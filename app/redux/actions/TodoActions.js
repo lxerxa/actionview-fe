@@ -1,22 +1,15 @@
-import {
-  ADD_TODO,
-  ADD_TODO_SUCCESS,
-  ADD_TODO_FAIL,
-  TODOS_LOAD,
-  TODOS_LOAD_SUCCESS,
-  TODOS_LOAD_FAIL
-} from '../constants/ActionTypes';
+import {asyncFuncCreator} from '../utils';
 
 export function addTodo(text) {
-  return {
-    types: [ADD_TODO, ADD_TODO_SUCCESS, ADD_TODO_FAIL],
+  return asyncFuncCreator({
+    CONSTANT: 'TODO_ADD',
     promise: (client) => client.addTodo(text)
-  };
+  });
 }
 
 export function loadTodos() {
-  return {
-    types: [TODOS_LOAD, TODOS_LOAD_SUCCESS, TODOS_LOAD_FAIL],
-    promise: (client) => client.loadTodo()
-  };
+  return asyncFuncCreator({
+    CONSTANT: 'TODOS_LOAD',
+    promise: (client) => client.loadTodos()
+  });
 }
