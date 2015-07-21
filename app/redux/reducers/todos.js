@@ -1,6 +1,6 @@
 import {
   TODO_ADD,
-  TODO_ADD_SUCESS,
+  TODO_ADD_SUCCESS,
   TODO_ADD_FAIL,
   TODOS_LOAD,
   TODOS_LOAD_SUCCESS,
@@ -34,7 +34,7 @@ export default function todos(state = initialState, action) {
         loading: true,
         error: null
       };
-    case TODO_ADD_SUCESS:
+    case TODO_ADD_SUCCESS:
       return {
         ...state,
         loading: false,
