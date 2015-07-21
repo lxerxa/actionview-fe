@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-class App extends Component {
+class Layout extends Component {
 
   static propTypes = {
     children: PropTypes.element.isRequired
@@ -12,4 +12,4 @@ class App extends Component {
 
 }
 
-export default App;
+export default Layout;
