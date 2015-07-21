@@ -1,0 +1,25 @@
+{
+  "parser": "babel-eslint",
+  "extends": "eslint-config-airbnb",
+  "plugins": ["react"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-multi-comp": 2,
+    "react/prop-types": 2,
+    "react/react-in-jsx-scope": 2,
+    "react/self-closing-comp": 1,
+    "react/wrap-multilines": 2,
+
+    "quotes": [2, "single", "avoid-escape"],
+    "comma-dangle": [2, "never"],
+    "no-underscore-dangle": 0,
+    "space-in-brackets": 0
+  }
+}
