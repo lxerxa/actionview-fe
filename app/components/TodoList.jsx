@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import TodoItem from './TodoItem';
 
-class MainSection extends Component {
+class TodoList extends Component {
 
   static propTypes = {
     todos: PropTypes.object.isRequired,
@@ -69,4 +69,4 @@ class MainSection extends Component {
 
 }
 
-export default MainSection;
+export default TodoList;

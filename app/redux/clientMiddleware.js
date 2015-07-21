@@ -1,3 +1,5 @@
+// from https://github.com/erikras/react-redux-universal-hot-example/blob/master/src%2Fredux%2FclientMiddleware.js
+
 export default function clientMiddleware(client) {
   return ({/* dispatch, getState */}) => {
     return (next) => (action) => {

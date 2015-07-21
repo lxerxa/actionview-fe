@@ -2,11 +2,11 @@ import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import MainSection from './MainSection';
+import TodoList from './TodoList';
 import * as TodoActions from '../redux/actions/TodoActions';
 
 @connect(state => ({ todos: state.todos }))
-class TodoApp extends Component {
+class TodoContainer extends Component {
 
   static propTypes = {
     todos: PropTypes.object.isRequired,
@@ -16,7 +16,7 @@ class TodoApp extends Component {
   render() {
     const { todos, dispatch } = this.props;
     return (
-      <MainSection
+      <TodoList
         todos={todos}
         actions={bindActionCreators(TodoActions, dispatch)} />
     );
@@ -24,4 +24,4 @@ class TodoApp extends Component {
 
 }
 
-export default TodoApp;
+export default TodoContainer;

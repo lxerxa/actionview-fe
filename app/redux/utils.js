@@ -1,4 +1,4 @@
-// These utils are here to remove boilerplate from Redux
+// Utils for removing boilerplate from Redux
 import * as types from './constants/ActionTypes';
 
 export function asyncFuncCreator({CONSTANT, promise, ...rest}) {
