@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import MainSection from './MainSection';
-import * as TodoActions from '../actions/TodoActions';
+import * as TodoActions from '../redux/actions/TodoActions';
 
 @connect(state => ({ todos: state.todos }))
 class TodoApp extends Component {

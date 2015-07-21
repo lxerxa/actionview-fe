@@ -1,7 +1,7 @@
 import {
-  ADD_TODO,
-  ADD_TODO_SUCCESS,
-  ADD_TODO_FAIL,
+  TODO_ADD,
+  TODO_ADD_SUCESS,
+  TODO_ADD_FAIL,
   TODOS_LOAD,
   TODOS_LOAD_SUCCESS,
   TODOS_LOAD_FAIL
@@ -28,13 +28,13 @@ export default function todos(state = initialState, action) {
         loading: false,
         error: action.error
       };
-    case ADD_TODO:
+    case TODO_ADD:
       return {
         ...state,
         loading: true,
         error: null
       };
-    case ADD_TODO_SUCCESS:
+    case TODO_ADD_SUCESS:
       return {
         ...state,
         loading: false,
@@ -47,7 +47,7 @@ export default function todos(state = initialState, action) {
           ...state.todos
         ]
       };
-    case ADD_TODO_FAIL:
+    case TODO_ADD_FAIL:
       return {
         ...state,
         loading: false,

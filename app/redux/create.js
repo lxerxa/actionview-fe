@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { devTools, persistState } from 'redux-devtools';
 
 import createMiddleware from './clientMiddleware';
-import * as reducers from '../reducers';
+import * as reducers from './reducers';
 
 const reducer = combineReducers(reducers);
 

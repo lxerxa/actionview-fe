@@ -1,6 +1,6 @@
 import {generateAsyncConstants} from '../utils';
 
 export default {
-  ...generateAsyncConstants('ADD_TODO'),
+  ...generateAsyncConstants('TODO_ADD'),
   ...generateAsyncConstants('TODOS_LOAD')
 };

@@ -6,7 +6,7 @@ import TodoApp from './TodoApp';
 import createStore from '../redux/create';
 
 const client = {
-  loadTodo() {
+  loadTodos() {
     return new Promise((resolve) => {
       setTimeout(() => {
         return resolve([
