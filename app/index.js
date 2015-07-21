@@ -1,2 +1,5 @@
+// require ES6/ES7 polyfill on browser
 require('babel/polyfill');
-require('./main');
+
+// start client application
+require('./app');
