@@ -1,3 +1,4 @@
+import path from 'path';
 import debug from 'debug';
 import express from 'express';
 
@@ -7,11 +8,16 @@ import client from '../app/redux/api-client';
 import createStore from '../app/redux/create';
 import universalRender from '../shared/universal-render';
 
+const PORT = parseInt(process.env.PORT, 10) || 3000;
+const server = express();
+
 if (process.env.NODE_ENV === 'development') {
   debug.enable('dev,server');
 }
 
-const server = express();
+server.use('/assets', express.static(path.resolve(__dirname, '..', 'dist')));
+server.set('views', path.resolve(__dirname, 'views'));
+server.set('view engine', 'ejs');
 
 server.use(async function(req, res) {
   try {
@@ -19,7 +25,14 @@ server.use(async function(req, res) {
     const store = createStore(client, {});
     const body = await universalRender({location, store, client});
 
-    return res.status(200).end(body);
+    // Load assets paths from `webpack-stats`
+    // remove cache on dev env
+    const assets = require('./webpack-stats.json');
+    if (process.env.NODE_ENV === 'development') {
+      delete require.cache[require.resolve('./webpack-stats.json')];
+    }
+
+    return res.render('index.ejs', {body, assets});
   } catch (error) {
     debug('server')('error with rendering');
     debug('server')(error);
@@ -28,4 +41,5 @@ server.use(async function(req, res) {
   }
 });
 
-server.listen(3000);
+server.listen(PORT);
+if (process.send) process.send('online');
