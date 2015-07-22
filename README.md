@@ -4,22 +4,29 @@
 
 ### Libraries
 
-* expressjs
-* reactjs
-* react-router
-* redux
-* redux-devtools
-* cssnext
-* webpack
-* babel
+* [expressjs](http://expressjs.com/)
+* [reactjs ^0.13](https://facebook.github.io/react/)
+* [react-router ^1.0.0-beta3](http://rackt.github.io/react-router/tags/v1.0.0-beta3.html)
+* [redux ^1.0.0-rc](https://github.com/gaearon/redux)
+* [redux-devtools](https://github.com/gaearon/redux-devtools)
+* [cssnext](http://cssnext.io/)
+* [webpack](webpack.github.io)
+* [babel](babeljs.io)
 
 ### How to / Installation
 
-* `$ npm install`
+* `$ git clone -o upstream https://github.com/savemysmartphone/universal-redux-boilerplate.git`
+* `$ cd universal-redux-boilerplate && npm install`
 * `$ npm run dev`
 
+## Run in production
 
-### Related
+* `$ npm run build`
+* `$ npm install -g npm2`
+* `$ pm2 start processes.json`
 
-* https://github.com/erikras/react-redux-universal-hot-example
-* https://github.com/gaearon/redux-devtools/blob/master/examples%2Ftodomvc%2FREADME.md
+### Related projects
+
+* [iam4x/isomorphic-flux-boilerplat](https://github.com/iam4x/isomorphic-flux-boilerplate)
+* [erikas/react-redux-universal-hot-example](https://github.com/erikras/react-redux-universal-hot-example)
+* [gaeron/redux-devtools/examples](https://github.com/gaearon/redux-devtools/blob/master/examples%2Ftodomvc%2FREADME.md)
