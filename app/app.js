@@ -7,8 +7,14 @@ import apiClient from './redux/api-client';
 import createStore from './redux/create';
 import universalRender from '../shared/universal-render';
 
-if (process.env.NODE_ENV !== 'production') {
+const { NODE_ENV, BROWSER } = process.env;
+
+if (NODE_ENV !== 'production') {
   debug.enable('dev');
+}
+
+if (BROWSER) {
+  require('styles/app.css');
 }
 
 (async function() {

@@ -1,0 +1,10 @@
+@import 'bootstrap/dist/css/bootstrap';
+
+body {
+  padding-top: 50px;
+}
+
+/* on dev make redux-devtool always shown */
+.navbar-fixed-top {
+  z-index: 998;
+}
