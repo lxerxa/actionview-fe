@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import * as UserActions from 'redux/actions/UserActions';
 
@@ -21,17 +22,24 @@ class Users extends Component {
     const { dispatch } = this.props;
     this.actions = bindActionCreators(UserActions, dispatch);
 
-    return resolver.resolve(this.actions.loadUsers);
+    return resolver.resolve(this.actions.index);
   }
 
-  renderLoader(loading) {
-    if (loading) return <strong>Loading...</strong>;
+  componentWillUnmount() {
+    this.actions.clearError();
   }
 
-  renderUser({ id, name }, index) {
+  renderUser({ name, picture, seed }, index) {
     return (
-      <li key={index}>
-        #{id} - {name}
+      <li
+        key={index}
+        className='text-capitalize'>
+        <Link to={'/users/' + seed}>
+          <img
+            className='img-thumbnail'
+            src={picture.thumbnail} />
+          { name.first } { name.last }
+        </Link>
       </li>
     );
   }
@@ -39,12 +47,11 @@ class Users extends Component {
   render() {
     const { users } = this.props;
     return (
-      <div>
+      <div className='user-list'>
         <h1>Users</h1>
-        {this.renderLoader(users.loading)}
-        <ul>
+        <ul className='well'>
           {
-            users.users
+            users.collection
               .map(this.renderUser)
           }
         </ul>

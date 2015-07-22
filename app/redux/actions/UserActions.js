@@ -1,8 +1,20 @@
+import { USERS_CLEAR_ERROR } from '../constants/ActionTypes';
 import { asyncFuncCreator } from '../utils';
 
-export function loadUsers() {
+export function index() {
   return asyncFuncCreator({
-    CONSTANT: 'USERS_LOAD',
-    promise: (client) => client.loadUsers()
+    CONSTANT: 'USERS_INDEX',
+    promise: (client) => client.request({url: '/users'})
   });
+}
+
+export function show(seed) {
+  return asyncFuncCreator({
+    CONSTANT: 'USERS_SHOW',
+    promise: (client) => client.request({url: '/users/' + seed})
+  });
+}
+
+export function clearError() {
+  return { type: USERS_CLEAR_ERROR };
 }

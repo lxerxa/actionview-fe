@@ -5,9 +5,12 @@ export default (
   <Route component={require('components/Layout')}>
     <Route
       path='/'
-      component={require('components/Todos')} />
-    <Route
-      path='/users'
       component={require('components/Users')} />
+    <Route
+      path='/users/:seed'
+      component={require('components/Profile')} />
+    <Route
+      path='readme'
+      component={require('components/Readme')} />
   </Route>
 );

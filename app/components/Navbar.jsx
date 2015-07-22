@@ -11,12 +11,12 @@ class Navbar extends Component {
             <ul className='nav navbar-nav'>
               <li>
                 <Link to='/'>
-                  Todo List
+                  User List
                 </Link>
               </li>
               <li>
-                <Link to='/users'>
-                  User List
+                <Link to='/readme'>
+                  Readme
                 </Link>
               </li>
             </ul>
