@@ -3,8 +3,8 @@ import debug from 'debug';
 import React from 'react';
 import BrowserHistory from 'react-router/lib/BrowserHistory';
 
-import apiClient from './redux/api-client';
 import createStore from './redux/create';
+import ApiClient from '../shared/api-client';
 import universalRender from '../shared/universal-render';
 
 const { NODE_ENV, BROWSER } = process.env;
@@ -19,7 +19,7 @@ if (BROWSER) {
 
 (async function() {
   try {
-    const store = createStore(apiClient, window.__initialState);
+    const store = createStore(new ApiClient(), window.__initialState);
     const history = new BrowserHistory();
     const container = window.document.getElementById('content');
     const element = await universalRender({history, store});
