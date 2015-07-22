@@ -5,17 +5,18 @@ class ReduxResolver {
 
   resolve = ::this.resolve
   resolve(action) {
-    if (process.env.BROWSER && !this.firstRender) return action();
+    const [, ...args] = arguments;
+    if (process.env.BROWSER && !this.firstRender) return action(...args);
 
     this.pendingActions = [
       ...this.pendingActions,
-      action
+      { action, args }
     ];
   }
 
   mapActions() {
     return this.pendingActions
-      .map(action => action());
+      .map(({ action, args }) => action(...args));
   }
 
   async dispatchPendingActions() {
