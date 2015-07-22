@@ -5,7 +5,7 @@ export default (
   <Route component={require('components/Layout')}>
     <Route
       path='/'
-      component={require('components/Todo/TodoContainer')} />
+      component={require('components/Todos')} />
     <Route
       path='/users'
       component={require('components/Users')} />

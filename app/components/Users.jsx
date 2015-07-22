@@ -39,7 +39,7 @@ class Users extends Component {
   render() {
     const { users } = this.props;
     return (
-      <div className='container'>
+      <div>
         <h1>Users</h1>
         {this.renderLoader(users.loading)}
         <ul>
