@@ -13,9 +13,8 @@
   <%# React App output %>
   <div id='content'><%- body %></div>
 
+  <script>window.__initialState = <%- initialState %>;</script>
   <%# JavaScript from `webpack-stats.json` %>
-  <% assets.script.forEach(function (script) { %>
-    <script async defer src="<%= script %>"></script>
-  <% }); %>
+  <script async defer src="<%- assets.script[0] %>"></script>
 </body>
 </html>

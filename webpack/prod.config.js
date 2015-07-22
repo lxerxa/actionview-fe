@@ -7,7 +7,7 @@ import writeStats from './utils/write-stats';
 
 const JS_REGEX = /\.js$|\.jsx$|\.es6$|\.babel$/;
 
-module.exports = {
+export default {
   devtool: 'source-map',
   entry: {
     app: './app/index.js'
@@ -72,9 +72,7 @@ module.exports = {
     }),
 
     // write webpack stats
-    function() {
-      this.plugin('done', writeStats);
-    }
+    function() { this.plugin('done', writeStats); }
   ],
   resolve: {
     extensions: ['', '.js', '.json', '.jsx', '.es6', '.babel'],

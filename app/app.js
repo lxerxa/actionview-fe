@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'development') {
 
 (async function() {
   try {
-    const store = createStore(apiClient, {});
+    const store = createStore(apiClient, window.__initialState);
     const history = new BrowserHistory();
     const container = window.document.getElementById('content');
     const element = await universalRender({history, store});
