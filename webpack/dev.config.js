@@ -49,7 +49,9 @@ export default {
       ],
       loaders: [
         {test: /\.json$/, exclude: /node_modules/, loader: 'json'},
-        {test: JS_REGEX, exclude: /node_modules/, loaders: ['react-hot', 'babel']}
+        {test: JS_REGEX, exclude: /node_modules/, loaders: ['react-hot', 'babel']},
+        {test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]'},
+        {test: /\.css$/, exclude: /node_modules/, loader: 'style!css!cssnext'}
       ]
     },
     plugins: [

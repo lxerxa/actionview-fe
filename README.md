@@ -9,6 +9,7 @@
 * react-router
 * redux
 * redux-devtools
+* cssnext
 * webpack
 * babel
 

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "babel-node ./webpack/dev-server",
+    "build": "rm -rf dist/* && babel-node ./node_modules/.bin/webpack --progress --stats --config ./webpack/prod.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "iam4x",
@@ -14,15 +15,19 @@
     "babel-eslint": "^3.1.23",
     "babel-loader": "^5.3.2",
     "browser-sync": "^2.8.0",
+    "cssnext-loader": "^1.0.1",
     "dev-ip": "^1.0.1",
     "eslint": "^0.24.1",
     "eslint-config-airbnb": "0.0.6",
     "eslint-loader": "^0.14.2",
     "eslint-plugin-react": "^3.0.0",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
     "json-loader": "^0.5.2",
     "node-libs-browser": "^0.5.2",
     "node-watch": "^0.3.4",
     "react-hot-loader": "^1.2.8",
+    "url-loader": "^0.5.6",
     "webpack": "^1.10.1",
     "webpack-dev-server": "^1.10.1"
   },
