@@ -12,7 +12,7 @@ let serverReload;
 
 const PORT = parseInt(process.env.PORT, 10) + 2 || 3002;
 const HOST = `0.0.0.0:${parseInt(process.env.PORT, 10) || 3000}`;
-const SERVER = path.join(__dirname, '../../server/index');
+const SERVER = path.resolve(__dirname, '../../server/index');
 
 function startServer() {
   function restartServer() {
@@ -35,27 +35,21 @@ function startServer() {
 
       if (!started) {
         started = true;
-        browserSync({port: PORT, proxy: HOST});
+        browserSync({ port: PORT, proxy: HOST });
 
         // Listen for `rs` in stdin to restart server
         debug('dev')('type `rs` in console to restart express server');
         process.stdin.setEncoding('utf8');
         process.stdin.on('data', function(data) {
           const parsedData = (data + '').trim().toLowerCase();
-          if (parsedData === 'rs') {
-            return restartServer();
-          }
+          if (parsedData === 'rs') return restartServer();
         });
 
         // Start watch on server files
         // and reload browser on changes
         watch(
-          path.join(__dirname, '../../server'),
-          function(file) {
-            if (!file.match('webpack-stats.json')) {
-              return restartServer();
-            }
-          }
+          path.resolve(__dirname, '../../server'),
+          file => !file.match('webpack-stats.json') && restartServer()
         );
       }
     }

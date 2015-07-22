@@ -3,15 +3,16 @@ class ReduxResolver {
   firstRender = true
   pendingActions = []
 
-  resolve = ::this.resolve
   resolve(action) {
     const [, ...args] = arguments;
-    if (process.env.BROWSER && !this.firstRender) return action(...args);
-
-    this.pendingActions = [
-      ...this.pendingActions,
-      { action, args }
-    ];
+    if (process.env.BROWSER && !this.firstRender) {
+      return action(...args);
+    } else {
+      this.pendingActions = [
+        ...this.pendingActions,
+        { action, args }
+      ];
+    }
   }
 
   mapActions() {

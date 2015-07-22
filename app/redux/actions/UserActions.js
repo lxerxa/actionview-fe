@@ -4,14 +4,14 @@ import { asyncFuncCreator } from '../utils';
 export function index() {
   return asyncFuncCreator({
     CONSTANT: 'USERS_INDEX',
-    promise: (client) => client.request({url: '/users'})
+    promise: (client) => client.request({ url: '/users' })
   });
 }
 
 export function show(seed) {
   return asyncFuncCreator({
     CONSTANT: 'USERS_SHOW',
-    promise: (client) => client.request({url: '/users/' + seed})
+    promise: (client) => client.request({ url: '/users/' + seed })
   });
 }
 

@@ -45,9 +45,9 @@ server.use(require('compression')({
 }));
 
 // serve favicon
-server.use(require('serve-favicon')(path.resolve(__dirname, '..', 'app', 'images', 'favicon.ico')));
+server.use(require('serve-favicon')(path.resolve(__dirname, '../app/images/favicon.ico')));
 
-server.use('/assets', express.static(path.resolve(__dirname, '..', 'dist')));
+server.use('/assets', express.static(path.resolve(__dirname, '../dist')));
 server.set('views', path.resolve(__dirname, 'views'));
 server.set('view engine', 'ejs');
 
@@ -62,7 +62,7 @@ server.use(async function(req, res) {
     const client = new ApiClient(req);
     const location = new Location(req.path, req.query);
     const store = createStore(client, {});
-    const body = await universalRender({location, store, client});
+    const body = await universalRender({ location, store, client });
     const initialState = serialize(store.getState());
 
     // Load assets paths from `webpack-stats`
@@ -72,7 +72,7 @@ server.use(async function(req, res) {
       delete require.cache[require.resolve('./webpack-stats.json')];
     }
 
-    return res.render('index.ejs', {body, assets, initialState});
+    return res.render('index.ejs', { body, assets, initialState });
   } catch (error) {
     debug('server')('error with rendering');
     debug('server')(error);

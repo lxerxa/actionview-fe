@@ -19,7 +19,7 @@ export default function users(state = initialState, action) {
 
     case t.USERS_SHOW_SUCCESS:
       // clone `state.collection`
-      let collection = [...state.collection];
+      let collection = [ ...state.collection ];
 
       // find fetched user into collection
       const { seed } = action.result;
@@ -30,7 +30,7 @@ export default function users(state = initialState, action) {
         collection[index] = action.result;
       } else {
         // else add new user into collection
-        collection = [action.result, ...state.collection];
+        collection = [ action.result, ...state.collection ];
       }
 
       // return modified state

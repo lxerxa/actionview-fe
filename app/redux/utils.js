@@ -1,7 +1,7 @@
 // Utils for removing boilerplate from Redux
 import types from './constants/ActionTypes';
 
-export function asyncFuncCreator({CONSTANT, promise, ...rest}) {
+export function asyncFuncCreator({ CONSTANT, promise, ...rest }) {
   return {
     types: [
       types[CONSTANT],

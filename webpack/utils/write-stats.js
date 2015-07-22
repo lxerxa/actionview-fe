@@ -14,9 +14,7 @@ export default function(stats) {
     let chunks = json.assetsByChunkName[name];
 
     // a chunk could be a string or an array, so make sure it is an array
-    if (!(Array.isArray(chunks))) {
-      chunks = [chunks];
-    }
+    if (!(Array.isArray(chunks))) chunks = [chunks];
 
     return chunks
       .filter(chunk => ext.test(path.extname(chunk))) // filter by extension
@@ -39,7 +37,7 @@ export default function(stats) {
       };
     });
 
-  const content = {script, style, images};
+  const content = { script, style, images };
 
   fs.writeFileSync(filepath, JSON.stringify(content));
   debug('dev')('`webpack-stats.json` updated');

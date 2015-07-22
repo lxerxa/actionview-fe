@@ -6,7 +6,7 @@ import marked from 'marked';
 import { users } from './data.json';
 
 const simplifyUsers = (collection) => collection
-  .map(({ user, seed}) => ({ ...user, seed}))
+  .map(({ user, seed }) => ({ ...user, seed }))
   .map(({ name, seed, picture}) => ({ name, seed, picture }));
 
 export default function(router) {
@@ -24,7 +24,7 @@ export default function(router) {
   });
 
   router.get('/readme', async function(req, res) {
-    const readme = await readFile(path.resolve(__dirname, '..', '..', 'README.md'), 'utf8');
+    const readme = await readFile(path.resolve(__dirname, '../../README.md'), 'utf8');
     return res.status(200).send(marked(readme));
   });
 }

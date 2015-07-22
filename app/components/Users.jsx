@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 
 import * as UserActions from 'redux/actions/UserActions';
 
-@connect(state => ({ users: state.users }))
+@connect(({ users }) => ({ users }))
 class Users extends Component {
 
   static propTypes = {
@@ -34,10 +34,10 @@ class Users extends Component {
       <li
         key={index}
         className='text-capitalize'>
-        <Link to={'/users/' + seed}>
+        <Link to={ '/users/' + seed }>
           <img
             className='img-thumbnail'
-            src={picture.thumbnail} />
+            src={ picture.thumbnail } />
           { name.first } { name.last }
         </Link>
       </li>

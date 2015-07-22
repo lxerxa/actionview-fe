@@ -8,7 +8,7 @@ import routes from '../app/routes';
 const runRouter = function(location) {
   return new Promise(function(resolve) {
     Router.run(routes, location, function(error, initialState) {
-      return resolve({error, initialState});
+      return resolve({ error, initialState });
     });
   });
 };
