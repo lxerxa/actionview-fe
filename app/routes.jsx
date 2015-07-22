@@ -8,6 +8,6 @@ export default (
       component={require('components/Todo/TodoContainer')} />
     <Route
       path='/users'
-      component={require('components/User/UserContainer')} />
+      component={require('components/Users')} />
   </Route>
 );
