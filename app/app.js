@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
     const store = createStore(apiClient, {});
     const history = new BrowserHistory();
     const container = window.document.getElementById('root');
-    const element = await universalRender(null, history, store);
+    const element = await universalRender({history, store});
 
     return React.render(element, container);
   } catch (error) {

@@ -10,7 +10,7 @@ export default function(client, data) {
   const middleware = createMiddleware(client);
 
   let finalCreateStore;
-  if (global.window) {
+  if (process.env.BROWSER) {
     finalCreateStore = compose(
       applyMiddleware(middleware),
       devTools(),

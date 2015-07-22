@@ -8,9 +8,14 @@ class TodoList extends Component {
     actions: PropTypes.object.isRequired
   }
 
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  }
+
   componentWillMount() {
     const { actions } = this.props;
-    return actions.loadTodos();
+    const { store } = this.context;
+    store.resolve(actions.loadTodos);
   }
 
   componentWillUpdate({ todos }) {

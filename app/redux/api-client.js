@@ -6,7 +6,7 @@ export default {
           {id: 1, text: 'foo'},
           {id: 2, text: 'bar'}
         ]);
-      }, 1000);
+      }, 300);
     });
   },
 
@@ -15,7 +15,7 @@ export default {
       setTimeout(() => {
         if (!text) return reject({message: 'no content sent'});
         return resolve(text);
-      }, 1000);
+      }, 300);
     });
   }
 };
