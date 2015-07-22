@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Navbar from 'components/Navbar';
 
 class Layout extends Component {
 
@@ -7,7 +8,14 @@ class Layout extends Component {
   }
 
   render() {
-    return <div>{this.props.children}</div>;
+    return (
+      <div>
+        <Navbar />
+        <div className='container'>
+          {this.props.children}
+        </div>
+      </div>
+    );
   }
 
 }

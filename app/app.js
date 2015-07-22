@@ -7,7 +7,7 @@ import apiClient from './redux/api-client';
 import createStore from './redux/create';
 import universalRender from '../shared/universal-render';
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   debug.enable('dev');
 }
 
@@ -18,7 +18,12 @@ if (process.env.NODE_ENV === 'development') {
     const container = window.document.getElementById('content');
     const element = await universalRender({history, store});
 
-    return React.render(element, container);
+    // render application in browser
+    React.render(element, container);
+
+    // clean state of `redux-resolver`
+    store.resolver.firstRender = false;
+    store.resolver.pendingActions = [];
   } catch (error) {
     debug('dev')('Error with first render');
     throw error;

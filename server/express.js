@@ -44,6 +44,9 @@ server.use(require('compression')({
   level: 3
 }));
 
+// serve favicon
+server.use(require('serve-favicon')(path.resolve(__dirname, '..', 'app', 'images', 'favicon.ico')));
+
 server.use('/assets', express.static(path.resolve(__dirname, '..', 'dist')));
 server.set('views', path.resolve(__dirname, 'views'));
 server.set('view engine', 'ejs');

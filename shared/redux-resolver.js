@@ -1,10 +1,11 @@
 class ReduxResolver {
 
+  firstRender = true
   pendingActions = []
 
   resolve = ::this.resolve
   resolve(action) {
-    if (process.env.BROWSER) return action();
+    if (process.env.BROWSER && !this.firstRender) return action();
 
     this.pendingActions = [
       ...this.pendingActions,

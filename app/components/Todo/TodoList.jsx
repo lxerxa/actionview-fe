@@ -14,8 +14,9 @@ class TodoList extends Component {
 
   componentWillMount() {
     const { actions } = this.props;
-    const { store } = this.context;
-    store.resolve(actions.loadTodos);
+    const { resolver } = this.context.store;
+
+    return resolver.resolve(actions.loadTodos);
   }
 
   componentWillUpdate({ todos }) {

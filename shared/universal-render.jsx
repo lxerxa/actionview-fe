@@ -15,7 +15,7 @@ const runRouter = function(location) {
 
 export default async function({location, history, store}) {
   const resolver = new ReduxResolver();
-  store.resolve = resolver.resolve;
+  store.resolver = resolver;
 
   if (process.env.BROWSER) {
     // add redux-devtools on client side

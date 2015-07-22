@@ -17,5 +17,16 @@ export default {
         return resolve(text);
       }, 300);
     });
+  },
+
+  loadUsers() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        return resolve([
+          {id: 1, name: 'userfoo'},
+          {id: 2, name: 'userbar'}
+        ]);
+      }, 300);
+    });
   }
 };
