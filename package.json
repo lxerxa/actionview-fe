@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "babel": "^5.6.23",
+    "debug": "^2.2.0",
     "express": "^4.13.1",
     "react": "^0.13.3",
     "react-redux": "^0.2.2",

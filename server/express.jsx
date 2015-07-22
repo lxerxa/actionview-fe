@@ -1,35 +1,31 @@
+import debug from 'debug';
 import express from 'express';
 
-import React from 'react';
-import Router from 'react-router';
 import Location from 'react-router/lib/Location';
-import { Provider } from 'react-redux';
 
-import routes from '../app/routes';
 import apiClient from '../app/redux/api-client';
 import createStore from '../app/redux/create';
+import universalRender from '../shared/universal-render';
+
+if (process.env.NODE_ENV === 'development') {
+  debug.enable('dev,server');
+}
 
 const server = express();
 
-server.use(function(req, res) {
-  const location = new Location(req.path, req.query);
-  Router.run(routes, location, function(error, initialState) {
-    if (error) return res.status(500).send(error);
-
+server.use(async function(req, res) {
+  try {
+    const location = new Location(req.path, req.query);
     const store = createStore(apiClient, {});
-    const element = (
-      <Provider store={store}>
-        {() => (
-          <Router
-            location={location}
-            {...initialState} />
-        )}
-      </Provider>
-    );
-    const body = React.renderToString(element);
+    const body = await universalRender(location, null, store);
 
-    res.status(200).end(body);
-  });
+    return res.status(200).end(body);
+  } catch (error) {
+    debug('server')('error with rendering');
+    debug('server')(error);
+
+    return res.status(500).end(error);
+  }
 });
 
 server.listen(3000);
