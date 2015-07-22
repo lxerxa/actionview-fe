@@ -17,10 +17,11 @@ class Todos extends Component {
   }
 
   componentWillMount() {
-    this.actions = bindActionCreators(TodoActions, this.props.dispatch);
+    const { resolver } = this.context.store;
+    const { dispatch } = this.props;
+    this.actions = bindActionCreators(TodoActions, dispatch);
 
-    return this.context.store
-      .resolver.resolve(this.actions.loadTodos);
+    return resolver.resolve(this.actions.loadTodos);
   }
 
   renderTodoItem({ id, text }, index) {

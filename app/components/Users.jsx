@@ -19,9 +19,9 @@ class Users extends Component {
   componentWillMount() {
     const { resolver } = this.context.store;
     const { dispatch } = this.props;
-    const actions = bindActionCreators(UserActions, dispatch);
+    this.actions = bindActionCreators(UserActions, dispatch);
 
-    return resolver.resolve(actions.loadUsers);
+    return resolver.resolve(this.actions.loadUsers);
   }
 
   renderLoader(loading) {
