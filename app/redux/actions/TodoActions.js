@@ -1,4 +1,4 @@
-import {asyncFuncCreator} from '../utils';
+import { asyncFuncCreator } from '../utils';
 
 export function addTodo(text) {
   return asyncFuncCreator({

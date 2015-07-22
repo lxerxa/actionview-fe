@@ -1,4 +1,4 @@
-import {generateAsyncConstants} from '../utils';
+import { generateAsyncConstants } from '../utils';
 
 export default {
   ...generateAsyncConstants('TODO_ADD'),

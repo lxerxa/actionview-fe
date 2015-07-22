@@ -7,12 +7,19 @@ import * as reducers from './reducers';
 const reducer = combineReducers(reducers);
 
 export default function(client, data) {
-  const finalCreateStore = compose(
-    applyMiddleware(createMiddleware(client)),
-    devTools(),
-    persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
-    createStore
-  );
+  const middleware = createMiddleware(client);
+
+  let finalCreateStore;
+  if (global.window) {
+    finalCreateStore = compose(
+      applyMiddleware(middleware),
+      devTools(),
+      persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
+      createStore
+    );
+  } else {
+    finalCreateStore = applyMiddleware(middleware)(createStore);
+  }
 
   return finalCreateStore(reducer, data);
 }
