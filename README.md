@@ -10,8 +10,8 @@
 * [redux ^1.0.0-rc](https://github.com/gaearon/redux)
 * [redux-devtools](https://github.com/gaearon/redux-devtools)
 * [cssnext](http://cssnext.io/)
-* [webpack](webpack.github.io)
-* [babel](babeljs.io)
+* [webpack](http://webpack.github.io)
+* [babel](http://babeljs.io)
 
 ## Documentation
 
