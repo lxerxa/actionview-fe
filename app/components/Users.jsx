@@ -46,17 +46,25 @@ class Users extends Component {
 
   render() {
     const { users } = this.props;
-    return (
-      <div className='user-list'>
-        <h1>Users</h1>
-        <ul className='well'>
-          {
-            users.collection
-              .map(this.renderUser)
-          }
-        </ul>
-      </div>
-    );
+    if (users.error) {
+      return (
+        <div className='alert alert-danger'>
+          <strong>{ users.error }</strong>
+        </div>
+      );
+    } else {
+      return (
+        <div className='user-list'>
+          <h1>Users</h1>
+          <ul className='well'>
+            {
+              users.collection
+                .map(this.renderUser)
+            }
+          </ul>
+        </div>
+      );
+    }
   }
 
 }
