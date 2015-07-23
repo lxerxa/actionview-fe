@@ -25,8 +25,8 @@ export default {
     loaders: [
       {test: /\.json$/, exclude: /node_modules/, loader: 'json'},
       {test: JS_REGEX, exclude: /node_modules/, loader: 'babel'},
-      {test: /\.(woff|woff2|eot|ttf)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]'},
-      {test: /\.(jpe?g|png|gif|svg)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced'},
+      {test: /\.(woff|woff2|eot|ttf|svg)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]'},
+      {test: /\.(jpe?g|png|gif)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced'},
       {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!cssnext')}
     ]
   },

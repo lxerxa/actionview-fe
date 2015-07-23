@@ -4,7 +4,8 @@
   "description": "An universal (isomorphic) boilerplate for ReactJS using Redux as Flux library.",
   "main": "index.js",
   "scripts": {
-    "dev": "babel-node ./webpack/dev-server",
+    "dev": "NODE_ENV=development babel-node ./webpack/dev-server",
+    "prod": "NODE_ENV=production babel-node ./server/index",
     "build": "rm -rf dist/* && babel-node ./node_modules/.bin/webpack --progress --stats --config ./webpack/prod.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +31,7 @@
     "eslint-plugin-react": "^3.0.0",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
+    "image-loader": "0.0.1",
     "json-loader": "^0.5.2",
     "node-libs-browser": "^0.5.2",
     "node-watch": "^0.3.4",
