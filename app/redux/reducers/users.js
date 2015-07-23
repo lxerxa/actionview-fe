@@ -1,5 +1,5 @@
 import findIndex from 'lodash/array/findIndex';
-import * as t from '../constants/ActionTypes';
+import t from '../constants/ActionTypes';
 
 const initialState = { collection: [] };
 
