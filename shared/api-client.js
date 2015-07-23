@@ -30,7 +30,7 @@ class ApiClient {
     }
 
     // Copy cookies into headers on server side
-    if (!BROWSER) config.headers = {cookie: this.cookie};
+    if (!BROWSER && this.cookie) config.headers = {cookie: this.cookie};
 
     return config;
   }
@@ -41,7 +41,7 @@ class ApiClient {
       const { data } = await axios(config);
       return data;
     } catch(error) {
-      throw error.data;
+      throw error && error.data || error.stack;
     }
   }
 
