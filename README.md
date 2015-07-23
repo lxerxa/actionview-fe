@@ -19,7 +19,7 @@
 
 [shared/redux-resolver.js](https://github.com/savemysmartphone/universal-redux-boilerplate/blob/master/shared/redux-resolver.js) is the magic thing about the boilerplate. It's our tool for resolving promises (data-fetching) before server side render.
 
-The resolver is available on the `store` instance through components context, use it to wrap your async actions in `componentWillMount` for data te be fetched before server side render:
+The resolver is available on the `store` instance through components context, use it to wrap your async actions in `componentWillMount` for data to be fetched before server side render:
 
 ```javascript
 import { bindActionCreators } from 'redux';
@@ -42,7 +42,7 @@ componentWillMount() {
 }
 ```
 
-The action `this.actions.load` will be resolved instantly on browser. On the other hand, on server side a first render `React.renderToString` is called to collect promises, resolved them and re-render with the correct data.
+The action `this.actions.load` will be resolved instantly on browser. On the other hand, on server side a first render `React.renderToString` is called to collect promises, resolve them and re-render with the correct data.
 
 ### How to / Installation
 
