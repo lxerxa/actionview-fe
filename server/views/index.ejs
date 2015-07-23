@@ -13,7 +13,7 @@
   <%# React App output %>
   <div id='content'><%- body %></div>
 
-  <script>window.__initialState = <%- initialState %>;</script>
+  <script>window.__state = <%- state %>;</script>
   <%# JavaScript from `webpack-stats.json` %>
   <script async defer src="<%- assets.script[0] %>"></script>
 </body>

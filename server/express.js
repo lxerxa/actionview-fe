@@ -2,7 +2,6 @@ import path from 'path';
 import debug from 'debug';
 import express from 'express';
 import helmet from 'helmet';
-import serialize from 'serialize-javascript';
 
 import Location from 'react-router/lib/Location';
 
@@ -62,8 +61,7 @@ server.use(async function(req, res) {
     const client = new ApiClient(req);
     const location = new Location(req.path, req.query);
     const store = createStore(client, {});
-    const body = await universalRender({ location, store, client });
-    const initialState = serialize(store.getState());
+    const { body, state } = await universalRender({ location, store, client });
 
     // Load assets paths from `webpack-stats`
     // remove cache on dev env
@@ -72,7 +70,7 @@ server.use(async function(req, res) {
       delete require.cache[require.resolve('./webpack-stats.json')];
     }
 
-    return res.render('index.ejs', { body, assets, initialState });
+    return res.render('index.ejs', { assets, body, state });
   } catch (error) {
     debug('server')('error with rendering');
     debug('server')(error);

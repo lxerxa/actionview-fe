@@ -19,7 +19,7 @@ if (BROWSER) {
 
 (async function() {
   try {
-    const store = createStore(new ApiClient(), window.__initialState);
+    const store = createStore(new ApiClient(), window.__state);
     const history = new BrowserHistory();
     const container = window.document.getElementById('content');
     const element = await universalRender({history, store});

@@ -1,3 +1,5 @@
+import serialize from 'serialize-javascript';
+
 import React from 'react';
 import Router from 'react-router';
 import { Provider } from 'react-redux';
@@ -51,6 +53,9 @@ export default async function({location, history, store}) {
     // Resolve them, populate stores
     await resolver.dispatchPendingActions();
     // Re-render application with data
-    return React.renderToString(element);
+    const state = serialize(store.getState());
+    const body = React.renderToString(element);
+
+    return { body, state };
   }
 }
