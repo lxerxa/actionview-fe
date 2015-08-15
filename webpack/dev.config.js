@@ -1,6 +1,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import { isArray } from 'lodash';
+import cssnext from 'cssnext';
 
 import writeStats from './utils/write-stats';
 import startExpress from './utils/start-express';
@@ -51,9 +52,12 @@ export default {
         {test: /\.json$/, exclude: /node_modules/, loader: 'json'},
         {test: JS_REGEX, exclude: /node_modules/, loaders: ['react-hot', 'babel']},
         {test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]'},
-        {test: /\.css$/, exclude: /node_modules/, loader: 'style!css!cssnext'}
+        {test: /\.css$/, exclude: /node_modules/, loader: 'style!css!postcss'}
       ]
     },
+    postcss: [
+      cssnext()
+    ],
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin(),

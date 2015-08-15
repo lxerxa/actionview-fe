@@ -2,6 +2,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import cssnext from 'cssnext';
 
 import writeStats from './utils/write-stats';
 
@@ -27,12 +28,12 @@ export default {
       {test: JS_REGEX, exclude: /node_modules/, loader: 'babel'},
       {test: /\.(woff|woff2|eot|ttf|svg)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]'},
       {test: /\.(jpe?g|png|gif)$/, loader: 'url?limit=10000&name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced'},
-      {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!cssnext')}
+      {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!postcss')}
     ]
   },
-  cssnext: {
-    browsers: 'last 2 versions'
-  },
+  postcss: [
+    cssnext({browsers: 'last 2 versions'})
+  ],
   plugins: [
 
     new ExtractTextPlugin('[name]-[hash].css'),

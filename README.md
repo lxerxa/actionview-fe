@@ -9,6 +9,7 @@
 * [react-router ^1.0.0-beta3](http://rackt.github.io/react-router/tags/v1.0.0-beta3.html)
 * [redux ^1.0.0-rc](https://github.com/gaearon/redux)
 * [redux-devtools](https://github.com/gaearon/redux-devtools)
+* [postcss](https://github.com/postcss/postcss)
 * [cssnext](http://cssnext.io/)
 * [webpack](http://webpack.github.io)
 * [babel](http://babeljs.io)
