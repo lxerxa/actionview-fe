@@ -9,7 +9,6 @@ import ApiClient from '../shared/api-client';
 import universalRender from '../shared/universal-render';
 
 import createStore from 'redux/create';
-import * as I18nActions from 'redux/actions/I18nActions';
 
 const { NODE_ENV = 'development', PORT = 3000 } = process.env;
 const server = express();
@@ -64,17 +63,9 @@ server.use(async function(req, res) {
     const client = new ApiClient(req);
     const location = new Location(req.path, req.query);
     const store = createStore(client, {});
+    const locale = req.acceptsLanguages(['en', 'fr']) || 'en';
 
-    // Initiliaze locale rendering
-    try {
-      const locale = req.acceptsLanguages(['en', 'fr']);
-      const messages = require(`i18n/${locale}`);
-      store.dispatch(I18nActions.initialize(locale, messages));
-    } catch(error) {
-      store.dispatch(I18nActions.initialize('en', require('i18n/en')));
-    }
-
-    const { body, state } = await universalRender({ location, store, client });
+    const { body, state } = await universalRender({ location, store, client, locale });
 
     // Load assets paths from `webpack-stats`
     // remove cache on dev env

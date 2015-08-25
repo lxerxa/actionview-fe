@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import serialize from 'serialize-javascript';
 
 import React from 'react';
@@ -6,8 +7,10 @@ import { Provider } from 'react-redux';
 
 import ReduxResolver from './redux-resolver';
 import routes from '../app/routes';
+import * as I18nActions from 'redux/actions/I18nActions';
 
 const { BROWSER, NODE_ENV } = process.env;
+const cache = {};
 
 const runRouter = function(location) {
   return new Promise(function(resolve) {
@@ -17,7 +20,7 @@ const runRouter = function(location) {
   });
 };
 
-export default async function({ location, history, store }) {
+export default async function({ location, history, store, locale }) {
   const resolver = new ReduxResolver();
   store.resolver = resolver;
 
@@ -42,6 +45,25 @@ export default async function({ location, history, store }) {
       </Provider>
     );
   } else {
+    // simple cache
+    const { pathname, query } = location;
+    const cacheKey = crypto
+      .createHash('md5')
+      .update(pathname + JSON.stringify(query) + locale)
+      .digest('hex');
+
+    if (NODE_ENV === 'production' && cache[cacheKey] !== undefined) {
+      return cache[cacheKey];
+    }
+
+    // Initialize locale of rendering
+    try {
+      const messages = require(`i18n/${locale}`);
+      store.dispatch(I18nActions.initialize(locale, messages));
+    } catch (error) {
+      store.dispatch(I18nActions.initialize('en', require('i18n/en')));
+    }
+
     const { error, initialState } = await runRouter(location);
     if (error) throw error;
 
@@ -60,6 +82,7 @@ export default async function({ location, history, store }) {
     const state = serialize(store.getState());
     const body = React.renderToString(element);
 
-    return { body, state };
+    cache[cacheKey] = { body, state };
+    return cache[cacheKey];
   }
 }
