@@ -1,10 +1,9 @@
-import { generateAsyncConstants } from '../utils';
+import { generateConstants } from '../utils';
 
-export default {
-  USERS_CLEAR_ERROR: 'USERS_CLEAR_ERROR',
-  ...generateAsyncConstants('USERS_INDEX'),
-  ...generateAsyncConstants('USERS_SHOW'),
-  ...generateAsyncConstants('README_LOAD'),
-  LOCALE_INITIALIZE: 'LOCALE_INITIALIZE',
-  ...generateAsyncConstants('LOCALE_CHANGE')
-};
+export default generateConstants([
+  'USERS_CLEAR_ERROR',
+  'USERS_INDEX(ASYNC)',
+  'README_LOAD(ASYNC)',
+  'LOCALE_INITIALIZE',
+  'LOCALE_CHANGE(ASYNC)'
+]);

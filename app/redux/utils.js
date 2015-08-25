@@ -1,15 +1,28 @@
 // Utils for removing boilerplate from Redux
 import t from './constants/ActionTypes';
 
-export function asyncFuncCreator({ CONSTANT, promise, ...rest }) {
-  const types = [t[CONSTANT], t[CONSTANT + '_SUCCESS'], t[CONSTANT + '_FAIL']];
-  return { types, promise, ...rest };
+export function asyncFuncCreator({ constant, ...rest }) {
+  return {
+    types: [
+      t[constant],
+      t[constant + '_SUCCESS'],
+      t[constant + '_FAIL']
+    ],
+    ...rest
+  };
 }
 
-export function generateAsyncConstants(CONSTANT) {
-  return {
-    [CONSTANT]: CONSTANT,
-    [CONSTANT + '_SUCCESS']: CONSTANT + '_SUCCESS',
-    [CONSTANT + '_FAIL']: CONSTANT + '_FAIL'
-  };
+export function generateConstants(constants) {
+  const result = {};
+  for (const constant of constants) {
+    if (constant.indexOf('(ASYNC)')) {
+      const clean = constant.replace('(ASYNC)', '');
+      result[clean] = clean;
+      result[clean + '_SUCCESS'] = clean + '_SUCCESS';
+      result[clean + '_FAIL'] = clean + '_FAIL';
+    } else {
+      result[constant] = constant;
+    }
+  }
+  return result;
 }

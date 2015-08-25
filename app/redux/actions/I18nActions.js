@@ -5,7 +5,7 @@ import { asyncFuncCreator } from '../utils';
 
 export function change(locale = 'en') {
   return asyncFuncCreator({
-    CONSTANT: 'LOCALE_CHANGE',
+    constant: 'LOCALE_CHANGE',
     promise: loaders[locale],
     locale
   });
