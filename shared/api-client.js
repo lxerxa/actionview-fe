@@ -1,5 +1,4 @@
 import axios from 'axios';
-import isUndefined from 'lodash/lang/isUndefined';
 
 const { BROWSER, PORT = 3000 } = process.env;
 
@@ -18,7 +17,7 @@ class ApiClient {
     config.method = config.method || 'get';
 
     // Append correct `baseURL` to `config.url`
-    if (isUndefined(config.baseURL)) {
+    if (config.baseURL === undefined) {
       config.url = config.url ? this.baseURL + config.url : this.baseURL;
     } else {
       config.url = config.url ? config.baseURL + config.url : config.baseURL;
@@ -26,7 +25,8 @@ class ApiClient {
 
     // Add CORS credentials on browser side
     if (BROWSER) {
-      config.withCredentials = isUndefined(config.withCredentials) && true || config.withCredentials;
+      config.withCredentials = (config.withCredentials === undefined) ?
+        true : config.withCredentials;
     }
 
     // Copy cookies into headers on server side

@@ -1,4 +1,3 @@
-import findIndex from 'lodash/array/findIndex';
 import t from '../constants/ActionTypes';
 
 const initialState = { collection: [] };
@@ -23,13 +22,7 @@ export default function users(state = initialState, action) {
 
       // find fetched user into collection
       const { seed } = action.result;
-      const index = findIndex(collection, { seed });
-
-      if (index > -1) {
-        // update the user if he exists
-        collection[index] = action.result;
-      } else {
-        // else add new user into collection
+      if (!collection.find(user => user.seed === seed)) {
         collection = [ action.result, ...state.collection ];
       }
 
