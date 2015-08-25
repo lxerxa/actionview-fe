@@ -1,4 +1,9 @@
 {
+  "routes": {
+    "users": "/utilisateurs",
+    "readme": "/lisez-moi",
+    "profile": "/utilisateurs/{seed}"
+  },
   "users": "Utilisateurs",
   "readme": "Documentation"
 }
