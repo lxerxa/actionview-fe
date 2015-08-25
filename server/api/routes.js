@@ -17,7 +17,7 @@ export default function(router) {
 
   router.get('/users/:seed', function(req, res) {
     const { seed } = req.params;
-    const result = simplifyUsers(users.filter(user => user.seed === seed))[0];
+    const [ result ] = simplifyUsers(users.filter(user => user.seed === seed));
 
     if (!result) res.status(422).send({ error: { message: 'User not found' } });
     return res.status(200).send(result);
