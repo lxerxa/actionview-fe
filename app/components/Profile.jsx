@@ -16,11 +16,11 @@ class Profile extends Component {
   static contextTypes = { store: PropTypes.object.isRequired }
 
   componentWillMount() {
-    const { dispatch, params } = this.props;
-    const { resolver } = this.context.store;
+    const { store: { resolver } } = this.context;
+    const { dispatch, params: { seed } } = this.props;
     this.actions = bindActionCreators(UserActions, dispatch);
 
-    return resolver.resolve(this.actions.show, params.seed);
+    return resolver.resolve(this.actions.show, seed);
   }
 
   componentWillUnmount() {
