@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import ReduxResolver from './redux-resolver';
 import routes from '../app/routes';
 
+const { BROWSER, NODE_ENV } = process.env;
+
 const runRouter = function(location) {
   return new Promise(function(resolve) {
     Router.run(routes, location, function(error, initialState) {
@@ -19,7 +21,7 @@ export default async function({ location, history, store }) {
   const resolver = new ReduxResolver();
   store.resolver = resolver;
 
-  if (process.env.BROWSER) {
+  if (BROWSER && NODE_ENV === 'development') {
     // add redux-devtools on client side
     const { DevTools, DebugPanel, LogMonitor } = require('redux-devtools/lib/react');
 
@@ -32,6 +34,12 @@ export default async function({ location, history, store }) {
           <DevTools store={ store } monitor={ LogMonitor } />
         </DebugPanel>
       </div>
+    );
+  } else if (BROWSER) {
+    return (
+      <Provider store={ store }>
+        { () => <Router history={ history } routes={ routes } /> }
+      </Provider>
     );
   } else {
     const { error, initialState } = await runRouter(location);
