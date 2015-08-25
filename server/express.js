@@ -6,8 +6,10 @@ import helmet from 'helmet';
 import Location from 'react-router/lib/Location';
 
 import ApiClient from '../shared/api-client';
-import createStore from '../app/redux/create';
 import universalRender from '../shared/universal-render';
+
+import createStore from 'redux/create';
+import * as I18nActions from 'redux/actions/I18nActions';
 
 const { NODE_ENV = 'development', PORT = 3000 } = process.env;
 const server = express();
@@ -58,9 +60,20 @@ server.use('/api', apiRouter);
 // Run requests through react-router next
 server.use(async function(req, res) {
   try {
+    // Initialize Redux
     const client = new ApiClient(req);
     const location = new Location(req.path, req.query);
     const store = createStore(client, {});
+
+    // Initiliaze locale rendering
+    try {
+      const locale = req.acceptsLanguages(['en', 'fr']);
+      const messages = require(`i18n/${locale}`);
+      store.dispatch(I18nActions.initialize(locale, messages));
+    } catch(error) {
+      store.dispatch(I18nActions.initialize('en', require('i18n/en')));
+    }
+
     const { body, state } = await universalRender({ location, store, client });
 
     // Load assets paths from `webpack-stats`
