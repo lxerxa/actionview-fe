@@ -25,7 +25,7 @@ export default function users(state = initialState, action) {
       const { seed } = action.result;
       const index = findIndex(collection, { seed });
 
-      if (index > 0) {
+      if (index > -1) {
         // update the user if he exists
         collection[index] = action.result;
       } else {
