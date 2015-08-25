@@ -13,8 +13,7 @@ export function asyncFuncCreator({ constant, ...rest }) {
 }
 
 export function generateConstants(constants) {
-  const result = {};
-  for (const constant of constants) {
+  return constants.reduce((result, constant) => {
     if (constant.indexOf('(ASYNC)')) {
       const clean = constant.replace('(ASYNC)', '');
       result[clean] = clean;
@@ -23,6 +22,6 @@ export function generateConstants(constants) {
     } else {
       result[constant] = constant;
     }
-  }
-  return result;
+    return result;
+  }, {});
 }
