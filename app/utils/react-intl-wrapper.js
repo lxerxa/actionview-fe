@@ -1,12 +1,14 @@
-import { IntlMixin } from 'react-intl';
+import debug from 'debug';
+import { IntlMixin as i18n } from 'react-intl';
 
 // prevent app to break when translation is missing
 // add message a la i18n Rails
-export function getIntlMessage(key) {
+export function getIntlMessage(key, values) {
   try {
-    return IntlMixin.getIntlMessage.call(this, key);
+    const messages = i18n.getIntlMessage.call(this, key);
+    return i18n.formatMessage.call({ ...this, ...i18n }, messages, values);
   } catch (error) {
-    const { locale } = this.props;
-    return `translation missing ${locale}: ${key}`;
+    debug('dev')(error);
+    return `translation missing ${this.props.locale}: ${key}`;
   }
 }
