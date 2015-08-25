@@ -43,7 +43,7 @@ class Users extends Component {
           <ul className='well'>
             { collection.map(({ name, picture, seed }) =>
                 <li key={ seed }>
-                  <Link to={ '/users/' + seed }>
+                  <Link to={ this.i18n('routes.profile', { seed }) }>
                     <img
                       className='img-thumbnail'
                       src={ picture.thumbnail } />

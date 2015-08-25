@@ -26,12 +26,12 @@ class Navbar extends Component {
           <div className='navbar-collapse collapse'>
             <ul className='nav navbar-nav'>
               <li>
-                <Link to='/'>
+                <Link to={ this.i18n('routes.users') }>
                   { this.i18n('users') }
                 </Link>
               </li>
               <li>
-                <Link to='/readme'>
+                <Link to={ this.i18n('routes.readme') }>
                   { this.i18n('readme') }
                 </Link>
               </li>
