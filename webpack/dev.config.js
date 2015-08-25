@@ -30,7 +30,7 @@ export default {
     }
   },
   webpack: {
-    devtool: 'eval-source-map',
+    devtool: 'cheap-module-source-map',
     entry: {
       app: [
         `webpack-dev-server/client?http://0.0.0.0:${PORT}`,
