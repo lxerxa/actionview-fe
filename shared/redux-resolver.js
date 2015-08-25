@@ -15,16 +15,8 @@ class ReduxResolver {
     }
   }
 
-  mapActions() {
-    return this.pendingActions
-      .map(({ action, args }) => action(...args));
-  }
-
-  async dispatchPendingActions() {
-    const promises = this.mapActions();
-    await Promise.all(promises);
-  }
-
+  mapActions = () => this.pendingActions.map(({ action, args }) => action(...args));
+  dispatchPendingActions = async () => await Promise.all(this.mapActions())
 }
 
 export default ReduxResolver;

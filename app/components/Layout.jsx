@@ -12,7 +12,7 @@ class Layout extends Component {
       <div>
         <Navbar />
         <div className='container'>
-          {this.props.children}
+          { this.props.children }
         </div>
       </div>
     );

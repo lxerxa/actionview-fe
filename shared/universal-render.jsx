@@ -15,7 +15,7 @@ const runRouter = function(location) {
   });
 };
 
-export default async function({location, history, store}) {
+export default async function({ location, history, store }) {
   const resolver = new ReduxResolver();
   store.resolver = resolver;
 
@@ -25,15 +25,15 @@ export default async function({location, history, store}) {
 
     return (
       <div>
-        <Provider store={store}>
-          {() => (
+        <Provider store={ store }>
+          { () => (
             <Router
-              history={history}
-              routes={routes} />
-          )}
+              history={ history }
+              routes={ routes } />
+          ) }
         </Provider>
         <DebugPanel top right bottom>
-          <DevTools store={store} monitor={LogMonitor} />
+          <DevTools store={ store } monitor={ LogMonitor } />
         </DebugPanel>
       </div>
     );
@@ -41,10 +41,10 @@ export default async function({location, history, store}) {
     const { error, initialState } = await runRouter(location);
     if (error) throw error;
 
-    const props = {location, ...initialState};
+    const props = { location, ...initialState };
     const element = (
-      <Provider store={store}>
-        {() => <Router {...props} />}
+      <Provider store={ store }>
+        { () => <Router { ...props } /> }
       </Provider>
     );
 

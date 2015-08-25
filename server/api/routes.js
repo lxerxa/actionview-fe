@@ -7,7 +7,7 @@ import { users } from './data.json';
 
 const simplifyUsers = (collection) => collection
   .map(({ user, seed }) => ({ ...user, seed }))
-  .map(({ name, seed, picture}) => ({ name, seed, picture }));
+  .map(({ name, seed, picture }) => ({ name, seed, picture }));
 
 export default function(router) {
   router.get('/users', function(req, res) {
@@ -19,7 +19,7 @@ export default function(router) {
     const { seed } = req.params;
     const result = simplifyUsers(users.filter(user => user.seed === seed))[0];
 
-    if (!result) res.status(422).send({error: {message: 'User not found'}});
+    if (!result) res.status(422).send({ error: { message: 'User not found' } });
     return res.status(200).send(result);
   });
 

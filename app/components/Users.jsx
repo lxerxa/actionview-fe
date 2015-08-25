@@ -13,9 +13,7 @@ class Users extends Component {
     dispatch: PropTypes.func.isRequired
   }
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  }
+  static contextTypes = { store: PropTypes.object.isRequired }
 
   componentWillMount() {
     const { resolver } = this.context.store;
@@ -25,31 +23,14 @@ class Users extends Component {
     return resolver.resolve(this.actions.index);
   }
 
-  componentWillUnmount() {
-    this.actions.clearError();
-  }
-
-  renderUser({ name, picture, seed }, index) {
-    return (
-      <li
-        key={index}
-        className='text-capitalize'>
-        <Link to={ '/users/' + seed }>
-          <img
-            className='img-thumbnail'
-            src={ picture.thumbnail } />
-          { name.first } { name.last }
-        </Link>
-      </li>
-    );
-  }
+  componentWillUnmount = () => this.actions.clearError()
 
   render() {
-    const { users } = this.props;
-    if (users.error) {
+    const { users: { error, collection } } = this.props;
+    if (error) {
       return (
         <div className='alert alert-danger'>
-          <strong>{ users.error }</strong>
+          <strong>{ error }</strong>
         </div>
       );
     } else {
@@ -57,10 +38,16 @@ class Users extends Component {
         <div className='user-list'>
           <h1>Users</h1>
           <ul className='well'>
-            {
-              users.collection
-                .map(this.renderUser)
-            }
+            { collection.map(({ name, picture, seed }) =>
+                <li key={ seed }>
+                  <Link to={ '/users/' + seed }>
+                    <img
+                      className='img-thumbnail'
+                      src={ picture.thumbnail } />
+                    { name.first } { name.last }
+                  </Link>
+                </li>
+            ) }
           </ul>
         </div>
       );

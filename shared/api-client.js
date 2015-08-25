@@ -30,15 +30,14 @@ class ApiClient {
     }
 
     // Copy cookies into headers on server side
-    if (!BROWSER && this.cookie) config.headers = {cookie: this.cookie};
+    if (!BROWSER && this.cookie) config.headers = { cookie: this.cookie };
 
     return config;
   }
 
   async request(config = {}) {
-    config = this.getConfig(config);
     try {
-      const { data } = await axios(config);
+      const { data } = await axios(this.getConfig(config));
       return data;
     } catch(error) {
       throw error && error.data || error.stack;

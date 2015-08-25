@@ -12,9 +12,7 @@ class Readme extends Component {
     dispatch: PropTypes.func.isRequired
   }
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  }
+  static contextTypes = { store: PropTypes.object.isRequired }
 
   componentWillMount() {
     const { dispatch } = this.props;
@@ -25,21 +23,14 @@ class Readme extends Component {
   }
 
   render() {
-    const { readme } = this.props;
+    const { readme: { error, markdown } } = this.props;
+    if (error) return <div className='alert alert-danger'>{ error }</div>;
 
-    if (readme.error) {
-      return (
-        <div className='alert alert-danger'>
-          { readme.error }
-        </div>
-      );
-    } else {
-      return (
-        <div
-          className='well'
-          dangerouslySetInnerHTML={{__html: readme.markdown}} />
-      );
-    }
+    return (
+      <div
+        className='well'
+        dangerouslySetInnerHTML={ { __html: markdown } } />
+    );
   }
 
 }

@@ -13,9 +13,7 @@ class Profile extends Component {
     params: PropTypes.object.isRequired
   }
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  }
+  static contextTypes = { store: PropTypes.object.isRequired }
 
   componentWillMount() {
     const { dispatch, params } = this.props;
@@ -30,13 +28,13 @@ class Profile extends Component {
   }
 
   render() {
-    const { params, users } = this.props;
-    const user = users.collection.find(({ seed }) => seed === params.seed);
+    const { params, users: { error, collection } } = this.props;
+    const user = collection.find(({ seed }) => seed === params.seed);
 
-    if (users.error) {
+    if (error) {
       return (
         <div className='alert alert-danger'>
-          <strong>{users.error}</strong>
+          <strong>{ error }</strong>
         </div>
       );
     } else if (!user) {
@@ -46,13 +44,11 @@ class Profile extends Component {
         </div>
       );
     } else {
-      const { name, picture } = user;
+      const { name: { first, last }, picture: { medium } } = user;
       return (
         <div>
-          <h1 className='text-capitalize'>{name.first} {name.last}</h1>
-          <img
-            className='img-thumbnail'
-            src={picture.medium} />
+          <h1 className='text-capitalize'>{ first } { last }</h1>
+          <img className='img-thumbnail' src={ medium } />
         </div>
       );
     }

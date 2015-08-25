@@ -22,7 +22,7 @@ if (BROWSER) {
     const store = createStore(new ApiClient(), window.__state);
     const history = new BrowserHistory();
     const container = window.document.getElementById('content');
-    const element = await universalRender({history, store});
+    const element = await universalRender({ history, store });
 
     // render application in browser
     React.render(element, container);
