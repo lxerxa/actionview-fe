@@ -26,11 +26,7 @@ export default async function({ location, history, store }) {
     return (
       <div>
         <Provider store={ store }>
-          { () => (
-            <Router
-              history={ history }
-              routes={ routes } />
-          ) }
+          { () => <Router history={ history } routes={ routes } /> }
         </Provider>
         <DebugPanel top right bottom>
           <DevTools store={ store } monitor={ LogMonitor } />

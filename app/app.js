@@ -9,13 +9,8 @@ import universalRender from '../shared/universal-render';
 
 const { NODE_ENV, BROWSER } = process.env;
 
-if (NODE_ENV !== 'production') {
-  debug.enable('dev');
-}
-
-if (BROWSER) {
-  require('styles/app.css');
-}
+if (NODE_ENV !== 'production') debug.enable('dev');
+if (BROWSER) require('styles/app.css');
 
 (async function() {
   try {

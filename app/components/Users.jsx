@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import * as UserActions from 'redux/actions/UserActions';
+import { getIntlMessage } from 'utils/react-intl-wrapper';
 
-@connect(({ users }) => ({ users }))
+@connect(({ users, i18n }) => ({ users, ...i18n }))
 class Users extends Component {
 
   static propTypes = {
@@ -14,6 +15,8 @@ class Users extends Component {
   }
 
   static contextTypes = { store: PropTypes.object.isRequired }
+
+  i18n = getIntlMessage
 
   componentWillMount() {
     const { resolver } = this.context.store;
@@ -36,7 +39,7 @@ class Users extends Component {
     } else {
       return (
         <div className='user-list'>
-          <h1>Users</h1>
+          <h1>{ this.i18n('users') }</h1>
           <ul className='well'>
             { collection.map(({ name, picture, seed }) =>
                 <li key={ seed }>

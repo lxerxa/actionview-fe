@@ -25,11 +25,13 @@
     "react/require-extension": 2,
     "react/self-closing-comp": 2,
     "react/wrap-multilines": 2,
+    "react/sort-comp": 0,
 
     "quotes": [2, "single", "avoid-escape"],
     "comma-dangle": [2, "never"],
     "indent": [2, 2, { "SwitchCase": 1 }],
     "object-curly-spacing": [2, "always"],
+    "no-undef": 2,
     "no-underscore-dangle": 0,
     "func-names": 0,
     "no-else-return": 0
