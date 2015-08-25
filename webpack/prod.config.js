@@ -41,7 +41,7 @@ export default {
     new webpack.DefinePlugin({
       'process.env': {
         BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify('production')
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production')
       }
     }),
 
