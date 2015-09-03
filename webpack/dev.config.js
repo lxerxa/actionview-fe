@@ -9,7 +9,7 @@ import startExpress from './utils/start-express';
 const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
 const LOCAL_IP = require('dev-ip')();
 const HOST = isArray(LOCAL_IP) && LOCAL_IP[0] || LOCAL_IP || 'localhost';
-const PUBLIC_PATH = `http://${HOST}:${PORT}/assets/`;
+const PUBLIC_PATH = `//${HOST}:${PORT}/assets/`;
 const JS_REGEX = /\.js$|\.jsx$|\.es6$|\.babel$/;
 
 export default {
@@ -33,8 +33,7 @@ export default {
     devtool: 'cheap-module-source-map',
     entry: {
       app: [
-        `webpack-dev-server/client?http://0.0.0.0:${PORT}`,
-        'webpack/hot/only-dev-server',
+        `webpack-hot-middleware/client?path=//${HOST}:${PORT}/__webpack_hmr`,
         './app/index.js'
       ]
     },
@@ -50,7 +49,7 @@ export default {
       ],
       loaders: [
         {test: /\.json$/, exclude: /node_modules/, loader: 'json'},
-        {test: JS_REGEX, exclude: /node_modules/, loaders: ['react-hot', 'babel']},
+        {test: JS_REGEX, exclude: /node_modules/, loader: 'babel'},
         {test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)$/, loader: 'file?name=[sha512:hash:base64:7].[ext]'},
         {test: /\.css$/, exclude: /node_modules/, loader: 'style!css!postcss'}
       ]
