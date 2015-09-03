@@ -1,13 +1,17 @@
 import debug from 'debug';
 import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+import express from 'express';
 
 import config from './dev.config';
 
+const app = express();
 const compiler = webpack(config.webpack);
-const devServer = new WebpackDevServer(compiler, config.server.options);
 
 debug.enable('dev');
-devServer.listen(config.server.port, '0.0.0.0', function() {
+
+app.use(require('webpack-dev-middleware')(compiler, config.server.options));
+app.use(require('webpack-hot-middleware')(compiler));
+
+app.listen(config.server.port, '0.0.0.0', function() {
   debug('dev')('`webpack-dev-server` listening on port %s', config.server.port);
 });

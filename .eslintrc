@@ -15,7 +15,6 @@
     "react/jsx-quotes": [2, "single", "avoid-espace"],
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
-    "react/no-danger": 1,
     "react/no-did-mount-set-state": 2,
     "react/no-did-update-set-state": 2,
     "react/no-multi-comp": 2,

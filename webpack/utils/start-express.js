@@ -22,8 +22,8 @@ function startServer() {
     return startServer();
   }
 
-  const env = Object.assign({}, {NODE_ENV: 'development'}, process.env);
-  server = cp.fork(SERVER, {env});
+  const env = { ...process.env, NODE_ENV: 'development', BABEL_ENV: 'server' };
+  server = cp.fork(SERVER, { env });
 
   server.once('message', function(message) {
     if (message.match(/^online$/)) {
