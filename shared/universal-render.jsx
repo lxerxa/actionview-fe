@@ -29,7 +29,10 @@ export default async function({ location, history, store, locale }) {
           <Router history={ history } routes={ routes } />
         </Provider>
         <DebugPanel top right bottom>
-          <DevTools store={ store } monitor={ LogMonitor } />
+          <DevTools
+            store={ store }
+            monitor={ LogMonitor }
+            visibleOnLoad={ false }/>
         </DebugPanel>
       </div>
     );
