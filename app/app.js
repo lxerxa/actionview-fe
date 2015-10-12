@@ -1,6 +1,6 @@
 import debug from 'debug';
 
-import React from 'react';
+import ReactDOM from 'react-dom';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import createStore from './redux/create';
@@ -20,7 +20,7 @@ if (BROWSER) require('styles/app.css');
     const element = await universalRender({ history, store });
 
     // render application in browser
-    React.render(element, container);
+    ReactDOM.render(element, container);
 
     // clean state of `redux-resolver`
     store.resolver.firstRender = false;

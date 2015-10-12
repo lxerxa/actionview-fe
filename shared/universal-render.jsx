@@ -1,6 +1,7 @@
 import serialize from 'serialize-javascript';
 
 import React from 'react';
+import ReactDOM from 'react-dom/server';
 import { Provider } from 'react-redux';
 import Router, { RoutingContext, match } from 'react-router';
 
@@ -25,7 +26,7 @@ export default async function({ location, history, store, locale }) {
     return (
       <div>
         <Provider store={ store }>
-          { () => <Router history={ history } routes={ routes } /> }
+          <Router history={ history } routes={ routes } />
         </Provider>
         <DebugPanel top right bottom>
           <DevTools store={ store } monitor={ LogMonitor } />
@@ -35,7 +36,7 @@ export default async function({ location, history, store, locale }) {
   } else if (BROWSER) {
     return (
       <Provider store={ store }>
-        { () => <Router history={ history } routes={ routes } /> }
+        <Router history={ history } routes={ routes } />
       </Provider>
     );
   } else {
@@ -55,17 +56,17 @@ export default async function({ location, history, store, locale }) {
 
     const element = (
       <Provider store={ store }>
-        { () => <RoutingContext { ...routerProps } /> }
+        <RoutingContext { ...routerProps } />
       </Provider>
     );
 
     // Collect promises with a first render
-    React.renderToString(element);
+    ReactDOM.renderToString(element);
     // Resolve them, populate stores
     await resolver.dispatchPendingActions();
     // Re-render application with data
     const state = serialize(store.getState());
-    const body = React.renderToString(element);
+    const body = ReactDOM.renderToString(element);
 
     return { body, state };
   }
