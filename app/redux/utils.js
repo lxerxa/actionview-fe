@@ -1,12 +1,12 @@
 // Utils for removing boilerplate from Redux
-import t from './constants/ActionTypes';
+import at from './constants/ActionTypes';
 
 export function asyncFuncCreator({ constant, ...rest }) {
   return {
     types: [
-      t[constant],
-      t[constant + '_SUCCESS'],
-      t[constant + '_FAIL']
+      at[constant],
+      at[constant + '_SUCCESS'],
+      at[constant + '_FAIL']
     ],
     ...rest
   };

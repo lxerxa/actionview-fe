@@ -1,22 +1,22 @@
-import t from '../constants/ActionTypes';
+import at from '../constants/ActionTypes';
 
 const initialState = { collection: [] };
 
 export default function users(state = initialState, action) {
   switch (action.type) {
-    case t.USERS_INDEX:
+    case at.USERS_INDEX:
       return { ...state, loading: true };
 
-    case t.USERS_INDEX_SUCCESS:
+    case at.USERS_INDEX_SUCCESS:
       return { ...state, loading: false, collection: action.result };
 
-    case t.USERS_INDEX_FAIL:
+    case at.USERS_INDEX_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.USERS_SHOW:
+    case at.USERS_SHOW:
       return { ...state, loading: true };
 
-    case t.USERS_SHOW_SUCCESS:
+    case at.USERS_SHOW_SUCCESS:
       // clone `state.collection`
       let collection = [ ...state.collection ];
 
@@ -29,10 +29,10 @@ export default function users(state = initialState, action) {
       // return modified state
       return { ...state, loading: false, collection };
 
-    case t.USERS_SHOW_FAIL:
+    case at.USERS_SHOW_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.USERS_CLEAR_ERROR:
+    case at.USERS_CLEAR_ERROR:
       return { ...state, error: null };
 
     default:

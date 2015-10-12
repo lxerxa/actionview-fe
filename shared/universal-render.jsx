@@ -1,24 +1,18 @@
-import crypto from 'crypto';
 import serialize from 'serialize-javascript';
 
 import React from 'react';
-import Router from 'react-router';
 import { Provider } from 'react-redux';
+import Router, { RoutingContext, match } from 'react-router';
 
 import ReduxResolver from './redux-resolver';
 import routes from '../app/routes';
 import * as I18nActions from 'redux/actions/I18nActions';
 
 const { BROWSER, NODE_ENV } = process.env;
-const cache = {};
 
-const runRouter = function(location) {
-  return new Promise(function(resolve) {
-    Router.run(routes, location, function(error, initialState) {
-      return resolve({ error, initialState });
-    });
-  });
-};
+const runRouter = (location) =>
+  new Promise((resolve) =>
+    match({ routes, location }, (...args) => resolve(args)));
 
 export default async function({ location, history, store, locale }) {
   const resolver = new ReduxResolver();
@@ -45,17 +39,6 @@ export default async function({ location, history, store, locale }) {
       </Provider>
     );
   } else {
-    // simple cache
-    const { pathname, query } = location;
-    const cacheKey = crypto
-      .createHash('md5')
-      .update(pathname + JSON.stringify(query) + locale)
-      .digest('hex');
-
-    if (NODE_ENV === 'production' && cache[cacheKey] !== undefined) {
-      return cache[cacheKey];
-    }
-
     // Initialize locale of rendering
     try {
       const messages = require(`i18n/${locale}`);
@@ -64,13 +47,15 @@ export default async function({ location, history, store, locale }) {
       store.dispatch(I18nActions.initialize('en', require('i18n/en')));
     }
 
-    const { error, initialState } = await runRouter(location);
-    if (error) throw error;
+    const [ error, redirect, renderProps ] = await runRouter(location);
+    const routerProps = { ...renderProps, location };
 
-    const props = { location, ...initialState };
+    // TODO: Fix redirection
+    if (error || redirect) throw (error || redirect);
+
     const element = (
       <Provider store={ store }>
-        { () => <Router { ...props } /> }
+        { () => <RoutingContext { ...routerProps } /> }
       </Provider>
     );
 
@@ -82,7 +67,6 @@ export default async function({ location, history, store, locale }) {
     const state = serialize(store.getState());
     const body = React.renderToString(element);
 
-    cache[cacheKey] = { body, state };
-    return cache[cacheKey];
+    return { body, state };
   }
 }

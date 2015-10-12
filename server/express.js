@@ -3,7 +3,7 @@ import debug from 'debug';
 import express from 'express';
 import helmet from 'helmet';
 
-import Location from 'react-router/lib/Location';
+import createLocation from 'history/lib/createLocation';
 
 import ApiClient from '../shared/api-client';
 import universalRender from '../shared/universal-render';
@@ -61,7 +61,7 @@ server.use(async function(req, res) {
   try {
     // Initialize Redux
     const client = new ApiClient(req);
-    const location = new Location(req.path, req.query);
+    const location = createLocation(req.path, req.query);
     const store = createStore(client, {});
     const locale = req.acceptsLanguages(['en', 'fr']) || 'en';
 

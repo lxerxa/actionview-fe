@@ -39,7 +39,7 @@ class ApiClient {
     try {
       const { data } = await axios(this.getConfig(config));
       return data;
-    } catch(error) {
+    } catch (error) {
       throw error && error.data || error.stack;
     }
   }
