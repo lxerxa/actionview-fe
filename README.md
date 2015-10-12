@@ -6,9 +6,9 @@
 
 * [expressjs](http://expressjs.com/)
 * [reactjs ^0.13](https://facebook.github.io/react/)
-* [react-router ^1.0.0-beta3](http://rackt.github.io/react-router/tags/v1.0.0-beta3.html)
-* [redux ^1.0.0-rc](https://github.com/gaearon/redux)
-* [redux-devtools](https://github.com/gaearon/redux-devtools)
+* [react-router 1.0.0-rc3](http://rackt.github.io/react-router/tags/v1.0.0-beta3.html)
+* [redux ^3.0.0](https://github.com/gaearon/redux)
+* [redux-devtools ^3.0.0](https://github.com/gaearon/redux-devtools)
 * [postcss](https://github.com/postcss/postcss)
 * [cssnext](http://cssnext.io/)
 * [webpack](http://webpack.github.io)
