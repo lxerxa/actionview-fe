@@ -2,29 +2,14 @@ import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import writeStats from './utils/write-stats';
-import postCSSPlugins from './postcss.config';
-
-const JS_REGEX = /\.js$|\.jsx$|\.es6$|\.babel$/;
+import { baseConfig } from './base.config';
 
 export default {
-  devtool: 'source-map',
-  entry: {
-    app: './app/index.js'
-  },
-  output: {
-    path: path.join(__dirname, '../dist'),
-    filename: '[name]-[hash].js',
-    chunkFilename: '[name]-[hash].js',
-    publicPath: '/assets/'
-  },
+  ...baseConfig,
   module: {
-    preLoaders: [
-      { test: JS_REGEX, exclude: /node_modules/, loader: 'eslint' }
-    ],
+    ...baseConfig.module,
     loaders: [
-      { test: /\.json$/, exclude: /node_modules/, loader: 'json' },
-      { test: JS_REGEX, exclude: /node_modules/, loader: 'babel' },
+      ...baseConfig.module.loaders,
       {
         test: /\.(svg|woff|woff2|eot|ttf)(\?v=[0-9].[0-9].[0-9])?$/,
         loader: 'file?name=[sha512:hash:base64:7].[ext]',
@@ -35,12 +20,13 @@ export default {
         loader: 'file?name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced',
         exclude: /node_modules\/(?!font-awesome|bootstrap)/
       },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!postcss') }
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style', 'css!postcss')
+      }
     ]
   },
-  postcss: [ ...postCSSPlugins ],
   plugins: [
-
     new ExtractTextPlugin('[name]-[hash].css'),
 
     new webpack.DefinePlugin({
@@ -77,11 +63,6 @@ export default {
       }
     }),
 
-    // write webpack stats
-    function() { this.plugin('done', writeStats); }
-  ],
-  resolve: {
-    extensions: ['', '.js', '.json', '.jsx', '.es6', '.babel'],
-    modulesDirectories: ['node_modules', 'app']
-  }
+    ...baseConfig.plugins
+  ]
 };
