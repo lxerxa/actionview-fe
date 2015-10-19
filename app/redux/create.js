@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { devTools, persistState } from 'redux-devtools';
+import { persistState } from 'redux-devtools';
 
+import DevTools from '../utils/dev-tools';
 import createMiddleware from './clientMiddleware';
 import * as reducers from './reducers';
 
@@ -14,7 +15,7 @@ export default function(client, data) {
   if (process.env.BROWSER) {
     finalCreateStore = compose(
       applyMiddleware(middleware),
-      devTools(),
+      DevTools.instrument(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(createStore);
   } else {

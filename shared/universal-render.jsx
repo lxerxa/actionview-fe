@@ -15,25 +15,24 @@ const runRouter = (location) =>
   new Promise((resolve) =>
     match({ routes, location }, (...args) => resolve(args)));
 
+/* eslint react/display-name:0 */
+// see: https://github.com/yannickcr/eslint-plugin-react/issues/256
 export default async function({ location, history, store, locale }) {
   const resolver = new ReduxResolver();
   store.resolver = resolver;
 
   if (BROWSER && NODE_ENV === 'development') {
     // add redux-devtools on client side
-    const { DevTools, DebugPanel, LogMonitor } = require('redux-devtools/lib/react');
+    const DevTools = require('utils/dev-tools');
 
     return (
       <div>
         <Provider store={ store }>
           <Router history={ history } routes={ routes } />
         </Provider>
-        <DebugPanel top right bottom>
-          <DevTools
-            store={ store }
-            monitor={ LogMonitor }
-            visibleOnLoad={ false }/>
-        </DebugPanel>
+        <Provider store={ store }>
+          <DevTools key='dev-tools' />
+        </Provider>
       </div>
     );
   } else if (BROWSER) {
