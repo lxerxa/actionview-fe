@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import * as I18nActions from 'redux/actions/I18nActions';
-import { getIntlMessage } from 'utils/react-intl-wrapper';
+import connectI18n from 'decorators/connectI18n';
 
-@connect(({ i18n }) => ({ ...i18n }))
+@connectI18n()
 class Navbar extends Component {
 
   static propTypes = {
@@ -16,7 +15,6 @@ class Navbar extends Component {
     messages: PropTypes.object
   }
 
-  i18n = getIntlMessage
   actions = bindActionCreators(I18nActions, this.props.dispatch)
 
   render() {

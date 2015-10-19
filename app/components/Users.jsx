@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import * as UserActions from 'redux/actions/UserActions';
-import { getIntlMessage } from 'utils/react-intl-wrapper';
+import connectI18n from 'decorators/connectI18n';
 
-@connect(({ users, i18n }) => ({ users, ...i18n }))
+@connect(({ users }) => ({ users }))
+@connectI18n()
 class Users extends Component {
 
   static propTypes = {
@@ -15,8 +16,6 @@ class Users extends Component {
   }
 
   static contextTypes = { store: PropTypes.object.isRequired }
-
-  i18n = getIntlMessage
 
   componentWillMount() {
     const { resolver } = this.context.store;

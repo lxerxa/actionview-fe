@@ -1,6 +1,6 @@
 import at from '../constants/ActionTypes';
 
-const initialState = { messages: {}, locale: 'en' };
+const initialState = { messages: {}, formats: {}, locales: [ 'en' ] };
 
 export default function i18n(state = initialState, action) {
   const { type, result, locale, messages } = action;
@@ -10,14 +10,14 @@ export default function i18n(state = initialState, action) {
       return { ...state, loading: true };
 
     case at.LOCALE_CHANGE_SUCCESS:
-      return { messages: result, locale, loading: false };
+      return { ...state, messages: result, locales: [ locale ], loading: false };
 
     case at.LOCALE_CHANGE_FAIL:
       const { error } = result;
       return { ...state, loading: false, error };
 
     case at.LOCALE_INITIALIZE:
-      return { messages, locale };
+      return { ...state, messages, locales: [ locale ] };
 
     default:
       return state;
