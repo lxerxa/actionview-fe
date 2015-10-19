@@ -5,12 +5,13 @@
 ### Libraries
 
 * [expressjs](http://expressjs.com/)
-* [reactjs ^0.13](https://facebook.github.io/react/)
+* [reactjs ^0.14](https://facebook.github.io/react/)
 * [react-router 1.0.0-rc3](http://rackt.github.io/react-router/tags/v1.0.0-beta3.html)
 * [redux ^3.0.0](https://github.com/gaearon/redux)
-* [redux-devtools ^3.0.0](https://github.com/gaearon/redux-devtools)
+* [redux-devtools ^3.0.0-beta-3](https://github.com/gaearon/redux-devtools)
+* [react-redux ^4.0.0](https://github.com/rackt/react-redux)
 * [postcss](https://github.com/postcss/postcss)
-* [cssnext](http://cssnext.io/)
+* [precss](https://github.com/jonathantneal/precss)
 * [webpack](http://webpack.github.io)
 * [babel](http://babeljs.io)
 
@@ -51,7 +52,7 @@ The action `this.actions.load` will be resolved instantly on browser. On the oth
 * `$ cd universal-redux-boilerplate && npm install`
 * `$ npm run dev`
 
-(Don't forget to add your remote origin: `$ git remote origin git@github.com:xxx/xxx.git`)
+(Don't forget to add your remote origin: `$ git remote add origin git@github.com:xxx/xxx.git`)
 
 ### Update the boilerplate
 

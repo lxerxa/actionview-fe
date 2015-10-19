@@ -1,10 +1,9 @@
-/* eslint camelcase:0 */
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import cssnext from 'cssnext';
 
 import writeStats from './utils/write-stats';
+import postCSSPlugins from './postcss.config';
 
 const JS_REGEX = /\.js$|\.jsx$|\.es6$|\.babel$/;
 
@@ -21,19 +20,25 @@ export default {
   },
   module: {
     preLoaders: [
-      {test: JS_REGEX, exclude: /node_modules/, loader: 'eslint'}
+      { test: JS_REGEX, exclude: /node_modules/, loader: 'eslint' }
     ],
     loaders: [
-      {test: /\.json$/, exclude: /node_modules/, loader: 'json'},
-      {test: JS_REGEX, exclude: /node_modules/, loader: 'babel'},
-      {test: /\.(woff|woff2|eot|ttf|svg)$/, loader: 'file?name=[sha512:hash:base64:7].[ext]'},
-      {test: /\.(jpe?g|png|gif)$/, loader: 'file?name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced'},
-      {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!postcss')}
+      { test: /\.json$/, exclude: /node_modules/, loader: 'json' },
+      { test: JS_REGEX, exclude: /node_modules/, loader: 'babel' },
+      {
+        test: /\.(svg|woff|woff2|eot|ttf)(\?v=[0-9].[0-9].[0-9])?$/,
+        loader: 'file?name=[sha512:hash:base64:7].[ext]',
+        exclude: /node_modules\/(?!font-awesome|bootstrap)/
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/,
+        loader: 'file?name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced',
+        exclude: /node_modules\/(?!font-awesome|bootstrap)/
+      },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!postcss') }
     ]
   },
-  postcss: [
-    cssnext({browsers: 'last 2 versions'})
-  ],
+  postcss: [ ...postCSSPlugins ],
   plugins: [
 
     new ExtractTextPlugin('[name]-[hash].css'),

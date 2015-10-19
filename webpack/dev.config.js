@@ -1,10 +1,10 @@
 import path from 'path';
 import webpack from 'webpack';
 import { isArray } from 'lodash';
-import cssnext from 'cssnext';
 
 import writeStats from './utils/write-stats';
 import startExpress from './utils/start-express';
+import postCSSPlugins from './postcss.config';
 
 const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
 const LOCAL_IP = require('dev-ip')();
@@ -58,9 +58,7 @@ export default {
         { test: /\.css$/, exclude: /node_modules/, loader: 'style!css!postcss' }
       ]
     },
-    postcss: [
-      cssnext()
-    ],
+    postcss: [ ...postCSSPlugins ],
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin(),
