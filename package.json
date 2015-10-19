@@ -74,7 +74,6 @@
     "react-redux": "^4.0.0",
     "react-router": "^1.0.0-rc3",
     "redux": "^3.0.2",
-    "redux-devtools": "^2.1.5",
     "response-time": "^2.3.1",
     "serialize-javascript": "^1.0.0",
     "serve-favicon": "^2.3.0"
