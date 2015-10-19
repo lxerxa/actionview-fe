@@ -38,7 +38,7 @@
     "node-libs-browser": "^0.5.2",
     "node-watch": "^0.3.4",
     "postcss-import": "^7.1.0",
-    "postcss-loader": "^0.5.1",
+    "postcss-loader": "^0.7.0",
     "postcss-url": "^5.0.2",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
