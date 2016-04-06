@@ -4,18 +4,14 @@ import { Route } from 'react-router';
 import { generateRoute } from 'utils/localized-routes';
 
 export default (
-  <Route component={ require('components/Layout') }>
+  <Route component={ require('components/Header') }>
     { generateRoute({
-      paths: [ '/', '/users', '/utilisateurs' ],
-      component: require('components/Users')
+      paths: [ '/' ],
+      component: require('components/Main')
     }) }
     { generateRoute({
-      paths: [ '/users/:seed', '/utilisateurs/:seed' ],
-      component: require('components/Profile')
-    }) }
-    { generateRoute({
-      paths: [ '/readme', '/lisez-moi' ],
-      component: require('components/Readme')
+      paths: [ '/login' ],
+      component: require('components/Login')
     }) }
   </Route>
 );

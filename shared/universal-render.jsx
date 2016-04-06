@@ -1,5 +1,7 @@
 import serialize from 'serialize-javascript';
 
+import debug from 'debug';
+
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import { Provider } from 'react-redux';
