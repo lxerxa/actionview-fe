@@ -1,40 +1,26 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router'
-import { bindActionCreators } from 'redux';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+// import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import defaultAvatar from '../assets/images/avatar.png'
+// import defaultAvatar from '../assets/images/avatar.png';
 
-import * as ReadmeActions from 'redux/actions/ReadmeActions';
-
-@connect(({ readme }) => ({ readme }))
-class Readme extends Component {
-
-  static propTypes = {
-    readme: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
-  }
-
-  static contextTypes = { store: PropTypes.object.isRequired }
-
-  componentWillMount() {
-    const { dispatch } = this.props;
-    const { resolver } = this.context.store;
-    this.actions = bindActionCreators(ReadmeActions, dispatch);
-
-    return resolver.resolve(this.actions.load);
-  }
-
+@connect(({ styleMode }) => ({ styleMode }))
+class Navbar extends Component {
   render() {
-    const { readme: { error, markdown } } = this.props;
-    if (error) return <div className='alert alert-danger'>{ error }</div>;
-
     return (
-      <div
-        className='well'
-        dangerouslySetInnerHTML={ { __html: markdown } } />
+      <div className='navbar-box navbar-skin'>
+        <div className='navbar-menu'>
+          <Link className='navbar-item logo' title='首页' to='/'>
+            Hu
+          </Link>
+          <Link activeClassName='active' className='navbar-item mobile hidden-xs' title='移动应用' to='/apps'>
+            <i className='fa fa-mobile'></i>
+          </Link>
+        </div>
+      </div>
     );
   }
 
 }
 
-export default Readme;
+export default Navbar;

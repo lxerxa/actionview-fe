@@ -17,6 +17,8 @@ const runRouter = (location) =>
   new Promise((resolve) =>
     match({ routes, location }, (...args) => resolve(args)));
 
+debug('------------------------');
+
 /* eslint react/display-name:0 */
 // see: https://github.com/yannickcr/eslint-plugin-react/issues/256
 export default async function({ location, history, store, locale }) {

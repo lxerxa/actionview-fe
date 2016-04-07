@@ -4,13 +4,9 @@ import { Route } from 'react-router';
 import { generateRoute } from 'utils/localized-routes';
 
 export default (
-  <Route component={ require('components/Header') }>
+  <Route component={ require('components/Layout') }>
     { generateRoute({
-      paths: [ '/' ],
-      component: require('components/Main')
-    }) }
-    { generateRoute({
-      paths: [ '/login' ],
+      paths: [ '/', '/login' ],
       component: require('components/Login')
     }) }
   </Route>
