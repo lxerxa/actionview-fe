@@ -17,6 +17,18 @@ class Navbar extends Component {
             <i className='fa fa-mobile'></i>
           </Link>
         </div>
+        <div className='navbar-expanded'>
+          <div>
+            <a className='navbar-item change-mode'>
+              <i className='fa fa-sun-o'></i>
+            </a>
+          </div>
+          <div>
+            <Link activeClassName='active' className='navbar-item' title='登录' to='/login'>
+              <i className='fa fa-sign-in'></i>
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
