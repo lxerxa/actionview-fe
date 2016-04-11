@@ -79,6 +79,7 @@
     "serialize-javascript": "^1.0.0",
     "serve-favicon": "^2.3.0",
     "font-awesome": "~4.5.0",
-    "jackblog-sass": "git://github.com/jackhutu/jackblog-sass"
+    "jackblog-sass": "git://github.com/jackhutu/jackblog-sass",
+    "redux-form": "~5.0.0"
   }
 }

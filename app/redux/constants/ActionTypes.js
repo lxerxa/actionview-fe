@@ -7,6 +7,10 @@ export default generateConstants([
 
   'README_LOAD(ASYNC)',
 
+  'SESSION_CREATE(ASYNC)',
+
+  'USER_INFO_FETCH(ASYNC)',
+
   'LOCALE_INITIALIZE',
   'LOCALE_CHANGE(ASYNC)'
 ]);

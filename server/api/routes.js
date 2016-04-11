@@ -15,6 +15,11 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.post('/session', function(req, res) {
+    const results = { token: '22222' };
+    return res.status(200).send(results);
+  });
+
   router.get('/users/:seed', function(req, res) {
     const { seed } = req.params;
     const [ result ] = simplifyUsers(users.filter(user => user.seed === seed));
