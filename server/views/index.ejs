@@ -2,19 +2,18 @@
 <html lang='en'>
 <head>
   <meta charset='UTF-8' />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>Universal Redux Boilerplate</title>
   <%# Stylesheets from `webpack-stats.json` %>
   <% assets.style.forEach(function (style) { %>
     <link rel='stylesheet' href='<%= style %>' />
   <% }); %>
 </head>
-<body>
-  <%# React App output %>
-  <div id='content'><%- body %></div>
+<%# React App output %>
+<body class='day-mode'>
+  <div class='top-box' id='content'><%- body %></div>
 
   <script>window.__state = <%- state %>;</script>
-  <%# JavaScript from `webpack-stats.json` %>
-  <script async defer src="<%- assets.script[0] %>"></script>
+  <script async defer src='<%- assets.script[0] %>'></script>
 </body>
 </html>

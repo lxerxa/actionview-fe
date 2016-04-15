@@ -46,11 +46,14 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  static contextTypes = { store: PropTypes.object.isRequired }
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  }
 
   static propTypes = {
     session: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    history: PropTypes.object,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     dirty: PropTypes.bool,
@@ -66,6 +69,13 @@ class Login extends Component {
     resolver.resolve(actions.create, values);
   }
 
+  componentDidUpdate() {
+    const { session, history } = this.props;
+    if (session.token !== '') {
+      history.pushState(null, '/home');
+    }
+  }
+
   render() {
     const { session, fields: { email, password }, dirty, invalid, submitting } = this.props;
     const style = { marginTop: 13 + '%' };
@@ -73,7 +83,7 @@ class Login extends Component {
     return (
       <div className='signin-box'>
         <div className='signin-container' style={ style }>
-          <h4 className='title'>{ session.token }{ (session.token === '' && session.cnt > 0) ? '错误的邮箱或密码' : '用户登录' } </h4>
+          <h4 className='title'>{ session.ecode !== 0 ? '错误的邮箱或密码' : '用户登录' } </h4>
           <form className='signin-form form-horizontal' onSubmit={ this.handleSubmit } noValidate>
             <div className='form-group'>
               <div className='input-group'>

@@ -8,14 +8,14 @@ import { Provider } from 'react-redux';
 import Router, { RoutingContext, match } from 'react-router';
 
 import ReduxResolver from './redux-resolver';
-import routes from '../app/routes';
+import sroutes from '../app/sroutes'; // 临时修改
 import * as I18nActions from 'redux/actions/I18nActions';
 
 const { BROWSER, NODE_ENV } = process.env;
 
 const runRouter = (location) =>
   new Promise((resolve) =>
-    match({ routes, location }, (...args) => resolve(args)));
+    match({ sroutes, location }, (...args) => resolve(args)));
 
 debug('------------------------');
 
@@ -24,8 +24,8 @@ debug('------------------------');
 export default async function({ location, history, store, locale }) {
   const resolver = new ReduxResolver();
   store.resolver = resolver;
-
   if (BROWSER && NODE_ENV === 'development') {
+    const routes = require('../app/routes');
     // add redux-devtools on client side
     const DevTools = require('utils/dev-tools');
 
@@ -40,6 +40,7 @@ export default async function({ location, history, store, locale }) {
       </div>
     );
   } else if (BROWSER) {
+    const routes = require('../app/routes');
     return (
       <Provider store={ store }>
         <Router history={ history } routes={ routes } />

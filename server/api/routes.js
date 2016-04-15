@@ -16,7 +16,7 @@ export default function(router) {
   });
 
   router.post('/session', function(req, res) {
-    const results = { token: '22222' };
+    const results = { ecode: 0, data: { token: '123456', user: {id: 'nhy67ujm', name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1'}}};
     return res.status(200).send(results);
   });
 
