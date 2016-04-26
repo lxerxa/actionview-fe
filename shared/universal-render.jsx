@@ -1,11 +1,10 @@
 import serialize from 'serialize-javascript';
-
 import debug from 'debug';
 
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import { Provider } from 'react-redux';
-import Router, { RoutingContext, match } from 'react-router';
+import { Router, RouterContext, match } from 'react-router';
 
 import ReduxResolver from './redux-resolver';
 import sroutes from '../app/sroutes'; // 临时修改
@@ -63,7 +62,7 @@ export default async function({ location, history, store, locale }) {
 
     const element = (
       <Provider store={ store }>
-        <RoutingContext { ...routerProps } />
+        <RouterContext { ...routerProps } />
       </Provider>
     );
 

@@ -1,3 +1,4 @@
+import serialize from 'serialize-javascript';
 import path from 'path';
 import debug from 'debug';
 import express from 'express';
@@ -65,7 +66,8 @@ server.use(async function(req, res) {
     const store = createStore(client, {});
     const locale = req.acceptsLanguages(['en', 'fr']) || 'en';
 
-    const { body, state } = await universalRender({ location, store, client, locale });
+    //const { body, state } = await universalRender({ location, store, client, locale });
+    const body = '', state = serialize({});
 
     // Load assets paths from `webpack-stats`
     // remove cache on dev env

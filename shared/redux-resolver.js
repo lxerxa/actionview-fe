@@ -1,6 +1,6 @@
 class ReduxResolver {
 
-  firstRender = true
+  firstRender = false
   pendingActions = []
 
   resolve(action) {

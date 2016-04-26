@@ -84,7 +84,7 @@ class Login extends Component {
       <div className='signin-box'>
         <div className='signin-container' style={ style }>
           <h4 className='title'>{ session.ecode !== 0 ? '错误的邮箱或密码' : '用户登录' } </h4>
-          <form className='signin-form form-horizontal' onSubmit={ this.handleSubmit } noValidate>
+          <form className='signin-form form-horizontal' onSubmit={ this.handleSubmit }>
             <div className='form-group'>
               <div className='input-group'>
                 <div className='input-group-addon'>

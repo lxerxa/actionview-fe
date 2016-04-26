@@ -13,6 +13,9 @@ export default function session(state = initialState, action) {
     case t.SESSION_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
+    case t.SESSION_DESTROY:
+      return { ...state, token: '' };
+
     default:
       return state;
   }

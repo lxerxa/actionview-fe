@@ -1,11 +1,12 @@
 import debug from 'debug';
 
 import ReactDOM from 'react-dom';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { browserHistory } from 'react-router';
 
 import createStore from './redux/create';
 import ApiClient from '../shared/api-client';
 import universalRender from '../shared/universal-render';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 const { NODE_ENV, BROWSER } = process.env;
 
@@ -20,8 +21,9 @@ if (BROWSER) {
 
 (async function() {
   try {
-    const store = createStore(new ApiClient(), window.__state);
-    const history = createBrowserHistory();
+    const store = createStore(new ApiClient(), window.__state, browserHistory);
+    const history = syncHistoryWithStore(browserHistory, store);
+
     const container = window.document.getElementById('content');
     const element = await universalRender({ history, store });
 

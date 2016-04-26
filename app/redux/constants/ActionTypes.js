@@ -8,6 +8,9 @@ export default generateConstants([
   'README_LOAD(ASYNC)',
 
   'SESSION_CREATE(ASYNC)',
+  'SESSION_DESTROY',
+
+  'PROJECTS_INDEX(ASYNC)',
 
   'USER_INFO_FETCH(ASYNC)',
 

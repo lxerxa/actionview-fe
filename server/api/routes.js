@@ -15,6 +15,11 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/projects', function(req, res) {
+    const results = { ecode: 0, data: [{ id: '546761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 }] };
+    return res.status(200).send(results);
+  });
+
   router.post('/session', function(req, res) {
     const results = { ecode: 0, data: { token: '123456', user: {id: 'nhy67ujm', name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1'}}};
     return res.status(200).send(results);

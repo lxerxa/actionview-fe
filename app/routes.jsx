@@ -18,8 +18,8 @@ export default (
       component: require('components/MobileApps')
     }) }
     { generateRoute({
-      paths: [ '/myproject' ],
-      component: require('components/MyProject')
+      paths: [ '/projects' ],
+      component: require('components/Projects')
     }) }
   </Route>
 );
