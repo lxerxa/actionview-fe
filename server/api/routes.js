@@ -1,5 +1,6 @@
 import path from 'path';
 import { readFile } from 'fs-promise';
+import debug from 'debug';
 
 import marked from 'marked';
 
@@ -15,8 +16,16 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
-  router.get('/projects', function(req, res) {
+  router.get('/project', function(req, res) {
     const results = { ecode: 0, data: [{ id: '546761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 }] };
+    return res.status(200).send(results);
+  });
+
+  router.post('/project', function(req, res) {
+    const startTime = new Date().getTime(); 
+    while (new Date().getTime() < startTime + 5000);
+    //const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }};
+    const results = { ecode: 0, data: req.body };
     return res.status(200).send(results);
   });
 

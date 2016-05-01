@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import * as SessionActions from 'redux/actions/SessionActions';
 
@@ -40,7 +41,6 @@ function mapDispatchToProps(dispatch) {
   validate
 })
 class Login extends Component {
-
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -53,6 +53,7 @@ class Login extends Component {
   static propTypes = {
     session: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
     history: PropTypes.object,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -61,18 +62,14 @@ class Login extends Component {
     values: PropTypes.object
   }
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
-    const { values } = this.props;
-    const { actions } = this.props;
-    const { resolver } = this.context.store;
-    resolver.resolve(actions.create, values);
-  }
+    const { values, actions, dispatch } = this.props;
+    await actions.create(values);
 
-  componentDidUpdate() {
-    const { session, history } = this.props;
+    const { session } = this.context.store.getState();
     if (session.token !== '') {
-      history.pushState(null, '/home');
+      dispatch(push('/home'));
     }
   }
 

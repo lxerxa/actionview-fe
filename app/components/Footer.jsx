@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 
 export default class Footer extends Component {
   render() {
+    const styles = { marginTop: '40px' };
     return (
-      <footer>
+      <footer style={ styles }>
       <div className='footer-container'>
         <ul>
           <li>
