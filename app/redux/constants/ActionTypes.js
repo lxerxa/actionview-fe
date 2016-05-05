@@ -13,6 +13,9 @@ export default generateConstants([
   'PROJECT_INDEX(ASYNC)',
   'PROJECT_CREATE(ASYNC)',
 
+  'ISSUE_INDEX(ASYNC)',
+  'ISSUE_CREATE(ASYNC)',
+
   'USER_INFO_FETCH(ASYNC)',
 
   'LOCALE_INITIALIZE',

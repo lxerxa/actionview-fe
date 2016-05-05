@@ -1,13 +1,33 @@
 import React, { PropTypes, Component } from 'react';
 import TreeView from 'treeview-react-bootstrap';
+import ProjectModal from './ProjectModal';
+import IssueModal from './IssueModal';
 
 export default class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { projctModalShow: false, issueModalShow: false };
+    this.projectModalClose = this.projectModalClose.bind(this);
+    this.issueModalClose = this.issueModalClose.bind(this);
+  }
+
   static propTypes = {
-    indexImg: PropTypes.any.isRequired
+    indexImg: PropTypes.any.isRequired,
+    project: PropTypes.object.isRequired,
+    createIssue: PropTypes.func,
+    createProject: PropTypes.func
+  }
+
+  projectModalClose() {
+    this.setState({ projectModalShow: false });
+  }
+
+  issueModalClose() {
+    this.setState({ issueModalShow: false });
   }
 
   render() {
-    const { indexImg } = this.props;
+    const { indexImg, project, createProject, createIssue } = this.props;
     const styles = { backgroundImage: 'url(' + indexImg + ')' };
     const styles2 = { position: 'absolute', top: '0px', paddingLeft: '30px', color: 'white' };
     const styles3 = { position: 'relative', top: '60px', width: '200px', fontSize: '18px', marginLeft: '20px' };
@@ -53,8 +73,17 @@ export default class Sidebar extends Component {
         <div className='bottom-block'>
           <h3>有朋自远方来</h3>
           <h3>不亦乐乎</h3>
-          <button className='btn btn-primary btn-lg btn-block'>创建项目</button>
+          { project.item.id ?
+            <button className='btn btn-primary btn-lg btn-block' onClick={ () => this.setState({ issueModalShow: true }) }>创建问题</button>
+            :
+            <button className='btn btn-primary btn-lg btn-block' onClick={ () => this.setState({ projectModalShow: true }) }>创建项目</button>
+          }
         </div>
+        { project.item.id ?
+          <IssueModal show={ this.state.issueModalShow } hide={ this.issueModalClose } create={ createIssue }/>
+          :
+          <ProjectModal show={ this.state.projectModalShow } hide={ this.projectModalClose } create={ createProject }/>
+        }
       </div>
     );
   }

@@ -1,25 +1,15 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, IndexRoute } from 'react-router';
 import Layout from './components/Layout';
-import { generateRoute } from 'utils/localized-routes';
+import Login from './components/Login';
+import Home from './components/Home';
+import ProjectList from './components/ProjectList';
 
 export default (
   <Route path='/' component={ Layout }>
-    { generateRoute({
-      paths: [ '/home' ],
-      component: require('components/Home')
-    }) }
-    { generateRoute({
-      paths: [ '/login' ],
-      component: require('components/Login')
-    }) }
-    { generateRoute({
-      paths: [ '/apps' ],
-      component: require('components/MobileApps')
-    }) }
-    { generateRoute({
-      paths: [ '/projects' ],
-      component: require('components/Projects')
-    }) }
+    <Route path='/login' component={ Login }/>
+    <Route path='/home' component={ Home }>
+      <IndexRoute component={ ProjectList }/>
+    </Route>
   </Route>
 );

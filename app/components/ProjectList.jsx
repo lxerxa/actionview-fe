@@ -1,17 +1,35 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-export default class Projects extends Component {
+import * as ProjectActions from 'redux/actions/ProjectActions';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(ProjectActions, dispatch)
+  };
+}
+
+@connect(({ project }) => ({ project }), mapDispatchToProps)
+export default class ProjectList extends Component {
   static propTypes = {
-    projectList: PropTypes.array.isRequired
+    actions: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired
+  }
+
+  componentWillMount() {
+    const { actions } = this.props;
+    actions.index();
   }
 
   render() {
-    const collection = this.props.projectList;
+    const { collection = [] } = this.props.project;
     const styles = { marginLeft: '25px' };
+    const styles2 = { minHeight: '595px' };
 
     return (
-      <div>
+      <div className='col-sm-7 col-sm-offset-3 main-content' style={ styles2 }>
         <div className='list-unstyled clearfix'>
           <h2>#项目中心#</h2>
         </div>
@@ -20,7 +38,7 @@ export default class Projects extends Component {
             <li key={ i }className='article-item'>
               <div className='list-top'>
                 <h4 className='title'>
-                  <Link to='/projects'>
+                  <Link to={ '/project/' + items.key }>
                     { items.name }
                   </Link>
                 </h4>
