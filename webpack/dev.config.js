@@ -50,12 +50,12 @@ export default {
           loaders: [
             'url?limit=1000&name=[sha512:hash:base64:7].[ext]'
           ],
-          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass)/
+          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass|react-bootstrap-table)/
         },
         {
           test: /\.css$/,
           loader: 'style!css!postcss',
-          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass)/
+          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass|react-bootstrap-table)/
         }
       ]
     },

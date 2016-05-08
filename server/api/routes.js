@@ -21,11 +21,21 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key', function(req, res) {
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }};
+    return res.status(200).send(results);
+  });
+
   router.post('/project', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 5000);
     //const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }};
     const results = { ecode: 0, data: req.body };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/type', function(req, res) {
+    const results = { ecode: 0, data: [{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546761', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}]};
     return res.status(200).send(results);
   });
 

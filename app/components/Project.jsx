@@ -12,10 +12,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(({ project }) => ({ project }), mapDispatchToProps)
-export default class Profile extends Component {
+export default class Project extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
-    project: PropTypes.object.isRequired,
+    children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired
   }
 
@@ -26,10 +26,10 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { item } = this.props.project;
+    const styles = { minHeight: '595px' };
     return (
-      <div>
-        { item.name }
+      <div className='col-sm-7 col-sm-offset-3 main-content' style={ styles }>
+      { this.props.children }
       </div>
     );
   }

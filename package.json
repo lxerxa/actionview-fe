@@ -57,7 +57,8 @@
     "redux-thunk": "~2.0.1",
     "react-router-redux": "~4.0.2",
     "react-router": "~2.0.1",
-    "react-bootstrap": "~0.29.2"
+    "react-bootstrap": "~0.29.2",
+    "react-bootstrap-table": "~2.3.0"
   },
   "dependencies": {
     "axios": "^0.7.0",
@@ -86,6 +87,7 @@
     "serve-favicon": "^2.3.0",
     "font-awesome": "~4.5.0",
     "jackblog-sass": "git://github.com/jackhutu/jackblog-sass",
-    "redux-form": "~5.0.0"
+    "redux-form": "~5.0.0",
+    "treeview-react-bootstrap": "~0.4.5"
   }
 }

@@ -12,6 +12,10 @@ export default generateConstants([
 
   'PROJECT_INDEX(ASYNC)',
   'PROJECT_CREATE(ASYNC)',
+  'PROJECT_SHOW(ASYNC)',
+
+  'TYPE_INDEX(ASYNC)',
+  'TYPE_CREATE(ASYNC)',
 
   'ISSUE_INDEX(ASYNC)',
   'ISSUE_CREATE(ASYNC)',

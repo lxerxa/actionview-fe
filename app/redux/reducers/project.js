@@ -8,9 +8,18 @@ export default function project(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.PROJECT_INDEX_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, collection: action.result.data };
+      return { ...state, loading: false, ecode: action.result.ecode, collection: action.result.data, item: {} };
 
     case t.PROJECT_INDEX_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case t.PROJECT_SHOW:
+      return { ...state, loading: true };
+
+    case t.PROJECT_SHOW_SUCCESS:
+      return { ...state, loading: false, ecode: action.result.ecode, item: action.result.data, collection: [] };
+
+    case t.PROJECT_SHOW_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.PROJECT_CREATE:

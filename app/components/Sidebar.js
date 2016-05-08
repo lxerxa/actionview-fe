@@ -30,7 +30,7 @@ export default class Sidebar extends Component {
     const { indexImg, project, createProject, createIssue } = this.props;
     const styles = { backgroundImage: 'url(' + indexImg + ')' };
     const styles2 = { position: 'absolute', top: '0px', paddingLeft: '30px', color: 'white' };
-    const styles3 = { position: 'relative', top: '60px', width: '200px', fontSize: '18px', marginLeft: '20px' };
+    const styles3 = { position: 'relative', top: '60px', width: '95%', fontSize: '18px', marginLeft: '20px', overflow: 'auto', height: '70%' };
 
     const data = [
       {
@@ -38,11 +38,19 @@ export default class Sidebar extends Component {
         nodes: [
           {
             text: '问题',
-            href: '#a'
+            href: '/project/' + project.item.key + '/issue'
+          },
+          {
+            text: '路线图',
+            href: '/project/' + project.item.key + '/roadmap'
+          },
+          {
+            text: '报告',
+            href: '/project/' + project.item.key + '/report'
           },
           {
             text: '模块',
-            href: '#b'
+            href: '/project/' + project.item.key + '/module'
           }
         ]
       },
@@ -50,12 +58,28 @@ export default class Sidebar extends Component {
         text: '项目配置',
         nodes: [
           {
-            text: '字段',
-            href: '#a'
+            text: '项目类型',
+            href: '/project/' + project.item.key + '/type'
           },
           {
-            text: '项目类型',
-            href: '#a'
+            text: '工作流',
+            href: '/project/' + project.item.key + '/workflow'
+          },
+          {
+            text: '字段',
+            href: '/project/' + project.item.key + '/field'
+          },
+          {
+            text: '界面',
+            href: '/project/' + project.item.key + '/screen'
+          },
+          {
+            text: '状态',
+            href: '/project/' + project.item.key + '/status'
+          },
+          {
+            text: '优先级',
+            href: '/project/' + project.item.key + '/priority'
           }
         ]
       }
@@ -64,22 +88,26 @@ export default class Sidebar extends Component {
     return (
       <div className='col-sm-3 sidebar-box'>
         <div className='cover-img' style={ styles }></div>
-        <div style={ styles2 }>
-          <h3>社交化项目管理系统</h3>
-        </div>
-        <div style={ styles3 }>
-          <TreeView data={ data } enableLinks={ 'true' } highlightSelected={ false } nodeIcon={ '' } backColor = { 'rgba(0, 0, 0, 0)' } color={ 'white' } showBorder= { false }/>
-        </div>
+        { project.item.key &&
+          <div style={ styles2 }>
+            <h3>{ project.item.name }</h3>
+          </div>
+        }
+        { project.item.key &&
+          <div style={ styles3 }>
+            <TreeView data={ data } enableLinks highlightSelected={ false } nodeIcon={ '' } backColor = { 'rgba(0, 0, 0, 0)' } color={ 'white' } showBorder= { false }/>
+          </div>
+        }
         <div className='bottom-block'>
-          <h3>有朋自远方来</h3>
-          <h3>不亦乐乎</h3>
-          { project.item.id ?
-            <button className='btn btn-primary btn-lg btn-block' onClick={ () => this.setState({ issueModalShow: true }) }>创建问题</button>
+          <h3>勿忘初心，方得始终</h3>
+          <p>一个基于内容分享的社区</p>
+          { project.item.key ?
+            <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ issueModalShow: true }) }><i className='fa fa-pencil'></i>&nbsp;&nbsp;创建问题</button>
             :
-            <button className='btn btn-primary btn-lg btn-block' onClick={ () => this.setState({ projectModalShow: true }) }>创建项目</button>
+            <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ projectModalShow: true }) }><i className='fa fa-pencil'></i>&nbsp;&nbsp;创建项目</button>
           }
         </div>
-        { project.item.id ?
+        { project.item.key ?
           <IssueModal show={ this.state.issueModalShow } hide={ this.issueModalClose } create={ createIssue }/>
           :
           <ProjectModal show={ this.state.projectModalShow } hide={ this.projectModalClose } create={ createProject }/>

@@ -16,6 +16,7 @@ if (BROWSER) {
   require('font-awesome/css/font-awesome.css');
   require('bootstrap/dist/css/bootstrap.css');
   require('jackblog-sass/dist/index.css');
+  require('react-bootstrap-table/css/react-bootstrap-table.css');
   require('assets/styles/app.css');
 }
 

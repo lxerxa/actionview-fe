@@ -13,3 +13,10 @@ export function create(values) {
     promise: (client) => client.request({ url: '/project', method: 'post', data: values })
   });
 }
+
+export function show(key) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_SHOW',
+    promise: (client) => client.request({ url: '/project/' + key })
+  });
+}
