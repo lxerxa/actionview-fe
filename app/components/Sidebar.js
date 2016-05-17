@@ -29,8 +29,6 @@ export default class Sidebar extends Component {
   render() {
     const { indexImg, project, createProject, createIssue } = this.props;
     const styles = { backgroundImage: 'url(' + indexImg + ')' };
-    const styles2 = { position: 'absolute', top: '0px', paddingLeft: '30px', color: 'white' };
-    const styles3 = { position: 'relative', top: '60px', width: '95%', fontSize: '18px', marginLeft: '20px', overflow: 'auto', height: '70%' };
 
     const data = [
       {
@@ -55,10 +53,10 @@ export default class Sidebar extends Component {
         ]
       },
       {
-        text: '项目配置',
+        text: '项目管理',
         nodes: [
           {
-            text: '项目类型',
+            text: '问题类型',
             href: '/project/' + project.item.key + '/type'
           },
           {
@@ -89,12 +87,12 @@ export default class Sidebar extends Component {
       <div className='col-sm-3 sidebar-box'>
         <div className='cover-img' style={ styles }></div>
         { project.item.key &&
-          <div style={ styles2 }>
+          <div className='sidebar-header'>
             <h3>{ project.item.name }</h3>
           </div>
         }
         { project.item.key &&
-          <div style={ styles3 }>
+          <div className='treeview-div'>
             <TreeView data={ data } enableLinks highlightSelected={ false } nodeIcon={ '' } backColor = { 'rgba(0, 0, 0, 0)' } color={ 'white' } showBorder= { false }/>
           </div>
         }
@@ -102,9 +100,9 @@ export default class Sidebar extends Component {
           <h3>勿忘初心，方得始终</h3>
           <p>一个基于内容分享的社区</p>
           { project.item.key ?
-            <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ issueModalShow: true }) }><i className='fa fa-pencil'></i>&nbsp;&nbsp;创建问题</button>
+            <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ issueModalShow: true }) }><i className='fa fa-plus'></i>&nbsp;&nbsp;创建问题</button>
             :
-            <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ projectModalShow: true }) }><i className='fa fa-pencil'></i>&nbsp;&nbsp;创建项目</button>
+            <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ projectModalShow: true }) }><i className='fa fa-plus'></i>&nbsp;&nbsp;创建项目</button>
           }
         </div>
         { project.item.key ?

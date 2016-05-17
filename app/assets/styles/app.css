@@ -1,19 +1,74 @@
 
 .treeview .list-group-item {
-        cursor: pointer;
+  cursor: pointer;
 }
 
 .treeview span {
-        width: 1rem;
-        height: 1rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .treeview span.indent {
-        margin-left: 10px;
-        margin-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .treeview span.icon {
-        margin-left: 10px;
-        margin-right: 5px;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.treeview-div {
+  position: relative;
+  top: 60px; 
+  font-size: 16px;
+  margin-left: 20px;
+  overflow: auto;
+  width: 95%;
+  height: 70% 
+}
+
+.modal-content .ralign {
+  margin-right: 20px
+}
+
+.modal-content input.disable {
+  disabled: true
+}
+
+.modal-content input.enable {
+  disabled: false 
+}
+
+.modal-content .loading {
+  width: 25px;
+  height: 25px;
+  margin-right: 15px
+}
+
+.modal-content .hide {
+  display: none
+}
+
+.sidebar-header {
+  position: absolute; 
+  top: 0px; 
+  padding-left: 30px;
+  color: #fff  
+}
+
+.create-btn {
+  margin: 10px 10px 5px 10px;
+}
+
+.react-bs-container-body img.loading {
+  width: 25px;
+  height: 25px;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 4px;
+}
+
+.react-bs-container-body .hide {
+  display: none
 }

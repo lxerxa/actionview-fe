@@ -11,10 +11,6 @@ const simplifyUsers = (collection) => collection
   .map(({ name, seed, picture }) => ({ name, seed, picture }));
 
 export default function(router) {
-  router.get('/users', function(req, res) {
-    const results = simplifyUsers(users.slice(0, 10));
-    return res.status(200).send(results);
-  });
 
   router.get('/project', function(req, res) {
     const results = { ecode: 0, data: [{ id: '546761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 }] };
@@ -35,7 +31,39 @@ export default function(router) {
   });
 
   router.get('/project/:key/type', function(req, res) {
-    const results = { ecode: 0, data: [{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546761', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}]};
+    const results = { ecode: 0, data: [{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}], options:{ screens:[{id:'111',name:'界面1'},{id:'222', name:'界面2'}, {id:'333', name:'界面3'}], workflows:[{id:'111',name:'流程1'},{id:'222', name:'流程2'}, {id:'333', name:'流程3'}] }};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/type', function(req, res) {
+    const results = { ecode: 0, data: { id: 'were', name: '5C问题', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程1'}} };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/type/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 5000);
+    const { id } = req.params;
+    let results = {};
+    if (id === '546761') {
+      results = { ecode: 0, data: { id: '546761', name: '任务', screen: '111', workflow:'111'}};
+    } else {
+      results = { ecode: 0, data: { id: '546762', name: '任务2', screen: '222', workflow:'111'}};
+    }
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/type', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 5000);
+    const results = { ecode: 0, data: { id: '546761', name: '任务1111', screen:{id:'222', name:'界面2'}, workflow:{id:'222', name:'流程2'}}};
+    return res.status(200).send(results);
+  });
+
+  router.delete('/project/:key/type/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 5000);
+    const results = { ecode: 0, data: { id: req.params.id }};
     return res.status(200).send(results);
   });
 

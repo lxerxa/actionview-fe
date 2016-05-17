@@ -69,9 +69,6 @@ class ProjectModal extends Component {
   render() {
     const { fields: { name, key, category }, handleSubmit, invalid, submitting } = this.props;
     const styles = { width: '60%' };
-    const styles2 = { marginRight: '20px' };
-    const styles3 = { width: '25px', height: '25px', marginRight: '15px' };
-    const styles4 = { display: 'none' };
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -82,15 +79,15 @@ class ProjectModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>名称</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='输入项目名' />
+            <FormControl type='text' { ...name } disabled={ submitting } placeholder='输入项目名' />
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>键值</ControlLabel>
-            <FormControl type='text' { ...key } style={ styles } placeholder='输入键值（最多10个字符）' />
+            <FormControl type='text' { ...key } style={ styles } disabled={ submitting } placeholder='输入键值（最多10个字符）' />
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>类型</ControlLabel>
-            <FormControl componentClass='select' type='text' { ...category } style={ styles } placeholder='请选择'>
+            <FormControl componentClass='select' type='text' { ...category } style={ styles } disabled={ submitting } placeholder='请选择'>
               <option value=''>请选择</option>
               <option value='1'>产品</option>
               <option value='2'>技术</option>
@@ -98,9 +95,9 @@ class ProjectModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span style={ styles2 }>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
-          <image src={ img } style={ submitting ? styles3 : styles4 }/>
-          <Button style={ styles2 } disabled={ submitting || invalid } type='submit'>确定</Button>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <image src={ img } className={ submitting ? 'loading' : 'hide' }/>
+          <Button className='ralign' disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>
