@@ -4,13 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button } from 'react-bootstrap';
-
-import TypeModal from './TypeModal';
-import TypeDelModal from './TypeDelModal';
-import TypeSortModal from './TypeSortModal';
 import * as TypeActions from 'redux/actions/TypeActions';
 
-const img = require('../assets/images/loading.gif');
+const SaveModal = require('./SaveModal');
+const DelNotify = require('./DelNotify');
+const SortCardModal = require('./SortCardModal');
+const img = require('../../assets/images/loading.gif');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -19,14 +18,14 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(({ type }) => ({ type }), mapDispatchToProps)
-export default class TypeList extends Component {
+export default class List extends Component {
   constructor(props) {
     super(props);
     this.pid = '';
-    this.state = { typeModalShow: false };
-    this.typeModalClose = this.typeModalClose.bind(this);
-    this.typeDelModalClose = this.typeDelModalClose.bind(this);
-    this.typeSortModalClose = this.typeSortModalClose.bind(this);
+    this.state = { saveModalShow: false, delNotifyShow: false, sortCardModalShow: false };
+    this.saveModalClose = this.saveModalClose.bind(this);
+    this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.sortCardModalClose = this.sortCardModalClose.bind(this);
   }
 
   static propTypes = {
@@ -35,22 +34,22 @@ export default class TypeList extends Component {
     type: PropTypes.object.isRequired
   }
 
-  typeModalClose() {
-    this.setState({ typeModalShow: false });
+  saveModalClose() {
+    this.setState({ saveModalShow: false });
   }
 
-  typeDelModalClose() {
-    this.setState({ typeDelModalShow: false });
+  delNotifyClose() {
+    this.setState({ delNotifyShow: false });
   }
 
-  typeSortModalClose() {
-    this.setState({ typeSortModalShow: false });
+  sortCardModalClose() {
+    this.setState({ sortCardModalShow: false });
   }
 
   init() {
     const { actions } = this.props;
     actions.init();
-    this.setState({ typeModalShow: true });
+    this.setState({ saveModalShow: true });
   }
 
   async create(values) {
@@ -67,13 +66,13 @@ export default class TypeList extends Component {
     const { actions } = this.props;
     await actions.show(this.pid, id);
     if (this.props.type.ecode === 0) {
-      this.setState({ typeModalShow: true });
+      this.setState({ saveModalShow: true });
     }
     return this.props.type.ecode;
   }
 
   delNotify(id) {
-    this.setState({ typeDelModalShow: true });
+    this.setState({ delNotifyShow: true });
     const { actions } = this.props;
     actions.delNotify(id);
   }
@@ -81,6 +80,16 @@ export default class TypeList extends Component {
   async del(id) {
     const { actions } = this.props;
     await actions.del(this.pid, id);
+    return this.props.type.ecode;
+  }
+
+  async setSort(values) {
+    await this.props.actions.setSort(this.pid, values);
+    return this.props.type.ecode;
+  }
+
+  async setDefault(values) {
+    await this.props.actions.setDefault(this.pid, values);
     return this.props.type.ecode;
   }
 
@@ -92,7 +101,7 @@ export default class TypeList extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, loading } = this.props.type;
+    const { collection, selectedItem, item, options, itemLoading, sortLoading } = this.props.type;
     const styles = { paddingTop: '6px' };
 
     const types = [];
@@ -104,12 +113,12 @@ export default class TypeList extends Component {
         workflow: ( <div style={ styles }>{ collection[i].workflow.name }</div> ),
         operation: (
           <div>
-            <div className={ loading && selectedItem.id === collection[i].id && 'hide' }>
+            <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
               <Button bsStyle='link' onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
               <span>&nbsp;·&nbsp;</span>
               <Button bsStyle='link' onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
             </div>
-            <image src={ img } className={ (loading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            <image src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -122,7 +131,7 @@ export default class TypeList extends Component {
         </div>
         <div>
           <Button className='create-btn' onClick={ this.init.bind(this) }><i className='fa fa-plus'></i>&nbsp;新建类型</Button>
-          <Button className='create-btn' onClick={ () => { this.setState({ typeSortModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button>
+          <Button className='create-btn' onClick={ () => { this.setState({ sortCardModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button>
         </div>
         <BootstrapTable data={ types } bordered={ false } hover>
           <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
@@ -130,9 +139,9 @@ export default class TypeList extends Component {
           <TableHeaderColumn dataField='workflow'>工作流</TableHeaderColumn>
           <TableHeaderColumn dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
-        <TypeModal show={ this.state.typeModalShow } hide={ this.typeModalClose } create={ this.create.bind(this) } edit={ this.edit.bind(this) } data={ item } options={ options }/>
-        <TypeDelModal show={ this.state.typeDelModalShow } hide={ this.typeDelModalClose } data={ selectedItem } del={ this.del.bind(this) }/>
-        <TypeSortModal show={ this.state.typeSortModalShow } hide={ this.typeSortModalClose } cards={ collection }/>
+        <SaveModal show={ this.state.saveModalShow } hide={ this.saveModalClose } create={ this.create.bind(this) } edit={ this.edit.bind(this) } data={ item } options={ options }/>
+        <DelNotify show={ this.state.delNotifyShow } hide={ this.delNotifyClose } data={ selectedItem } del={ this.del.bind(this) }/>
+        <SortCardModal show={ this.state.sortCardModalShow } hide={ this.sortCardModalClose } cards={ collection } setSort={ this.setSort.bind(this) } sortLoading={ sortLoading }/>
       </div>
     );
   }

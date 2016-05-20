@@ -21,7 +21,7 @@ export function create(key, values) {
 export function edit(key, values) {
   return asyncFuncCreator({
     constant: 'TYPE_EDIT',
-    promise: (client) => client.request({ url: '/project/' + key + '/type', method: 'put', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/type/' + values.id, method: 'put', data: values })
   });
 }
 
@@ -42,5 +42,19 @@ export function del(key, id) {
     constant: 'TYPE_DELETE',
     id,
     promise: (client) => client.request({ url: '/project/' + key + '/type/' + id, method: 'delete' })
+  });
+}
+
+export function setSort(key, values) {
+  return asyncFuncCreator({
+    constant: 'TYPE_SET_SORT',
+    promise: (client) => client.request({ url: '/project/' + key + '/type', method: 'put', data: values })
+  });
+}
+
+export function setDefault(key, values) {
+  return asyncFuncCreator({
+    constant: 'TYPE_SET_DEFAULT',
+    promise: (client) => client.request({ url: '/project/' + key + '/type', method: 'put', data: values })
   });
 }

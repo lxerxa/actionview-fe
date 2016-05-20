@@ -6,8 +6,9 @@ import Home from './components/Home';
 import Project from './components/Project';
 import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
-import TypeList from './components/TypeList';
 import IssueList from './components/IssueList';
+
+const TypeList = require('./components/type/List');
 
 export default (
   <Route path='/' component={ Layout }>

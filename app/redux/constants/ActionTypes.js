@@ -21,6 +21,8 @@ export default generateConstants([
   'TYPE_EDIT(ASYNC)',
   'TYPE_DELETE(ASYNC)',
   'TYPE_DELETE_NOTIFY',
+  'TYPE_SET_SORT(ASYNC)',
+  'TYPE_SET_DEFAULT(ASYNC)',
 
   'ISSUE_INDEX(ASYNC)',
   'ISSUE_CREATE(ASYNC)',

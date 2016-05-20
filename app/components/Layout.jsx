@@ -19,7 +19,7 @@ class Layout extends Component {
     actions: PropTypes.object.isRequired,
     mode: PropTypes.string,
     session: PropTypes.object,
-    children: PropTypes.element.isRequired
+    children: PropTypes.element
   }
 
   render() {
