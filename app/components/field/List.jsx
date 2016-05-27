@@ -59,13 +59,14 @@ export default class List extends Component {
   render() {
     const { collection, selectedItem, item, options, indexLoading, itemLoading, del, edit } = this.props;
 
-    const types = [];
-    const typeNum = collection.length;
-    for (let i = 0; i < typeNum; i++) {
-      types.push({
+    const fields = [];
+    const fieldNum = collection.length;
+    for (let i = 0; i < fieldNum; i++) {
+      fields.push({
         name: ( <span>{ collection[i].name }</span> ),
+        key: ( <span>{ collection[i].key }</span> ),
+        type: ( <span>{ collection[i].type }</span> ),
         screen: ( <span>{ collection[i].screen.name }</span> ),
-        workflow: ( <span>{ collection[i].workflow.name }</span> ),
         operation: (
           <div>
             <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
@@ -88,14 +89,15 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts }>
+        <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='screen'>界面</TableHeaderColumn>
-          <TableHeaderColumn dataField='workflow'>工作流</TableHeaderColumn>
+          <TableHeaderColumn dataField='key'>键值</TableHeaderColumn>
+          <TableHeaderColumn dataField='type'>类型</TableHeaderColumn>
+          <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item } options={ options }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.editModalShow && <EditModal show hide={ this.editModalClose } edit={ edit } data={ item } options={ options }/> }
+        { this.state.delNotifyShow && <DelNotify show hide={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );
   }

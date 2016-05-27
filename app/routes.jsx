@@ -8,7 +8,8 @@ import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
 import IssueList from './components/IssueList';
 
-const TypeList = require('./components/type/List');
+const TypeContainer = require('./components/type/Container');
+const FieldContainer = require('./components/field/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -18,7 +19,8 @@ export default (
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
         <Route path='/project/:key/profile' component={ Profile }/>
-        <Route path='/project/:key/type' component={ TypeList }/>
+        <Route path='/project/:key/type' component={ TypeContainer }/>
+        <Route path='/project/:key/field' component={ FieldContainer }/>
         <Route path='/project/:key/issue' component={ IssueList }/>
       </Route>
     </Route>
