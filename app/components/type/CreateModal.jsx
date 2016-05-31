@@ -25,7 +25,7 @@ const validate = (values) => {
   fields: ['name', 'screen', 'workflow'],
   validate
 })
-export default class SaveModal extends Component {
+export default class CreateModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -49,8 +49,8 @@ export default class SaveModal extends Component {
     const { values, create, close } = this.props;
     const ecode = await create(values);
     if (ecode === 0) {
-      close();
       this.setState({ ecode: 0 });
+      close();
     } else {
       this.setState({ ecode: ecode });
     }
@@ -61,8 +61,8 @@ export default class SaveModal extends Component {
     if (submitting) {
       return;
     }
-    close();
     this.setState({ ecode: 0 });
+    close();
   }
 
   render() {

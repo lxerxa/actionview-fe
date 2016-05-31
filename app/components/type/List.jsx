@@ -70,7 +70,6 @@ export default class List extends Component {
           <div>
             <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
               <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
-              <span>&nbsp;·&nbsp;</span>
               <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
             </div>
             <image src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>

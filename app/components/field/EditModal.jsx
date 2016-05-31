@@ -10,38 +10,38 @@ const validate = (values) => {
     errors.name = 'Required';
   }
 
-  if (!values.screen) {
-    errors.screen = 'Required';
+  if (!values.key) {
+    errors.key = 'Required';
   }
 
-  if (!values.workflow) {
-    errors.workflow = 'Required';
+  if (!values.type) {
+    errors.type = 'Required';
   }
   return errors;
 };
 
 @reduxForm({
-  form: 'type',
-  fields: ['id', 'name', 'screen', 'workflow'],
+  form: 'field',
+  fields: [ 'name', 'key', 'type', 'description' ],
   validate
 })
 export default class EditModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, editModalShow: false };
+    this.state = { ecode: 0 };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
 
   static propTypes = {
+    optionValues: PropTypes.array,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     dirty: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    hide: PropTypes.func.isRequired,
-    options: PropTypes.object.isRequired,
+    close: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired
@@ -52,15 +52,11 @@ export default class EditModal extends Component {
     initializeForm(data);
   }
 
-  editModalClose() {
-    this.setState({ saveModalShow: false });
-  }
-
   async handleSubmit() {
-    const { values, edit, hide } = this.props;
+    const { values, edit, close } = this.props;
     const ecode = await edit(values);
     if (ecode === 0) {
-      hide();
+      close();
       this.setState({ ecode: 0 });
     } else {
       this.setState({ ecode: ecode });
@@ -68,44 +64,54 @@ export default class EditModal extends Component {
   }
 
   handleCancel() {
-    const { hide, submitting } = this.props;
+    const { close, submitting } = this.props;
     if (submitting) {
       return;
     }
-    hide();
+    close();
     this.setState({ ecode: 0 });
   }
 
   render() {
-    const { fields: { id, name, screen, workflow }, options = {}, handleSubmit, invalid, dirty, submitting, data } = this.props;
-    const { screens = [], workflows = [] } = options;
+    const { fields: { name, key, type, description }, dirty, handleSubmit, invalid, submitting } = this.props;
     const styles = { width: '60%' };
+    const types = [
+      { id: 'Label', name: '标签' },
+      { id: 'RadioBox', name: '单选按钮' },
+      { id: 'CheckBox', name: '复选按钮' },
+      { id: 'Date', name: '日期选择控件' },
+      { id: 'Number', name: '数值字段' },
+      { id: 'Text', name: '文本框单行' },
+      { id: 'TextArea', name: '文本框多行' },
+      { id: 'Select', name: '选择列表(单行)' },
+      { id: 'MultiSelect', name: '选择列表(多行)' },
+      { id: 'Url', name: 'URL字段' }];
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>{ '编辑问题类型 - ' + data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>创建字段</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>名称</ControlLabel>
-            <FormControl type='hidden' { ...id }/>
-            <FormControl type='text' { ...name } placeholder='问题类型名'/>
+            <ControlLabel>字段名</ControlLabel>
+            <FormControl type='text' { ...name } placeholder='字段名'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>键值</ControlLabel>
+            <FormControl type='text' { ...key } placeholder='键值唯一'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>界面</ControlLabel>
-            <FormControl componentClass='select' type='text' { ...screen } style={ styles }>
-              <option value=''>请选择一个界面</option>
-              { screens.map( screenOption => <option value={ screenOption.id } key={ screenOption.id }>{ screenOption.name }</option>) }
+            <ControlLabel>类型</ControlLabel>
+            <FormControl componentClass='select' type='text' { ...type } style={ styles }>
+              <option value=''>请选择字段类型</option>
+              { types.map( typeOption => <option value={ typeOption.id } key={ typeOption.id }>{ typeOption.name }</option>) }
             </FormControl>
           </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>工作流</ControlLabel>
-            <FormControl componentClass='select' type='text' { ...workflow } style={ styles }>
-              <option value=''>请选择一个工作流</option>
-              { workflows.map( workflowOption => <option value={ workflowOption.id } key={ workflowOption.id }>{ workflowOption.name }</option>) }
-            </FormControl>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>描述</ControlLabel>
+            <FormControl type='text' { ...description } placeholder='描述内容'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

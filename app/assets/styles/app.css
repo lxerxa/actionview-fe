@@ -99,5 +99,12 @@
 }
 
 .react-bs-container-body table tr td {
-  vertical-align: middle
+  vertical-align: middle;
+  overflow: visible
+}
+
+.react-bs-container-body {
+  height: 154px;
+  overflow: visible;
+  width: 100%;
 }

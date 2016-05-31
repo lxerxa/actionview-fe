@@ -89,7 +89,7 @@ export default class Card extends Component {
   render() {
     const { text, isDragging, connectDragSource, connectDropTarget, deleteCard } = this.props;
     const opacity = isDragging ? 0 : 1;
-    const styles = { float: 'right' };
+    const styles = { float: 'right', cursor: 'pointer' };
 
     return connectDragSource(connectDropTarget(
       <div style={ { ...style, opacity } }>

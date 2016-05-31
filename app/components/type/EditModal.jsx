@@ -28,7 +28,7 @@ const validate = (values) => {
 export default class EditModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, editModalShow: false };
+    this.state = { ecode: 0 };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -52,16 +52,12 @@ export default class EditModal extends Component {
     initializeForm(data);
   }
 
-  editModalClose() {
-    this.setState({ saveModalShow: false });
-  }
-
   async handleSubmit() {
     const { values, edit, close } = this.props;
     const ecode = await edit(values);
     if (ecode === 0) {
-      close();
       this.setState({ ecode: 0 });
+      close();
     } else {
       this.setState({ ecode: ecode });
     }
@@ -72,8 +68,8 @@ export default class EditModal extends Component {
     if (submitting) {
       return;
     }
-    close();
     this.setState({ ecode: 0 });
+    close();
   }
 
   render() {

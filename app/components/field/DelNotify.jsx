@@ -31,10 +31,10 @@ export default class DelNotify extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>删除问题类型 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除字段 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此问题类型？
+          确认要删除此字段？
         </Modal.Body>
         <Modal.Footer>
           <Button className='ralign' onClick={ this.confirm }>确定</Button>
