@@ -9,23 +9,15 @@ const validate = (values) => {
   if (!values.name) {
     errors.name = 'Required';
   }
-
-  if (!values.key) {
-    errors.key = 'Required';
-  }
-
-  if (!values.type) {
-    errors.type = 'Required';
-  }
   return errors;
 };
 
 @reduxForm({
-  form: 'field',
-  fields: [ 'name', 'key', 'type', 'description' ],
+  form: 'screen',
+  fields: [ 'id', 'name', 'description' ],
   validate
 })
-export default class CreateModal extends Component {
+export default class EditModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -37,16 +29,24 @@ export default class CreateModal extends Component {
     optionValues: PropTypes.array,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
+    dirty: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired
+    data: PropTypes.object.isRequired,
+    initializeForm: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired
+  }
+
+  componentWillMount() {
+    const { initializeForm, data } = this.props;
+    initializeForm(data);
   }
 
   async handleSubmit() {
-    const { values, create, close } = this.props;
-    const ecode = await create(values);
+    const { values, edit, close } = this.props;
+    const ecode = await edit(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -65,41 +65,19 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, key, type, description }, handleSubmit, invalid, submitting } = this.props;
-    const styles = { width: '60%' };
-    const types = [
-      { id: 'Label', name: '标签' },
-      { id: 'RadioBox', name: '单选按钮' },
-      { id: 'CheckBox', name: '复选按钮' },
-      { id: 'Date', name: '日期选择控件' },
-      { id: 'Number', name: '数值字段' },
-      { id: 'Text', name: '文本框单行' },
-      { id: 'TextArea', name: '文本框多行' },
-      { id: 'Select', name: '选择列表(单行)' },
-      { id: 'MultiSelect', name: '选择列表(多行)' },
-      { id: 'Url', name: 'URL字段' }];
+    const { fields: { id, name, description }, dirty, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>创建字段</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '编辑界面 - ' + data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>字段名</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='字段名'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>键值</ControlLabel>
-            <FormControl type='text' { ...key } placeholder='键值唯一'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>类型</ControlLabel>
-            <FormControl componentClass='select' type='text' { ...type } style={ styles }>
-              <option value=''>请选择字段类型</option>
-              { types.map( typeOption => <option value={ typeOption.id } key={ typeOption.id }>{ typeOption.name }</option>) }
-            </FormControl>
+            <FormControl type='hidden' { ...id }/>
+            <ControlLabel>界面名</ControlLabel>
+            <FormControl type='text' { ...name } placeholder='界面名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
@@ -109,7 +87,7 @@ export default class CreateModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
           <image src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button className='ralign' disabled={ submitting || invalid } type='submit'>确定</Button>
+          <Button className='ralign' disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
           <Button disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>

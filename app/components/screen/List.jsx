@@ -6,17 +6,17 @@ import _ from 'lodash';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
-const OptionValuesConfigModal = require('./OptionValuesConfigModal');
+const LayoutConfigModal = require('./LayoutConfigModal');
+const LayoutFieldConfigModal = require('./LayoutConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, optionValuesConfigShow: false, defaultValueConfigShow: false };
+    this.state = { editModalShow: false, delNotifyShow: false, layoutConfigShow: false, layoutFieldConfigShow: false };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
-    this.optionValuesConfigClose = this.optionValuesConfigClose.bind(this);
-    this.defaultValueConfigClose = this.defaultValueConfigClose.bind(this);
+    this.layoutConfigClose = this.layoutConfigClose.bind(this);
   }
 
   static propTypes = {
@@ -47,20 +47,12 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  optionValuesConfigClose() {
-    this.setState({ optionValuesConfigShow: false });
+  layoutConfigClose() {
+    this.setState({ layoutConfigShow: false });
   }
 
-  defaultValueConfigClose() {
-    this.setState({ defaultValueConfigShow: false });
-  }
-
-  async show(id) {
-    const { show } = this.props;
-    const ecode = await show(id);
-    if (ecode === 0) {
-      this.setState({ editModalShow: true });
-    }
+  layoutFieldConfigClose() {
+    this.setState({ layoutFieldConfigShow: false });
   }
 
   async configSelect(eventKey) {
@@ -69,10 +61,18 @@ export default class List extends Component {
       const { show } = this.props;
       const ecode = await show(resultArr[0]);
       if (ecode === 0) {
-        this.setState({ optionValuesConfigShow: true });
+        this.setState({ layoutConfigShow: true });
       }
     } else if (resultArr[1] === '2') {
-      this.setState({ defaultValueConfigShow: true });
+      this.setState({ layoutFieldConfigShow: true });
+    }
+  }
+
+  async show(id) {
+    const { show } = this.props;
+    const ecode = await show(id);
+    if (ecode === 0) {
+      this.setState({ editModalShow: true });
     }
   }
 
@@ -88,24 +88,23 @@ export default class List extends Component {
     const fields = [];
     const fieldNum = collection.length;
     for (let i = 0; i < fieldNum; i++) {
-      let screens = '';
-      _.forEach(collection[i].screens, function(val) {
-        screens += val.name + '<br/>';
+      let workflows = '';
+      _.forEach(collection[i].workflows, function(val) {
+        workflows += val.name + '<br/>';
       });
       
       fields.push({
         name: ( <span>{ collection[i].name }</span> ),
-        key: ( <span>{ collection[i].key }</span> ),
-        type: ( <span>{ collection[i].type }</span> ),
-        screen: ( <span dangerouslySetInnerHTML={ { __html: screens } }/> ),
+        workflow: ( <span dangerouslySetInnerHTML={ { __html: workflows } }/> ),
         operation: (
           <div>
             <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
               <DropdownButton bsStyle='link' disabled = { itemLoading && true } title='配置' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.configSelect.bind(this) }>
-                { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RedioBox' || collection[i].type === 'CheckBox') && <MenuItem eventKey={ collection[i].id + '_1' }>可选值配置</MenuItem> }
-                <MenuItem eventKey={ collection[i].id + '_2' }>默认值配置</MenuItem>
+                <MenuItem eventKey={ collection[i].id + '_1' }>页面配置</MenuItem>
+                <MenuItem eventKey={ collection[i].id + '_2' }>页面字段配置</MenuItem>
               </DropdownButton>
               <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
+              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>复制</Button>
               <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
             </div>
             <image src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
@@ -125,15 +124,13 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='key'>键值</TableHeaderColumn>
-          <TableHeaderColumn dataField='type'>类型</TableHeaderColumn>
-          <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
+          <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ item } config={ edit } loading={ loading }/> }
-        { this.state.defaultValueConfigShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ item } config={ edit } loading={ loading }/> }
+        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } loading={ loading }/> }
       </div>
     );
   }

@@ -76,6 +76,7 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  /************** field *****************/
   router.get('/project/:key/field', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
@@ -83,8 +84,7 @@ export default function(router) {
       { id: '546761', name: '主题', type: 'Text', screens: [{id:'111', name:'界面1'}], key:'title'},
       { id: '546763', name: '描述', type:'Text', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
       { id: '546762', name: '优先级', type:'Select', screens: [{id:'111', name:'界面1'}], key:'priority'},
-      { id: '2323', name: '附件', type:'File', screens: [{id:'111', name:'界面1'}], key:'attachement'}], 
-      options:{ screens:[{id:'111',name:'界面1'},{id:'222', name:'界面2'}, {id:'333', name:'界面3'}], workflows:[{id:'111',name:'流程1'},{id:'222', name:'流程2'}, {id:'333', name:'流程3'}] }};
+      { id: '2323', name: '附件', type:'File', screens: [{id:'111', name:'界面1'}], key:'attachement'}]};
     return res.status(200).send(results);
   });
 
@@ -119,6 +119,51 @@ export default function(router) {
     const results = { ecode: 0, data: { id: req.params.id }};
     return res.status(200).send(results);
   });
+
+  /************** screen *****************/
+  router.get('/project/:key/screen', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [
+      { id: '546761', name: '测试界面1', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}]},
+      { id: '546763', name: '测试界面2', workflows: [{id:'222', name:'流程B' }, {id:'333', name:'流程C'}]},
+      { id: '546762', name: '测试界面3', workflows: [{id:'111', name:'流程A' }]},
+      { id: '546764', name: '测试界面5', workflows: [{id:'111', name:'流程C' }]}]};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/screen', function(req, res) {
+    const results = { ecode: 0, data: { id: 'were', name: '测试界面4', description:'aaaaaaa' } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/screen/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const { id } = req.params;
+    let results = {};
+    if (id === '546761') {
+      results = { ecode: 0, data: { id: '546761', name: '测试界面1', description:'aaaaaaaa', fields:[{id:'111', name:'字段A'},{id:'222', name:'字段B'},{id:'333', name:'字段C'}]}};
+    } else {
+      results = { ecode: 0, data: { id: '546762', name: '测试界面2', description:'bbbbbb', fields:[{id:'111', name:'字段A'},{id:'222', name:'字段B'},{id:'333', name:'字段C'}]}};
+    }
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/screen/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '546761', name: '测试界面11111', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}]}};
+    return res.status(200).send(results);
+  });
+
+  router.delete('/project/:key/screen/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
 
   router.post('/session', function(req, res) {
     const results = { ecode: 0, data: { token: '123456', user: {id: 'nhy67ujm', name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1'}}};
