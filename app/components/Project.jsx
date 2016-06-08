@@ -26,9 +26,9 @@ export default class Project extends Component {
   }
 
   render() {
-    const styles = { minHeight: '595px' };
+    const styles = { minHeight: '595px', width: '74%', marginLeft: '26%' };
     return (
-      <div className='col-sm-7 col-sm-offset-3 main-content' style={ styles }>
+      <div className='col-sm-7 col-sm-offset-3' style={ styles }>
       { this.props.children }
       </div>
     );

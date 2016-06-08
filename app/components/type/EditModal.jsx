@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import Select from 'react-select';
+import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -75,7 +77,13 @@ export default class EditModal extends Component {
   render() {
     const { fields: { id, name, screen, workflow }, options = {}, handleSubmit, invalid, dirty, submitting, data } = this.props;
     const { screens = [], workflows = [] } = options;
-    const styles = { width: '60%' };
+
+    const screenOptions = _.map(screens, function(val) {
+      return { label: val.name, value: val.id };
+    });
+    const workflowOptions = _.map(workflows, function(val) {
+      return { label: val.name, value: val.id };
+    });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -91,17 +99,11 @@ export default class EditModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>界面</ControlLabel>
-            <FormControl componentClass='select' type='text' { ...screen } style={ styles }>
-              <option value=''>请选择一个界面</option>
-              { screens.map( screenOption => <option value={ screenOption.id } key={ screenOption.id }>{ screenOption.name }</option>) }
-            </FormControl>
+            <Select options={ screenOptions } simpleValue clearable={ false } value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择>一个界面'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>工作流</ControlLabel>
-            <FormControl componentClass='select' type='text' { ...workflow } style={ styles }>
-              <option value=''>请选择一个工作流</option>
-              { workflows.map( workflowOption => <option value={ workflowOption.id } key={ workflowOption.id }>{ workflowOption.name }</option>) }
-            </FormControl>
+            <Select options={ workflowOptions } simpleValue clearable={ false } value={ workflow.value } onChange={ newValue => { workflow.onChange(newValue) } } placeholder='>请选择一个工作流'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

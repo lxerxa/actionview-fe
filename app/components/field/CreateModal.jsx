@@ -69,8 +69,8 @@ export default class CreateModal extends Component {
     const styles = { width: '60%' };
     const types = [
       { id: 'Label', name: '标签' },
-      { id: 'RadioBox', name: '单选按钮' },
-      { id: 'CheckBox', name: '复选按钮' },
+      { id: 'RadioGroup', name: '单选按钮' },
+      { id: 'CheckboxGroup', name: '复选按钮' },
       { id: 'Date', name: '日期选择控件' },
       { id: 'Number', name: '数值字段' },
       { id: 'Text', name: '文本框单行' },

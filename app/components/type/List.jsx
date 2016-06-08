@@ -63,9 +63,9 @@ export default class List extends Component {
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
       types.push({
-        name: ( <span>{ collection[i].name }</span> ),
-        screen: ( <span>{ collection[i].screen.name }</span> ),
-        workflow: ( <span>{ collection[i].workflow.name }</span> ),
+        name: collection[i].name,
+        screen: collection[i].screen.name,
+        workflow: collection[i].workflow.name,
         operation: (
           <div>
             <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
@@ -91,7 +91,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='screen'>界面</TableHeaderColumn>
           <TableHeaderColumn dataField='workflow'>工作流</TableHeaderColumn>
-          <TableHeaderColumn dataField='operation'>操作</TableHeaderColumn>
+          <TableHeaderColumn width='150' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item } options={ options }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }

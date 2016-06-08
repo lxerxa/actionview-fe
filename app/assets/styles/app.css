@@ -99,6 +99,7 @@
 }
 
 .react-bs-container-body table tr td {
+  height: 55px;
   vertical-align: middle;
   overflow: visible
 }

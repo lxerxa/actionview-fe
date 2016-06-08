@@ -5,6 +5,7 @@ import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
 
 const EditModal = require('./EditModal');
+const CopyModal = require('./CopyModal');
 const DelNotify = require('./DelNotify');
 const LayoutConfigModal = require('./LayoutConfigModal');
 const LayoutFieldConfigModal = require('./LayoutConfigModal');
@@ -13,8 +14,17 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, layoutConfigShow: false, layoutFieldConfigShow: false };
+    this.state = { 
+      editModalShow: false, 
+      copyModalShow: false, 
+      delNotifyShow: false, 
+      layoutConfigShow: false, 
+      layoutFieldConfigShow: false, 
+      operateShow: false,
+      hoverRowId: ''
+    };
     this.editModalClose = this.editModalClose.bind(this);
+    this.copyModalClose = this.copyModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.layoutConfigClose = this.layoutConfigClose.bind(this);
   }
@@ -30,6 +40,7 @@ export default class List extends Component {
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     config: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     delNotify: PropTypes.func.isRequired
   }
@@ -41,6 +52,10 @@ export default class List extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  copyModalClose() {
+    this.setState({ copyModalShow: false });
   }
 
   delNotifyClose() {
@@ -55,35 +70,33 @@ export default class List extends Component {
     this.setState({ layoutFieldConfigShow: false });
   }
 
-  async configSelect(eventKey) {
-    const resultArr = eventKey.split('_');
-    if (resultArr[1] === '1') {
-      const { show } = this.props;
-      const ecode = await show(resultArr[0]);
-      if (ecode === 0) {
-        this.setState({ layoutConfigShow: true });
-      }
-    } else if (resultArr[1] === '2') {
-      this.setState({ layoutFieldConfigShow: true });
+  async operateSelect(eventKey) {
+    const { hoverRowId } = this.state;
+    const { delNotify, show } = this.props;
+
+    if (eventKey === '2') {
+      this.setState({ delNotifyShow : true });
+      delNotify(hoverRowId);
+    } else {
+      const ecode = await show(hoverRowId);
+      // todo err notify
+      eventKey === '1' && this.setState({ editModalShow: true });
+      eventKey === '3' && this.setState({ defaultValueConfigShow: true });
+      eventKey === '4' && this.setState({ copyModalShow: true });
     }
   }
 
-  async show(id) {
-    const { show } = this.props;
-    const ecode = await show(id);
-    if (ecode === 0) {
-      this.setState({ editModalShow: true });
-    }
+  onRowMouseOver(rowData) {
+    this.setState({ operateShow: true, hoverRowId: rowData.id });
   }
 
-  delNotify(id) {
-    this.setState({ delNotifyShow: true });
-    const { delNotify } = this.props;
-    delNotify(id);
+  onMouseLeave() {
+    this.setState({ operateShow: false, hoverRowId: '' });
   }
 
   render() {
-    const { collection, selectedItem, item, loading, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, item, loading, indexLoading, itemLoading, del, edit, create } = this.props;
+    const { operateShow, hoverRowId } = this.state;
 
     const fields = [];
     const fieldNum = collection.length;
@@ -94,20 +107,20 @@ export default class List extends Component {
       });
       
       fields.push({
-        name: ( <span>{ collection[i].name }</span> ),
+        id: collection[i].id,
+        name: collection[i].name,
         workflow: ( <span dangerouslySetInnerHTML={ { __html: workflows } }/> ),
         operation: (
           <div>
-            <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
-              <DropdownButton bsStyle='link' disabled = { itemLoading && true } title='配置' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.configSelect.bind(this) }>
-                <MenuItem eventKey={ collection[i].id + '_1' }>页面配置</MenuItem>
-                <MenuItem eventKey={ collection[i].id + '_2' }>页面字段配置</MenuItem>
+            { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+              <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+                <MenuItem eventKey='3'>配置</MenuItem>
+                <MenuItem eventKey='4'>复制</MenuItem>
+                <MenuItem eventKey='1'>编辑</MenuItem>
+                <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>复制</Button>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
-            </div>
-            <image src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            }
+            <image src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -120,14 +133,19 @@ export default class List extends Component {
       opts.noDataText = '暂无数据显示。'; 
     } 
 
+    opts.onRowMouseOver = this.onRowMouseOver.bind(this);
+    opts.onMouseLeave = this.onMouseLeave.bind(this);
+
     return (
       <div>
         <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
-          <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
+          <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
-          <TableHeaderColumn dataField='operation'>操作</TableHeaderColumn>
+          <TableHeaderColumn width='150' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
+        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
         { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ item } config={ edit } loading={ loading }/> }
         { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } loading={ loading }/> }

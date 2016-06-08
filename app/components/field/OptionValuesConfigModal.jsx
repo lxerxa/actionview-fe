@@ -14,7 +14,7 @@ export default class OptionValuesConfigModal extends Component {
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
-    this.state = { cards: [], ecode: 0 };
+    this.state = { cards: [], ecode: 0, enableAdd: false };
     const optionValues = this.props.data.optionValues || [];
     const optionNum = optionValues.length;
     for (let i = 0; i < optionNum; i++) {
@@ -65,11 +65,19 @@ export default class OptionValuesConfigModal extends Component {
     this.setState({ cards: this.state.cards });
   }
 
+  handleChange(e) {
+    const optionValue = e.target.value;
+    if (optionValue.trim() === '') {
+      this.setState({ enableAdd: false });
+    } else if (_.findIndex(this.state.cards, function(o) { return o.id === optionValue }) !== -1) {
+      this.setState({ enableAdd: false });
+    }else {
+      this.setState({ enableAdd: true });
+    }
+  }
+
   add() {
     const optionValue = findDOMNode(this.refs.addOpt).value;
-    if (optionValue.trim() === '') {
-      return;
-    }
     this.state.cards.push({ id: optionValue, text: optionValue });
     this.setState({ cards: this.state.cards });
     findDOMNode(this.refs.addOpt).value = '';
@@ -90,7 +98,7 @@ export default class OptionValuesConfigModal extends Component {
   }
 
   render() {
-    const { cards, strCards } = this.state;
+    const { cards, strCards, enableAdd } = this.state;
     const { loading } = this.props;
 
     return (
@@ -114,8 +122,8 @@ export default class OptionValuesConfigModal extends Component {
             <p>可选值为空</p>
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
-            <FormControl type='text' ref='addOpt' placeholder='' style={ { display: 'inline-block', width: '60%' } }/>
-            <Button className='ralign' onClick={ this.add.bind(this) } style={ { display: 'inline-block', marginLeft: '10px' } }>添加新值</Button>
+            <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } style={ { display: 'inline-block', width: '60%' } }/>
+            <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', marginLeft: '10px' } }>添加新值</Button>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

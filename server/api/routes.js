@@ -84,6 +84,7 @@ export default function(router) {
       { id: '546761', name: '主题', type: 'Text', screens: [{id:'111', name:'界面1'}], key:'title'},
       { id: '546763', name: '描述', type:'Text', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
       { id: '546762', name: '优先级', type:'Select', screens: [{id:'111', name:'界面1'}], key:'priority'},
+      { id: '546764', name: '开始时间', type:'DatePicker', screens: [{id:'111', name:'界面1'}], key:'starttime'},
       { id: '2323', name: '附件', type:'File', screens: [{id:'111', name:'界面1'}], key:'attachement'}]};
     return res.status(200).send(results);
   });
@@ -99,9 +100,13 @@ export default function(router) {
     const { id } = req.params;
     let results = {};
     if (id === '546761') {
-      results = { ecode: 0, data: { id: '546761', name: '主题', key:'title',type:'Text', description:'aaaaaaaa'}};
+      results = { ecode: 0, data: { id: '546761', name: '主题', key:'title',type:'Text', description:'aaaaaaaa', defaultValue: '123qwe'}};
+    } else if (id === '546763') {
+      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'TextArea', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
+    } else if (id === '2323') {
+      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'MultiSelect', optionValues:['111', '222', '333'], defaultValue: ['111', '222']}};
     } else {
-      results = { ecode: 0, data: { id: '546762', name: '优先级', key:'priority', type:'Select', optionValues:['111', '222', '333']}};
+      results = { ecode: 0, data: { id: '546762', name: '优先级', key:'priority', type:'Select', optionValues:['111', '222', '333'], defaultValue: '222'}};
     }
     return res.status(200).send(results);
   });
