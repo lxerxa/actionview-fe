@@ -103,6 +103,8 @@ export default function(router) {
       results = { ecode: 0, data: { id: '546761', name: '主题', key:'title',type:'Text', description:'aaaaaaaa', defaultValue: '123qwe'}};
     } else if (id === '546763') {
       results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'TextArea', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
+    } else if (id === '546764') {
+      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'DatePicker', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
     } else if (id === '2323') {
       results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'MultiSelect', optionValues:['111', '222', '333'], defaultValue: ['111', '222']}};
     } else {

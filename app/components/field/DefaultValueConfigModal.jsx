@@ -5,6 +5,7 @@ import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-boots
 import Select from 'react-select';
 import CheckboxGroup from 'react-checkbox-group';
 import RadioGroup from 'react-radio-group';
+import DateTime from 'react-datetime';
 import _ from 'lodash'
 
 const img = require('../../assets/images/loading.gif');
@@ -67,7 +68,6 @@ export default class DefaultValueConfigModal extends Component {
     const { fields: { id, defaultValue }, dirty, handleSubmit, invalid, submitting, data } = this.props;
 
     let optionValues = [];
-
     let defaultComponent = {};
     if (data.type === 'Select' || data.type === 'MultiSelect') {
       if (data.optionValues) {
@@ -110,6 +110,8 @@ export default class DefaultValueConfigModal extends Component {
       ); 
     } else if (data.type === 'TextArea') {
       defaultComponent = ( <FormControl componentClass='textarea' { ...defaultValue } placeholder='请输入默认值'/> );
+    } else if (data.type === 'DatePicker' || data.type === 'DateTimePicker' ) {
+      defaultComponent = ( <DateTime locale='zh-cn' mode='date' dateFormat='YYYY/MM/DD' timeFormat= { data.type === 'DateTimePicker' ? 'HH:mm:ss' : '' } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } }/> );
     } else {
       defaultComponent = ( <FormControl type='text' { ...defaultValue } placeholder='请输入默认值'/> );
     }

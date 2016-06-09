@@ -18,6 +18,7 @@ if (BROWSER) {
   require('jackblog-sass/dist/index.css');
   require('react-select/dist/react-select.css');
   require('react-bootstrap-table/css/react-bootstrap-table.css');
+  require('react-datetime/css/react-datetime.css');
   require('assets/styles/app.css');
 }
 
