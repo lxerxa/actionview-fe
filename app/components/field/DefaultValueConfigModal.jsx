@@ -46,6 +46,7 @@ export default class DefaultValueConfigModal extends Component {
 
   async handleSubmit() {
     const { values, config, close } = this.props;
+    alert(JSON.stringify(values));
     const ecode = await config(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -121,6 +122,7 @@ export default class DefaultValueConfigModal extends Component {
         <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>{ '字段默认值配置 - ' + data.name }</Modal.Title>
         </Modal.Header>
+        <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body>
           <FormGroup controlId='formControlsText'>
             <FormControl type='hidden' { ...id }/>
@@ -134,6 +136,7 @@ export default class DefaultValueConfigModal extends Component {
           <Button className='ralign' disabled={ submitting || !dirty } type='submit'>确定</Button>
           <Button disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
+        </form>
       </Modal>
     );
   }

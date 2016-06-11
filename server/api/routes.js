@@ -135,7 +135,9 @@ export default function(router) {
       { id: '546761', name: '测试界面1', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}]},
       { id: '546763', name: '测试界面2', workflows: [{id:'222', name:'流程B' }, {id:'333', name:'流程C'}]},
       { id: '546762', name: '测试界面3', workflows: [{id:'111', name:'流程A' }]},
-      { id: '546764', name: '测试界面5', workflows: [{id:'111', name:'流程C' }]}]};
+      { id: '546764', name: '测试界面5', workflows: [{id:'111', name:'流程C' }]}],
+      options:{ fields:[{id:'111',name:'字段A'},{id:'222', name:'字段2'}, {id:'333', name:'字段3'}, {id:'444', name:'字段4'}, {id:'555', name:'字段5'}]}
+    };
     return res.status(200).send(results);
   });
 

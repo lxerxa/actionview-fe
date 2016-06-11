@@ -33,6 +33,7 @@ export default class List extends Component {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -78,11 +79,12 @@ export default class List extends Component {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
     } else {
-      const ecode = await show(hoverRowId);
+      const ecode = await show(hoverRowId, eventKey === '3' ? '1' : '');
       // todo err notify
+      eventKey === '3' && this.setState({ layoutConfigShow: true });
       eventKey === '1' && this.setState({ editModalShow: true });
-      eventKey === '3' && this.setState({ defaultValueConfigShow: true });
-      eventKey === '4' && this.setState({ copyModalShow: true });
+      eventKey === '4' && this.setState({ layoutFieldConfigShow: true });
+      eventKey === '5' && this.setState({ copyModalShow: true });
     }
   }
 
@@ -95,7 +97,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, loading, indexLoading, itemLoading, del, edit, create } = this.props;
+    const { collection, selectedItem, item, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const fields = [];
@@ -114,8 +116,9 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='3'>配置</MenuItem>
-                <MenuItem eventKey='4'>复制</MenuItem>
+                <MenuItem eventKey='3'>界面配置</MenuItem>
+                <MenuItem eventKey='4'>字段配置</MenuItem>
+                <MenuItem eventKey='5'>复制</MenuItem>
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
@@ -147,8 +150,8 @@ export default class List extends Component {
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ item } config={ edit } loading={ loading }/> }
-        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } loading={ loading }/> }
+        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ item } config={ edit } options= { options } loading={ loading }/> }
+        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } options= { options } loading={ loading }/> }
       </div>
     );
   }

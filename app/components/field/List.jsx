@@ -110,7 +110,7 @@ export default class List extends Component {
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RedioGroup' || collection[i].type === 'CheckboxGroup') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
-                <MenuItem eventKey='3'>默认值配置</MenuItem>
+                { collection[i].type !== 'File' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
