@@ -152,9 +152,9 @@ export default function(router) {
     const { id } = req.params;
     let results = {};
     if (id === '546761') {
-      results = { ecode: 0, data: { id: '546761', name: '测试界面1', description:'aaaaaaaa', fields:[{id:'111', name:'字段A'},{id:'222', name:'字段B'},{id:'333', name:'字段C'}]}};
+      results = { ecode: 0, data: { id: '546761', name: '测试界面1', description:'aaaaaaaa', fields:[{id:'111', name:'字段A', required: true},{id:'222', name:'字段B'},{id:'333', name:'字段C'}]}};
     } else {
-      results = { ecode: 0, data: { id: '546762', name: '测试界面2', description:'bbbbbb', fields:[{id:'111', name:'字段A'},{id:'222', name:'字段B'},{id:'333', name:'字段C'}]}};
+      results = { ecode: 0, data: { id: '546762', name: '测试界面2', description:'bbbbbb', fields:[{id:'111', name:'字段A'},{id:'222', name:'字段B', required: true},{id:'333', name:'字段C', required: true}]}};
     }
     return res.status(200).send(results);
   });

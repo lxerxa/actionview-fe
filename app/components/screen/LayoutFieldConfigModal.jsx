@@ -15,7 +15,7 @@ export default class LayoutFieldConfigModal extends Component {
       if (fields[i].required) {
         this.state.cards.push({
           id: fields[i].id,
-          text: fields[i].name
+          name: fields[i].name
         });
       }
     }
