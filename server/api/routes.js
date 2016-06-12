@@ -173,6 +173,99 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  /************** workflow *****************/
+  router.get('/project/:key/workflow', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [
+      { id: '546761', name: '测试流程1', latest_modify_time: 1465716065, latest_modifier: { id: '1111', name: '张三' }, step: 5 },
+      { id: '546763', name: '测试流程2', latest_modify_time: 1465416065, latest_modifier: { id: '1111', name: '张三' }, step: 5 },
+      { id: '546762', name: '测试流程3', latest_modify_time: 1465316065, latest_modifier: { id: '2222', name: '李四' }, step: 6 },
+      { id: '546764', name: '测试流程5', latest_modify_time: 1465716005, latest_modifier: { id: '2222', name: '李四' }, step: 4 }]
+    };
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/workflow', function(req, res) {
+    const results = { ecode: 0, data: { id: 'were', name: '测试界面4', description:'aaaaaaa' } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/workflow/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const { id } = req.params;
+    let results = {};
+    if (id === '546761') {
+      results = { ecode: 0, data: { id: '546761', name: '测试界面1', description:'aaaaaaaa', fields:[{id:'111', name:'字段A', required: true},{id:'222', name:'字段B'},{id:'333', name:'字段C'}]}};
+    } else {
+      results = { ecode: 0, data: { id: '546762', name: '测试界面2', description:'bbbbbb', fields:[{id:'111', name:'字段A'},{id:'222', name:'字段B', required: true},{id:'333', name:'字段C', required: true}]}};
+    }
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/workflow/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '546761', name: '测试界面11111', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}]}};
+    return res.status(200).send(results);
+  });
+
+  router.delete('/project/:key/workflow/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
+
+  /*******************state*****************/
+  router.get('/project/:key/state', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '开发中', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: '已关闭', description: 'ddddddddddd' }]};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/state', function(req, res) {
+    const results = { ecode: 0, data: { id: 'were', name: '5C问题', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程1'}} };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/state/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const { id } = req.params;
+    let results = {};
+    if (id === '546761') {
+      results = { ecode: 0, data: { id: '546761', name:'开发中', description: '111aaa'}};
+    } else {
+      results = { ecode: 0, data: { id: '546762', name: '待测试', description: 'adsfs'}};
+    }
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/state/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '546761', name: '任务1111', screen:{id:'222', name:'界面2'}, workflow:{id:'222', name:'流程2'}}};
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/state', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
+    return res.status(200).send(results);
+  });
+
+  router.delete('/project/:key/state/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
 
   router.post('/session', function(req, res) {
     const results = { ecode: 0, data: { token: '123456', user: {id: 'nhy67ujm', name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1'}}};

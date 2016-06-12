@@ -7,5 +7,7 @@ export { default as issue } from './issue';
 export { default as type } from './type';
 export { default as field } from './field';
 export { default as screen } from './screen';
+export { default as workflow } from './workflow';
+export { default as state } from './state';
 export { reducer as form } from 'redux-form';
 export { routerReducer as routing } from 'react-router-redux';

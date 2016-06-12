@@ -73,7 +73,7 @@ export default class Sidebar extends Component {
           },
           {
             text: '状态',
-            href: '/project/' + project.item.key + '/status'
+            href: '/project/' + project.item.key + '/state'
           },
           {
             text: '优先级',

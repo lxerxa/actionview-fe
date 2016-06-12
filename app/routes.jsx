@@ -11,6 +11,8 @@ import IssueList from './components/IssueList';
 const TypeContainer = require('./components/type/Container');
 const FieldContainer = require('./components/field/Container');
 const ScreenContainer = require('./components/screen/Container');
+const WorkflowContainer = require('./components/workflow/Container');
+const StateContainer = require('./components/state/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -23,6 +25,8 @@ export default (
         <Route path='/project/:key/type' component={ TypeContainer }/>
         <Route path='/project/:key/field' component={ FieldContainer }/>
         <Route path='/project/:key/screen' component={ ScreenContainer }/>
+        <Route path='/project/:key/workflow' component={ WorkflowContainer }/>
+        <Route path='/project/:key/state' component={ StateContainer }/>
         <Route path='/project/:key/issue' component={ IssueList }/>
       </Route>
     </Route>
