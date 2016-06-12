@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -123,7 +122,7 @@ export default class LayoutConfigModal extends Component {
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
             <div style={ { display: 'inline-block', width: '60%' } }>
-              <Select ref='addField' simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldId } onChange={ this.handleChange.bind(this) } placeholder='请选择添加字段'/>
+              <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldId } onChange={ this.handleChange.bind(this) } placeholder='请选择添加字段'/>
             </div>
             <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加字段</Button>
           </FormGroup>

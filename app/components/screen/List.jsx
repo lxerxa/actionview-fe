@@ -8,7 +8,7 @@ const EditModal = require('./EditModal');
 const CopyModal = require('./CopyModal');
 const DelNotify = require('./DelNotify');
 const LayoutConfigModal = require('./LayoutConfigModal');
-const LayoutFieldConfigModal = require('./LayoutConfigModal');
+const LayoutFieldConfigModal = require('./LayoutFieldConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -27,6 +27,7 @@ export default class List extends Component {
     this.copyModalClose = this.copyModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.layoutConfigClose = this.layoutConfigClose.bind(this);
+    this.layoutFieldConfigClose = this.layoutFieldConfigClose.bind(this);
   }
 
   static propTypes = {
@@ -151,7 +152,7 @@ export default class List extends Component {
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
         { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ item } config={ edit } options= { options } loading={ loading }/> }
-        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } options= { options } loading={ loading }/> }
+        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } loading={ loading }/> }
       </div>
     );
   }
