@@ -9,5 +9,6 @@ export { default as field } from './field';
 export { default as screen } from './screen';
 export { default as workflow } from './workflow';
 export { default as state } from './state';
+export { default as result } from './result';
 export { reducer as form } from 'redux-form';
 export { routerReducer as routing } from 'react-router-redux';

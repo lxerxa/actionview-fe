@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-class TypeDelModal extends Component {
+export default class DelNotify extends Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
@@ -9,20 +9,20 @@ class TypeDelModal extends Component {
   }
 
   static propTypes = {
-    hide: PropTypes.func.isRequired,
+    close: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
   }
 
   confirm() {
-    const { hide, del, data } = this.props;
-    hide();
+    const { close, del, data } = this.props;
+    close();
     del(data.id);
   }
 
   cancel() {
-    const { hide } = this.props;
-    hide();
+    const { close } = this.props;
+    close();
   }
 
   render() {
@@ -31,10 +31,10 @@ class TypeDelModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>删除问题类型 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除工作流 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此问题类型？
+          确认要删除此工作流？
         </Modal.Body>
         <Modal.Footer>
           <Button className='ralign' onClick={ this.confirm }>确定</Button>
@@ -44,5 +44,3 @@ class TypeDelModal extends Component {
     );
   }
 }
-
-export default TypeDelModal;

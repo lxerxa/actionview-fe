@@ -1,27 +1,23 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import update from 'react/lib/update';
-import Card from '../share/Card';
 import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
-@DragDropContext(HTML5Backend)
-export default class LayoutConfigModal extends Component {
+export default class LayoutFieldConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.moveCard = this.moveCard.bind(this);
     this.state = { cards: [], ecode: 0, addFieldId: '', enableAdd: false };
     const fields = this.props.data.fields || [];
     const fieldNum = fields.length;
     for (let i = 0; i < fieldNum; i++) {
-      this.state.cards.push({
-        id: fields[i].id,
-        text: fields[i].name
-      });
+      if (fields[i].required) {
+        this.state.cards.push({
+          id: fields[i].id,
+          name: fields[i].name
+        });
+      }
     }
     this.state.strCards = JSON.stringify(this.state.cards);
   }
@@ -70,59 +66,52 @@ export default class LayoutConfigModal extends Component {
   }
 
   add() {
-    const { options } = this.props;
+    const { data } = this.props;
     const fid = this.state.addFieldId;
-    const field = _.find(options.fields || [], function(o) { return o.id === fid; });
-    this.state.cards.push({ id: field.id, text: field.name });
+    const field = _.find(data.fields || [], function(o) { return o.id === fid; });
+    this.state.cards.push({ id: field.id, name: field.name });
     this.setState({ cards: this.state.cards, addFieldId: '', enableAdd: false });
-  }
-
-  moveCard(dragIndex, hoverIndex) {
-    const { cards } = this.state;
-    const dragCard = cards[dragIndex];
-
-    this.setState(update(this.state, {
-      cards: {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, dragCard]
-        ]
-      }
-    }));
   }
 
   render() {
     const { cards, strCards, enableAdd } = this.state;
-    const { loading, options } = this.props;
-    //let optionFields = [];
-    const allFields = _.map(options.fields || [], function(val) {
+    const { loading, data } = this.props;
+
+    const screenFields = _.map(data.fields || [], function(val) {
       return { label: val.name, value: val.id };
     });
 
     return (
       <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>{ '界面配置 - ' + this.props.data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '界面字段配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          { cards.length > 0 && <p>通过上下拖拽改变显示顺序。</p> }
+          <p><b>必填字段：</b></p>
           { cards.length > 0 ?
-            cards.map((op, i) => {
-              return (
-                <Card key={ op.id }
-                  index={ i }
-                  id={ op.id }
-                  text={ op.text }
-                  moveCard={ this.moveCard }
-                  deleteCard={ this.deleteCard.bind(this, i) }/>
-              );
-            }) 
+            <ul onMouseLeave={ () => { this.setState({ removeIconShow: false }) } } onMouseOver={ () => { this.setState({ removeIconShow: true }) } }>
+            { 
+              cards.map((op, i) => {
+                return (
+                  <li key={ op.id } style={ { width: '55%', borderBottom: '1px gray dashed', padding: '5px 0 5px 0' } } onMouseOver={ () => { this.setState({ hoverId: op.id }) } }>
+                    { op.name }
+                    { this.state.hoverId === op.id && this.state.removeIconShow &&
+                      <span style={ { float: 'right', marginLeft:'15px', cursor: 'pointer', marginRight: '5px' } } onClick={ this.deleteCard.bind(this, i) }>
+                        <i className='fa fa-remove'></i>
+                      </span>
+                    }
+                  </li>
+                ); 
+              }) 
+            }
+            <li>&nbsp;</li>
+            </ul>
             :
-            <p>此界面暂无字段。</p>
+            <ul><li>此界面暂无必填字段。</li><li>&nbsp;</li></ul>
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
             <div style={ { display: 'inline-block', width: '60%' } }>
-              <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldId } onChange={ this.handleChange.bind(this) } placeholder='请选择添加字段'/>
+              <Select simpleValue options={ _.reject(screenFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldId } onChange={ this.handleChange.bind(this) } placeholder='请选择必填字段'/>
             </div>
             <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加字段</Button>
           </FormGroup>

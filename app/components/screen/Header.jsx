@@ -8,7 +8,7 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false, sortCardsModalShow: false, defaultSetShow: false };
+    this.state = { createModalShow: false };
     this.createModalClose = this.createModalClose.bind(this);
   }
 

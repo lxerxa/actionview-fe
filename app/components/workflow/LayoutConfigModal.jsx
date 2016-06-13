@@ -1,26 +1,26 @@
 import React, { PropTypes, Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
-import Card from '../share/Card';
+import Card from './Card';
+import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
 @DragDropContext(HTML5Backend)
-export default class OptionValuesConfigModal extends Component {
+export default class LayoutConfigModal extends Component {
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
-    this.state = { cards: [], ecode: 0, enableAdd: false };
-    const optionValues = this.props.data.optionValues || [];
-    const optionNum = optionValues.length;
-    for (let i = 0; i < optionNum; i++) {
+    this.state = { cards: [], ecode: 0, addFieldId: '', enableAdd: false };
+    const fields = this.props.data.fields || [];
+    const fieldNum = fields.length;
+    for (let i = 0; i < fieldNum; i++) {
       this.state.cards.push({
-        id: optionValues[i],
-        text: optionValues[i]
+        id: fields[i].id,
+        text: fields[i].name
       });
     }
     this.state.strCards = JSON.stringify(this.state.cards);
@@ -30,13 +30,14 @@ export default class OptionValuesConfigModal extends Component {
     loading: PropTypes.bool,
     config: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired
   }
 
   async save() {
     const { close, config, data } = this.props;
     let ecode = 0;
-    const values = { id: data.id, optionValues: _.map(this.state.cards, _.iteratee('text')) };
+    const values = { id: data.id, fields: _.map(this.state.cards, _.iteratee('id')) };
     ecode = await config(values);
 
     if (ecode === 0) {
@@ -55,32 +56,25 @@ export default class OptionValuesConfigModal extends Component {
     close();
   }
 
-  sort() {
-    const cards = this.state.cards;
-    this.setState(cards.sort(function(a, b) { return a.text.localeCompare(b.text); } ));
-  }
-
   deleteCard(i) {
     this.state.cards.splice(i, 1);
     this.setState({ cards: this.state.cards });
   }
 
-  handleChange(e) {
-    const optionValue = e.target.value;
-    if (optionValue.trim() === '') {
-      this.setState({ enableAdd: false });
-    } else if (_.findIndex(this.state.cards, function(o) { return o.id === optionValue }) !== -1) {
-      this.setState({ enableAdd: false });
-    }else {
-      this.setState({ enableAdd: true });
+  handleChange(field) {
+    if (field !== '') {
+      this.setState ({ addFieldId: field, enableAdd: true });
+    } else {
+      this.setState ({ enableAdd: false });
     }
   }
 
   add() {
-    const optionValue = findDOMNode(this.refs.addOpt).value;
-    this.state.cards.push({ id: optionValue, text: optionValue });
-    this.setState({ cards: this.state.cards });
-    findDOMNode(this.refs.addOpt).value = '';
+    const { options } = this.props;
+    const fid = this.state.addFieldId;
+    const field = _.find(options.fields || [], function(o) { return o.id === fid; });
+    this.state.cards.push({ id: field.id, text: field.name });
+    this.setState({ cards: this.state.cards, addFieldId: '', enableAdd: false });
   }
 
   moveCard(dragIndex, hoverIndex) {
@@ -99,15 +93,19 @@ export default class OptionValuesConfigModal extends Component {
 
   render() {
     const { cards, strCards, enableAdd } = this.state;
-    const { loading } = this.props;
+    const { loading, options } = this.props;
+    //let optionFields = [];
+    const allFields = _.map(options.fields || [], function(val) {
+      return { label: val.name, value: val.id };
+    });
 
     return (
       <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>{ '字段可选值配置 - ' + this.props.data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '界面配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          { cards.length > 0 && <p>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></p> }
+          { cards.length > 0 && <p>通过上下拖拽改变显示顺序。</p> }
           { cards.length > 0 ?
             cards.map((op, i) => {
               return (
@@ -118,12 +116,15 @@ export default class OptionValuesConfigModal extends Component {
                   moveCard={ this.moveCard }
                   deleteCard={ this.deleteCard.bind(this, i) }/>
               );
-            }) :
-            <p>可选值为空</p>
+            }) 
+            :
+            <p>此界面暂无字段。</p>
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
-            <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } style={ { display: 'inline-block', width: '60%' } }/>
-            <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', marginLeft: '10px' } }>添加新值</Button>
+            <div style={ { display: 'inline-block', width: '60%' } }>
+              <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldId } onChange={ this.handleChange.bind(this) } placeholder='请选择添加字段'/>
+            </div>
+            <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加字段</Button>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

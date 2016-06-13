@@ -1,9 +1,9 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, loading: false, itemLoading: false, sortLoading: false, defaultLoading: false, selectedItem: {} };
 
-export default function state(state = initialState, action) {
+export default function result(state = initialState, action) {
   switch (action.type) {
     case t.STATE_INDEX:
       return { ...state, indexLoading: true, collection: [] };
@@ -66,6 +66,27 @@ export default function state(state = initialState, action) {
 
     case t.STATE_DELETE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.STATE_SET_SORT:
+      return { ...state, sortLoading: true };
+
+    case t.STATE_SET_SORT_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.collection = action.result.data;
+      }
+      return { ...state, sortLoading: false, ecode: action.result.ecode };
+
+    case t.STATE_SET_SORT_FAIL:
+      return { ...state, sortLoading: false, error: action.error };
+
+    case t.STATE_SET_DEFAULT:
+      return { ...state, defaultLoading: true };
+
+    case t.STATE_SET_DEFAULT_SUCCESS:
+      return { ...state, defaultLoading: false, ecode: action.result.ecode, collection: action.result.data };
+
+    case t.STATE_SET_DEFAULT_FAIL:
+      return { ...state, defaultLoading: false, error: action.error };
 
     default:
       return state;

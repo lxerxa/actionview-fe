@@ -7,10 +7,6 @@ export function index(key) {
   });
 }
 
-export function init() {
-  return { type: 'STATE_INIT' };
-}
-
 export function create(key, values) {
   return asyncFuncCreator({
     constant: 'STATE_CREATE',
@@ -42,19 +38,5 @@ export function del(key, id) {
     constant: 'STATE_DELETE',
     id,
     promise: (client) => client.request({ url: '/project/' + key + '/state/' + id, method: 'delete' })
-  });
-}
-
-export function setSort(key, values) {
-  return asyncFuncCreator({
-    constant: 'STATE_SET_SORT',
-    promise: (client) => client.request({ url: '/project/' + key + '/state', method: 'put', data: values })
-  });
-}
-
-export function setDefault(key, values) {
-  return asyncFuncCreator({
-    constant: 'STATE_SET_DEFAULT',
-    promise: (client) => client.request({ url: '/project/' + key + '/state', method: 'put', data: values })
   });
 }

@@ -82,16 +82,19 @@ export default class Card extends Component {
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
     text: PropTypes.string.isRequired,
+    deleteCard: PropTypes.func.isRequired,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
-    const { text, isDragging, connectDragSource, connectDropTarget } = this.props;
+    const { text, isDragging, connectDragSource, connectDropTarget, deleteCard } = this.props;
     const opacity = isDragging ? 0 : 1;
+    const styles = { float: 'right', cursor: 'pointer' };
 
     return connectDragSource(connectDropTarget(
       <div style={ { ...style, opacity } }>
         { text }
+        { !!deleteCard && <span style={ styles } onClick={ deleteCard }><i className='fa fa-remove'></i></span> }
       </div>
     ));
   }

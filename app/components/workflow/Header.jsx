@@ -8,7 +8,7 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false };
+    this.state = { createModalShow: false, sortCardsModalShow: false, defaultSetShow: false };
     this.createModalClose = this.createModalClose.bind(this);
   }
 
@@ -26,10 +26,10 @@ export default class Header extends Component {
     return (
       <div>
         <div className='list-unstyled clearfix'>
-          <h2>#字段#</h2>
+          <h2>#工作流#</h2>
         </div>
         <div>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建字段</Button>
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建工作流</Button>
         </div>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
       </div>
