@@ -21,12 +21,8 @@ export function edit(key, values) {
   });
 }
 
-export function show(key, id) {
-  return asyncFuncCreator({
-    constant: 'RESULT_SHOW',
-    id,
-    promise: (client) => client.request({ url: '/project/' + key + '/result/' + id })
-  });
+export function show(id) {
+  return { type: 'RESULT_SHOW', id: id };
 }
 
 export function delNotify(id) {

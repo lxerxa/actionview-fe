@@ -42,12 +42,10 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  async show(id) {
+  show(id) {
+    this.setState({ editModalShow: true });
     const { show } = this.props;
-    const ecode = await show(id);
-    if (ecode === 0) {
-      this.setState({ editModalShow: true });
-    }
+    show(id);
   }
 
   delNotify(id) {
@@ -57,7 +55,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, item, indexLoading, itemLoading, del, edit } = this.props;
 
     const types = [];
     const typeNum = collection.length;
@@ -91,7 +89,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
           <TableHeaderColumn width='150' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item } options={ options }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );

@@ -40,20 +40,12 @@ export default function result(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.RESULT_SHOW:
-      return { ...state, itemLoading: true, selectedItem: { id: action.id } };
-
-    case t.RESULT_SHOW_SUCCESS:
-      if ( action.result.ecode === 0 ) {
-        state.item = action.result.data;
-      }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
-
-    case t.RESULT_SHOW_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      const el = _.find(state.collection, { id: action.id });
+      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, description: el.description } };
 
     case t.RESULT_DELETE_NOTIFY:
-      const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name } };
+      const el2 = _.find(state.collection, { id: action.id });
+      return { ...state, itemLoading: false, selectedItem: { id: el2.id, name: el2.name } };
 
     case t.RESULT_DELETE:
       return { ...state, itemLoading: true };
