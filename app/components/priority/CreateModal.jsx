@@ -14,7 +14,7 @@ const validate = (values) => {
 };
 
 @reduxForm({
-  form: 'result',
+  form: 'priority',
   fields: ['name', 'description'],
   validate
 })
@@ -64,17 +64,17 @@ export default class CreateModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>创建解决结果</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>创建优先级</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>名称</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='解决结果名'/>
+            <FormControl type='text' { ...name } placeholder='优先级名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='结果描述'/>
+            <FormControl type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

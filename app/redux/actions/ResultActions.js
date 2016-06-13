@@ -7,10 +7,6 @@ export function index(key) {
   });
 }
 
-export function init() {
-  return { type: 'RESULT_INIT' };
-}
-
 export function create(key, values) {
   return asyncFuncCreator({
     constant: 'RESULT_CREATE',

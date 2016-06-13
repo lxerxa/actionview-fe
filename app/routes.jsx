@@ -6,7 +6,6 @@ import Home from './components/Home';
 import Project from './components/Project';
 import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
-import IssueList from './components/IssueList';
 
 const TypeContainer = require('./components/type/Container');
 const FieldContainer = require('./components/field/Container');
@@ -14,6 +13,7 @@ const ScreenContainer = require('./components/screen/Container');
 const WorkflowContainer = require('./components/workflow/Container');
 const StateContainer = require('./components/state/Container');
 const ResultContainer = require('./components/result/Container');
+const PriorityContainer = require('./components/priority/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -29,7 +29,7 @@ export default (
         <Route path='/project/:key/workflow' component={ WorkflowContainer }/>
         <Route path='/project/:key/state' component={ StateContainer }/>
         <Route path='/project/:key/result' component={ ResultContainer }/>
-        <Route path='/project/:key/issue' component={ IssueList }/>
+        <Route path='/project/:key/priority' component={ PriorityContainer }/>
       </Route>
     </Route>
   </Route>

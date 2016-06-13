@@ -39,13 +39,13 @@ export default class Header extends Component {
     return (
       <div>
         <div className='list-unstyled clearfix'>
-          <h3>#问题类型#</h3>
+          <h3>#问题优先级#</h3>
         </div>
         <div>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建类型</Button>
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建优先级</Button>
           { !indexLoading && <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button> }
           <div style={ styles } className={ indexLoading && 'hide' }>
-            <span className='default-set'>默认类型：</span>
+            <span className='default-set'>默认优先级：</span>
             { this.state.defaultSetShow ? 
               <div className='default-set'>
                 <div className='edit-field-content'>
