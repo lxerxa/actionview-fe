@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, loading: false, itemLoading: false, sortLoading: false, defaultLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], item: {}, indexLoading: false, loading: false, itemLoading: false, sortLoading: false, defaultLoading: false, selectedItem: {} };
 
 export default function priority(state = initialState, action) {
   switch (action.type) {
@@ -9,7 +9,7 @@ export default function priority(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.PRIORITY_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, options: action.result.options };
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
 
     case t.PRIORITY_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };

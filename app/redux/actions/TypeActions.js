@@ -7,10 +7,6 @@ export function index(key) {
   });
 }
 
-export function init() {
-  return { type: 'TYPE_INIT' };
-}
-
 export function create(key, values) {
   return asyncFuncCreator({
     constant: 'TYPE_CREATE',
@@ -25,12 +21,8 @@ export function edit(key, values) {
   });
 }
 
-export function show(key, id) {
-  return asyncFuncCreator({
-    constant: 'TYPE_SHOW',
-    id,
-    promise: (client) => client.request({ url: '/project/' + key + '/type/' + id })
-  });
+export function show(id) {
+  return { type: 'TYPE_SHOW', id: id };
 }
 
 export function delNotify(id) {
