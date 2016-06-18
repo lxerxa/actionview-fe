@@ -82,6 +82,10 @@ export default class Sidebar extends Component {
           {
             text: '优先级',
             href: '/project/' + project.item.key + '/priority'
+          },
+          {
+            text: '角色权限',
+            href: '/project/' + project.item.key + '/role'
           }
         ]
       }

@@ -34,7 +34,6 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
-    optionValues: PropTypes.array,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,

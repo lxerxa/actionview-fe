@@ -41,6 +41,9 @@ export default class DefaultValueConfigModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
+    if (data.type === 'MultiSelect' && _.isArray(data.defaultValue)) {
+      data.defaultValue = data.defaultValue.join(',');
+    }
     initializeForm(data);
   }
 

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button } from 'react-bootstrap';
+import _ from 'lodash';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -11,8 +12,6 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { editModalShow: false, delNotifyShow: false };
-    this.editModalClose = this.editModalClose.bind(this);
-    this.delNotifyClose = this.delNotifyClose.bind(this);
   }
 
   static propTypes = {
@@ -22,10 +21,7 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
-    delNotify: PropTypes.func.isRequired
+    edit: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -33,36 +29,22 @@ export default class List extends Component {
     index();
   }
 
-  editModalClose() {
-    this.setState({ editModalShow: false });
-  }
-
-  delNotifyClose() {
-    this.setState({ delNotifyShow: false });
-  }
-
-  show(id) {
-    this.setState({ editModalShow: true });
-    const { show } = this.props;
-    show(id);
-  }
-
-  delNotify(id) {
-    this.setState({ delNotifyShow: true });
-    const { delNotify } = this.props;
-    delNotify(id);
-  }
-
   render() {
-    const { collection, selectedItem, item, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, item, options, indexLoading, itemLoading, del, edit } = this.props;
 
     const types = [];
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
+      const permissions = _.filter(options.permissions, function(o) { return _.indexOf(collection[i].permissions, o.id) !== -1; });
       types.push({
         id: collection[i].id,
-        name: collection[i].name,
-        description: collection[i].description,
+        role: collection[i].role,
+        permissions: (
+          <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>
+            { _.map(permissions, function(v){ 
+              return <li key={ v.id }>{ v.name }</li> }) 
+            }
+          </ul>), 
         operation: (
           <div>
             <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
@@ -86,12 +68,9 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ types } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name' width='365'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
-          <TableHeaderColumn width='150' dataField='operation'>操作</TableHeaderColumn>
+          <TableHeaderColumn dataField='role'>角色</TableHeaderColumn>
+          <TableHeaderColumn dataField='member'>成员</TableHeaderColumn>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );
   }

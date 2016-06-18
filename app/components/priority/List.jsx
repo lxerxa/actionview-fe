@@ -60,6 +60,7 @@ export default class List extends Component {
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
       types.push({
+        id: collection[i].id,
         name: collection[i].name,
         description: collection[i].description,
         operation: (
@@ -84,7 +85,8 @@ export default class List extends Component {
     return (
       <div>
         <BootstrapTable data={ types } bordered={ false } hover options={ opts }>
-          <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
           <TableHeaderColumn width='150' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>

@@ -85,7 +85,7 @@ export default function(router) {
       { id: '546763', name: '描述', type:'Text', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
       { id: '546762', name: '优先级', type:'Select', screens: [{id:'111', name:'界面1'}], key:'priority'},
       { id: '546764', name: '开始时间', type:'DatePicker', screens: [{id:'111', name:'界面1'}], key:'starttime'},
-      { id: '2323', name: '附件', type:'File', screens: [{id:'111', name:'界面1'}], key:'attachement'}]};
+      { id: '2323', name: '附件', type:'CheckboxGroup', screens: [{id:'111', name:'界面1'}], key:'attachement'}]};
     return res.status(200).send(results);
   });
 
@@ -354,6 +354,53 @@ export default function(router) {
   });
 
   router.delete('/project/:key/priority/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
+  /*******************permission*****************/
+  router.get('/project/:key/role', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', role: '项目经理', description: '111aaa', permissions:[ 'createIssue', 'viewWorkflow'] }, { id: '546762', role: '产品经理', permissions:['createIssue', 'projectConfig'] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/role', function(req, res) {
+    const results = { ecode: 0, data: { id: 'were', name: '5C问题', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程1'}} };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/role/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const { id } = req.params;
+    let results = {};
+    if (id === '546761') {
+      results = { ecode: 0, data: { id: '546761', role:'项目经理', description: '111aaa', permissions:['createIssue', 'projectConfig']}};
+    } else {
+      results = { ecode: 0, data: { id: '546762', role: '产品经理', description: 'adsfs', permissions:['createIssue', 'viewWorkflow']}};
+    }
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/role/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '546761', name: '任务1111', screen:{id:'222', name:'界面2'}, workflow:{id:'222', name:'流程2'}}};
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/role', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
+    return res.status(200).send(results);
+  });
+
+  router.delete('/project/:key/role/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: req.params.id }};

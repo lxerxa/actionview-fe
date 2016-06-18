@@ -2,19 +2,18 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button } from 'react-bootstrap';
-import * as StateActions from 'redux/actions/StateActions';
+import * as MemberActions from 'redux/actions/MemberActions';
 
 const Header = require('./Header');
 const List = require('./List');
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(StateActions, dispatch)
+    actions: bindActionCreators(MemberActions, dispatch)
   };
 }
 
-@connect(({ state }) => ({ state }), mapDispatchToProps)
+@connect(({ member }) => ({ member }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -24,28 +23,17 @@ export default class Container extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    state: PropTypes.object.isRequired
+    member: PropTypes.object.isRequired
   }
 
   async index() {
     await this.props.actions.index(this.pid);
-    return this.props.state.ecode;
-  }
-
-  async create(values) {
-    await this.props.actions.create(this.pid, values);
-    return this.props.state.ecode;
+    return this.props.member.ecode;
   }
 
   async edit(values) {
     await this.props.actions.edit(this.pid, values);
-    return this.props.state.ecode;
-  }
-
-  async del(id) {
-    const { actions } = this.props;
-    await actions.del(this.pid, id);
-    return this.props.state.ecode;
+    return this.props.member.ecode;
   }
 
   componentWillMount() {
@@ -56,8 +44,7 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header create={ this.create.bind(this) } { ...this.props.state }/>
-        <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.state }/>
+        <List index={ this.index.bind(this) } edit={ this.edit.bind(this) } { ...this.props.member }/>
       </div>
     );
   }

@@ -19,8 +19,7 @@ export default class Header extends Component {
     setSort: PropTypes.func.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     sortLoading: PropTypes.bool.isRequired,
-    collection: PropTypes.array.isRequired,
-    options: PropTypes.object.isRequired
+    collection: PropTypes.array.isRequired
   }
 
   createModalClose() {
@@ -32,7 +31,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, setSort, sortLoading, indexLoading, collection, options } = this.props;
+    const { create, setSort, sortLoading, indexLoading, collection } = this.props;
     const styles = { display: 'inline-block', marginLeft: '15px' };
     const defaultIndex = _.findIndex(collection, { default: true }) || 0;
 
@@ -66,7 +65,7 @@ export default class Header extends Component {
             }
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
         { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading }/> }
       </div>
     );

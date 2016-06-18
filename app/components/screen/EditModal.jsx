@@ -26,7 +26,6 @@ export default class EditModal extends Component {
   }
 
   static propTypes = {
-    optionValues: PropTypes.array,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     dirty: PropTypes.bool,

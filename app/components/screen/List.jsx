@@ -104,15 +104,13 @@ export default class List extends Component {
     const fields = [];
     const fieldNum = collection.length;
     for (let i = 0; i < fieldNum; i++) {
-      let workflows = '';
-      _.forEach(collection[i].workflows, function(val) {
-        workflows += val.name + '<br/>';
-      });
-      
       fields.push({
         id: collection[i].id,
         name: collection[i].name,
-        workflow: ( <span dangerouslySetInnerHTML={ { __html: workflows } }/> ),
+        workflow: ( 
+          <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>{
+            _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }
+          </ul> ),
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&

@@ -51,7 +51,7 @@ export default class EditModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    initializeForm(data);
+    initializeForm({ ...data, screen: data.screen.id, workflow: data.workflow.id });
   }
 
   async handleSubmit() {
