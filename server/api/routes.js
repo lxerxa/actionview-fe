@@ -364,7 +364,7 @@ export default function(router) {
   router.get('/project/:key/role', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', role: '项目经理', description: '111aaa', permissions:[ 'createIssue', 'viewWorkflow'] }, { id: '546762', role: '产品经理', permissions:['createIssue', 'projectConfig'] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'createIssue', 'viewWorkflow'] }, { id: '546762', name: '产品经理', permissions:['createIssue', 'projectConfig'] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
     return res.status(200).send(results);
   });
 
@@ -379,9 +379,9 @@ export default function(router) {
     const { id } = req.params;
     let results = {};
     if (id === '546761') {
-      results = { ecode: 0, data: { id: '546761', role:'项目经理', description: '111aaa', permissions:['createIssue', 'projectConfig']}};
+      results = { ecode: 0, data: { id: '546761', name:'项目经理', description: '111aaa', permissions:['createIssue', 'projectConfig']}};
     } else {
-      results = { ecode: 0, data: { id: '546762', role: '产品经理', description: 'adsfs', permissions:['createIssue', 'viewWorkflow']}};
+      results = { ecode: 0, data: { id: '546762', name: '产品经理', description: 'adsfs', permissions:['createIssue', 'viewWorkflow']}};
     }
     return res.status(200).send(results);
   });
@@ -404,6 +404,21 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
+  /*******************permission*****************/
+  router.get('/project/:key/roleactor', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', role: {id: '2222', name: '项目经理'}}, { id: '546762', role: { id: '3333', name: '产品经理'}}] };
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/roleactor/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '546761', name: '任务1111', screen:{id:'222', name:'界面2'}, workflow:{id:'222', name:'流程2'}}};
     return res.status(200).send(results);
   });
 

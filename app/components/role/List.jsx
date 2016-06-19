@@ -64,7 +64,7 @@ export default class List extends Component {
       const permissions = _.filter(options.permissions, function(o) { return _.indexOf(collection[i].permissions, o.id) !== -1; });
       types.push({
         id: collection[i].id,
-        role: collection[i].role,
+        name: collection[i].name,
         permissions: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>
             { _.map(permissions, function(v){ 
@@ -94,7 +94,7 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ types } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='role'>角色</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='permissions'>权限</TableHeaderColumn>
           <TableHeaderColumn width='150' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>

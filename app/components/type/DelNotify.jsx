@@ -30,7 +30,7 @@ export default class DelNotify extends Component {
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={ { background: '#f0f0f0' } }>
           <Modal.Title id='contained-modal-title-la'>删除问题类型 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>

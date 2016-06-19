@@ -68,7 +68,7 @@ export default class EditModal extends Component {
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={ { background: '#f0f0f0' } }>
           <Modal.Title id='contained-modal-title-la'>{ '编辑字段 - ' + data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>

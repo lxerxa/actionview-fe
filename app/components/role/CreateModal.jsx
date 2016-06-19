@@ -8,15 +8,15 @@ const img = require('../../assets/images/loading.gif');
 
 const validate = (values) => {
   const errors = {};
-  if (!values.role) {
-    errors.role = 'Required';
+  if (!values.name) {
+    errors.name = 'Required';
   }
   return errors;
 };
 
 @reduxForm({
   form: 'state',
-  fields: ['role', 'description', 'permissions'],
+  fields: ['name', 'description', 'permissions'],
   validate
 })
 export default class CreateModal extends Component {
@@ -60,18 +60,18 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { role, description, permissions }, handleSubmit, invalid, submitting, options } = this.props;
+    const { fields: { name, description, permissions }, handleSubmit, invalid, submitting, options } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={ { background: '#f0f0f0' } }>
           <Modal.Title id='contained-modal-title-la'>创建新角色</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>角色名</ControlLabel>
-            <FormControl type='text' { ...role } placeholder='角色名'/>
+            <FormControl type='text' { ...name } placeholder='角色名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

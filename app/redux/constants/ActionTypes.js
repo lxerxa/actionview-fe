@@ -77,6 +77,9 @@ export default generateConstants([
   'ROLE_DELETE(ASYNC)',
   'ROLE_DELETE_NOTIFY',
 
+  'ROLEACTOR_INDEX(ASYNC)',
+  'ROLEACTOR_EDIT(ASYNC)',
+
   'ISSUE_INDEX(ASYNC)',
   'ISSUE_CREATE(ASYNC)',
 

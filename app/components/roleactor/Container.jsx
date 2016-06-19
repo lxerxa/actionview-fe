@@ -2,18 +2,18 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import * as MemberActions from 'redux/actions/MemberActions';
+import * as RoleactorActions from 'redux/actions/RoleactorActions';
 
 const Header = require('./Header');
 const List = require('./List');
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(MemberActions, dispatch)
+    actions: bindActionCreators(RoleactorActions, dispatch)
   };
 }
 
-@connect(({ member }) => ({ member }), mapDispatchToProps)
+@connect(({ roleactor }) => ({ roleactor }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -23,17 +23,17 @@ export default class Container extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    member: PropTypes.object.isRequired
+    roleactor: PropTypes.object.isRequired
   }
 
   async index() {
     await this.props.actions.index(this.pid);
-    return this.props.member.ecode;
+    return this.props.roleactor.ecode;
   }
 
   async edit(values) {
     await this.props.actions.edit(this.pid, values);
-    return this.props.member.ecode;
+    return this.props.roleactor.ecode;
   }
 
   componentWillMount() {
@@ -44,7 +44,7 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <List index={ this.index.bind(this) } edit={ this.edit.bind(this) } { ...this.props.member }/>
+        <List index={ this.index.bind(this) } edit={ this.edit.bind(this) } { ...this.props.roleactor }/>
       </div>
     );
   }

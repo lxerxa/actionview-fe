@@ -12,5 +12,6 @@ export { default as state } from './state';
 export { default as result } from './result';
 export { default as priority } from './priority';
 export { default as role } from './role';
+export { default as roleactor } from './roleactor';
 export { reducer as form } from 'redux-form';
 export { routerReducer as routing } from 'react-router-redux';

@@ -8,15 +8,15 @@ const img = require('../../assets/images/loading.gif');
 
 const validate = (values) => {
   const errors = {};
-  if (!values.role) {
-    errors.role = 'Required';
+  if (!values.name) {
+    errors.name = 'Required';
   }
   return errors;
 };
 
 @reduxForm({
   form: 'state',
-  fields: ['id', 'role', 'description', 'permissions'],
+  fields: ['id', 'name', 'description', 'permissions'],
   validate
 })
 export default class EditModal extends Component {
@@ -68,19 +68,19 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, role, description, permissions }, options={}, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { id, name, description, permissions }, options={}, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>{ '编辑角色权限 - ' + data.role }</Modal.Title>
+        <Modal.Header closeButton style={ { background: '#f0f0f0' } }>
+          <Modal.Title id='contained-modal-title-la'>{ '编辑角色权限 - ' + data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>角色名</ControlLabel>
             <FormControl type='hidden' { ...id }/>
-            <FormControl type='text' { ...role } placeholder='角色名'/>
+            <FormControl type='text' { ...name } placeholder='角色名'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>权限集</ControlLabel>
