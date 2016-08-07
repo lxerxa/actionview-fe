@@ -15,6 +15,7 @@ const StateContainer = require('./components/state/Container');
 const ResultContainer = require('./components/result/Container');
 const PriorityContainer = require('./components/priority/Container');
 const RoleContainer = require('./components/role/Container');
+const RoleactorContainer = require('./components/roleactor/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -32,6 +33,7 @@ export default (
         <Route path='/project/:key/result' component={ ResultContainer }/>
         <Route path='/project/:key/priority' component={ PriorityContainer }/>
         <Route path='/project/:key/role' component={ RoleContainer }/>
+        <Route path='/project/:key/roleactor' component={ RoleactorContainer }/>
       </Route>
     </Route>
   </Route>

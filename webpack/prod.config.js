@@ -10,20 +10,18 @@ export default {
     ...baseConfig.module,
     loaders: [
       ...baseConfig.module.loaders,
-      {
-        test: /\.(svg|woff|woff2|eot|ttf)(\?v=[0-9].[0-9].[0-9])?$/,
-        loader: 'file?name=[sha512:hash:base64:7].[ext]',
-        exclude: /node_modules\/(?!font-awesome|bootstrap)/
-      },
-      {
-        test: /\.(jpe?g|png|gif)$/,
-        loader: 'file?name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced',
-        exclude: /node_modules\/(?!font-awesome|bootstrap)/
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css!postcss')
-      }
+        {
+          test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)(\?v=[0-9].[0-9].[0-9])?$/,
+          loaders: [
+            'url?limit=1000&name=[sha512:hash:base64:7].[ext]'
+          ],
+          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass|react-bootstrap-table)/
+        },
+        {
+          test: /\.css$/,
+          loader: 'style!css!postcss',
+          exclude: /node_modules\/(?!font-awesome|react-select|bootstrap|jackblog-sass|react-bootstrap-table|react-datetime)/
+        }
     ]
   },
   plugins: [

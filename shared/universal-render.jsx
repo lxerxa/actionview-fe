@@ -23,57 +23,11 @@ debug('------------------------');
 export default async function({ location, history, store, locale }) {
   const resolver = new ReduxResolver();
   store.resolver = resolver;
-  if (BROWSER && NODE_ENV === 'development') {
-    const routes = require('../app/routes');
-    // add redux-devtools on client side
-    const DevTools = require('utils/dev-tools');
 
-    return (
-      <div>
-        <Provider store={ store }>
-          <Router history={ history } routes={ routes } />
-        </Provider>
-        <Provider store={ store }>
-          <DevTools key='dev-tools' />
-        </Provider>
-      </div>
-    );
-  } else if (BROWSER) {
-    const routes = require('../app/routes');
-    return (
-      <Provider store={ store }>
-        <Router history={ history } routes={ routes } />
-      </Provider>
-    );
-  } else {
-    // Initialize locale of rendering
-    try {
-      const messages = require(`i18n/${locale}`);
-      store.dispatch(I18nActions.initialize(locale, messages));
-    } catch (error) {
-      store.dispatch(I18nActions.initialize('en', require('i18n/en')));
-    }
-
-    const [ error, redirect, renderProps ] = await runRouter(location);
-    const routerProps = { ...renderProps, location };
-
-    // TODO: Fix redirection
-    if (error || redirect) throw (error || redirect);
-
-    const element = (
-      <Provider store={ store }>
-        <RouterContext { ...routerProps } />
-      </Provider>
-    );
-
-    // Collect promises with a first render
-    ReactDOM.renderToString(element);
-    // Resolve them, populate stores
-    await resolver.dispatchPendingActions();
-    // Re-render application with data
-    const state = serialize(store.getState());
-    const body = ReactDOM.renderToString(element);
-
-    return { body, state };
-  }
+  const routes = require('../app/routes');
+  return (
+    <Provider store={ store }>
+      <Router history={ history } routes={ routes } />
+    </Provider>
+  );
 }

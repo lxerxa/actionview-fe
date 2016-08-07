@@ -5,7 +5,7 @@ import { SESSION_DESTROY } from '../constants/ActionTypes';
 export function create(values) {
   return asyncFuncCreator({
     constant: 'SESSION_CREATE',
-    promise: (client) => client.request({ url: '/session', method: 'post' }, values)
+    promise: (client) => client.request({ url: '/session', method: 'post', data: values })
   });
 }
 

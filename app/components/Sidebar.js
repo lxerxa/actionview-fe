@@ -47,6 +47,10 @@ export default class Sidebar extends Component {
             href: '/project/' + project.item.key + '/report'
           },
           {
+            text: '角色成员',
+            href: '/project/' + project.item.key + '/roleactor'
+          },
+          {
             text: '模块',
             href: '/project/' + project.item.key + '/module'
           }

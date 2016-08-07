@@ -4,8 +4,6 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button } from 'react-bootstrap';
 import _ from 'lodash';
 
-const EditModal = require('./EditModal');
-const DelNotify = require('./DelNotify');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -30,28 +28,17 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, item, indexLoading, itemLoading, edit } = this.props;
 
     const types = [];
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
-      const permissions = _.filter(options.permissions, function(o) { return _.indexOf(collection[i].permissions, o.id) !== -1; });
       types.push({
         id: collection[i].id,
-        role: collection[i].role,
-        permissions: (
-          <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>
-            { _.map(permissions, function(v){ 
-              return <li key={ v.id }>{ v.name }</li> }) 
-            }
-          </ul>), 
-        operation: (
+        role: collection[i].role.name,
+        members: (
           <div>
-            <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
-            </div>
-            <image src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            aa
           </div>
         )
       });
@@ -68,8 +55,8 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ types } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='role'>角色</TableHeaderColumn>
-          <TableHeaderColumn dataField='member'>成员</TableHeaderColumn>
+          <TableHeaderColumn dataField='role' width='270'>角色</TableHeaderColumn>
+          <TableHeaderColumn dataField='members'>成员</TableHeaderColumn>
         </BootstrapTable>
       </div>
     );

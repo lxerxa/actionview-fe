@@ -407,7 +407,7 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
-  /*******************permission*****************/
+  /*******************roleactor*****************/
   router.get('/project/:key/roleactor', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
@@ -423,7 +423,7 @@ export default function(router) {
   });
 
   router.post('/session', function(req, res) {
-    const results = { ecode: 0, data: { token: '123456', user: {id: 'nhy67ujm', name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1'}}};
+    const results = { ecode: 0, data: { _id: 'nhy67ujm', name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1'}};
     return res.status(200).send(results);
   });
 

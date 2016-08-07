@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as RoleactorActions from 'redux/actions/RoleactorActions';
 
-const Header = require('./Header');
 const List = require('./List');
 
 function mapDispatchToProps(dispatch) {
@@ -44,6 +43,9 @@ export default class Container extends Component {
   render() {
     return (
       <div>
+        <div className='list-unstyled clearfix'>
+          <h3>#角色成员#</h3>
+        </div>
         <List index={ this.index.bind(this) } edit={ this.edit.bind(this) } { ...this.props.roleactor }/>
       </div>
     );
