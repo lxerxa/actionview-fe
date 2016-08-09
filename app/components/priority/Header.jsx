@@ -33,7 +33,7 @@ export default class Header extends Component {
   render() {
     const { create, setSort, sortLoading, indexLoading, collection } = this.props;
     const styles = { display: 'inline-block', marginLeft: '15px' };
-    const defaultIndex = _.findIndex(collection, { default: true }) || 0;
+    const defaultIndex = _.findIndex(collection, { default: true });
 
     return (
       <div>
@@ -59,7 +59,7 @@ export default class Header extends Component {
               </div>
               :
               <span className='default-set editable-field'>
-                <span>{ collection[defaultIndex] && collection[defaultIndex].name }</span>
+                <span>{ collection[defaultIndex] ? collection[defaultIndex].name : '无' }</span>
                 <Button className='edit-icon' onClick={ () => { this.setState({ defaultSetShow: true }); } }><i className='fa fa-pencil'></i></Button>
               </span>
             }

@@ -68,7 +68,7 @@ class Login extends Component {
     await actions.create(values);
 
     const { session } = this.context.store.getState();
-    if (session.ecode === 0 && typeof session.user._id !== 'undefined') {
+    if (session.ecode === 0 && typeof session.user.id !== 'undefined') {
       dispatch(push('/home'));
     }
   }

@@ -12,7 +12,7 @@ const img = require('../../assets/images/loading.gif');
 
 @reduxForm({
   form: 'field',
-  fields: [ 'defaultValue' ]
+  fields: [ 'id', 'defaultValue' ]
 })
 export default class DefaultValueConfigModal extends Component {
   constructor(props) {

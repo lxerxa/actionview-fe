@@ -33,7 +33,7 @@ export default class LayoutFieldConfigModal extends Component {
   async save() {
     const { close, config, data } = this.props;
     let ecode = 0;
-    const values = { id: data.id, fields: _.map(this.state.cards, _.iteratee('id')) };
+    const values = { id: data.id, required_fields: _.map(this.state.cards, _.iteratee('id')) };
     ecode = await config(values);
 
     if (ecode === 0) {

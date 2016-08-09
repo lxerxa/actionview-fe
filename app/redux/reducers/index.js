@@ -9,7 +9,7 @@ export { default as field } from './field';
 export { default as screen } from './screen';
 export { default as workflow } from './workflow';
 export { default as state } from './state';
-export { default as result } from './result';
+export { default as resolution } from './resolution';
 export { default as priority } from './priority';
 export { default as role } from './role';
 export { default as roleactor } from './roleactor';

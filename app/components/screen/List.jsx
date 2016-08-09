@@ -108,8 +108,8 @@ export default class List extends Component {
         id: collection[i].id,
         name: collection[i].name,
         workflow: ( 
-          <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>{
-            _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }
+          <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>
+            { _.isEmpty(collection[i].workflows) ? '-' : _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }
           </ul> ),
         operation: (
           <div>

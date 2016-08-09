@@ -95,9 +95,16 @@ export default class List extends Component {
     const fieldNum = collection.length;
     for (let i = 0; i < fieldNum; i++) {
       let screens = '';
-      _.forEach(collection[i].screens, function(val) {
-        screens += val.name + '<br/>';
-      });
+      if (_.isEmpty(collection[i].screens))
+      {
+        screens = '-';
+      }
+      else
+      {
+        _.forEach(collection[i].screens, function(val) {
+          screens += val.name + '<br/>';
+        });
+      }
       
       fields.push({
         id: collection[i].id,

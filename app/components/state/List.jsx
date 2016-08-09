@@ -62,7 +62,7 @@ export default class List extends Component {
       types.push({
         id: collection[i].id,
         name: collection[i].name,
-        description: collection[i].description,
+        description: collection[i].description ? collection[i].description : '-',
         operation: (
           <div>
             <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>

@@ -83,7 +83,7 @@ export default function(router) {
     const results = { ecode: 0, data: [
       { id: '546761', name: '主题', type: 'Text', screens: [{id:'111', name:'界面1'}], key:'title'},
       { id: '546763', name: '描述', type:'Text', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
-      { id: '546762', name: '优先级', type:'Select', screens: [{id:'111', name:'界面1'}], key:'priority'},
+      { id: '546762', name: '优先级', type:'Select', screens: [], key:'priority'},
       { id: '546764', name: '开始时间', type:'DatePicker', screens: [{id:'111', name:'界面1'}], key:'starttime'},
       { id: '2323', name: '附件', type:'CheckboxGroup', screens: [{id:'111', name:'界面1'}], key:'attachement'}]};
     return res.status(200).send(results);
@@ -134,7 +134,7 @@ export default function(router) {
     const results = { ecode: 0, data: [
       { id: '546761', name: '测试界面1', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}]},
       { id: '546763', name: '测试界面2', workflows: [{id:'222', name:'流程B' }, {id:'333', name:'流程C'}]},
-      { id: '546762', name: '测试界面3', workflows: [{id:'111', name:'流程A' }]},
+      { id: '546762', name: '测试界面3', workflows: []},
       { id: '546764', name: '测试界面5', workflows: [{id:'111', name:'流程C' }]}],
       options:{ fields:[{id:'111',name:'字段A'},{id:'222', name:'字段2'}, {id:'333', name:'字段3'}, {id:'444', name:'字段4'}, {id:'555', name:'字段5'}]}
     };
@@ -267,19 +267,19 @@ export default function(router) {
   });
 
   /*******************result*****************/
-  router.get('/project/:key/result', function(req, res) {
+  router.get('/project/:key/resolution', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [{ id: '546761', name: '开发中', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: '已关闭', description: 'ddddddddddd' }]};
     return res.status(200).send(results);
   });
 
-  router.post('/project/:key/result', function(req, res) {
+  router.post('/project/:key/resolution', function(req, res) {
     const results = { ecode: 0, data: { id: 'were', name: '5C问题', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程1'}} };
     return res.status(200).send(results);
   });
 
-  router.get('/project/:key/result/:id', function(req, res) {
+  router.get('/project/:key/resolution/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const { id } = req.params;
@@ -292,21 +292,21 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
-  router.put('/project/:key/result/:id', function(req, res) {
+  router.put('/project/:key/resolution/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: '546761', name: '任务1111', screen:{id:'222', name:'界面2'}, workflow:{id:'222', name:'流程2'}}};
     return res.status(200).send(results);
   });
 
-  router.put('/project/:key/result', function(req, res) {
+  router.put('/project/:key/resolution', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
     return res.status(200).send(results);
   });
 
-  router.delete('/project/:key/result/:id', function(req, res) {
+  router.delete('/project/:key/resolution/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: req.params.id }};

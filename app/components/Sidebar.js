@@ -81,7 +81,7 @@ export default class Sidebar extends Component {
           },
           {
             text: '解决结果',
-            href: '/project/' + project.item.key + '/result'
+            href: '/project/' + project.item.key + '/resolution'
           },
           {
             text: '优先级',

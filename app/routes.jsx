@@ -12,7 +12,7 @@ const FieldContainer = require('./components/field/Container');
 const ScreenContainer = require('./components/screen/Container');
 const WorkflowContainer = require('./components/workflow/Container');
 const StateContainer = require('./components/state/Container');
-const ResultContainer = require('./components/result/Container');
+const ResolutionContainer = require('./components/resolution/Container');
 const PriorityContainer = require('./components/priority/Container');
 const RoleContainer = require('./components/role/Container');
 const RoleactorContainer = require('./components/roleactor/Container');
@@ -30,7 +30,7 @@ export default (
         <Route path='/project/:key/screen' component={ ScreenContainer }/>
         <Route path='/project/:key/workflow' component={ WorkflowContainer }/>
         <Route path='/project/:key/state' component={ StateContainer }/>
-        <Route path='/project/:key/result' component={ ResultContainer }/>
+        <Route path='/project/:key/resolution' component={ ResolutionContainer }/>
         <Route path='/project/:key/priority' component={ PriorityContainer }/>
         <Route path='/project/:key/role' component={ RoleContainer }/>
         <Route path='/project/:key/roleactor' component={ RoleactorContainer }/>

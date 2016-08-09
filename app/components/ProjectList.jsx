@@ -44,9 +44,9 @@ export default class ProjectList extends Component {
                 </h4>
                 <div className='list-footer'>
                   <span>键值：{ items.key } </span>
-                  <span style={ styles }>创建者：{ items.creator || '无' } </span>
-                  <span style={ styles }>创建日：{ items.create_time || '无' } </span>
-                  <span style={ styles }>最近访问：{ items.create_time || '无' } </span>
+                  <span style={ styles }>负责人：{ items.principal || '无' } </span>
+                  <span style={ styles }>创建日：{ items.created_at || '无' } </span>
+                  <span style={ styles }>最近访问：{ items.latest_accese_time || '无' } </span>
                 </div>
               </div>
             </li>

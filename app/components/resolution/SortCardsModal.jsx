@@ -51,7 +51,7 @@ export default class SortCardsModal extends Component {
   async save() {
     const { close, setSort } = this.props;
     let ecode = 0;
-    const values = { mode: 'sort', cards: this.state.cards };
+    const values = { sequence: _.map(this.state.cards, _.iteratee('id')) };
     ecode = await setSort(values);
 
     if (ecode === 0) {
