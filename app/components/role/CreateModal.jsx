@@ -5,6 +5,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
+const allPermissions = require('../share/Permissions.js');
 
 const validate = (values) => {
   const errors = {};
@@ -60,7 +61,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, description, permissions }, handleSubmit, invalid, submitting, options } = this.props;
+    const { fields: { name, description, permissions }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -73,13 +74,13 @@ export default class CreateModal extends Component {
             <ControlLabel>角色名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='角色名'/>
           </FormGroup>
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>权限集</ControlLabel>
+            <Select options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi/>
+          </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
             <FormControl type='text' { ...description } placeholder='描述'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>权限集</ControlLabel>
-            <Select options={ _.map(options.permissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

@@ -74,6 +74,33 @@
   border-radius: 2px;
 }
 
+.editable-field:hover .edit-icon{
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
+.editable-list-field .edit-icon {
+  opacity: 0 !important;
+  margin-left: 5px;
+  border-left-style: solid;
+  border-left-width: 0px;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+  border-right-width: 0px;
+  border-radius: 0px;
+}
+
+.editable-list-field:hover {
+  box-shadow: 0 0 0 1px #ccc;
+  border-radius: 2px;
+  background-color: #fff;
+}
+
+.editable-list-field:hover .edit-icon{
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
 .edit-field-content {
   display: inline-block;
   margin-right: 2px;
@@ -81,11 +108,6 @@
 
 .edit-ok-button {
   border-radius: 2px;
-}
-
-.editable-field:hover .edit-icon{
-  opacity: 1 !important;
-  cursor: pointer;
 }
 
 .loading {

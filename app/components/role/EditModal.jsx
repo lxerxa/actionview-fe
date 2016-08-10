@@ -5,6 +5,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
+const allPermissions = require('../share/Permissions.js');
 
 const validate = (values) => {
   const errors = {};
@@ -84,7 +85,7 @@ export default class EditModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>权限集</ControlLabel>
-            <Select options={ _.map(options.permissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi simpleValue/>
+            <Select options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi simpleValue/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

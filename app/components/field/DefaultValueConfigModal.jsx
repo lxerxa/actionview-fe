@@ -49,7 +49,7 @@ export default class DefaultValueConfigModal extends Component {
 
   async handleSubmit() {
     const { values, config, close } = this.props;
-    alert(JSON.stringify(values));
+    //alert(JSON.stringify(values));
     const ecode = await config(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });

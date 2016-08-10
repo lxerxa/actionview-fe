@@ -11,7 +11,7 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false };
+    this.state = { editModalShow: false, delNotifyShow: false, willSetPermissionRoleIds: [], settingPermissionRoleIds: [], willSetUserRoleIds: [], settingUserRoleIds: [] };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
   }
@@ -55,8 +55,39 @@ export default class List extends Component {
     delNotify(id);
   }
 
+  willSetPermissions(roleId) {
+    this.state.willSetPermissionRoleIds.push(roleId);
+  }
+
+  cancelSetPermissions(roleId) {
+    const index = this.state.willSetPermissionRoleIds.indexOf(roleId);
+    this.state.willSetPermissionRoleIds.splice(index, 1);
+  }
+
+  async setPermissions(roleId) {
+    this.state.settingPermissionRoleIds.push(roleId);
+    const index = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
+    this.state.willSetPermissionRoleIds.splice(index, 1);
+  }
+
+  willSetUsers(roleId) {
+    this.state.willSetUserRoleIds.push(roleId);
+  }
+
+  cancelSetUsers(roleId) {
+    const index = _.indexOf(this.state.willSetUserRoleIds, roleId);
+    this.state.willSetUserRoleIds.splice(index, 1);
+  }
+
+  async setUsers(roleId) {
+    this.state.settingUserRoleIds.push(roleId);
+    const index = this.state.willSetUserRoleIds.indexOf(roleId);
+    this.state.willSetUserRoleIds.splice(index, 1);
+  }
+
   render() {
     const { collection, selectedItem, item, options, indexLoading, itemLoading, del, edit } = this.props;
+    const { willSetPermissionRoleIds, settingPermissionRoleIds, willSetUserRoleIds, settingUserRoleIds } = this.state;
 
     const types = [];
     const typeNum = collection.length;
@@ -66,11 +97,15 @@ export default class List extends Component {
         id: collection[i].id,
         name: collection[i].name,
         permissions: (
-          <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>
-            { _.map(permissions, function(v){ 
-              return <li key={ v.id }>{ v.name }</li> }) 
-            }
-          </ul>), 
+          <div className={ _.indexOf(willSetPermissionRoleIds, collection[i].id) === -1 && _.indexOf(settingPermissionRoleIds, collection[i].id) === -1 ? 'editable-list-field' : 'hide' }>
+            <ul style={ { marginBottom: '0px', padding: '3px', display: 'inline-block' } }>
+              { _.map(permissions, function(v){ 
+                return <li key={ v.id }>{ v.name }</li> }) 
+              }
+            </ul>
+            <Button className='edit-icon' onClick={ () => { this.willSetPermissions.bind(this, collection[i].id) } } style={ { display:'inline-block', float: 'right' } }><i className='fa fa-pencil'></i></Button>
+          </div> 
+        ), 
         operation: (
           <div>
             <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
