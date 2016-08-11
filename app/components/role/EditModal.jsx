@@ -36,7 +36,6 @@ export default class EditModal extends Component {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    options: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired
@@ -69,7 +68,7 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, description, permissions }, options={}, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { id, name, description, permissions }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

@@ -364,7 +364,7 @@ export default function(router) {
   router.get('/project/:key/role', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'createIssue', 'viewWorkflow'] }, { id: '546762', name: '产品经理', permissions:['createIssue', 'projectConfig'] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
     return res.status(200).send(results);
   });
 

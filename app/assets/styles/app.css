@@ -131,3 +131,7 @@
   overflow: visible;
   width: 100%;
 }
+
+.Select-control .Select-value {
+  float: left;
+}

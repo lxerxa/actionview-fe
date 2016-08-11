@@ -36,8 +36,7 @@ export default class CreateModal extends Component {
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired,
-    options: PropTypes.object.isRequired
+    create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
