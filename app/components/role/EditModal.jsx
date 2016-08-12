@@ -5,7 +5,6 @@ import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
-const allPermissions = require('../share/Permissions.js');
 
 const validate = (values) => {
   const errors = {};
@@ -17,7 +16,7 @@ const validate = (values) => {
 
 @reduxForm({
   form: 'state',
-  fields: ['id', 'name', 'description', 'permissions'],
+  fields: ['id', 'name', 'description'],
   validate
 })
 export default class EditModal extends Component {
@@ -43,12 +42,12 @@ export default class EditModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    initializeForm({ ...data, permissions: (data.permissions || []).join(',') });
+    initializeForm(data);
   }
 
   async handleSubmit() {
     const { values, edit, close } = this.props;
-    alert(JSON.stringify(values));
+    //alert(JSON.stringify(values));
     const ecode = await edit(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -68,7 +67,7 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, description, permissions }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { id, name, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -81,10 +80,6 @@ export default class EditModal extends Component {
             <ControlLabel>角色名</ControlLabel>
             <FormControl type='hidden' { ...id }/>
             <FormControl type='text' { ...name } placeholder='角色名'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>权限集</ControlLabel>
-            <Select options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi simpleValue/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

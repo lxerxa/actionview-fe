@@ -41,6 +41,10 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
+    if (values.permissions)
+    {
+      values.permissions = _.map(values.permissions, _.iteratee('value'));
+    }
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -75,7 +79,7 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>权限集</ControlLabel>
-            <Select options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi/>
+            <Select clearable={ false } searchable={ false } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

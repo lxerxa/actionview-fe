@@ -10,7 +10,7 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false, sortCardsModalShow: false, defaultSetShow: false, defaultSetLoadingShow: false };
+    this.state = { createModalShow: false, sortCardsModalShow: false, defaultSetShow: false };
     this.createModalClose = this.createModalClose.bind(this);
     this.sortCardsModalClose = this.sortCardsModalClose.bind(this);
     this.setDefaultValue = this.setDefaultValue.bind(this);
@@ -22,17 +22,16 @@ export default class Header extends Component {
     setDefault: PropTypes.func.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     sortLoading: PropTypes.bool.isRequired,
+    defaultLoading: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired
   }
 
   async setDefaultValue() {
-    this.setState({ defaultSetLoadingShow: true });
-
     const defaultValue = findDOMNode(this.refs.defaultValue).value;
     const { setDefault } = this.props;
     const ecode = await setDefault({ 'defaultValue': defaultValue });
     // fix me add tip
-    this.setState({ defaultSetShow: false, defaultSetLoadingShow: false });
+    this.setState({ defaultSetShow: false });
   }
 
   createModalClose() {
@@ -44,7 +43,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, setSort, sortLoading, indexLoading, collection } = this.props;
+    const { create, setSort, sortLoading, indexLoading, defaultLoading, collection } = this.props;
     const styles = { display: 'inline-block', marginLeft: '15px' };
     const defaultIndex = _.findIndex(collection, { default: true });
 
@@ -61,12 +60,12 @@ export default class Header extends Component {
             { this.state.defaultSetShow ? 
               <div className='default-set'>
                 <div className='edit-field-content'>
-                  <FormControl componentClass='select' type='text' ref='defaultValue' disabled={ this.state.defaultSetLoadingShow }>
+                  <FormControl componentClass='select' type='text' ref='defaultValue' disabled={ defaultLoading }>
                     { collection.map( itemOption => <option value={ itemOption.id } key={ itemOption.id } selected={ itemOption.default && true }>{ itemOption.name }</option>) }
                   </FormControl>
                 </div>
-                <image src={ img } className={ this.state.defaultSetLoadingShow ? 'loading' : 'hide' }/>
-                <div className={ this.state.defaultSetLoadingShow ? 'hide' : 'edit-field-content' }>
+                <image src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>
+                <div className={ defaultLoading ? 'hide' : 'edit-field-content' }>
                   <Button className='edit-ok-button' onClick={ this.setDefaultValue }><i className='fa fa-check'></i></Button>
                   <Button className='edit-ok-button' onClick={ () => { this.setState({ defaultSetShow: false }); } }><i className='fa fa-close'></i></Button>
                 </div>

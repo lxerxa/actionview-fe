@@ -78,7 +78,7 @@ export default class List extends Component {
     this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
 
     const { edit } = this.props;
-    const ecode = await edit(this.state.permissions[roleId]);
+    const ecode = await edit({ permissions: _.map(this.state.permissions[roleId], _.iteratee('value')), id: roleId });
     if (ecode === 0) {
       const index = _.indexOf(this.state.settingPermissionRoleIds, roleId);
       this.state.settingPermissionRoleIds.splice(index, 1);
@@ -124,23 +124,26 @@ export default class List extends Component {
           <div>
           { _.indexOf(willSetPermissionRoleIds, collection[i].id) === -1 && _.indexOf(settingPermissionRoleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
-              <ul style={ { marginBottom: '0px', padding: '3px', display: 'inline-block' } }>
-              { _.map(permissions, function(v){ 
-                return <li key={ v.id }>{ v.name }</li> }) 
+              { 
+                permissions.length > 0 ?
+                <ul style={ { marginBottom: '0px', padding: '3px', display: 'inline-block' } }>
+                { _.map(permissions, function(v){ return <li key={ v.id }>{ v.name }</li> }) }
+                </ul>
+                :
+                '-'
               }
-              </ul>
               <Button className='edit-icon' onClick={ this.willSetPermissions.bind(this, collection[i].id) } style={ { display:'inline-block', float: 'right' } }><i className='fa fa-pencil'></i></Button>
             </div> 
             :
             <div>
-              <Select options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ this.state.permissions[collection[i].id] || collection[i].permissions } onChange={ this.handlePermissionSelectChange.bind(this, collection[i].id) } placeholder='请选择相应权限' multi/>
-              <image src={ img } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+              <Select multi clearable={ false } searchable={ false } disabled={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 && true } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ this.state.permissions[collection[i].id] || collection[i].permissions } onChange={ this.handlePermissionSelectChange.bind(this, collection[i].id) } placeholder='请选择相应权限'/>
               <div className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPermissions.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetPermissions.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
               </div>
             </div> 
           }
+          <image src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ), 
         operation: (

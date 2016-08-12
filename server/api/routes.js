@@ -395,7 +395,7 @@ export default function(router) {
 
   router.put('/project/:key/role', function(req, res) {
     const startTime = new Date().getTime();
-    while (new Date().getTime() < startTime + 2000);
+    while (new Date().getTime() < startTime + 5000);
     const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
     return res.status(200).send(results);
   });
