@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
+import ApiClient from '../../../shared/api-client';
 
 const img = require('../../assets/images/loading.gif');
 const allPermissions = require('../share/Permissions.js');
@@ -17,7 +18,7 @@ const validate = (values) => {
 
 @reduxForm({
   form: 'state',
-  fields: ['name', 'description', 'permissions'],
+  fields: ['name', 'description', 'permissions', 'users'],
   validate
 })
 export default class CreateModal extends Component {
@@ -26,6 +27,7 @@ export default class CreateModal extends Component {
     this.state = { ecode: 0 };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.searchUsers = this.searchUsers.bind(this);
   }
 
   static propTypes = {
@@ -45,6 +47,10 @@ export default class CreateModal extends Component {
     {
       values.permissions = _.map(values.permissions, _.iteratee('value'));
     }
+    if (values.users)
+    {
+      values.users = _.map(values.users, _.iteratee('value'));
+    }
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -63,8 +69,19 @@ export default class CreateModal extends Component {
     close();
   }
 
+  async searchUsers(input) {
+    input = input.toLowerCase();
+    if (!input)
+    {
+      return { options: [] };
+    }
+    const api = new ApiClient;
+    const results = await api.request( { url: '/user?s=' + input } ); 
+    return { options: results.data };
+  }
+
   render() {
-    const { fields: { name, description, permissions }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, description, permissions, users }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -79,7 +96,11 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>权限集</ControlLabel>
-            <Select clearable={ false } searchable={ false } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择相应权限' multi/>
+            <Select clearable={ false } searchable={ false } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择权限' multi/>
+          </FormGroup>
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>用户</ControlLabel>
+            <Select.Async clearable={ false } value={ users.value } onChange={ newValue => { users.onChange(newValue) } } loadOptions={ this.searchUsers } valueKey='id' labelKey='name' placeholder='请输入用户' multi/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
