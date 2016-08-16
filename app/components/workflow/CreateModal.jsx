@@ -13,7 +13,7 @@ const validate = (values) => {
 };
 
 @reduxForm({
-  form: 'screen',
+  form: 'workflow',
   fields: [ 'name', 'description' ],
   validate
 })
@@ -68,7 +68,7 @@ export default class CreateModal extends Component {
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>工作流名</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='界面名'/>
+            <FormControl type='text' { ...name } placeholder='工作流名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

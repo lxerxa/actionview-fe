@@ -13,7 +13,7 @@ const validate = (values) => {
 };
 
 @reduxForm({
-  form: 'screen',
+  form: 'workflow',
   fields: [ 'id', 'name', 'description' ],
   validate
 })

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
@@ -7,6 +7,8 @@ import _ from 'lodash';
 const EditModal = require('./EditModal');
 const CopyModal = require('./CopyModal');
 const DelNotify = require('./DelNotify');
+const LayoutConfigModal = require('./LayoutConfigModal');
+const LayoutFieldConfigModal = require('./LayoutFieldConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -16,12 +18,16 @@ export default class List extends Component {
       editModalShow: false, 
       copyModalShow: false, 
       delNotifyShow: false, 
+      layoutConfigShow: false, 
+      layoutFieldConfigShow: false, 
       operateShow: false,
       hoverRowId: ''
     };
     this.editModalClose = this.editModalClose.bind(this);
     this.copyModalClose = this.copyModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.layoutConfigClose = this.layoutConfigClose.bind(this);
+    this.layoutFieldConfigClose = this.layoutFieldConfigClose.bind(this);
   }
 
   static propTypes = {
@@ -35,6 +41,7 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
+    config: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     delNotify: PropTypes.func.isRequired
@@ -57,6 +64,14 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
+  layoutConfigClose() {
+    this.setState({ layoutConfigShow: false });
+  }
+
+  layoutFieldConfigClose() {
+    this.setState({ layoutFieldConfigShow: false });
+  }
+
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     const { delNotify, show } = this.props;
@@ -67,8 +82,10 @@ export default class List extends Component {
     } else {
       const ecode = await show(hoverRowId, eventKey === '3' ? '1' : '');
       // todo err notify
+      eventKey === '3' && this.setState({ layoutConfigShow: true });
       eventKey === '1' && this.setState({ editModalShow: true });
-      eventKey === '4' && this.setState({ copyModalShow: true });
+      eventKey === '4' && this.setState({ layoutFieldConfigShow: true });
+      eventKey === '5' && this.setState({ copyModalShow: true });
     }
   }
 
@@ -91,12 +108,11 @@ export default class List extends Component {
         id: collection[i].id,
         name:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name }</span>
-            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
+            <span className='table-td-title'>{ collection[i].name }</span>                                                                                              { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
-        latest_modify: ( <span> { collection[i].latest_modified_time } <br/> { collection[i].latest_modifier && collection[i].latest_modifier.name } </span> ),
-        step: collection[i].steps,
+        latest_modify: ( <span dangerouslySetInnerHTML={ { __html: collection[i].latest_modify_time + '<br/>' + collection[i].latest_modifier.name } }/> ),
+        step: collection[i].step,
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
@@ -128,13 +144,15 @@ export default class List extends Component {
         <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='latest_modify' width='280'>最近配置修改</TableHeaderColumn>
-          <TableHeaderColumn dataField='step' width='120'>步骤</TableHeaderColumn>
+          <TableHeaderColumn dataField='latest_modify' width='250'>最近修改</TableHeaderColumn>
+          <TableHeaderColumn dataField='step' width='100'>步骤</TableHeaderColumn>
           <TableHeaderColumn width='150' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ item } config={ edit } options= { options } loading={ loading }/> }
+        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } loading={ loading }/> }
       </div>
     );
   }

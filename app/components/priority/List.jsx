@@ -61,7 +61,7 @@ export default class List extends Component {
     for (let i = 0; i < typeNum; i++) {
       types.push({
         id: collection[i].id,
-        name: collection[i].name,
+        name: ( <span className='table-td-title'>{ collection[i].name }</span> ),
         description: collection[i].description ? collection[i].description : '-',
         operation: (
           <div>

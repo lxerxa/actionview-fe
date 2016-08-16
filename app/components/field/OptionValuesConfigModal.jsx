@@ -122,7 +122,7 @@ export default class OptionValuesConfigModal extends Component {
             <p>可选值为空</p>
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
-            <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } style={ { display: 'inline-block', width: '60%' } }/>
+            <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } style={ { display: 'inline-block', width: '68%' } }/>
             <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', marginLeft: '10px' } }>添加新值</Button>
           </FormGroup>
         </Modal.Body>

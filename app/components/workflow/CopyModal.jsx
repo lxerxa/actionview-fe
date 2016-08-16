@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -13,8 +14,8 @@ const validate = (values) => {
 };
 
 @reduxForm({
-  form: 'screen',
-  fields: [ 'name', 'description' ],
+  form: 'workflow',
+  fields: [ 'id', 'name', 'description' ],
   validate
 })
 export default class CopyModal extends Component {
@@ -45,7 +46,7 @@ export default class CopyModal extends Component {
 
   async handleSubmit() {
     const { values, copy, close } = this.props;
-    const ecode = await copy(values);
+    const ecode = await copy(_.mapKeys(values, function (value, key) { return key == 'id' ? 'source_id' : key }));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -64,7 +65,7 @@ export default class CopyModal extends Component {
   }
 
   render() {
-    const { fields: { name, description }, handleSubmit, invalid, submitting, data } = this.props;
+    const { fields: { id, name, description }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -73,6 +74,7 @@ export default class CopyModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+          <FormControl type='hidden' { ...id }/>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>工作流名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='工作流名'/>

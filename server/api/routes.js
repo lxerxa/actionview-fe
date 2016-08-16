@@ -178,10 +178,10 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-      { id: '546761', name: '测试流程1', latest_modify_time: 1465716065, latest_modifier: { id: '1111', name: '张三' }, step: 5 },
-      { id: '546763', name: '测试流程2', latest_modify_time: 1465416065, latest_modifier: { id: '1111', name: '张三' }, step: 5 },
-      { id: '546762', name: '测试流程3', latest_modify_time: 1465316065, latest_modifier: { id: '2222', name: '李四' }, step: 6 },
-      { id: '546764', name: '测试流程5', latest_modify_time: 1465716005, latest_modifier: { id: '2222', name: '李四' }, step: 4 }]
+      { id: '546761', name: '测试流程1', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '1111', name: '张三' }, steps: 5 },
+      { id: '546763', name: '测试流程2', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '1111', name: '张三' }, steps: 5 },
+      { id: '546762', name: '测试流程3', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '2222', name: '李四' }, steps: 6 },
+      { id: '546764', name: '测试流程5', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '2222', name: '李四' }, steps: 4 }]
     };
     return res.status(200).send(results);
   });
@@ -364,7 +364,7 @@ export default function(router) {
   router.get('/project/:key/role', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu'}] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu'}, {id: '2222', name: 'lihui'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu'}] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
     return res.status(200).send(results);
   });
 

@@ -9,6 +9,7 @@ const DelNotify = require('./DelNotify');
 const OptionValuesConfigModal = require('./OptionValuesConfigModal');
 const DefaultValueConfigModal = require('./DefaultValueConfigModal');
 const img = require('../../assets/images/loading.gif');
+const fieldTypes = require('../share/FieldTypes.js');
 
 export default class List extends Component {
   constructor(props) {
@@ -108,15 +109,21 @@ export default class List extends Component {
       
       fields.push({
         id: collection[i].id,
-        name: collection[i].name,
+        name: (
+          <div>
+            <span className='table-td-title'>{ collection[i].name }</span>
+            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
+          </div>
+        ),
         key: collection[i].key,
-        type: collection[i].type,
+        type: _.find(fieldTypes, { value: collection[i].type }).label,
         screen: ( <span dangerouslySetInnerHTML={ { __html: screens } }/> ),
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RadioGroup' || collection[i].type === 'CheckboxGroup') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
+                { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
                 { collection[i].type !== 'File' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
@@ -142,9 +149,9 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
-          <TableHeaderColumn width='250' dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn width='280' dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn width='180' dataField='key'>键值</TableHeaderColumn>
-          <TableHeaderColumn width='160' dataField='type'>类型</TableHeaderColumn>
+          <TableHeaderColumn width='180' dataField='type'>类型</TableHeaderColumn>
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn width='150' dataField='operation'/>
         </BootstrapTable>

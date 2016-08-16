@@ -106,7 +106,11 @@ export default class List extends Component {
     for (let i = 0; i < fieldNum; i++) {
       fields.push({
         id: collection[i].id,
-        name: collection[i].name,
+        name:  (
+          <div>
+            <span className='table-td-title'>{ collection[i].name }</span>                                                                                              { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
+          </div>
+        ),
         workflow: ( 
           <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>
             { _.isEmpty(collection[i].workflows) ? '-' : _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }

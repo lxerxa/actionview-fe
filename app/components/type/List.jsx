@@ -61,7 +61,7 @@ export default class List extends Component {
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
       types.push({
-        name: collection[i].name,
+        name: ( <span className='table-td-title'>{ collection[i].name }</span> ),
         screen: collection[i].screen.name,
         workflow: collection[i].workflow.name,
         operation: (

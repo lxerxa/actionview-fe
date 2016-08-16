@@ -148,7 +148,11 @@ export default class List extends Component {
       const permissions = _.filter(allPermissions, function(o) { return _.indexOf(collection[i].permissions, o.id) !== -1; });
       types.push({
         id: collection[i].id,
-        name: collection[i].name,
+        name:  (
+          <div>
+            <span className='table-td-title'>{ collection[i].name }</span>                                                                                              { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
+          </div>
+        ),
         permissions: (
           <div>
           { _.indexOf(willSetPermissionRoleIds, collection[i].id) === -1 && _.indexOf(settingPermissionRoleIds, collection[i].id) === -1 ?
