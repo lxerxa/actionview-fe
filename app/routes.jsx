@@ -11,6 +11,7 @@ const TypeContainer = require('./components/type/Container');
 const FieldContainer = require('./components/field/Container');
 const ScreenContainer = require('./components/screen/Container');
 const WorkflowContainer = require('./components/workflow/Container');
+const WorkflowConfigContainer = require('./components/workflow/ConfigContainer');
 const StateContainer = require('./components/state/Container');
 const ResolutionContainer = require('./components/resolution/Container');
 const PriorityContainer = require('./components/priority/Container');
@@ -29,6 +30,7 @@ export default (
         <Route path='/project/:key/field' component={ FieldContainer }/>
         <Route path='/project/:key/screen' component={ ScreenContainer }/>
         <Route path='/project/:key/workflow' component={ WorkflowContainer }/>
+        <Route path='/project/:key/workflow/:id' component={ WorkflowConfigContainer }/>
         <Route path='/project/:key/state' component={ StateContainer }/>
         <Route path='/project/:key/resolution' component={ ResolutionContainer }/>
         <Route path='/project/:key/priority' component={ PriorityContainer }/>

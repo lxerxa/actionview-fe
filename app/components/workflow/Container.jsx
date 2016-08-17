@@ -63,7 +63,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } { ...this.props.workflow }/>
-        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.workflow }/>
+        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } pid={ this.pid } { ...this.props.workflow }/>
       </div>
     );
   }

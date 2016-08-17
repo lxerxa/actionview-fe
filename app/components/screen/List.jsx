@@ -80,7 +80,7 @@ export default class List extends Component {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
     } else {
-      const ecode = await show(hoverRowId, eventKey === '3' ? '1' : '');
+      const ecode = await show(hoverRowId);
       // todo err notify
       eventKey === '3' && this.setState({ layoutConfigShow: true });
       eventKey === '1' && this.setState({ editModalShow: true });

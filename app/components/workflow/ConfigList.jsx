@@ -4,28 +4,24 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
 
-const EditModal = require('./EditModal');
-const CopyModal = require('./CopyModal');
-const DelNotify = require('./DelNotify');
+const EditStepModal = require('./EditStepModal');
+const DelStepNotify = require('./DelStepNotify');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      editModalShow: false, 
-      copyModalShow: false, 
-      delNotifyShow: false, 
+      editStepModalShow: false, 
+      delStepNotifyShow: false, 
       operateShow: false,
       hoverRowId: ''
     };
-    this.editModalClose = this.editModalClose.bind(this);
-    this.copyModalClose = this.copyModalClose.bind(this);
-    this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.editStepModalClose = this.editStepModalClose.bind(this);
+    this.delStepNotifyClose = this.delStepNotifyClose.bind(this);
   }
 
   static propTypes = {
-    pid: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
@@ -35,10 +31,12 @@ export default class List extends Component {
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
-    delNotify: PropTypes.func.isRequired
+    editStep: PropTypes.func.isRequired,
+    delStep: PropTypes.func.isRequired,
+    delStepNotify: PropTypes.func.isRequired,
+    addAction: PropTypes.func.isRequired,
+    editAction: PropTypes.func.isRequired,
+    delAction: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -46,29 +44,26 @@ export default class List extends Component {
     index();
   }
 
-  editModalClose() {
-    this.setState({ editModalShow: false });
+  editStepModalClose() {
+    this.setState({ editStepModalShow: false });
   }
 
-  copyModalClose() {
-    this.setState({ copyModalShow: false });
+  delStepNotifyClose() {
+    this.setState({ delStepNotifyShow: false });
   }
 
-  delNotifyClose() {
-    this.setState({ delNotifyShow: false });
-  }
+  operateSelect(eventKey) {
 
-  async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { delNotify, show } = this.props;
+    const { delStepNotify, show } = this.props;
 
     if (eventKey === '2') {
-      this.setState({ delNotifyShow : true });
-      delNotify(hoverRowId);
+      this.setState({ delStepNotifyShow : true });
+      delStepNotify(hoverRowId);
     } else if (eventKey !== '3') {
-      const ecode = await show(hoverRowId);
+      const ecode = show(hoverRowId);
       // todo err notify
-      eventKey === '1' && this.setState({ editModalShow: true });
+      eventKey === '1' && this.setState({ editStepModalShow: true });
       eventKey === '4' && this.setState({ copyModalShow: true });
     }
   }
@@ -82,7 +77,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, loading, indexLoading, itemLoading, del, edit, create, pid } = this.props;
+    const { collection, selectedItem, item, loading, indexLoading, itemLoading, editStep, delStep } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const fields = [];
@@ -102,7 +97,6 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='3'><Link to={ '/project/' + pid + '/workflow/' + collection[i].id }>配置</Link></MenuItem>
                 <MenuItem eventKey='4'>复制</MenuItem>
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
@@ -133,9 +127,8 @@ export default class List extends Component {
           <TableHeaderColumn dataField='step' width='120'>步骤</TableHeaderColumn>
           <TableHeaderColumn width='150' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
-        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
+        { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ selectedItem } del={ delStep }/> }
       </div>
     );
   }
