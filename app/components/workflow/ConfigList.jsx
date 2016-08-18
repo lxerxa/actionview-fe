@@ -52,20 +52,16 @@ export default class List extends Component {
     this.setState({ delStepNotifyShow: false });
   }
 
-  operateSelect(eventKey) {
+  addAction() {
+    this.setState({ editStepModalShow: false });
+  }
 
-    const { hoverRowId } = this.state;
-    const { delStepNotify, show } = this.props;
+  delAction() {
+    this.setState({ editStepModalShow: false });
+  }
 
-    if (eventKey === '2') {
-      this.setState({ delStepNotifyShow : true });
-      delStepNotify(hoverRowId);
-    } else if (eventKey !== '3') {
-      const ecode = show(hoverRowId);
-      // todo err notify
-      eventKey === '1' && this.setState({ editStepModalShow: true });
-      eventKey === '4' && this.setState({ copyModalShow: true });
-    }
+  editStep() {
+    this.setState({ editStepModalShow: false });
   }
 
   onRowMouseOver(rowData) {
@@ -77,32 +73,34 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, loading, indexLoading, itemLoading, editStep, delStep } = this.props;
+    const { collection, selectedItem, item, indexLoading, options, editStep, delStep } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
-    const fields = [];
-    const fieldNum = collection.length;
-    for (let i = 0; i < fieldNum; i++) {
-      fields.push({
+    const steps = [];
+    const stepNum = collection.length;
+    for (let i = 0; i < stepNum; i++) {
+      steps.push({
         id: collection[i].id,
-        name:  (
+        step:  (
           <div>
             <span className='table-td-title'>{ collection[i].name }</span>
-            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
-        latest_modify: ( <span> { collection[i].latest_modified_time } <br/> { collection[i].latest_modifier && collection[i].latest_modifier.name } </span> ),
-        step: collection[i].steps,
+        status:  (
+          <div>
+            { _.find(options.states, { id: collection[i].state }).name || '-' }
+          </div>
+        ),
+        actions:  (
+          <div>
+            cc
+          </div>
+        ),
         operation: (
           <div>
-            { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='4'>复制</MenuItem>
-                <MenuItem eventKey='1'>编辑</MenuItem>
-                <MenuItem eventKey='2'>删除</MenuItem>
-              </DropdownButton>
-            }
-            <image src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
+            <Button bsStyle='link' onClick={ this.addAction.bind(this, collection[i].id) }>添加动作</Button>
+            <Button bsStyle='link' onClick={ this.delAction.bind(this, collection[i].id) }>删除动作</Button>
+            <Button bsStyle='link' onClick={ this.editStep.bind(this, collection[i].id) }>编辑</Button>
           </div>
         )
       });
@@ -120,14 +118,16 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
+        <BootstrapTable data={ steps } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='latest_modify' width='280'>最近配置修改</TableHeaderColumn>
-          <TableHeaderColumn dataField='step' width='120'>步骤</TableHeaderColumn>
-          <TableHeaderColumn width='150' dataField='operation'/>
+          <TableHeaderColumn dataField='step'>步骤</TableHeaderColumn>
+          <TableHeaderColumn dataField='status'>关联状态</TableHeaderColumn>
+          <TableHeaderColumn dataField='actions' width='320'>动作</TableHeaderColumn>
+          <TableHeaderColumn width='250' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
+        { this.state.addActionModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
+        { this.state.delActionModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
+        { this.state.ModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
         { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ selectedItem } del={ delStep }/> }
       </div>
     );

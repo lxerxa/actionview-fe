@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button } from 'react-bootstrap';
-import * as WorkflowActions from 'redux/actions/WorkflowActions';
+import * as WorkflowActions from 'redux/actions/WfconfigActions';
 
 const Header = require('./ConfigHeader');
 const List = require('./ConfigList');
@@ -14,7 +14,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ workflow }) => ({ workflow }), mapDispatchToProps)
+@connect(({ wfconfig }) => ({ wfconfig }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -25,17 +25,15 @@ export default class Container extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    workflow: PropTypes.object.isRequired
+    wfconfig: PropTypes.object.isRequired
   }
 
   async index() {
-    await this.props.actions.show(this.pid, this.id);
-    return this.props.workflow.ecode;
+    await this.props.actions.index(this.pid, this.id);
+    return this.props.wfconfig.ecode;
   }
 
   async publish(values) {
-    await this.props.actions.edit(this.pid, values);
-    return this.props.workflow.ecode;
   }
 
   componentWillMount() {
@@ -56,10 +54,7 @@ export default class Container extends Component {
   addAction() {
   }
 
-  editActionTriggers() {
-  }
-
-  editActionContidions() {
+  editAction() {
   }
 
   delAction() {
@@ -68,8 +63,8 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header createStep={ this.createStep.bind(this) } publish={ this.publish.bind(this) } { ...this.props.workflow }/>
-        <List index={ this.index.bind(this) } editStep={ this.editStep.bind(this) } delStep={ this.delStep.bind(this) } delStepNotify={ this.props.actions.delStepNotify } addAction={ this.addAction.bind(this) } editActionTriggers={ this.editActionTriggers.bind(this) } editActionContidions={ this.editActionContidions.bind(this) } delAction={ this.delAction.bind(this) } delActionNotify={ this.props.actions.delActionNotify } { ...this.props.workflow }/>
+        <Header createStep={ this.createStep.bind(this) } publish={ this.publish.bind(this) } { ...this.props.wfconfig }/>
+        <List index={ this.index.bind(this) } editStep={ this.editStep.bind(this) } delStep={ this.delStep.bind(this) } addAction={ this.addAction.bind(this) } editAction={ this.editAction.bind(this) } delAction={ this.delAction.bind(this) } { ...this.props.wfconfig }/>
       </div>
     );
   }

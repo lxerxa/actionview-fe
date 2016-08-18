@@ -8,6 +8,7 @@ export { default as type } from './type';
 export { default as field } from './field';
 export { default as screen } from './screen';
 export { default as workflow } from './workflow';
+export { default as wfconfig } from './wfconfig';
 export { default as state } from './state';
 export { default as resolution } from './resolution';
 export { default as priority } from './priority';

@@ -191,16 +191,114 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
-  router.get('/project/:key/workflow/:id', function(req, res) {
+  router.get('/project/:key/workflow/:id/steps', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const { id } = req.params;
-    let results = {};
-    if (id === '546761') {
-      results = { ecode: 0, data: { id: '546761', name: '测试界面1', description:'aaaaaaaa', fields:[{id:'111', name:'字段A', required: true},{id:'222', name:'字段B'},{id:'333', name:'字段C'}]}};
-    } else {
-      results = { ecode: 0, data: { id: '546762', name: '测试界面2', description:'bbbbbb', fields:[{id:'111', name:'字段A'},{id:'222', name:'字段B', required: true},{id:'333', name:'字段C', required: true}]}};
+    const results = { ecode: 0, data:[
+    {
+       id: 1,
+       name: "step1",
+       state: "1111",
+       actions: [
+        {
+           id: 1,
+           name: "action1",
+           restrict_to: {
+             conditions: {
+               type: "or",
+               list: [
+                {
+                   name: "App\\Workflow\\Util@trueCondition1",
+                   args: {
+                     owner: "aaa"
+                  }
+                },
+                {
+                   name: "App\\Workflow\\Util@falseCondition2",
+                   args: {
+                     owner: "aaa"
+                  }
+                }
+              ]
+            }
+          },
+           results: [
+            {
+               step: 2,
+               old_status: "Finished",
+               status: "Underway"
+            },
+            {
+               step: "3",
+               old_status: "Finished",
+               status: "Underway"
+            }
+          ]
+        },
+        {
+           id: 2,
+           name: "action2",
+           results: [
+            {
+               step: "4",
+               old_status: "Finished",
+               status: "Underway"
+            }
+          ]
+        }
+      ]
+    },
+    {
+       id: 2,
+       name: "step2",
+       state: "2222",
+       actions: [
+        {
+           id: 3,
+           name: "action3",
+           results: [
+            {
+               step: "3",
+               old_status: "Finished",
+               status: "Underway"
+            }
+          ]
+        }
+      ]
+    },
+    {
+       id: 3,
+       name: "step3",
+       state: "3333",
+       actions: [
+        {
+           id: 4,
+           name: "action4",
+           results: [
+            {
+               step: "4",
+               old_status: "Finished",
+               status: "Underway"
+            }
+          ]
+        },
+        {
+           id: 5,
+           name: "action5",
+           results: [
+            {
+               step: "1",
+               old_status: "Finished",
+               status: "Underway"
+            }
+          ]
+        }
+      ]
     }
+    ],
+    options: { states : [{id: "1111", name:"test1"}, {id: "2222", name:"test2"}, {id: "3333", name:"test3"}] }
+};
     return res.status(200).send(results);
   });
 
