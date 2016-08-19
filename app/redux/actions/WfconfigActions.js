@@ -8,7 +8,7 @@ export function index(key, id) {
 }
 
 export function createStep(values) {
-  return { type: 'WFCONFIG_CREATE_STEP', step: values };
+  return { type: 'WFCONFIG_STEP_CREATE', values: values };
 }
 
 export function delNotify(id) {

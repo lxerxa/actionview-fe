@@ -14,8 +14,7 @@ export default class List extends Component {
     this.state = { 
       editStepModalShow: false, 
       delStepNotifyShow: false, 
-      operateShow: false,
-      hoverRowId: ''
+      item: {}
     };
     this.editStepModalClose = this.editStepModalClose.bind(this);
     this.delStepNotifyClose = this.delStepNotifyClose.bind(this);
@@ -24,7 +23,6 @@ export default class List extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    item: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -56,25 +54,24 @@ export default class List extends Component {
     this.setState({ editStepModalShow: false });
   }
 
+  editAction() {
+    this.setState({ editStepModalShow: false });
+  }
+
   delAction() {
     this.setState({ editStepModalShow: false });
   }
 
-  editStep() {
-    this.setState({ editStepModalShow: false });
-  }
-
-  onRowMouseOver(rowData) {
-    this.setState({ operateShow: true, hoverRowId: rowData.id });
-  }
-
-  onMouseLeave() {
-    this.setState({ operateShow: false, hoverRowId: '' });
+  showStep(id) {
+    this.setState({ editStepModalShow: true });
+    const { collection } = this.props; 
+    const item = _.find(collection, { id });
+    this.setState({ item });
   }
 
   render() {
-    const { collection, selectedItem, item, indexLoading, options, editStep, delStep } = this.props;
-    const { operateShow, hoverRowId } = this.state;
+    const { collection, indexLoading, options, editStep, delStep } = this.props;
+    const { item } = this.state;
 
     const steps = [];
     const stepNum = collection.length;
@@ -92,15 +89,23 @@ export default class List extends Component {
           </div>
         ),
         actions:  (
-          <div>
-            cc
-          </div>
+          <ul className='list-unstyled clearfix'>
+            { collection[i].actions.map((item, i) =>
+              <li key={ i }>
+                <span style={ { color: '#337ab7', cursor: 'pointer' } } onClick={ this.editAction.bind(this, collection[i].id) } >{ item.name }</span>
+                { item.results.map((item2, i2) =>
+                  <span key={ i2 } style={ { fontSize: '10px', fontStyle: 'italic' } }>
+                    <br/> >>{ ' ' + _.find(collection, { id: item2.step }).name }
+                  </span>) }
+              </li>)
+            }
+          </ul>
         ),
         operation: (
           <div>
             <Button bsStyle='link' onClick={ this.addAction.bind(this, collection[i].id) }>添加动作</Button>
             <Button bsStyle='link' onClick={ this.delAction.bind(this, collection[i].id) }>删除动作</Button>
-            <Button bsStyle='link' onClick={ this.editStep.bind(this, collection[i].id) }>编辑</Button>
+            <Button bsStyle='link' onClick={ this.showStep.bind(this, collection[i].id) }>编辑</Button>
           </div>
         )
       });
@@ -113,22 +118,19 @@ export default class List extends Component {
       opts.noDataText = '暂无数据显示。'; 
     } 
 
-    opts.onRowMouseOver = this.onRowMouseOver.bind(this);
-    opts.onMouseLeave = this.onMouseLeave.bind(this);
-
     return (
       <div>
-        <BootstrapTable data={ steps } bordered={ false } hover options={ opts }>
+        <BootstrapTable data={ steps } bordered={ false } hover>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='step'>步骤</TableHeaderColumn>
           <TableHeaderColumn dataField='status'>关联状态</TableHeaderColumn>
-          <TableHeaderColumn dataField='actions' width='320'>动作</TableHeaderColumn>
+          <TableHeaderColumn dataField='actions' width='300'>动作</TableHeaderColumn>
           <TableHeaderColumn width='250' dataField='operation'/>
         </BootstrapTable>
         { this.state.addActionModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
         { this.state.delActionModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
-        { this.state.ModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item }/> }
-        { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ selectedItem } del={ delStep }/> }
+        { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item } options={ options }/> }
+        { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ item } del={ delStep }/> }
       </div>
     );
   }

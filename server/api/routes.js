@@ -230,7 +230,7 @@ export default function(router) {
                status: "Underway"
             },
             {
-               step: "3",
+               step: 3,
                old_status: "Finished",
                status: "Underway"
             }
@@ -241,7 +241,7 @@ export default function(router) {
            name: "action2",
            results: [
             {
-               step: "4",
+               step: 2,
                old_status: "Finished",
                status: "Underway"
             }
@@ -259,7 +259,7 @@ export default function(router) {
            name: "action3",
            results: [
             {
-               step: "3",
+               step: 3,
                old_status: "Finished",
                status: "Underway"
             }
@@ -277,7 +277,7 @@ export default function(router) {
            name: "action4",
            results: [
             {
-               step: "4",
+               step: 1,
                old_status: "Finished",
                status: "Underway"
             }
@@ -288,7 +288,7 @@ export default function(router) {
            name: "action5",
            results: [
             {
-               step: "1",
+               step: 1,
                old_status: "Finished",
                status: "Underway"
             }

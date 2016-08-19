@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import Select from 'react-select';
+import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -9,15 +11,18 @@ const validate = (values) => {
   if (!values.name) {
     errors.name = 'Required';
   }
+  if (!values.state) {
+    errors.name = 'Required';
+  }
   return errors;
 };
 
 @reduxForm({
-  form: 'wfstep',
-  fields: [ 'id', 'name', 'description' ],
+  form: 'wfconfig',
+  fields: [ 'id', 'name', 'state' ],
   validate
 })
-export default class EditStepModal extends Component {
+export default class CreateModal extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,13 +32,14 @@ export default class EditStepModal extends Component {
   static propTypes = {
     optionValues: PropTypes.array,
     submitting: PropTypes.bool,
-    invalid: PropTypes.bool,
     dirty: PropTypes.bool,
+    invalid: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
+    data: PropTypes.object,
+    options: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired
   }
@@ -43,7 +49,10 @@ export default class EditStepModal extends Component {
     initializeForm(data);
   }
 
-  handleSubmit() {
+  async handleSubmit() {
+    const { values, edit, close } = this.props;
+    edit(values);
+    close();
   }
 
   handleCancel() {
@@ -55,12 +64,14 @@ export default class EditStepModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, description }, dirty, handleSubmit, invalid, submitting, data } = this.props;
+    const { fields: { id, name, state }, dirty, handleSubmit, invalid, submitting, data, options } = this.props;
+
+    const stateOptions = _.map(options.states || [], (val) => { return { label: val.name, value: val.id } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>{ '编辑工作流步骤 - ' + data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>新建步骤</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
@@ -70,8 +81,8 @@ export default class EditStepModal extends Component {
             <FormControl type='text' { ...name } placeholder='步骤名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='描述内容'/>
+            <ControlLabel>链接状态</ControlLabel>
+            <Select options={ stateOptions } simpleValue value={ state.value } onChange={ newValue => { state.onChange(newValue) } } placeholder='请选择状态' clearable={ false } searchable={ false }/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

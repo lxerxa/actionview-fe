@@ -35,7 +35,7 @@ export default class ProjectList extends Component {
         </div>
         <ul className='article-list list-unstyled clearfix'>
           { collection.map((items, i) =>
-            <li key={ i }className='article-item'>
+            <li key={ i } className='article-item'>
               <div className='list-top'>
                 <h4 className='title'>
                   <Link to={ '/project/' + items.key }>

@@ -150,7 +150,8 @@ export default class List extends Component {
         id: collection[i].id,
         name:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name }</span>                                                                                              { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
+            <span className='table-td-title'>{ collection[i].name }</span>
+            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
         permissions: (

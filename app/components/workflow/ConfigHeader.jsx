@@ -13,7 +13,8 @@ export default class Header extends Component {
   }
 
   static propTypes = {
-    create: PropTypes.func.isRequired
+    options: PropTypes.object.isRequired,
+    createStep: PropTypes.func.isRequired
   }
 
   createStepModalClose() {
@@ -21,7 +22,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create } = this.props;
+    const { createStep, options } = this.props;
 
     return (
       <div>
@@ -31,7 +32,7 @@ export default class Header extends Component {
         <div>
           <Button className='create-btn' onClick={ () => { this.setState({ createStepModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建步骤</Button>
         </div>
-        { this.state.createStepModalShow && <CreateStepModal show close={ this.createStepModalClose } create={ create }/> }
+        { this.state.createStepModalShow && <CreateStepModal show close={ this.createStepModalClose } create={ createStep } options={ options }/> }
       </div>
     );
   }

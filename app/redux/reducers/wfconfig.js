@@ -14,8 +14,14 @@ export default function wfconfig(state = initialState, action) {
     case t.WFCONFIG_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
 
-    case t.WFSTEP_CREATE:
-      return { ...state, collection: [] };
+    case t.WFCONFIG_STEP_CREATE:
+      const { collection } = state;
+      const maxStep = _.max(collection, step => step.id).id;
+      collection.push({ id: maxStep+1, name: action.values.name, state: action.values.state, actions: [], results: [] });
+      return { ...state, collection };
+
+    case t.WFCONFIG_STEP_EDIT:
+      return { ...state };
 
     default:
       return state;

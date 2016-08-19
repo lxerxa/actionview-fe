@@ -42,15 +42,6 @@ export default class Container extends Component {
     this.id = id;
   }
 
-  createStep() {
-  }
-
-  editStep() {
-  }
-
-  delStep() {
-  }
-
   addAction() {
   }
 
@@ -63,8 +54,8 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header createStep={ this.createStep.bind(this) } publish={ this.publish.bind(this) } { ...this.props.wfconfig }/>
-        <List index={ this.index.bind(this) } editStep={ this.editStep.bind(this) } delStep={ this.delStep.bind(this) } addAction={ this.addAction.bind(this) } editAction={ this.editAction.bind(this) } delAction={ this.delAction.bind(this) } { ...this.props.wfconfig }/>
+        <Header createStep={ this.props.actions.createStep } publish={ this.publish.bind(this) } { ...this.props.wfconfig }/>
+        <List index={ this.index.bind(this) } editStep={ this.props.actions.editStep } delStep={ this.props.actions.delStep } addAction={ this.addAction.bind(this) } editAction={ this.editAction.bind(this) } delAction={ this.delAction.bind(this) } { ...this.props.wfconfig }/>
       </div>
     );
   }
