@@ -19,6 +19,7 @@ if (BROWSER) {
   require('react-select/dist/react-select.css');
   require('react-bootstrap-table/css/react-bootstrap-table.css');
   require('react-datetime/css/react-datetime.css');
+  require('rc-tabs/assets/index.css');
   require('assets/styles/app.css');
 }
 

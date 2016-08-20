@@ -148,3 +148,8 @@
   word-wrap: break-word;
   white-space: pre-wrap;
 }
+
+.rc-tabs-content {
+  position: relative;
+  overflow: visible;
+}
