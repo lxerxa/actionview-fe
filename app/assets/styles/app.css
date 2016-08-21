@@ -153,3 +153,19 @@
   position: relative;
   overflow: visible;
 }
+
+.cond-list {
+  padding-top: 8px;
+}
+
+.cond-list li {
+  height: 50px;
+}
+
+.cond-list li span {
+  margin-left: 10px;
+}
+
+.cond-list li b {
+  margin-left: 10px;
+}

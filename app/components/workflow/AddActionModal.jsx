@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import Select from 'react-select';
 import Tabs, { TabPane } from 'rc-tabs';
+import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
@@ -23,7 +24,7 @@ const validate = (values) => {
 export default class AddActionModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeKey: '1' };
+    this.state = { activeKey: '1', fruits: ['apple','watermelon'] };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -66,6 +67,12 @@ export default class AddActionModal extends Component {
     this.setState({ activeKey });
   }
 
+  fruitsChanged(newFruits) {
+    this.setState({
+      fruits: newFruits
+    });
+  }
+
   render() {
     const { fields: { src_step, name, dest_step, screen }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
     const stepOptions = _.map(steps, (val) => { return { label: val.name, value: val.id } });
@@ -105,13 +112,40 @@ export default class AddActionModal extends Component {
                 </FormGroup>
               </div>
             </TabPane>
-            <TabPane tab='条件' key='2'>
-              <div style={ { paddingTop: '15px' } }>
-                <FormGroup controlId='formControlsText'>
-                  <ControlLabel>动作名2</ControlLabel>
-                  <FormControl type='text' { ...name } placeholder='工作流名'/>
-                </FormGroup>
+            <TabPane tab='触发条件' key='2'>
+              <div style={ { paddingTop: '25px', paddingBottom: '25px' } }>
+                <Select options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='条件关系' clearable={ false } searchable={ false }/>
               </div>
+              <ui className='list-unstyled clearfix cond-list'>
+                <CheckboxGroup name='fruits' value={ this.state.fruits } onChange={ this.fruitsChanged }>
+                  <li>
+                    <Checkbox value='apple'/>
+                    <span>只有</span><b>报告人</b><span>才能执行此动作</span>
+                  </li>
+                  <li>
+                    <Checkbox value='orange'/>
+                    <span>只有</span><b>经办人</b><span>才能执行此动作</span>
+                  </li>
+                  <li>
+                    <Checkbox value='watermelon'/>
+                    <span>根据子任务状态</span>
+                    <select options={ screenOptions } value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择界面' style={ { width: '100px', marginLeft: '10px' } }/> 
+                    <span>限制父任务动作</span>
+                  </li>
+                  <li>
+                    <Checkbox value='watermelon'/>
+                    <span>只有具有权限</span>
+                    <select options={ screenOptions } value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择界面' style={ { width: '100px', marginLeft: '10px' } }/> 
+                    <span>的用户才能执行此动作</span>
+                  </li>
+                  <li>
+                    <Checkbox value='watermelon'/>
+                    <span>只有属于项目角色</span>
+                    <select options={ screenOptions } value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择界面' style={ { width: '100px', marginLeft: '10px' } }/>
+                    <span>的成员才能执行此动作</span>
+                  </li>
+                </CheckboxGroup>
+              </ui>
             </TabPane>
             <TabPane tab='结果处理' key='3'>
               <div style={ { paddingTop: '15px' } }>
