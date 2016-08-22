@@ -297,7 +297,7 @@ export default function(router) {
       ]
     }
     ],
-    options: { states : [{id: "1111", name:"test1"}, {id: "2222", name:"test2"}, {id: "3333", name:"test3"}] }
+    options: { states : [{id: "1111", name:"test1"}, {id: "2222", name:"test2"}, {id: "3333", name:"test3"}], permissions:[{id: "1111", name:"permission1"}, {id: "2222", name:"permission2"}, {id: "3333", name:"permission3"}], roles: [{id: "1111", name:"role1"}, {id: "2222", name:"role2"}, {id: "3333", name:"role3"}], screens:[{id: "1111", name:"screen1"}, {id: "2222", name:"screen2"}, {id: "3333", name:"screen3"}] }
 };
     return res.status(200).send(results);
   });
