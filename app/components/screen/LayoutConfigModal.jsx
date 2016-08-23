@@ -14,7 +14,7 @@ export default class LayoutConfigModal extends Component {
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
-    this.state = { cards: [], ecode: 0, addFieldId: '', enableAdd: false };
+    this.state = { cards: [], ecode: 0, addFieldIds: '', enableAdd: false };
     const fields = this.props.data.fields || [];
     const fieldNum = fields.length;
     for (let i = 0; i < fieldNum; i++) {
@@ -61,9 +61,9 @@ export default class LayoutConfigModal extends Component {
     this.setState({ cards: this.state.cards });
   }
 
-  handleChange(field) {
-    if (field !== '') {
-      this.setState ({ addFieldId: field, enableAdd: true });
+  handleChange(fields) {
+    if (fields !== '') {
+      this.setState ({ addFieldIds: fields, enableAdd: true });
     } else {
       this.setState ({ enableAdd: false });
     }
@@ -71,10 +71,13 @@ export default class LayoutConfigModal extends Component {
 
   add() {
     const { options } = this.props;
-    const fid = this.state.addFieldId;
-    const field = _.find(options.fields || [], function(o) { return o.id === fid; });
-    this.state.cards.push({ id: field.id, text: field.name });
-    this.setState({ cards: this.state.cards, addFieldId: '', enableAdd: false });
+    const fids = this.state.addFieldIds.split(',');
+    for (let i = 0; i < fids.length; i++)
+    {
+      const field = _.find(options.fields || [], function(o) { return o.id === fids[i]; });
+      this.state.cards.push({ id: field.id, text: field.name });
+    }
+    this.setState({ cards: this.state.cards, addFieldIds: '', enableAdd: false });
   }
 
   moveCard(dragIndex, hoverIndex) {
@@ -122,7 +125,7 @@ export default class LayoutConfigModal extends Component {
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
             <div style={ { display: 'inline-block', width: '68%' } }>
-              <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldId } onChange={ this.handleChange.bind(this) } placeholder='请选择添加字段'/>
+              <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='请选择添加字段' multi/>
             </div>
             <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加字段</Button>
           </FormGroup>

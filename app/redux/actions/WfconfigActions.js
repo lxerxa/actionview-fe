@@ -19,3 +19,15 @@ export function delStep(id) {
   return { type: 'WFCONFIG_STEP_DELETE', id: id };
 }
 
+export function addAction(values) {
+  return { type: 'WFCONFIG_ACTION_ADD', values: values };
+}
+
+export function editAction(values) {
+  return { type: 'WFCONFIG_ACTION_EDIT', values: values };
+}
+
+export function delAction(id) {
+  return { type: 'WFCONFIG_ACTION_DELETE', id: id };
+}
+

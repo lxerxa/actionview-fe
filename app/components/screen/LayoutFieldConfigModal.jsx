@@ -8,7 +8,7 @@ const img = require('../../assets/images/loading.gif');
 export default class LayoutFieldConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { cards: [], ecode: 0, addFieldId: '', enableAdd: false };
+    this.state = { cards: [], ecode: 0, addFieldIds: '', enableAdd: false };
     const fields = this.props.data.fields || [];
     const fieldNum = fields.length;
     for (let i = 0; i < fieldNum; i++) {
@@ -57,9 +57,9 @@ export default class LayoutFieldConfigModal extends Component {
     this.setState({ cards: this.state.cards });
   }
 
-  handleChange(field) {
-    if (field !== '') {
-      this.setState ({ addFieldId: field, enableAdd: true });
+  handleChange(fields) {
+    if (fields !== '') {
+      this.setState ({ addFieldIds: fields, enableAdd: true });
     } else {
       this.setState ({ enableAdd: false });
     }
@@ -67,10 +67,13 @@ export default class LayoutFieldConfigModal extends Component {
 
   add() {
     const { data } = this.props;
-    const fid = this.state.addFieldId;
-    const field = _.find(data.fields || [], function(o) { return o.id === fid; });
-    this.state.cards.push({ id: field.id, name: field.name });
-    this.setState({ cards: this.state.cards, addFieldId: '', enableAdd: false });
+    const fids = this.state.addFieldIds.split(',');
+    for (let i = 0; i < fids.length; i++)
+    {
+      const field = _.find(data.fields || [], function(o) { return o.id === fids[i]; });
+      this.state.cards.push({ id: field.id, name: field.name });
+    }
+    this.setState({ cards: this.state.cards, addFieldIds: '', enableAdd: false });
   }
 
   render() {
@@ -87,31 +90,29 @@ export default class LayoutFieldConfigModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ '界面字段配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p><b>必填字段：</b></p>
-          { cards.length > 0 ?
-            <ul onMouseLeave={ () => { this.setState({ removeIconShow: false }) } } onMouseOver={ () => { this.setState({ removeIconShow: true }) } }>
-            { 
-              cards.map((op, i) => {
-                return (
-                  <li key={ op.id } style={ { width: '55%', borderBottom: '1px gray dashed', padding: '5px 0 5px 0' } } onMouseOver={ () => { this.setState({ hoverId: op.id }) } }>
-                    { op.name }
-                    { this.state.hoverId === op.id && this.state.removeIconShow &&
-                      <span style={ { float: 'right', marginLeft:'15px', cursor: 'pointer', marginRight: '5px' } } onClick={ this.deleteCard.bind(this, i) }>
-                        <i className='fa fa-remove'></i>
-                      </span>
-                    }
-                  </li>
-                ); 
-              }) 
-            }
-            <li>&nbsp;</li>
+          { cards.length > 0 ? <p>以下为页面的必填字段</p> : <p>此页面没有必填字段</p> }
+          { cards.length > 0 && 
+            <ul onMouseLeave={ () => { this.setState({ removeIconShow: false }) } } onMouseOver={ () => { this.setState({ removeIconShow: true }) } } className='list-unstyled clearfix'>
+              { 
+                cards.map((op, i) => {
+                  return (
+                    <li key={ op.id } style={ { width: '68%', borderBottom: '1px gray dashed', padding: '5px 0 5px 0' } } onMouseOver={ () => { this.setState({ hoverId: op.id }) } }>
+                      <b>{ op.name }</b>
+                      { this.state.hoverId === op.id && this.state.removeIconShow &&
+                        <span style={ { float: 'right', marginLeft:'15px', cursor: 'pointer', marginRight: '5px' } } onClick={ this.deleteCard.bind(this, i) }>
+                          <i className='fa fa-remove'></i>
+                        </span>
+                      }
+                    </li>
+                  ); 
+                }) 
+              }
+              <li>&nbsp;</li>
             </ul>
-            :
-            <ul><li>此界面暂无必填字段。</li><li>&nbsp;</li></ul>
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
             <div style={ { display: 'inline-block', width: '68%' } }>
-              <Select simpleValue options={ _.reject(screenFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldId } onChange={ this.handleChange.bind(this) } placeholder='请选择必填字段'/>
+              <Select simpleValue options={ _.reject(screenFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='请选择必填字段' multi/>
             </div>
             <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加字段</Button>
           </FormGroup>

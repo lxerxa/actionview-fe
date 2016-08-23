@@ -32,6 +32,9 @@ export default function wfconfig(state = initialState, action) {
       collection.splice(inx, 1);
       return { ...state, collection: collection };
 
+    case t.WFCONFIG_ACTION_ADD:
+      return { ...state };
+
     case t.WFCONFIG_STEP_EDIT:
       return { ...state };
 

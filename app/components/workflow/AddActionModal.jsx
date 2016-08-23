@@ -13,12 +13,18 @@ const validate = (values) => {
   if (!values.name) {
     errors.name = 'Required';
   }
+  if (!values.dest_step) {
+    errors.name = 'Required';
+  }
+  if (!values.screen) {
+    errors.name = 'Required';
+  }
   return errors;
 };
 
 @reduxForm({
   form: 'wfconfig',
-  fields: [ 'src_step', 'name', 'dest_step', 'screen', 'relation', 'stateParam', 'permissionParam', 'roleParam', 'setResolution', 'setState', 'assignIssue', 'addComments', 'updateHistory', 'triggerWebhook' ],
+  fields: [ 'src_step', 'name', 'dest_step', 'screen', 'relation', 'stateParam', 'permissionParam', 'roleParam', 'setResolution', 'setState', 'assignIssue', 'addComments', 'updateHistory', 'triggerEvent' ],
   validate
 })
 export default class AddActionModal extends Component {
@@ -44,6 +50,9 @@ export default class AddActionModal extends Component {
 
   handleSubmit() {
     const { values, create, close } = this.props;
+    values.conditions = this.state.conditions;
+    values.postFucntions = this.state.postFunctions;
+    //alert(JSON.stringify(this.props.close));
     create(values);
     close();
   }
@@ -80,7 +89,7 @@ export default class AddActionModal extends Component {
   }
 
   render() {
-    const { fields: { src_step, name, dest_step, screen, relation, stateParam, permissionParam, roleParam, resolutionParam, assigneeParam }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { src_step, name, dest_step, screen, relation, stateParam, permissionParam, roleParam, resolutionParam, assigneeParam, eventParam }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
     const stepOptions = _.map(steps, (val) => { return { label: val.name, value: val.id } });
     stepOptions.splice(_.findIndex(steps, { id: stepData.id }), 1);
 
@@ -88,15 +97,16 @@ export default class AddActionModal extends Component {
     screenOptions.unshift( { label: '不显示页面', value: '' } );;
 
     const relationOptions = [{ label: 'AND', value: 'and' }, { label: 'OR', value: 'or' }];
+    const assigneeOptions = [ { id: 'whoami', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
+    const eventOptions = [ { id: 'normal', name: '一般事件' } ];
 
     const stateOptions = options.states || [];
     const permissionOptions = options.permissions || [];
     const roleOptions = options.roles || [];
     const resolutionOptions = options.resolutions || [];
-    const assigneeOptions = [ { id: 'whoami', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
 
-    const selectEnableStyles = { width: '130px', marginLeft: '10px' }; 
-    const selectDisabledStyles = { width: '130px', marginLeft: '10px', backgroundColor: '#f5f5f5' }; 
+    const selectEnableStyles = { width: '125px', marginLeft: '10px', borderRadius: '4px' }; 
+    const selectDisabledStyles = { width: '125px', marginLeft: '10px', backgroundColor: '#f5f5f5', borderRadius: '4px' }; 
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -223,8 +233,16 @@ export default class AddActionModal extends Component {
                     <span>更新问题的变动历史记录</span>
                   </li>
                   <li>
-                    <Checkbox value='triggerWebhook'/>
-                    <span>引发一个Webhook（待开发）</span>
+                    <Checkbox value='triggerEvent'/>
+                    <span>过程结束后触发</span>
+                    <select
+                      { ...eventParam }
+                      disabled={ _.indexOf(this.state.postFunctions, 'triggerEvent') !== -1 ? false : true }
+                      style={ _.indexOf(this.state.postFunctions, 'triggerEvent') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
+                      <option value='' key=''>请选择事件</option>
+                      { eventOptions.map( eventOption => <option value={ eventOption.id } key={ eventOption.id }>{ eventOption.name }</option> ) }
+                    </select>
+                    <span>事件(待开发)</span>
                   </li>
                 </CheckboxGroup>
               </ui>

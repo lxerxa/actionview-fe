@@ -28,16 +28,12 @@ export default class List extends Component {
 
   static propTypes = {
     collection: PropTypes.array.isRequired,
-    selectedItem: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
-    itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
     editStep: PropTypes.func.isRequired,
     delStep: PropTypes.func.isRequired,
-    delStepNotify: PropTypes.func.isRequired,
     addAction: PropTypes.func.isRequired,
     editAction: PropTypes.func.isRequired,
     delAction: PropTypes.func.isRequired
