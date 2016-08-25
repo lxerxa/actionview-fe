@@ -33,6 +33,7 @@ export default function wfconfig(state = initialState, action) {
       return { ...state, collection: collection };
 
     case t.WFCONFIG_ACTION_ADD:
+      const stepIndex = _.findIndex(collection, { id: action.values.stepId });
       return { ...state };
 
     case t.WFCONFIG_STEP_EDIT:
