@@ -9,6 +9,23 @@ import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
+const CONDITION_FUNCTIONS = {
+  isReporter: { name:'11' },
+  isAssignee: { name: '22' },
+  checkSubTasksState: { name: '33', args: [ 'stateParam' ] },
+  hasPermission: { name: '44', args: [ 'permissionParam' ] },
+  belongsToRole: { name: '55', args: [ 'roleParam' ] }
+};
+
+const POST_FUNCTIONS = {
+  setResolution: { name : 'aa', args: [ 'resolutionParam' ], sn: 1 },
+  setState: { name : 'bb', sn: 2 },
+  assignIssue: { name : 'cc', args: [ 'assigneeParam' ], sn: 3 },
+  addComments: { name : 'dd', sn: 4 },
+  updateHistory: { name : 'ee', sn: 5 },
+  triggerEvent: { name : 'ff', args: [ 'eventParam' ], sn: 6 }
+};
+
 const validate = (values) => {
   const errors = {};
   if (!values.name) {
@@ -25,46 +42,64 @@ const validate = (values) => {
 
 @reduxForm({
   form: 'wfconfig',
-  fields: [ 'name', 'destStep', 'screen', 'relation' ],
+  fields: [ 'id', 'name', 'destStep', 'screen' ],
   validate
 })
 export default class AddActionModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeKey: '1', conditions: [], postFunctions: [], stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', eventParam: '' };
+
+    this.state = { activeKey: '1', conditions: [], postFunctions: [], relation: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', eventParam: '' };
+
+    const state = this.state;
+    const { data } = props;
+    if (data)
+    {
+      if (data.restrict_to && data.restrict_to.conditions && data.restrict_to.conditions.list.length > 0)
+      {
+        this.state.conditions = _.map(data.restrict_to.conditions.list, function(value) { 
+          value.args && _.assign(state, value.args);
+          return _.findKey(CONDITION_FUNCTIONS, value.name);
+        });
+        this.state.relation = data.restrict_to.conditions.type || 'and';
+      }
+
+      if (data.post_functions && data.post_functions.length > 0)
+      {
+        this.state.postFunctions = _.map(data.post_functions, function(value) { 
+          value.args && _.assign(state, value.args);
+          return _.findKey(POST_FUNCTIONS, value.name);
+        });
+      }
+    }
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
 
   static propTypes = {
     options: PropTypes.object,
+    data: PropTypes.object,
     stepData: PropTypes.object,
     steps: PropTypes.array,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
+    initializeForm: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired
+    create: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired
   }
 
   handleSubmit() {
-    const { values, create, close, stepData } = this.props;
-
-    //values.stepId = stepData.id;
-
-    const POSTFUNCTIONS = {
-      setResolution: { name : 'aa', args: [ 'resolutionParam' ] },
-      setState: { name : 'bb', args: [] },
-      assignIssue: { name : 'cc', args: [ 'assigneeParam' ] },
-      addComments: { name : 'dd', args: [] },
-      updateHistory: { name : 'ee', args: [] },
-      triggerEvent: { name : 'ff', args: [ 'eventParam' ] }
-    };
+    const { values, create, edit, close, stepData } = this.props;
 
     const addedAction = {};
+    addedAction.id = values.id;
     addedAction.name = values.name;
+    addedAction.screen = values.screen;
     addedAction.results = [ { step: values.destStep, old_status: 'Finished', status: 'Underway' } ];
 
     const postFunctions = [];
@@ -73,11 +108,11 @@ export default class AddActionModal extends Component {
     {
       const funcKey = this.state.postFunctions[i];
       const funcArgs = {};
-      const argsLength = POSTFUNCTIONS[funcKey].args.length;
+      const argsLength = POST_FUNCTIONS[funcKey].args ? POST_FUNCTIONS[funcKey].args.length : 0;
       let validFlag = 1;
       for (let j = 0; j < argsLength; j++) 
       {
-        const arg = (POSTFUNCTIONS[funcKey].args)[j];
+        const arg = (POST_FUNCTIONS[funcKey].args)[j];
         if (!this.state[arg])
         {
           validFlag = 0;
@@ -89,21 +124,51 @@ export default class AddActionModal extends Component {
       if (validFlag === 1)
       {
         argsLength > 0 ?
-          postFunctions.push({ name: POSTFUNCTIONS[funcKey].name, args: [{ aa : 'tt' }] }) :
-          postFunctions.push({ name: POSTFUNCTIONS[funcKey].name })
+          postFunctions.push({ name: POST_FUNCTIONS[funcKey].name, args: funcArgs, sn: POST_FUNCTIONS[funcKey].sn }) :
+          postFunctions.push({ name: POST_FUNCTIONS[funcKey].name, sn: POST_FUNCTIONS[funcKey].sn })
+      }
+    }
+    if (postFunctions.length > 0)
+    {
+      addedAction.post_functions = _.map(_.sortBy(postFunctions, 'sn'), function(value) { return _.pick(value, ['name', 'args']); });
+    }
+
+    const restrictConditions = [];
+    const restrictCondLength = this.state.conditions.length;
+    for (let i = 0; i < restrictCondLength; i++)
+    {
+      const condKey = this.state.conditions[i];
+      const condArgs = {};
+      let validFlag = 1;
+      const argsLength = CONDITION_FUNCTIONS[condKey].args ? CONDITION_FUNCTIONS[condKey].args.length : 0;
+      for (let j = 0; j < argsLength; j++)
+      {
+        const arg = (CONDITION_FUNCTIONS[condKey].args)[j];
+        if (!this.state[arg])
+        {
+          validFlag = 0;
+          break;
+        }
+        condArgs[arg] = this.state[arg];
+      }
+
+      if (validFlag === 1)
+      {
+        argsLength > 0 ?
+          restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name, args: condArgs }) :
+          restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name })
       }
     }
 
-    if (postFunctions.length > 0)
+    if (restrictConditions.length > 0)
     {
-      addedAction.post_functions = postFunctions;
+      addedAction.restrict_to = { conditions: { type: this.state.relation ? this.state.relation : 'and', list: restrictConditions } };
     }
 
-    alert(JSON.stringify(addedAction));
+    //alert(JSON.stringify(addedAction));
+    //return;
 
-    return;
-
-    create(values);
+    values.id ? edit(stepData.id, addedAction) : create(stepData.id, addedAction);
     close();
   }
 
@@ -113,6 +178,26 @@ export default class AddActionModal extends Component {
       return;
     }
     close();
+  }
+
+  componentWillMount() {
+    const { initializeForm, data } = this.props;
+    const basicData = {};
+    if (!_.isEmpty(data))
+    {
+      basicData.id = data.id;
+      basicData.name = data.name;
+      basicData.destStep = data.results[0].step;
+      basicData.screen = data.screen;
+    }
+    else
+    {
+      basicData.id = '';
+      basicData.name = '';
+      basicData.destStep = '';
+      basicData.screen = '';
+    }
+    initializeForm(basicData);
   }
 
   onTabClick(key) {
@@ -140,7 +225,7 @@ export default class AddActionModal extends Component {
 
   render() {
     // const { fields: { name, destStep, screen, relation, stateParam, permissionParam, roleParam, resolutionParam, assigneeParam, eventParam }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
-    const { fields: { name, destStep, screen, relation }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { id, name, destStep, screen }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
     const stepOptions = _.map(steps, (val) => { return { label: val.name, value: val.id } });
     stepOptions.splice(_.findIndex(steps, { id: stepData.id }), 1);
 
@@ -166,6 +251,7 @@ export default class AddActionModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' } style={ { height: '450px' } }>
+          <FormControl type='hidden' { ...id }/>
           <Tabs
             activeKey={ this.state.activeKey }
             onTabClick={ this.onTabClick.bind(this) } 
@@ -192,7 +278,7 @@ export default class AddActionModal extends Component {
             </TabPane>
             <TabPane tab='触发条件' key='2'>
               <div style={ { paddingTop: '25px', paddingBottom: '25px' } }>
-                <Select options={ relationOptions } simpleValue value={ relation.value } onChange={ newValue => { relation.onChange(newValue) } } placeholder='条件关系' clearable={ false } searchable={ false }/>
+                <Select options={ relationOptions } simpleValue value={ this.state.relation } onChange={ newValue => { this.setState({ relation: newValue }) } } placeholder='条件关系' clearable={ false } searchable={ false }/>
               </div>
               <ui className='list-unstyled clearfix cond-list'>
                 <CheckboxGroup name='conditions' value={ this.state.conditions } onChange={ this.conditionsChanged.bind(this) }>

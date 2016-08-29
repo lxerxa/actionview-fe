@@ -17,10 +17,10 @@ export default class List extends Component {
     this.state = { 
       editStepModalShow: false, 
       delStepNotifyShow: false, 
-      item: {}
+      item: {},
+      actionItem: {} 
     };
     this.addActionModalClose = this.addActionModalClose.bind(this);
-    this.editActionModalClose = this.editActionModalClose.bind(this);
     this.delActionModalClose = this.delActionModalClose.bind(this);
     this.editStepModalClose = this.editStepModalClose.bind(this);
     this.delStepNotifyClose = this.delStepNotifyClose.bind(this);
@@ -56,23 +56,23 @@ export default class List extends Component {
     this.setState({ addActionModalShow: false });
   }
 
-  editActionModalClose() {
-    this.setState({ editActionModalShow: false });
-  }
-
   delActionModalClose() {
     this.setState({ delActionModalShow: false });
   }
 
-  addAction(id) {
+  addAction(stepId) {
     this.setState({ addActionModalShow: true });
     const { collection } = this.props; 
-    const item = _.find(collection, { id });
-    this.setState({ item });
+    const item = _.find(collection, { id: stepId });
+    this.setState({ item, actionItem: {} });
   }
 
-  editAction() {
-    this.setState({ editActionModalShow: true });
+  showAction(stepId, actionId) {
+    this.setState({ addActionModalShow: true });
+    const { collection } = this.props;
+    const item = _.find(collection, { id: stepId });
+    const actionItem = _.find(item.actions, { id: actionId });
+    this.setState({ item, actionItem });
   }
 
   delAction() {
@@ -95,7 +95,7 @@ export default class List extends Component {
 
   render() {
     const { collection, indexLoading, options, editStep, delStep, addAction, editAction, delAction } = this.props;
-    const { item } = this.state;
+    const { item, actionItem } = this.state;
 
     const steps = [];
     const stepNum = collection.length;
@@ -107,18 +107,18 @@ export default class List extends Component {
             <span className='table-td-title'>{ collection[i].name }</span>
           </div>
         ),
-        status:  (
+        state:  (
           <div>
             { _.find(options.states, { id: collection[i].state }).name || '-' }
           </div>
         ),
         actions:  (
           <ul className='list-unstyled clearfix'>
-            { collection[i].actions.map((item, i) =>
-              <li key={ i }>
-                <span style={ { color: '#337ab7', cursor: 'pointer' } } onClick={ this.editAction.bind(this, collection[i].id) } >{ item.name }</span>
-                { item.results.map((item2, i2) =>
-                  <span key={ i2 } style={ { fontSize: '10px', fontStyle: 'italic' } }>
+            { collection[i].actions.map((item, j) =>
+              <li key={ j }>
+                <span style={ { color: '#337ab7', cursor: 'pointer' } } onClick={ this.showAction.bind(this, collection[i].id, item.id) } >{ item.name }</span>
+                { item.results.map((item2, j2) =>
+                  <span key={ j2 } style={ { fontSize: '10px', fontStyle: 'italic' } }>
                     <br/> >>{ ' ' + _.find(collection, { id: item2.step }).name }
                   </span>) }
               </li>)
@@ -148,12 +148,11 @@ export default class List extends Component {
         <BootstrapTable data={ steps } bordered={ false } hover options={ opts }>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='step'>步骤</TableHeaderColumn>
-          <TableHeaderColumn dataField='status'>关联状态</TableHeaderColumn>
+          <TableHeaderColumn dataField='state'>关联状态</TableHeaderColumn>
           <TableHeaderColumn dataField='actions' width='300'>动作</TableHeaderColumn>
           <TableHeaderColumn width='300' dataField='operation'/>
         </BootstrapTable>
-        { this.state.addActionModalShow && <AddActionModal show close={ this.addActionModalClose } create={ addAction } stepData={ item } options={ options } steps={ collection } /> }
-        { this.state.editActionModalShow && <EditActionModal show close={ this.editActionModalClose } edit={ editAction } data={ item }/> }
+        { this.state.addActionModalShow && <AddActionModal show close={ this.addActionModalClose } create={ addAction } edit={ editAction } stepData={ item } options={ options } steps={ collection } data={ actionItem } /> }
         { this.state.delActionModalShow && <DelActionModal show close={ this.delActionModalClose } del={ delAction } data={ item }/> }
         { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item } options={ options }/> }
         { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ item } del={ delStep }/> }

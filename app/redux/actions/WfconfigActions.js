@@ -19,12 +19,12 @@ export function delStep(id) {
   return { type: 'WFCONFIG_STEP_DELETE', id: id };
 }
 
-export function addAction(values) {
-  return { type: 'WFCONFIG_ACTION_ADD', values: values };
+export function addAction(stepId, values) {
+  return { type: 'WFCONFIG_ACTION_ADD', stepId, values };
 }
 
-export function editAction(values) {
-  return { type: 'WFCONFIG_ACTION_EDIT', values: values };
+export function editAction(stepId, values) {
+  return { type: 'WFCONFIG_ACTION_EDIT', stepId, values };
 }
 
 export function delAction(id) {
