@@ -10,20 +10,20 @@ import _ from 'lodash';
 const img = require('../../assets/images/loading.gif');
 
 const CONDITION_FUNCTIONS = {
-  isReporter: { name:'11' },
-  isAssignee: { name: '22' },
-  checkSubTasksState: { name: '33', args: [ 'stateParam' ] },
-  hasPermission: { name: '44', args: [ 'permissionParam' ] },
-  belongsToRole: { name: '55', args: [ 'roleParam' ] }
+  isReporter: { name: 'App\\Workflow\\Util@isReporter' },
+  isAssignee: { name: 'App\\Workflow\\Util@isAssignee' },
+  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ] },
+  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ] },
+  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ] }
 };
 
 const POST_FUNCTIONS = {
-  setResolution: { name : 'aa', args: [ 'resolutionParam' ], sn: 1 },
-  setState: { name : 'bb', sn: 2 },
-  assignIssue: { name : 'cc', args: [ 'assigneeParam' ], sn: 3 },
-  addComments: { name : 'dd', sn: 4 },
-  updateHistory: { name : 'ee', sn: 5 },
-  triggerEvent: { name : 'ff', args: [ 'eventParam' ], sn: 6 }
+  setResolution: { name : 'App\\Workflow\\Util@setResolution', args: [ 'resolutionParam' ], sn: 1 },
+  setState: { name : 'App\\Workflow\\Util@setState', sn: 2 },
+  assignIssue: { name : 'App\\Workflow\\Util@assignIssue', args: [ 'assigneeParam' ], sn: 3 },
+  addComments: { name : 'App\\Workflow\\Util@addComments', sn: 4 },
+  updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 5 },
+  triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 }
 };
 
 const validate = (values) => {
@@ -53,13 +53,13 @@ export default class AddActionModal extends Component {
 
     const state = this.state;
     const { data } = props;
-    if (data)
+    if (!_.isEmpty(data))
     {
       if (data.restrict_to && data.restrict_to.conditions && data.restrict_to.conditions.list.length > 0)
       {
         this.state.conditions = _.map(data.restrict_to.conditions.list, function(value) { 
           value.args && _.assign(state, value.args);
-          return _.findKey(CONDITION_FUNCTIONS, value.name);
+          return _.findKey(CONDITION_FUNCTIONS, { name: value.name });
         });
         this.state.relation = data.restrict_to.conditions.type || 'and';
       }
@@ -68,7 +68,7 @@ export default class AddActionModal extends Component {
       {
         this.state.postFunctions = _.map(data.post_functions, function(value) { 
           value.args && _.assign(state, value.args);
-          return _.findKey(POST_FUNCTIONS, value.name);
+          return _.findKey(POST_FUNCTIONS, { name: value.name });
         });
       }
     }

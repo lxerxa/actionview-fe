@@ -40,13 +40,13 @@ export default function wfconfig(state = initialState, action) {
       }
       action.values.id = action.stepId * 1000 + collection[stepIndex].actions.length;
       collection[stepIndex].actions.push(action.values);
-      //alert(collection[stepIndex].actions);
 
       return { ...state, collection };
 
-    case t.WFCONFIG_STEP_EDIT:
+    case t.WFCONFIG_ACTION_EDIT:
       const stepInd = _.findIndex(collection, { id: action.stepId });
-      collection.actions.push(action.values);
+      const actionInd = _.findIndex(collection[stepInd].actions, { id: action.values.id })
+      collection[stepInd].actions[actionInd] = action.values;
       return { ...state, collection };
 
     default:
