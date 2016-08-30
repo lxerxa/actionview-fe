@@ -27,7 +27,7 @@ export function editAction(stepId, values) {
   return { type: 'WFCONFIG_ACTION_EDIT', stepId, values };
 }
 
-export function delAction(id) {
-  return { type: 'WFCONFIG_ACTION_DELETE', id: id };
+export function delAction(stepId, values) {
+  return { type: 'WFCONFIG_ACTION_DELETE', stepId, values };
 }
 

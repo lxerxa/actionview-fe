@@ -4,10 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-boots
 import Select from 'react-select';
 import Tabs, { TabPane } from 'rc-tabs';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
-import { findDOMNode } from 'react-dom';
 import _ from 'lodash';
-
-const img = require('../../assets/images/loading.gif');
 
 const CONDITION_FUNCTIONS = {
   isReporter: { name: 'App\\Workflow\\Util@isReporter' },

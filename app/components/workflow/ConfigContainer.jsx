@@ -45,7 +45,7 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header createStep={ this.props.actions.createStep } publish={ this.publish.bind(this) } { ...this.props.wfconfig }/>
+        <Header createStep={ this.props.actions.createStep } publish={ this.publish.bind(this) } pid={ this.pid } { ...this.props.wfconfig }/>
         <List index={ this.index.bind(this) } editStep={ this.props.actions.editStep } delStep={ this.props.actions.delStep } addAction={ this.props.actions.addAction } editAction={ this.props.actions.editAction } delAction={ this.props.actions.delAction } { ...this.props.wfconfig }/>
       </div>
     );

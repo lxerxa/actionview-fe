@@ -5,8 +5,7 @@ import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
 
 const AddActionModal = require('./AddActionModal');
-const EditActionModal = require('./EditStepModal');
-const DelActionModal = require('./EditStepModal');
+const DelActionModal = require('./DelActionModal');
 const EditStepModal = require('./EditStepModal');
 const DelStepNotify = require('./DelStepNotify');
 const img = require('../../assets/images/loading.gif');
@@ -75,8 +74,11 @@ export default class List extends Component {
     this.setState({ item, actionItem });
   }
 
-  delAction() {
+  delAction(stepId) {
     this.setState({ delActionModalShow: true });
+    const { collection } = this.props;
+    const item = _.find(collection, { id: stepId });
+    this.setState({ item });
   }
 
   showStep(id) {
@@ -98,7 +100,17 @@ export default class List extends Component {
     const { item, actionItem } = this.state;
 
     const steps = [];
+    const allDestSteps = [];
     const stepNum = collection.length;
+
+    for (let i = 0; i < stepNum; i++) {
+      _.map(collection[i].actions, function(v) { 
+        _.map(v.results, function(v2) {
+          allDestSteps.push(v2.step); 
+        });
+      });
+    }
+
     for (let i = 0; i < stepNum; i++) {
       steps.push({
         id: collection[i].id,
@@ -130,7 +142,7 @@ export default class List extends Component {
             <Button bsStyle='link' onClick={ this.addAction.bind(this, collection[i].id) }>添加动作</Button>
             <Button bsStyle='link' onClick={ this.delAction.bind(this, collection[i].id) }>删除动作</Button>
             <Button bsStyle='link' onClick={ this.showStep.bind(this, collection[i].id) }>编辑</Button>
-            <Button bsStyle='link' onClick={ this.delStepNotify.bind(this, collection[i].id) }>删除</Button>
+            { collection[i].actions.length === 0 && _.indexOf(allDestSteps, collection[i].id) === -1 && <Button bsStyle='link' onClick={ this.delStepNotify.bind(this, collection[i].id) }>删除</Button> }
           </div>
         )
       });
@@ -153,7 +165,7 @@ export default class List extends Component {
           <TableHeaderColumn width='300' dataField='operation'/>
         </BootstrapTable>
         { this.state.addActionModalShow && <AddActionModal show close={ this.addActionModalClose } create={ addAction } edit={ editAction } stepData={ item } options={ options } steps={ collection } data={ actionItem } /> }
-        { this.state.delActionModalShow && <DelActionModal show close={ this.delActionModalClose } del={ delAction } data={ item }/> }
+        { this.state.delActionModalShow && <DelActionModal show close={ this.delActionModalClose } del={ delAction } stepData={ item }/> }
         { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item } options={ options }/> }
         { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ item } del={ delStep }/> }
       </div>

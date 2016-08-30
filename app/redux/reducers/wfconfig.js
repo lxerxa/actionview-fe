@@ -49,6 +49,11 @@ export default function wfconfig(state = initialState, action) {
       collection[stepInd].actions[actionInd] = action.values;
       return { ...state, collection };
 
+    case t.WFCONFIG_ACTION_DELETE:
+      const sInd = _.findIndex(collection, { id: action.stepId });
+      collection[sInd].actions = _.filter(collection[sInd].actions, function(v) { return _.indexOf(action.values, v.id) === -1 });
+      return { ...state, collection };
+
     default:
       return state;
   }
