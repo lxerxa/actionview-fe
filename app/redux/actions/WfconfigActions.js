@@ -7,6 +7,13 @@ export function index(key, id) {
   });
 }
 
+export function save(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'WFCONFIG_SAVE',
+    promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + id, method: 'put', data: values })
+  });
+}
+
 export function createStep(values) {
   return { type: 'WFCONFIG_STEP_CREATE', values: values };
 }

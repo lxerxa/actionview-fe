@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], options: {}, indexLoading: false };
+const initialState = { ecode: 0, collection: [], options: {}, indexLoading: false, saveLoading: false };
 
 export default function wfconfig(state = initialState, action) {
   const { collection } = state;
@@ -11,13 +11,24 @@ export default function wfconfig(state = initialState, action) {
       return { ...state, indexLoading: true };
 
     case t.WFCONFIG_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, options: action.result.options };
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data.contents.steps, collection2JSON: JSON.stringify(action.result.data.contents.steps), workflowId: action.result.data.id, workflowName:action.result.data.name, options: action.result.options };
 
     case t.WFCONFIG_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
 
+    case t.WFCONFIG_SAVE:
+      return { ...state, saveLoading: true };
+
+    case t.WFCONFIG_SAVE_SUCCESS:
+      return action.result.ecode === 0 ? 
+        { ...state, saveLoading: false, ecode: action.result.ecode, collection2JSON: JSON.stringify(state.collection) } :
+        { ...state, saveLoading: false, ecode: action.result.ecode };
+
+    case t.WFCONFIG_SAVE_FAIL:
+      return { ...state, saveLoading: false, error: action.error };
+
     case t.WFCONFIG_STEP_CREATE:
-      const maxStep = _.max(collection, step => step.id).id;
+      const maxStep = _.max(collection, step => step.id).id || 1;
       collection.push({ id: maxStep+1, name: action.values.name, state: action.values.state, actions: [], results: [] });
       return { ...state, collection };
 
@@ -38,7 +49,8 @@ export default function wfconfig(state = initialState, action) {
       {
         collection[stepIndex].actions = [];
       }
-      action.values.id = action.stepId * 1000 + collection[stepIndex].actions.length;
+      const maxAction = _.max(collection[stepIndex].actions, value => value.id).id || 1;
+      action.values.id = action.stepId * 1000 + maxAction;
       collection[stepIndex].actions.push(action.values);
 
       return { ...state, collection };

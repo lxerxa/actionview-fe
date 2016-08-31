@@ -7,11 +7,11 @@ import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
 const CONDITION_FUNCTIONS = {
-  isReporter: { name: 'App\\Workflow\\Util@isReporter' },
-  isAssignee: { name: 'App\\Workflow\\Util@isAssignee' },
-  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ] },
-  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ] },
-  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ] }
+  isReporter: { name: 'App\\Workflow\\Util@isReporter', sn: 1 },
+  isAssignee: { name: 'App\\Workflow\\Util@isAssignee', sn: 2 },
+  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ], sn: 3 },
+  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ], sn: 4 },
+  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ], sn: 5 }
 };
 
 const POST_FUNCTIONS = {
@@ -152,14 +152,15 @@ export default class AddActionModal extends Component {
       if (validFlag === 1)
       {
         argsLength > 0 ?
-          restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name, args: condArgs }) :
-          restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name })
+          restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name, args: condArgs, sn: CONDITION_FUNCTIONS[condKey].sn }) :
+          restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name, sn: CONDITION_FUNCTIONS[condKey].sn })
       }
     }
 
     if (restrictConditions.length > 0)
     {
-      addedAction.restrict_to = { conditions: { type: this.state.relation ? this.state.relation : 'and', list: restrictConditions } };
+      const rcs = _.map(_.sortBy(restrictConditions, 'sn'), function(value) { return _.pick(value, ['name', 'args']); });
+      addedAction.restrict_to = { conditions: { type: this.state.relation ? this.state.relation : 'and', list: rcs } };
     }
 
     //alert(JSON.stringify(addedAction));

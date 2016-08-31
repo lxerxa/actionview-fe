@@ -33,7 +33,9 @@ export default class Container extends Component {
     return this.props.wfconfig.ecode;
   }
 
-  async publish(values) {
+  async save(values) {
+    await this.props.actions.save(this.pid, this.id, values);
+    return this.props.wfconfig.ecode;
   }
 
   componentWillMount() {
@@ -45,7 +47,7 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header createStep={ this.props.actions.createStep } publish={ this.publish.bind(this) } pid={ this.pid } { ...this.props.wfconfig }/>
+        <Header createStep={ this.props.actions.createStep } save={ this.save.bind(this) } pid={ this.pid } { ...this.props.wfconfig }/>
         <List index={ this.index.bind(this) } editStep={ this.props.actions.editStep } delStep={ this.props.actions.delStep } addAction={ this.props.actions.addAction } editAction={ this.props.actions.editAction } delAction={ this.props.actions.delAction } { ...this.props.wfconfig }/>
       </div>
     );
