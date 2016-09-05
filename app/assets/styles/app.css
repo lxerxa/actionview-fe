@@ -169,3 +169,8 @@
 .cond-list li b {
   margin-left: 10px;
 }
+
+.txt-impt {
+  color: #C00;
+  margin-right: 5px;
+}

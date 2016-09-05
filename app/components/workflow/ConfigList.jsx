@@ -10,7 +10,7 @@ const EditStepModal = require('./EditStepModal');
 const DelStepNotify = require('./DelStepNotify');
 const img = require('../../assets/images/loading.gif');
 
-export default class List extends Component {
+export default class ConfigList extends Component {
   constructor(props) {
     super(props);
     this.state = { 

@@ -20,7 +20,7 @@ export default {
         {
           test: /\.css$/,
           loader: 'style!css!postcss',
-          exclude: /node_modules\/(?!font-awesome|react-select|bootstrap|jackblog-sass|react-bootstrap-table|react-datetime)/
+          exclude: /node_modules\/(?!font-awesome|react-select|bootstrap|jackblog-sass|react-bootstrap-table|react-datetime|rc-tabs|mermaid)/
         }
     ]
   },

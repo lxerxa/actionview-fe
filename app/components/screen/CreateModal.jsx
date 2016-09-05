@@ -66,7 +66,7 @@ export default class CreateModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>界面名</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>界面名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='界面名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>

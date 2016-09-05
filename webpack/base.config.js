@@ -34,6 +34,9 @@ export default {
     plugins: [
       function() { this.plugin('done', writeStats) }
     ],
+    externals: {
+      'mermaid': 'window.mermaid'
+    },
     resolve: {
       extensions: ['', '.js', '.json', '.jsx', '.es6', '.babel'],
       modulesDirectories: ['node_modules', 'app']

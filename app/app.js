@@ -21,6 +21,7 @@ if (BROWSER) {
   require('react-datetime/css/react-datetime.css');
   require('rc-tabs/assets/index.css');
   require('assets/styles/app.css');
+  require('mermaid/dist/mermaid.css');
 }
 
 (async function() {

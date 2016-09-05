@@ -77,15 +77,15 @@ export default class CreateModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>字段名</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>字段名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='字段名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>键值</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
             <FormControl type='text' { ...key } placeholder='键值唯一'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>类型</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
             <Select options={ fieldTypes } simpleValue value={ type.value } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择字段类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>

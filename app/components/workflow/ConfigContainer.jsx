@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(({ wfconfig }) => ({ wfconfig }), mapDispatchToProps)
-export default class Container extends Component {
+export default class ConfigContainer extends Component {
   constructor(props) {
     super(props);
     this.pid = '';

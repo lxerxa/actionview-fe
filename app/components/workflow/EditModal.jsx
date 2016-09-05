@@ -76,7 +76,7 @@ export default class EditModal extends Component {
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
             <FormControl type='hidden' { ...id }/>
-            <ControlLabel>工作流名</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>工作流名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='工作流名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>

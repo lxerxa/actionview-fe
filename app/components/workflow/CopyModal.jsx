@@ -76,7 +76,7 @@ export default class CopyModal extends Component {
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormControl type='hidden' { ...id }/>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>工作流名</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>新工作流名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='工作流名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>

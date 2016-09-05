@@ -14,6 +14,7 @@ export default class OptionValuesConfigModal extends Component {
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
+    this.add = this.add.bind(this);
     this.state = { cards: [], ecode: 0, enableAdd: false };
     const optionValues = this.props.data.optionValues || [];
     const optionNum = optionValues.length;
@@ -83,6 +84,15 @@ export default class OptionValuesConfigModal extends Component {
     findDOMNode(this.refs.addOpt).value = '';
   }
 
+  handlerKeyUp(event) {
+    if (event.keyCode === 13) {
+      if (!this.state.enableAdd) {
+        return false;
+      }
+      this.add();      
+    }
+  }
+
   moveCard(dragIndex, hoverIndex) {
     const { cards } = this.state;
     const dragCard = cards[dragIndex];
@@ -122,7 +132,7 @@ export default class OptionValuesConfigModal extends Component {
             <p>可选值为空</p>
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
-            <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } style={ { display: 'inline-block', width: '68%' } }/>
+            <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyUp={ this.handlerKeyUp.bind(this) } style={ { display: 'inline-block', width: '68%' } }/>
             <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', marginLeft: '10px' } }>添加新值</Button>
           </FormGroup>
         </Modal.Body>

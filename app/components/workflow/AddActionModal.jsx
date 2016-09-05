@@ -9,18 +9,20 @@ import _ from 'lodash';
 const CONDITION_FUNCTIONS = {
   isReporter: { name: 'App\\Workflow\\Util@isReporter', sn: 1 },
   isAssignee: { name: 'App\\Workflow\\Util@isAssignee', sn: 2 },
-  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ], sn: 3 },
-  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ], sn: 4 },
-  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ], sn: 5 }
+  isTheUser: { name: 'App\\Workflow\\Util@isTheUser', args: [ 'userParam' ], sn: 3 },
+  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ], sn: 4 },
+  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ], sn: 5 },
+  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ], sn: 6 }
 };
 
 const POST_FUNCTIONS = {
   setResolution: { name : 'App\\Workflow\\Util@setResolution', args: [ 'resolutionParam' ], sn: 1 },
   setState: { name : 'App\\Workflow\\Util@setState', sn: 2 },
   assignIssue: { name : 'App\\Workflow\\Util@assignIssue', args: [ 'assigneeParam' ], sn: 3 },
-  addComments: { name : 'App\\Workflow\\Util@addComments', sn: 4 },
-  updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 5 },
-  triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 }
+  assignIssueToUser: { name : 'App\\Workflow\\Util@assignIssueToUser', args: [ 'assignedUserParam' ], sn: 4 },
+  addComments: { name : 'App\\Workflow\\Util@addComments', sn: 5 },
+  updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 6 }
+  //triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 }
 };
 
 const validate = (values) => {
@@ -46,7 +48,7 @@ export default class AddActionModal extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { activeKey: '1', conditions: [], postFunctions: [], relation: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', eventParam: '' };
+    this.state = { activeKey: '1', conditions: [], postFunctions: [], relation: '', userParam: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', assignedUserParam: '' };
 
     const state = this.state;
     const { data } = props;
@@ -234,6 +236,7 @@ export default class AddActionModal extends Component {
     const assigneeOptions = [ { id: 'whoami', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
     const eventOptions = [ { id: 'normal', name: '一般事件' } ];
 
+    const userOptions = options.users || [];
     const stateOptions = options.states || [];
     const permissionOptions = options.permissions || [];
     const roleOptions = options.roles || [];
@@ -261,15 +264,15 @@ export default class AddActionModal extends Component {
                   <FormControl type='text' value={ stepData.name } disabled={ true }/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
-                  <ControlLabel>动作名</ControlLabel>
+                  <ControlLabel><span className='txt-impt'>*</span>动作名</ControlLabel>
                   <FormControl type='text' { ...name } placeholder='动作名'/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
-                  <ControlLabel>目标步骤</ControlLabel>
+                  <ControlLabel><span className='txt-impt'>*</span>目标步骤</ControlLabel>
                   <Select options={ stepOptions } simpleValue value={ destStep.value } onChange={ newValue => { destStep.onChange(newValue) } } placeholder='请选择目标步骤' clearable={ false } searchable={ false }/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
-                  <ControlLabel>动作界面</ControlLabel>
+                  <ControlLabel><span className='txt-impt'>*</span>动作界面</ControlLabel>
                   <Select options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择界面' clearable={ false } searchable={ false }/>
                 </FormGroup>
               </div>
@@ -287,6 +290,19 @@ export default class AddActionModal extends Component {
                   <li>
                     <Checkbox value='isAssignee'/>
                     <span>只有</span><b>经办人</b><span>才能执行此动作</span>
+                  </li>
+                  <li>
+                    <Checkbox value='isTheUser'/>
+                    <span>只有用户</span>
+                    <select 
+                      value={ this.state.userParam }
+                      onChange={ (e) => this.setState({ userParam: e.target.value }) }
+                      disabled={ _.indexOf(this.state.conditions, 'isTheUser') !== -1 ? false : true } 
+                      style={ _.indexOf(this.state.conditions, 'isTheUser') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
+                      <option value='' key=''>请选择用户</option>
+                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name }</option> ) }
+                    </select>
+                    <span>才能执行此动作</span>
                   </li>
                   <li>
                     <Checkbox value='checkSubTasksState'/>
@@ -365,6 +381,18 @@ export default class AddActionModal extends Component {
                     </select>
                   </li>
                   <li>
+                    <Checkbox value='assignIssueToUser'/>
+                    <span>将问题分配给指定用户</span>
+                    <select
+                      value={ this.state.assignedUserParam }
+                      onChange={ (e) => this.setState({ assignedUserParam: e.target.value }) }
+                      disabled={ _.indexOf(this.state.postFunctions, 'assignIssueToUser') !== -1 ? false : true }
+                      style={ _.indexOf(this.state.postFunctions, 'assignIssueToUser') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
+                      <option value='' key=''>请选择用户</option>
+                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name }</option> ) }
+                    </select>
+                  </li>
+                  <li>
                     <Checkbox value='addComments'/>
                     <span>如果用户输入了备注，将备注添加到问题中</span>
                   </li>
@@ -372,6 +400,7 @@ export default class AddActionModal extends Component {
                     <Checkbox value='updateHistory'/>
                     <span>更新问题的变动历史记录</span>
                   </li>
+                  {/*
                   <li>
                     <Checkbox value='triggerEvent'/>
                     <span>过程结束后触发</span>
@@ -385,6 +414,7 @@ export default class AddActionModal extends Component {
                     </select>
                     <span>事件(待开发)</span>
                   </li>
+                  */}
                 </CheckboxGroup>
               </ui>
             </TabPane>

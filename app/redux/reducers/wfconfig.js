@@ -8,7 +8,7 @@ export default function wfconfig(state = initialState, action) {
 
   switch (action.type) {
     case t.WFCONFIG_INDEX:
-      return { ...state, indexLoading: true };
+      return { ...state, indexLoading: true, collection: [] };
 
     case t.WFCONFIG_INDEX_SUCCESS:
       return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data.contents.steps, collection2JSON: JSON.stringify(action.result.data.contents.steps), workflowId: action.result.data.id, workflowName:action.result.data.name, options: action.result.options };

@@ -68,11 +68,11 @@ export default class CreateModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>步骤名</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>步骤名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='步骤名'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>链接状态</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>链接状态</ControlLabel>
             <Select options={ stateOptions } simpleValue value={ state.value } onChange={ newValue => { state.onChange(newValue) } } placeholder='请选择状态' clearable={ false } searchable={ false }/>
           </FormGroup>
         </Modal.Body>
