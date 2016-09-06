@@ -84,11 +84,11 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts }>
+        <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
-          <TableHeaderColumn width='150' dataField='operation'>操作</TableHeaderColumn>
+          <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }

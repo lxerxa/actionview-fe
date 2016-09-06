@@ -24,7 +24,7 @@ const validate = (values) => {
 
 @reduxForm({
   form: 'type',
-  fields: ['name', 'screen', 'workflow'],
+  fields: ['name', 'screen', 'workflow', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -68,7 +68,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, screen, workflow }, options = {}, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, screen, workflow, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
     const { screens = [], workflows = [] } = options;
     const styles = { width: '60%' };
 
@@ -97,6 +97,10 @@ export default class CreateModal extends Component {
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>工作流</ControlLabel>
             <Select options={ workflowOptions } simpleValue value={ workflow.value } onChange={ newValue => { workflow.onChange(newValue) } } placeholder='请选择一个工作流'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>描述</ControlLabel>
+            <FormControl type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

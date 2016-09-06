@@ -121,7 +121,7 @@ export default class List extends Component {
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <DropdownButton pullRight bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RadioGroup' || collection[i].type === 'CheckboxGroup') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
                 { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
                 { collection[i].type !== 'File' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
@@ -147,13 +147,13 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
+        <BootstrapTable data={ fields } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn width='230' dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn width='180' dataField='key'>键值</TableHeaderColumn>
           <TableHeaderColumn width='180' dataField='type'>类型</TableHeaderColumn>
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
-          <TableHeaderColumn width='150' dataField='operation'/>
+          <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }

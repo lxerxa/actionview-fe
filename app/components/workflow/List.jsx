@@ -101,7 +101,7 @@ export default class List extends Component {
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <DropdownButton pullRight bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='3'><Link to={ '/project/' + pid + '/workflow/' + collection[i].id }>配置</Link></MenuItem>
                 <MenuItem eventKey='4'>复制</MenuItem>
                 <MenuItem eventKey='1'>编辑</MenuItem>
@@ -126,12 +126,12 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ fields } bordered={ false } hover options={ opts }>
+        <BootstrapTable pullRight data={ fields } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
           <TableHeaderColumn dataField='latest_modify' width='280'>最近配置修改</TableHeaderColumn>
           <TableHeaderColumn dataField='step' width='120'>步骤</TableHeaderColumn>
-          <TableHeaderColumn width='150' dataField='operation'/>
+          <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }

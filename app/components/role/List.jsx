@@ -227,12 +227,12 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts }>
+        <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='permissions'>权限</TableHeaderColumn>
           <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
-          <TableHeaderColumn width='150' dataField='operation'>操作</TableHeaderColumn>
+          <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }

@@ -121,7 +121,16 @@
   display: none
 }
 
-.react-bs-container-body table tr td {
+.tr-middle {}
+.tr-top {}
+
+.react-bs-container-body table tr.tr-middle td {
+  height: 55px;
+  vertical-align: middle;
+  overflow: visible
+}
+
+.react-bs-container-body table tr.tr-top td {
   height: 55px;
   vertical-align: top;
   overflow: visible

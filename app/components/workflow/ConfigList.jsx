@@ -157,12 +157,12 @@ export default class ConfigList extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ steps } bordered={ false } hover options={ opts }>
+        <BootstrapTable data={ steps } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='step'>步骤</TableHeaderColumn>
           <TableHeaderColumn dataField='state'>关联状态</TableHeaderColumn>
           <TableHeaderColumn dataField='actions' width='300'>动作</TableHeaderColumn>
-          <TableHeaderColumn width='300' dataField='operation'/>
+          <TableHeaderColumn width='260' dataField='operation'/>
         </BootstrapTable>
         { this.state.addActionModalShow && <AddActionModal show close={ this.addActionModalClose } create={ addAction } edit={ editAction } stepData={ item } options={ options } steps={ collection } data={ actionItem } /> }
         { this.state.delActionModalShow && <DelActionModal show close={ this.delActionModalClose } del={ delAction } stepData={ item }/> }

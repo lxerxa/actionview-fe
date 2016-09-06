@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
-import Select from 'react-select';
-import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -11,20 +9,12 @@ const validate = (values) => {
   if (!values.name) {
     errors.name = 'Required';
   }
-
-  if (!values.screen) {
-    errors.screen = 'Required';
-  }
-
-  if (!values.workflow) {
-    errors.workflow = 'Required';
-  }
   return errors;
 };
 
 @reduxForm({
   form: 'type',
-  fields: ['id', 'name', 'screen', 'workflow'],
+  fields: ['id', 'name', 'description'],
   validate
 })
 export default class EditModal extends Component {
@@ -43,7 +33,6 @@ export default class EditModal extends Component {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    options: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired
@@ -75,15 +64,7 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, screen, workflow }, options = {}, handleSubmit, invalid, dirty, submitting, data } = this.props;
-    const { screens = [], workflows = [] } = options;
-
-    const screenOptions = _.map(screens, function(val) {
-      return { label: val.name, value: val.id };
-    });
-    const workflowOptions = _.map(workflows, function(val) {
-      return { label: val.name, value: val.id };
-    });
+    const { fields: { id, name, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -97,13 +78,9 @@ export default class EditModal extends Component {
             <FormControl type='hidden' { ...id }/>
             <FormControl type='text' { ...name } placeholder='问题类型名'/>
           </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>界面</ControlLabel>
-            <Select options={ screenOptions } simpleValue clearable={ false } value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择>一个界面'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>工作流</ControlLabel>
-            <Select options={ workflowOptions } simpleValue clearable={ false } value={ workflow.value } onChange={ newValue => { workflow.onChange(newValue) } } placeholder='>请选择一个工作流'/>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>描述</ControlLabel>
+            <FormControl type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
