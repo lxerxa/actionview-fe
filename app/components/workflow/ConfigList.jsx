@@ -116,12 +116,12 @@ export default class ConfigList extends Component {
         id: collection[i].id,
         step:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name }</span>
+            <span className='table-td-title'>{ collection[i].name || '-' }</span>
           </div>
         ),
         state:  (
           <div>
-            { _.find(options.states, { id: collection[i].state }).name || '-' }
+            { _.find(options.states, { id: collection[i].state }) ? _.find(options.states, { id: collection[i].state }).name : '-' }
           </div>
         ),
         actions:  (
@@ -142,7 +142,7 @@ export default class ConfigList extends Component {
             <Button bsStyle='link' onClick={ this.addAction.bind(this, collection[i].id) }>添加动作</Button>
             <Button bsStyle='link' onClick={ this.delAction.bind(this, collection[i].id) }>删除动作</Button>
             <Button bsStyle='link' onClick={ this.showStep.bind(this, collection[i].id) }>编辑</Button>
-            { collection[i].actions.length === 0 && _.indexOf(allDestSteps, collection[i].id) === -1 && <Button bsStyle='link' onClick={ this.delStepNotify.bind(this, collection[i].id) }>删除</Button> }
+            { collection[i].actions.length === 0 && collection[i].id !== 1 && _.indexOf(allDestSteps, collection[i].id) === -1 && <Button bsStyle='link' onClick={ this.delStepNotify.bind(this, collection[i].id) }>删除</Button> }
           </div>
         )
       });
@@ -161,12 +161,12 @@ export default class ConfigList extends Component {
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='step'>步骤</TableHeaderColumn>
           <TableHeaderColumn dataField='state'>关联状态</TableHeaderColumn>
-          <TableHeaderColumn dataField='actions' width='300'>动作</TableHeaderColumn>
-          <TableHeaderColumn width='260' dataField='operation'/>
+          <TableHeaderColumn dataField='actions' width='260'>动作</TableHeaderColumn>
+          <TableHeaderColumn width='300' dataField='operation'/>
         </BootstrapTable>
         { this.state.addActionModalShow && <AddActionModal show close={ this.addActionModalClose } create={ addAction } edit={ editAction } stepData={ item } options={ options } steps={ collection } data={ actionItem } /> }
         { this.state.delActionModalShow && <DelActionModal show close={ this.delActionModalClose } del={ delAction } stepData={ item }/> }
-        { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item } options={ options }/> }
+        { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item } collection={ collection } options={ options }/> }
         { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ item } del={ delStep }/> }
       </div>
     );

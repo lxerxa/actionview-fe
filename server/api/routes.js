@@ -191,7 +191,7 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
-  router.get('/project/:key/workflow/:id/steps', function(req, res) {
+  router.get('/project/:key/workflow/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const { id } = req.params;
@@ -298,13 +298,6 @@ export default function(router) {
     }]}},
     options: { states : [{id: "1111", name:"test1"}, {id: "2222", name:"test2"}, {id: "3333", name:"test3"}], permissions:[{id: "1111", name:"permission1"}, {id: "2222", name:"permission2"}, {id: "3333", name:"permission3"}], roles: [{id: "1111", name:"role1"}, {id: "2222", name:"role2"}, {id: "3333", name:"role3"}], screens:[{id: "1111", name:"screen1"}, {id: "2222", name:"screen2"}, {id: "3333", name:"screen3"}] }
 };
-    return res.status(200).send(results);
-  });
-
-  router.put('/project/:key/workflow/:id', function(req, res) {
-    const startTime = new Date().getTime();
-    while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { id: '546761', name: '测试界面11111', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}]}};
     return res.status(200).send(results);
   });
 

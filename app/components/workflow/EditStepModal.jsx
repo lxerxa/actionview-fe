@@ -30,7 +30,6 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
-    optionValues: PropTypes.array,
     submitting: PropTypes.bool,
     dirty: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -38,6 +37,7 @@ export default class CreateModal extends Component {
     fields: PropTypes.object,
     data: PropTypes.object,
     options: PropTypes.object,
+    collection: PropTypes.array,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     initializeForm: PropTypes.func.isRequired,
@@ -49,7 +49,7 @@ export default class CreateModal extends Component {
     initializeForm(data);
   }
 
-  async handleSubmit() {
+  handleSubmit() {
     const { values, edit, close } = this.props;
     edit(values);
     close();
@@ -64,9 +64,9 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, state }, dirty, handleSubmit, invalid, submitting, data, options } = this.props;
+    const { fields: { id, name, state }, dirty, handleSubmit, invalid, submitting, data, options, collection } = this.props;
 
-    const stateOptions = _.map(options.states || [], (val) => { return { label: val.name, value: val.id } });
+    const stateOptions = _.map(_.filter(options.states || [], (o) => { return _.findIndex(collection, { state: o.id }) === -1 || o.id === data.state }), (val) => { return { label: val.name, value: val.id } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

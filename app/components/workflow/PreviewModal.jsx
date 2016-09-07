@@ -21,56 +21,21 @@ export default class PreviewModal extends Component {
 
     const { collection, close } = this.props;
 
-    const allSteps = [];
-    const startSteps = [];
-    const endSteps = [];
-    const tmpSteps = [];
-
     const stepNum = collection.length;
+
+    let graphTxt = 'graph LR;S(( ))-->' + (collection.length > 0 ? collection[0].name : '-') + ';';
     for (let i = 0; i < stepNum; i++) {
-      allSteps.push(collection[i].id);
-      if (!collection[i].actions || collection[i].actions.length <= 0)
-      {
-        endSteps.push(collection[i].id);
+
+      if (collection[i].actions && collection[i].actions.length <= 0) {
+        graphTxt += collection[i].name + ';';
         continue;
       }
 
       _.map(collection[i].actions, function(v) {
         _.map(v.results, function(v2) {
-          tmpSteps.push(v2.step);
-        });
-      });
-    }
-
-    _.map(_.xor(allSteps, tmpSteps), function(v) {
-      startSteps.push(v);
-    });
-
-    const isolatedSteps = _.intersection(startSteps, endSteps);
-
-    let graphTxt = 'graph LR;';
-    for (let i = 0; i < stepNum; i++) {
-
-      if (_.indexOf(isolatedSteps, collection[i].id) !== -1) {
-        graphTxt += collection[i].name + '((' +  collection[i].name + '));';
-        continue;
-      }
-
-      _.map(collection[i].actions, function(v) {
-        _.map(v.results, function(v2) {
-          if (_.indexOf(startSteps, collection[i].id) !== -1) {
-            graphTxt += collection[i].name + '((' + collection[i].name + '))';
-          } else {
-            graphTxt += collection[i].name;
-          }
-
+          graphTxt += collection[i].name;
           graphTxt += '--' + v.name + '-->';
-
-          if (_.indexOf(endSteps, v2.step) !== -1) {
-            graphTxt += v2.step + '((' + _.find(collection, { id: v2.step }).name + '));';
-          } else {
-            graphTxt += _.find(collection, { id: v2.step }).name + ';';
-          }
+          graphTxt += _.find(collection, { id: v2.step }).name + ';';
         });
       });
     }

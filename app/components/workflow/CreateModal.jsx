@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -38,7 +39,8 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
-    const ecode = await create(values);
+    const initialActions = { id : 0, name: 'initial_action', results: [{ step: 1, status: 'Underway' }] };
+    const ecode = await create(_.assign(values, { contents : { initial_actions: initialActions, steps: [ { id: 1, name: '步骤1', actions: [], results: [] } ] } }));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

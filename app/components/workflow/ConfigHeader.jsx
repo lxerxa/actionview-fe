@@ -35,59 +35,57 @@ export default class ConfigHeader extends Component {
     this.setState({ previewModalShow: false });
   }
 
+  dfsVisit(treeNodes, nodeId, vistedNodes) {
+    if (_.indexOf(vistedNodes, nodeId) !== -1) {
+      return;
+    }
+
+    vistedNodes.push(nodeId);
+
+    const DestNodes = treeNodes[nodeId];
+    const nodeNum = DestNodes.length;
+    for (let i = 0; i < nodeNum; i++) {
+      this.dfsVisit(treeNodes, DestNodes[i], vistedNodes);
+    }
+  }
+
   saveWorkflow() {
     const { save, collection, workflowName } = this.props;
 
     const allSteps = [];
-    const startSteps = [];
-    const endSteps = [];
-    const tmpSteps = [];
+    const stepTree = {}; 
 
     const stepNum = collection.length;
     for (let i = 0; i < stepNum; i++) {
       allSteps.push(collection[i].id);
-      if (!collection[i].actions || collection[i].actions.length <= 0)
-      {
-        endSteps.push(collection[i].id);
+      stepTree[collection[i].id] = [];
+
+      if (!collection[i].actions || collection[i].actions.length <= 0) {
         continue;
       }
 
       _.map(collection[i].actions, function(v) {
         _.map(v.results, function(v2) {
-          tmpSteps.push(v2.step);
+          stepTree[collection[i].id].push(v2.step);
         });
       });
     }
-    _.map(_.xor(allSteps, tmpSteps), function(v) {
-      startSteps.push(v);
-    });
 
-    const isolatedSteps = _.intersection(startSteps, endSteps);
+    const visitedSteps = [];
+    this.dfsVisit(stepTree, 1, visitedSteps);
 
-    if (isolatedSteps.length > 0 || startSteps.length !== 1 || endSteps.length !== 1) {
-      if (isolatedSteps.length > 0) {
-        this.setState({ errMsg: '格式错误：不能有孤点。' });
-      } else if (startSteps.length < 1) {
-        this.setState({ errMsg: '格式错误：没有起点。' });
-      } else if (startSteps.length > 1) {
-        this.setState({ errMsg: '格式错误：只能有一个起点。' });
-      } else if (endSteps.length < 1) {
-        this.setState({ errMsg: '格式错误：没有终点。' });
-      } else if (endSteps.length > 1) {
-        this.setState({ errMsg: '格式错误：只能有一个终点。' });
-      } else {
-        this.setState({ errMsg: '格式错误' });
-      }
+    if (_.xor(allSteps, visitedSteps).length > 0) {
+      this.setState({ errMsg: '格式错误, 请预览查看' });
       return;
     }
 
-    const initialActions = { id : 0, name: 'initial_action', results: [{ step: startSteps[0], status: 'Underway' }] };
+    const initialActions = { id : 0, name: 'initial_action', results: [{ step: collection[0].id, status: 'Underway' }] };
 
-    save({ contents : { name: workflowName, initial_actions: initialActions, step: collection } });
+    save({ contents : { initial_actions: initialActions, steps: collection } });
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ errMsg: '' });
+    this.setState({ errMsg: '', ecode: 0 });
   }
 
   render() {
@@ -107,12 +105,11 @@ export default class ConfigHeader extends Component {
           </Link>
           <Button className='create-btn' onClick={ () => { this.setState({ createStepModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建步骤</Button>
           <Button className='create-btn' onClick={ this.saveWorkflow.bind(this) } disabled={ newCollection2JSON === collection2JSON || collection.length <= 0 }><i className='fa fa-save'></i>&nbsp;保存</Button>
-          <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>{ this.state.errMsg }</Label>
-          <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>{ ecode !== 0 ? '保存失败，请重试' : '' }</Label>
+          <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>{ this.state.errMsg != '' ? this.state.errMsg : (ecode !== 0 ? '保存失败，请重试' : '') }</Label>
           <image src={ img } className={ saveLoading ? 'loading' : 'hide' }/>
           <Button className='create-btn' style={ { float: 'right' } } onClick={ () => { this.setState({ previewModalShow: true }); } } disabled={ collection.length <= 0 }><i className='fa fa-search'></i>&nbsp;预览</Button>
         </div>
-        { this.state.createStepModalShow && <CreateStepModal show close={ this.createStepModalClose } create={ createStep } options={ options }/> }
+        { this.state.createStepModalShow && <CreateStepModal show close={ this.createStepModalClose } create={ createStep } options={ options } collection={ collection }/> }
         { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } collection={ collection } /> }
       </div>
     );

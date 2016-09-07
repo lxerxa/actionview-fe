@@ -76,7 +76,7 @@ export default class SortCardsModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>编辑问题类型顺序</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>编辑顺序</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>通过上下拖拽改变显示顺序。</p>

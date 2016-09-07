@@ -3,7 +3,7 @@ import { asyncFuncCreator } from '../utils';
 export function index(key, id) {
   return asyncFuncCreator({
     constant: 'WFCONFIG_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + id + '/steps' })
+    promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + id })
   });
 }
 
