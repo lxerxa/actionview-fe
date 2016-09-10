@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button } from 'react-bootstrap';
+import { Button, Label } from 'react-bootstrap';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -61,7 +61,7 @@ export default class List extends Component {
     for (let i = 0; i < typeNum; i++) {
       types.push({
         id: collection[i].id,
-        name: ( <span className='table-td-title'>{ collection[i].name }</span> ),
+        name: ( <span className='table-td-title'>{ collection[i].name } { collection[i].category && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>全局</Label> } </span> ),
         description: collection[i].description ? collection[i].description : '-',
         operation: (
           <div>

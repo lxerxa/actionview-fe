@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button } from 'react-bootstrap';
+import { Button, Label } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
@@ -150,7 +150,7 @@ export default class List extends Component {
         id: collection[i].id,
         name:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name }</span>
+            <span className='table-td-title'>{ collection[i].name } { collection[i].category && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>全局</Label> } </span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),

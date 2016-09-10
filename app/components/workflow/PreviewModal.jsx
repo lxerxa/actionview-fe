@@ -49,7 +49,7 @@ export default class PreviewModal extends Component {
           <div className='mermaid' dangerouslySetInnerHTML={ { __html: mermaidAPI.render('xxx', graphTxt) } } />
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ close }>取消</Button>
+          <Button onClick={ close }>关闭</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -188,7 +188,7 @@ export default class AddActionModal extends Component {
       basicData.id = data.id;
       basicData.name = data.name;
       basicData.destStep = data.results[0].step;
-      basicData.screen = data.screen;
+      basicData.screen = data.screen || '-1';
     }
     else
     {
@@ -225,9 +225,16 @@ export default class AddActionModal extends Component {
 
   render() {
     // const { fields: { name, destStep, screen, relation, stateParam, permissionParam, roleParam, resolutionParam, assigneeParam, eventParam }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
-    const { fields: { id, name, destStep, screen }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
-    const stepOptions = _.map(steps, (val) => { return { label: val.name, value: val.id } });
-    stepOptions.splice(_.findIndex(steps, { id: stepData.id }), 1);
+    const { fields: { id, name, destStep, screen }, options, steps, stepData, handleSubmit, invalid, submitting, data } = this.props;
+
+    const goneSteps = [ stepData.id ];
+    _.map(stepData.actions, (action) => {
+      _.map(action.results || [], (result) => {
+        goneSteps.push(result.step);
+      })
+    });
+
+    const stepOptions = _.map(_.filter(steps, (o) => { return _.indexOf(goneSteps, o.id) === -1 || o.id == (data && data.results ? data.results[0].step : '') } ), (val) => { return { label: val.name, value: val.id } });
 
     const screenOptions = _.map(options.screens, (val) => { return { label: val.name, value: val.id } });
     screenOptions.unshift( { label: '不显示页面', value: '-1' } );;
@@ -238,7 +245,7 @@ export default class AddActionModal extends Component {
 
     const userOptions = options.users || [];
     const stateOptions = options.states || [];
-    const permissionOptions = options.permissions || [];
+    const permissionOptions = require('../share/Permissions.js');
     const roleOptions = options.roles || [];
     const resolutionOptions = options.resolutions || [];
 
