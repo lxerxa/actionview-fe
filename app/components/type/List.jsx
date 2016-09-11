@@ -150,12 +150,12 @@ export default class List extends Component {
           <div>
           { _.indexOf(willSetScreenTypeIds, collection[i].id) === -1 && _.indexOf(settingScreenTypeIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
-              {
-                collection[i].screen && collection[i].screen.name ?
-                <div style={ { display: 'inline-block', marginLeft: '5px', marginTop: '7px' } }> { collection[i].screen.name } </div> :
-                '-'
-              }
-              <Button className='edit-icon' onClick={ this.willSetScreen.bind(this, collection[i].id) } style={ { display:'inline-block', float: 'right' } }><i className='fa fa-pencil'></i></Button>
+              <div style={ { display: 'table', width: '100%' } }>
+              { collection[i].screen && collection[i].screen.name ?
+                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { collection[i].screen.name } </div></span> :
+                '-' }
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetScreen.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+              </div>
             </div>
             :
             <div>
@@ -173,12 +173,12 @@ export default class List extends Component {
           <div>
           { _.indexOf(willSetWorkflowTypeIds, collection[i].id) === -1 && _.indexOf(settingWorkflowTypeIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
-              {
-                collection[i].workflow && collection[i].workflow.name ?
-                <div style={ { display: 'inline-block', marginLeft: '5px', marginTop: '7px' } }> { collection[i].workflow.name } </div> :
-                '-'
-              }
-              <Button className='edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id) } style={ { display:'inline-block', float: 'right' } }><i className='fa fa-pencil'></i></Button>
+              <div style={ { display: 'table', width: '100%' } }>
+              { collection[i].workflow && collection[i].workflow.name ?
+                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { collection[i].workflow.name } </div></span> :
+                '-' }
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+              </div>
             </div>
             :
             <div>

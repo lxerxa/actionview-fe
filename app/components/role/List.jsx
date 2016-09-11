@@ -158,15 +158,15 @@ export default class List extends Component {
           <div>
           { _.indexOf(willSetPermissionRoleIds, collection[i].id) === -1 && _.indexOf(settingPermissionRoleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
-              { 
-                permissions.length > 0 ?
-                <ul style={ { marginBottom: '0px', padding: '3px', display: 'inline-block' } }>
-                { _.map(permissions, function(v){ return <li key={ v.id }>{ v.name }</li> }) }
-                </ul>
+              <div style={ { display: 'table', width: '100%' } }>
+              { permissions.length > 0 ?
+                <span>
+                { _.map(permissions, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }><Label bsStyle='info' key={ v.id }>{ v.name }</Label></div> }) }
+                </span>
                 :
-                '-'
-              }
-              <Button className='edit-icon' onClick={ this.willSetPermissions.bind(this, collection[i].id) } style={ { display:'inline-block', float: 'right' } }><i className='fa fa-pencil'></i></Button>
+                '-' }
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPermissions.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+              </div>
             </div> 
             :
             <div>
@@ -184,15 +184,15 @@ export default class List extends Component {
           <div>
           { _.indexOf(willSetUserRoleIds, collection[i].id) === -1 && _.indexOf(settingUserRoleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
-              { 
-                collection[i].users.length > 0 ?
-                <ul style={ { marginBottom: '0px', padding: '3px', display: 'inline-block' } }>
-                { _.map(collection[i].users, function(v){ return <li key={ v.id }>{ v.name }</li> }) }
-                </ul>
+              <div style={ { display: 'table', width: '100%' } }>
+              { collection[i].users && collection[i].users.length > 0 ?
+                <span>
+                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }><Label bsStyle='success' key={ v.id }>{ v.name }</Label></div> }) }
+                </span>
                 :
-                '-'
-              }
-              <Button className='edit-icon' onClick={ this.willSetUsers.bind(this, collection[i].id) } style={ { display:'inline-block', float: 'right' } }><i className='fa fa-pencil'></i></Button>
+                '-' }
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetUsers.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+              </div>
             </div> 
             :
             <div>
