@@ -145,7 +145,7 @@ export default class List extends Component {
     const types = [];
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
-      const permissions = _.filter(allPermissions, function(o) { return _.indexOf(collection[i].permissions, o.id) !== -1; });
+      const permissions = _.filter(allPermissions, function(o) { return _.indexOf(collection[i].permissions || [], o.id) !== -1; });
       types.push({
         id: collection[i].id,
         name:  (

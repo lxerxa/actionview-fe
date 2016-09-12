@@ -12,11 +12,11 @@ const validate = (values) => {
     errors.name = 'Required';
   }
 
-  if (!values.screen) {
+  if (!values.screen_id) {
     errors.screen = 'Required';
   }
 
-  if (!values.workflow) {
+  if (!values.workflow_id) {
     errors.workflow = 'Required';
   }
   return errors;
@@ -24,7 +24,7 @@ const validate = (values) => {
 
 @reduxForm({
   form: 'type',
-  fields: ['name', 'screen', 'workflow', 'description'],
+  fields: ['name', 'screen_id', 'workflow_id', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -68,9 +68,8 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, screen, workflow, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, screen_id, workflow_id, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
     const { screens = [], workflows = [] } = options;
-    const styles = { width: '60%' };
 
     const screenOptions = _.map(screens, function(val) {
       return { label: val.name, value: val.id };
@@ -87,16 +86,16 @@ export default class CreateModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>名称</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='text' { ...name } placeholder='问题类型名'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>界面</ControlLabel>
-            <Select options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择一个界面'/>
+            <ControlLabel><span className='txt-impt'>*</span>界面</ControlLabel>
+            <Select options={ screenOptions } simpleValue clearable={ false } value={ screen_id.value } onChange={ newValue => { screen_id.onChange(newValue) } } placeholder='请选择一个界面'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>工作流</ControlLabel>
-            <Select options={ workflowOptions } simpleValue value={ workflow.value } onChange={ newValue => { workflow.onChange(newValue) } } placeholder='请选择一个工作流'/>
+            <ControlLabel><span className='txt-impt'>*</span>工作流</ControlLabel>
+            <Select options={ workflowOptions } simpleValue clearable={ false } value={ workflow_id.value } onChange={ newValue => { workflow_id.onChange(newValue) } } placeholder='请选择一个工作流'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

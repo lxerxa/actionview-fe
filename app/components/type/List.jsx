@@ -77,7 +77,7 @@ export default class List extends Component {
     this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds, willSetScreenTypeIds: this.state.willSetScreenTypeIds });
 
     const { edit } = this.props;
-    const ecode = await edit({ screen: _.map(this.state.screen[typeId], _.iteratee('value')), id: typeId });
+    const ecode = await edit({ screen_id: this.state.screen[typeId], id: typeId });
     if (ecode === 0) {
       const index = _.indexOf(this.state.settingScreenTypeIds, typeId);
       this.state.settingScreenTypeIds.splice(index, 1);
@@ -111,7 +111,7 @@ export default class List extends Component {
     this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds, willSetWorkflowTypeIds: this.state.willSetWorkflowTypeIds });
 
     const { edit } = this.props;
-    const ecode = await edit({ workflow: _.map(this.state.workflow[typeId], _.iteratee('value')), id: typeId });
+    const ecode = await edit({ workflow_id: this.state.workflow[typeId], id: typeId });
     if (ecode === 0) {
       const index = _.indexOf(this.state.settingWorkflowTypeIds, typeId);
       this.state.settingWorkflowTypeIds.splice(index, 1);
@@ -151,15 +151,15 @@ export default class List extends Component {
           { _.indexOf(willSetScreenTypeIds, collection[i].id) === -1 && _.indexOf(settingScreenTypeIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
               <div style={ { display: 'table', width: '100%' } }>
-              { collection[i].screen && collection[i].screen.name ?
-                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { collection[i].screen.name } </div></span> :
+              { collection[i].screen_id ?
+                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { _.find(screens, { id: collection[i].screen_id }).name } </div></span> :
                 '-' }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetScreen.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>
             </div>
             :
             <div>
-              <Select clearable={ false } searchable={ false } disabled={ _.indexOf(settingScreenTypeIds, collection[i].id) !== -1 && true } options={ screenOptions } value={ this.state.screen[collection[i].id] || collection[i].screen.id } onChange={ this.handleScreenSelectChange.bind(this, collection[i].id) } placeholder='请选择相应权限'/>
+              <Select simpleValue clearable={ false } searchable={ false } disabled={ _.indexOf(settingScreenTypeIds, collection[i].id) !== -1 && true } options={ screenOptions } value={ this.state.screen[collection[i].id] || collection[i].screen_id } onChange={ this.handleScreenSelectChange.bind(this, collection[i].id) } placeholder='请选择界面'/>
               <div className={ _.indexOf(settingScreenTypeIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setScreen.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetScreen.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -174,15 +174,15 @@ export default class List extends Component {
           { _.indexOf(willSetWorkflowTypeIds, collection[i].id) === -1 && _.indexOf(settingWorkflowTypeIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
               <div style={ { display: 'table', width: '100%' } }>
-              { collection[i].workflow && collection[i].workflow.name ?
-                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { collection[i].workflow.name } </div></span> :
+              { collection[i].workflow_id ?
+                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { _.find(workflows, { id: collection[i].workflow_id }).name } </div></span> :
                 '-' }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>
             </div>
             :
             <div>
-              <Select clearable={ false } searchable={ false } disabled={ _.indexOf(settingWorkflowTypeIds, collection[i].id) !== -1 && true } options={ workflowOptions } value={ this.state.workflow[collection[i].id] || collection[i].workflow.id } onChange={ this.handleWorkflowSelectChange.bind(this, collection[i].id) } placeholder='请选择相应权限'/>
+              <Select simpleValue clearable={ false } searchable={ false } disabled={ _.indexOf(settingWorkflowTypeIds, collection[i].id) !== -1 && true } options={ workflowOptions } value={ this.state.workflow[collection[i].id] || collection[i].workflow_id } onChange={ this.handleWorkflowSelectChange.bind(this, collection[i].id) } placeholder='请选择工作流'/>
               <div className={ _.indexOf(settingWorkflowTypeIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setWorkflow.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetWorkflow.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>

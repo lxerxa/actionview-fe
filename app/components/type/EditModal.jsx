@@ -40,7 +40,7 @@ export default class EditModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    initializeForm({ ...data, screen: data.screen.id, workflow: data.workflow.id });
+    initializeForm({ ...data });
   }
 
   async handleSubmit() {
@@ -74,7 +74,7 @@ export default class EditModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>名称</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='hidden' { ...id }/>
             <FormControl type='text' { ...name } placeholder='问题类型名'/>
           </FormGroup>

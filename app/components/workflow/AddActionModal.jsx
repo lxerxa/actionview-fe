@@ -33,9 +33,9 @@ const validate = (values) => {
   if (!values.destStep) {
     errors.name = 'Required';
   }
-  if (!values.screen) {
-    errors.name = 'Required';
-  }
+  //if (!values.screen) {
+  //  errors.name = 'Required';
+  //}
   return errors;
 };
 
@@ -188,7 +188,7 @@ export default class AddActionModal extends Component {
       basicData.id = data.id;
       basicData.name = data.name;
       basicData.destStep = data.results[0].step;
-      basicData.screen = data.screen || '-1';
+      basicData.screen = data.screen;
     }
     else
     {
@@ -237,7 +237,7 @@ export default class AddActionModal extends Component {
     const stepOptions = _.map(_.filter(steps, (o) => { return _.indexOf(goneSteps, o.id) === -1 || o.id == (data && data.results ? data.results[0].step : '') } ), (val) => { return { label: val.name, value: val.id } });
 
     const screenOptions = _.map(options.screens, (val) => { return { label: val.name, value: val.id } });
-    screenOptions.unshift( { label: '不显示页面', value: '-1' } );;
+    //screenOptions.unshift( { label: '不显示页面', value: '-1' } );;
 
     const relationOptions = [{ label: '必须全部满足', value: 'and' }, { label: '满足任何一个即可', value: 'or' }];
     const assigneeOptions = [ { id: 'whoami', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
@@ -279,8 +279,8 @@ export default class AddActionModal extends Component {
                   <Select options={ stepOptions } simpleValue value={ destStep.value } onChange={ newValue => { destStep.onChange(newValue) } } placeholder='请选择目标步骤' clearable={ false } searchable={ false }/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
-                  <ControlLabel><span className='txt-impt'>*</span>动作界面</ControlLabel>
-                  <Select options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='请选择界面' clearable={ false } searchable={ false }/>
+                  <ControlLabel>动作界面</ControlLabel>
+                  <Select options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='无界面' searchable={ false }/>
                 </FormGroup>
               </div>
             </TabPane>

@@ -67,7 +67,7 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header setSort={ this.setSort.bind(this) } create={ this.create.bind(this) } { ...this.props.type }/>
+        <Header setSort={ this.setSort.bind(this) } setDefault={ this.setDefault.bind(this) } create={ this.create.bind(this) } { ...this.props.type }/>
         <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.type }/>
       </div>
     );

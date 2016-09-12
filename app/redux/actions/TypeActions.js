@@ -40,13 +40,13 @@ export function del(key, id) {
 export function setSort(key, values) {
   return asyncFuncCreator({
     constant: 'TYPE_SET_SORT',
-    promise: (client) => client.request({ url: '/project/' + key + '/type', method: 'put', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/type/batch', method: 'post', data: values })
   });
 }
 
 export function setDefault(key, values) {
   return asyncFuncCreator({
     constant: 'TYPE_SET_DEFAULT',
-    promise: (client) => client.request({ url: '/project/' + key + '/type', method: 'put', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/type/batch', method: 'post', data: values })
   });
 }
