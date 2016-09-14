@@ -193,3 +193,9 @@
   color: #C00;
   margin-right: 5px;
 }
+
+.circle {
+  width: 16px;
+  height: 16px;
+  -webkit-border-radius: 8px;
+}

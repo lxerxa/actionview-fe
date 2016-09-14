@@ -41,7 +41,7 @@ export default function priority(state = initialState, action) {
 
     case t.PRIORITY_SHOW:
       const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, description: el.description } };
+      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, color: el.color, description: el.description } };
 
     case t.PRIORITY_DELETE_NOTIFY:
       const el2 = _.find(state.collection, { id: action.id });

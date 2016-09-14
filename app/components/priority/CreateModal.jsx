@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
@@ -10,12 +10,21 @@ const validate = (values) => {
   if (!values.name) {
     errors.name = 'Required';
   }
+
+  if (values.color) {
+    const pattern = new RegExp(/^#[0-9a-fA-F]{6}$/);
+    if (!pattern.test(values.color))
+    {
+      errors.color = 'format error!';
+    }
+  }
+
   return errors;
 };
 
 @reduxForm({
   form: 'priority',
-  fields: ['name', 'description'],
+  fields: ['name', 'color', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -58,8 +67,13 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, description }, handleSubmit, invalid, submitting } = this.props;
-    const styles = { width: '60%' };
+    const { fields: { name, color, description }, handleSubmit, invalid, submitting } = this.props;
+    
+    let colorStyle = { backgroundColor: '#cccccc', marginTop: '8px', marginRight: '8px' };
+    if (color.value)
+    {
+      colorStyle = { backgroundColor: color.value, marginTop: '8px', marginRight: '8px' };
+    }
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -71,6 +85,13 @@ export default class CreateModal extends Component {
           <FormGroup controlId='formControlsText'>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='text' { ...name } placeholder='优先级名'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
+            <ControlLabel>色彩值</ControlLabel>
+            <FormControl type='text' { ...color } placeholder='#cccccc'/>
+            <FormControl.Feedback>
+              <span className='circle' style={ colorStyle }/>
+            </FormControl.Feedback>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

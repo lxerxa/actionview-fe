@@ -59,9 +59,12 @@ export default class List extends Component {
     const types = [];
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
+      const colorStyle = { backgroundColor: collection[i].color || '#cccccc' };
+
       types.push({
         id: collection[i].id,
         name: ( <span className='table-td-title'>{ collection[i].name } { collection[i].category && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>全局</Label> } </span> ),
+        color: ( <div className='circle' style={ colorStyle } /> ),
         description: collection[i].description ? collection[i].description : '-',
         operation: (
           <div>
@@ -86,7 +89,8 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn width='220' dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='color'>色彩</TableHeaderColumn>
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
           <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>

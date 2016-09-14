@@ -11,12 +11,21 @@ const validate = (values) => {
   if (!values.name) {
     errors.name = 'Required';
   }
+
+  if (values.color) {
+    const pattern = new RegExp(/^#[0-9a-fA-F]{6}$/);
+    if (!pattern.test(values.color))
+    {
+      errors.color = 'format error!';
+    }
+  }
+
   return errors;
 };
 
 @reduxForm({
   form: 'priority',
-  fields: ['id', 'name', 'description'],
+  fields: ['id', 'name', 'color', 'description'],
   validate
 })
 export default class EditModal extends Component {
@@ -66,7 +75,13 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { id, name, color, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+
+    let colorStyle = { backgroundColor: '#cccccc', marginTop: '8px', marginRight: '8px' };
+    if (color.value)
+    {
+      colorStyle = { backgroundColor: color.value, marginTop: '8px', marginRight: '8px' };
+    }
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -79,6 +94,13 @@ export default class EditModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='hidden' { ...id }/>
             <FormControl type='text' { ...name } placeholder='优先级名'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
+            <ControlLabel>色彩值</ControlLabel>
+            <FormControl type='text' { ...color } placeholder='#cccccc'/>
+            <FormControl.Feedback>
+              <span className='circle' style={ colorStyle }/>
+            </FormControl.Feedback>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
