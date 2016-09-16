@@ -9,5 +9,5 @@ export default [
   { id: 'edit_comments', name: '编辑备注' },
   { id: 'delete_comments', name: '删除备注' },
   { id: 'add_attachment', name: '添加附件' },
-  { id: 'delete_attachement', name: '删除附件' }
+  { id: 'delete_attachment', name: '删除附件' }
 ];

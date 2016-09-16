@@ -1,22 +1,24 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
-const validate = (values) => {
+const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'Required';
+    errors.name = '必填';
+  } else if (props.data.name !== values.name && _.findIndex(props.collection || [], { name: values.name }) !== -1) {
+    errors.name = '该名称已存在';
   }
 
   if (values.color) {
     const pattern = new RegExp(/^#[0-9a-fA-F]{6}$/);
     if (!pattern.test(values.color))
     {
-      errors.color = 'format error!';
+      errors.color = '格式错误';
     }
   }
 
@@ -90,10 +92,11 @@ export default class EditModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='hidden' { ...id }/>
             <FormControl type='text' { ...name } placeholder='优先级名'/>
+            { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
             <ControlLabel>色彩值</ControlLabel>
@@ -101,6 +104,7 @@ export default class EditModal extends Component {
             <FormControl.Feedback>
               <span className='circle' style={ colorStyle }/>
             </FormControl.Feedback>
+            { color.touched && color.error && <HelpBlock style={ { float: 'right' } }>{ color.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

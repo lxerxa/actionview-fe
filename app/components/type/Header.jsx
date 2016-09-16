@@ -80,7 +80,7 @@ export default class Header extends Component {
             }
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options } collection={ collection }/> }
         { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading }/> }
       </div>
     );

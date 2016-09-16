@@ -1,13 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
 const img = require('../../assets/images/loading.gif');
 
 const validate = (values) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'Required';
+    errors.name = '必填';
   }
   return errors;
 };
@@ -74,10 +74,11 @@ export default class EditModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <FormControl type='hidden' { ...id }/>
             <ControlLabel><span className='txt-impt'>*</span>工作流名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='工作流名'/>
+            { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

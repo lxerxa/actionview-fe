@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { reduxForm, getValues } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import _ from 'lodash';
+import ApiClient from '../../../shared/api-client';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -9,8 +10,6 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (_.findIndex(props.collection || [], { name: values.name }) !== -1) {
-    errors.name = '该名称已存在';
   }
 
   if (values.color) {
@@ -24,9 +23,30 @@ const validate = (values, props) => {
   return errors;
 };
 
+
+const asyncValidate = (values, dispatch) => {
+  return new Promise((resolve, reject) => {
+    const api = new ApiClient;
+    api.request( { url: '/priority/checkname?name=' + values.name } ).then(
+      (result) => { 
+        if (result.taken_flg == 1) {
+          reject({ name: 'has be used.' });
+        } else {
+          resolve();
+        }
+      },
+      (error) => {
+        reject({ name: 'error!' });
+      } 
+    );
+  });
+};
+
 @reduxForm({
   form: 'priority',
   fields: ['name', 'color', 'description'],
+  asyncValidate,
+  asyncBlurFields: [ 'name' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -38,12 +58,14 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
+    asyncValidating: PropTypes.string.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
+    collection: PropTypes.array,
     resetForm: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired
   }
@@ -69,7 +91,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, color, description }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, color, description }, handleSubmit, invalid, submitting, collection } = this.props;
     
     let colorStyle = { backgroundColor: '#cccccc', marginTop: '8px', marginRight: '8px' };
     if (color.value)
@@ -84,6 +106,7 @@ export default class CreateModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+          <input name='allPriorities' type='hidden' value={ JSON.stringify(collection) }/>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='text' { ...name } placeholder='优先级名'/>

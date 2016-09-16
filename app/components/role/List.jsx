@@ -81,11 +81,12 @@ export default class List extends Component {
 
     const { edit } = this.props;
     const ecode = await edit({ permissions: _.map(this.state.permissions[roleId], _.iteratee('value')), id: roleId });
-    if (ecode === 0) {
-      const index = _.indexOf(this.state.settingPermissionRoleIds, roleId);
-      this.state.settingPermissionRoleIds.splice(index, 1);
-      this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
-    }
+    //if (ecode === 0) {
+    //}else {
+    //}
+    const ind = _.indexOf(this.state.settingPermissionRoleIds, roleId);
+    this.state.settingPermissionRoleIds.splice(ind, 1);
+    this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
   }
 
   willSetUsers(roleId) {
@@ -110,11 +111,12 @@ export default class List extends Component {
 
     const { edit } = this.props;
     const ecode = await edit({ users: _.map(this.state.users[roleId], _.iteratee('id')), id: roleId });
-    if (ecode === 0) {
-      const index = _.indexOf(this.state.settingUserRoleIds, roleId);
-      this.state.settingUserRoleIds.splice(index, 1);
-      this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
-    }
+    //if (ecode === 0) {
+    //}else {
+    //}
+    const ind = _.indexOf(this.state.settingUserRoleIds, roleId);
+    this.state.settingUserRoleIds.splice(ind, 1);
+    this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
   }
 
   handlePermissionSelectChange(roleId, value) {
@@ -196,7 +198,7 @@ export default class List extends Component {
             </div> 
             :
             <div>
-              <Select.Async multi clearable={ false } disabled={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 && true } options={ [] } value={ this.state.users[collection[i].id] || collection[i].users } onChange={ this.handleUserSelectChange.bind(this, collection[i].id) } valueKey='id' labelKey='name' loadOptions={ this.searchUsers } placeholder='请输入用户'/>
+              <Select.Async multi clearable={ false } disabled={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 && true } options={ [] } value={ this.state.users[collection[i].id] || collection[i].users } onChange={ this.handleUserSelectChange.bind(this, collection[i].id) } valueKey='id' labelKey='nameAndEmail' loadOptions={ this.searchUsers } placeholder='请输入用户'/>
               <div className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setUsers.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetUsers.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -231,7 +233,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='permissions'>权限</TableHeaderColumn>
-          <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
+          <TableHeaderColumn width='330' dataField='users'>用户</TableHeaderColumn>
           <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }

@@ -53,7 +53,7 @@ export default class Header extends Component {
           <h3>#问题解决结果#</h3>
         </div>
         <div>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建结果</Button>
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建结果</Button>
           { !indexLoading && <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button> }
           <div style={ styles } className={ indexLoading && 'hide' }>
             <span className='default-set'>默认结果：</span>
@@ -78,7 +78,7 @@ export default class Header extends Component {
             }
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
         { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading }/> }
       </div>
     );

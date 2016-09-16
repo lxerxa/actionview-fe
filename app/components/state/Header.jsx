@@ -33,9 +33,9 @@ export default class Header extends Component {
           <h3>#问题状态#</h3>
         </div>
         <div>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建状态</Button>
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建状态</Button>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
       </div>
     );
   }

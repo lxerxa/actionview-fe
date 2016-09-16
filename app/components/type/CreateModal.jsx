@@ -1,15 +1,17 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
-const validate = (values) => {
+const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'Required';
+    errors.name = '必填';
+  } else if (_.findIndex(props.collection || [], { name: values.name }) !== -1) {
+    errors.name = '该名称已存在';
   }
 
   if (!values.screen_id) {
@@ -85,9 +87,10 @@ export default class CreateModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='问题类型名'/>
+            <FormControl type='text' { ...name } placeholder='问题类型名'/ >
+            { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>界面</ControlLabel>
