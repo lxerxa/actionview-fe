@@ -107,7 +107,7 @@ export default class LayoutConfigModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '界面配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={ { height: '450px', overflow: 'auto' } }>
           { cards.length > 0 && <p>通过上下拖拽改变显示顺序。</p> }
           { cards.length > 0 ?
             cards.map((op, i) => {

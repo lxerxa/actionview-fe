@@ -172,7 +172,7 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>新建界面</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' } style={ { height: '450px' } }>
+        <Modal.Body className={ submitting ? 'disable' : 'enable' } style={ { height: '450px', overflow: 'auto' } }>
           <Tabs
             activeKey={ this.state.activeKey }
             onTabClick={ this.onTabClick.bind(this) } 

@@ -82,6 +82,7 @@ export default class OptionValuesConfigModal extends Component {
     this.state.cards.push({ id: optionValue, text: optionValue });
     this.setState({ cards: this.state.cards });
     findDOMNode(this.refs.addOpt).value = '';
+    this.setState({ enableAdd: false });
   }
 
   handlerKeyUp(event) {
@@ -116,7 +117,7 @@ export default class OptionValuesConfigModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '字段可选值配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={ { height: '450px', overflow: 'auto' } }>
           { cards.length > 0 && <p>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></p> }
           { cards.length > 0 ?
             cards.map((op, i) => {

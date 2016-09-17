@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import Tabs, { TabPane } from 'rc-tabs';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
@@ -31,7 +31,7 @@ const validate = (values) => {
     errors.name = 'Required';
   }
   if (!values.destStep) {
-    errors.name = 'Required';
+    errors.destStep = 'Required';
   }
   //if (!values.screen) {
   //  errors.name = 'Required';
@@ -239,7 +239,7 @@ export default class AddActionModal extends Component {
     const screenOptions = _.map(options.screens, (val) => { return { label: val.name, value: val.id } });
     //screenOptions.unshift( { label: '不显示页面', value: '-1' } );;
 
-    const relationOptions = [{ label: '必须全部满足', value: 'and' }, { label: '满足任何一个即可', value: 'or' }];
+    const relationOptions = [{ label: '全部满足', value: 'and' }, { label: '满足任何一个即可', value: 'or' }];
     const assigneeOptions = [ { id: 'whoami', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
     const eventOptions = [ { id: 'normal', name: '一般事件' } ];
 
@@ -270,9 +270,10 @@ export default class AddActionModal extends Component {
                   <ControlLabel>原步骤</ControlLabel>
                   <FormControl type='text' value={ stepData.name } disabled={ true }/>
                 </FormGroup>
-                <FormGroup controlId='formControlsText'>
+                <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
                   <ControlLabel><span className='txt-impt'>*</span>动作名</ControlLabel>
                   <FormControl type='text' { ...name } placeholder='动作名'/>
+                  { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
                   <ControlLabel><span className='txt-impt'>*</span>目标步骤</ControlLabel>
