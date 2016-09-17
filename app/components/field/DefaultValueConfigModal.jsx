@@ -3,8 +3,6 @@ import { reduxForm } from 'redux-form';
 import { findDOMNode } from 'react-dom';
 import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Select from 'react-select';
-import CheckboxGroup from 'react-checkbox-group';
-import RadioGroup from 'react-radio-group';
 import DateTime from 'react-datetime';
 import _ from 'lodash'
 
@@ -41,7 +39,7 @@ export default class DefaultValueConfigModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    if (data.type === 'MultiSelect' && _.isArray(data.defaultValue)) {
+    if ((data.type === 'MultiSelect' || data.type === 'CheckboxGroup') && _.isArray(data.defaultValue)) {
       data.defaultValue = data.defaultValue.join(',');
     }
     initializeForm(data);
@@ -73,45 +71,13 @@ export default class DefaultValueConfigModal extends Component {
 
     let optionValues = [];
     let defaultComponent = {};
-    if (data.type === 'Select' || data.type === 'MultiSelect') {
+    if (data.type === 'Select' || data.type === 'MultiSelect' || data.type === 'CheckboxGroup' || data.type === 'RadioGroup') {
       if (data.optionValues) {
         optionValues = _.map(data.optionValues || [], function(val) {
           return { label: val, value: val };
         });
       }
-      defaultComponent = ( <Select options={ optionValues } simpleValue multi={ data.type === 'MultiSelect' && true } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } } placeholder='请设置默认值'/> ); 
-    } else if (data.type === 'RadioGroup') {
-      defaultComponent = (
-        <RadioGroup selectedValue={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } }>
-        {
-          Radio => (
-            <ul>
-            {
-              _.map(data.optionValues, function (val, i) {
-                return ( <li key={ i }><Radio value = { val }/> { val }</li> );
-              })
-            }
-            </ul>
-          )
-        }
-        </RadioGroup>
-      );
-    } else if (data.type === 'CheckboxGroup') {
-      defaultComponent = ( 
-        <CheckboxGroup value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } }> 
-        {
-          Checkbox => (
-            <ul>
-            { 
-              _.map(data.optionValues, function (val, i) { 
-                return ( <li key={ i }><Checkbox value = { val }/> { val }</li> );
-              })
-            }
-            </ul>
-          )
-        }
-        </CheckboxGroup>
-      ); 
+      defaultComponent = ( <Select options={ optionValues } simpleValue multi={ data.type === 'CheckboxGroup' || data.type === 'MultiSelect' } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } } placeholder='请设置默认值'/> ); 
     } else if (data.type === 'TextArea') {
       defaultComponent = ( <FormControl componentClass='textarea' { ...defaultValue } placeholder='请输入默认值'/> );
     } else if (data.type === 'DatePicker' || data.type === 'DateTimePicker' ) {

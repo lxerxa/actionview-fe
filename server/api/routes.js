@@ -106,7 +106,7 @@ export default function(router) {
     } else if (id === '546764') {
       results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'DatePicker', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
     } else if (id === '2323') {
-      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'MultiSelect', optionValues:['111', '222', '333'], defaultValue: ['111', '222']}};
+      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'CheckboxGroup', optionValues:['111', '222', '333'], defaultValue: ['111', '222']}};
     } else {
       results = { ecode: 0, data: { id: '546762', name: '优先级', key:'priority', type:'Select', optionValues:['111', '222', '333'], defaultValue: '222'}};
     }
@@ -454,7 +454,7 @@ export default function(router) {
   router.get('/project/:key/role', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu'}, {id: '2222', name: 'lihui'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu'}] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', nameAndEmail: 'liuxu@aa.com' }, {id: '2222', name: 'lihui', nameAndEmail: 'lihui@aa.com'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', nameAndEmail: 'liuxu@aa.com'}] }], options:{ permissions: [{ id: 'createIssue', name: '创建问题'}, { id: 'viewWorkflow', name: '查看流程'}, { id: 'projectConfig', name: '项目配置'}, { id: 'deleteComments', name: '删除评论'}] }};
     return res.status(200).send(results);
   });
 
