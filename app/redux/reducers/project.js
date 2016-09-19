@@ -17,7 +17,7 @@ export default function project(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.PROJECT_SHOW_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, item: action.result.data, collection: [] };
+      return { ...state, loading: false, ecode: action.result.ecode, item: action.result.data, collection: [], options: action.result.options };
 
     case t.PROJECT_SHOW_FAIL:
       return { ...state, loading: false, error: action.error };

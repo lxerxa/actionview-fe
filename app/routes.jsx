@@ -7,6 +7,7 @@ import Project from './components/Project';
 import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
 
+const ModuleContainer = require('./components/module/Container');
 const TypeContainer = require('./components/type/Container');
 const FieldContainer = require('./components/field/Container');
 const ScreenContainer = require('./components/screen/Container');
@@ -26,6 +27,7 @@ export default (
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
         <Route path='/project/:key/profile' component={ Profile }/>
+        <Route path='/project/:key/module' component={ ModuleContainer }/>
         <Route path='/project/:key/type' component={ TypeContainer }/>
         <Route path='/project/:key/field' component={ FieldContainer }/>
         <Route path='/project/:key/screen' component={ ScreenContainer }/>

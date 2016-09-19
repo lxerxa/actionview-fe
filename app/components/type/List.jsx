@@ -152,7 +152,11 @@ export default class List extends Component {
             <div className='editable-list-field'>
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].screen_id ?
-                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { _.find(screens, { id: collection[i].screen_id }).name } </div></span> :
+                <span>
+                  <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> 
+                    { _.find(screens, { id: collection[i].screen_id }) ? _.find(screens, { id: collection[i].screen_id }).name : '-' } 
+                  </div>
+                </span> :
                 '-' }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetScreen.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>
@@ -175,7 +179,11 @@ export default class List extends Component {
             <div className='editable-list-field'>
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].workflow_id ?
-                <span><div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> { _.find(workflows, { id: collection[i].workflow_id }).name } </div></span> :
+                <span>
+                  <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> 
+                    { _.find(workflows, { id: collection[i].workflow_id }) ? _.find(workflows, { id: collection[i].workflow_id }).name : '-' } 
+                  </div>
+                </span> :
                 '-' }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>

@@ -18,7 +18,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }};
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }, options: { users: [{id: 'xxx', name: 'liuxu', nameAndEmail: 'liuxu(aa@tom.com)' }, {id:'yyy', name: 'lihui', nameAndEmail: 'liuhui(bb@tom.com)'}]}};
     return res.status(200).send(results);
   });
 
@@ -34,6 +34,13 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', screen_id:'111', workflow_id:'111'},{ id: '546763', name: '需求', screen_id:'222', workflow_id:'111', default: true },{ id: '546762', name: '缺陷', screen_id:'111', workflow_id:'111'},{ id: '2323', name: '子任务', screen_id:'111', workflow_id:'222'}], options:{ screens:[{id:'111',name:'界面1'},{id:'222', name:'界面2'}, {id:'333', name:'界面3'}], workflows:[{id:'111',name:'流程1'},{id:'222', name:'流程2'}, {id:'333', name:'流程3'}] }};
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/module', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', principal_id:'111', defaultAssignee_id:'111'},{ id: '546763', name: '需求', principal_id:'222', defaultAssignee_id:'111', default: true },{ id: '546762', name: '缺陷', principal_id:'111', defaultAssignee_id:'111'},{ id: '2323', name: '子任务'}], options:{ screens:[{id:'111',name:'界面1'},{id:'222', name:'界面2'}, {id:'333', name:'界面3'}], workflows:[{id:'111',name:'流>程1'},{id:'222', name:'流程2'}, {id:'333', name:'流程3'}] }};
     return res.status(200).send(results);
   });
 

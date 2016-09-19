@@ -243,7 +243,8 @@ export default class AddActionModal extends Component {
     const assigneeOptions = [ { id: 'whoami', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
     const eventOptions = [ { id: 'normal', name: '一般事件' } ];
 
-    const userOptions = options.users || [];
+    const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
+
     const stateOptions = options.states || [];
     const permissionOptions = require('../share/Permissions.js');
     const roleOptions = options.roles || [];
