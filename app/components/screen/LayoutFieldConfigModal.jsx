@@ -114,7 +114,7 @@ export default class LayoutFieldConfigModal extends Component {
             <div style={ { display: 'inline-block', width: '68%' } }>
               <Select simpleValue options={ _.reject(screenFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='请选择必填字段(可多选)' multi/>
             </div>
-            <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加字段</Button>
+            <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加</Button>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

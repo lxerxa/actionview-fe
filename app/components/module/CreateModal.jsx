@@ -44,6 +44,11 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
+    if (!values.defaultAssignee_id)
+    {
+      values.defaultAssignee_id = 'modulePrincipal';
+    }
+
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
