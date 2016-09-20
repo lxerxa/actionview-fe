@@ -46,7 +46,7 @@ export default class CreateModal extends Component {
     const { values, create, close } = this.props;
     if (!values.defaultAssignee_id)
     {
-      values.defaultAssignee_id = 'modulePrincipal';
+      values.defaultAssignee_id = 'projectPrincipal';
     }
 
     const ecode = await create(values);
