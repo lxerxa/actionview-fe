@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import Layout from './components/Layout';
+import Cover from './components/Cover';
 import Login from './components/Login';
 import Home from './components/Home';
 import Project from './components/Project';
@@ -8,6 +9,7 @@ import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
 
 const ModuleContainer = require('./components/module/Container');
+const VersionContainer = require('./components/version/Container');
 const TypeContainer = require('./components/type/Container');
 const FieldContainer = require('./components/field/Container');
 const ScreenContainer = require('./components/screen/Container');
@@ -21,6 +23,7 @@ const RoleactorContainer = require('./components/roleactor/Container');
 
 export default (
   <Route path='/' component={ Layout }>
+    <IndexRoute component={ Cover }/>
     <Route path='/login' component={ Login }/>
     <Route path='/home' component={ Home }>
       <IndexRoute component={ ProjectList }/>
@@ -28,6 +31,7 @@ export default (
         <IndexRoute component={ Profile }/>
         <Route path='/project/:key/profile' component={ Profile }/>
         <Route path='/project/:key/module' component={ ModuleContainer }/>
+        <Route path='/project/:key/version' component={ VersionContainer }/>
         <Route path='/project/:key/type' component={ TypeContainer }/>
         <Route path='/project/:key/field' component={ FieldContainer }/>
         <Route path='/project/:key/screen' component={ ScreenContainer }/>

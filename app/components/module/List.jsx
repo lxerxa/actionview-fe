@@ -85,7 +85,7 @@ export default class List extends Component {
     }
   }
 
-  handleScreenSelectChange(moduleId, value) {
+  handlePrincipalSelectChange(moduleId, value) {
     this.state.principal[moduleId] = value;
     this.setState({ principal: this.state.principal });
   }
@@ -119,7 +119,7 @@ export default class List extends Component {
     }
   }
 
-  handleWorkflowSelectChange(moduleId, value) {
+  handleDefaultAssigneeSelectChange(moduleId, value) {
     this.state.defaultAssignee[moduleId] = value;
     this.setState({ defaultAssignee: this.state.defaultAssignee });
   }
@@ -163,7 +163,7 @@ export default class List extends Component {
             </div>
             :
             <div>
-              <Select simpleValue clearable={ false } disabled={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 && true } options={ userOptions } value={ this.state.principal[collection[i].id] || collection[i].principal_id } onChange={ this.handleScreenSelectChange.bind(this, collection[i].id) } placeholder='请选择用户'/>
+              <Select simpleValue clearable={ false } disabled={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 && true } options={ userOptions } value={ this.state.principal[collection[i].id] || collection[i].principal_id } onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } placeholder='请选择用户'/>
               <div className={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -191,7 +191,7 @@ export default class List extends Component {
             </div>
             :
             <div>
-              <Select simpleValue clearable={ false } searchable={ false } disabled={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 && true } options={ defaultAssigneeOptions } value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee_id } onChange={ this.handleWorkflowSelectChange.bind(this, collection[i].id) } placeholder='默认经办人(项目负责人)'/>
+              <Select simpleValue clearable={ false } searchable={ false } disabled={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 && true } options={ defaultAssigneeOptions } value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee_id } onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } placeholder='默认经办人(项目负责人)'/>
               <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>

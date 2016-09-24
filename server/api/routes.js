@@ -44,6 +44,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/version', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', start_time:1474642399, end_time:1474646399},{ id: '546763', name: '需求', start_time:1474546399, end_time:1474646499 },{ id: '546762', name: '缺陷', start_time:1474646399, end_time:1474646399},{ id: '2323', name: '子任务'}] };
+    return res.status(200).send(results);
+  });
+
   router.post('/project/:key/type', function(req, res) {
     const results = { ecode: 0, data: { id: 'were', name: '5C问题', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程1'}} };
     return res.status(200).send(results);

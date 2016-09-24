@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { Button, FormControl } from 'react-bootstrap';
-import _ from 'lodash';
 
 const CreateModal = require('./CreateModal');
 const img = require('../../assets/images/loading.gif');
@@ -13,7 +12,9 @@ export default class Header extends Component {
   }
 
   static propTypes = {
-    create: PropTypes.func.isRequired
+    create: PropTypes.func.isRequired,
+    collection: PropTypes.array,
+    indexLoading: PropTypes.bool.isRequired
   }
 
   createModalClose() {
@@ -21,15 +22,17 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create } = this.props;
+    const { create, indexLoading, collection } = this.props;
 
     return (
       <div>
-        <h3>#工作流#</h3>
-        <div>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建工作流</Button>
+        <div className='list-unstyled clearfix'>
+          <h3>#版本#</h3>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+        <div>
+          <Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建版本</Button>
+        </div>
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
       </div>
     );
   }

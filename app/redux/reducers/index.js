@@ -15,5 +15,6 @@ export { default as priority } from './priority';
 export { default as role } from './role';
 export { default as roleactor } from './roleactor';
 export { default as module } from './module';
+export { default as version } from './version';
 export { reducer as form } from 'redux-form';
 export { routerReducer as routing } from 'react-router-redux';
