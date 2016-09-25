@@ -19,7 +19,7 @@ export default function version(state = initialState, action) {
 
     case t.VERSION_CREATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection.push(action.result.data);
+        state.collection.unshift(action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
