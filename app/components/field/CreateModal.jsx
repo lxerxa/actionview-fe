@@ -71,7 +71,6 @@ export default class CreateModal extends Component {
 
   render() {
     const { fields: { name, key, type, description }, handleSubmit, invalid, submitting } = this.props;
-    const styles = { width: '60%' };
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

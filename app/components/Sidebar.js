@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import TreeView from 'treeview-react-bootstrap';
 import ProjectModal from './ProjectModal';
-import IssueModal from './IssueModal';
+import CreateIssueModal from './issue/CreateModal';
+import { Label } from 'react-bootstrap';
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -109,19 +110,12 @@ export default class Sidebar extends Component {
           </div>
         }
         <div className='bottom-block'>
-          <h3>勿忘初心，方得始终</h3>
-          <p>一个基于内容分享的社区</p>
-          { project.item.key ?
+          <p>ActionView，一个开源、类 Jira 、轻量级的问题跟踪管理工具。<Label bsStyle='success'>刘旭</Label></p>
+          { project.item.key && 
             <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ issueModalShow: true }) }><i className='fa fa-plus'></i>&nbsp;&nbsp;创建问题</button>
-            :
-            <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ projectModalShow: true }) }><i className='fa fa-plus'></i>&nbsp;&nbsp;创建项目</button>
           }
         </div>
-        { project.item.key ?
-          <IssueModal show={ this.state.issueModalShow } hide={ this.issueModalClose } create={ createIssue }/>
-          :
-          <ProjectModal show={ this.state.projectModalShow } hide={ this.projectModalClose } create={ createProject }/>
-        }
+        { this.state.issueModalShow && <CreateIssueModal show close={ this.issueModalClose } config={ project.options.config } create={ createIssue }/> }
       </div>
     );
   }

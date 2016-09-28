@@ -15,7 +15,7 @@ const validate = (values, props) => {
   }
 
   if (!values.state) {
-    errors.name = 'Required';
+    errors.state = 'Required';
   }
   return errors;
 };

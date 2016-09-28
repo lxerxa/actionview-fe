@@ -18,7 +18,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }, options: { users: [{id: 'xxx', name: 'liuxu', nameAndEmail: 'liuxu(aa@tom.com)' }, {id:'yyy', name: 'lihui', nameAndEmail: 'liuhui(bb@tom.com)'}]}};
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }, options: { users: [{id: 'xxx', name: 'liuxu', nameAndEmail: 'liuxu(aa@tom.com)' }, {id:'yyy', name: 'lihui', nameAndEmail: 'liuhui(bb@tom.com)'}], config: { types: [{id: '1111', name: '任务'}, { id: '2222', name: 'Bug', default: true }, { id: '3333', name: '需求' }], schemas: { 2222: [ { key:'name', name:'名称', required: true, type: 'Text', defaultValue: 'aa' }, { key:'title', name:'主题', type: 'Text', defaultValue: 'bb' }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'city', name:'城市', type: 'CheckboxGroup', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'expect_time', name:'城市', type: 'DatePicker' } ] }}}};
     return res.status(200).send(results);
   });
 
