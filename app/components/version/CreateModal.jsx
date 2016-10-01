@@ -67,11 +67,11 @@ export default class CreateModal extends Component {
     
     if (values.start_time)
     {
-      values.start_time = moment(values.start_time).startOf('day').format('X');
+      values.start_time = parseInt(moment(values.start_time).startOf('day').format('X'));
     }
     if (values.end_time)
     {
-      values.end_time = moment(values.end_time).endOf('day').format('X');
+      values.end_time = parseInt(moment(values.end_time).endOf('day').format('X'));
     }
 
     const ecode = await create(values);
@@ -114,12 +114,12 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ start_time.value && start_time.error ? 'error' : '' }>
             <ControlLabel>开始时间</ControlLabel>
-            <DateTime locale='zh-cn' mode='date' dateFormat='YYYY/MM/DD' timeFormat={ false } value={ start_time.value } onChange={ newValue => { start_time.onChange(newValue) } }/>
+            <DateTime locale='zh-cn' mode='date' closeOnSelect dateFormat='YYYY/MM/DD' timeFormat={ false } value={ start_time.value } onChange={ newValue => { start_time.onChange(newValue) } }/>
             { start_time.value && start_time.error && <HelpBlock style={ { float: 'right' } }>{ start_time.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ end_time.value && end_time.error ? 'error' : '' }>
             <ControlLabel>结束时间</ControlLabel>
-            <DateTime locale='zh-cn' mode='date' dateFormat='YYYY/MM/DD' timeFormat={ false } defaultValue={ moment() } value={ end_time.value } onChange={ newValue => { end_time.onChange(newValue) } }/>
+            <DateTime locale='zh-cn' mode='date' closeOnSelect dateFormat='YYYY/MM/DD' timeFormat={ false } defaultValue={ moment() } value={ end_time.value } onChange={ newValue => { end_time.onChange(newValue) } }/>
             { end_time.value && end_time.error && <HelpBlock style={ { float: 'right' } }>{ end_time.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>

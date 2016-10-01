@@ -43,12 +43,6 @@ export default class Container extends Component {
     return this.props.screen.ecode;
   }
 
-  async show(id) {
-    const { actions } = this.props;
-    await actions.show(this.pid, id);
-    return this.props.screen.ecode;
-  }
-
   async del(id) {
     const { actions } = this.props;
     await actions.del(this.pid, id);
@@ -64,7 +58,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } { ...this.props.screen }/>
-        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.screen }/>
+        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.screen }/>
       </div>
     );
   }

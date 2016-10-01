@@ -33,7 +33,6 @@ export default class List extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    item: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -72,7 +71,7 @@ export default class List extends Component {
     this.setState({ layoutFieldConfigShow: false });
   }
 
-  async operateSelect(eventKey) {
+  operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     const { delNotify, show } = this.props;
 
@@ -80,7 +79,7 @@ export default class List extends Component {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
     } else {
-      const ecode = await show(hoverRowId);
+      show(hoverRowId);
       // todo err notify
       eventKey === '3' && this.setState({ layoutConfigShow: true });
       eventKey === '1' && this.setState({ editModalShow: true });
@@ -98,7 +97,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
+    const { collection, selectedItem, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const fields = [];
@@ -151,11 +150,11 @@ export default class List extends Component {
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
-        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ item } config={ edit } options= { options } loading={ loading }/> }
-        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ item } config={ edit } loading={ loading }/> }
+        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ selectedItem } config={ edit } options= { options } loading={ loading }/> }
+        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }
       </div>
     );
   }

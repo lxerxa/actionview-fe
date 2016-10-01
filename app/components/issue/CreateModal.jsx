@@ -6,6 +6,7 @@ import { RadioGroup, Radio } from 'react-radio-group';
 import DateTime from 'react-datetime';
 import _ from 'lodash';
 
+var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
 class CreateModal extends Component {
@@ -14,7 +15,18 @@ class CreateModal extends Component {
     const { config } = this.props;
 
     const defaultType = _.find(config.types || [], { default: true }); 
-    this.state = { ecode: 0, errors: {}, type: defaultType.id, schema: config.schemas[defaultType.id] };
+    const schema = config.schemas[defaultType.id];
+    const errors = {}, values = {};
+    _.map(schema, (v) => {
+      if (v.defaultValue) {
+        values[v.key] = v.defaultValue;
+      }
+      if (v.required && !v.defaultValue) {
+        errors[v.key] = 'requried';
+      }
+    });
+
+    this.state = { ecode: 0, errors, touched: {}, type: defaultType.id, schema, values };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -24,6 +36,7 @@ class CreateModal extends Component {
     close: PropTypes.func.isRequired,
     values: PropTypes.object.isRequired,
     config: PropTypes.object,
+    loading: PropTypes.bool,
     create: PropTypes.func.isRequired
   }
 
@@ -44,36 +57,61 @@ class CreateModal extends Component {
     close();
   }
 
+  typeChange(typeValue) {
+    const { config } = this.props;
+    const schema = config.schemas[typeValue];
+    if (!schema) {
+      return;
+    }
+
+    const errors = {}, values = {};
+    _.map(schema, (v) => {
+      if (this.state.errors[v.key]) {
+        values[v.key] = '';
+      } else if (!this.state.values[v.key] && v.defaultValue) {
+        values[v.key] = v.defaultValue;
+      } else if (this.state.values[v.key]) {
+        values[v.key] = this.state.values[v.key];
+      }
+
+      if (v.required && !values[v.key]) {
+        errors[v.key] = 'requried';
+      }
+    });
+
+    this.setState({ type: typeValue, errors, touched: {}, schema, values });
+  }
+
   render() {
-    const { config, close } = this.props;
+    const { config, close, loading } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(config.types || [], function(val) {
       return { label: val.name, value: val.id };
     });
 
-    let submitflag = true;
-    let t;
-    for (t in this.state.errors) {
-      if (this.state.errors[t] !== undefined) {
-        submitflag = false;
-        break;
-      }
-    }
-
     return (
       <Modal { ...this.props } onHide={ close } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>创建问题</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={ loading ? 'disable' : 'enable' } style={ { height: '580px', overflow: 'auto' } }>
           <Form horizontal>
-            <FormGroup controlId='formControlsSelect' style={ { height: '50px', borderBottom: '1px solid #ddd' } }>
+            <FormGroup controlId='formControlsLabel'>
+              <Col sm={ 2 } componentClass={ ControlLabel }>
+                项目名称
+              </Col>
+              <Col sm={ 9 }>
+                <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>社交化项目管理系统</span></div>
+              </Col>
+            </FormGroup>
+            <FormGroup controlId='formControlsSelect' style={ { height: '68px', borderBottom: '1px solid #ddd' } }>
               <Col sm={ 2 } componentClass={ ControlLabel }>
                 <span className='txt-impt'>*</span>类型
               </Col>
-              <Col sm={ 6 }>
-                <Select options={ typeOptions } simpleValue clearable={ false } value={ this.state.type } onChange={ newValue => { this.setState({ type: newValue }) } } placeholder='请选择问题类型'/>
+              <Col sm={ 7 }>
+                <Select options={ typeOptions } simpleValue clearable={ false } value={ this.state.type } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
+                <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
               </Col>
             </FormGroup>
             <div>
@@ -88,36 +126,67 @@ class CreateModal extends Component {
 
               if (v.type === 'Text') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.errors[v.key] && 'error' }>
+                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl 
                       type='text' 
-                      value={ _.isUndefined(this.state[v.key]) ? v.defaultValue || '' : this.state[v.key] } 
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : this.state.errors[v.key] = undefined; this.setState({ [ v.key ]: e.target.value, errors: this.state.errors }); } } 
+                      value={ this.state.values[v.key] } 
+                      onChange={ (e) => { this.state.touched[v.key] = true; v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } } 
                       placeholder={ '输入' + v.name } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                    { this.state.errors[v.key] || '' }
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> ); 
+              } else if (v.type === 'Number') { 
+                return (
+                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                  { title }
+                  <Col sm={ 4 }>
+                    <FormControl
+                      type='text'
+                      value={ this.state.values[v.key] }
+                      onChange={ (e) => { this.state.touched[v.key] = true; v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }
+                      placeholder={ '输入' + v.name } />
+                  </Col>
+                  <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
+                  </Col>
+                </FormGroup> );
+              } else if (v.type === 'TextArea') {
+                return (
+                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                  { title }
+                  <Col sm={ 9 }>
+                    <FormControl
+                      componentClass='textarea'
+                      value={ this.state.values[v.key] }
+                      onChange={ (e) => { this.state.touched[v.key] = true; v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }
+                      style={ { height: '200px' } }
+                      placeholder={ '输入' + v.name } />
+                  </Col>
+                  <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
+                  </Col>
+                </FormGroup> );
               } else if (v.type === 'Select' || v.type === 'MultiSelect') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.errors[v.key] && 'error' }>
+                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
-                  <Col sm={ 6 }>
+                  <Col sm={ 7 }>
                     <Select 
                       simpleValue
                       multi={ v.type === 'MultiSelect' }
                       clearable={ !v.required } 
-                      value={ _.isUndefined(this.state[v.key]) ? v.defaultValue || '' : this.state[v.key] } 
+                      value={ this.state.values[v.key] } 
                       options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } } ) } 
-                      onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必选' : this.state.errors[v.key] = undefined; this.setState({ [ v.key ]: newValue, errors: this.state.errors }) } } 
-                      className={ this.state.errors[v.key] && 'select-error' }
+                      onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } } 
+                      className={ this.state.touched[v.key] && this.state.errors[v.key] && 'select-error' }
                       placeholder={ '选择' + v.name } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                    { this.state.errors[v.key] || '' }
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> ); 
               } else if (v.type === 'CheckboxGroup') {
@@ -128,13 +197,13 @@ class CreateModal extends Component {
                     <CheckboxGroup
                       style={ { marginTop: '6px' } }
                       name={ v.name }
-                      value={ _.isUndefined(this.state[v.key]) ? (v.defaultValue || '').split(',') : this.state[v.key] }
-                      onChange={ newValue => { v.required && newValue.length <= 0 ? this.state.errors[v.key] = '必选' : this.state.errors[v.key] = undefined; this.setState({ [ v.key ]: newValue, errors: this.state.errors }) } }>
+                      value={ this.state.values[v.key] && _.isString(this.state.values[v.key]) ? this.state.values[v.key].split(',') : this.state.values[v.key] }
+                      onChange={ newValue => { v.required && newValue.length <= 0 ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } }>
                       { _.map(v.optionValues || [], (val) => 
                         <span><Checkbox value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
                       }
-                      { this.state.errors[v.key] && <div><ControlLabel>{ this.state.errors[v.key] || '' }</ControlLabel></div> }
+                      { this.state.touched[v.key] && this.state.errors[v.key] && <div><ControlLabel>{ this.state.errors[v.key] || '' }</ControlLabel></div> }
                     </CheckboxGroup>
                   </Col>
                 </FormGroup> );
@@ -146,8 +215,8 @@ class CreateModal extends Component {
                     <RadioGroup
                       style={ { marginTop: '6px' } }
                       name={ v.name }
-                      value={ _.isUndefined(this.state[v.key]) ? v.defaultValue || '' : this.state[v.key] }
-                      onChange={ newValue => { this.setState({ [ v.key ]: newValue }) } }>
+                      value={ this.state.values[v.key] }
+                      onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }) } }>
                       { _.map(v.optionValues || [], (val) =>
                         <span style={ { marginLeft: '6px' } }><Radio value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
@@ -157,19 +226,19 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.errors[v.key] && 'error' }>
+                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 4 }>
                     <DateTime 
-                      locale='zh-cn' 
                       mode='date' 
                       dateFormat={ v.type === 'DateTimePicker' ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD' }
                       timeFormat={ v.type === 'DateTimePicker' } 
-                      value={ _.isUndefined(this.state[v.key]) ? v.defaultValue || '' : this.state[v.key] } 
-                      onChange={ newValue => { this.setState({ [ v.key ]: newValue }) } }/>
+                      closeOnSelect={ v.type === 'DatePicker' }
+                      value={ this.state.values[v.key] } 
+                      onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必填' : (newValue && !moment(newValue).isValid() ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }/>
                   </Col>
-                  <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                    { this.state.errors[v.key] || '' }
+                  <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
               }
@@ -178,7 +247,7 @@ class CreateModal extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button className='ralign' type='submit' disabled={ !submitflag }>确定</Button>
+          <Button className='ralign' type='submit' disabled={ !_.isEmpty(this.state.errors) }>确定</Button>
           <Button onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>

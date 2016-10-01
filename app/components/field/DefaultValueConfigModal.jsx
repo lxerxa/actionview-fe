@@ -1,24 +1,39 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { findDOMNode } from 'react-dom';
-import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import DateTime from 'react-datetime';
 import _ from 'lodash'
 
+var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
+const validate = (values, props) => {
+  const { data } = props;
+
+  const errors = {};
+  if (data.type === 'Number') {
+    if (values.defaultValue && isNaN(values.defaultValue)) {
+      errors.defaultValue = '格式错误';
+    }
+  } else if (data.type === 'DatePicker') {
+    if (values.defaultValue && !moment(values.defaultValue).isValid()) {
+      errors.defaultValue = '格式错误';
+    }
+  }
+
+  return errors;
+};
 @reduxForm({
   form: 'field',
-  fields: [ 'id', 'defaultValue' ]
+  fields: [ 'id', 'defaultValue' ],
+  validate
 })
 export default class DefaultValueConfigModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
-    //this.state.type = props.data.type;
-    //this.state.optionValues = props.data.optionValues || [];
-    //this.state.defaultValue = props.data.defaultValue || [];
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -41,12 +56,17 @@ export default class DefaultValueConfigModal extends Component {
     const { initializeForm, data } = this.props;
     if ((data.type === 'MultiSelect' || data.type === 'CheckboxGroup') && _.isArray(data.defaultValue)) {
       data.defaultValue = data.defaultValue.join(',');
+    } else if (data.type === 'DatePicker') {
+      data.defaultValue = moment.unix(data.defaultValue);
     }
     initializeForm(data);
   }
 
   async handleSubmit() {
-    const { values, config, close } = this.props;
+    const { values, config, close, data } = this.props;
+    if (data.type === 'DatePicker' && values.defaultValue) {
+      values.defaultValue = parseInt(moment(values.defaultValue).startOf('day').format('X')); 
+    }
     //alert(JSON.stringify(values));
     const ecode = await config(values);
     if (ecode === 0) {
@@ -74,16 +94,16 @@ export default class DefaultValueConfigModal extends Component {
     if (data.type === 'Select' || data.type === 'MultiSelect' || data.type === 'CheckboxGroup' || data.type === 'RadioGroup') {
       if (data.optionValues) {
         optionValues = _.map(data.optionValues || [], function(val) {
-          return { label: val, value: val };
+          return { label: val.name, value: val.id };
         });
       }
-      defaultComponent = ( <Select options={ optionValues } simpleValue multi={ data.type === 'CheckboxGroup' || data.type === 'MultiSelect' } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } } placeholder='请设置默认值'/> ); 
+      defaultComponent = ( <Select options={ optionValues } simpleValue multi={ data.type === 'CheckboxGroup' || data.type === 'MultiSelect' } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } } placeholder='设置默认值'/> ); 
     } else if (data.type === 'TextArea') {
-      defaultComponent = ( <FormControl componentClass='textarea' { ...defaultValue } placeholder='请输入默认值'/> );
-    } else if (data.type === 'DatePicker' || data.type === 'DateTimePicker' ) {
-      defaultComponent = ( <DateTime locale='zh-cn' mode='date' dateFormat='YYYY/MM/DD' timeFormat= { data.type === 'DateTimePicker' ? 'HH:mm:ss' : '' } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } }/> );
+      defaultComponent = ( <FormControl componentClass='textarea' { ...defaultValue } placeholder='输入默认值'/> );
+    } else if (data.type === 'DatePicker') {
+      defaultComponent = ( <DateTime mode='date' closeOnSelect dateFormat='YYYY/MM/DD' timeFormat= { false } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } }/> );
     } else {
-      defaultComponent = ( <FormControl type='text' { ...defaultValue } placeholder='请输入默认值'/> );
+      defaultComponent = ( <FormControl type='text' { ...defaultValue } placeholder='输入默认值'/> );
     }
 
     return (
@@ -93,16 +113,17 @@ export default class DefaultValueConfigModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup controlId='formControlsText' validationState={ defaultValue.value && defaultValue.error ? 'error' : '' }>
             <FormControl type='hidden' { ...id }/>
             <ControlLabel>默认值</ControlLabel>
             { defaultComponent }
+            { defaultValue.value && defaultValue.error && <HelpBlock>{ defaultValue.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
           <image src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button className='ralign' disabled={ submitting || !dirty } type='submit'>确定</Button>
+          <Button className='ralign' disabled={ submitting || !dirty || invalid } type='submit'>确定</Button>
           <Button disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>

@@ -20,8 +20,8 @@ export default class OptionValuesConfigModal extends Component {
     const optionNum = optionValues.length;
     for (let i = 0; i < optionNum; i++) {
       this.state.cards.push({
-        id: optionValues[i],
-        text: optionValues[i]
+        id: optionValues[i].id,
+        text: optionValues[i].name
       });
     }
     this.state.strCards = JSON.stringify(this.state.cards);
@@ -37,7 +37,7 @@ export default class OptionValuesConfigModal extends Component {
   async save() {
     const { close, config, data } = this.props;
     let ecode = 0;
-    const values = { id: data.id, optionValues: _.map(this.state.cards, _.iteratee('text')) };
+    const values = { id: data.id, optionValues: _.map(this.state.cards, (val) => { return { id: val.text, name: val.text } }) };
     ecode = await config(values);
 
     if (ecode === 0) {

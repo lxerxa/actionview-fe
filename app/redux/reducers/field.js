@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], options: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
 
 export default function field(state = initialState, action) {
   switch (action.type) {
@@ -40,16 +40,8 @@ export default function field(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.FIELD_SHOW:
-      return { ...state, itemLoading: true, selectedItem: { id: action.id } };
-
-    case t.FIELD_SHOW_SUCCESS:
-      if ( action.result.ecode === 0 ) {
-        state.item = action.result.data;
-      }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
-
-    case t.FIELD_SHOW_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      const el0 = _.find(state.collection, { id: action.id });
+      return { ...state, itemLoading: false, selectedItem: el0 };
 
     case t.FIELD_DELETE_NOTIFY:
       const el = _.find(state.collection, { id: action.id });

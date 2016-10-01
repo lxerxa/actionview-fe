@@ -110,7 +110,7 @@ export default class Sidebar extends Component {
           </div>
         }
         <div className='bottom-block'>
-          <p>ActionView，一个开源、类 Jira 、轻量级的问题跟踪管理工具。<Label bsStyle='success'>刘旭</Label></p>
+          <p style={ { marginBottom: '16px' } }>ActionView，一个开源、类 Jira 、轻量级的问题跟踪管理工具。<Label bsStyle='success'>刘旭</Label></p>
           { project.item.key && 
             <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ issueModalShow: true }) }><i className='fa fa-plus'></i>&nbsp;&nbsp;创建问题</button>
           }

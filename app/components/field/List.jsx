@@ -31,7 +31,6 @@ export default class List extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    item: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -64,7 +63,7 @@ export default class List extends Component {
     this.setState({ defaultValueConfigShow: false });
   }
 
-  async operateSelect(eventKey) {
+  operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     const { delNotify, show } = this.props;
 
@@ -72,7 +71,7 @@ export default class List extends Component {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
     } else {
-      const ecode = await show(hoverRowId);
+      show(hoverRowId);
       // todo err notify
       eventKey === '1' && this.setState({ editModalShow: true });
       eventKey === '3' && this.setState({ defaultValueConfigShow: true });
@@ -89,7 +88,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, loading, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, del, edit } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const fields = [];
@@ -124,7 +123,7 @@ export default class List extends Component {
               <DropdownButton pullRight bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RadioGroup' || collection[i].type === 'CheckboxGroup') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
                 { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
-                { collection[i].type !== 'File' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
+                { collection[i].type !== 'File' && collection[i].type !== 'SingleVersion' && collection[i].type !== 'MultiVersion' && collection[i].type !== 'SingleModule' && collection[i].type !== 'MultiModule' && collection[i].type !== 'DateTimePicker' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
@@ -155,10 +154,10 @@ export default class List extends Component {
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ item } config={ edit } loading={ loading }/> }
-        { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ item } config={ edit } loading={ loading }/> }
+        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }
+        { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }
       </div>
     );
   }

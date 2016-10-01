@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], options: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
 
 export default function screen(state = initialState, action) {
   switch (action.type) {
@@ -40,13 +40,8 @@ export default function screen(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.SCREEN_SHOW:
-      return { ...state, itemLoading: true, selectedItem: { id: action.id } };
-
-    case t.SCREEN_SHOW_SUCCESS:
-      if ( action.result.ecode === 0 ) {
-        state.item = action.result.data;
-      }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
+      const el0 = _.find(state.collection, { id: action.id });
+      return { ...state, itemLoading: false, selectedItem: { id: el0.id, name: el0.name, fields: el0.schema } };
 
     case t.SCREEN_SHOW_FAIL:
       return { ...state, itemLoading: false, error: action.error };
