@@ -87,7 +87,14 @@ class CreateModal extends Component {
     const { schema } = this.state;
 
     const typeOptions = _.map(config.types || [], function(val) {
-      return { label: val.name, value: val.id };
+      return { 
+        label: (
+          <span>
+            <span className='type-abb'>{ val.abb }</span>
+            { val.name }
+          </span>), 
+        value: val.id 
+      };
     });
 
     return (
@@ -110,7 +117,7 @@ class CreateModal extends Component {
                 <span className='txt-impt'>*</span>类型
               </Col>
               <Col sm={ 7 }>
-                <Select options={ typeOptions } simpleValue clearable={ false } value={ this.state.type } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
+                <Select options={ typeOptions } simpleValue searchable={ false } clearable={ false } value={ this.state.type } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
                 <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
               </Col>
             </FormGroup>

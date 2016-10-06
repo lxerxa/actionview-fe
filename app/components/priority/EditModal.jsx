@@ -79,10 +79,10 @@ export default class EditModal extends Component {
   render() {
     const { fields: { id, name, color, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
-    let colorStyle = { backgroundColor: '#cccccc', marginTop: '8px', marginRight: '8px' };
+    let colorStyle = { backgroundColor: '#cccccc', marginTop: '10px', marginRight: '8px' };
     if (color.value)
     {
-      colorStyle = { backgroundColor: color.value, marginTop: '8px', marginRight: '8px' };
+      colorStyle = { backgroundColor: color.value, marginTop: '10px', marginRight: '8px' };
     }
 
     return (

@@ -8,6 +8,7 @@ import Project from './components/Project';
 import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
 
+const IssueContainer = require('./components/issue/Container');
 const ModuleContainer = require('./components/module/Container');
 const VersionContainer = require('./components/version/Container');
 const TypeContainer = require('./components/type/Container');
@@ -30,6 +31,7 @@ export default (
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
         <Route path='/project/:key/profile' component={ Profile }/>
+        <Route path='/project/:key/issue' component={ IssueContainer }/>
         <Route path='/project/:key/module' component={ ModuleContainer }/>
         <Route path='/project/:key/version' component={ VersionContainer }/>
         <Route path='/project/:key/type' component={ TypeContainer }/>

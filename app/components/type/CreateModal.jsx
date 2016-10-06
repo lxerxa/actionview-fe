@@ -14,19 +14,30 @@ const validate = (values, props) => {
     errors.name = '该名称已存在';
   }
 
+  if (!values.abb) {
+    errors.abb = '必填';
+  } else {
+    const pattern = new RegExp(/^[a-zA-Z0-9]/);
+    if (!pattern.test(values.abb)) {
+      errors.abb = '格式有误';
+    } else if (_.findIndex(props.collection || [], { abb: values.abb }) !== -1) {
+      errors.abb = '该缩码已存在';
+    }
+  }
+
   if (!values.screen_id) {
-    errors.screen = 'Required';
+    errors.screen_id = 'Required';
   }
 
   if (!values.workflow_id) {
-    errors.workflow = 'Required';
+    errors.workflow_id = 'Required';
   }
   return errors;
 };
 
 @reduxForm({
   form: 'type',
-  fields: ['name', 'screen_id', 'workflow_id', 'description'],
+  fields: ['name', 'abb', 'screen_id', 'workflow_id', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -70,8 +81,13 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, screen_id, workflow_id, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, abb, screen_id, workflow_id, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
     const { screens = [], workflows = [] } = options;
+
+    if (abb.value) {
+      abb.value = abb.value.toUpperCase();
+      abb.value = abb.value.substring(0, 1);
+    }
 
     const screenOptions = _.map(screens, function(val) {
       return { label: val.name, value: val.id };
@@ -91,6 +107,11 @@ export default class CreateModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='text' { ...name } placeholder='问题类型名'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
+            <FormControl type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
+            { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>界面</ControlLabel>

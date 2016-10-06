@@ -71,10 +71,10 @@ export default class CreateModal extends Component {
   render() {
     const { fields: { name, color, description }, handleSubmit, invalid, submitting } = this.props;
     
-    let colorStyle = { backgroundColor: '#cccccc', marginTop: '8px', marginRight: '8px' };
+    let colorStyle = { backgroundColor: '#cccccc', marginTop: '10px', marginRight: '8px' };
     if (color.value)
     {
-      colorStyle = { backgroundColor: color.value, marginTop: '8px', marginRight: '8px' };
+      colorStyle = { backgroundColor: color.value, marginTop: '10px', marginRight: '8px' };
     }
 
     return (

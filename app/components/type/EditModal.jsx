@@ -12,12 +12,24 @@ const validate = (values, props) => {
   } else if (props.data.name !== values.name && _.findIndex(props.collection || [], { name: values.name }) !== -1) {
     errors.name = '该名称已存在';
   }
+
+  if (!values.abb) {
+    errors.abb = '必填';
+  } else {
+    const pattern = new RegExp(/^[a-zA-Z0-9]/);
+    if (!pattern.test(values.abb)) {
+      errors.abb = '格式有误';
+    } else if (props.data.abb !== values.abb && _.findIndex(props.collection || [], { abb: values.abb }) !== -1) {
+      errors.abb = '该缩码已存在';
+    }
+  }
+
   return errors;
 };
 
 @reduxForm({
   form: 'type',
-  fields: ['id', 'name', 'description'],
+  fields: ['id', 'name', 'abb', 'description'],
   validate
 })
 export default class EditModal extends Component {
@@ -67,7 +79,12 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { id, name, abb, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+
+    if (abb.value) {
+      abb.value = abb.value.toUpperCase();
+      abb.value = abb.value.substring(0, 1);
+    }
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -81,6 +98,11 @@ export default class EditModal extends Component {
             <FormControl type='hidden' { ...id }/>
             <FormControl type='text' { ...name } placeholder='问题类型名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
+            <FormControl type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
+            { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

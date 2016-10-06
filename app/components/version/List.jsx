@@ -21,7 +21,6 @@ export default class List extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    item: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
@@ -58,7 +57,7 @@ export default class List extends Component {
 
 
   render() {
-    const { collection, selectedItem, item, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, indexLoading, itemLoading, del, edit } = this.props;
 
     const types = [];
     const typeNum = collection.length;
