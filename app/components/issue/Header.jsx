@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, FormControl } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 const CreateModal = require('./CreateModal');
@@ -14,7 +14,7 @@ export default class Header extends Component {
 
   static propTypes = {
     create: PropTypes.func.isRequired,
-    collection: PropTypes.array,
+    query: PropTypes.object,
     indexLoading: PropTypes.bool.isRequired
   }
 
@@ -23,7 +23,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, indexLoading, collection } = this.props;
+    const { create, indexLoading } = this.props;
 
     return (
       <div>
@@ -31,9 +31,15 @@ export default class Header extends Component {
           <h3>#问题#</h3>
         </div>
         <div>
-          <Link to={ { pathname: '/projecr/boba/workflow', query: { showAge: true } } } >aa</Link><Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建问题</Button>
+          <Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ createModalShow: true }); } }>过滤器&nbsp;<i className='fa fa-angle-double-down'></i></Button>
+          <Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ createModalShow: true }); } }>检索&nbsp;<i className='fa fa-angle-double-down'></i></Button>
+          <div style={ { marginTop: '8px', float: 'right' } }>
+            <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多'>
+              <MenuItem eventKey='2'>删除</MenuItem>
+            </DropdownButton>
+          </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
       </div>
     );
   }

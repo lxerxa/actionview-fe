@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button } from 'react-bootstrap';
+
 import * as IssueActions from 'redux/actions/IssueActions';
 
 const Header = require('./Header');
@@ -20,7 +21,10 @@ export default class Container extends Component {
   constructor(props) {
     super(props);
     this.pid = '';
-    this.query = {};
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
 
   static propTypes = {
@@ -29,6 +33,12 @@ export default class Container extends Component {
     location: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired
+  }
+
+  refresh(query) {
+    const pathname = '/project/' + this.pid + '/issue';
+    this.context.router.push({ pathname, query });
+    this.index();
   }
 
   async index() {
@@ -56,7 +66,7 @@ export default class Container extends Component {
     const { params: { key } } = this.props;
     this.pid = key;
   }
- 
+
   render() {
     if (this.props.issue && this.props.project && this.props.project.options) {
       this.props.issue.options = this.props.project.options;
@@ -67,7 +77,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } { ...this.props.issue }/>
-        <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } pid={ this.pid } query={ query }/>
+        <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } pid={ this.pid } query={ query } refresh={ this.refresh.bind(this) }/>
       </div>
     );
   }

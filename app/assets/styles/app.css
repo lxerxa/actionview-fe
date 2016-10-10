@@ -170,6 +170,8 @@
   white-space: pre-wrap;
 }
 
+.table-header:hover { cursor: pointer }
+
 .table-td-issue-title:hover { color: #3b73af; cursor: pointer }
 
 .table-td-desc {
@@ -231,3 +233,5 @@
    padding: 0 6px 0 6px; 
    margin-right: 5px;
 }
+
+.page-button:hover { cursor: pointer }

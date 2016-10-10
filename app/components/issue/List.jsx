@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-// import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem, Label } from 'react-bootstrap';
-import { Link } from 'react-router'
 import _ from 'lodash';
 
 var moment = require('moment');
@@ -29,7 +27,7 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    pid: PropTypes.string.isRequired,
+    refresh: PropTypes.func.isRequired,
     query: PropTypes.object,
     show: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
@@ -78,11 +76,49 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
+  orderBy(field) {
+    const { query={}, refresh } = this.props;
+    if (_.isEmpty(query) || !query.orderBy) {
+      query.orderBy = field + ' asc';
+      refresh(query)
+      return;
+    }
+
+    const newOrders = [];
+    const orders = query.orderBy.toLowerCase().split(',');
+    const ind = _.findIndex(orders, (val) => { return _.startsWith(_.trim(val), field) });
+    if (ind === -1) {
+      newOrders.push(field + ' asc');
+    } else {
+      newOrders.push(field + (_.endsWith(orders[ind], 'desc') ? ' asc' : ' desc'));
+    }
+    _.map(orders, (val, i) => {
+      if (ind === i) {
+        return;
+      }
+      newOrders.push(val);
+    });
+    query.orderBy = newOrders.join(',');
+
+    refresh(query); 
+    return;
+  }
+
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, options={}, del, pid, query } = this.props;
+    const sizePerPage = 3;
+
+    const { collection, selectedItem, loading, indexLoading, itemLoading, options={}, del, query, refresh } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
+
+    const mainOrder = {};
+    if (!_.isEmpty(query) && query.orderBy) {
+      let strFirstOrder = _.trim(query.orderBy.toLowerCase()).split(',').shift();
+      let tmp = strFirstOrder.split(' ');
+      mainOrder.field = tmp[0];
+      mainOrder.order = _.trim(tmp[1] || 'asc');
+    }
 
     const issues = [];
     const issueNum = collection.length;
@@ -130,14 +166,14 @@ export default class List extends Component {
         <BootstrapTable data={ issues } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn width='50' dataField='type'><span>类型<i className='fa fa-arrow-up'></i></span></TableHeaderColumn>
-          <TableHeaderColumn dataField='name'><Link to={ '/project/' + pid + '/issue' } query={ { sort: 'aa' } }>名称</Link></TableHeaderColumn>
-          <TableHeaderColumn width='120' dataField='assignee'>经办人</TableHeaderColumn>
-          <TableHeaderColumn width='70' dataField='priority'>优先级</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>主题</TableHeaderColumn>
+          <TableHeaderColumn width='120' dataField='assignee'><span className='table-header' onClick={ this.orderBy.bind(this, 'assignee') }>经办人 { mainOrder.field === 'assignee' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
+          <TableHeaderColumn width='70' dataField='priority'><span className='table-header' onClick={ this.orderBy.bind(this, 'priority') }>优先级 { mainOrder.field === 'priority' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='100' dataField='state'>状态</TableHeaderColumn>
           <TableHeaderColumn width='100' dataField='state'>解决结果</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        <PaginationList total={ 8 } curPage={ query.page || 1 } sizePerPage={ 3 } paginationSize={ 4 } url={ '/project/' + pid + '/issue' } query={ { sort: 'aa' } }/>
+        <PaginationList total={ 8 } curPage={ query.page || 1 } sizePerPage={ sizePerPage } paginationSize={ 4 } query={ query } refresh={ refresh }/>
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );

@@ -9,17 +9,22 @@ export default class PaginationList extends Component {
   }
 
   static propTypes = {
-    url: PropTypes.string,
     query: PropTypes.object,
+    refresh: PropTypes.func,
     total: PropTypes.number.isRequired,
     curPage: PropTypes.number,
     sizePerPage: PropTypes.number,
     paginationSize : PropTypes.number
   }
 
+  goPage(page) {
+    const { query, refresh } = this.props;
+    refresh({ ...query, page });
+  }
+
   render() {
 
-    let { url, total, curPage = 1, sizePerPage, paginationSize = 4 } = this.props;
+    let { total, curPage = 1, sizePerPage, paginationSize = 4 } = this.props;
 
     const pages = _.ceil(total / sizePerPage);
     if (curPage > pages || curPage <= 0) {
@@ -47,30 +52,29 @@ export default class PaginationList extends Component {
           </div>
           <div className='col-md-6'>
             <ul className='pagination' style={ { float:'right', marginTop: '0px' } }>
-              { curPage - paginationSize > 1 && 
+              { curPage - paginationSize > 1 &&
               <li key='first'>
-                <Link to={ { pathname: url, query: { page: 1 } } }>&lt;&lt;</Link>
+                <span className='page-button' onClick={ this.goPage.bind(this, 1) }>&lt;&lt;</span>
               </li> }
-              { curPage > 1 && pages > 1 && 
+              { curPage-1 > 1 && pages > 1 &&
               <li key='pre'>
-                <Link to={ { pathname: url, query: { page: curPage - 1 } } }>&lt;</Link>
+                <span className='page-button' onClick={ this.goPage.bind(this, curPage-1) }>&lt;</span>
               </li> }
 
               { _.map(pageList, (val, key) =>
                 <li key={ key } className={ val === curPage ? 'active' : '' }>
-                  <Link to={ { pathname: url, query: { page: val } } }>{ val }</Link>
+                  <span className='page-button' onClick={ this.goPage.bind(this, val) }>{ val }</span>
                 </li>
               ) }
-              
+
               { curPage < pages && pages > 1 &&
               <li key='next'>
-                <Link to={ { pathname: url, query: { page: _.add(curPage, 1) } } }>&gt;</Link>
+                <span className='page-button' onClick={ this.goPage.bind(this, _.add(curPage,1)) }>&gt;</span>
               </li> }
               { pages - paginationSize > curPage &&
               <li key='last'>
-                <Link to={ { pathname: url, query: { page: pages } } }>&gt;&gt;</Link>
+                <span className='page-button' onClick={ this.goPage.bind(this, pages) }>&gt;&gt;</span>
               </li> }
-
             </ul>
           </div>
         </div>
