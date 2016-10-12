@@ -15,7 +15,7 @@ class CreateModal extends Component {
     const { config } = this.props;
 
     const defaultType = _.find(config.types || [], { default: true }); 
-    const schema = config.schemas[defaultType.id];
+    const schema = defaultType.schema || [];
     const errors = {}, values = {};
     _.map(schema, (v) => {
       if (v.defaultValue) {
@@ -34,15 +34,30 @@ class CreateModal extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    values: PropTypes.object.isRequired,
     config: PropTypes.object,
-    loading: PropTypes.bool,
+    issue: PropTypes.object,
     create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, create, close } = this.props;
-    const ecode = await create(values);
+    const { create, close, config } = this.props;
+
+    const schema = _.find(config.types, { id: this.state.type }).schema;
+    const submitData = {};
+    _.mapValues(this.state.values, (val, key) => {
+      const index = _.findIndex(schema, { key });
+      const field = index === -1 ? {} : schema[index];
+      if (field.type === 'DatePicker') {
+        submitData[key] = parseInt(moment(val).startOf('day').format('X')); 
+      } else if (field.type === 'DateTimePicker') {
+        submitData[key] = parseInt(moment(val).format('X')); 
+      } else if (field.type === 'Number') {
+        submitData[key] = parseInt(val);
+      } else {
+        submitData[key] = val; 
+      }
+    });
+    const ecode = await create(submitData);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -59,7 +74,7 @@ class CreateModal extends Component {
 
   typeChange(typeValue) {
     const { config } = this.props;
-    const schema = config.schemas[typeValue];
+    const schema = _.find(config.types, { id: typeValue } ).schema;
     if (!schema) {
       return;
     }
@@ -83,7 +98,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { config, close, loading } = this.props;
+    const { config, close, issue } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(config.types || [], function(val) {
@@ -102,7 +117,7 @@ class CreateModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>创建问题</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={ loading ? 'disable' : 'enable' } style={ { height: '580px', overflow: 'auto' } }>
+        <Modal.Body className={ issue.loading ? 'disable' : 'enable' } style={ { height: '580px', overflow: 'auto' } }>
           <Form horizontal>
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>
@@ -254,7 +269,9 @@ class CreateModal extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button className='ralign' type='submit' disabled={ !_.isEmpty(this.state.errors) }>确定</Button>
+          <span className='ralign'>{ this.state.ecode !== 0 && !issue.loading && 'aaaa' }</span>
+          <image src={ img } className={ issue.loading ? 'loading' : 'hide' }/>
+          <Button className='ralign' type='submit' disabled={ !_.isEmpty(this.state.errors) || issue.loading } onClick={ this.handleSubmit }>确定</Button>
           <Button onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>

@@ -14,7 +14,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ project }) => ({ project }), mapDispatchToProps)
+@connect(({ project, issue }) => ({ project, issue }), mapDispatchToProps)
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +24,7 @@ export default class Home extends Component {
 
   static propTypes = {
     project: PropTypes.object.isRequired,
+    issue: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired,
     values: PropTypes.object
@@ -35,7 +36,7 @@ export default class Home extends Component {
   }
 
   async createIssue(values) {
-    await this.props.actions.create(values);
+    await this.props.actions.createIssue(this.props.project.item.key, values);
     return this.props.project.ecode;
   }
 
@@ -44,7 +45,7 @@ export default class Home extends Component {
       <div>
         <div className='container-fluid main-box'>
           <div className='row'>
-            <Sidebar indexImg={ img } project={ this.props.project } createProject={ this.createProject } createIssue={ this.createIssue }/>
+            <Sidebar indexImg={ img } project={ this.props.project } issue={ this.props.issue } createProject={ this.createProject } createIssue={ this.createIssue }/>
             { this.props.children }
           </div>
         </div>

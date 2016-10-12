@@ -15,6 +15,7 @@ export default class Sidebar extends Component {
   static propTypes = {
     indexImg: PropTypes.any.isRequired,
     project: PropTypes.object.isRequired,
+    issue: PropTypes.object,
     createIssue: PropTypes.func,
     createProject: PropTypes.func
   }
@@ -28,7 +29,7 @@ export default class Sidebar extends Component {
   }
 
   render() {
-    const { indexImg, project, createProject, createIssue } = this.props;
+    const { indexImg, project, createProject, createIssue, issue } = this.props;
     const styles = { backgroundImage: 'url(' + indexImg + ')' };
 
     const data = [
@@ -115,7 +116,7 @@ export default class Sidebar extends Component {
             <button className='btn btn-primary btn-lg btn-success' onClick={ () => this.setState({ issueModalShow: true }) }><i className='fa fa-plus'></i>&nbsp;&nbsp;创建问题</button>
           }
         </div>
-        { this.state.issueModalShow && <CreateIssueModal show close={ this.issueModalClose } config={ project.options.config } create={ createIssue }/> }
+        { this.state.issueModalShow && <CreateIssueModal show close={ this.issueModalClose } config={ project.options.config } create={ createIssue } issue={ issue }/> }
       </div>
     );
   }

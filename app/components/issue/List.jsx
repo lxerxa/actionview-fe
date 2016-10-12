@@ -44,7 +44,7 @@ export default class List extends Component {
     const { index, query } = this.props;
     if (JSON.stringify(newQuery) !== JSON.stringify(query))
     {
-      index();
+      index(newQuery);
     }
   }
 
@@ -79,8 +79,7 @@ export default class List extends Component {
   orderBy(field) {
     const { query={}, refresh } = this.props;
     if (_.isEmpty(query) || !query.orderBy) {
-      query.orderBy = field + ' asc';
-      refresh(query)
+      refresh(_.assign(query, { orderBy: field + ' asc', page: 1 }));
       return;
     }
 
@@ -98,10 +97,8 @@ export default class List extends Component {
       }
       newOrders.push(val);
     });
-    query.orderBy = newOrders.join(',');
 
-    refresh(query); 
-    return;
+    refresh(_.assign(query, { orderBy: newOrders.join(','), page: 1 })); 
   }
 
   render() {
@@ -165,12 +162,12 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ issues } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
-          <TableHeaderColumn width='50' dataField='type'><span>类型<i className='fa fa-arrow-up'></i></span></TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>主题</TableHeaderColumn>
+          <TableHeaderColumn width='50' dataField='type'><span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>类型{ mainOrder.field === 'type' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
+          <TableHeaderColumn dataField='name'><span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>主题 { mainOrder.field === 'title' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='120' dataField='assignee'><span className='table-header' onClick={ this.orderBy.bind(this, 'assignee') }>经办人 { mainOrder.field === 'assignee' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='70' dataField='priority'><span className='table-header' onClick={ this.orderBy.bind(this, 'priority') }>优先级 { mainOrder.field === 'priority' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='state'>状态</TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='state'>解决结果</TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='state'><span className='table-header' onClick={ this.orderBy.bind(this, 'state') }>状态{ mainOrder.field === 'state' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='state'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         <PaginationList total={ 8 } curPage={ query.page || 1 } sizePerPage={ sizePerPage } paginationSize={ 4 } query={ query } refresh={ refresh }/>

@@ -38,11 +38,12 @@ export default class Container extends Component {
   refresh(query) {
     const pathname = '/project/' + this.pid + '/issue';
     this.context.router.push({ pathname, query });
-    this.index();
+    //this.index(query);
   }
 
-  async index() {
-    await this.props.actions.index(this.pid);
+  async index(query) {
+    var qs = require('qs');
+    await this.props.actions.index(this.pid, qs.stringify(query || {}));
     return this.props.issue.ecode;
   }
 

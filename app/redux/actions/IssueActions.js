@@ -1,9 +1,9 @@
 import { asyncFuncCreator } from '../utils';
 
-export function index(key) {
+export function index(key, qs) {
   return asyncFuncCreator({
     constant: 'ISSUE_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue' })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue' + (qs ? '?' + qs : '') })
   });
 }
 
