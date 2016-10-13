@@ -128,8 +128,8 @@ export default class List extends Component {
         type: (<span className='type-abb' title={ options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).name : '' }>{ options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).abb : '-' }</span>),
         name: (
           <div>
-            <span className='table-td-issue-title'>{ collection[i].no + ' - ' + collection[i].title }</span>
-            { collection[i].creator && <span className='table-td-issue-desc'>{ collection[i].creator.name + ' ' + moment(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
+            <span className='table-td-issue-title'>{ collection[i].no + ' - ' + (collection[i].title || '') }</span>
+            { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + ' ' + moment(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
           </div>
         ), 
         assignee: collection[i].assignee ? collection[i].assignee.name : '-',

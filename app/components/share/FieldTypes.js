@@ -11,7 +11,5 @@ export default [
   { value: 'DateTimePicker', label: '日期时间选择控件' },
   { value: 'SingleVersion', label: '单一版本选择' },
   { value: 'MultiVersion', label: '多版本选择' },
-  { value: 'SingleModule', label: '单一模块选择' },
-  { value: 'MultiModule', label: '多模块选择' },
   { value: 'Url', label: 'URL字段' }
 ];

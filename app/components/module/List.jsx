@@ -75,8 +75,9 @@ export default class List extends Component {
     this.state.willSetPrincipalModuleIds.splice(index, 1);
     this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds, willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds });
 
-    const { edit } = this.props;
-    const ecode = await edit({ principal_id: this.state.principal[moduleId], id: moduleId });
+    const { edit, options } = this.props;
+    const { users = [] } = options;
+    const ecode = await edit({ principal: this.state.principal[moduleId], id: moduleId });
     if (ecode === 0) {
       const index = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
       this.state.settingPrincipalModuleIds.splice(index, 1);
@@ -110,7 +111,7 @@ export default class List extends Component {
     this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds, willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds });
 
     const { edit } = this.props;
-    const ecode = await edit({ defaultAssignee_id: this.state.defaultAssignee[moduleId], id: moduleId });
+    const ecode = await edit({ defaultAssignee: this.state.defaultAssignee[moduleId], id: moduleId });
     if (ecode === 0) {
       const index = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
       this.state.settingDefaultAssigneeModuleIds.splice(index, 1);
@@ -129,7 +130,7 @@ export default class List extends Component {
 
     const { users = [] } = options;
     const userOptions = _.map(users, function(val) {
-      return { label: val.name, value: val.id };
+      return { label: val.nameAndEmail, value: val.id };
     });
 
     const defaultAssigneeOptions = [ { value: 'projectPrincipal', label: '项目负责人' }, { value: 'modulePrincipal', label: '模块负责人' }, { value: 'none', label: '未分配' } ];
@@ -149,10 +150,10 @@ export default class List extends Component {
           { _.indexOf(willSetPrincipalModuleIds, collection[i].id) === -1 && _.indexOf(settingPrincipalModuleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
               <div style={ { display: 'table', width: '100%' } }>
-              { collection[i].principal_id ?
+              { collection[i].principal ?
                 <span>
                   <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> 
-                    { _.find(users, { id: collection[i].principal_id }) ? _.find(users, { id: collection[i].principal_id }).name : '-' } 
+                    { collection[i].principal.name || '-' } 
                   </div>
                 </span> 
                 :
@@ -162,7 +163,7 @@ export default class List extends Component {
             </div>
             :
             <div>
-              <Select simpleValue clearable={ false } disabled={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 && true } options={ userOptions } value={ this.state.principal[collection[i].id] || collection[i].principal_id } onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } placeholder='请选择用户'/>
+              <Select simpleValue clearable={ false } disabled={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 && true } options={ userOptions } value={ this.state.principal[collection[i].id] || collection[i].principal.id } onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } placeholder='请选择用户'/>
               <div className={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -177,10 +178,10 @@ export default class List extends Component {
           { _.indexOf(willSetDefalutAssigneeModuleIds, collection[i].id) === -1 && _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
               <div style={ { display: 'table', width: '100%' } }>
-              { collection[i].defaultAssignee_id ?
+              { collection[i].defaultAssignee ?
                 <span>
                   <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> 
-                    { _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee_id }) ? _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee_id }).label : '-' } 
+                    { _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }) ? _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }).label : '-' } 
                   </div>
                 </span> 
                 :
@@ -190,7 +191,7 @@ export default class List extends Component {
             </div>
             :
             <div>
-              <Select simpleValue clearable={ false } searchable={ false } disabled={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 && true } options={ defaultAssigneeOptions } value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee_id } onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } placeholder='默认经办人(项目负责人)'/>
+              <Select simpleValue clearable={ false } searchable={ false } disabled={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 && true } options={ defaultAssigneeOptions } value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee } onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } placeholder='默认经办人(项目负责人)'/>
               <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>

@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Modal, Button, FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
@@ -133,8 +133,12 @@ export default class OptionValuesConfigModal extends Component {
             <p>可选值为空</p>
           }
           <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
-            <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyUp={ this.handlerKeyUp.bind(this) } style={ { display: 'inline-block', width: '68%' } }/>
-            <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', marginLeft: '10px' } }>添加新值</Button>
+            <Col sm={ 10 }>
+              <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyUp={ this.handlerKeyUp.bind(this) }/>
+            </Col>
+            <Col sm={ 2 }>
+              <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+            </Col>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

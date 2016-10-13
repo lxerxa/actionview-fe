@@ -19,7 +19,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'module',
-  fields: ['name', 'defaultAssignee_id', 'principal_id', 'description'],
+  fields: ['name', 'defaultAssignee', 'principal', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -44,9 +44,9 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
-    if (!values.defaultAssignee_id)
+    if (!values.defaultAssignee)
     {
-      values.defaultAssignee_id = 'projectPrincipal';
+      values.defaultAssignee = 'projectPrincipal';
     }
 
     const ecode = await create(values);
@@ -68,7 +68,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, defaultAssignee_id, principal_id, description }, options={}, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, defaultAssignee, principal, description }, options={}, handleSubmit, invalid, submitting } = this.props;
 
     const assigneeOptions = [ { value: 'projectPrincipal', label: '项目负责人' }, { value: 'modulePrincipal', label: '模块负责人' }, { value: 'none', label: '未分配' } ];
 
@@ -88,11 +88,11 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>责任人</ControlLabel>
-            <Select clearable={ false } value={ principal_id.value } onChange={ newValue => { principal_id.onChange(newValue) } } options={ userOptions } placeholder='请输入责任人'/>
+            <Select clearable={ false } value={ principal.value } onChange={ newValue => { principal.onChange(newValue) } } options={ userOptions } placeholder='请输入责任人'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>默认经办人</ControlLabel>
-            <Select options={ assigneeOptions } simpleValue clearable={ false } value={ defaultAssignee_id.value } onChange={ newValue => { defaultAssignee_id.onChange(newValue) } } placeholder='默认经办人(项目负责人)'/>
+            <Select options={ assigneeOptions } clearable={ false } value={ defaultAssignee.value } onChange={ newValue => { defaultAssignee.onChange(newValue) } } placeholder='默认经办人(项目负责人)'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

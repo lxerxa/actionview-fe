@@ -14,8 +14,8 @@ class CreateModal extends Component {
     super(props);
     const { config } = this.props;
 
-    const defaultType = _.find(config.types || [], { default: true }); 
-    const schema = defaultType.schema || [];
+    const defaultIndex = _.findIndex(config.types || [], { default: true }); 
+    const schema = defaultIndex !== -1 ? config.types[defaultIndex].schema : [];
     const errors = {}, values = {};
     _.map(schema, (v) => {
       if (v.defaultValue) {
@@ -26,7 +26,7 @@ class CreateModal extends Component {
       }
     });
 
-    this.state = { ecode: 0, errors, touched: {}, type: defaultType.id, schema, values };
+    this.state = { ecode: 0, errors, touched: {}, type: defaultIndex !== -1 ? config.types[defaultIndex].id : '', schema, values };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -57,6 +57,7 @@ class CreateModal extends Component {
         submitData[key] = val; 
       }
     });
+    submitData['type'] = this.state.type;
     const ecode = await create(submitData);
     if (ecode === 0) {
       this.setState({ ecode: 0 });

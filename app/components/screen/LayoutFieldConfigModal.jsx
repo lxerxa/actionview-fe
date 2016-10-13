@@ -52,6 +52,7 @@ export default class LayoutFieldConfigModal extends Component {
     if (values.required_fields) {
       values.required_fields = values.required_fields.split(',');
     }
+    values.required_fields = values.required_fields || [];
     let ecode = 0;
     ecode = await config(values);
 
