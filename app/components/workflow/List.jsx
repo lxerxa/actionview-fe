@@ -85,10 +85,10 @@ export default class List extends Component {
     const { collection, selectedItem, item, options, loading, indexLoading, itemLoading, del, edit, create, pid } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
-    const fields = [];
-    const fieldNum = collection.length;
-    for (let i = 0; i < fieldNum; i++) {
-      fields.push({
+    const workflows = [];
+    const workflowNum = collection.length;
+    for (let i = 0; i < workflowNum; i++) {
+      workflows.push({
         id: collection[i].id,
         name:  (
           <div>
@@ -126,7 +126,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable pullRight data={ fields } bordered={ false } hover options={ opts } trClassName='tr-top'>
+        <BootstrapTable pullRight data={ workflows } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
           <TableHeaderColumn dataField='latest_modify' width='280'>最近配置修改</TableHeaderColumn>

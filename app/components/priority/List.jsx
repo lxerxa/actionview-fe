@@ -56,12 +56,12 @@ export default class List extends Component {
   render() {
     const { collection, selectedItem, item, indexLoading, itemLoading, del, edit } = this.props;
 
-    const types = [];
-    const typeNum = collection.length;
-    for (let i = 0; i < typeNum; i++) {
+    const priorities = [];
+    const priorityNum = collection.length;
+    for (let i = 0; i < priorityNum; i++) {
       const colorStyle = { backgroundColor: collection[i].color || '#cccccc' };
 
-      types.push({
+      priorities.push({
         id: collection[i].id,
         name: ( <span className='table-td-title'>{ collection[i].name } { collection[i].category && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>全局</Label> } </span> ),
         color: ( <div className='circle' style={ colorStyle } /> ),
@@ -87,7 +87,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+        <BootstrapTable data={ priorities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn width='220' dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn width='100' dataField='color'>色彩</TableHeaderColumn>

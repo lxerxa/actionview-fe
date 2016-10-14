@@ -144,11 +144,11 @@ export default class List extends Component {
     const { collection, selectedItem, item, indexLoading, itemLoading, del, edit } = this.props;
     const { willSetPermissionRoleIds, settingPermissionRoleIds, willSetUserRoleIds, settingUserRoleIds } = this.state;
 
-    const types = [];
-    const typeNum = collection.length;
-    for (let i = 0; i < typeNum; i++) {
+    const roles = [];
+    const roleNum = collection.length;
+    for (let i = 0; i < roleNum; i++) {
       const permissions = _.filter(allPermissions, function(o) { return _.indexOf(collection[i].permissions || [], o.id) !== -1; });
-      types.push({
+      roles.push({
         id: collection[i].id,
         name:  (
           <div>
@@ -229,7 +229,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-top'>
+        <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='permissions'>权限</TableHeaderColumn>

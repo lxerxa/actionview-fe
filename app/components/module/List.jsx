@@ -135,10 +135,10 @@ export default class List extends Component {
 
     const defaultAssigneeOptions = [ { value: 'projectPrincipal', label: '项目负责人' }, { value: 'modulePrincipal', label: '模块负责人' }, { value: 'none', label: '未分配' } ];
 
-    const types = [];
-    const typeNum = collection.length;
-    for (let i = 0; i < typeNum; i++) {
-      types.push({
+    const modules = [];
+    const moduleNum = collection.length;
+    for (let i = 0; i < moduleNum; i++) {
+      modules.push({
         name: ( 
           <div>
             <span className='table-td-title'>{ collection[i].name }</span>
@@ -222,7 +222,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+        <BootstrapTable data={ modules } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
           <TableHeaderColumn dataField='defaultAssignee'>默认经办人</TableHeaderColumn>

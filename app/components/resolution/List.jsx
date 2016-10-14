@@ -56,10 +56,10 @@ export default class List extends Component {
   render() {
     const { collection, selectedItem, item, indexLoading, itemLoading, del, edit } = this.props;
 
-    const types = [];
-    const typeNum = collection.length;
-    for (let i = 0; i < typeNum; i++) {
-      types.push({
+    const resolutions = [];
+    const resolutionNum = collection.length;
+    for (let i = 0; i < resolutionNum; i++) {
+      resolutions.push({
         id: collection[i].id,
         name: ( <span className='table-td-title'>{ collection[i].name } { collection[i].category && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>全局</Label> } </span> ),
         description: collection[i].description ? collection[i].description : '-', 
@@ -84,7 +84,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+        <BootstrapTable data={ resolutions } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' width='365'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>

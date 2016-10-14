@@ -59,10 +59,10 @@ export default class List extends Component {
   render() {
     const { collection, selectedItem, indexLoading, itemLoading, del, edit } = this.props;
 
-    const types = [];
-    const typeNum = collection.length;
-    for (let i = 0; i < typeNum; i++) {
-      types.push({
+    const versions = [];
+    const versionNum = collection.length;
+    for (let i = 0; i < versionNum; i++) {
+      versions.push({
         name: ( 
           <div>
             <span className='table-td-title'>{ collection[i].name }</span>
@@ -108,7 +108,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+        <BootstrapTable data={ versions } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='start_time'>开始时间</TableHeaderColumn>
           <TableHeaderColumn dataField='end_time'>结束时间</TableHeaderColumn>

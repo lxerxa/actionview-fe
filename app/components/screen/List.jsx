@@ -100,10 +100,10 @@ export default class List extends Component {
     const { collection, selectedItem, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
-    const fields = [];
-    const fieldNum = collection.length;
-    for (let i = 0; i < fieldNum; i++) {
-      fields.push({
+    const screens = [];
+    const screenNum = collection.length;
+    for (let i = 0; i < screenNum; i++) {
+      screens.push({
         id: collection[i].id,
         name:  (
           <div>
@@ -144,7 +144,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ fields } bordered={ false } hover options={ opts } trClassName='tr-top'>
+        <BootstrapTable data={ screens } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
