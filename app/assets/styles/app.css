@@ -165,6 +165,7 @@
 
 .table-td-issue-title {
   display: block;
+  font-weight: bold;
   word-wrap: break-word;
   white-space: pre-wrap;
 }

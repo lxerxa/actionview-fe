@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 const CreateModal = require('./CreateModal');
@@ -38,6 +38,17 @@ export default class Header extends Component {
               <MenuItem eventKey='2'>删除</MenuItem>
             </DropdownButton>
           </div>
+        </div>
+        <div>
+          <Col sm={ 4 }>
+            <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>社交化项目管理系统</span></div>
+          </Col>
+          <Col sm={ 4 }>
+            <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>社交化项目管理系统</span></div>
+          </Col>
+          <Col sm={ 4 }>
+            <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>社交化项目管理系统</span></div>
+          </Col>
         </div>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
       </div>

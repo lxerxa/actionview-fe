@@ -1,5 +1,5 @@
 export default [
-  { value: 'Label', label: '标签' },
+  { value: 'Tags', label: '标签' },
   { value: 'Number', label: '数值字段' },
   { value: 'Text', label: '文本框单行' },
   { value: 'TextArea', label: '文本框多行' },

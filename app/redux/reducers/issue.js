@@ -9,7 +9,7 @@ export default function issue(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.ISSUE_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, options: action.result.options };
 
     case t.ISSUE_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };

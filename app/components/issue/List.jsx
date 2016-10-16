@@ -35,8 +35,11 @@ export default class List extends Component {
   }
 
   componentWillMount() {
-    const { index } = this.props;
-    index();
+    const { index, query={} } = this.props;
+    if (!query.page) {
+      query.page = 1;
+    }
+    index(query);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -121,20 +124,28 @@ export default class List extends Component {
     const issueNum = collection.length;
     for (let i = 0; i < issueNum; i++) {
 
-      const priorityStyle = { backgroundColor: options.config && _.findIndex(options.config.priorities, { id: collection[i].priority }) !== -1 ? _.find(options.config.priorities, { id: collection[i].priority }).color : '#cccccc', marginLeft: '14px' };
+      const priorityInd = options.config ? _.findIndex(options.config.priorities, { id: collection[i].priority }) : -1;
+      const priorityStyle = { backgroundColor: priorityInd !== -1 ? options.config.priorities[priorityInd].color : '#cccccc', marginLeft: '14px' };
 
       issues.push({
         id: collection[i].id,
-        type: (<span className='type-abb' title={ options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).name : '' }>{ options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).abb : '-' }</span>),
+        type: (
+          <span className='type-abb' title={ options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).name : '' }>
+            { options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).abb : '-' }
+          </span>),
         name: (
           <div>
-            <span className='table-td-issue-title'>{ collection[i].no + ' - ' + (collection[i].title || '') }</span>
-            { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + ' ' + moment(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
+            <span className='table-td-issue-title'>
+              { collection[i].title ? (collection[i].no + ' - ' + collection[i].title) : '-' }
+            </span>
+            { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
+            
           </div>
         ), 
-        assignee: collection[i].assignee ? collection[i].assignee.name : '-',
-        priority: ( <div className='circle' style={ priorityStyle } title={ options.config && _.findIndex(options.config.priorities, { id: collection[i].priority }) !== -1 ? _.find(options.config.priorities, { id: collection[i].priority }).name : '' } /> ),
+        assignee: !_.isEmpty(collection[i].assignee) ? collection[i].assignee.name : '-',
+        priority: (<div className='circle' style={ priorityStyle } title={ priorityInd !== -1 ? options.config.priorities[priorityInd].name : '' }/>),
         state: options.config && _.findIndex(options.config.states, { id: collection[i].state }) !== -1 ? _.find(options.config.states, { id: collection[i].state }).name : '-', 
+        resolution: options.config && _.findIndex(options.config.resolutions, { id: collection[i].resolution }) !== -1 ? _.find(options.config.resolutions, { id: collection[i].resolution }).name : '-', 
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
@@ -167,10 +178,10 @@ export default class List extends Component {
           <TableHeaderColumn width='120' dataField='assignee'><span className='table-header' onClick={ this.orderBy.bind(this, 'assignee') }>经办人 { mainOrder.field === 'assignee' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='70' dataField='priority'><span className='table-header' onClick={ this.orderBy.bind(this, 'priority') }>优先级 { mainOrder.field === 'priority' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='100' dataField='state'><span className='table-header' onClick={ this.orderBy.bind(this, 'state') }>状态{ mainOrder.field === 'state' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='state'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        <PaginationList total={ 8 } curPage={ query.page || 1 } sizePerPage={ sizePerPage } paginationSize={ 4 } query={ query } refresh={ refresh }/>
+        { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ sizePerPage } paginationSize={ 4 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button } from 'react-bootstrap';
+import _ from 'lodash';
 
 import * as IssueActions from 'redux/actions/IssueActions';
 
@@ -70,7 +71,7 @@ export default class Container extends Component {
 
   render() {
     if (this.props.issue && this.props.project && this.props.project.options) {
-      this.props.issue.options = this.props.project.options;
+      _.assign(this.props.issue.options, this.props.project.options);
     }
 
     const { location: { query={} } } = this.props;
