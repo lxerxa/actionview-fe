@@ -36,17 +36,13 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index, query={} } = this.props;
-    if (!query.page) {
-      query.page = 1;
-    }
     index(query);
   }
 
   componentWillReceiveProps(nextProps) {
     const newQuery = nextProps.query || {};
     const { index, query } = this.props;
-    if (JSON.stringify(newQuery) !== JSON.stringify(query))
-    {
+    if (JSON.stringify(newQuery) !== JSON.stringify(query)) {
       index(newQuery);
     }
   }
@@ -105,7 +101,6 @@ export default class List extends Component {
   }
 
   render() {
-    const sizePerPage = 3;
 
     const { collection, selectedItem, loading, indexLoading, itemLoading, options={}, del, query, refresh } = this.props;
     const { operateShow, hoverRowId } = this.state;
@@ -181,7 +176,7 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ sizePerPage } paginationSize={ 4 } query={ query } refresh={ refresh }/> : '' }
+        { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );
