@@ -107,7 +107,7 @@
   background-color: #fff;
 }
 
-.editable-list-field:hover .edit-icon{
+.editable-list-field:hover .edit-icon {
   opacity: 1 !important;
   cursor: pointer;
 }
@@ -227,11 +227,51 @@
 }
 
 .type-abb {
-   background-color: #ffffff;
-   border: 1px #ccc solid;
-   border-radius: 4px;
-   padding: 0 6px 0 6px; 
-   margin-right: 5px;
+  background-color: #ffffff;
+  border: 1px #ccc solid;
+  border-radius: 4px;
+  padding: 0 6px 0 6px; 
+  margin-right: 5px;
 }
 
 .page-button:hover { cursor: pointer }
+
+.cond-bar {
+  vertical-align: middle;
+  padding: 6px 0px 6px 10px;
+  margin: 10px 10px 5px 10px;
+  background-color: whitesmoke;
+  border: 1px #ddd solid;
+  border-radius: 4px;
+}
+
+.cond-bar .remove-icon {
+  opacity: 0 !important;
+  margin-left: 5px;
+}
+
+.cond-bar:hover {
+  box-shadow: 0 0 0 1px #e78170;
+  border-radius: 4px;
+}
+
+.cond-bar:hover .remove-icon{
+  opacity: 1 !important;
+  cursor: pointer;
+  float: right;
+  margin-right: 10px;
+}
+
+.searcher {
+  margin-left: 15px;
+}
+
+.searcher .remove-icon {
+  opacity: 0 !important;
+  margin-left: 15px;
+}
+
+.searcher:hover .remove-icon{
+  opacity: 1 !important;
+  cursor: pointer;
+}
