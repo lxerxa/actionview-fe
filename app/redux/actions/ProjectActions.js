@@ -20,10 +20,3 @@ export function show(key) {
     promise: (client) => client.request({ url: '/project/' + key })
   });
 }
-
-export function createIssue(key, values) {
-  return asyncFuncCreator({
-    constant: 'ISSUE_CREATE',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue', method: 'post', data: values })
-  });
-}

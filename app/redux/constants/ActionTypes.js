@@ -33,6 +33,7 @@ export default generateConstants([
 
   'ISSUE_INDEX(ASYNC)',
   'ISSUE_CREATE(ASYNC)',
+  'ISSUE_OPTIONS(ASYNC)',
   'ISSUE_SHOW',
   'ISSUE_EDIT(ASYNC)',
   'ISSUE_DELETE(ASYNC)',

@@ -12,10 +12,10 @@ const img = require('../../assets/images/loading.gif');
 class CreateModal extends Component {
   constructor(props) {
     super(props);
-    const { config } = this.props;
+    const { options } = this.props;
 
-    const defaultIndex = _.findIndex(config.types || [], { default: true }); 
-    const schema = defaultIndex !== -1 ? config.types[defaultIndex].schema : [];
+    const defaultIndex = _.findIndex(options.types || [], { default: true }); 
+    const schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
     const errors = {}, values = {};
     _.map(schema, (v) => {
       if (v.defaultValue) {
@@ -26,7 +26,7 @@ class CreateModal extends Component {
       }
     });
 
-    this.state = { ecode: 0, errors, touched: {}, type: defaultIndex !== -1 ? config.types[defaultIndex].id : '', schema, values };
+    this.state = { ecode: 0, errors, touched: {}, type: defaultIndex !== -1 ? options.types[defaultIndex].id : '', schema, values };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -34,15 +34,15 @@ class CreateModal extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    config: PropTypes.object,
-    issue: PropTypes.object,
+    options: PropTypes.object,
+    loading: PropTypes.bool,
     create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { create, close, config } = this.props;
+    const { create, close, options } = this.props;
 
-    const schema = _.find(config.types, { id: this.state.type }).schema;
+    const schema = _.find(options.types, { id: this.state.type }).schema;
     const submitData = {};
     _.mapValues(this.state.values, (val, key) => {
       const index = _.findIndex(schema, { key });
@@ -74,8 +74,8 @@ class CreateModal extends Component {
   }
 
   typeChange(typeValue) {
-    const { config } = this.props;
-    const schema = _.find(config.types, { id: typeValue } ).schema;
+    const { options } = this.props;
+    const schema = _.find(options.types, { id: typeValue } ).schema;
     if (!schema) {
       return;
     }
@@ -99,10 +99,10 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { config, close, issue } = this.props;
+    const { options, close, loading } = this.props;
     const { schema } = this.state;
 
-    const typeOptions = _.map(config.types || [], function(val) {
+    const typeOptions = _.map(options.types || [], function(val) {
       return { 
         label: (
           <span>
@@ -118,7 +118,7 @@ class CreateModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>创建问题</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={ issue.loading ? 'disable' : 'enable' } style={ { height: '580px', overflow: 'auto' } }>
+        <Modal.Body className={ loading ? 'disable' : 'enable' } style={ { height: '580px', overflow: 'auto' } }>
           <Form horizontal>
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>
@@ -149,7 +149,7 @@ class CreateModal extends Component {
 
               if (v.type === 'Text') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl 
@@ -164,7 +164,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'Number') { 
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 4 }>
                     <FormControl
@@ -179,7 +179,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'TextArea') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl
@@ -195,7 +195,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'Select' || v.type === 'MultiSelect') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 7 }>
                     <Select 
@@ -214,7 +214,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'CheckboxGroup') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 9 }>
                     <CheckboxGroup
@@ -222,8 +222,8 @@ class CreateModal extends Component {
                       name={ v.name }
                       value={ this.state.values[v.key] && _.isString(this.state.values[v.key]) ? this.state.values[v.key].split(',') : this.state.values[v.key] }
                       onChange={ newValue => { v.required && newValue.length <= 0 ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } }>
-                      { _.map(v.optionValues || [], (val) => 
-                        <span><Checkbox value={ val.id }/>{ ' ' + val.name + ' ' }</span>
+                      { _.map(v.optionValues || [], (val, i) => 
+                        <span key={ i }><Checkbox value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
                       }
                       { this.state.touched[v.key] && this.state.errors[v.key] && <div><ControlLabel>{ this.state.errors[v.key] || '' }</ControlLabel></div> }
@@ -232,7 +232,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'RadioGroup') {
                 return (
-                <FormGroup controlId={ key }>
+                <FormGroup key={ key } controlId={ 'id' + key }>
                   { title }
                   <Col sm={ 9 }>
                     <RadioGroup
@@ -240,8 +240,8 @@ class CreateModal extends Component {
                       name={ v.name }
                       value={ this.state.values[v.key] }
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }) } }>
-                      { _.map(v.optionValues || [], (val) =>
-                        <span style={ { marginLeft: '6px' } }><Radio value={ val.id }/>{ ' ' + val.name + ' ' }</span>
+                      { _.map(v.optionValues || [], (val, i) =>
+                        <span style={ { marginLeft: '6px' } } key={ i }><Radio value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
                       }
                     </RadioGroup>
@@ -249,7 +249,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
                 return (
-                <FormGroup controlId={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 4 }>
                     <DateTime 
@@ -270,9 +270,9 @@ class CreateModal extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !issue.loading && 'aaaa' }</span>
-          <image src={ img } className={ issue.loading ? 'loading' : 'hide' }/>
-          <Button className='ralign' type='submit' disabled={ _.isEmpty(schema) || !_.isEmpty(this.state.errors) || issue.loading } onClick={ this.handleSubmit }>确定</Button>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <image src={ img } className={ loading ? 'loading' : 'hide' }/>
+          <Button className='ralign' type='submit' disabled={ _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
           <Button onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>

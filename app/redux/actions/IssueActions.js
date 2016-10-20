@@ -21,6 +21,13 @@ export function edit(key, values) {
   });
 }
 
+export function getOptions(key) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_OPTIONS',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/options' })
+  });
+}
+
 export function show(id) {
   return { type: 'ISSUE_SHOW', id: id };
 }

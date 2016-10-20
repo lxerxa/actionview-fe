@@ -62,7 +62,7 @@ export default class SearchList extends Component {
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
 
     return (
-      <Form horizontal style={ { marginTop: '10px', marginBottom: '30px' } } className={ !searchShow && 'hide' }>
+      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px' } } className={ !searchShow && 'hide' }>
         <FormGroup controlId='formControlsLabel'>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             类型 

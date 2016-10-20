@@ -14,7 +14,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ wfconfig, project }) => ({ wfconfig, project }), mapDispatchToProps)
+@connect(({ wfconfig }) => ({ wfconfig }), mapDispatchToProps)
 export default class ConfigContainer extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +25,6 @@ export default class ConfigContainer extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    project: PropTypes.object.isRequired,
     wfconfig: PropTypes.object.isRequired
   }
 
@@ -47,9 +46,9 @@ export default class ConfigContainer extends Component {
 
   render() {
 
-    if (this.props.wfconfig && this.props.wfconfig.options && this.props.project && this.props.project.options) {
-      this.props.wfconfig.options.users = this.props.project.options.users || []; 
-    }
+    //if (this.props.wfconfig && this.props.wfconfig.options && this.props.project && this.props.project.options) {
+    //  this.props.wfconfig.options.users = this.props.project.options.users || []; 
+    //}
 
     return (
       <div>

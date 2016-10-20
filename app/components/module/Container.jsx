@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ module, project }) => ({ module, project }), mapDispatchToProps)
+@connect(({ module }) => ({ module }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +25,6 @@ export default class Container extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    project: PropTypes.object.isRequired,
     module: PropTypes.object.isRequired
   }
 
@@ -57,10 +56,10 @@ export default class Container extends Component {
 
   render() {
 
-    if (this.props.module && this.props.project && this.props.project.options) {
-      this.props.module.options = {};
-      this.props.module.options.users = this.props.project.options.users || [];
-    }
+    //if (this.props.module && this.props.project && this.props.project.options) {
+    //  this.props.module.options = {};
+    //  this.props.module.options.users = this.props.project.options.users || [];
+    //}
 
     return (
       <div>

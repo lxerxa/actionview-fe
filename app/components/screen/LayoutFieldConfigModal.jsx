@@ -25,7 +25,6 @@ export default class LayoutFieldConfigModal extends Component {
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    close: PropTypes.func.isRequired,
     initializeForm: PropTypes.func.isRequired,
     config: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,

@@ -18,19 +18,22 @@ export default class SearcherList extends Component {
   render() {
     const { indexLoading, searcherShow=false, options: { config: { types=[], states=[], priorities=[], resolutions=[] } = {}, users=[] } } = this.props;
 
+    const aa = [{ name: '分配给我的', link: 'aa' }, { name: '分配给我的', link: 'bb' }, { name: '分配给我的2', link: 'bb' }, { name: '分配给我的3', link: 'cc' }, { name: '分配给我的4', link: 'cc' }];
+
     return (
-      <Form horizontal style={ { marginTop: '10px', marginBottom: '30px' } } className={ !searchShow && 'hide' }>
+      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px' } } className={ !searcherShow && 'hide' }>
         <FormGroup controlId='formControlsLabel'>
-          <Col sm={ 3 }>
-            <span className='searcher'>
-              <Link to='aa'>
-                <span style={ { color: '#3b73af' } }>分配给我的</span>
-              </Link>
-              <span className='remove-icon'>
-                <i className='fa fa-remove'></i>
+          { _.map(aa, (val) => 
+            <Col sm={ 3 }>
+              <span className='searcher'>
+                <Link to={ val.link }>
+                  <span style={ { color: '#3b73af' } }>{ val.name }</span>
+                </Link>
+                <span className='remove-icon'>
+                  <i className='fa fa-remove'></i>
+                </span>
               </span>
-            </span>
-          </Col>
+            </Col>) }
         </FormGroup>
       </Form>
     );
