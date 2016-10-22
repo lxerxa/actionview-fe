@@ -30,7 +30,6 @@ export default class Sidebar extends Component {
 
   render() {
     const { indexImg, project, createProject, createIssue, issue } = this.props;
-    const styles = { backgroundImage: 'url(' + indexImg + ')' };
 
     const data = [
       {
@@ -98,8 +97,7 @@ export default class Sidebar extends Component {
     ];
 
     return (
-      <div className='col-sm-3 sidebar-box'>
-        <div className='cover-img' style={ styles }></div>
+      <div className='col-sm-2 sidebar-box' style={ { width: '21%', boxShadow: '0 0 .5rem #9da5ab' } }>
         { project.item.key &&
           <div className='sidebar-header'>
             <h3>{ project.item.name }</h3>
@@ -107,7 +105,7 @@ export default class Sidebar extends Component {
         }
         { project.item.key &&
           <div className='treeview-div'>
-            <TreeView data={ data } enableLinks highlightSelected={ false } nodeIcon={ '' } backColor = { 'rgba(0, 0, 0, 0)' } color={ 'white' } showBorder= { false }/>
+            <TreeView data={ data } enableLinks highlightSelected={ false } nodeIcon={ '' } backColor = { 'rgba(0, 0, 0, 0)' } showBorder= { false }/>
           </div>
         }
         <div className='bottom-block'>

@@ -8,6 +8,7 @@ import _ from 'lodash';
 
 import * as IssueActions from 'redux/actions/IssueActions';
 
+const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
 
@@ -42,7 +43,6 @@ export default class Container extends Component {
   }
 
   async index(query) {
-    var qs = require('qs');
     if (!query.page) { query.page = 1; }
     await this.props.actions.index(this.pid, qs.stringify(query || {}));
     return this.props.issue.ecode;
@@ -69,6 +69,16 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async addSearcher(values) {
+    await this.props.actions.addSearcher(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
+  async delSearcher(id) {
+    await this.props.actions.delSearcher(this.pid, id);
+    return this.props.issue.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -83,7 +93,7 @@ export default class Container extends Component {
 
     return (
       <div>
-        <Header create={ this.create.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } { ...this.props.issue }/>
+        <Header create={ this.create.bind(this) } addSearcher={ this.addSearcher.bind(this) } delSearcher={ this.delSearcher.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } { ...this.props.issue }/>
         <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } pid={ this.pid } query={ query } refresh={ this.refresh.bind(this) }/>
       </div>
     );

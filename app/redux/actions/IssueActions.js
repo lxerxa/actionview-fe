@@ -28,6 +28,21 @@ export function getOptions(key) {
   });
 }
 
+export function addSearcher(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SEARCHER_ADD',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/searcher', method: 'post', data: values })
+  });
+}
+
+export function delSearcher(key, id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SEARCHER_DELETE',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/searcher/' + id, method: 'delete' })
+  });
+}
+
 export function show(id) {
   return { type: 'ISSUE_SHOW', id: id };
 }

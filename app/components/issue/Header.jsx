@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import _ from 'lodash';
 
 const CreateModal = require('./CreateModal');
+const AddSearcherModal = require('./AddSearcherModal');
 const SearchList = require('./SearchList');
 const SearcherList = require('./SearcherList');
 const img = require('../../assets/images/loading.gif');
@@ -12,19 +13,23 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false, searcherShow: false, searchShow: false, condShow: true };
+    this.state = { createModalShow: false, searcherShow: false, searchShow: false, condShow: false, addSearcherShow: false };
     this.createModalClose = this.createModalClose.bind(this);
+    this.addSearcherModalClose = this.addSearcherModalClose.bind(this);
     this.condsTxt = this.condsTxt.bind(this);
   }
 
   static propTypes = {
     create: PropTypes.func.isRequired,
+    addSearcher: PropTypes.func.isRequired,
+    delSearcher: PropTypes.func.isRequired,
     refresh: PropTypes.func,
     getOptions: PropTypes.func,
     query: PropTypes.object,
     options: PropTypes.object,
     loading: PropTypes.bool.isRequired,
     optionsLoading: PropTypes.bool.isRequired,
+    searcherLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired
   }
 
@@ -37,8 +42,12 @@ export default class Header extends Component {
     this.setState({ createModalShow: false });
   }
 
+  addSearcherModalClose() {
+    this.setState({ addSearcherShow: false });
+  }
+
   condsTxt() {
-    const { options: { config: { types=[], states=[], priorities=[], resolutions=[] } = {}, users=[] }, query } = this.props;
+    const { options: { types=[], states=[], priorities=[], resolutions=[], users=[] }, query } = this.props;
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
 
     const errorMsg = ' 检索值解析失败，条件无法正常显示。';
@@ -96,8 +105,20 @@ export default class Header extends Component {
     return queryConds.join(' | ');
   }
 
+  hideSearcher() {
+    this.setState({ searcherShow: false });
+  }
+
+  operateSelect(eventKey) {
+    if (eventKey === '1') {
+      this.setState({ addSearcherShow : true });
+    } else if (eventKey == '2') {
+      this.setState({ condShow : !this.state.condShow });
+    }
+  }
+
   render() {
-    const { create, indexLoading, optionsLoading, options={}, refresh, query, loading } = this.props;
+    const { create, addSearcher, delSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading } = this.props;
 
     const sqlTxt = this.condsTxt();
     
@@ -110,19 +131,22 @@ export default class Header extends Component {
         <div className='cond-bar'>
           <span>{ sqlTxt }</span>
           <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } }><i className='fa fa-remove'></i></span>
+          <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
         </div> }
         <div>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searcherShow: !this.state.searcherShow }); } }>过滤器&nbsp;<i className={ this.state.searcherShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searcherShow: !this.state.searcherShow, searchShow: false }); } }>过滤器&nbsp;<i className={ this.state.searcherShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           <div style={ { marginTop: '8px', float: 'right' } }>
-            <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多'>
-              <MenuItem eventKey='2'>删除</MenuItem>
+            <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='1'>保存检索</MenuItem>
+              <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
             </DropdownButton>
           </div>
         </div>
-        <SearcherList className={ !this.state.searcherShow && 'hide' } searcherShow={ this.state.searcherShow } indexLoading={ indexLoading } options={ options }/>
+        <SearcherList className={ !this.state.searcherShow && 'hide' } searcherShow={ this.state.searcherShow } loading={ searcherLoading } indexLoading={ indexLoading } options={ options } delSearcher={ delSearcher } refresh={ refresh } hide={ this.hideSearcher.bind(this) }/>
         <SearchList className={ !this.state.searchShow && 'hide' } query={ query } searchShow={ this.state.searchShow } indexLoading={ indexLoading } options={ options } refresh={ refresh }/>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading }/> }
+        { this.state.addSearcherShow && <AddSearcherModal show close={ this.addSearcherModalClose } searchers={ options.searchers || [] } create={ addSearcher } query={ query } loading={ searcherLoading } sqlTxt={ sqlTxt }/> }
       </div>
     );
   }

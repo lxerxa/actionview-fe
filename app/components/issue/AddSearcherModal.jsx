@@ -9,7 +9,7 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (_.findIndex(props.collection || [], { name: values.name }) !== -1) {
+  } else if (_.findIndex(props.searchers || [], { name: values.name }) !== -1) {
     errors.name = '该名称已存在';
   }
 
@@ -18,10 +18,10 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'state',
-  fields: ['name', 'description'],
+  fields: [ 'name' ],
   validate
 })
-export default class CreateModal extends Component {
+export default class AddSearcherModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -30,6 +30,8 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
+    query: PropTypes.object,
+    sqlTxt: PropTypes.string,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -40,7 +42,8 @@ export default class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { values, create, close } = this.props;
+    const { values, create, close, query={} } = this.props;
+    values.query = _.omit(query, [ 'page' ]);
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -60,23 +63,22 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, description }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name }, handleSubmit, invalid, submitting, sqlTxt='' } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>创建问题状态</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>保存检索</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+          <FormGroup>
+            <div><span>{ sqlTxt }</span></div>
+          </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='问题状态名'/>
-            { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }`
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='状态描述'/>
+            <FormControl type='text' { ...name } placeholder='过滤器名'/>
+            { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, optionsLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, loading: false, itemLoading: false, selectedItem: {} };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -9,6 +9,7 @@ export default function issue(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.ISSUE_INDEX_SUCCESS:
+      _.assign(state.options, action.result.options || {});
       return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
 
     case t.ISSUE_INDEX_FAIL:
@@ -67,6 +68,33 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_DELETE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.ISSUE_SEARCHER_ADD:
+      return { ...state, searcherLoading: true };
+
+    case t.ISSUE_SEARCHER_ADD_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        if (!state.options.searchers) {
+          state.options.searchers = [];
+        }
+        state.options.searchers.push(action.result.data);
+      }
+      return { ...state, searcherLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_SEARCHER_ADD_FAIL:
+      return { ...state, searcherLoading: false, error: action.error };
+
+    case t.ISSUE_SEARCHER_DELETE:
+      return { ...state, searcherLoading: true };
+
+    case t.ISSUE_SEARCHER_DELETE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.options.searchers = _.reject(state.options.searchers, { id: action.id });
+      }
+      return { ...state, searcherLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_SEARCHER_DELETE_FAIL:
+      return { ...state, searcherLoading: false, error: action.error };
 
     default:
       return state;

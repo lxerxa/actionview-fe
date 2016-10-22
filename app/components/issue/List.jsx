@@ -119,14 +119,14 @@ export default class List extends Component {
     const issueNum = collection.length;
     for (let i = 0; i < issueNum; i++) {
 
-      const priorityInd = options.config ? _.findIndex(options.config.priorities, { id: collection[i].priority }) : -1;
-      const priorityStyle = { backgroundColor: priorityInd !== -1 ? options.config.priorities[priorityInd].color : '#cccccc', marginLeft: '14px' };
+      const priorityInd = _.findIndex(options.priorities, { id: collection[i].priority }) || -1;
+      const priorityStyle = { backgroundColor: priorityInd !== -1 ? options.priorities[priorityInd].color : '#cccccc', marginLeft: '14px' };
 
       issues.push({
         id: collection[i].id,
         type: (
-          <span className='type-abb' title={ options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).name : '' }>
-            { options.config && _.findIndex(options.config.types, { id: collection[i].type }) !== -1 ? _.find(options.config.types, { id: collection[i].type }).abb : '-' }
+          <span className='type-abb' title={ _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).name : '' }>
+            { _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).abb : '-' }
           </span>),
         name: (
           <div>
@@ -138,9 +138,9 @@ export default class List extends Component {
           </div>
         ), 
         assignee: !_.isEmpty(collection[i].assignee) ? collection[i].assignee.name : '-',
-        priority: (<div className='circle' style={ priorityStyle } title={ priorityInd !== -1 ? options.config.priorities[priorityInd].name : '' }/>),
-        state: options.config && _.findIndex(options.config.states, { id: collection[i].state }) !== -1 ? _.find(options.config.states, { id: collection[i].state }).name : '-', 
-        resolution: options.config && _.findIndex(options.config.resolutions, { id: collection[i].resolution }) !== -1 ? _.find(options.config.resolutions, { id: collection[i].resolution }).name : '-', 
+        priority: (<div className='circle' style={ priorityStyle } title={ priorityInd !== -1 ? options.priorities[priorityInd].name : '' }/>),
+        state: _.findIndex(options.states, { id: collection[i].state }) !== -1 ? _.find(options.states, { id: collection[i].state }).name : '-', 
+        resolution: _.findIndex(options.resolutions, { id: collection[i].resolution }) !== -1 ? _.find(options.resolutions, { id: collection[i].resolution }).name : '-', 
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&

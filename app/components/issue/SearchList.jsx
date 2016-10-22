@@ -17,6 +17,8 @@ export default class SearchList extends Component {
     this.state.state = query.state || ''; 
     this.state.resolution = query.resolution || ''; 
     this.state.priority = query.priority || ''; 
+    this.state.created_at = query.created_at || ''; 
+    this.state.updated_at = query.updated_at || ''; 
     this.state.title = query.title || ''; 
   }
 
@@ -52,7 +54,7 @@ export default class SearchList extends Component {
   }
 
   render() {
-    const { indexLoading, searchShow=false, options: { config: { types=[], states=[], priorities=[], resolutions=[] } = {}, users=[] } } = this.props;
+    const { indexLoading, searchShow=false, options: { types=[], states=[], priorities=[], resolutions=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name, value: val.id } });
