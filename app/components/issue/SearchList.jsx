@@ -22,6 +22,21 @@ export default class SearchList extends Component {
     this.state.title = query.title || ''; 
   }
 
+  componentWillReceiveProps(nextProps) {
+    const newQuery = nextProps.query || {};
+    this.setState({ 
+      type: newQuery.type ? newQuery.type : '',
+      assignee: newQuery.assignee ? newQuery.assignee : '',
+      reporter: newQuery.reporter ? newQuery.reporter : '',
+      state: newQuery.state ? newQuery.state : '',
+      resolution: newQuery.resolution ? newQuery.resolution : '',
+      priority: newQuery.priority ? newQuery.priority : '',
+      created_at: newQuery.created_at ? newQuery.created_at : '',
+      updated_at: newQuery.updated_at ? newQuery.updated_at : '',
+      title: newQuery.title ? newQuery.title : ''
+    });
+  }
+
   static propTypes = {
     refresh: PropTypes.func,
     query: PropTypes.object,

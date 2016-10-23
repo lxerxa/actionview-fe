@@ -97,7 +97,7 @@ export default class Sidebar extends Component {
     ];
 
     return (
-      <div className='col-sm-2 sidebar-box' style={ { width: '21%', boxShadow: '0 0 .5rem #9da5ab' } }>
+      <div className='col-sm-2 sidebar-box' style={ { width: '20%', boxShadow: '0 0 .5rem #9da5ab', overflowY: 'auto', backgroundColor: 'white' } }>
         { project.item.key &&
           <div className='sidebar-header'>
             <h3>{ project.item.name }</h3>
@@ -108,9 +108,6 @@ export default class Sidebar extends Component {
             <TreeView data={ data } enableLinks highlightSelected={ false } nodeIcon={ '' } backColor = { 'rgba(0, 0, 0, 0)' } showBorder= { false }/>
           </div>
         }
-        <div className='bottom-block'>
-          <p style={ { marginBottom: '16px' } }>ActionView，一个开源、类 Jira 、轻量级的问题跟踪管理工具。<Label bsStyle='success'>@刘旭</Label></p>
-        </div>
         { this.state.issueModalShow && <CreateIssueModal show close={ this.issueModalClose } config={ project.options.config } create={ createIssue } issue={ issue }/> }
       </div>
     );
