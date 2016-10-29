@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, Form, FormControl, FormGroup, Col, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 
@@ -165,6 +165,16 @@ export default class CreateModal extends Component {
             </TabPane>
             <TabPane tab='字段配置' key='2'>
               <div style={ { paddingTop: '15px' } }>
+                <Form horizontal>
+                  <FormGroup controlId='formControlsText'>
+                    <Col sm={ 10 }>
+                      <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='选择添加字段(可多选)' multi/>
+                    </Col>
+                    <Col sm={ 2 }>
+                      <Button onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+                    </Col>
+                  </FormGroup>
+                </Form>
                 { cards.length > 0 && <p>通过上下拖拽改变显示顺序。</p> }
                 { cards.length > 0 ?
                   cards.map((op, i) => {
@@ -180,12 +190,6 @@ export default class CreateModal extends Component {
                   :
                   <p>此界面暂无字段。</p>
                 }
-                <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
-                  <div style={ { display: 'inline-block', width: '68%' } }>
-                    <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='选择添加字段(可多选)' multi/>
-                  </div>
-                  <Button onClick={ this.add.bind(this) } disabled={ !enableAdd } style={ { display: 'inline-block', margin: '3px 0 0 10px', position: 'absolute' } }>添加</Button>
-                </FormGroup>
               </div>
             </TabPane>
             <TabPane tab='必填字段' key='3'>

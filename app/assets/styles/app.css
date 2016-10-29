@@ -271,3 +271,7 @@
   opacity: 1 !important;
   cursor: pointer;
 }
+
+.filepicker.dropzone .dz-preview.dz-image-preview {
+    background: none;
+}

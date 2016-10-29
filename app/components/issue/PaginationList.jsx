@@ -56,7 +56,7 @@ export default class PaginationList extends Component {
               <li key='first'>
                 <span className='page-button' onClick={ this.goPage.bind(this, 1) }>&lt;&lt;</span>
               </li> }
-              { curPage-1 > 1 && pages > 1 &&
+              { curPage-1 > 0 && pages > 1 &&
               <li key='pre'>
                 <span className='page-button' onClick={ this.goPage.bind(this, curPage-1) }>&lt;</span>
               </li> }

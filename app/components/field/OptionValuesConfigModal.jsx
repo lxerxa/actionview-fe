@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { Modal, Button, FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
+import { Modal, Button, Form, FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
@@ -118,6 +118,16 @@ export default class OptionValuesConfigModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ '字段可选值配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '450px', overflow: 'auto' } }>
+          <Form horizontal>
+            <FormGroup controlId='formControlsText'>
+              <Col sm={ 10 }>
+                <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyUp={ this.handlerKeyUp.bind(this) }/>
+              </Col>
+              <Col sm={ 2 }>
+                <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+              </Col>
+            </FormGroup>
+          </Form>
           { cards.length > 0 && <p>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></p> }
           { cards.length > 0 ?
             cards.map((op, i) => {
@@ -132,14 +142,6 @@ export default class OptionValuesConfigModal extends Component {
             }) :
             <p>可选值为空</p>
           }
-          <FormGroup controlId='formControlsText' style={ { marginTop: '15px' } }>
-            <Col sm={ 10 }>
-              <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyUp={ this.handlerKeyUp.bind(this) }/>
-            </Col>
-            <Col sm={ 2 }>
-              <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
-            </Col>
-          </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>

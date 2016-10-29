@@ -22,6 +22,8 @@ if (BROWSER) {
   require('rc-tabs/assets/index.css');
   require('assets/styles/app.css');
   require('mermaid/dist/mermaid.css');
+  require('react-dropzone-component/styles/filepicker.css');
+  require('react-dropzone-component/node_modules/dropzone/dist/dropzone.css');
 }
 
 (async function() {

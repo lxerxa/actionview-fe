@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import { RadioGroup, Radio } from 'react-radio-group';
 import DateTime from 'react-datetime';
+import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 
 var moment = require('moment');
@@ -96,6 +97,31 @@ class CreateModal extends Component {
     });
 
     this.setState({ type: typeValue, errors, touched: {}, schema, values });
+  }
+
+  success(file, res) {
+    const { field = '', fid = '' } = res.data;
+    this.state.values[field] = this.state.values[field] || [];
+    this.state.values[field].push(fid); 
+    file.field = field;
+    file.fid = fid; 
+    if (field && this.state.errors[field]) {
+      delete this.state.errors[field];
+      this.setState({ errors: this.state.errors });
+    }
+  }
+
+  removedfile(file) { 
+    const field = file.field || '';
+    const fid = file.fid || '';
+    if (field && fid) {
+      this.state.values[field] = _.reject(this.state.values[field], (o) => { return o === fid });
+    }
+    const curField = _.find(this.state.schema, { key: field });
+    if (curField && curField.required && field && this.state.values[field].length <= 0) {
+      this.state.errors[field] = 'required';
+      this.setState({ errors: this.state.errors });
+    }
   }
 
   render() {
@@ -193,14 +219,14 @@ class CreateModal extends Component {
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
-              } else if (v.type === 'Select' || v.type === 'MultiSelect') {
+              } else if (v.type === 'Select' || v.type === 'MultiSelect' || v.type === 'SingleVersion' || v.type === 'MultiVersion') {
                 return (
                 <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
                   <Col sm={ 7 }>
                     <Select 
                       simpleValue
-                      multi={ v.type === 'MultiSelect' }
+                      multi={ v.type === 'MultiSelect' || v.type === 'MultiVersion' }
                       clearable={ !v.required } 
                       value={ this.state.values[v.key] } 
                       options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } } ) } 
@@ -254,14 +280,37 @@ class CreateModal extends Component {
                   <Col sm={ 4 }>
                     <DateTime 
                       mode='date' 
-                      dateFormat={ v.type === 'DateTimePicker' ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD' }
-                      timeFormat={ v.type === 'DateTimePicker' } 
+                      locale='zh-cn'
+                      dateFormat={ 'YYYY/MM/DD' }
+                      timeFormat={ v.type === 'DateTimePicker' ?  'HH:mm' : false } 
                       closeOnSelect={ v.type === 'DatePicker' }
                       value={ this.state.values[v.key] } 
                       onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必填' : (newValue && !moment(newValue).isValid() ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }/>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
+                  </Col>
+                </FormGroup> );
+              } else if (v.type === 'File') {
+                const componentConfig = {
+                  showFiletypeIcon: true,
+                  postUrl: '/api/uploadfile'
+                };
+                const djsConfig = {
+                  addRemoveLinks: true,
+                  paramName: v.key,
+                  maxFilesize: 20
+                };
+                const eventHandlers = {
+                  init: dz => this.dropzone = dz,
+                  success: this.success.bind(this),
+                  removedfile: this.removedfile.bind(this)
+                }
+                return (
+                <FormGroup key={ key } controlId={ 'id' + key }>
+                  { title }
+                  <Col sm={ 7 }>
+                    <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
                   </Col>
                 </FormGroup> );
               }

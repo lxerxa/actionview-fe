@@ -60,7 +60,8 @@
     "react-bootstrap": "~0.29.2",
     "react-bootstrap-table": "~2.3.0",
     "react-checkbox-group": "~3.0.0",
-    "react-radio-group": "~3.0.1"
+    "react-radio-group": "~3.0.1",
+    "react-dropzone-component": "~1.2.0"
   },
   "dependencies": {
     "axios": "^0.7.0",

@@ -9,6 +9,7 @@ export default [
   { value: 'RadioGroup', label: '单选按钮' },
   { value: 'DatePicker', label: '日期选择控件' },
   { value: 'DateTimePicker', label: '日期时间选择控件' },
+  { value: 'File', label: '文件' },
   { value: 'SingleVersion', label: '单一版本选择' },
   { value: 'MultiVersion', label: '多版本选择' },
   { value: 'Url', label: 'URL字段' }

@@ -19,7 +19,8 @@ export default function issue(state = initialState, action) {
       return { ...state, optionsLoading: true };
 
     case t.ISSUE_OPTIONS_SUCCESS:
-      return { ...state, optionsLoading: false, ecode: action.result.ecode, options: action.result.data };
+      _.assign(state.options, action.result.data || {});
+      return { ...state, optionsLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_OPTIONS_FAIL:
       return { ...state, optionsLoading: false, error: action.error };
