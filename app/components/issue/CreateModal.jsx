@@ -124,6 +124,32 @@ class CreateModal extends Component {
     }
   }
 
+  urlTest(url) {
+    // url regex
+    const urlRegex = '^' + '(?:(?:https?|ftp)://)' + '(?:\\S+(?::\\S*)?@)?' + '(?:' + '(?!(?:10|127)(?:\\.\\d{1,3}){3})' + '(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})' + '(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})' + '(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])' + '(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}' + '(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))' + '|' + '(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)' + '(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*' + '(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))' + ')' + '(?::\\d{2,5})?' + '(?:/\\S*)?' + '$';
+    const re = new RegExp(urlRegex);
+    return re.test(url);
+  }
+
+  ttTest(tt) {
+    let newtt = _.trim(tt);
+    const tts = newtt.split(' ');
+
+    let flag = true;
+    _.map(tts, (v) => {
+      if (v) {
+        if (!_.endsWith(v, 'w') && !_.endsWith(v, 'd') && !_.endsWith(v, 'h') && !_.endsWith(v, 'm')) {
+          flag = false;
+        }
+        let time = v.substr(0, v.length - 1);
+        if (time && isNaN(time)) {
+          flag = false;
+        }
+      }
+    });
+    return flag;
+  }
+
   render() {
     const { options, close, loading } = this.props;
     const { schema } = this.state;
@@ -181,7 +207,8 @@ class CreateModal extends Component {
                     <FormControl 
                       type='text' 
                       value={ this.state.values[v.key] } 
-                      onChange={ (e) => { this.state.touched[v.key] = true; v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } } 
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } } 
+                      onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '输入' + v.name } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
@@ -196,7 +223,8 @@ class CreateModal extends Component {
                     <FormControl
                       type='text'
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { this.state.touched[v.key] = true; v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '输入' + v.name } />
                   </Col>
                   <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
@@ -211,7 +239,8 @@ class CreateModal extends Component {
                     <FormControl
                       componentClass='textarea'
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { this.state.touched[v.key] = true; v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       style={ { height: '200px' } }
                       placeholder={ '输入' + v.name } />
                   </Col>
@@ -311,6 +340,38 @@ class CreateModal extends Component {
                   { title }
                   <Col sm={ 7 }>
                     <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+                  </Col>
+                </FormGroup> );
+              } else if (v.type === 'Url') {
+                return (
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                  { title }
+                  <Col sm={ 7 }>
+                    <FormControl
+                      type='text'
+                      value={ this.state.values[v.key] }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.urlTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
+                      placeholder={ '输入' + v.name } />
+                  </Col>
+                  <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
+                  </Col>
+                </FormGroup> );
+              } else if (v.type === 'TimeTracking') {
+                return (
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                  { title }
+                  <Col sm={ 7 }>
+                    <FormControl
+                      type='text'
+                      value={ this.state.values[v.key] }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.ttTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
+                      placeholder={ '输入' + v.name } />
+                  </Col>
+                  <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
               }
