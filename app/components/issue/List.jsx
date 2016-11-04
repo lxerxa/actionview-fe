@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button, DropdownButton, MenuItem, Label } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem, Label, Nav, NavItem } from 'react-bootstrap';
 import _ from 'lodash';
 
 var moment = require('moment');
@@ -14,6 +14,7 @@ export default class List extends Component {
     this.state = { 
       delNotifyShow: false, 
       operateShow: false, 
+      barShow: false,
       hoverRowId: ''
     };
     this.delNotifyClose = this.delNotifyClose.bind(this);
@@ -130,7 +131,7 @@ export default class List extends Component {
           </span>),
         name: (
           <div>
-            <span className='table-td-issue-title'>
+            <span className='table-td-issue-title' onClick={ () => { this.setState({ barShow: true }) } }>
               { collection[i].title ? (collection[i].no + ' - ' + collection[i].title) : '-' }
             </span>
             { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
@@ -176,6 +177,20 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
+        { this.state.barShow && 
+        <div className='animate-dialog'>
+          <Button className='close' onClick={ () => { this.setState({ barShow: false }) } }>
+            <i className='fa fa-close'></i>
+          </Button>
+          <div className='panel panel-default'>
+            <Nav bsStyle='tabs' activeKey='1'>
+              <NavItem eventKey='1' href='/home'>基本</NavItem>
+              <NavItem eventKey='2' title='Item'>备注</NavItem>
+              <NavItem eventKey='3'>改动记录</NavItem>
+              <NavItem eventKey='3'>工作日志</NavItem>
+            </Nav>
+          </div>
+        </div> }
         { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>

@@ -129,8 +129,8 @@ export default class List extends Component {
         <BootstrapTable pullRight data={ workflows } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='latest_modify' width='280'>最近配置修改</TableHeaderColumn>
-          <TableHeaderColumn dataField='step' width='120'>步骤</TableHeaderColumn>
+          <TableHeaderColumn dataField='latest_modify'>最近配置修改</TableHeaderColumn>
+          <TableHeaderColumn dataField='step' width='200'>步骤</TableHeaderColumn>
           <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }

@@ -89,8 +89,8 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ priorities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn width='220' dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='color'>色彩</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn width='200' dataField='color'>色彩</TableHeaderColumn>
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
           <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>

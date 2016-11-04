@@ -362,15 +362,15 @@ class CreateModal extends Component {
                 return (
                 <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
-                  <Col sm={ 7 }>
+                  <Col sm={ 4 }>
                     <FormControl
                       type='text'
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.ttTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ '例如：3w 4d 12h 30m' } />
                   </Col>
-                  <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                  <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );

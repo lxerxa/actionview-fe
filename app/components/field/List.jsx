@@ -150,7 +150,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='key'>键值</TableHeaderColumn>
-          <TableHeaderColumn width='180' dataField='type'>类型</TableHeaderColumn>
+          <TableHeaderColumn dataField='type'>类型</TableHeaderColumn>
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>

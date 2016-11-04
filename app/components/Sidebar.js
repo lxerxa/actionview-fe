@@ -97,7 +97,7 @@ export default class Sidebar extends Component {
     ];
 
     return (
-      <div className='col-sm-2 sidebar-box' style={ { width: '20%', boxShadow: '0 0 .5rem #9da5ab', overflowY: 'auto', backgroundColor: 'white' } }>
+      <div className='col-sm-2 sidebar-box' style={ { width: '19%', boxShadow: '0 0 .5rem #9da5ab', overflowY: 'auto', backgroundColor: 'white' } }>
         { project.item.key &&
           <div className='sidebar-header'>
             <h3>{ project.item.name }</h3>

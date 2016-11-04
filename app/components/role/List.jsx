@@ -233,7 +233,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='permissions'>权限</TableHeaderColumn>
-          <TableHeaderColumn width='330' dataField='users'>用户</TableHeaderColumn>
+          <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
           <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
