@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], item: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, loading: false, itemLoading: false, selectedItem: {} };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -51,8 +51,13 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
-      const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: el };
+      return { ...state, itemLoading: true, itemData: {} };
+
+    case t.ISSUE_SHOW_SUCCESS:
+      return { ...state, itemLoading: false, ecode: action.result.ecode, itemData: action.result.data };
+
+    case t.ISSUE_SHOW_FAIL:
+      return { ...state, itemLoading: false, error: action.error };
 
     case t.ISSUE_DELETE_NOTIFY:
       const el2 = _.find(state.collection, { id: action.id });

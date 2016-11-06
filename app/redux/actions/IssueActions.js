@@ -43,8 +43,11 @@ export function delSearcher(key, id) {
   });
 }
 
-export function show(id) {
-  return { type: 'ISSUE_SHOW', id: id };
+export function show(key, id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SHOW',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id })
+  });
 }
 
 export function delNotify(id) {

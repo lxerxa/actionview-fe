@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 var moment = require('moment');
 const DelNotify = require('./DelNotify');
+const DetailBar = require('./DetailBar');
 const img = require('../../assets/images/loading.gif');
 const PaginationList = require('./PaginationList');
 
@@ -23,6 +24,7 @@ export default class List extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
+    itemData: PropTypes.object.isRequired,
     options: PropTypes.object,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -101,9 +103,15 @@ export default class List extends Component {
     refresh(_.assign(query, { orderBy: newOrders.join(','), page: 1 })); 
   }
 
+  async show(id) {
+    this.setState({ barShow: true }); 
+    const { show } = this.props;
+    await show(id);  //fix me
+  }
+
   render() {
 
-    const { collection, selectedItem, loading, indexLoading, itemLoading, options={}, del, query, refresh } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, query, refresh } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -131,7 +139,7 @@ export default class List extends Component {
           </span>),
         name: (
           <div>
-            <span className='table-td-issue-title' onClick={ () => { this.setState({ barShow: true }) } }>
+            <span className='table-td-issue-title' onClick={ this.show.bind(this, collection[i].id) }>
               { collection[i].title ? (collection[i].no + ' - ' + collection[i].title) : '-' }
             </span>
             { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
@@ -177,20 +185,7 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow && 
-        <div className='animate-dialog'>
-          <Button className='close' onClick={ () => { this.setState({ barShow: false }) } }>
-            <i className='fa fa-close'></i>
-          </Button>
-          <div className='panel panel-default'>
-            <Nav bsStyle='tabs' activeKey='1'>
-              <NavItem eventKey='1' href='/home'>基本</NavItem>
-              <NavItem eventKey='2' title='Item'>备注</NavItem>
-              <NavItem eventKey='3'>改动记录</NavItem>
-              <NavItem eventKey='3'>工作日志</NavItem>
-            </Nav>
-          </div>
-        </div> }
+        { this.state.barShow && <DetailBar close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } loading={ itemLoading }/> }
         { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>

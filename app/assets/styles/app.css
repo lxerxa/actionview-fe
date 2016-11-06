@@ -264,7 +264,7 @@
 
 .searcher .remove-icon {
   opacity: 0 !important;
-  margin-left: 15px;
+  margin-left: 20px;
 }
 
 .searcher:hover .remove-icon{
@@ -293,4 +293,22 @@
   font-size: 16px;
   width: 42px;
   height: 42px;
+  z-index: 1000;
+}
+
+.detail-view-blanket {
+  opacity: 0.8;
+  background-color: white;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  display: none;
+  z-index: 999;
+}
+
+.detail-loading {
+  margin-top: 48%;
+  margin-left: 48%;
 }

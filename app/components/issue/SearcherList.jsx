@@ -44,7 +44,7 @@ export default class SearcherList extends Component {
               <span className='searcher'>
                 <span onClick={ () => { hide(); refresh(val.query); } } style={ { cursor: 'pointer', color: '#3b73af' } }>{ val.name }</span>
                 <span className='remove-icon' onClick={ () => { this.setState({ delSearcherShow: true, data: val }) } }>
-                  <i className='fa fa-remove'></i>
+                  <i className='fa fa-trash'></i>
                 </span>
               </span>
             </Col>) }
