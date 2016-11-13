@@ -42,14 +42,11 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div>
-        <div className='container-fluid main-box'>
-          <div className='row'>
-            <Sidebar indexImg={ img } project={ this.props.project } issue={ this.props.issue } createProject={ this.createProject } createIssue={ this.createIssue }/>
-            { this.props.children }
-          </div>
+      <div className='doc-main'>
+        <div className='toc-container'>
+          <Sidebar indexImg={ img } project={ this.props.project } issue={ this.props.issue } createProject={ this.createProject } createIssue={ this.createIssue }/>
         </div>
-        <Footer/>
+        { this.props.children }
       </div>
     );
   }

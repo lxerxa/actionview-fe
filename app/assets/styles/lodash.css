@@ -1,0 +1,821 @@
+html {
+	background-color: #eee;
+	box-sizing: border-box;
+	color: #5f5f5f;
+	font-size: 10px;
+	height: 100%
+}
+
+body,h1,h2,html,p {
+	margin: 0;
+	padding: 0
+}
+
+*,:after,:before {
+	box-sizing: inherit
+}
+
+body {
+	font-family: Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 14px;
+	line-height: 1.5;
+	min-height: 100%;
+	overflow: auto
+}
+
+h1,h2,h3,h4 {
+	color: #5f5f5f;
+	font-weight: 400;
+	letter-spacing: .5px;
+	margin-top: 2.0rem
+}
+
+h1,h2,h3,h4,ol,p,ul {
+	margin-bottom: 1.6rem
+}
+
+ol,p {
+	margin-top: 1.6rem
+}
+
+footer {
+	font-size: 1.2rem;
+	margin-bottom: 3.2rem;
+	text-align: center
+}
+
+footer p {
+	margin-bottom: 0;
+	margin-top: .5rem
+}
+
+footer .fa-heart {
+	color: #e12e2e
+}
+
+header {
+	background-color: #fff;
+	box-shadow: 0 0 2.25rem #9da5ab;
+	padding: .8rem 0;
+	position: relative;
+	z-index: 2
+}
+
+header .container {
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	-ms-flex-pack: justify;
+	justify-content: space-between
+}
+
+header .header-group {
+	-webkit-flex-shrink: 3;
+	-ms-flex-negative: 3;
+	flex-shrink: 3
+}
+
+header .header-group h1,header .header-group h2 {
+	margin: 0;
+	vertical-align: middle
+}
+
+header .header-group h1 {
+	font-size: 2.2rem
+}
+
+header .header-group h2 {
+	font-size: 1.6rem
+}
+
+header .header-section {
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-flex: 1;
+	-webkit-flex: 1 1 auto;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	margin: .8rem 1.6rem
+}
+
+header .header-section.logo-section {
+	-webkit-box-flex: 3;
+	-webkit-flex: 3 1 auto;
+	-ms-flex: 3 1 auto;
+	flex: 3 1 auto;
+	-webkit-box-pack: start;
+	-webkit-justify-content: flex-start;
+	-ms-flex-pack: start;
+	justify-content: flex-start
+}
+
+header .header-section.mobile-menu {
+	-webkit-box-pack: end;
+	-webkit-justify-content: flex-end;
+	-ms-flex-pack: end;
+	justify-content: flex-end
+}
+
+header .logo {
+	border-right: 2px solid #c5c5c5;
+	box-sizing: content-box;
+	-webkit-flex-shrink: 1;
+	-ms-flex-negative: 1;
+	flex-shrink: 1;
+	height: 80px;
+	margin-right: 1.6rem;
+	padding: 0 1.6rem 0 0;
+	width: 80px
+}
+
+header .logo a {
+	background: url(/assets/img/lodash.svg) no-repeat;
+	background-size: contain;
+	border: none;
+	display: block;
+	height: 100%;
+	padding: 0;
+	text-indent: -1000px;
+	width: 100%
+}
+
+code,pre {
+	font-family: Consolas,Courier New,monospace
+}
+
+section {
+	padding: 0 4rem
+}
+
+section:not(:first-of-type) {
+	margin-top: 1.6rem
+}
+
+section:not(:last-of-type) {
+	margin-bottom: 1.6rem
+}
+
+.toc-container ul {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0
+}
+
+.toc-container ul li {
+	padding-left: 1.6rem
+}
+
+.toc-container ul li+li {
+	padding-top: 1rem
+}
+
+.toc-container ul.chevron li:before {
+	content: "\203A";
+	margin-left: -1.2rem;
+	padding-right: .8rem
+}
+
+.toc-container ul.chevron li .highlight {
+	text-indent: 0
+}
+
+.container {
+	margin: 0 auto;
+	max-width: 1199px
+}
+
+.container.main {
+	background-color: #fff;
+	box-shadow: 0 4px 2.4rem -.4rem #9da5ab;
+	margin-bottom: 3.2rem;
+	margin-top: 3.2rem;
+	overflow: hidden;
+	padding-bottom: 3.2rem;
+	position: relative
+}
+
+.highlight {
+	background-color: #283646;
+	color: #ddd;
+	margin: 0 -999rem;
+	padding: 3.2rem 999rem;
+	position: relative
+}
+
+.highlight,.highlight pre {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch
+}
+
+.highlight pre {
+	margin: 0;
+	padding: 0
+}
+
+.nowrap {
+	white-space: nowrap
+}
+
+.rwd-line {
+	display: block
+}
+
+html.home.offline section:nth-of-type(2) {
+	display: none
+}
+
+html.home div.intro {
+	font-size: 1.9rem
+}
+
+html.home section:first-of-type {
+	background: #283646;
+	color: #ddd
+}
+
+html.home #download-links {
+	list-style: none;
+	padding: 0
+}
+
+html.home #download-links li {
+	line-height: 1.75;
+	padding-left: 0
+}
+
+html.home #download-links .fa {
+	color: #858585;
+	margin-right: 1rem
+}
+
+html.home #social {
+	margin-bottom: 0
+}
+
+html.home #social,html.home #social .btn-gh,html.home #social .btn-twitter-follow,html.home #social .btn-twitter-share {
+	height: 26px
+}
+
+html.home #social .btn-gh {
+	width: 105px
+}
+
+html.home #social .btn-twitter-follow {
+	width: 120px
+}
+
+html.home #social .btn-twitter-share {
+	width: 95px
+}
+
+html.custom-builds li .highlight {
+	margin-top: .8rem;
+	margin-bottom: 1.6rem
+}
+
+html.docs #carbonads {
+	background-color: #fff;
+	bottom: 0;
+	display: block;
+	font-size: 1.1rem;
+	font-family: Verdana,Helvetica Neue,Helvetica,sans-serif;
+	line-height: 1.5;
+	margin-left: -1rem;
+	max-width: -webkit-calc(300px - 2rem);
+	max-width: calc(300px - 2rem);
+	overflow: hidden;
+	padding: 2rem 0;
+	position: fixed
+}
+
+html.docs #carbonads a {
+	border-bottom: 0;
+	color: #3492ff
+}
+
+html.docs #carbonads a:hover {
+	color: #006be7
+}
+
+html.docs #carbonads span {
+	overflow: hidden;
+	position: relative
+}
+
+html.docs #carbonads .carbon-img {
+	float: left;
+	margin-right: 1rem
+}
+
+html.docs #carbonads .carbon-img img {
+	border: 0;
+	display: block;
+	max-width: 130px
+}
+
+html.docs #carbonads .carbon-poweredby {
+	bottom: 0;
+	display: block;
+	font-size: 1rem;
+	position: absolute;
+	right: 0
+}
+
+html.docs #carbonads .carbon-text {
+	display: block;
+	float: left;
+	max-width: -webkit-calc(100% - 130px - 1em);
+	max-width: calc(100% - 130px - 1em);
+	text-align: left;
+	white-space: normal
+}
+
+html.docs.offline #carbonads,html.docs.offline .btn-repl {
+	display: none
+}
+
+html.docs.offline .toc-container>div:nth-of-type(2) {
+	padding-bottom: 0
+}
+
+html.docs body {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	height: 100%
+}
+
+html.docs header {
+	padding: 0
+}
+
+html.docs select {
+	border: 1px solid #eee;
+	border-radius: 5px;
+	font-size: 1.4rem;
+	height: 34px;
+	line-height: 1.42857143;
+	padding: 6px
+}
+
+html.docs select:focus {
+	border-color: #3492ff;
+	outline: 0
+}
+
+html.docs .btn-repl {
+	bottom: 2.4rem;
+	color: #fff;
+	font-size: 1.3rem;
+	position: absolute;
+	right: 0
+}
+
+html.docs .container {
+	max-width: 100%
+}
+
+html.docs .doc-container {
+	-webkit-box-flex: 14;
+	-webkit-flex: 14 14 0;
+	-ms-flex: 14 14 0;
+	flex: 14 14 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding: 0rem 1.2rem;
+	-webkit-overflow-scrolling: touch
+}
+
+html.docs .doc-container:after {
+	background: #d3d3d3;
+	content: "";
+	display: none;
+	height: 100%;
+	left: 0;
+	opacity: .5;
+	position: absolute;
+	top: 0;
+	width: 100%
+}
+
+html.docs .doc-container>div>div {
+	margin-bottom: 0rem;
+	position: relative
+}
+
+html.docs .doc-container h2,html.docs .doc-container h3,html.docs .doc-container h4 {
+	white-space: nowrap
+}
+
+html.docs .doc-container h3 {
+	background-color: #eee;
+	font-weight: 700;
+	margin: 0 -999rem;
+	padding: 1.8rem 999rem;
+	overflow-y: hidden
+}
+
+html.docs .doc-container h3 a {
+	border-bottom: 0;
+	padding-right: .8rem;
+	visibility: hidden
+}
+
+html.docs .doc-container h3:hover a {
+	visibility: inherit
+}
+
+html.docs .doc-container h3+p a {
+	color: #9e9e9e;
+	font-size: 1.4rem;
+	margin-right: 1.6rem
+}
+
+html.docs .doc-container h3+p a:hover {
+	color: #787878
+}
+
+html.docs .doc-container h4 {
+	font-weight: 700
+}
+
+html.docs .doc-container h4+ol code,html.docs .doc-container h4+ol em,html.docs .doc-container h4+p em {
+	color: #3492ff;
+	font-family: Consolas,Courier New,monospace;
+	font-weight: 700
+}
+
+html.docs .doc-container h4+ol {
+	list-style-type: none;
+	padding-left: 1.6rem
+}
+
+html.docs .doc-container h4+p {
+	padding-left: 1.6rem
+}
+
+html.docs .doc-main {
+	background-color: #fff;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-flex: 1;
+	-webkit-flex: 1 1 auto;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	overflow: hidden;
+	position: relative;
+	height: 100%;
+	width: 100%
+}
+
+html.docs .hidden {
+	display: none
+}
+
+html.docs .logo {
+	height: 40px;
+	width: 40px
+}
+
+html.docs .mobile-menu a {
+	border: none;
+	color: #5f5f5f
+}
+
+html.docs .mobile-menu a i {
+	margin-right: 1rem
+}
+
+html.docs .repl {
+	background-color: transparent;
+	margin: 0 0 0 -75px;
+	padding: 0;
+	width: -webkit-calc(100% + 175px);
+	width: calc(100% + 175px)
+}
+
+html.docs .search {
+	position: relative;
+	margin-top: 2.0rem;
+	width: 100%
+}
+
+html.docs .search input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: none;
+	border-bottom: 2px solid #c5c5c5;
+	font-size: 1.4rem;
+	padding: 0 0 10px;
+	text-indent: 30px;
+	width: 100%
+}
+
+html.docs .search input:focus {
+	border-bottom-color: #858585;
+	outline: none
+}
+
+html.docs .search .fa-search {
+	color: #979797;
+	font-size: 1.5rem;
+	left: 7px;
+	position: absolute;
+	top: 5px
+}
+
+html.docs .toc-container {
+	background-color: #fff;
+	display: none;
+	-webkit-box-flex: 0;
+	-webkit-flex: none;
+	-ms-flex: none;
+	flex: none;
+	height: 100%;
+	min-width: 300px;
+	overflow-y: auto;
+	padding: 0rem 2.4rem 2.4rem 2.4rem;
+	position: absolute;
+	right: 0;
+	top: 0;
+	white-space: nowrap;
+	z-index: 1;
+	-webkit-overflow-scrolling: touch
+}
+
+html.docs .toc-container::-webkit-scrollbar {
+	-webkit-appearance: none
+}
+
+html.docs .toc-container::-webkit-scrollbar:horizontal {
+	height: 11px
+}
+
+html.docs .toc-container::-webkit-scrollbar:vertical {
+	width: 11px
+}
+
+html.docs .toc-container::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,.33);
+	border: 2px solid #fff;
+	border-radius: 8px
+}
+
+html.docs .toc-container.open {
+	display: block
+}
+
+html.docs .toc-container.open+.doc-container {
+	overflow-y: hidden
+}
+
+html.docs .toc-container.open+.doc-container:after {
+	display: block
+}
+
+html.docs .toc-container>div:first-child:not(.search):not(.react-menu-container) {
+	margin-top: -webkit-calc(2.4rem + 33px);
+	margin-top: calc(2.4rem + 33px)
+}
+
+html.docs .toc-container>div:first-child:not(.search):not(.react-menu-container) h2 {
+	margin-left: -webkit-calc(1.1rem + 11.5px);
+	margin-left: calc(1.1rem + 11.5px)
+}
+
+html.docs .toc-container>div:nth-of-type(2) {
+	padding-bottom: 13rem
+}
+
+html.docs .toc-container div>h2 {
+	margin-bottom: .8rem;
+	margin-top: 2.4rem
+}
+
+html.docs .toc-container div>h2 code {
+	font-family: Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif
+}
+
+html.docs .toc-container ul {
+	border-left: 1px dashed #dcdcdc;
+	margin-top: .8rem
+}
+
+html.docs .toc-container ul li a {
+	border: none;
+	color: #5f5f5f;
+        text-decoration: none;
+	font-size: 1.4rem
+}
+
+html.docs .toc-container ul li a:hover {
+	color: #000;
+        text-decoration: none;
+}
+
+html.docs .toc-container h4 a {
+        border: none;
+        text-decoration: none;
+        color: #5f5f5f;
+}
+
+html.docs .toc-container h4 a:hover {
+        color: #000;
+        text-decoration: none;
+}
+
+html.docs .toc-container .empty-state {
+	color: #bababa;
+	margin-top: 2.4rem;
+	font-size: 1.4rem
+}
+
+html.docs .toc-container .fa-minus-square-o,html.docs .toc-container .fa-plus-square-o {
+	cursor: pointer;
+	font-size: 1.4rem;
+	margin-right: 1.1rem
+}
+
+.highlight.js .comment {
+	color: #b9b9b9
+}
+
+.highlight.js .modifier,.highlight.js .numeric,.highlight.js .type {
+	color: #fee937
+}
+
+.highlight.js .name,.highlight.js .support {
+	color: #86b9f5
+}
+
+.highlight.js .console {
+	color: #ddd
+}
+
+.highlight.html .string,.highlight.js .string {
+	color: #62d543
+}
+
+@media (min-width:768px) {
+	html.docs .mobile-menu {
+		display: none
+	}
+
+	html.docs .toc-container {
+		box-shadow: 0 0 .5rem #9da5ab;
+		display: block;
+		-webkit-box-flex: 3;
+		-webkit-flex: 3 3 0;
+		-ms-flex: 3 3 0;
+		flex: 3 3 0;
+		height: auto;
+		position: relative
+	}
+
+	html.docs .toc-container.open+.doc-container {
+		overflow-y: auto
+	}
+
+	html.docs .toc-container.open+.doc-container:after {
+		display: none
+	}
+}
+
+@media (max-width:320px) {
+	html.docs h3 a {
+		display: none
+	}
+
+	html.docs .doc-container {
+		padding-left: 3.2rem;
+		padding-right: 3.2rem
+	}
+}
+
+@media (max-width:767px) {
+	.logo {
+		height: 60px;
+		width: 60px
+	}
+
+	.rwd-line {
+		display: inline
+	}
+
+	html.docs .btn-repl {
+		display: none
+	}
+}
+
+@media (max-width:991px) {
+	section {
+		padding: .8rem 2.8rem
+	}
+
+	.container.main {
+		margin: 2rem
+	}
+}
+
+@media (max-width:1199px) {
+	html {
+		font-size: 8.75px
+	}
+
+	html.docs .search input {
+		font-size: 16px
+	}
+}
+
+@media print {
+	html.docs,html.docs *,html.docs :after,html.docs :before {
+		background: transparent!important;
+		box-shadow: none!important;
+		color: #000!important
+	}
+
+	html.docs body {
+		height: auto!important
+	}
+
+	html.docs a,html.docs a:visited {
+		border-bottom: 1px solid #000!important
+	}
+
+	html.docs a[href]:after {
+		content: " (" attr(href) ")"
+	}
+
+	html.docs a[href^="#"]:after {
+		content: ""
+	}
+
+	html.docs h1,html.docs h2,html.docs h3,html.docs h4 {
+		margin-top: 1.6rem!important
+	}
+
+	html.docs h2,html.docs h3 {
+		page-break-after: avoid
+	}
+
+	html.docs pre {
+		page-break-inside: avoid;
+		white-space: pre-wrap!important
+	}
+
+	html.docs h2,html.docs h3,html.docs p {
+		orphans: 3;
+		widows: 3
+	}
+
+	html.docs .btn-repl,html.docs .doc-container h3+p a,html.docs .toc-container,html.docs h3 a,html.docs header {
+		display: none!important
+	}
+
+	html.docs .doc-container h3 {
+		padding: 1.6rem 999rem!important
+	}
+
+	html.docs .doc-container>div>div {
+		margin-bottom: 1.6rem!important
+	}
+
+	html.docs .highlight {
+		padding: 0 999rem!important
+	}
+
+	html.docs .highlight pre {
+		border: 0!important;
+		font-weight: 700!important;
+		padding-left: 1.6rem!important
+	}
+}

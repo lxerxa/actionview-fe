@@ -15,12 +15,12 @@ if (NODE_ENV !== 'production') debug.enable('dev');
 if (BROWSER) {
   require('font-awesome/css/font-awesome.css');
   require('bootstrap/dist/css/bootstrap.css');
-  require('jackblog-sass/dist/index.css');
   require('react-select/dist/react-select.css');
   require('react-bootstrap-table/css/react-bootstrap-table.css');
   require('react-datetime/css/react-datetime.css');
   require('rc-tabs/assets/index.css');
   require('assets/styles/app.css');
+  require('assets/styles/lodash.css');
   require('mermaid/dist/mermaid.css');
   require('react-dropzone-component/styles/filepicker.css');
   require('react-dropzone-component/node_modules/dropzone/dist/dropzone.css');

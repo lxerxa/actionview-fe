@@ -46,7 +46,7 @@ export default class Header extends Component {
 
   render() {
     const { create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
-    const styles = { display: 'inline-block', marginLeft: '15px' };
+    const styles = { display: 'inline-block', margin: '10px 10px 5px 10px', verticalAlign: 'middle' };
     const defaultIndex = _.findIndex(collection, { default: true });
 
     return (

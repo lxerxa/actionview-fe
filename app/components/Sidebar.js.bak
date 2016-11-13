@@ -1,0 +1,164 @@
+import React, { PropTypes, Component } from 'react';
+import TreeView from 'treeview-react-bootstrap';
+import ProjectModal from './ProjectModal';
+import CreateIssueModal from './issue/CreateModal';
+import { Label, Nav, Navbar, NavItem, Col, Form, FormGroup, ControlLabel } from 'react-bootstrap';
+
+export default class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { projctModalShow: false, issueModalShow: false };
+    this.projectModalClose = this.projectModalClose.bind(this);
+    this.issueModalClose = this.issueModalClose.bind(this);
+  }
+
+  static propTypes = {
+    indexImg: PropTypes.any.isRequired,
+    project: PropTypes.object.isRequired,
+    issue: PropTypes.object,
+    createIssue: PropTypes.func,
+    createProject: PropTypes.func
+  }
+
+  projectModalClose() {
+    this.setState({ projectModalShow: false });
+  }
+
+  issueModalClose() {
+    this.setState({ issueModalShow: false });
+  }
+
+  render() {
+    const { indexImg, project, createProject, createIssue, issue } = this.props;
+
+    const data = [
+      {
+        text: '项目概述',
+        nodes: [
+          {
+            text: '问题',
+            href: '/project/' + project.item.key + '/issue'
+          },
+          {
+            text: '路线图',
+            href: '/project/' + project.item.key + '/roadmap'
+          },
+          {
+            text: '报告',
+            href: '/project/' + project.item.key + '/report'
+          },
+          {
+            text: '版本',
+            href: '/project/' + project.item.key + '/version'
+          },
+          {
+            text: '模块',
+            href: '/project/' + project.item.key + '/module'
+          }
+        ]
+      },
+      {
+        text: '项目管理',
+        nodes: [
+          {
+            text: '问题类型',
+            href: '/project/' + project.item.key + '/type'
+          },
+          {
+            text: '工作流',
+            href: '/project/' + project.item.key + '/workflow'
+          },
+          {
+            text: '字段',
+            href: '/project/' + project.item.key + '/field'
+          },
+          {
+            text: '界面',
+            href: '/project/' + project.item.key + '/screen'
+          },
+          {
+            text: '状态',
+            href: '/project/' + project.item.key + '/state'
+          },
+          {
+            text: '解决结果',
+            href: '/project/' + project.item.key + '/resolution'
+          },
+          {
+            text: '优先级',
+            href: '/project/' + project.item.key + '/priority'
+          },
+          {
+            text: '角色权限',
+            href: '/project/' + project.item.key + '/role'
+          }
+        ]
+      }
+    ];
+
+    return (
+      <div className='react-menu-container'>
+        { project.item.key &&
+          <div className='sidebar-header'>
+            <h3>{ project.item.name }</h3>
+          </div>
+        }
+        { project.item.key &&
+          <div className='treeview-div'>
+            <TreeView data={ data } enableLinks highlightSelected={ false } nodeIcon={ '' } backColor = { 'rgba(0, 0, 0, 0)' } showBorder= { false }/>
+          </div>
+        }
+        { this.state.issueModalShow && <CreateIssueModal show close={ this.issueModalClose } config={ project.options.config } create={ createIssue } issue={ issue }/> }
+
+        <Form horizontal>
+          <FormGroup>
+            <Col sm={ 3 } componentClass={ ControlLabel }><h3><i className='fa fa-eye'></i></h3></Col>
+            <Col sm={ 9 } style={ { padding: '7px 15px 10px 5px' } }><h3>ActionView</h3></Col>
+            <Col sm={ 3 } componentClass={ ControlLabel } style={ { fontSize: '16px' } }><i className='fa fa-home'></i></Col>
+            <Col sm={ 9 } className='navheader' style={ { padding: '7px 15px 10px 5px', fontSize: '16px', color: '#3b73af' } }>项目中心</Col>
+            <Col sm={ 2 }/>
+            <Col sm={ 10 } style={ { padding: '7px 15px 10px 0px', fontSize: '12px', color: '#3b73af' } }>
+              社交化项目管理
+            </Col>
+            <Col sm={ 12 } className='navheader' style={ { padding: '7px 15px 10px 5px', fontSize: '16px', color: '#3b73af' } }>
+              <i className='fa fa-plus-square-o'></i>项目概述
+            </Col>
+            <Col sm={ 3 }/>
+            <Col sm={ 9 } style={ { paddingLeft: '0px' } }>
+              <Nav bsStyle='pills' stacked activeKey={ 1 }>
+                <NavItem eventKey={ 1 } ref='/home'>问题</NavItem>
+                <NavItem eventKey={ 2 } title='Item'>版本</NavItem>
+                <NavItem eventKey={ 3 }>模块</NavItem>
+              </Nav>
+            </Col>
+            <Col sm={ 3 } componentClass={ ControlLabel } style={ { fontSize: '16px' } }><i className='fa fa-plus-square-o'></i></Col>
+            <Col sm={ 9 } style={ { padding: '7px 15px 10px 0px', fontSize: '16px', color: '#3b73af' } }>项目概述</Col>
+            <Col sm={ 3 }/>
+            <Col sm={ 9 } style={ { paddingLeft: '0px' } }>
+              <Nav bsStyle='pills' stacked activeKey={ 1 }>
+                <NavItem eventKey={ 1 } ref='/home'>问题</NavItem>
+                <NavItem eventKey={ 2 } title='Item'>版本</NavItem>
+                <NavItem eventKey={ 3 }>模块</NavItem>
+              </Nav>
+            </Col>
+            <Col sm={ 2 }/>
+            <Col sm={ 10 } style={ { padding: '7px 15px 10px 0px', fontSize: '12px', color: '#3b73af' } }>
+              个人中心
+            </Col>
+            <Col sm={ 3 } componentClass={ ControlLabel } style={ { fontSize: '16px' } }><i className='fa fa-plus-square-o'></i></Col>
+            <Col sm={ 9 } style={ { padding: '7px 15px 10px 5px', fontSize: '16px' } }>个人设置</Col>
+            <Col sm={ 3 }/>
+            <Col sm={ 9 } style={ { paddingLeft: '0px' } }>
+              <Nav bsStyle='pills' stacked>
+                <NavItem eventKey={ 1 } disabled>刘旭 登录</NavItem>
+                <NavItem eventKey={ 1 } ref='/home'>设置</NavItem>
+                <NavItem eventKey={ 2 } title='Item'>通知</NavItem>
+                <NavItem eventKey={ 3 }>我的关注</NavItem>
+              </Nav>
+            </Col>
+          </FormGroup>
+        </Form>
+      </div>
+    );
+  }
+}

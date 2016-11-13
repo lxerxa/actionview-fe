@@ -29,7 +29,7 @@ export default class ProjectList extends Component {
     const styles2 = { minHeight: '595px' };
 
     return (
-      <div className='col-sm-7 col-sm-offset-3 main-content' style={ styles2 }>
+      <div className='doc-container'>
         <div className='list-unstyled clearfix'>
           <h2>#项目中心#</h2>
         </div>

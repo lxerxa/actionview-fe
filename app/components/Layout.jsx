@@ -25,8 +25,7 @@ class Layout extends Component {
   render() {
     const { location, session, mode, actions } = this.props;
     return (
-      <div>
-        <Navbar location={ location } mode={ mode } session={ session } logout={ actions.destroy } />
+      <div style={ { height: '100%' } }>
         { this.props.children }
       </div>
     );
