@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as SessionActions from 'redux/actions/SessionActions';
-import Navbar from 'components/Navbar';
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -11,19 +10,17 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ mode, session }) => ({ mode, session }), mapDispatchToProps)
+@connect(({ session }) => ({ session }), mapDispatchToProps)
 class Layout extends Component {
 
   static propTypes = {
-    location: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    mode: PropTypes.string,
     session: PropTypes.object,
     children: PropTypes.element
   }
 
   render() {
-    const { location, session, mode, actions } = this.props;
+    const { session } = this.props;
     return (
       <div style={ { height: '100%' } }>
         { this.props.children }

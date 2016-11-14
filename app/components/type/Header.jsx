@@ -46,7 +46,6 @@ export default class Header extends Component {
 
   render() {
     const { create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
-    const styles = { display: 'inline-block', margin: '10px 10px 5px 10px', verticalAlign: 'middle' };
     const defaultIndex = _.findIndex(collection, { default: true });
 
     return (
@@ -57,7 +56,7 @@ export default class Header extends Component {
         <div>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建类型</Button>
           { !indexLoading && <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button> }
-          <div style={ styles } className={ indexLoading && 'hide' }>
+          <div className={ indexLoading ? 'hide' : 'div-default-set' }>
             <span className='default-set'>默认类型：</span>
             { this.state.defaultSetShow ? 
               <div className='default-set'>

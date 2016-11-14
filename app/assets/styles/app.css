@@ -49,11 +49,16 @@
   margin: 10px 10px 5px 10px;
 }
 
+.div-default-set {
+  display: inline-block;
+  margin: 10px 10px 5px 10px;
+  vertical-align: middle;
+}
+
 .default-set {
   display: inline-block;
   margin-top: 5px;
   padding-left: 5px;
-  vertical-align: middle;
 }
 
 .editable-field .edit-icon {
@@ -112,6 +117,7 @@
 
 .edit-field-content {
   display: inline-block;
+  vertical-align: middle;
   margin-right: 2px;
 }
 
@@ -311,18 +317,6 @@
 .detail-loading {
   margin-top: 48%;
   margin-left: 48%;
-}
-
-.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
-  font-size: 16px;
-  color: #000;
-  background-color: #fff;
-}
-
-.nav-pills > li > a {
-  font-size: 16px;
-  color: #3b73af;
-  padding-left: 5px;
 }
 
 #content {
