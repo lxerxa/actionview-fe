@@ -137,10 +137,11 @@ export default class List extends Component {
           <span className='type-abb' title={ _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).name : '' }>
             { _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).abb : '-' }
           </span>),
+        no: collection[i].no,
         name: (
           <div>
             <span className='table-td-issue-title' onClick={ this.show.bind(this, collection[i].id) }>
-              { collection[i].title ? (collection[i].no + ' - ' + collection[i].title) : '-' }
+              { collection[i].title ? collection[i].title : '-' }
             </span>
             { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
             
@@ -178,6 +179,7 @@ export default class List extends Component {
         <BootstrapTable data={ issues } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn width='50' dataField='type'><span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>类型{ mainOrder.field === 'type' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
+          <TableHeaderColumn dataField='no' width='40'>NO</TableHeaderColumn>
           <TableHeaderColumn dataField='name'><span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>主题 { mainOrder.field === 'title' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='120' dataField='assignee'><span className='table-header' onClick={ this.orderBy.bind(this, 'assignee') }>经办人 { mainOrder.field === 'assignee' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='70' dataField='priority'><span className='table-header' onClick={ this.orderBy.bind(this, 'priority') }>优先级 { mainOrder.field === 'priority' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>

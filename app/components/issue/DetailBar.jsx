@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, ControlLabel, Label, Col, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 
 var moment = require('moment');
@@ -43,7 +44,7 @@ export default class DetailBar extends Component {
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }><image src={ img } className='loading detail-loading'/></div>
-              <Form horizontal className={ _.isEmpty(data) && 'hide' }>
+              <Form horizontal className={ _.isEmpty(data) && 'hide' } style={ { marginRight: '10px' } }>
                 <ButtonToolbar style={ { margin: '10px 10px 10px 5px' } }>
                   <Button><i className='fa fa-pencil'></i> 编辑</Button>
                   <ButtonGroup style={ { marginLeft: '10px' } }>
@@ -61,15 +62,13 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     类型 
                   </Col>
-                  <Col sm={ 9 }>
+                  <Col sm={ 3 }>
                     <div style={ { marginTop: '6px' } }>{ type ? type.name : '-' }</div>
                   </Col>
-                </FormGroup>
-                <FormGroup controlId='formControlsLabel'>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
                     状态 
                   </Col>
-                  <Col sm={ 9 }>
+                  <Col sm={ 4 }>
                     <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states, { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label></div>
                   </Col>
                 </FormGroup>
@@ -98,6 +97,57 @@ export default class DetailBar extends Component {
                     contents = moment.unix(data[field.key]).format('YYYY/MM/DD');
                   } else if (field.type === 'DateTimePicker') {
                     contents = moment.unix(data[field.key]).format('YYYY/MM/DD HH:mm');
+                  } else if (field.type === 'File'){
+                    const componentConfig = {
+                      showFiletypeIcon: true,
+                      postUrl: '/api/uploadfile'
+                    };
+                    const djsConfig = {
+                      addRemoveLinks: true,
+                      paramName: field.key,
+                      maxFilesize: 20
+                    };
+                    const eventHandlers = {
+                      init: dz => this.dropzone = dz,
+                      success: null,
+                      removedfile: null 
+                    }
+
+                    const imgFiles = _.filter(data[field.key], (f) => { return _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) !== -1 });
+                    const noImgFiles = _.filter(data[field.key], (f) => { return _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) === -1 });
+                    contents = (<div>
+                      { noImgFiles.length > 0 &&
+                        <Table condensed hover responsive>
+                          <tbody>
+                            { _.map(noImgFiles, (f, i) => 
+                              <tr key={ i }>
+                                <td>{ f.name }</td>
+                                <td width='2%'><span className='remove-icon'><i className='fa fa-trash'></i></span></td>
+                              </tr> ) }
+                          </tbody>
+                        </Table> }
+
+                      { imgFiles.length > 0 && 
+                         <Grid style={ { paddingLeft: '0px' } }>
+                           <Row>
+                           { _.map(imgFiles, (f, i) =>
+                             <Col sm={ 6 } key={ i }>
+                               <div className='attachment-content'>
+                                 <div className='attachment-thumb'>
+                                   <img src='http://10.2.5.91/api/file/582da0581d41c87b4e072d84?flag=s' width='150px'/>
+                                 </div>
+                                 <div className='attachment-title-container'>
+                                    <div className='attachment-title'>{ f.name }</div>
+                                    <div className='remove-icon'><i className='fa fa-trash'></i></div>
+                                 </div>
+                               </div>
+                             </Col> ) }
+                           </Row>
+                         </Grid> }
+                      <div style={ { marginTop: '8px' } }>
+                        <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+                      </div>
+                    </div>);
                   } else {
                     contents = data[field.key];
                   }

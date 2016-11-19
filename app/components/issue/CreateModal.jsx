@@ -23,7 +23,7 @@ class CreateModal extends Component {
         values[v.key] = v.defaultValue;
       }
       if (v.required && !v.defaultValue) {
-        errors[v.key] = 'requried';
+        errors[v.key] = '必填';
       }
     });
 
@@ -119,7 +119,7 @@ class CreateModal extends Component {
     }
     const curField = _.find(this.state.schema, { key: field });
     if (curField && curField.required && field && this.state.values[field].length <= 0) {
-      this.state.errors[field] = 'required';
+      this.state.errors[field] = '必传';
       this.setState({ errors: this.state.errors });
     }
   }

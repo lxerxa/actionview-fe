@@ -322,3 +322,65 @@
 #content {
   height: 100%;
 }
+
+table tr .remove-icon {
+  opacity: 0 !important;
+}
+
+table tr:hover .remove-icon{
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
+.attachment-content {
+  border: 1px solid #f0f0f0;
+  height: 183px;
+  margin: 0 4px 4px 0;
+  padding: 6px 2px;
+  width: 160px;
+  text-align: center;
+}
+
+.attachment-content:hover {
+  background-color: #f0f0f0
+}
+
+.attachment-thumb {
+  float: none;
+  height: 150px;
+  margin: 0 auto;
+  width: 150px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.attachment-title-container {
+  clear: left;
+  display: block;
+  height: 20px;
+  overflow: hidden;
+  width: 150px;
+}
+
+.attachment-title {
+  display: block;
+  float: left;
+  height: 21px;
+  white-space: nowrap;
+  width: 150px;
+  word-wrap: normal;
+}
+
+.attachment-content .remove-icon {
+  position: absolute;
+  boottom: 0px;
+  left: auto;
+  right: 5px;
+  opacity: 0 !important;
+}
+
+.attachment-content:hover .remove-icon{
+  opacity: 1 !important;
+  cursor: pointer;
+}
