@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {} };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -101,6 +101,18 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_SEARCHER_DELETE_FAIL:
       return { ...state, searcherLoading: false, error: action.error };
+
+    case t.ISSUE_FILE_DELETE:
+      return { ...state, fileLoading: true };
+
+    case t.ISSUE_FILE_DELETE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.itemData[action.field_key] = _.reject(state.itemData[action.field_key] || [], { id: action.id });
+      }
+      return { ...state, fileLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_FILE_DELETE_FAIL:
+      return { ...state, fileLoading: false, error: action.error };
 
     default:
       return state;

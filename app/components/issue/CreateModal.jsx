@@ -35,6 +35,7 @@ class CreateModal extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
+    project: PropTypes.object,
     options: PropTypes.object,
     loading: PropTypes.bool,
     create: PropTypes.func.isRequired
@@ -151,7 +152,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { options, close, loading } = this.props;
+    const { options, close, loading, project } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(options.types || [], function(val) {
@@ -177,7 +178,7 @@ class CreateModal extends Component {
                 项目名称
               </Col>
               <Col sm={ 9 }>
-                <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>社交化项目管理系统</span></div>
+                <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>{ project.name || '-' }</span></div>
               </Col>
             </FormGroup>
             <FormGroup controlId='formControlsSelect' style={ { height: '68px', borderBottom: '1px solid #ddd' } }>
@@ -323,7 +324,7 @@ class CreateModal extends Component {
               } else if (v.type === 'File') {
                 const componentConfig = {
                   showFiletypeIcon: true,
-                  postUrl: '/api/uploadfile'
+                  postUrl: '/api/project/' + project.key + '/file'
                 };
                 const djsConfig = {
                   addRemoveLinks: true,

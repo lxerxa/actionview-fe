@@ -25,6 +25,7 @@ export default class List extends Component {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
+    project: PropTypes.object,
     options: PropTypes.object,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -33,6 +34,8 @@ export default class List extends Component {
     refresh: PropTypes.func.isRequired,
     query: PropTypes.object,
     show: PropTypes.func.isRequired,
+    fileLoading: PropTypes.bool.isRequired,
+    delFile: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     delNotify: PropTypes.func.isRequired
   }
@@ -111,7 +114,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, query, refresh } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, query, refresh, project, delFile, fileLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -187,7 +190,7 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow && <DetailBar close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } loading={ itemLoading }/> }
+        { this.state.barShow && <DetailBar close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } loading={ itemLoading } fileLoading={ fileLoading } project={ project } delFile={ delFile }/> }
         { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>

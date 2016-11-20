@@ -38,8 +38,16 @@ export function addSearcher(key, values) {
 export function delSearcher(key, id) {
   return asyncFuncCreator({
     constant: 'ISSUE_SEARCHER_DELETE',
-    id,
     promise: (client) => client.request({ url: '/project/' + key + '/issue/searcher/' + id, method: 'delete' })
+  });
+}
+
+export function delFile(key, issue_id, field_key, file_id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_FILE_DELETE',
+    id: file_id,
+    field_key,
+    promise: (client) => client.request({ url: '/project/' + key + '/file/' + file_id + '?issue_id=' + issue_id + '&field_key=' + field_key, method: 'delete' })
   });
 }
 

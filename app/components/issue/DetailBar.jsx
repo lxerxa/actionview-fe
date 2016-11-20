@@ -6,16 +6,22 @@ import _ from 'lodash';
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
+const DelFileModal = require('./DelFileModal');
+
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1 };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {} };
+    this.delFileModalClose = this.delFileModalClose.bind(this);
   }
 
   static propTypes = {
     options: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
+    fileLoading: PropTypes.bool.isRequired,
+    delFile: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -29,8 +35,17 @@ export default class DetailBar extends Component {
     this.setState({ tabKey });
   }
 
+  delFileNotify(field_key, id, name) {
+    const { data } = this.props;
+    this.setState({ delFileShow: true, selectedFile: { field_key, id, name } });
+  }
+
+  delFileModalClose() {
+    this.setState({ delFileShow: false });
+  }
+
   render() {
-    const { close, data={}, loading, options } = this.props;
+    const { close, data={}, loading, options, project, fileLoading, delFile } = this.props;
 
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
@@ -100,7 +115,7 @@ export default class DetailBar extends Component {
                   } else if (field.type === 'File'){
                     const componentConfig = {
                       showFiletypeIcon: true,
-                      postUrl: '/api/uploadfile'
+                      postUrl: '/api/project/' + project.key + '/file?issue_id=' + data.id 
                     };
                     const djsConfig = {
                       addRemoveLinks: true,
@@ -122,7 +137,7 @@ export default class DetailBar extends Component {
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
                                 <td>{ f.name }</td>
-                                <td width='2%'><span className='remove-icon'><i className='fa fa-trash'></i></span></td>
+                                <td width='2%'><span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></span></td>
                               </tr> ) }
                           </tbody>
                         </Table> }
@@ -134,11 +149,11 @@ export default class DetailBar extends Component {
                              <Col sm={ 6 } key={ i }>
                                <div className='attachment-content'>
                                  <div className='attachment-thumb'>
-                                   <img src='http://10.2.5.91/api/file/582da0581d41c87b4e072d84?flag=s' width='150px'/>
+                                   <img src={  '/api/project/' + project.key + '/file/' + f.id + '?flag=s' }/>
                                  </div>
                                  <div className='attachment-title-container'>
                                     <div className='attachment-title'>{ f.name }</div>
-                                    <div className='remove-icon'><i className='fa fa-trash'></i></div>
+                                    <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div>
                                  </div>
                                </div>
                              </Col> ) }
@@ -193,6 +208,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 4 } title='工作日志'>Tab 3 content</Tab>
           </Tabs>
         </div>
+        { this.state.delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ this.state.selectedFile } loading={ fileLoading }/> }
       </div>
     );
   }

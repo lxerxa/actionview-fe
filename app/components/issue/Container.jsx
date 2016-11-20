@@ -84,6 +84,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async delFile(field_key, file_id) {
+    await this.props.actions.delFile(this.pid, this.props.issue.itemData.id, field_key, file_id);
+    return this.props.issue.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -98,8 +103,8 @@ export default class Container extends Component {
 
     return (
       <div>
-        <Header create={ this.create.bind(this) } addSearcher={ this.addSearcher.bind(this) } delSearcher={ this.delSearcher.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } { ...this.props.issue }/>
-        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } pid={ this.pid } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean }/>
+        <Header create={ this.create.bind(this) } addSearcher={ this.addSearcher.bind(this) } delSearcher={ this.delSearcher.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } project={ this.props.project.item } { ...this.props.issue }/>
+        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } delFile={ this.delFile.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item }/>
       </div>
     );
   }

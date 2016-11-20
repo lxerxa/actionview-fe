@@ -26,6 +26,7 @@ export default class Header extends Component {
     refresh: PropTypes.func,
     getOptions: PropTypes.func,
     query: PropTypes.object,
+    project: PropTypes.object,
     options: PropTypes.object,
     loading: PropTypes.bool.isRequired,
     optionsLoading: PropTypes.bool.isRequired,
@@ -118,7 +119,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, addSearcher, delSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading } = this.props;
+    const { create, addSearcher, delSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading, project } = this.props;
 
     const sqlTxt = this.condsTxt();
     
@@ -145,7 +146,7 @@ export default class Header extends Component {
         </div>
         <SearcherList className={ !this.state.searcherShow && 'hide' } searcherShow={ this.state.searcherShow } loading={ searcherLoading } indexLoading={ indexLoading } options={ options } delSearcher={ delSearcher } refresh={ refresh } hide={ this.hideSearcher.bind(this) }/>
         <SearchList className={ !this.state.searchShow && 'hide' } query={ query } searchShow={ this.state.searchShow } indexLoading={ indexLoading } options={ options } refresh={ refresh }/>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading } project={ project }/> }
         { this.state.addSearcherShow && <AddSearcherModal show close={ this.addSearcherModalClose } searchers={ options.searchers || [] } create={ addSearcher } query={ query } loading={ searcherLoading } sqlTxt={ sqlTxt }/> }
       </div>
     );
