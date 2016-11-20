@@ -118,6 +118,7 @@ export default generateConstants([
   'ISSUE_SEARCHER_DELETE(ASYNC)',
 
   'ISSUE_FILE_DELETE(ASYNC)',
+  'ISSUE_FILE_ADD',
 
   'USER_INFO_FETCH(ASYNC)',
 

@@ -100,21 +100,21 @@ class CreateModal extends Component {
     this.setState({ type: typeValue, errors, touched: {}, schema, values });
   }
 
-  success(file, res) {
-    const { field = '', fid = '' } = res.data;
+  success(localfile, res) {
+    const { field = '', file = {} } = res.data;
     this.state.values[field] = this.state.values[field] || [];
-    this.state.values[field].push(fid); 
-    file.field = field;
-    file.fid = fid; 
+    this.state.values[field].push(file.id); 
+    localfile.field = field;
+    localfile.fid = file.id; 
     if (field && this.state.errors[field]) {
       delete this.state.errors[field];
       this.setState({ errors: this.state.errors });
     }
   }
 
-  removedfile(file) { 
-    const field = file.field || '';
-    const fid = file.fid || '';
+  removedfile(localfile) { 
+    const field = localfile.field || '';
+    const fid = localfile.fid || '';
     if (field && fid) {
       this.state.values[field] = _.reject(this.state.values[field], (o) => { return o === fid });
     }

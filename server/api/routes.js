@@ -591,7 +591,7 @@ export default function(router) {
     return res.status(200).send(marked(readme));
   });
 
-  router.post('/uploadfile', function(req, res) {
+  router.post('/project/:key/file', function(req, res) {
     return res.status(200).send({ecode: 0, data: { field:'attachements', fid: '546761'}});
   });
 }

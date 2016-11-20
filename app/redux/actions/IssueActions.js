@@ -69,3 +69,7 @@ export function del(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id, method: 'delete' })
   });
 }
+
+export function addFile(field_key, file) {
+  return { type: 'ISSUE_FILE_ADD', field_key, file };
+}

@@ -22,6 +22,7 @@ export default class DetailBar extends Component {
     loading: PropTypes.bool.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
+    addFile: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -42,6 +43,12 @@ export default class DetailBar extends Component {
 
   delFileModalClose() {
     this.setState({ delFileShow: false });
+  }
+
+  uploadSuccess(localfile, res) {
+    const { field = '', file = {} } = res.data;
+    const { addFile } = this.props;
+    addFile(field, file); 
   }
 
   render() {
@@ -118,14 +125,13 @@ export default class DetailBar extends Component {
                       postUrl: '/api/project/' + project.key + '/file?issue_id=' + data.id 
                     };
                     const djsConfig = {
-                      addRemoveLinks: true,
+                      addRemoveLinks: false,
                       paramName: field.key,
                       maxFilesize: 20
                     };
                     const eventHandlers = {
                       init: dz => this.dropzone = dz,
-                      success: null,
-                      removedfile: null 
+                      success: this.uploadSuccess.bind(this) 
                     }
 
                     const imgFiles = _.filter(data[field.key], (f) => { return _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) !== -1 });

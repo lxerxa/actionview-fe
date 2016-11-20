@@ -114,6 +114,13 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_FILE_DELETE_FAIL:
       return { ...state, fileLoading: false, error: action.error };
 
+    case t.ISSUE_FILE_ADD:
+      if (!state.itemData[action.field_key]) {
+        state.itemData[action.field_key] = [];
+      }
+      state.itemData[action.field_key].push(action.file);
+      return { ...state, itemData: state.itemData };
+
     default:
       return state;
   }

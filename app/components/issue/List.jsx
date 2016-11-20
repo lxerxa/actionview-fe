@@ -36,6 +36,7 @@ export default class List extends Component {
     show: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
+    addFile: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     delNotify: PropTypes.func.isRequired
   }
@@ -114,7 +115,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, query, refresh, project, delFile, fileLoading } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, query, refresh, project, delFile, addFile, fileLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -190,7 +191,7 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow && <DetailBar close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } loading={ itemLoading } fileLoading={ fileLoading } project={ project } delFile={ delFile }/> }
+        { this.state.barShow && <DetailBar close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } loading={ itemLoading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile }/> }
         { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>

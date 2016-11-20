@@ -104,7 +104,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } addSearcher={ this.addSearcher.bind(this) } delSearcher={ this.delSearcher.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } project={ this.props.project.item } { ...this.props.issue }/>
-        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } delFile={ this.delFile.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item }/>
+        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } delFile={ this.delFile.bind(this) } addFile={ this.props.actions.addFile } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item }/>
       </div>
     );
   }
