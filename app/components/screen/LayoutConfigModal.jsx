@@ -107,7 +107,7 @@ export default class LayoutConfigModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '界面配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { height: '450px', overflow: 'auto' } }>
+        <Modal.Body style={ { maxHeight: '450px', overflow: 'auto' } }>
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
               <Col sm={ 10 }>
