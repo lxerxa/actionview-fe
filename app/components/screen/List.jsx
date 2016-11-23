@@ -126,7 +126,7 @@ export default class List extends Component {
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
             }
-            <image src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
+            <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -134,7 +134,7 @@ export default class List extends Component {
 
     const opts = {};
     if (indexLoading) {
-      opts.noDataText = ( <div><image src={ img } className='loading'/></div> );
+      opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
       opts.noDataText = '暂无数据显示。'; 
     } 

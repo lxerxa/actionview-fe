@@ -65,7 +65,7 @@ export default class Header extends Component {
                     { collection.map( itemOption => <option value={ itemOption.id } key={ itemOption.id } selected={ itemOption.default && true }>{ itemOption.name }</option>) }
                   </FormControl>
                 </div>
-                <image src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>
+                <img src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>
                 <div className={ defaultLoading ? 'hide' : 'edit-field-content' }>
                   <Button className='edit-ok-button' onClick={ this.setDefaultValue }><i className='fa fa-check'></i></Button>
                   <Button className='edit-ok-button' onClick={ () => { this.setState({ defaultSetShow: false }); } }><i className='fa fa-close'></i></Button>

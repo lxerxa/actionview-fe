@@ -106,7 +106,7 @@ export default class ConfigHeader extends Component {
           <Button className='create-btn' onClick={ () => { this.setState({ createStepModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建步骤</Button>
           <Button className='create-btn' onClick={ this.saveWorkflow.bind(this) } disabled={ newCollection2JSON === collection2JSON || collection.length <= 0 }><i className='fa fa-save'></i>&nbsp;保存</Button>
           <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>{ this.state.errMsg != '' ? this.state.errMsg : (ecode !== 0 ? '保存失败，请重试' : '') }</Label>
-          <image src={ img } className={ saveLoading ? 'loading' : 'hide' }/>
+          <img src={ img } className={ saveLoading ? 'loading' : 'hide' }/>
           <Button className='create-btn' style={ { float: 'right' } } onClick={ () => { this.setState({ previewModalShow: true }); } } disabled={ collection.length <= 0 }><i className='fa fa-search'></i>&nbsp;预览</Button>
         </div>
         { this.state.createStepModalShow && <CreateStepModal show close={ this.createStepModalClose } create={ createStep } options={ options } collection={ collection }/> }

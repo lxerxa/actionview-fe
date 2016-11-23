@@ -136,7 +136,7 @@ export default class LayoutConfigModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
-          <image src={ img } className={ loading ? 'loading' : 'hide' }/>
+          <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button className='ralign' disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
           <Button disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
         </Modal.Footer>

@@ -47,7 +47,7 @@ export default class DelFileModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
-          <image src={ img } className={ loading ? 'loading' : 'hide' }/>
+          <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button className='ralign' disabled={ loading } onClick={ this.confirm }>确定</Button>
           <Button disabled={ loading } onClick={ this.cancel }>取消</Button>
         </Modal.Footer>

@@ -57,6 +57,8 @@ export default class DetailBar extends Component {
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
 
+    const images= [ { src: 'http://www.w3school.com.cn//i/site_photoref.jpg' }, { src: 'http://www.w3school.com.cn//i/site_photoref.jpg' } ];
+
     return (
       <div className='animate-dialog'>
         <Button className='close' onClick={ close }>
@@ -65,7 +67,7 @@ export default class DetailBar extends Component {
         <div className='panel panel-default'>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
-              <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }><image src={ img } className='loading detail-loading'/></div>
+              <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
               <Form horizontal className={ _.isEmpty(data) && 'hide' } style={ { marginRight: '10px' } }>
                 <ButtonToolbar style={ { margin: '10px 10px 10px 5px' } }>
                   <Button><i className='fa fa-pencil'></i> 编辑</Button>
@@ -142,7 +144,7 @@ export default class DetailBar extends Component {
                           <tbody>
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
-                                <td>{ f.name }</td>
+                                <td><a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a></td>
                                 <td width='2%'><span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></span></td>
                               </tr> ) }
                           </tbody>
@@ -208,6 +210,7 @@ export default class DetailBar extends Component {
                       <Button bsStyle='link'><i className='fa fa-refresh'></i></Button>
                     </div>
                   </Col>
+
                 </FormGroup>
               </Form>
             </Tab>

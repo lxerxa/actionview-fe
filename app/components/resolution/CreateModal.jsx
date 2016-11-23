@@ -36,7 +36,6 @@ export default class CreateModal extends Component {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    resetForm: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired
   }
 
@@ -62,7 +61,6 @@ export default class CreateModal extends Component {
 
   render() {
     const { fields: { name, description }, handleSubmit, invalid, submitting } = this.props;
-    const styles = { width: '60%' };
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -83,7 +81,7 @@ export default class CreateModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
-          <image src={ img } className={ submitting ? 'loading' : 'hide' }/>
+          <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button className='ralign' disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>

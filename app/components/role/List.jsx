@@ -179,7 +179,7 @@ export default class List extends Component {
               </div>
             </div> 
           }
-          <image src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ), 
         users: (
@@ -205,7 +205,7 @@ export default class List extends Component {
               </div>
             </div> 
           }
-          <image src={ img } style={ { float: 'right' } } className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ), 
         operation: (
@@ -214,7 +214,7 @@ export default class List extends Component {
               <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
               <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
             </div>
-            <image src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -222,7 +222,7 @@ export default class List extends Component {
 
     const opts = {};
     if (indexLoading) {
-      opts.noDataText = ( <div><image src={ img } className='loading'/></div> );
+      opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
       opts.noDataText = '暂无数据显示。'; 
     } 

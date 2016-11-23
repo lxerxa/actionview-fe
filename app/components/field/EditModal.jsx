@@ -86,7 +86,7 @@ export default class EditModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
-          <image src={ img } className={ submitting ? 'loading' : 'hide' }/>
+          <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button className='ralign' disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
           <Button disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>

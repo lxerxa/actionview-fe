@@ -50,12 +50,12 @@ export default {
           loaders: [
             'url?limit=1000&name=[sha512:hash:base64:7].[ext]'
           ],
-          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass|react-bootstrap-table|react-dropzone-component|dropzone)/
+          exclude: /node_modules\/(?!font-awesome|bootstrap|react-bootstrap-table|react-dropzone-component|dropzone)/
         },
         {
           test: /\.css$/,
           loader: 'style!css!postcss',
-          exclude: /node_modules\/(?!font-awesome|react-select|bootstrap|jackblog-sass|react-bootstrap-table|react-datetime|rc-tabs|mermaid|react-dropzone-component|dropzone)/
+          exclude: /node_modules\/(?!font-awesome|react-select|bootstrap|react-bootstrap-table|react-datetime|rc-tabs|mermaid|react-dropzone-component|dropzone)/
         }
       ]
     },
