@@ -36,7 +36,7 @@
     "image-loader": "0.0.1",
     "json-loader": "~0.5.4",
     "node-libs-browser": "^0.5.2",
-    "node-watch": "^0.3.4",
+    "node-watch": "~0.4.1",
     "postcss-import": "^7.1.0",
     "postcss-loader": "^0.7.0",
     "postcss-url": "^5.0.2",
@@ -79,8 +79,8 @@
     "intl": "^1.0.0",
     "marked": "^0.3.5",
     "morgan": "^1.6.1",
-    "react": "~15.2.0",
-    "react-dom": "~15.2.0",
+    "react": "~15.1.0",
+    "react-dom": "~15.1.0",
     "react-intl": "^1.2.0",
     "react-redux": "^4.0.0",
     "redux": "^3.0.2",
@@ -95,6 +95,7 @@
     "moment": "~2.13.0",
     "react-datetime": "~2.2.1",
     "lodash": "~3.10.1",
-    "rc-tabs": "~5.9.2"
+    "rc-tabs": "~5.9.2",
+    "react-image-lightbox": "~3.2.0"
   }
 }

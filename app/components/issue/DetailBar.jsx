@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, ControlLabel, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 import DropzoneComponent from 'react-dropzone-component';
+import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 
 var moment = require('moment');
@@ -11,7 +12,7 @@ const DelFileModal = require('./DelFileModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {} };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0 };
     this.delFileModalClose = this.delFileModalClose.bind(this);
   }
 
@@ -51,13 +52,16 @@ export default class DetailBar extends Component {
     addFile(field, file); 
   }
 
+  openPreview(index) {
+    this.setState({ previewShow: true, photoIndex: index });
+  }
+
   render() {
     const { close, data={}, loading, options, project, fileLoading, delFile } = this.props;
+    const { previewShow, photoIndex } = this.state;
 
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
-
-    const images= [ { src: 'http://www.w3school.com.cn//i/site_photoref.jpg' }, { src: 'http://www.w3school.com.cn//i/site_photoref.jpg' } ];
 
     return (
       <div className='animate-dialog'>
@@ -156,7 +160,7 @@ export default class DetailBar extends Component {
                            { _.map(imgFiles, (f, i) =>
                              <Col sm={ 6 } key={ i }>
                                <div className='attachment-content'>
-                                 <div className='attachment-thumb'>
+                                 <div className='attachment-thumb' onClick={ this.openPreview.bind(this, i) }>
                                    <img src={  '/api/project/' + project.key + '/file/' + f.id + '?flag=s' }/>
                                  </div>
                                  <div className='attachment-title-container'>
@@ -168,8 +172,19 @@ export default class DetailBar extends Component {
                            </Row>
                          </Grid> }
                       <div style={ { marginTop: '8px' } }>
-                        <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+                        <DropzoneComponent 
+                          config={ componentConfig } 
+                          eventHandlers={ eventHandlers } 
+                          djsConfig={ djsConfig } />
                       </div>
+                      { previewShow &&
+                        <Lightbox
+                          mainSrc={  '/api/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
+                          nextSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
+                          prevSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+                          onCloseRequest={ () => this.setState({ previewShow: false }) }
+                          onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+                          onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
                     </div>);
                   } else {
                     contents = data[field.key];

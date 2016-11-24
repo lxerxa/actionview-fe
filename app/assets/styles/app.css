@@ -348,6 +348,7 @@ table tr:hover .remove-icon{
 }
 
 .attachment-thumb {
+  cursor: pointer;
   float: none;
   height: 160px;
   margin: 0 auto;
