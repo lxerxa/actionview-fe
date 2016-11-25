@@ -107,7 +107,10 @@ export default class DetailBar extends Component {
 
                   let contents = '';
                   if (field.key === 'assignee') {
-                    contents = data[field.key] && data[field.key].name || '-';
+                    contents = (
+                      <div>
+                        { data[field.key] && data[field.key].name || '-' }
+                      </div>);
                   } else if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingeVersion') {
                     const optionValues = field.optionValues || [];
                     contents = _.find(optionValues, { id: data[field.key] }) ? _.find(optionValues, { id: data[field.key] }).name : '-';
@@ -182,6 +185,8 @@ export default class DetailBar extends Component {
                           mainSrc={  '/api/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
                           nextSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
                           prevSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+                          imageTitle={ imgFiles[photoIndex].name }
+                          imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
                           onCloseRequest={ () => this.setState({ previewShow: false }) }
                           onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
                           onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }

@@ -30,6 +30,7 @@ export default class List extends Component {
 
   static propTypes = {
     collection: PropTypes.array.isRequired,
+    options: PropTypes.object.isRequired,
     selectedItem: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -88,7 +89,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, del, edit, options } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const fields = [];
@@ -154,7 +155,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } options={ options }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
         { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }
         { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }

@@ -28,7 +28,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'field',
-  fields: [ 'name', 'key', 'type', 'description' ],
+  fields: [ 'name', 'key', 'type', 'applyToTypes', 'description' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -42,6 +42,7 @@ export default class CreateModal extends Component {
   static propTypes = {
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
+    options: PropTypes.object,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
@@ -70,7 +71,9 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, key, type, description }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, key, type, applyToTypes, description }, handleSubmit, invalid, options, submitting } = this.props;
+
+    const typeOptions = _.map(options.types || [], (val) => { return { label: val.name, value: val.id } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -93,6 +96,10 @@ export default class CreateModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
             <Select options={ fieldTypes } simpleValue value={ type.value } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择字段类型' clearable={ false }/>
             { type.touched && type.error && <HelpBlock style={ { float: 'right' } }>{ type.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>适用类型</ControlLabel>
+            <Select multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

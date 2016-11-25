@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import Select from 'react-select';
+import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -14,7 +16,7 @@ const validate = (values) => {
 
 @reduxForm({
   form: 'field',
-  fields: [ 'id', 'name', 'description' ],
+  fields: [ 'id', 'name', 'applyToTypes', 'description' ],
   validate
 })
 export default class EditModal extends Component {
@@ -28,6 +30,7 @@ export default class EditModal extends Component {
   static propTypes = {
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
+    options: PropTypes.object,
     dirty: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
@@ -64,7 +67,9 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, description }, dirty, handleSubmit, invalid, submitting, data } = this.props;
+    const { fields: { id, name, applyToTypes, description }, dirty, handleSubmit, invalid, submitting, data, options } = this.props;
+
+    const typeOptions = _.map(options.types || [], (val) => { return { label: val.name, value: val.id } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -78,6 +83,10 @@ export default class EditModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>字段名</ControlLabel>
             <FormControl type='text' { ...name } placeholder='字段名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>适用类型</ControlLabel>
+            <Select multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
