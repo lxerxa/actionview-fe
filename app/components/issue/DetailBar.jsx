@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button, ControlLabel, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 import DropzoneComponent from 'react-dropzone-component';
 import Lightbox from 'react-image-lightbox';
+import Select from 'react-select';
 import _ from 'lodash';
 
 var moment = require('moment');
@@ -12,7 +13,7 @@ const DelFileModal = require('./DelFileModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0 };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
   }
 
@@ -24,6 +25,7 @@ export default class DetailBar extends Component {
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -56,9 +58,39 @@ export default class DetailBar extends Component {
     this.setState({ previewShow: true, photoIndex: index });
   }
 
+  assignToMe(e) {
+    e.preventDefault();
+    alert('aaa');
+  }
+
+  editAssignee() {
+    this.setState({ editAssignee: true });
+  }
+
+  async setAssignee() {
+    this.setState({ settingAssignee: true });
+    const { edit } = this.props;
+    const ecode = await edit({ assignee: this.state.newAssignee });
+    if (ecode === 0) {
+      this.setState({ settingAssignee: false, editAssignee: false, newAssignee: undefined });
+    } else {
+      this.setState({ settingAssignee: false });
+    }
+  }
+
+  cancelSetAssignee() {
+    this.setState({ editAssignee: false, newAssignee: undefined });
+  }
+
+  handleAssigneeSelectChange(value) {
+    this.setState({ newAssignee: value });
+  }
+
   render() {
     const { close, data={}, loading, options, project, fileLoading, delFile } = this.props;
-    const { previewShow, photoIndex } = this.state;
+    const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
+
+    const assigneeOptions=[ { value: 'aaa', label: 'aaa' }, { value: 'bbb', label: 'bbb' } ];
 
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
@@ -108,9 +140,27 @@ export default class DetailBar extends Component {
                   let contents = '';
                   if (field.key === 'assignee') {
                     contents = (
+                      !editAssignee ?
+                      <div className='editable-list-field'>
+                        <div style={ { display: 'table', width: '100%' } }>
+                          <span>
+                            <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
+                              { data[field.key] && data[field.key].name || '-' }
+                            </div>
+                          </span>
+                          <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
+                        </div>
+                      </div>
+                      :
                       <div>
-                        { data[field.key] && data[field.key].name || '-' }
-                      </div>);
+                        <Select simpleValue clearable={ false } searchable={ false } disabled={ settingAssignee } options={ assigneeOptions } value={ newAssignee || data[field.key].id } onChange={ this.handleAssigneeSelectChange.bind(this) } placeholder='选择经办人'/>
+                        <div className={ editAssignee ? 'hide' : '' } style={ { float: 'right' } }>
+                          <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
+                          <Button className='edit-ok-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
+                        </div>
+                        <img src={ img } style={ { float: 'right' } } className={ settingAssignee ? 'loading' : 'hide' }/>
+                      </div>
+                    );
                   } else if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingeVersion') {
                     const optionValues = field.optionValues || [];
                     contents = _.find(optionValues, { id: data[field.key] }) ? _.find(optionValues, { id: data[field.key] }).name : '-';
@@ -237,7 +287,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 4 } title='工作日志'>Tab 3 content</Tab>
           </Tabs>
         </div>
-        { this.state.delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ this.state.selectedFile } loading={ fileLoading }/> }
+        { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
       </div>
     );
   }

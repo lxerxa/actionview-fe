@@ -72,15 +72,20 @@ export default class List extends Component {
 
   async setScreen(typeId) {
     this.state.settingScreenTypeIds.push(typeId);
-    const index = _.indexOf(this.state.willSetScreenTypeIds, typeId);
-    this.state.willSetScreenTypeIds.splice(index, 1);
-    this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds, willSetScreenTypeIds: this.state.willSetScreenTypeIds });
+    this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds });
 
     const { edit } = this.props;
     const ecode = await edit({ screen_id: this.state.screen[typeId], id: typeId });
     if (ecode === 0) {
-      const index = _.indexOf(this.state.settingScreenTypeIds, typeId);
-      this.state.settingScreenTypeIds.splice(index, 1);
+      const willSetIndex = _.indexOf(this.state.willSetScreenTypeIds, typeId);
+      this.state.willSetScreenTypeIds.splice(willSetIndex, 1);
+
+      const settingIndex = _.indexOf(this.state.settingScreenTypeIds, typeId);
+      this.state.settingScreenTypeIds.splice(settingIndex, 1);
+      this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds, willSetScreenTypeIds: this.state.willSetScreenTypeIds });
+    } else {
+      const settingIndex = _.indexOf(this.state.settingScreenTypeIds, typeId);
+      this.state.settingScreenTypeIds.splice(settingIndex, 1);
       this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds });
     }
   }
@@ -106,15 +111,21 @@ export default class List extends Component {
 
   async setWorkflow(typeId) {
     this.state.settingWorkflowTypeIds.push(typeId);
-    const index = _.indexOf(this.state.willSetWorkflowTypeIds, typeId);
-    this.state.willSetWorkflowTypeIds.splice(index, 1);
-    this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds, willSetWorkflowTypeIds: this.state.willSetWorkflowTypeIds });
+    this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds });
 
     const { edit } = this.props;
     const ecode = await edit({ workflow_id: this.state.workflow[typeId], id: typeId });
     if (ecode === 0) {
-      const index = _.indexOf(this.state.settingWorkflowTypeIds, typeId);
-      this.state.settingWorkflowTypeIds.splice(index, 1);
+      const willSetIndex = _.indexOf(this.state.willSetWorkflowTypeIds, typeId);
+      this.state.willSetWorkflowTypeIds.splice(willSetIndex, 1);
+
+      const settingIndex = _.indexOf(this.state.settingWorkflowTypeIds, typeId);
+      this.state.settingWorkflowTypeIds.splice(settingIndex, 1);
+
+      this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds, willSetWorkflowTypeIds: this.state.willSetWorkflowTypeIds });
+    } else {
+      const settingIndex = _.indexOf(this.state.settingWorkflowTypeIds, typeId);
+      this.state.settingWorkflowTypeIds.splice(settingIndex, 1);
       this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds });
     }
   }

@@ -75,18 +75,24 @@ export default class List extends Component {
 
   async setPermissions(roleId) {
     this.state.settingPermissionRoleIds.push(roleId);
-    const index = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
-    this.state.willSetPermissionRoleIds.splice(index, 1);
-    this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
+    this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
 
     const { edit } = this.props;
     const ecode = await edit({ permissions: _.map(this.state.permissions[roleId], _.iteratee('value')), id: roleId });
-    //if (ecode === 0) {
-    //}else {
-    //}
-    const ind = _.indexOf(this.state.settingPermissionRoleIds, roleId);
-    this.state.settingPermissionRoleIds.splice(ind, 1);
-    this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
+    if (ecode === 0) {
+      const willSetIndex = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
+      this.state.willSetPermissionRoleIds.splice(willSetIndex, 1);
+
+      const settingIndex = _.indexOf(this.state.settingPermissionRoleIds, roleId);
+      this.state.settingPermissionRoleIds.splice(settingIndex, 1);
+
+      this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
+    }else {
+      const settingIndex = _.indexOf(this.state.settingPermissionRoleIds, roleId);
+      this.state.settingPermissionRoleIds.splice(settingIndex, 1);
+
+      this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
+    }
   }
 
   willSetUsers(roleId) {
@@ -105,18 +111,24 @@ export default class List extends Component {
 
   async setUsers(roleId) {
     this.state.settingUserRoleIds.push(roleId);
-    const index = this.state.willSetUserRoleIds.indexOf(roleId);
-    this.state.willSetUserRoleIds.splice(index, 1);
-    this.setState({ willSetUserRoleIds: this.state.willSetUserRoleIds, settingUserRoleIds: this.state.settingUserRoleIds });
+    this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
 
     const { edit } = this.props;
     const ecode = await edit({ users: _.map(this.state.users[roleId], _.iteratee('id')), id: roleId });
-    //if (ecode === 0) {
-    //}else {
-    //}
-    const ind = _.indexOf(this.state.settingUserRoleIds, roleId);
-    this.state.settingUserRoleIds.splice(ind, 1);
-    this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
+    if (ecode === 0) {
+      const willSetIndex = this.state.willSetUserRoleIds.indexOf(roleId);
+      this.state.willSetUserRoleIds.splice(willSetIndex, 1);
+
+      const settingIndex = _.indexOf(this.state.settingUserRoleIds, roleId);
+      this.state.settingUserRoleIds.splice(settingIndex, 1);
+
+      this.setState({ willSetUserRoleIds: this.state.willSetUserRoleIds, settingUserRoleIds: this.state.settingUserRoleIds });
+
+    }else {
+      const settingIndex = _.indexOf(this.state.settingUserRoleIds, roleId);
+      this.state.settingUserRoleIds.splice(settingIndex, 1);
+      this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
+    }
   }
 
   handlePermissionSelectChange(roleId, value) {

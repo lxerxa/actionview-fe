@@ -71,16 +71,22 @@ export default class List extends Component {
 
   async setPrincipal(moduleId) {
     this.state.settingPrincipalModuleIds.push(moduleId);
-    const index = _.indexOf(this.state.willSetPrincipalModuleIds, moduleId);
-    this.state.willSetPrincipalModuleIds.splice(index, 1);
-    this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds, willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds });
+    this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIdsleIds });
 
-    const { edit, options } = this.props;
-    const { users = [] } = options;
+    const { edit } = this.props;
     const ecode = await edit({ principal: this.state.principal[moduleId], id: moduleId });
     if (ecode === 0) {
-      const index = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
-      this.state.settingPrincipalModuleIds.splice(index, 1);
+      const willSetIndex = _.indexOf(this.state.willSetPrincipalModuleIds, moduleId);
+      this.state.willSetPrincipalModuleIds.splice(willSetIndex, 1);
+
+      const settingIndex = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
+      this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
+
+      this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds, willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds });
+    } else {
+      const settingIndex = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
+      this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
+
       this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
     }
   }
@@ -106,15 +112,22 @@ export default class List extends Component {
 
   async setDefaultAssignee(moduleId) {
     this.state.settingDefaultAssigneeModuleIds.push(moduleId);
-    const index = _.indexOf(this.state.willSetDefalutAssigneeModuleIds, moduleId);
-    this.state.willSetDefalutAssigneeModuleIds.splice(index, 1);
-    this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds, willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds });
+    this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
 
     const { edit } = this.props;
     const ecode = await edit({ defaultAssignee: this.state.defaultAssignee[moduleId], id: moduleId });
     if (ecode === 0) {
-      const index = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
-      this.state.settingDefaultAssigneeModuleIds.splice(index, 1);
+      const willSetIndex = _.indexOf(this.state.willSetDefalutAssigneeModuleIds, moduleId);
+      this.state.willSetDefalutAssigneeModuleIds.splice(willSetIndex, 1);
+
+      const settingIndex = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
+      this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
+
+      this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds, willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds });
+    } else {
+      const settingIndex = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
+      this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
+
       this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
     }
   }
@@ -152,7 +165,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].principal ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
                     { collection[i].principal.name || '-' } 
                   </div>
                 </span> 
@@ -180,7 +193,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].defaultAssignee ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
                     { _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }) ? _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }).label : '-' } 
                   </div>
                 </span> 
