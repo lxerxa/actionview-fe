@@ -71,7 +71,7 @@ export default class List extends Component {
 
   async setPrincipal(moduleId) {
     this.state.settingPrincipalModuleIds.push(moduleId);
-    this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIdsleIds });
+    this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
 
     const { edit } = this.props;
     const ecode = await edit({ principal: this.state.principal[moduleId], id: moduleId });

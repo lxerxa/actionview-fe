@@ -25,7 +25,7 @@ export default class DetailBar extends Component {
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    setAssignee: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -58,9 +58,14 @@ export default class DetailBar extends Component {
     this.setState({ previewShow: true, photoIndex: index });
   }
 
-  assignToMe(e) {
+  async assignToMe(e) {
     e.preventDefault();
-    alert('aaa');
+    const { setAssignee } = this.props;
+    const ecode = await setAssignee({ assignee: '57afced21d41c8174d7421c1' });
+    // fix me
+    //if (ecode === 0) {
+    //} else {
+    //}
   }
 
   editAssignee() {
@@ -69,8 +74,8 @@ export default class DetailBar extends Component {
 
   async setAssignee() {
     this.setState({ settingAssignee: true });
-    const { edit } = this.props;
-    const ecode = await edit({ assignee: this.state.newAssignee });
+    const { setAssignee } = this.props;
+    const ecode = await setAssignee({ assignee: this.state.newAssignee });
     if (ecode === 0) {
       this.setState({ settingAssignee: false, editAssignee: false, newAssignee: undefined });
     } else {
@@ -90,7 +95,7 @@ export default class DetailBar extends Component {
     const { close, data={}, loading, options, project, fileLoading, delFile } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
-    const assigneeOptions=[ { value: 'aaa', label: 'aaa' }, { value: 'bbb', label: 'bbb' } ];
+    const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name, value: val.id } });
 
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
@@ -129,7 +134,7 @@ export default class DetailBar extends Component {
                     状态 
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states, { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label></div>
+                    <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label></div>
                   </Col>
                 </FormGroup>
                 { _.map(schema, (field, key) => {
@@ -141,8 +146,8 @@ export default class DetailBar extends Component {
                   if (field.key === 'assignee') {
                     contents = (
                       !editAssignee ?
-                      <div className='editable-list-field'>
-                        <div style={ { display: 'table', width: '100%' } }>
+                      <div>
+                        <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                           <span>
                             <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
                               { data[field.key] && data[field.key].name || '-' }
@@ -150,15 +155,15 @@ export default class DetailBar extends Component {
                           </span>
                           <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
                         </div>
+                        <span style={ { float: 'left' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span>
                       </div>
                       :
                       <div>
                         <Select simpleValue clearable={ false } searchable={ false } disabled={ settingAssignee } options={ assigneeOptions } value={ newAssignee || data[field.key].id } onChange={ this.handleAssigneeSelectChange.bind(this) } placeholder='选择经办人'/>
-                        <div className={ editAssignee ? 'hide' : '' } style={ { float: 'right' } }>
+                        <div style={ { float: 'right' } }>
                           <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
                           <Button className='edit-ok-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
                         </div>
-                        <img src={ img } style={ { float: 'right' } } className={ settingAssignee ? 'loading' : 'hide' }/>
                       </div>
                     );
                   } else if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingeVersion') {

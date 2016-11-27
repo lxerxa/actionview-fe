@@ -64,7 +64,7 @@ export default class Container extends Component {
   }
 
   async edit(values) {
-    await this.props.actions.edit(this.pid, values);
+    await this.props.actions.edit(this.pid, this.props.issue.itemData.id, values);
     return this.props.issue.ecode;
   }
 
@@ -76,6 +76,11 @@ export default class Container extends Component {
 
   async addSearcher(values) {
     await this.props.actions.addSearcher(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
+  async setAssignee(values) {
+    await this.props.actions.setAssignee(this.pid, this.props.issue.itemData.id, values);
     return this.props.issue.ecode;
   }
 
@@ -104,7 +109,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } addSearcher={ this.addSearcher.bind(this) } delSearcher={ this.delSearcher.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } project={ this.props.project.item } { ...this.props.issue }/>
-        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } delFile={ this.delFile.bind(this) } addFile={ this.props.actions.addFile } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item }/>
+        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } setAssignee={ this.setAssignee.bind(this) } delFile={ this.delFile.bind(this) } addFile={ this.props.actions.addFile } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item }/>
       </div>
     );
   }

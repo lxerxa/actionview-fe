@@ -121,6 +121,22 @@ export default function issue(state = initialState, action) {
       state.itemData[action.field_key].push(action.file);
       return { ...state, itemData: state.itemData };
 
+    case t.ISSUE_SET_ASSIGNEE:
+      return { ...state, itemLoading: true };
+
+    case t.ISSUE_SET_ASSIGNEE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.collection, { id: action.result.data.id });
+        state.collection[ind] = action.result.data;
+        if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
+          state.itemData = action.result.data;
+        }
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_SET_ASSIGNEE_FAIL:
+      return { ...state, itemLoading: false, error: action.error };
+
     default:
       return state;
   }

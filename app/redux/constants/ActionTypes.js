@@ -36,6 +36,7 @@ export default generateConstants([
   'ISSUE_OPTIONS(ASYNC)',
   'ISSUE_SHOW(ASYNC)',
   'ISSUE_EDIT(ASYNC)',
+  'ISSUE_SET_ASSIGNEE(ASYNC)',
   'ISSUE_DELETE(ASYNC)',
   'ISSUE_DELETE_NOTIFY',
 

@@ -14,10 +14,10 @@ export function create(key, values) {
   });
 }
 
-export function edit(key, values) {
+export function edit(key, id, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_EDIT',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + values.id, method: 'put', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id, method: 'put', data: values })
   });
 }
 
@@ -72,4 +72,11 @@ export function del(key, id) {
 
 export function addFile(field_key, file) {
   return { type: 'ISSUE_FILE_ADD', field_key, file };
+}
+
+export function setAssignee(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SET_ASSIGNEE',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id, method: 'put', data: values })
+  });
 }
