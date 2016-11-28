@@ -13,19 +13,40 @@ const img = require('../../assets/images/loading.gif');
 class CreateModal extends Component {
   constructor(props) {
     super(props);
-    const { options } = this.props;
+    const { options, data={} } = this.props;
 
-    const defaultIndex = _.findIndex(options.types || [], { default: true }); 
-    const schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
-    const errors = {}, values = {};
-    _.map(schema, (v) => {
-      if (v.defaultValue) {
-        values[v.key] = v.defaultValue;
-      }
-      if (v.required && !v.defaultValue) {
-        errors[v.key] = '必填';
-      }
-    });
+    let defaultIndex = -1, schema = [], errors={}, values={};
+    if (!_.isEmpty(data) && data.id) {
+      defaultIndex = _.findIndex(options.types || [], { id: data.type });
+      schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
+      _.map(schema, (v) => {
+        if (data[v.key]) {
+          if (data[v.key].id) {
+            values[v.key] = data[v.key].id; // assignee
+          } else if (_.isArray(data[v.key])) {
+            values[v.key] = _.map(data[v.key], 'id'); // files
+          } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
+            values[v.key] = moment.unix(data[v.key]);
+          } else {
+            values[v.key] = data[v.key];
+          }
+        }
+        if (v.required && (!data[v.key] || (_.isArray(data[v.key]) && data[v.key].length <= 0))) {
+          errors[v.key] = '必填';
+        }
+      });
+    } else {
+      defaultIndex = _.findIndex(options.types || [], { default: true }); 
+      schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
+      _.map(schema, (v) => {
+        if (v.defaultValue) {
+          values[v.key] = v.defaultValue;
+        }
+        if (v.required && !v.defaultValue) {
+          errors[v.key] = '必填';
+        }
+      });
+    }
 
     this.state = { ecode: 0, errors, touched: {}, type: defaultIndex !== -1 ? options.types[defaultIndex].id : '', schema, values };
 
@@ -35,14 +56,16 @@ class CreateModal extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
+    data: PropTypes.object,
     project: PropTypes.object,
     options: PropTypes.object,
     loading: PropTypes.bool,
-    create: PropTypes.func.isRequired
+    create: PropTypes.func,
+    edit: PropTypes.func
   }
 
   async handleSubmit() {
-    const { create, close, options } = this.props;
+    const { create, edit, close, options, data={} } = this.props;
 
     const schema = _.find(options.types, { id: this.state.type }).schema;
     const submitData = {};
@@ -60,7 +83,12 @@ class CreateModal extends Component {
       }
     });
     submitData['type'] = this.state.type;
-    const ecode = await create(submitData);
+    let ecode;
+    if (!_.isEmpty(data) && data.id) {
+      ecode = await edit(submitData);
+    } else { 
+      ecode = await create(submitData);
+    }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

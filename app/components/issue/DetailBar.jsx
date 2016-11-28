@@ -5,6 +5,7 @@ import Lightbox from 'react-image-lightbox';
 import Select from 'react-select';
 import _ from 'lodash';
 
+const CreateModal = require('./CreateModal');
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
@@ -13,7 +14,7 @@ const DelFileModal = require('./DelFileModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
   }
 
@@ -22,10 +23,12 @@ export default class DetailBar extends Component {
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
+    itemLoading: PropTypes.bool.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -56,6 +59,11 @@ export default class DetailBar extends Component {
 
   openPreview(index) {
     this.setState({ previewShow: true, photoIndex: index });
+  }
+
+  async viewWorkflow(e) {
+    e.preventDefault();
+    alert('aaa');
   }
 
   async assignToMe(e) {
@@ -91,8 +99,12 @@ export default class DetailBar extends Component {
     this.setState({ newAssignee: value });
   }
 
+  editModalClose() {
+    this.setState({ editModalShow: false });
+  }
+
   render() {
-    const { close, data={}, loading, options, project, fileLoading, delFile } = this.props;
+    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name, value: val.id } });
@@ -108,10 +120,10 @@ export default class DetailBar extends Component {
         <div className='panel panel-default'>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
-              <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
+              <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
               <Form horizontal className={ _.isEmpty(data) && 'hide' } style={ { marginRight: '10px' } }>
                 <ButtonToolbar style={ { margin: '10px 10px 10px 5px' } }>
-                  <Button><i className='fa fa-pencil'></i> 编辑</Button>
+                  <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button>
                   <ButtonGroup style={ { marginLeft: '10px' } }>
                   { _.map(data.wfactions || [], (v) => {
                     return ( <Button>{ v.name }</Button> ); 
@@ -131,10 +143,10 @@ export default class DetailBar extends Component {
                     <div style={ { marginTop: '6px' } }>{ type ? type.name : '-' }</div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
-                    状态 
+                    状态
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label></div>
+                    <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label><a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a></div>
                   </Col>
                 </FormGroup>
                 { _.map(schema, (field, key) => {
@@ -179,11 +191,11 @@ export default class DetailBar extends Component {
                       }
                     });
                     contents = newValues.join(',') || '-';
-                  } else if (field.type === 'DatePicker'){
+                  } else if (field.type === 'DatePicker') {
                     contents = moment.unix(data[field.key]).format('YYYY/MM/DD');
                   } else if (field.type === 'DateTimePicker') {
                     contents = moment.unix(data[field.key]).format('YYYY/MM/DD HH:mm');
-                  } else if (field.type === 'File'){
+                  } else if (field.type === 'File') {
                     const componentConfig = {
                       showFiletypeIcon: true,
                       postUrl: '/api/project/' + project.key + '/file?issue_id=' + data.id 
@@ -246,6 +258,8 @@ export default class DetailBar extends Component {
                           onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
                           onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
                     </div>);
+                  } else if (field.type === 'TextArea') {
+                    contents = ( <span dangerouslySetInnerHTML={ { __html: data[field.key].replace(/(\r\n)|(\n)/g, '<br/>') } } /> ); 
                   } else {
                     contents = data[field.key];
                   }
@@ -293,6 +307,7 @@ export default class DetailBar extends Component {
           </Tabs>
         </div>
         { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
+        { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data }/> }
       </div>
     );
   }

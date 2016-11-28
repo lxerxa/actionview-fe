@@ -44,6 +44,9 @@ export default function issue(state = initialState, action) {
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
+        if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
+          state.itemData = action.result.data;
+        }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

@@ -27,6 +27,15 @@ export default class Container extends Component {
     workflow: PropTypes.object.isRequired
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
+  goConfig(id) {
+    const pathname = '/project/' + this.pid + '/workflow/' + id;
+    this.context.router.push({ pathname });
+  }
+
   async index() {
     await this.props.actions.index(this.pid);
     return this.props.workflow.ecode;
@@ -63,7 +72,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } { ...this.props.workflow }/>
-        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } pid={ this.pid } { ...this.props.workflow }/>
+        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } del={ this.del.bind(this) } goConfig={ this.goConfig.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.workflow }/>
       </div>
     );
   }

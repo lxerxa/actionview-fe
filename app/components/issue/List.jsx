@@ -193,7 +193,7 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow && <DetailBar edit={ edit } setAssignee={ setAssignee } close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } loading={ itemLoading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile }/> }
+        { this.state.barShow && <DetailBar edit={ edit } setAssignee={ setAssignee } close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } itemLoading={ itemLoading } loading={ loading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile }/> }
         { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>

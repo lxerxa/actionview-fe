@@ -25,7 +25,6 @@ export default class List extends Component {
   }
 
   static propTypes = {
-    pid: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
@@ -38,6 +37,7 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
+    goConfig: PropTypes.func.isRequired,
     delNotify: PropTypes.func.isRequired
   }
 
@@ -60,12 +60,14 @@ export default class List extends Component {
 
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { delNotify, show } = this.props;
+    const { delNotify, show, goConfig } = this.props;
 
     if (eventKey === '2') {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
-    } else if (eventKey !== '3') {
+    } else if (eventKey === '3') {
+      goConfig(hoverRowId);
+    } else {
       const ecode = await show(hoverRowId);
       // todo err notify
       eventKey === '1' && this.setState({ editModalShow: true });
@@ -82,7 +84,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, loading, indexLoading, itemLoading, del, edit, create, pid } = this.props;
+    const { collection, selectedItem, item, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const workflows = [];
@@ -102,7 +104,8 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='3'><Link to={ '/project/' + pid + '/workflow/' + collection[i].id }>配置</Link></MenuItem>
+                <MenuItem eventKey='3'>配置</MenuItem>
+                <MenuItem eventKey='5'>查看</MenuItem>
                 <MenuItem eventKey='4'>复制</MenuItem>
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
