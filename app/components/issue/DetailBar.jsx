@@ -8,13 +8,14 @@ import _ from 'lodash';
 const CreateModal = require('./CreateModal');
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
+const PreviewModal = require('../workflow/PreviewModal');
 
 const DelFileModal = require('./DelFileModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
   }
 
@@ -22,6 +23,9 @@ export default class DetailBar extends Component {
     options: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
+    wfCollection: PropTypes.array.isRequired,
+    wfLoading: PropTypes.bool.isRequired,
+    viewWorkflow: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     fileLoading: PropTypes.bool.isRequired,
@@ -63,7 +67,11 @@ export default class DetailBar extends Component {
 
   async viewWorkflow(e) {
     e.preventDefault();
-    alert('aaa');
+    const { viewWorkflow } = this.props;
+    const ecode = await viewWorkflow();
+    if (ecode === 0) {
+      this.setState({ previewModalShow: true });
+    }
   }
 
   async assignToMe(e) {
@@ -104,7 +112,7 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit } = this.props;
+    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name, value: val.id } });
@@ -146,7 +154,7 @@ export default class DetailBar extends Component {
                     状态
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label><a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a></div>
+                    <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label>{ !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
                   </Col>
                 </FormGroup>
                 { _.map(schema, (field, key) => {
@@ -308,6 +316,7 @@ export default class DetailBar extends Component {
         </div>
         { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
         { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data }/> }
+        { this.state.previewModalShow && <PreviewModal show close={ () => { this.setState({ previewModalShow: false }); } } collection={ wfCollection } /> }
       </div>
     );
   }

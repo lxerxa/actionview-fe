@@ -7,6 +7,7 @@ import { Button } from 'react-bootstrap';
 import _ from 'lodash';
 
 import * as IssueActions from 'redux/actions/IssueActions';
+import * as WfconfigActions from 'redux/actions/WfconfigActions';
 
 const qs = require('qs');
 const Header = require('./Header');
@@ -14,11 +15,12 @@ const List = require('./List');
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(IssueActions, dispatch)
+    actions: bindActionCreators(IssueActions, dispatch),
+    wfActions: bindActionCreators(WfconfigActions, dispatch)
   };
 }
 
-@connect(({ issue, project }) => ({ issue, project }), mapDispatchToProps)
+@connect(({ issue, project, wfconfig }) => ({ issue, project, wfconfig }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -31,9 +33,11 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    wfActions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
+    wfconfig: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired
   }
 
@@ -94,6 +98,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async viewWorkflow() {
+    await this.props.wfActions.index(this.pid, '546761');
+    return this.props.wfconfig.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -109,7 +118,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } addSearcher={ this.addSearcher.bind(this) } delSearcher={ this.delSearcher.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } project={ this.props.project.item } { ...this.props.issue }/>
-        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } setAssignee={ this.setAssignee.bind(this) } delFile={ this.delFile.bind(this) } addFile={ this.props.actions.addFile } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item }/>
+        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } setAssignee={ this.setAssignee.bind(this) } delFile={ this.delFile.bind(this) } addFile={ this.props.actions.addFile } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item } wfCollection={ this.props.wfconfig.collection || [] } wfLoading={ this.props.wfconfig.indexLoading } viewWorkflow={ this.viewWorkflow.bind(this) }/>
       </div>
     );
   }

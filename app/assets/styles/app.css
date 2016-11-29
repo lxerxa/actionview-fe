@@ -131,6 +131,12 @@
   margin: 5px 5px 5px 10px;
 }
 
+.small-loading {
+  width: 14px;
+  height: 14px;
+  margin: 5px 5px 5px 10px;
+}
+
 .hide {
   display: none
 }

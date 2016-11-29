@@ -21,10 +21,10 @@ class CreateModal extends Component {
       schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
       _.map(schema, (v) => {
         if (data[v.key]) {
-          if (data[v.key].id) {
+          if (v.key == 'assignee' && data[v.key].id) {
             values[v.key] = data[v.key].id; // assignee
-          } else if (_.isArray(data[v.key])) {
-            values[v.key] = _.map(data[v.key], 'id'); // files
+          } else if (v.type == 'File' && _.isArray(data[v.key])) {
+            values[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
           } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
             values[v.key] = moment.unix(data[v.key]);
           } else {
