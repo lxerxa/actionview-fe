@@ -34,7 +34,7 @@ export default class DelNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>删除问题状态 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此问题状态？
+          确认要删除此角色？
         </Modal.Body>
         <Modal.Footer>
           <Button className='ralign' onClick={ this.confirm }>确定</Button>

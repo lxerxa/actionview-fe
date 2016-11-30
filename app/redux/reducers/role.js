@@ -43,10 +43,6 @@ export default function role(state = initialState, action) {
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: el };
 
-    case t.ROLE_DELETE_NOTIFY:
-      const el2 = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: el2 };
-
     case t.ROLE_DELETE:
       return { ...state, itemLoading: true };
 

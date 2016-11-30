@@ -7,6 +7,7 @@ import _ from 'lodash';
 const EditModal = require('./EditModal');
 const CopyModal = require('./CopyModal');
 const DelNotify = require('./DelNotify');
+const PreviewModal = require('../workflow/PreviewModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -37,8 +38,7 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
-    goConfig: PropTypes.func.isRequired,
-    delNotify: PropTypes.func.isRequired
+    goConfig: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -58,19 +58,16 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  async operateSelect(eventKey) {
+  operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { delNotify, show, goConfig } = this.props;
+    const { show, goConfig } = this.props;
 
-    if (eventKey === '2') {
-      this.setState({ delNotifyShow : true });
-      delNotify(hoverRowId);
-    } else if (eventKey === '3') {
+    if (eventKey === '3') {
       goConfig(hoverRowId);
     } else {
-      const ecode = await show(hoverRowId);
-      // todo err notify
+      show(hoverRowId);
       eventKey === '1' && this.setState({ editModalShow: true });
+      eventKey === '2' && this.setState({ delNotifyShow: true });
       eventKey === '4' && this.setState({ copyModalShow: true });
     }
   }
@@ -105,7 +102,6 @@ export default class List extends Component {
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='3'>配置</MenuItem>
-                <MenuItem eventKey='5'>查看</MenuItem>
                 <MenuItem eventKey='4'>复制</MenuItem>
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
@@ -136,8 +132,8 @@ export default class List extends Component {
           <TableHeaderColumn dataField='step' width='200'>步骤</TableHeaderColumn>
           <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ item }/> }
-        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ item }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );

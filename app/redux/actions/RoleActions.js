@@ -25,10 +25,6 @@ export function show(id) {
   return { type: 'ROLE_SHOW', id: id };
 }
 
-export function delNotify(id) {
-  return { type: 'ROLE_DELETE_NOTIFY', id: id };
-}
-
 export function del(key, id) {
   return asyncFuncCreator({
     constant: 'ROLE_DELETE',

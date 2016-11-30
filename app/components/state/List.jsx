@@ -24,8 +24,7 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
-    delNotify: PropTypes.func.isRequired
+    del: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -49,8 +48,8 @@ export default class List extends Component {
 
   delNotify(id) {
     this.setState({ delNotifyShow: true });
-    const { delNotify } = this.props;
-    delNotify(id);
+    const { show } = this.props;
+    show(id);
   }
 
   render() {

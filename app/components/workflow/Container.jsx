@@ -51,12 +51,6 @@ export default class Container extends Component {
     return this.props.workflow.ecode;
   }
 
-  async show(id) {
-    const { actions } = this.props;
-    await actions.show(this.pid, id);
-    return this.props.workflow.ecode;
-  }
-
   async del(id) {
     const { actions } = this.props;
     await actions.del(this.pid, id);
@@ -72,7 +66,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } { ...this.props.workflow }/>
-        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } del={ this.del.bind(this) } goConfig={ this.goConfig.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.workflow }/>
+        <List index={ this.index.bind(this) } create={ this.create.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } goConfig={ this.goConfig.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.workflow }/>
       </div>
     );
   }

@@ -39,8 +39,7 @@ export default class List extends Component {
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     config: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
-    delNotify: PropTypes.func.isRequired
+    del: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -66,18 +65,13 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { delNotify, show } = this.props;
+    const { show } = this.props;
 
-    if (eventKey === '2') {
-      this.setState({ delNotifyShow : true });
-      delNotify(hoverRowId);
-    } else {
-      show(hoverRowId);
-      // todo err notify
-      eventKey === '1' && this.setState({ editModalShow: true });
-      eventKey === '3' && this.setState({ defaultValueConfigShow: true });
-      eventKey === '4' && this.setState({ optionValuesConfigShow: true });
-    }
+    show(hoverRowId);
+    eventKey === '1' && this.setState({ editModalShow: true });
+    eventKey === '2' && this.setState({ delNotifyShow : true });
+    eventKey === '3' && this.setState({ defaultValueConfigShow: true });
+    eventKey === '4' && this.setState({ optionValuesConfigShow: true });
   }
 
   onRowMouseOver(rowData) {

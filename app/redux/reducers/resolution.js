@@ -43,10 +43,6 @@ export default function resolution(state = initialState, action) {
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, description: el.description } };
 
-    case t.RESOLUTION_DELETE_NOTIFY:
-      const el2 = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el2.id, name: el2.name } };
-
     case t.RESOLUTION_DELETE:
       return { ...state, itemLoading: true };
 

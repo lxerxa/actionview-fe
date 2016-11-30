@@ -40,20 +40,7 @@ export default function workflow(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.WORKFLOW_SHOW:
-      return { ...state, itemLoading: true, selectedItem: { id: action.id } };
-
-    case t.WORKFLOW_SHOW_SUCCESS:
-      if ( action.result.ecode === 0 ) {
-        state.item = action.result.data;
-      }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
-
-    case t.WORKFLOW_SHOW_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
-
-    case t.WORKFLOW_DELETE_NOTIFY:
-      const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name } };
+      return { ...state, itemLoading: false, selectedItem: _.find(state.collection, { id: action.id }) };
 
     case t.WORKFLOW_DELETE:
       return { ...state, itemLoading: true };

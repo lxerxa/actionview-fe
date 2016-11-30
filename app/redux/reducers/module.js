@@ -43,10 +43,6 @@ export default function module(state = initialState, action) {
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: el };
 
-    case t.MODULE_DELETE_NOTIFY:
-      const el2 = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el2.id, name: el2.name } };
-
     case t.MODULE_DELETE:
       return { ...state, itemLoading: true };
 

@@ -63,8 +63,8 @@ export default function issue(state = initialState, action) {
       return { ...state, itemLoading: false, error: action.error };
 
     case t.ISSUE_DELETE_NOTIFY:
-      const el2 = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el2.id, name: el2.name } };
+      const el = _.find(state.collection, { id: action.id });
+      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name } };
 
     case t.ISSUE_DELETE:
       return { ...state, itemLoading: true };

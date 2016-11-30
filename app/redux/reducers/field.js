@@ -40,12 +40,8 @@ export default function field(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.FIELD_SHOW:
-      const el0 = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: el0 };
-
-    case t.FIELD_DELETE_NOTIFY:
       const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name } };
+      return { ...state, itemLoading: false, selectedItem: el };
 
     case t.FIELD_DELETE:
       return { ...state, itemLoading: true };

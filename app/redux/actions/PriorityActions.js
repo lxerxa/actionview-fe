@@ -25,10 +25,6 @@ export function show(id) {
   return { type: 'PRIORITY_SHOW', id: id };
 }
 
-export function delNotify(id) {
-  return { type: 'PRIORITY_DELETE_NOTIFY', id: id };
-}
-
 export function del(key, id) {
   return asyncFuncCreator({
     constant: 'PRIORITY_DELETE',

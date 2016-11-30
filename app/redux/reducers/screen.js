@@ -40,15 +40,8 @@ export default function screen(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.SCREEN_SHOW:
-      const el0 = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el0.id, name: el0.name, fields: el0.schema } };
-
-    case t.SCREEN_SHOW_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
-
-    case t.SCREEN_DELETE_NOTIFY:
       const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name } };
+      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, fields: el.schema } };
 
     case t.SCREEN_DELETE:
       return { ...state, itemLoading: true };

@@ -26,7 +26,6 @@ export default class List extends Component {
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
-    delNotify: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired
   }
 
@@ -51,8 +50,8 @@ export default class List extends Component {
 
   delNotify(id) {
     this.setState({ delNotifyShow: true });
-    const { delNotify } = this.props;
-    delNotify(id);
+    const { show } = this.props;
+    show(id);
   }
 
   willSetPrincipal(moduleId) {
