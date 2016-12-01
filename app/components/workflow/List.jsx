@@ -28,7 +28,6 @@ export default class List extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    item: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -81,7 +80,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
+    const { collection, selectedItem, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const workflows = [];

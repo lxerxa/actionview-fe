@@ -20,7 +20,6 @@ export default class List extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    item: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
@@ -135,7 +134,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, item, options, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, options, indexLoading, itemLoading, del, edit } = this.props;
     const { willSetScreenTypeIds, settingScreenTypeIds, willSetWorkflowTypeIds, settingWorkflowTypeIds } = this.state;
 
     const { screens = [], workflows = [] } = options;

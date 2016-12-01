@@ -1,5 +1,4 @@
 export { default as users } from './users';
-export { default as readme } from './readme';
 export { default as i18n } from './i18n';
 export { default as session } from './session';
 export { default as project } from './project';
@@ -13,7 +12,6 @@ export { default as state } from './state';
 export { default as resolution } from './resolution';
 export { default as priority } from './priority';
 export { default as role } from './role';
-export { default as roleactor } from './roleactor';
 export { default as module } from './module';
 export { default as version } from './version';
 export { reducer as form } from 'redux-form';

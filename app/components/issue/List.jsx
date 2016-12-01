@@ -112,10 +112,11 @@ export default class List extends Component {
     refresh(_.assign(query, { orderBy: newOrders.join(','), page: 1 })); 
   }
 
-  async show(id) {
+  async show(e) {
+    e.preventDefault();
     this.setState({ barShow: true }); 
     const { show } = this.props;
-    await show(id);  //fix me
+    await show(this.state.hoverRowId);  //fix me
   }
 
   render() {
@@ -149,9 +150,9 @@ export default class List extends Component {
         no: collection[i].no,
         name: (
           <div>
-            <span className='table-td-issue-title' onClick={ this.show.bind(this, collection[i].id) }>
+            <a href='#' onClick={ this.show.bind(this) }>
               { collection[i].title ? collection[i].title : '-' }
-            </span>
+            </a>
             { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
             
           </div>

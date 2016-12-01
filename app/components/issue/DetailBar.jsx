@@ -145,10 +145,10 @@ export default class DetailBar extends Component {
                 </ButtonToolbar>
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    类型 
+                    类型/NO 
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '6px' } }>{ type ? type.name : '-' }</div>
+                    <div style={ { marginTop: '6px' } }>{ type ? type.name : '-' }/{ data.no || '' }</div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     状态
@@ -179,7 +179,7 @@ export default class DetailBar extends Component {
                       </div>
                       :
                       <div>
-                        <Select simpleValue clearable={ false } searchable={ false } disabled={ settingAssignee } options={ assigneeOptions } value={ newAssignee || data[field.key].id } onChange={ this.handleAssigneeSelectChange.bind(this) } placeholder='选择经办人'/>
+                        <Select simpleValue clearable={ false } disabled={ settingAssignee } options={ assigneeOptions } value={ newAssignee || data[field.key].id } onChange={ this.handleAssigneeSelectChange.bind(this) } placeholder='选择经办人'/>
                         <div style={ { float: 'right' } }>
                           <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
                           <Button className='edit-ok-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
