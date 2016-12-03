@@ -9,11 +9,19 @@ export default class Sidebar extends Component {
     const browseModules = [ 'issue', 'module', 'version' ];
     const configModules = [ 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role' ];
     if (props.pathname) {
-      const modulename = props.pathname.split('/').pop();
+      const sections = props.pathname.split('/');
+      let modulename = sections.pop();
       if (browseModules.indexOf(modulename) !== -1) {
         this.state.projectBrowseShow = true;
       } else if (configModules.indexOf(modulename) !== -1) {
         this.state.projectConfigShow = true;
+      } else {
+        if (sections.length > 1) {
+          modulename = sections.pop(); 
+          if (modulename === 'workflow') {
+            this.state.projectConfigShow = true;
+          }
+        }
       }
     }
   }

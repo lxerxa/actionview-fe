@@ -80,3 +80,10 @@ export function setAssignee(key, id, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id, method: 'put', data: values })
   });
 }
+
+export function indexComments(key, id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_COMMENTS_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments' })
+  });
+}

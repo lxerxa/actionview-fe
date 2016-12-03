@@ -26,6 +26,9 @@ export default class List extends Component {
     wfCollection: PropTypes.array.isRequired,
     wfLoading: PropTypes.bool.isRequired,
     viewWorkflow: PropTypes.func.isRequired,
+    indexComments: PropTypes.func.isRequired,
+    commentsCollection: PropTypes.array.isRequired,
+    commentsIndexLoading: PropTypes.bool.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
     project: PropTypes.object,
@@ -121,7 +124,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -150,10 +153,10 @@ export default class List extends Component {
         no: collection[i].no,
         name: (
           <div>
-            <a href='#' onClick={ this.show.bind(this) }>
+            <a href='#' onClick={ this.show.bind(this) } style={ { whiteSpace: 'pre-wrap' } }>
               { collection[i].title ? collection[i].title : '-' }
             </a>
-            { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YYYY/MM/DD HH:mm') }</span> }
+            { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }</span> }
             
           </div>
         ), 
@@ -197,7 +200,7 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow && <DetailBar edit={ edit } setAssignee={ setAssignee } close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } itemLoading={ itemLoading } loading={ loading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile } wfCollection={ wfCollection } wfLoading={ wfLoading } viewWorkflow={ viewWorkflow }/> }
+        { this.state.barShow && <DetailBar edit={ edit } setAssignee={ setAssignee } close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } itemLoading={ itemLoading } loading={ loading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile } wfCollection={ wfCollection } wfLoading={ wfLoading } viewWorkflow={ viewWorkflow } indexComments={ indexComments } commentsCollection={ commentsCollection } commentsIndexLoading={ commentsIndexLoading }/> }
         { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>

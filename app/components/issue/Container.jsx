@@ -103,6 +103,11 @@ export default class Container extends Component {
     return this.props.wfconfig.ecode;
   }
 
+  async indexComments(id) {
+    await this.props.actions.indexComments(this.pid, id);
+    return this.props.wfconfig.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -118,7 +123,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } addSearcher={ this.addSearcher.bind(this) } delSearcher={ this.delSearcher.bind(this) } getOptions={ this.getOptions.bind(this) } query={ query } refresh={ this.refresh.bind(this) } project={ this.props.project.item } { ...this.props.issue }/>
-        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } setAssignee={ this.setAssignee.bind(this) } delFile={ this.delFile.bind(this) } addFile={ this.props.actions.addFile } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item } wfCollection={ this.props.wfconfig.collection || [] } wfLoading={ this.props.wfconfig.indexLoading } viewWorkflow={ this.viewWorkflow.bind(this) }/>
+        <List index={ this.index.bind(this) } show={ this.show.bind(this) } edit={ this.edit.bind(this) } setAssignee={ this.setAssignee.bind(this) } delFile={ this.delFile.bind(this) } addFile={ this.props.actions.addFile } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.issue } query={ query } refresh={ this.refresh.bind(this) } clean={ this.props.actions.clean } project={ this.props.project.item } wfCollection={ this.props.wfconfig.collection || [] } wfLoading={ this.props.wfconfig.indexLoading } viewWorkflow={ this.viewWorkflow.bind(this) } indexComments={ this.indexComments.bind(this) } />
       </div>
     );
   }

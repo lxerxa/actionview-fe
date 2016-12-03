@@ -193,6 +193,7 @@
 
 .table-td-issue-desc {
   display: block;
+  color: #999;
   margin-top: 5px;
   font-size: 10px;
   word-wrap: break-word;
@@ -392,4 +393,8 @@ table tr:hover .remove-icon{
 .attachment-content:hover .remove-icon{
   opacity: 1 !important;
   cursor: pointer;
+}
+
+.comments-inputor {
+  margin: 5px;
 }

@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -139,6 +139,16 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_SET_ASSIGNEE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.ISSUE_COMMENTS_INDEX:
+      return { ...state, commentsIndexLoading: true, commentsCollection: [] };
+
+    case t.ISSUE_COMMENTS_INDEX_SUCCESS:
+      _.assign(state.options, action.result.options || {});
+      return { ...state, commentsIndexLoading: false, ecode: action.result.ecode, commentsCollection: action.result.data };
+
+    case t.ISSUE_COMMENTS_INDEX_FAIL:
+      return { ...state, commentsIndexLoading: false, error: action.error };
 
     default:
       return state;

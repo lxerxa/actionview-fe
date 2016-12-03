@@ -58,6 +58,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/issue/:id/comments', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '2222', contents: 'bbbbbbbb', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '3333', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469}] }; 
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/issue/546761', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

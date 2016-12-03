@@ -5,11 +5,11 @@ import Lightbox from 'react-image-lightbox';
 import Select from 'react-select';
 import _ from 'lodash';
 
+const moment = require('moment');
 const CreateModal = require('./CreateModal');
-var moment = require('moment');
+const Comments = require('./Comments');
 const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
-
 const DelFileModal = require('./DelFileModal');
 
 export default class DetailBar extends Component {
@@ -33,6 +33,9 @@ export default class DetailBar extends Component {
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
+    indexComments: PropTypes.func.isRequired,
+    commentsCollection: PropTypes.array.isRequired,
+    commentsIndexLoading: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -43,7 +46,11 @@ export default class DetailBar extends Component {
   }
 
   handleTabSelect(tabKey) {
+    const { indexComments, data } = this.props;
     this.setState({ tabKey });
+    if (tabKey === 2) {
+      indexComments(data.id);
+    }
   }
 
   delFileNotify(field_key, id, name) {
@@ -112,7 +119,7 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading } = this.props;
+    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, commentsCollection, commentsIndexLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name, value: val.id } });
@@ -287,16 +294,7 @@ export default class DetailBar extends Component {
               </Form>
             </Tab>
             <Tab eventKey={ 2 } title='备注'>
-              <Form horizontal>
-                <FormGroup>
-                  <Col sm={ 12 }>
-                    <div style={ { marginTop: '6px', marginLeft: '10px' } }>
-                      <span>最新备注更新于2016/04/15 12:34:23</span>
-                      <Button bsStyle='link'><i className='fa fa-refresh'></i></Button>
-                    </div>
-                  </Col>
-                </FormGroup>
-              </Form>
+              <Comments collection={ commentsCollection } indexLoading={ commentsIndexLoading }/>
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
               <Form horizontal>

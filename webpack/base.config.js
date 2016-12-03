@@ -35,7 +35,8 @@ export default {
       function() { this.plugin('done', writeStats) }
     ],
     externals: {
-      'mermaid': 'window.mermaid'
+      'mermaid': 'window.mermaid',
+      '$': 'window.$'
     },
     resolve: {
       extensions: ['', '.js', '.json', '.jsx', '.es6', '.babel'],
