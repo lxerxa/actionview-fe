@@ -27,8 +27,11 @@ export default class List extends Component {
     wfLoading: PropTypes.bool.isRequired,
     viewWorkflow: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
+    addComments: PropTypes.func.isRequired,
     commentsCollection: PropTypes.array.isRequired,
     commentsIndexLoading: PropTypes.bool.isRequired,
+    commentsLoading: PropTypes.bool.isRequired,
+    commentsLoaded: PropTypes.bool.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
     project: PropTypes.object,
@@ -124,7 +127,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -200,7 +203,7 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow && <DetailBar edit={ edit } setAssignee={ setAssignee } close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } itemLoading={ itemLoading } loading={ loading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile } wfCollection={ wfCollection } wfLoading={ wfLoading } viewWorkflow={ viewWorkflow } indexComments={ indexComments } commentsCollection={ commentsCollection } commentsIndexLoading={ commentsIndexLoading }/> }
+        { this.state.barShow && <DetailBar edit={ edit } setAssignee={ setAssignee } close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } itemLoading={ itemLoading } loading={ loading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile } wfCollection={ wfCollection } wfLoading={ wfLoading } viewWorkflow={ viewWorkflow } indexComments={ indexComments } commentsCollection={ commentsCollection } commentsIndexLoading={ commentsIndexLoading } commentsLoading={ commentsLoading } commentsLoaded={ commentsLoaded } addComments={ addComments }/> }
         { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>

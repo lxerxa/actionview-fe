@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsLoaded: false };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -54,7 +54,7 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
-      return { ...state, itemLoading: true, itemData: {} };
+      return { ...state, itemLoading: true, itemData: {}, commentsLoaded: false };
 
     case t.ISSUE_SHOW_SUCCESS:
       return { ...state, itemLoading: false, ecode: action.result.ecode, itemData: action.result.data };
@@ -145,10 +145,22 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_COMMENTS_INDEX_SUCCESS:
       _.assign(state.options, action.result.options || {});
-      return { ...state, commentsIndexLoading: false, ecode: action.result.ecode, commentsCollection: action.result.data };
+      return { ...state, commentsIndexLoading: false, commentsLoaded: true, ecode: action.result.ecode, commentsCollection: action.result.data };
 
     case t.ISSUE_COMMENTS_INDEX_FAIL:
       return { ...state, commentsIndexLoading: false, error: action.error };
+
+    case t.ISSUE_COMMENTS_ADD:
+      return { ...state, commentsLoading: true };
+
+    case t.ISSUE_COMMENTS_ADD_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.commentsCollection.unshift(action.result.data);
+      }
+      return { ...state, commentsLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_COMMENTS_ADD_FAIL:
+      return { ...state, commentsLoading: false, error: action.error };
 
     default:
       return state;

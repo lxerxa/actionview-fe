@@ -87,3 +87,10 @@ export function indexComments(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments' })
   });
 }
+
+export function addComments(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_COMMENTS_ADD',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments', method: 'post', data: values })
+  });
+}

@@ -34,21 +34,24 @@ export default class DetailBar extends Component {
     setAssignee: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
+    addComments: PropTypes.func.isRequired,
     commentsCollection: PropTypes.array.isRequired,
     commentsIndexLoading: PropTypes.bool.isRequired,
+    commentsLoading: PropTypes.bool.isRequired,
+    commentsLoaded: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.loading) {
+    if (nextProps.itemLoading) {
       this.setState({ tabKey: 1 });
     }
   }
 
   handleTabSelect(tabKey) {
-    const { indexComments, data } = this.props;
+    const { indexComments, data, commentsLoaded } = this.props;
     this.setState({ tabKey });
-    if (tabKey === 2) {
+    if (tabKey === 2 && !commentsLoaded) {
       indexComments(data.id);
     }
   }
@@ -119,7 +122,7 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, commentsCollection, commentsIndexLoading } = this.props;
+    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, addComments } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name, value: val.id } });
@@ -136,12 +139,12 @@ export default class DetailBar extends Component {
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
-              <Form horizontal className={ _.isEmpty(data) && 'hide' } style={ { marginRight: '10px' } }>
+              <Form horizontal className={ _.isEmpty(data) && 'hide' } style={ { marginRight: '5px' } }>
                 <ButtonToolbar style={ { margin: '10px 10px 10px 5px' } }>
                   <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button>
                   <ButtonGroup style={ { marginLeft: '10px' } }>
-                  { _.map(data.wfactions || [], (v) => {
-                    return ( <Button>{ v.name }</Button> ); 
+                  { _.map(data.wfactions || [], (v, i) => {
+                    return ( <Button key={ i }>{ v.name }</Button> ); 
                   }) }
                   </ButtonGroup>
                   <div style={ { float: 'right' } }>
@@ -279,7 +282,7 @@ export default class DetailBar extends Component {
                     contents = data[field.key];
                   }
                   return (
-                    <FormGroup controlId='formControlsLabel'>
+                    <FormGroup controlId='formControlsLabel' key={ 'form-' + key }>
                       <Col sm={ 3 } componentClass={ ControlLabel }>
                         { field.name || '-' }
                       </Col>
@@ -294,7 +297,7 @@ export default class DetailBar extends Component {
               </Form>
             </Tab>
             <Tab eventKey={ 2 } title='备注'>
-              <Comments collection={ commentsCollection } indexLoading={ commentsIndexLoading }/>
+              <Comments issueId={ data.id } collection={ commentsCollection } indexComments={ indexComments } indexLoading={ commentsIndexLoading } loading={ commentsLoading } users={ _.map(options.users || [], (v) => v.name ) } addComments={ addComments }/>
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
               <Form horizontal>
