@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
 const $ = require('$')
@@ -9,7 +9,8 @@ const moment = require('moment');
 export default class Comments extends Component {
   constructor(props) {
     super(props);
-    this.state = { addCommentsShow: false, comments:  '' };
+    this.state = { addCommentsShow: false, comments:  '', atWho: [] };
+    this.addAtWho = this.addAtWho.bind(this);
   }
 
   static propTypes = {
@@ -27,10 +28,17 @@ export default class Comments extends Component {
   }
 
   async addComments() {
-    const { issueId, addComments } = this.props;
-    const ecode = await addComments(issueId, { comments: this.state.comments }); 
+    const { issueId, addComments, users } = this.props;
+    const newAtWho = [];
+    _.map(_.uniq(this.state.atWho), (val) => {
+      const user = _.find(users, { id: val });
+      if (this.state.comments.indexOf('@' + user.name) !== -1) {
+        newAtWho.push(val);
+      }
+    });
+    const ecode = await addComments(issueId, { comments: this.state.comments, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) }); 
     if (ecode === 0) {
-      this.setState({ addCommentsShow: false, comments: '' });
+      this.setState({ addCommentsShow: false, comments: '', atWho: [] });
     }
   }
 
@@ -40,12 +48,31 @@ export default class Comments extends Component {
     }
   }
 
+  addAtWho(user) {
+    this.state.atWho.push(user.id);
+  }
+
   componentDidUpdate() {
     const { users } = this.props;
+    const self = this;
     $('.comments-inputor textarea').atwho({
       at: '@',
-      insertTpl: '${atwho-at}${name}',
+      searchKey: 'nameAndEmail',
+      displayTpl: '<li>${nameAndEmail}</li>',
+      insertTpl: '${nameAndEmail}',
+      callbacks: {
+        beforeInsert: function(value, $li) {
+          const user = _.find(users, { nameAndEmail: value });
+          if (user) {
+            self.state.atWho.push(user.id);
+          }
+          return '@' + user.name;
+        }
+      },
       data: users
+    });
+    $('.comments-inputor textarea').on('inserted.atwho', function(event, flag, query) {
+      self.setState({ comments: event.target.value });
     });
   }
 
@@ -55,10 +82,10 @@ export default class Comments extends Component {
     return (
       <Form horizontal>
         <FormGroup>
-          <Col sm={ 12 }>
+          <Col sm={ 12 } className={ indexLoading && 'hide' }>
             <div style={ { margin: '5px', textAlign: 'right' } }>
-              <Button bsStyle='link' disabled={ loading || indexLoading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o' title='添加备注'></i></Button>
-              <Button bsStyle='link' disabled={ loading || indexLoading } onClick={ () => { indexComments(issueId) } }><i className='fa fa-refresh' title='刷新'></i></Button>
+              <Button bsStyle='link' disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加备注</Button>
+              <Button bsStyle='link' disabled={ loading } onClick={ () => { indexComments(issueId) } }><i className='fa fa-refresh'></i> 刷新</Button>
             </div>
           </Col>
           <Col sm={ 12 } className={ this.state.addCommentsShow || 'hide' }>
@@ -67,25 +94,30 @@ export default class Comments extends Component {
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
-              <Button style={ { marginRight: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.comments)) }>添加</Button>
+              <Button style={ { marginRight: '10px', marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.comments)) }>添加</Button>
               <Button style={ { marginRight: '5px' } } onClick={ () => { this.setState({ addCommentsShow: false }) } } disabled={ loading }>取消</Button>
             </div>
           </Col>
           <Col sm={ 12 }>
-          { indexLoading && <div style={ { width: '100%', textAlign: 'center', marginTop: '10px' } }><img src={ img } className='loading' /></div> }
+          { indexLoading && <div style={ { width: '100%', textAlign: 'center', marginTop: '15px' } }><img src={ img } className='loading' /></div> }
           { collection.length <= 0 && !indexLoading ?
             <div style={ { width: '100%', textAlign: 'left', marginTop: '10px', marginLeft: '10px' } }>暂无备注。</div>
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
                 <span>{ (val.creator && val.creator.name) + '添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YYYY/MM/DD HH:mm')) }</span>
-                <span style={ { marginRight: '5px', float: 'right' } }><i className='fa fa-trash' title='删除'></i></span>
-                <span style={ { marginRight: '8px', float: 'right' } }><i className='fa fa-pencil' title='编辑'></i></span>
+                <span style={ { marginRight: '5px', float: 'right', cursor: 'pointer' } }><i className='fa fa-trash' title='删除'></i></span>
+                <span style={ { marginRight: '8px', float: 'right', cursor: 'pointer' } }><i className='fa fa-pencil' title='编辑'></i></span>
               </div> ); 
+              let contents = val.contents || '-';
+              _.map(val.atWho || [], (v) => {
+                contents = contents.replace(eval('/@' + v.name + '/'), '<a title="' + v.nameAndEmail + '">@' + v.name + '</a>');
+              });
+              contents = contents.replace(/(\r\n)|(\n)/g, '<br/>'); 
 
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
-                  { val.contents || '-' }
+                  <span dangerouslySetInnerHTML={ { __html: contents } }/>
                 </Panel>) } ) }
           </Col>
         </FormGroup>

@@ -142,7 +142,7 @@ export default class List extends Component {
 
     const { users = [] } = options;
     const userOptions = _.map(users, function(val) {
-      return { label: val.name, value: val.id };
+      return { label: val.nameAndEmail, value: val.id };
     });
 
     const defaultAssigneeOptions = [ { value: 'projectPrincipal', label: '项目负责人' }, { value: 'modulePrincipal', label: '模块负责人' }, { value: 'none', label: '未分配' } ];

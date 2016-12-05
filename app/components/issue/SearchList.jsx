@@ -72,7 +72,7 @@ export default class SearchList extends Component {
     const { indexLoading, searchShow=false, options: { types=[], states=[], priorities=[], resolutions=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
-    const userOptions = _.map(users, (val) => { return { label: val.name, value: val.id } });
+    const userOptions = _.map(users, (val) => { return { label: val.nameAndEmail, value: val.id } });
     const stateOptions = _.map(states, (val) => { return { label: val.name, value: val.id } });
     const priorityOptions = _.map(priorities, (val) => { return { label: val.name, value: val.id } });
     const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });

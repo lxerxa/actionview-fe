@@ -72,7 +72,7 @@ export default class CreateModal extends Component {
 
     const assigneeOptions = [ { value: 'projectPrincipal', label: '项目负责人' }, { value: 'modulePrincipal', label: '模块负责人' }, { value: 'none', label: '未分配' } ];
 
-    const userOptions = _.map(options.users || [], (value) => { return { value: value.id, label: value.name } });
+    const userOptions = _.map(options.users || [], (value) => { return { value: value.id, label: value.nameAndEmail } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

@@ -125,7 +125,7 @@ export default class DetailBar extends Component {
     const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, addComments } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
-    const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name, value: val.id } });
+    const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
 
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
@@ -297,7 +297,7 @@ export default class DetailBar extends Component {
               </Form>
             </Tab>
             <Tab eventKey={ 2 } title='备注'>
-              <Comments issueId={ data.id } collection={ commentsCollection } indexComments={ indexComments } indexLoading={ commentsIndexLoading } loading={ commentsLoading } users={ _.map(options.users || [], (v) => v.name ) } addComments={ addComments }/>
+              <Comments issueId={ data.id } collection={ commentsCollection } indexComments={ indexComments } indexLoading={ commentsIndexLoading } loading={ commentsLoading } users={ options.users || [] } addComments={ addComments }/>
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
               <Form horizontal>

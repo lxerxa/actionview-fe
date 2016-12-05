@@ -18,7 +18,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }, options: { users: [{id: 'xxx', name: 'liuxu', nameAndEmail: 'liuxu(aa@tom.com)' }, {id:'yyy', name: 'lihui', nameAndEmail: 'liuhui(bb@tom.com)'}] }};
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }, options: { }};
     return res.status(200).send(results);
   });
 
@@ -40,7 +40,7 @@ export default function(router) {
   router.get('/project/:key/module', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', principal_id:'111', defaultAssignee_id:'111'},{ id: '546763', name: '需求', principal_id:'222', defaultAssignee_id:'111', default: true },{ id: '546762', name: '缺陷', principal_id:'111', defaultAssignee_id:'111'},{ id: '2323', name: '子任务'}], options:{ screens:[{id:'111',name:'界面1'},{id:'222', name:'界面2'}, {id:'333', name:'界面3'}], workflows:[{id:'111',name:'流>程1'},{id:'222', name:'流程2'}, {id:'333', name:'流程3'}] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', principal_id:'111', defaultAssignee_id:'111'},{ id: '546763', name: '需求', principal_id:'222', defaultAssignee_id:'111', default: true },{ id: '546762', name: '缺陷', principal_id:'111', defaultAssignee_id:'111'},{ id: '2323', name: '子任务'}], options:{ users: [{ id: '111', name:'刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)' }, { id: '222', name:'葛鹏', nameAndEmail: '葛鹏(gepeng@chinamobile.com)' }] }};
     return res.status(200).send(results);
   });
 
@@ -61,7 +61,7 @@ export default function(router) {
   router.get('/project/:key/issue/:id/comments', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '2222', contents: 'bbbbbbbb', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '3333', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469}] }; 
+    const results = { ecode: 0, data: [{ id: '1111', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '2222', contents: '@刘旭 bbbb\r\nbbbb', atWho: [ {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} ], creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '3333', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469}] }; 
     return res.status(200).send(results);
   });
 
@@ -82,7 +82,7 @@ export default function(router) {
   router.get('/project/:key/issue/options', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode:0, data: { searchers:[{id:'1111', name:'分配给我的', query:{ aa: 'aa'}},{id:'2222', name:'分配给我的2', query:{bb:'bb'}},{id:'3333', name:'分配给我的3', query:{cc:'cc'}},{id:'4444', name:'分配给我的4', link:'dd'},{id:'5555', name:'分配给我的5', link:'dd'}], types: [{id: '1111', name: '任务',abb:'T'}, { id: '2222', name: 'Bug', abb:'B', default: true, schema: [ { key:'name', name:'名称', required: true, type: 'TextArea' }, { key:'title', name:'主题', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'attachments', name:'附件', type: 'File'}, { key:'expect_time', name:'城市', type: 'DateTimePicker' }, { key:'assignee', name:'经办人', type: 'Select' } ] }, { id: '3333', name: '需求',abb:'D', schema: [ { key:'title', name:'主题', type: 'Text', required: true }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'city2', name:'大城市', type: 'CheckboxGroup', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'expect_time', name:'期望时间', type: 'DateTimePicker', required: true }, { key:'title2', name:'主题', type: 'Number' } ] }], priorities:[{id:'1111',color:'#000000',name:'重要'},{id:'2222',color:'#aaaaaa',name:'一般'},{id:'3333',color:'#cccccc',name:'微小'}], resolutions:[{id:'1111',name:'待处理'},{id:'2222',name:'开发中'},{id:'3333',name:'完成'}], states:[{id:'1111',name:'待处理'},{id:'2222',name:'开发中'},{id:'3333',name:'完成'}] }};
+    const results = { ecode:0, data: { searchers:[{id:'1111', name:'分配给我的', query:{ aa: 'aa'}},{id:'2222', name:'分配给我的2', query:{bb:'bb'}},{id:'3333', name:'分配给我的3', query:{cc:'cc'}},{id:'4444', name:'分配给我的4', link:'dd'},{id:'5555', name:'分配给我的5', link:'dd'}], types: [{id: '1111', name: '任务',abb:'T'}, { id: '2222', name: 'Bug', abb:'B', default: true, schema: [ { key:'name', name:'名称', required: true, type: 'TextArea' }, { key:'title', name:'主题', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'attachments', name:'附件', type: 'File'}, { key:'expect_time', name:'城市', type: 'DateTimePicker' }, { key:'assignee', name:'经办人', type: 'Select' } ] }, { id: '3333', name: '需求',abb:'D', schema: [ { key:'title', name:'主题', type: 'Text', required: true }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'city2', name:'大城市', type: 'CheckboxGroup', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'expect_time', name:'期望时间', type: 'DateTimePicker', required: true }, { key:'title2', name:'主题', type: 'Number' } ] }], priorities:[{id:'1111',color:'#000000',name:'重要'},{id:'2222',color:'#aaaaaa',name:'一般'},{id:'3333',color:'#cccccc',name:'微小'}], resolutions:[{id:'1111',name:'待处理'},{id:'2222',name:'开发中'},{id:'3333',name:'完成'}], states:[{id:'1111',name:'待处理'},{id:'2222',name:'开发中'},{id:'3333',name:'完成'}], users: [{ id: '111', name:'刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)' }, { id: '222', name:'葛鹏', nameAndEmail: '葛鹏(gepeng@chinamobile.com)' }] }};
    return res.status(200).send(results);
   });
 
@@ -270,26 +270,26 @@ export default function(router) {
     const results = { ecode: 0, data:{ id: 'aaaa', name: '软件开发', contents: { steps:
     [{
        id: 1,
-       name: "step1",
-       state: "1111",
+       name: 'step1',
+       state: '1111',
        actions: [
         {
            id: 1,
-           name: "action1",
+           name: 'action1',
            restrict_to: {
              conditions: {
-               type: "or",
+               type: 'or',
                list: [
                 {
-                   name: "App\\Workflow\\Util@trueCondition1",
+                   name: 'App\\Workflow\\Util@trueCondition1',
                    args: {
-                     owner: "aaa"
+                     owner: 'aaa'
                   }
                 },
                 {
-                   name: "App\\Workflow\\Util@falseCondition2",
+                   name: 'App\\Workflow\\Util@falseCondition2',
                    args: {
-                     owner: "aaa"
+                     owner: 'aaa'
                   }
                 }
               ]
@@ -298,24 +298,24 @@ export default function(router) {
            results: [
             {
                step: 2,
-               old_status: "Finished",
-               status: "Underway"
+               old_status: 'Finished',
+               status: 'Underway'
             },
             {
                step: 3,
-               old_status: "Finished",
-               status: "Underway"
+               old_status: 'Finished',
+               status: 'Underway'
             }
           ]
         },
         {
            id: 2,
-           name: "action2",
+           name: 'action2',
            results: [
             {
                step: 2,
-               old_status: "Finished",
-               status: "Underway"
+               old_status: 'Finished',
+               status: 'Underway'
             }
           ]
         }
@@ -323,17 +323,17 @@ export default function(router) {
     },
     {
        id: 2,
-       name: "step2",
-       state: "2222",
+       name: 'step2',
+       state: '2222',
        actions: [
         {
            id: 3,
-           name: "action3",
+           name: 'action3',
            results: [
             {
                step: 3,
-               old_status: "Finished",
-               status: "Underway"
+               old_status: 'Finished',
+               status: 'Underway'
             }
           ]
         }
@@ -341,34 +341,34 @@ export default function(router) {
     },
     {
        id: 3,
-       name: "step3",
-       state: "3333",
+       name: 'step3',
+       state: '3333',
        actions: [
         {
            id: 4,
-           name: "action4",
+           name: 'action4',
            results: [
             {
                step: 1,
-               old_status: "Finished",
-               status: "Underway"
+               old_status: 'Finished',
+               status: 'Underway'
             }
           ]
         },
         {
            id: 5,
-           name: "action5",
+           name: 'action5',
            results: [
             {
                step: 1,
-               old_status: "Finished",
-               status: "Underway"
+               old_status: 'Finished',
+               status: 'Underway'
             }
           ]
         }
       ]
     }]}},
-    options: { states : [{id: "1111", name:"test1"}, {id: "2222", name:"test2"}, {id: "3333", name:"test3"}], permissions:[{id: "1111", name:"permission1"}, {id: "2222", name:"permission2"}, {id: "3333", name:"permission3"}], roles: [{id: "1111", name:"role1"}, {id: "2222", name:"role2"}, {id: "3333", name:"role3"}], screens:[{id: "1111", name:"screen1"}, {id: "2222", name:"screen2"}, {id: "3333", name:"screen3"}] }
+    options: { states : [{id: '1111', name:'test1'}, {id: '2222', name:'test2'}, {id: '3333', name:'test3'}], permissions:[{id: '1111', name:'permission1'}, {id: '2222', name:'permission2'}, {id: '3333', name:'permission3'}], roles: [{id: '1111', name:'role1'}, {id: '2222', name:'role2'}, {id: '3333', name:'role3'}], screens:[{id: '1111', name:'screen1'}, {id: '2222', name:'screen2'}, {id: '3333', name:'screen3'}], users: [{ id: '111', name:'刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)' }, { id: '222', name:'葛鹏', nameAndEmail: '葛鹏(gepeng@chinamobile.com)' }] }
 };
     return res.status(200).send(results);
   });
