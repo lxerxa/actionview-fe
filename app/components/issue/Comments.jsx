@@ -9,7 +9,7 @@ const moment = require('moment');
 export default class Comments extends Component {
   constructor(props) {
     super(props);
-    this.state = { addCommentsShow: false, comments:  '', atWho: [] };
+    this.state = { addCommentsShow: false, contents:  '', atWho: [] };
     this.addAtWho = this.addAtWho.bind(this);
   }
 
@@ -32,19 +32,19 @@ export default class Comments extends Component {
     const newAtWho = [];
     _.map(_.uniq(this.state.atWho), (val) => {
       const user = _.find(users, { id: val });
-      if (this.state.comments.indexOf('@' + user.name) !== -1) {
+      if (this.state.contents.indexOf('@' + user.name) !== -1) {
         newAtWho.push(val);
       }
     });
-    const ecode = await addComments(issueId, { comments: this.state.comments, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) }); 
+    const ecode = await addComments(issueId, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) }); 
     if (ecode === 0) {
-      this.setState({ addCommentsShow: false, comments: '', atWho: [] });
+      this.setState({ addCommentsShow: false, contents: '', atWho: [] });
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.indexLoading) {
-      this.setState({ addCommentsShow: false });
+      this.setState({ addCommentsShow: false, contents: '', atWho: [] });
     }
   }
 
@@ -72,7 +72,7 @@ export default class Comments extends Component {
       data: users
     });
     $('.comments-inputor textarea').on('inserted.atwho', function(event, flag, query) {
-      self.setState({ comments: event.target.value });
+      self.setState({ contents: event.target.value });
     });
   }
 
@@ -90,11 +90,11 @@ export default class Comments extends Component {
           </Col>
           <Col sm={ 12 } className={ this.state.addCommentsShow || 'hide' }>
             <div className='comments-inputor'>
-              <textarea style={ { height: '150px', width: '100%', borderColor: '#ccc' } } onChange={ (e) => { this.setState({ comments: e.target.value }) } } value={ this.state.comments }/>
+              <textarea style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents }/>
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
-              <Button style={ { marginRight: '10px', marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.comments)) }>添加</Button>
+              <Button style={ { marginRight: '10px', marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
               <Button style={ { marginRight: '5px' } } onClick={ () => { this.setState({ addCommentsShow: false }) } } disabled={ loading }>取消</Button>
             </div>
           </Col>
