@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
-const $ = require('$')
+const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 const moment = require('moment');
 
@@ -84,7 +84,7 @@ export default class Comments extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' }>
             <div style={ { margin: '5px', textAlign: 'right' } }>
-              <Button bsStyle='link' disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加备注</Button>
+              <Button bsStyle='link' disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</Button>
               <Button bsStyle='link' disabled={ loading } onClick={ () => { indexComments(issueId) } }><i className='fa fa-refresh'></i> 刷新</Button>
             </div>
           </Col>

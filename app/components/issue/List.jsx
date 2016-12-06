@@ -3,7 +3,8 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem, Label, Nav, NavItem } from 'react-bootstrap';
 import _ from 'lodash';
 
-var moment = require('moment');
+const $ = require('$');
+const moment = require('moment');
 const DelNotify = require('./DelNotify');
 const DetailBar = require('./DetailBar');
 const img = require('../../assets/images/loading.gif');
@@ -16,9 +17,11 @@ export default class List extends Component {
       delNotifyShow: false, 
       operateShow: false, 
       barShow: false,
+      detailId: '',
       hoverRowId: ''
     };
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.closeDetail = this.closeDetail.bind(this);
   }
 
   static propTypes = {
@@ -120,9 +123,27 @@ export default class List extends Component {
 
   async show(e) {
     e.preventDefault();
+
+    const self = this;
+    $('.react-bs-container-body table tr').each(function(i) {
+      if (self.state.hoverRowId === $(this).find('td:first').text()) {
+        $(this).css('background-color', '#eee');
+      } else {
+        $(this).css('background-color', '');
+      }
+    });
+
     this.setState({ barShow: true }); 
     const { show } = this.props;
     await show(this.state.hoverRowId);  //fix me
+  }
+
+  closeDetail() {
+    this.setState({ barShow: false });
+    const { selectedItem } = this.props;
+    $('.react-bs-container-body table tr').each(function(i) {
+      $(this).css('background-color', '');
+    });
   }
 
   render() {
@@ -153,7 +174,7 @@ export default class List extends Component {
           <span className='type-abb' title={ _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).name : '' }>
             { _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).abb : '-' }
           </span>),
-        no: collection[i].no,
+        no: ( <a href='#' onClick={ this.show.bind(this) }>{ collection[i].no }</a> ),
         name: (
           <div>
             <a href='#' onClick={ this.show.bind(this) } style={ { whiteSpace: 'pre-wrap' } }>
@@ -203,9 +224,41 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow && <DetailBar edit={ edit } setAssignee={ setAssignee } close={ () => { this.setState({ barShow: false }) } } options={ options } data={ itemData } itemLoading={ itemLoading } loading={ loading } fileLoading={ fileLoading } project={ project } delFile={ delFile } addFile={ addFile } wfCollection={ wfCollection } wfLoading={ wfLoading } viewWorkflow={ viewWorkflow } indexComments={ indexComments } commentsCollection={ commentsCollection } commentsIndexLoading={ commentsIndexLoading } commentsLoading={ commentsLoading } commentsLoaded={ commentsLoaded } addComments={ addComments }/> }
-        { options.total && options.total > 0 ? <PaginationList total={ options.total || 0 } curPage={ query.page || 1 } sizePerPage={ options.sizePerPage || 5 } paginationSize={ 5 } query={ query } refresh={ refresh }/> : '' }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.barShow &&
+          <DetailBar 
+            edit={ edit } 
+            setAssignee={ setAssignee } 
+            close={ this.closeDetail } 
+            options={ options } 
+            data={ itemData } 
+            itemLoading={ itemLoading } 
+            loading={ loading } 
+            fileLoading={ fileLoading } 
+            project={ project } 
+            delFile={ delFile } 
+            addFile={ addFile } 
+            wfCollection={ wfCollection } 
+            wfLoading={ wfLoading } 
+            viewWorkflow={ viewWorkflow } 
+            indexComments={ indexComments } 
+            commentsCollection={ commentsCollection } 
+            commentsIndexLoading={ commentsIndexLoading } 
+            commentsLoading={ commentsLoading } 
+            commentsLoaded={ commentsLoaded } 
+            addComments={ addComments }/> }
+        { options.total && options.total > 0 ? 
+          <PaginationList 
+            total={ options.total || 0 } 
+            curPage={ query.page || 1 } 
+            sizePerPage={ options.sizePerPage || 5 } 
+            paginationSize={ 5 } 
+            query={ query } refresh={ refresh }/> 
+          : '' }
+        { this.state.delNotifyShow && 
+          <DelNotify show 
+            close={ this.delNotifyClose } 
+            data={ selectedItem } 
+            del={ del }/> }
       </div>
     );
   }
