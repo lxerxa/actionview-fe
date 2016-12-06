@@ -82,10 +82,10 @@ export default class Comments extends Component {
     return (
       <Form horizontal>
         <FormGroup>
-          <Col sm={ 12 } className={ indexLoading && 'hide' }>
-            <div style={ { margin: '5px', textAlign: 'right' } }>
-              <Button bsStyle='link' disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</Button>
-              <Button bsStyle='link' disabled={ loading } onClick={ () => { indexComments(issueId) } }><i className='fa fa-refresh'></i> 刷新</Button>
+          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
+            <div>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexComments(issueId) } }><i className='fa fa-refresh'></i> 刷新</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</span>
             </div>
           </Col>
           <Col sm={ 12 } className={ this.state.addCommentsShow || 'hide' }>
@@ -105,9 +105,9 @@ export default class Comments extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span>{ (val.creator && val.creator.name) + '添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YYYY/MM/DD HH:mm')) }</span>
-                <span style={ { marginRight: '5px', float: 'right', cursor: 'pointer' } }><i className='fa fa-trash' title='删除'></i></span>
-                <span style={ { marginRight: '8px', float: 'right', cursor: 'pointer' } }><i className='fa fa-pencil' title='编辑'></i></span>
+                <span>{ (val.creator && val.creator.name) + ' 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YYYY/MM/DD HH:mm')) }</span>
+                <span className='comments-button' style={ { float: 'right' } }><i className='fa fa-trash' title='删除'></i></span>
+                <span className='comments-button' style={ { marginRight: '10px', float: 'right' } }><i className='fa fa-pencil' title='编辑'></i></span>
               </div> ); 
               let contents = val.contents || '-';
               _.map(val.atWho || [], (v) => {
@@ -118,6 +118,7 @@ export default class Comments extends Component {
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
                   <span dangerouslySetInnerHTML={ { __html: contents } }/>
+                  <div style={ { marginTop: '5px', fontSize: '12px' } }><span className='comments-button'><i className='fa fa-share'></i> 回复</span></div>
                 </Panel>) } ) }
           </Col>
         </FormGroup>

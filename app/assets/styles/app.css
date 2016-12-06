@@ -398,3 +398,10 @@ table tr:hover .remove-icon{
 .comments-inputor {
   margin: 5px;
 }
+
+.comments-button {
+  cursor: pointer
+}
+.comments-button:hover {
+  color: #337ab7;
+}
