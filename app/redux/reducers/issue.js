@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsLoaded: false };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -161,6 +161,31 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_COMMENTS_ADD_FAIL:
       return { ...state, commentsLoading: false, error: action.error };
+
+    case t.ISSUE_COMMENTS_EDIT:
+      return { ...state, commentsItemLoading: true };
+
+    case t.ISSUE_COMMENTS_EDIT_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.commentsCollection, { id: action.result.data.id });
+        state.commentsCollection[ind] = action.result.data;
+      }
+      return { ...state, commentsItemLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_COMMENTS_EDIT_FAIL:
+      return { ...state, commentsItemLoading: false, error: action.error };
+
+    case t.ISSUE_COMMENTS_DELETE:
+      return { ...state, commentsItemLoading: true };
+
+    case t.ISSUE_COMMENTS_DELETE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.commentsCollection = _.reject(state.commentsCollection, { id: action.id });
+      }
+      return { ...state, commentsCollection: state.commentsCollection, commentsItemLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_COMMENTS_DELETE_FAIL:
+      return { ...state, commentsItemLoading: false, error: action.error };
 
     default:
       return state;

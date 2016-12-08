@@ -94,3 +94,19 @@ export function addComments(key, id, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments', method: 'post', data: values })
   });
 }
+
+export function editComments(key, id, comments_id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_COMMENTS_EDIT',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments/' + comments_id, method: 'put', data: values })
+  });
+}
+
+export function delComments(key, id, comments_id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_COMMENTS_DELETE',
+    id: comments_id,
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments/' + comments_id, method: 'delete' })
+  });
+}
+   

@@ -72,6 +72,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.delete('/project/:key/issue/:id/comments/:cid', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '1111' } };
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/issue/546761', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 const moment = require('moment');
 const CreateModal = require('./CreateModal');
-const Comments = require('./Comments');
+const Comments = require('./comments/Comments');
 const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
 const DelFileModal = require('./DelFileModal');
@@ -35,9 +35,12 @@ export default class DetailBar extends Component {
     edit: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
     addComments: PropTypes.func.isRequired,
+    editComments: PropTypes.func.isRequired,
+    delComments: PropTypes.func.isRequired,
     commentsCollection: PropTypes.array.isRequired,
     commentsIndexLoading: PropTypes.bool.isRequired,
     commentsLoading: PropTypes.bool.isRequired,
+    commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired
   }
@@ -49,10 +52,10 @@ export default class DetailBar extends Component {
   }
 
   handleTabSelect(tabKey) {
-    const { indexComments, data, commentsLoaded } = this.props;
+    const { indexComments, commentsLoaded } = this.props;
     this.setState({ tabKey });
     if (tabKey === 2 && !commentsLoaded) {
-      indexComments(data.id);
+      indexComments();
     }
   }
 
@@ -122,7 +125,7 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, addComments } = this.props;
+    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
@@ -297,7 +300,7 @@ export default class DetailBar extends Component {
               </Form>
             </Tab>
             <Tab eventKey={ 2 } title='备注'>
-              <Comments issueId={ data.id } collection={ commentsCollection } indexComments={ indexComments } indexLoading={ commentsIndexLoading } loading={ commentsLoading } users={ options.users || [] } addComments={ addComments }/>
+              <Comments collection={ commentsCollection } indexComments={ indexComments } indexLoading={ commentsIndexLoading } loading={ commentsLoading } users={ options.users || [] } addComments={ addComments } editComments={ editComments } delComments={ delComments } itemLoading={ commentsItemLoading }/>
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
               <Form horizontal>

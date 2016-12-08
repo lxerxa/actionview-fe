@@ -7,7 +7,7 @@ import DateTime from 'react-datetime';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 
-var moment = require('moment');
+const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
 class CreateModal extends Component {

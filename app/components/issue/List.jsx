@@ -31,9 +31,12 @@ export default class List extends Component {
     viewWorkflow: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
     addComments: PropTypes.func.isRequired,
+    editComments: PropTypes.func.isRequired,
+    delComments: PropTypes.func.isRequired,
     commentsCollection: PropTypes.array.isRequired,
     commentsIndexLoading: PropTypes.bool.isRequired,
     commentsLoading: PropTypes.bool.isRequired,
+    commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
@@ -148,7 +151,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -244,8 +247,11 @@ export default class List extends Component {
             commentsCollection={ commentsCollection } 
             commentsIndexLoading={ commentsIndexLoading } 
             commentsLoading={ commentsLoading } 
+            commentsItemLoading={ commentsItemLoading } 
             commentsLoaded={ commentsLoaded } 
-            addComments={ addComments }/> }
+            addComments={ addComments }
+            editComments={ editComments }
+            delComments={ delComments }/> }
         { options.total && options.total > 0 ? 
           <PaginationList 
             total={ options.total || 0 } 
