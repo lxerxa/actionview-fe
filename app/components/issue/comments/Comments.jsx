@@ -1,17 +1,19 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
+import ReactDOM from 'react-dom';
+import { ButtonToolbar, OverlayTrigger, Tooltip, Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
 const $ = require('$');
 const img = require('../../../assets/images/loading.gif');
 const moment = require('moment');
 const DelCommentsModal = require('./DelCommentsModal');
+const DelReplyModal = require('./DelReplyModal');
 const EditCommentsModal = require('./EditCommentsModal');
 
 export default class Comments extends Component {
   constructor(props) {
     super(props);
-    this.state = { addCommentsShow: false, editCommentsShow: false, delCommentsShow: false, selectedComments: {}, contents:  '', atWho: [] };
+    this.state = { addCommentsShow: false, editCommentsShow: false, delCommentsShow: false, delReplyShow: false, selectedComments: {}, contents:  '', atWho: [] };
     this.addAtWho = this.addAtWho.bind(this);
   }
 
@@ -36,7 +38,19 @@ export default class Comments extends Component {
   }
 
   showEditComments(data) {
-    this.setState({ editCommentsShow: true, selectedComments: data });
+    this.setState({ editCommentsShow: true, selectedComments: data, editType: 'comments' });
+  }
+
+  showDelReply(comments_id, data) {
+    this.setState({ delReplyShow: true, selectedComments: _.extend(data, { comments_id }) });
+  }
+
+  showEditReply(comments_id, data) {
+    this.setState({ editCommentsShow: true, selectedComments: _.extend(data, { comments_id }) });
+  }
+
+  showAddReply(comments_id, to) {
+    this.setState({ editCommentsShow: true, selectedComments: { comments_id, to } });
   }
 
   async addComments() {
@@ -44,7 +58,7 @@ export default class Comments extends Component {
     const newAtWho = [];
     _.map(_.uniq(this.state.atWho), (val) => {
       const user = _.find(users, { id: val });
-      if (this.state.contents.indexOf('@' + user.name) !== -1) {
+      if (user && this.state.contents.indexOf('@' + user.name) !== -1) {
         newAtWho.push(val);
       }
     });
@@ -117,8 +131,8 @@ export default class Comments extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span>{ (val.creator && val.creator.name) + ' 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YYYY/MM/DD HH:mm')) }</span>
-                <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span>
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && val.creator.nameAndEmail || '') + '">' + (val.creator && val.creator.name || '') + '</a> 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YY/MM/DD HH:mm')) } } />
+                <span className='comments-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span>
                 <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span>
               </div> ); 
               let contents = val.contents || '-';
@@ -129,8 +143,33 @@ export default class Comments extends Component {
 
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
-                  <span dangerouslySetInnerHTML={ { __html: contents } }/>
-                  <div style={ { marginTop: '5px', fontSize: '12px' } }><span className='comments-button'><i className='fa fa-share'></i> 回复</span></div>
+                  <span style={ { lineHeight: '24px' } } dangerouslySetInnerHTML={ { __html: contents } }/>
+                  <div style={ { marginTop: '5px', fontSize: '12px' } }><span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, {}) }><i className='fa fa-share'></i> 回复</span></div>
+                  <div>
+                    <ul className='reply-contents'>
+                     { _.map(val.reply || [], (v, i) => {
+                       let contents = v.contents || '-';
+                       _.map(v.atWho || [], (value) => {
+                         contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.nameAndEmail + '">@' + value.name + '</a>');
+                       });
+                       contents = contents.replace(/(\r\n)|(\n)/g, '<br/>'); 
+
+                       return (
+                       <li className='reply-contents-item'>
+                         <div style={ { fontSize: '12px', marginBottom: '5px' } }>
+                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && v.creator.nameAndEmail || '') + '">' + (v.creator && v.creator.name || '') + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + v.to.name + '</a>') : '') + ' - ' + (v.created_at && moment.unix(v.created_at).format('YY/MM/DD HH:mm')) } }/>
+                           <span className='comments-button' style={ { float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span>
+                           <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span>
+                         </div>
+                         <div>
+                           <span style={ { lineHeight: '24px', wordBreak: 'break-all' } } dangerouslySetInnerHTML={ { __html: contents } }/>
+                         </div>
+                         <div style={ { fontSize: '12px' } }>
+                           <span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, v.creator) }><i className='fa fa-share'></i> 回复</span>
+                         </div>
+                       </li> ) } ) }
+                    </ul>
+                  </div>
                 </Panel>) } ) }
           </Col>
         </FormGroup>
@@ -140,6 +179,12 @@ export default class Comments extends Component {
             data={ this.state.selectedComments }
             loading = { itemLoading }
             users ={ users }
+            edit={ editComments }/> }
+        { this.state.delReplyShow &&
+          <DelReplyModal show
+            close={ () => { this.setState({ delReplyShow: false }) } }
+            data={ this.state.selectedComments }
+            loading = { itemLoading }
             edit={ editComments }/> }
         { this.state.delCommentsShow &&
           <DelCommentsModal show

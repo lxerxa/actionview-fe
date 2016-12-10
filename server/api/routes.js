@@ -61,7 +61,7 @@ export default function(router) {
   router.get('/project/:key/issue/:id/comments', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '2222', contents: '@刘旭 bbbb\r\nbbbb', atWho: [ {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} ], creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '3333', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469}] }; 
+    const results = { ecode: 0, data: [{ id: '1111', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '2222', contents: '@刘旭 bbbb\r\nbbbb', atWho: [ {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} ], creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469, reply: [ { id: '111', to: { id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)' }, contents: '测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试>测试测试测试', created_at: 1478415469, updated_at: 1478415469, creator: {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} }, {id: '2222', contents: '测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试>测试测试测试', created_at: 1478415469, updated_at: 1478415469, creator: {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} } ] }, {id: '3333', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469}] }; 
     return res.status(200).send(results);
   });
 

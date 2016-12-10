@@ -47,7 +47,7 @@ export default class DetailBar extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.itemLoading) {
-      this.setState({ tabKey: 1 });
+      this.setState({ tabKey: 1, editAssignee: false });
     }
   }
 

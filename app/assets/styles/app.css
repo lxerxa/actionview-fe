@@ -405,3 +405,20 @@ table tr:hover .remove-icon{
 .comments-button:hover {
   color: #337ab7;
 }
+
+.reply-contents {
+  list-style: none; 
+  margin-left: 15px; 
+  margin-bottom: 0px; 
+  padding: 0px;
+}
+
+.reply-contents-item {
+  vertical-align: top; 
+  margin-top: 10px; 
+  padding-left: 10px; 
+  padding-top: 10px; 
+  border-top-style: solid; 
+  border-top-width: 1px; 
+  border-color: #ddd;
+}

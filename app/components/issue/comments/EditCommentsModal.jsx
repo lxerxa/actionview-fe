@@ -8,7 +8,7 @@ const img = require('../../../assets/images/loading.gif');
 export default class EditCommentsModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, contents: props.data.contents || '', atWho: props.data.atWho || [] };
+    this.state = { ecode: 0, contents: props.data.contents || '', atWho: _.map(props.data.atWho || [], 'id') };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -31,9 +31,15 @@ export default class EditCommentsModal extends Component {
         newAtWho.push(val);
       }
     });
-    const ecode = await edit(data.id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) });
+    let ecode = 0;
+    if (data.comments_id) {
+      ecode = await edit(data.comments_id, { contents: this.state.contents, to: data.to || {}, reply_id: data.id || '', atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ), operation: data.id ? 'editReply' : 'addReply' });
+    } else {
+      ecode = await edit(data.id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) });
+    }
     if (ecode === 0) {
-      this.setState({ addCommentsShow: false, contents: '', atWho: [] });
+      this.setState({ ecode: 0 });
+      close();
     } else {
       this.setState({ ecode: ecode });
     }
@@ -71,14 +77,25 @@ export default class EditCommentsModal extends Component {
   render() {
     const { data, loading } = this.props;
 
+    let title = '';
+    if (data.comments_id) {
+      if (data.id) {
+        title = '编辑回复';
+      } else {
+        title = '回复 ' + (data.to && data.to.name ? data.to.name : '备注');
+      }
+    } else {
+      title = '编辑备注';
+    }
+
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>编辑备注</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ title }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className='edit-comments-inputor'>
-            <textarea style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents } placeholder='输入备注'/>
+            <textarea style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents }/>
           </div>
         </Modal.Body>
         <Modal.Footer>
