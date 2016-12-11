@@ -8,6 +8,7 @@ import _ from 'lodash';
 const moment = require('moment');
 const CreateModal = require('./CreateModal');
 const Comments = require('./comments/Comments');
+const History = require('./history/History');
 const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
 const DelFileModal = require('./DelFileModal');
@@ -42,6 +43,9 @@ export default class DetailBar extends Component {
     commentsLoading: PropTypes.bool.isRequired,
     commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
+    indexHistory: PropTypes.func.isRequired,
+    historyCollection: PropTypes.array.isRequired,
+    historyIndexLoading: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -52,10 +56,12 @@ export default class DetailBar extends Component {
   }
 
   handleTabSelect(tabKey) {
-    const { indexComments, commentsLoaded } = this.props;
+    const { indexComments, indexHistory, commentsLoaded } = this.props;
     this.setState({ tabKey });
     if (tabKey === 2 && !commentsLoaded) {
       indexComments();
+    } else if (tabKey === 3) {
+      indexHistory();
     }
   }
 
@@ -125,7 +131,7 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments } = this.props;
+    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
@@ -303,17 +309,7 @@ export default class DetailBar extends Component {
               <Comments collection={ commentsCollection } indexComments={ indexComments } indexLoading={ commentsIndexLoading } loading={ commentsLoading } users={ options.users || [] } addComments={ addComments } editComments={ editComments } delComments={ delComments } itemLoading={ commentsItemLoading }/>
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
-              <Form horizontal>
-                <FormGroup>
-                  <Col sm={ 12 }>
-                    <div style={ { marginTop: '6px', marginLeft: '10px' } }>
-                      <span>最新改动纪录更新于2016/04/15 12:34:23</span>
-                      <Button bsStyle='link'><i className='fa fa-refresh'></i></Button>
-                    </div>
-                  </Col>
-
-                </FormGroup>
-              </Form>
+              <History collection={ historyCollection } indexHistory={ indexHistory } indexLoading={ historyIndexLoading } />
             </Tab>
             <Tab eventKey={ 4 } title='工作日志'>Tab 3 content</Tab>
           </Tabs>

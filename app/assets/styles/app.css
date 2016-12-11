@@ -422,3 +422,7 @@ table tr:hover .remove-icon{
   border-top-width: 1px; 
   border-color: #ddd;
 }
+
+.table-responsive .table thead th {
+  padding: 5px;
+}

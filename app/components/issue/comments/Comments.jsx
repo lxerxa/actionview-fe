@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { ButtonToolbar, OverlayTrigger, Tooltip, Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
 const $ = require('$');
@@ -131,7 +131,7 @@ export default class Comments extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && val.creator.nameAndEmail || '') + '">' + (val.creator && val.creator.name || '') + '</a> 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YY/MM/DD HH:mm')) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && val.creator.nameAndEmail || '') + '">' + (val.creator && val.creator.name || '') + '</a> 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YY/MM/DD HH:mm')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 <span className='comments-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span>
                 <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span>
               </div> ); 
@@ -157,7 +157,7 @@ export default class Comments extends Component {
                        return (
                        <li className='reply-contents-item'>
                          <div style={ { fontSize: '12px', marginBottom: '5px' } }>
-                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && v.creator.nameAndEmail || '') + '">' + (v.creator && v.creator.name || '') + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + v.to.name + '</a>') : '') + ' - ' + (v.created_at && moment.unix(v.created_at).format('YY/MM/DD HH:mm')) } }/>
+                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && v.creator.nameAndEmail || '') + '">' + (v.creator && v.creator.name || '') + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + v.to.name + '</a>') : '') + ' - ' + (v.created_at && moment.unix(v.created_at).format('YY/MM/DD HH:mm')) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
                            <span className='comments-button' style={ { float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span>
                            <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span>
                          </div>

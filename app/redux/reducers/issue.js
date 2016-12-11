@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -186,6 +186,16 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_COMMENTS_DELETE_FAIL:
       return { ...state, commentsItemLoading: false, error: action.error };
+
+    case t.ISSUE_HISTORY_INDEX:
+      return { ...state, historyIndexLoading: true, historyCollection: [] };
+
+    case t.ISSUE_HISTORY_INDEX_SUCCESS:
+      _.assign(state.options, action.result.options || {});
+      return { ...state, historyIndexLoading: false, historyLoaded: true, ecode: action.result.ecode, historyCollection: action.result.data };
+
+    case t.ISSUE_HISTORY_INDEX_FAIL:
+      return { ...state, historyIndexLoading: false, error: action.error };
 
     default:
       return state;

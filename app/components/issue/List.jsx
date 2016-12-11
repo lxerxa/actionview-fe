@@ -38,6 +38,9 @@ export default class List extends Component {
     commentsLoading: PropTypes.bool.isRequired,
     commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
+    indexHistory: PropTypes.func.isRequired,
+    historyCollection: PropTypes.array.isRequired,
+    historyIndexLoading: PropTypes.bool.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
     project: PropTypes.object,
@@ -151,7 +154,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexHistory, historyCollection, historyIndexLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -249,6 +252,9 @@ export default class List extends Component {
             commentsLoading={ commentsLoading } 
             commentsItemLoading={ commentsItemLoading } 
             commentsLoaded={ commentsLoaded } 
+            indexHistory={ indexHistory }
+            historyCollection={ historyCollection }
+            historyIndexLoading={ historyIndexLoading }
             addComments={ addComments }
             editComments={ editComments }
             delComments={ delComments }/> }

@@ -109,4 +109,10 @@ export function delComments(key, id, comments_id) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments/' + comments_id, method: 'delete' })
   });
 }
-   
+
+export function indexHistory(key, id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_HISTORY_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/history' })
+  });
+} 

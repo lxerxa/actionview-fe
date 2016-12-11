@@ -8,7 +8,7 @@ const img = require('../../../assets/images/loading.gif');
 export default class EditCommentsModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, contents: props.data.contents || '', atWho: _.map(props.data.atWho || [], 'id') };
+    this.state = { ecode: 0, oldContents: props.data.contents || '', contents: props.data.contents || '', atWho: _.map(props.data.atWho || [], 'id') };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -101,7 +101,7 @@ export default class EditCommentsModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button className='ralign' disabled={ loading } onClick={ this.confirm }>确定</Button>
+          <Button className='ralign' disabled={ this.state.oldContents === this.state.contents || loading } onClick={ this.confirm }>确定</Button>
           <Button disabled={ loading } onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>

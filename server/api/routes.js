@@ -58,10 +58,17 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/issue/:id/history', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ operator: { id: '1111', name: '刘旭', nameAndEmail: 'bbb' }, operated_at: 1478415469, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级', before: 'aa', after: 'bb'}, { field: '优先级', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '刘旭', nameAndEmail: 'tttt' }, operated_at: 1478415469, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级22', before: 'aa', after: 'bb'}, { field: '优先级3', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '刘旭' }, operated_at: 1478415469, operation: 'new' }] };
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/issue/:id/comments', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469 }, {id: '2222', contents: '@刘旭 bbbb\r\nbbbb', atWho: [ {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} ], creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469, reply: [ { id: '111', to: { id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)' }, contents: '测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试>测试测试测试', created_at: 1478415469, updated_at: 1478415469, creator: {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} }, {id: '2222', contents: '测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试>测试测试测试', created_at: 1478415469, updated_at: 1478415469, creator: {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} } ] }, {id: '3333', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469}] }; 
+    const results = { ecode: 0, data: [{ id: '1111', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469, edited_flag : 1 }, {id: '2222', contents: '@刘旭 bbbb\r\nbbbb', atWho: [ {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} ], creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469, reply: [ { id: '111', to: { id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)' }, contents: '测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试>测试测试测试', created_at: 1478415469, updated_at: 1478415469, creator: {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} }, {id: '2222', contents: '测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试>测试测试测试', created_at: 1478415469, updated_at: 1478415469, creator: {id: '111', name: '刘旭', nameAndEmail: '刘旭(liuxuyjy@chinamobile.com)'} } ] }, {id: '3333', contents: 'aaaaaa', creator: {id:'aaa', name:'刘旭（研究院）'}, created_at: 1478415469}] }; 
     return res.status(200).send(results);
   });
 
