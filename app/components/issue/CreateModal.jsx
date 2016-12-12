@@ -15,7 +15,7 @@ class CreateModal extends Component {
     super(props);
     const { options, data={} } = this.props;
 
-    let defaultIndex = -1, schema = [], errors={}, values={};
+    let defaultIndex = -1, schema = [], errors={}, values={}, oldValues={};
     if (!_.isEmpty(data) && data.id) {
       defaultIndex = _.findIndex(options.types || [], { id: data.type });
       schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
@@ -23,12 +23,16 @@ class CreateModal extends Component {
         if (data[v.key]) {
           if (v.key == 'assignee' && data[v.key].id) {
             values[v.key] = data[v.key].id; // assignee
+            oldValues[v.key] = data[v.key].id; // assignee
           } else if (v.type == 'File' && _.isArray(data[v.key])) {
             values[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
+            oldValues[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
           } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
             values[v.key] = moment.unix(data[v.key]);
+            oldValues[v.key] = moment.unix(data[v.key]);
           } else {
             values[v.key] = data[v.key];
+            oldValues[v.key] = data[v.key];
           }
         }
         if (v.required && (!data[v.key] || (_.isArray(data[v.key]) && data[v.key].length <= 0))) {
@@ -48,8 +52,9 @@ class CreateModal extends Component {
       });
     }
 
-    this.state = { ecode: 0, errors, touched: {}, type: defaultIndex !== -1 ? options.types[defaultIndex].id : '', schema, values };
+    this.state = { ecode: 0, errors, touched: {}, type: defaultIndex !== -1 ? options.types[defaultIndex].id : '', schema, values, oldValues };
 
+    this.getChangedKeys = this.getChangedKeys.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -64,12 +69,35 @@ class CreateModal extends Component {
     edit: PropTypes.func
   }
 
+  getChangedKeys() {
+    const diffKeys = [];
+    _.mapKeys(this.state.values, (val, key) => {
+      if (val instanceof moment && this.state.oldValues[key] instanceof moment) {
+        if (!val.isSame(this.state.oldValues[key])) {
+          diffKeys.push(key);
+        }
+      } else if (!_.isEqual(val, this.state.oldValues[key])) {
+        diffKeys.push(key);
+      }
+    });
+    console.log(diffKeys);
+    return diffKeys; 
+  }
+
   async handleSubmit() {
     const { create, edit, close, options, data={} } = this.props;
 
     const schema = _.find(options.types, { id: this.state.type }).schema;
-    const submitData = {};
-    _.mapValues(this.state.values, (val, key) => {
+
+    let submitData = {};
+    if (!_.isEmpty(data) && data.id) {
+      const diffKeys = this.getChangedKeys();
+      submitData = diffKeys.length > 0 ? _.pick(this.state.values, diffKeys) : {};
+    } else {
+      submitData = this.state.values;
+    }
+
+    _.mapValues(submitData, (val, key) => {
       const index = _.findIndex(schema, { key });
       const field = index === -1 ? {} : schema[index];
       if (field.type === 'DatePicker') {
@@ -83,6 +111,7 @@ class CreateModal extends Component {
       }
     });
     submitData['type'] = this.state.type;
+
     let ecode;
     if (!_.isEmpty(data) && data.id) {
       ecode = await edit(submitData);
@@ -180,7 +209,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { options, close, loading, project } = this.props;
+    const { options, close, loading, project, data } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(options.types || [], function(val) {
@@ -411,7 +440,7 @@ class CreateModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button className='ralign' type='submit' disabled={ _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
+          <Button className='ralign' type='submit' disabled={ (data.id && this.getChangedKeys().length <= 0) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
           <Button onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>

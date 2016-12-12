@@ -36,11 +36,12 @@ export default class History extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && val.operator.nameAndEmail || '') + '">' + (val.operator && val.operator.name || '') + '</a> 修改 - ' + (val.operated_at && moment.unix(val.operated_at).format('YY/MM/DD HH:mm')) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && val.operator.nameAndEmail || '') + '">' + (val.operator && val.operator.name || '') + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + (val.operated_at && moment.unix(val.operated_at).format('YY/MM/DD HH:mm')) } } />
               </div> ); 
 
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
+                  { val.operation == 'modify' ?
                   <Table condensed hover responsive>
                     <thead>
                       <th>字段</th>
@@ -56,6 +57,8 @@ export default class History extends Component {
                         </tr> ) }
                     </tbody>
                   </Table>
+                  :
+                  <span style={ { marginLeft: '5px' } }>创建问题</span> }
                 </Panel>) } ) }
           </Col>
         </FormGroup>
