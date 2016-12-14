@@ -54,7 +54,7 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
-      return { ...state, itemLoading: true, itemData: {}, commentsLoaded: false };
+      return { ...state, itemLoading: true, itemData: { id: action.id }, commentsLoaded: false };
 
     case t.ISSUE_SHOW_SUCCESS:
       return { ...state, itemLoading: false, ecode: action.result.ecode, itemData: action.result.data };

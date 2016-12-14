@@ -52,7 +52,10 @@ class CreateModal extends Component {
       });
     }
 
-    this.state = { ecode: 0, errors, touched: {}, type: defaultIndex !== -1 ? options.types[defaultIndex].id : '', schema, values, oldValues };
+    const type = defaultIndex !== -1 ? options.types[defaultIndex].id : ''; 
+    _.extend(oldValues, { type });
+
+    this.state = { ecode: 0, errors, touched: {}, type, schema, values, oldValues };
 
     this.getChangedKeys = this.getChangedKeys.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -71,6 +74,10 @@ class CreateModal extends Component {
 
   getChangedKeys() {
     const diffKeys = [];
+
+    if (this.state.type != this.state.oldValues.type) {
+      diffKeys.push('type');
+    }
     _.mapKeys(this.state.values, (val, key) => {
       if (val instanceof moment && this.state.oldValues[key] instanceof moment) {
         if (!val.isSame(this.state.oldValues[key])) {
@@ -80,7 +87,6 @@ class CreateModal extends Component {
         diffKeys.push(key);
       }
     });
-    console.log(diffKeys);
     return diffKeys; 
   }
 
@@ -209,7 +215,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { options, close, loading, project, data } = this.props;
+    const { options, close, loading, project, data={} } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(options.types || [], function(val) {

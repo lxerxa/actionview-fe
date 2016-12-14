@@ -61,7 +61,7 @@ export default function(router) {
   router.get('/project/:key/issue/:id/history', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ operator: { id: '1111', name: '刘旭', nameAndEmail: 'bbb' }, operated_at: 1478415469, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级', before: 'aa', after: 'bb'}, { field: '优先级', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '刘旭', nameAndEmail: 'tttt' }, operated_at: 1478415469, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级22', before: 'aa', after: 'bb'}, { field: '优先级3', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '刘旭' }, operated_at: 1478415469, operation: 'new' }] };
+    const results = { ecode: 0, data: [{ operator: { id: '1111', name: '刘旭', nameAndEmail: 'bbb' }, operated_at: 1478414469, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级', before: 'aa', after: 'bb'}, { field: '优先级', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '刘旭', nameAndEmail: 'tttt' }, operated_at: 1478415479, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级22', before: 'aa', after: 'bb'}, { field: '优先级3', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '刘旭' }, operated_at: 1478415469, operation: 'new' }] };
     return res.status(200).send(results);
   });
 

@@ -130,18 +130,23 @@ export default class List extends Component {
   async show(e) {
     e.preventDefault();
 
-    const self = this;
-    $('.react-bs-container-body table tr').each(function(i) {
-      if (self.state.hoverRowId === $(this).find('td:first').text()) {
-        $(this).css('background-color', '#eee');
-      } else {
-        $(this).css('background-color', '');
-      }
-    });
-
     this.setState({ barShow: true }); 
     const { show } = this.props;
     await show(this.state.hoverRowId);  //fix me
+  }
+
+  componentDidUpdate() {
+    const { itemData={} } = this.props;
+
+    if (this.state.barShow) {
+      $('.react-bs-container-body table tr').each(function(i) {
+        if (itemData.id === $(this).find('td:first').text()) {
+          $(this).css('background-color', '#eee');
+        } else {
+          $(this).css('background-color', '');
+        }
+      });
+    }
   }
 
   closeDetail() {
