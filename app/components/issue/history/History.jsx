@@ -52,14 +52,8 @@ export default class History extends Component {
                     { _.map(val.data || [], (v) => 
                       <tr>
                         <td>{ v.field || '' }</td>
-                        { v.before_type == 'TextArea' ?
-                          <td dangerouslySetInnerHTML = { { __html: v.before_value.replace(/(\r\n)|(\n)/g, '<br/>') || '' } }/>
-                          :
-                          <td>{ v.before_value && (v.before_type == 'DatePicker' || v.before_type == 'DateTimePicker') ? moment.unix(v.before_value).format(v.before_type == 'DateTimePicker' ? 'YY/MM/DD HH:mm' : 'YY/MM/DD') : ( v.before_value || '') }</td> }
-                        { v.after_type == 'TextArea' ?
-                          <td dangerouslySetInnerHTML = { { __html:  v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') || '' } }/>
-                          :
-                          <td>{ v.after_value && (v.after_type == 'DatePicker' || v.after_type == 'DateTimePicker') ? moment.unix(v.after_value).format(v.after_type == 'DateTimePicker' ? 'YY/MM/DD HH:mm' : 'YY/MM/DD') : ( v.after_value || '') }</td> }
+                        <td dangerouslySetInnerHTML = { { __html: v.before_value.replace(/(\r\n)|(\n)/g, '<br/>') || '' } }/>
+                        <td dangerouslySetInnerHTML = { { __html: v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') || '' } }/>
                       </tr> ) }
                     </tbody>
                   </Table>

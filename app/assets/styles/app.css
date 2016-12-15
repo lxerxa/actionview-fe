@@ -426,3 +426,7 @@ table tr:hover .remove-icon{
 .table-responsive .table thead th {
   padding: 5px;
 }
+
+.table-responsive .table {
+  margin-bottom: 10px;
+}

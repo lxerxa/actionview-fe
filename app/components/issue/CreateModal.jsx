@@ -99,8 +99,10 @@ class CreateModal extends Component {
     if (!_.isEmpty(data) && data.id) {
       const diffKeys = this.getChangedKeys();
       submitData = diffKeys.length > 0 ? _.pick(this.state.values, diffKeys) : {};
+      diffKeys.indexOf('type') !== -1 && _.extend(submitData, { type: this.state.type });
     } else {
       submitData = this.state.values;
+      submitData['type'] = this.state.type;
     }
 
     _.mapValues(submitData, (val, key) => {
@@ -116,7 +118,6 @@ class CreateModal extends Component {
         submitData[key] = val; 
       }
     });
-    submitData['type'] = this.state.type;
 
     let ecode;
     if (!_.isEmpty(data) && data.id) {
