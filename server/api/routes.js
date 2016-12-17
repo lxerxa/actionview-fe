@@ -169,7 +169,7 @@ export default function(router) {
       { id: '546763', name: '描述', type:'Text', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
       { id: '546762', name: '优先级', type:'Select', screens: [], key:'priority'},
       { id: '546764', name: '开始时间', type:'DatePicker', screens: [{id:'111', name:'界面1'}], key:'starttime'},
-      { id: '2323', name: '附件', type:'CheckboxGroup', screens: [{id:'111', name:'界面1'}], key:'attachement'}],
+      { id: '2323', name: '附件', type:'CheckboxGroup', screens: [{id:'111', name:'界面1'}], key:'attachment'}],
       options: { types: [{id: '1111', name: '1111'}, {id: '2222', name: '2222'}] }
     };
     return res.status(200).send(results);
@@ -622,6 +622,6 @@ export default function(router) {
   });
 
   router.post('/project/:key/file', function(req, res) {
-    return res.status(200).send({ecode: 0, data: { field:'attachements', fid: '546761'}});
+    return res.status(200).send({ecode: 0, data: { field:'attachments', file: {id: '546761'}}});
   });
 }

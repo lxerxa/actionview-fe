@@ -386,7 +386,7 @@ table tr:hover .remove-icon{
   position: absolute;
   boottom: 0px;
   left: auto;
-  right: 5px;
+  right: 10px;
   opacity: 0 !important;
 }
 
@@ -402,8 +402,17 @@ table tr:hover .remove-icon{
 .comments-button {
   cursor: pointer
 }
+
 .comments-button:hover {
   color: #337ab7;
+}
+
+.comments-edit-button {
+  display: none;
+}
+
+.panel-heading:hover .comments-edit-button {
+  display: block;
 }
 
 .reply-contents {
@@ -421,6 +430,15 @@ table tr:hover .remove-icon{
   border-top-style: solid; 
   border-top-width: 1px; 
   border-color: #ddd;
+}
+
+.reply-item-header {
+  font-size: 12px; 
+  padding-bottom: 5px;
+}
+
+.reply-item-header:hover .comments-edit-button {
+  display: block;
 }
 
 .table-responsive .table thead th {

@@ -20,7 +20,7 @@ class CreateModal extends Component {
       defaultIndex = _.findIndex(options.types || [], { id: data.type });
       schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
       _.map(schema, (v) => {
-        if (data[v.key]) {
+        if (!_.isUndefined(data[v.key])) {
           if (v.key == 'assignee' && data[v.key].id) {
             values[v.key] = data[v.key].id; // assignee
             oldValues[v.key] = data[v.key].id; // assignee
@@ -173,6 +173,8 @@ class CreateModal extends Component {
     if (field && this.state.errors[field]) {
       delete this.state.errors[field];
       this.setState({ errors: this.state.errors });
+    } else {
+      this.setState({ values: this.state.values });
     }
   }
 
@@ -181,6 +183,7 @@ class CreateModal extends Component {
     const fid = localfile.fid || '';
     if (field && fid) {
       this.state.values[field] = _.reject(this.state.values[field], (o) => { return o === fid });
+      this.setState({ values: this.state.values });
     }
     const curField = _.find(this.state.schema, { key: field });
     if (curField && curField.required && field && this.state.values[field].length <= 0) {

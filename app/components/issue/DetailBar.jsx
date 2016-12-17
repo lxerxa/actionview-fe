@@ -18,6 +18,7 @@ export default class DetailBar extends Component {
     super(props);
     this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
+    this.uploadSuccess = this.uploadSuccess.bind(this);
   }
 
   static propTypes = {
@@ -234,8 +235,8 @@ export default class DetailBar extends Component {
                     };
                     const eventHandlers = {
                       init: dz => this.dropzone = dz,
-                      success: this.uploadSuccess.bind(this) 
-                    }
+                      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); }
+                    };
 
                     const imgFiles = _.filter(data[field.key], (f) => { return _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) !== -1 });
                     const noImgFiles = _.filter(data[field.key], (f) => { return _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) === -1 });
