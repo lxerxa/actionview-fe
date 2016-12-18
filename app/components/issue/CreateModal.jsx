@@ -83,7 +83,7 @@ class CreateModal extends Component {
         if (!val.isSame(this.state.oldValues[key])) {
           diffKeys.push(key);
         }
-      } else if (!_.isEqual(val, this.state.oldValues[key])) {
+      } else if (!_.isEqual(val, this.state.oldValues[key]) && !(_.isUndefined(this.state.oldValues[key]) && ((_.isArray(val) || _.isObject(val)) && _.isEmpty(val) || (_.isString(val) && val == '') || _.isNull(val)))) {
         diffKeys.push(key);
       }
     });
@@ -115,7 +115,7 @@ class CreateModal extends Component {
       } else if (field.type === 'Number') {
         submitData[key] = parseInt(val);
       } else {
-        submitData[key] = val; 
+        submitData[key] = val || ''; 
       }
     });
 

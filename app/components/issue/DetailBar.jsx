@@ -211,7 +211,7 @@ export default class DetailBar extends Component {
                     contents = _.find(optionValues, { id: data[field.key] }) ? _.find(optionValues, { id: data[field.key] }).name : '-';
                   } else if (field.type === 'MultiSelect' || field.type === 'CheckboxGroup' || field.type === 'MultiVersion') {
                     const optionValues = field.optionValues || [];
-                    const values = data[field.key].split(',');
+                    const values = !_.isArray(data[field.key]) ? data[field.key].split(',') : data[field.key];
                     const newValues = [];
                     _.map(values, (v, i) => {
                       if (_.find(optionValues, { id: v })) {

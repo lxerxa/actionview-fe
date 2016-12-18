@@ -62,7 +62,7 @@ export default class Sidebar extends Component {
           <li><Link to={ '/project/' + project.item.key + '/resolution' }>解决结果</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/priority' }>优先级</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/role' }>角色权限</Link></li>
-          <li/><li/><li/>
+          <li>&nbsp;</li><li>&nbsp;</li>
         </ul>
         <div id='carbonads'>
           <Label bsStyle='success'>刘旭(研究院)</Label> 登录于 16/12/20 20:45<span style={ { marginLeft: '10px' } }><i className='fa fa-sign-out' title='退出'></i></span>
