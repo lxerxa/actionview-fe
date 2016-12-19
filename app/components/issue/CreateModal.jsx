@@ -450,8 +450,8 @@ class CreateModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button className='ralign' type='submit' disabled={ (data.id && this.getChangedKeys().length <= 0) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
-          <Button onClick={ this.handleCancel }>取消</Button>
+          <Button type='submit' disabled={ (data.id && this.getChangedKeys().length <= 0) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
+          <Button bsStyle='link' onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

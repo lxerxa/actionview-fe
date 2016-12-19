@@ -37,8 +37,8 @@ export default class DelStepNotify extends Component {
           确认要删除此工作流步骤？
         </Modal.Body>
         <Modal.Footer>
-          <Button className='ralign' onClick={ this.confirm }>确定</Button>
-          <Button onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>确定</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -95,8 +95,8 @@ export default class SortCardsModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && 'aaaa' }</span>
           <img src={ img } className={ sortLoading ? 'loading' : 'hide' }/>
-          <Button className='ralign' disabled={ sortLoading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
-          <Button disabled={ sortLoading } onClick={ this.cancel.bind(this) }>取消</Button>
+          <Button disabled={ sortLoading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
+          <Button bsStyle='link' disabled={ sortLoading } onClick={ this.cancel.bind(this) }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

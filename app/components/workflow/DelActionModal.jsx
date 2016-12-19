@@ -68,8 +68,8 @@ export default class DelActionModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button className='ralign' disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
+          <Button bsStyle='link' onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>
       </Modal>

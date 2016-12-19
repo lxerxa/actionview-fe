@@ -81,8 +81,8 @@ export default class CreateModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button className='ralign' disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>
       </Modal>
