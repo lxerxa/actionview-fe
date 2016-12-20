@@ -111,7 +111,7 @@ export default class DefaultValueConfigModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '字段默认值配置 - ' + data.name }</Modal.Title>
         </Modal.Header>
-        <form onSubmit={ handleSubmit(this.handleSubmit) }>
+        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ defaultValue.value && defaultValue.error ? 'error' : '' }>
             <FormControl type='hidden' { ...id }/>

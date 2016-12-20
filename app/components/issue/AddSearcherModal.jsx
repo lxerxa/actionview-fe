@@ -70,7 +70,7 @@ export default class AddSearcherModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>保存检索</Modal.Title>
         </Modal.Header>
-        <form onSubmit={ handleSubmit(this.handleSubmit) }>
+        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body className={ submitting ? 'disable' : 'enable' }>
           <FormGroup>
             <div><span>{ sqlTxt }</span></div>
