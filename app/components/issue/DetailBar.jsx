@@ -44,6 +44,15 @@ export default class DetailBar extends Component {
     commentsLoading: PropTypes.bool.isRequired,
     commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
+    indexWorklog: PropTypes.func.isRequired,
+    addWorklog: PropTypes.func.isRequired,
+    editWorklog: PropTypes.func.isRequired,
+    delWorklog: PropTypes.func.isRequired,
+    worklogCollection: PropTypes.array.isRequired,
+    worklogIndexLoading: PropTypes.bool.isRequired,
+    worklogLoading: PropTypes.bool.isRequired,
+    worklogItemLoading: PropTypes.bool.isRequired,
+    worklogLoaded: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
@@ -129,6 +138,25 @@ export default class DetailBar extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  getFileIconCss(fileName) {
+    const newFileName = (fileName || '').toLowerCase();
+    if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
+      return 'fa fa-file-word-o';
+    } else if (_.endsWith(newFileName, 'xls') || _.endsWith(newFileName, 'xlsx')) {
+      return 'fa fa-file-excel-o';
+    } else if (_.endsWith(newFileName, 'ppt') || _.endsWith(newFileName, 'pptx')) {
+      return 'fa fa-file-powerpoint-o';
+    } else if (_.endsWith(newFileName, 'pdf')) {
+      return 'fa fa-file-pdf-o';
+    } else if (_.endsWith(newFileName, 'txt')) {
+      return 'fa fa-file-tex-o';
+    } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
+      return 'fa fa-file-zip-o';
+    } else {
+      return 'fa fa-file-o';
+    }
   }
 
   render() {
@@ -246,7 +274,7 @@ export default class DetailBar extends Component {
                           <tbody>
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
-                                <td><a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a></td>
+                                <td><i className={ this.getFileIconCss(f.name) }></i> <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a></td>
                                 <td width='2%'><span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></span></td>
                               </tr> ) }
                           </tbody>

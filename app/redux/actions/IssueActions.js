@@ -117,3 +117,32 @@ export function indexHistory(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/history' })
   });
 } 
+
+export function indexWorklog(key, id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_WORKLOG_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog' })
+  });
+}
+
+export function addWorklog(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_WORKLOG_ADD',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog', method: 'post', data: values })
+  });
+}
+
+export function editWorklog(key, id, worklog_id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_WORKLOG_EDIT',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog/' + worklog_id, method: 'put', data: values })
+  });
+}
+
+export function delWorklog(key, id, worklog_id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_WORKLOG_DELETE',
+    id: worklog_id,
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog/' + worklog_id, method: 'delete' })
+  });
+}
