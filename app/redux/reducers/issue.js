@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogItemLoading: false, worklogLoaded: false };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogItemLoading: false, worklogLoaded: false };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -243,6 +243,22 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_WORKLOG_DELETE_FAIL:
       return { ...state, worklogItemLoading: false, error: action.error };
+
+    case t.ISSUE_RECORD:
+      const plusIndex = _.add(state.visitedIndex, 1);
+      if (state.visitedCollection[plusIndex]) {
+        state.visitedCollection.splice(plusIndex);
+      }
+      if (state.visitedCollection.length <= 0 || (state.visitedCollection[state.visitedIndex] && state.visitedCollection[state.visitedIndex].id !== state.itemData.id)) {
+        state.visitedCollection.push(state.itemData.id);
+      }
+      return { ...state, visitedCollection: state.visitedCollection, visitedIndex: state.visitedCollection.length - 1 };
+
+    case t.ISSUE_FORWARD:
+      return { ...state, visitedIndex: _.add(state.visitedIndex, action.offset || 0) };
+
+    case t.ISSUE_CLEAN_RECORD:
+      return { ...state, visitedIndex: -1, visitedCollection: [] };
 
     default:
       return state;

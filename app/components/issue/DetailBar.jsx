@@ -25,6 +25,10 @@ export default class DetailBar extends Component {
     options: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
+    record: PropTypes.func.isRequired,
+    forward: PropTypes.func.isRequired,
+    visitedIndex: PropTypes.number.isRequired, 
+    visitedCollection: PropTypes.array.isRequired,
     issueCollection: PropTypes.array.isRequired,
     show: PropTypes.func.isRequired,
     wfCollection: PropTypes.array.isRequired,
@@ -162,24 +166,41 @@ export default class DetailBar extends Component {
   }
 
   async next(curInd) {
-    const { show, issueCollection=[] } = this.props;
+    const { show, record, issueCollection=[] } = this.props;
     if (curInd < issueCollection.length - 1) {
       const nextInd = _.add(curInd, 1);
       const nextId = issueCollection[nextInd].id;
-      await show(nextId);
+      const ecode = await show(nextId);
+      if (ecode == 0) {
+        record();
+      }
     }
   }
 
   async previous(curInd) {
-    const { show, issueCollection=[] } = this.props;
+    const { show, record, issueCollection=[] } = this.props;
     if (curInd > 0 ) {
       const nextId = issueCollection[curInd - 1].id;
-      await show(nextId);
+      const ecode = await show(nextId);
+      if (ecode == 0) {
+        record();
+      }
+    }
+  }
+
+  async forward(offset) {
+    const { show, forward, visitedIndex, visitedCollection=[] } = this.props;
+    const forwardIndex = _.add(visitedIndex, offset);
+    if (visitedCollection[ forwardIndex ]) {
+      const ecode = await show(visitedCollection[ forwardIndex ]);
+      if (ecode == 0) {
+        forward(offset);
+      }
     }
   }
 
   render() {
-    const { close, data={}, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading } = this.props;
+    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
@@ -200,10 +221,10 @@ export default class DetailBar extends Component {
         <Button className='angle' onClick={ this.previous.bind(this, curInd) } disabled={ curInd <= 0 } title='上一个'>
           <i className='fa fa-angle-up'></i>
         </Button>
-        <Button className='angle' onClick={ close } title='后退'>
+        <Button className='angle' onClick={ this.forward.bind(this, 1) } disabled={ visitedIndex < 0 || visitedIndex >= visitedCollection.length - 1 } title='前进'>
           <i className='fa fa-angle-right'></i>
         </Button>
-        <Button className='angle' onClick={ close } title='前进'>
+        <Button className='angle' onClick={ this.forward.bind(this, -1) } disabled={ visitedIndex <= 0 } title='后退'>
           <i className='fa fa-angle-left'></i>
         </Button>
         <div className='panel panel-default'>

@@ -67,6 +67,11 @@ export default class List extends Component {
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
+    record: PropTypes.func.isRequired,
+    forward: PropTypes.func.isRequired,
+    cleanRecord: PropTypes.func.isRequired,
+    visitedIndex: PropTypes.number.isRequired,
+    visitedCollection: PropTypes.array.isRequired,
     delNotify: PropTypes.func.isRequired
   }
 
@@ -140,8 +145,11 @@ export default class List extends Component {
     e.preventDefault();
 
     this.setState({ barShow: true }); 
-    const { show } = this.props;
-    await show(this.state.hoverRowId);  //fix me
+    const { show, record } = this.props;
+    const ecode = await show(this.state.hoverRowId);  //fix me
+    if (ecode == 0) {
+      record();
+    }
   }
 
   componentDidUpdate() {
@@ -160,15 +168,16 @@ export default class List extends Component {
 
   closeDetail() {
     this.setState({ barShow: false });
-    const { selectedItem } = this.props;
+    const { selectedItem, cleanRecord } = this.props;
     $('.react-bs-container-body table tr').each(function(i) {
       $(this).css('background-color', '');
     });
+    cleanRecord();
   }
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogItemLoading, indexHistory, historyCollection, historyIndexLoading } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogItemLoading, indexHistory, historyCollection, historyIndexLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -251,6 +260,10 @@ export default class List extends Component {
             close={ this.closeDetail } 
             options={ options } 
             data={ itemData } 
+            record={ record }
+            forward={ forward }
+            visitedIndex={ visitedIndex }
+            visitedCollection={ visitedCollection }
             issueCollection={ collection } 
             show = { show }
             itemLoading={ itemLoading } 

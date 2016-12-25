@@ -146,3 +146,15 @@ export function delWorklog(key, id, worklog_id) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog/' + worklog_id, method: 'delete' })
   });
 }
+
+export function record() {
+  return { type: 'ISSUE_RECORD' };
+}
+
+export function forward(offset) {
+  return { type: 'ISSUE_FORWARD', offset };
+}
+
+export function cleanRecord() {
+  return { type: 'ISSUE_CLEAN_RECORD' };
+}
