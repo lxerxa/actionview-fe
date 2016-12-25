@@ -245,11 +245,11 @@ export default function issue(state = initialState, action) {
       return { ...state, worklogItemLoading: false, error: action.error };
 
     case t.ISSUE_RECORD:
-      const plusIndex = _.add(state.visitedIndex, 1);
-      if (state.visitedCollection[plusIndex]) {
-        state.visitedCollection.splice(plusIndex);
+      const forwardIndex = _.add(state.visitedIndex, 1);
+      if (state.visitedCollection[forwardIndex]) {
+        state.visitedCollection.splice(forwardIndex);
       }
-      if (state.visitedCollection.length <= 0 || (state.visitedCollection[state.visitedIndex] && state.visitedCollection[state.visitedIndex].id !== state.itemData.id)) {
+      if (state.visitedCollection.length <= 0 || (state.visitedCollection[state.visitedIndex] && state.visitedCollection[state.visitedIndex] !== state.itemData.id)) {
         state.visitedCollection.push(state.itemData.id);
       }
       return { ...state, visitedCollection: state.visitedCollection, visitedIndex: state.visitedCollection.length - 1 };
