@@ -25,6 +25,8 @@ export default class DetailBar extends Component {
     options: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
+    issueCollection: PropTypes.array.isRequired,
+    show: PropTypes.func.isRequired,
     wfCollection: PropTypes.array.isRequired,
     wfLoading: PropTypes.bool.isRequired,
     viewWorkflow: PropTypes.func.isRequired,
@@ -159,8 +161,25 @@ export default class DetailBar extends Component {
     }
   }
 
+  async next(curInd) {
+    const { show, issueCollection=[] } = this.props;
+    if (curInd < issueCollection.length - 1) {
+      const nextInd = _.add(curInd, 1);
+      const nextId = issueCollection[nextInd].id;
+      await show(nextId);
+    }
+  }
+
+  async previous(curInd) {
+    const { show, issueCollection=[] } = this.props;
+    if (curInd > 0 ) {
+      const nextId = issueCollection[curInd - 1].id;
+      await show(nextId);
+    }
+  }
+
   render() {
-    const { close, data={}, loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading } = this.props;
+    const { close, data={}, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
@@ -168,10 +187,24 @@ export default class DetailBar extends Component {
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
 
+    const curInd = _.findIndex(issueCollection, { id: data.id });
+
     return (
       <div className='animate-dialog'>
-        <Button className='close' onClick={ close }>
+        <Button className='close' onClick={ close } title='关闭'>
           <i className='fa fa-close'></i>
+        </Button>
+        <Button className='angle' onClick={ this.next.bind(this, curInd) } disabled={ curInd < 0 || curInd >= issueCollection.length - 1 } title='下一个'>
+          <i className='fa fa-angle-down'></i>
+        </Button>
+        <Button className='angle' onClick={ this.previous.bind(this, curInd) } disabled={ curInd <= 0 } title='上一个'>
+          <i className='fa fa-angle-up'></i>
+        </Button>
+        <Button className='angle' onClick={ close } title='后退'>
+          <i className='fa fa-angle-right'></i>
+        </Button>
+        <Button className='angle' onClick={ close } title='前进'>
+          <i className='fa fa-angle-left'></i>
         </Button>
         <div className='panel panel-default'>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
