@@ -206,7 +206,8 @@
 }
 
 .cond-list {
-  padding-top: 8px;
+  margin-left: 5px;
+  display: block;
 }
 
 .cond-list li {

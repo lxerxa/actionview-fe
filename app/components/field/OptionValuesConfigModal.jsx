@@ -121,14 +121,14 @@ export default class OptionValuesConfigModal extends Component {
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
               <Col sm={ 10 }>
-                <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyUp={ this.handlerKeyUp.bind(this) }/>
+                <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } } onKeyUp={ this.handlerKeyUp.bind(this) }/>
               </Col>
               <Col sm={ 2 }>
-                <Button className='ralign' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+                <Button bsStyle='link' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
               </Col>
             </FormGroup>
           </Form>
-          { cards.length > 0 && <p>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></p> }
+          { cards.length > 0 && <div>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></div> }
           { cards.length > 0 ?
             cards.map((op, i) => {
               return (

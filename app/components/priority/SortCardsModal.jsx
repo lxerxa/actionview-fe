@@ -79,7 +79,7 @@ export default class SortCardsModal extends Component {
           <Modal.Title id='contained-modal-title-la'>编辑优先级顺序</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { maxHeight: '450px', overflow: 'auto' } }>
-          <p>通过上下拖拽改变显示顺序。</p>
+          <div style={ { marginBottom: '8px' } }>通过上下拖拽改变显示顺序。</div>
           <div style={ style }>
             { cards.map((card, i) => {
               return (

@@ -38,6 +38,15 @@ export default class List extends Component {
     commentsLoading: PropTypes.bool.isRequired,
     commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
+    indexWorklog: PropTypes.func.isRequired,
+    addWorklog: PropTypes.func.isRequired,
+    editWorklog: PropTypes.func.isRequired,
+    delWorklog: PropTypes.func.isRequired,
+    worklogCollection: PropTypes.array.isRequired,
+    worklogIndexLoading: PropTypes.bool.isRequired,
+    worklogLoading: PropTypes.bool.isRequired,
+    worklogItemLoading: PropTypes.bool.isRequired,
+    worklogLoaded: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
@@ -159,7 +168,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexHistory, historyCollection, historyIndexLoading } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogItemLoading, indexHistory, historyCollection, historyIndexLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -257,12 +266,21 @@ export default class List extends Component {
             commentsLoading={ commentsLoading } 
             commentsItemLoading={ commentsItemLoading } 
             commentsLoaded={ commentsLoaded } 
-            indexHistory={ indexHistory }
-            historyCollection={ historyCollection }
-            historyIndexLoading={ historyIndexLoading }
             addComments={ addComments }
             editComments={ editComments }
-            delComments={ delComments }/> }
+            delComments={ delComments }
+            indexWorklog={ indexWorklog }
+            worklogCollection={ worklogCollection }
+            worklogIndexLoading={ worklogIndexLoading }
+            worklogLoading={ worklogLoading }
+            worklogItemLoading={ worklogItemLoading }
+            worklogLoaded={ worklogLoaded }
+            addWorklog={ addWorklog }
+            editWorklog={ editWorklog }
+            delWorklog={ delWorklog }
+            indexHistory={ indexHistory }
+            historyCollection={ historyCollection }
+            historyIndexLoading={ historyIndexLoading }/> }
         { options.total && options.total > 0 ? 
           <PaginationList 
             total={ options.total || 0 } 

@@ -151,7 +151,7 @@ export default class DetailBar extends Component {
     } else if (_.endsWith(newFileName, 'pdf')) {
       return 'fa fa-file-pdf-o';
     } else if (_.endsWith(newFileName, 'txt')) {
-      return 'fa fa-file-tex-o';
+      return 'fa fa-file-text-o';
     } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
       return 'fa fa-file-zip-o';
     } else {

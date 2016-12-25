@@ -287,11 +287,11 @@ export default class AddActionModal extends Component {
               </div>
             </TabPane>
             <TabPane tab='触发条件' key='2'>
-              <div style={ { paddingTop: '25px', paddingBottom: '25px' } }>
+              <div style={ { paddingTop: '15px', paddingBottom: '15px', paddingLeft: '5px' } }>
                 <Select options={ relationOptions } simpleValue value={ this.state.relation } onChange={ newValue => { this.setState({ relation: newValue }) } } placeholder='条件关系' clearable={ false } searchable={ false }/>
               </div>
-              <ui className='list-unstyled clearfix cond-list'>
-                <CheckboxGroup name='conditions' value={ this.state.conditions } onChange={ this.conditionsChanged.bind(this) }>
+              <CheckboxGroup name='conditions' value={ this.state.conditions } onChange={ this.conditionsChanged.bind(this) }>
+                <ui className='list-unstyled clearfix cond-list'>
                   <li>
                     <Checkbox value='isReporter'/>
                     <span>只有</span><b>报告人</b><span>才能执行此动作</span>
@@ -352,15 +352,15 @@ export default class AddActionModal extends Component {
                     </select>
                     <span>的成员才能执行此动作</span>
                   </li>
-                </CheckboxGroup>
-              </ui>
+                </ui>
+              </CheckboxGroup>
             </TabPane>
             <TabPane tab='结果处理' key='3'>
-              <div style={ { paddingTop: '25px', paddingBottom: '25px' } }>
+              <div style={ { paddingTop: '15px', paddingBottom: '15px', paddingLeft: '5px' } }>
                 <span><b>发生转变之后下面功能将被执行</b></span>
               </div>
-              <ui className='list-unstyled clearfix cond-list'>
-                <CheckboxGroup name='postFunctions' value={ this.state.postFunctions } onChange={ this.postFunctionsChanged.bind(this) }>
+              <CheckboxGroup name='postFunctions' value={ this.state.postFunctions } onChange={ this.postFunctionsChanged.bind(this) }>
+                <ui className='list-unstyled clearfix cond-list'>
                   <li>
                     <Checkbox value='setResolution'/>
                     <span>问题的</span><b>解决结果</b><span>将被设置为</span>
@@ -424,8 +424,8 @@ export default class AddActionModal extends Component {
                     <span>事件(待开发)</span>
                   </li>
                   */}
-                </CheckboxGroup>
-              </ui>
+                </ui>
+              </CheckboxGroup>
             </TabPane>
           </Tabs>
         </Modal.Body>

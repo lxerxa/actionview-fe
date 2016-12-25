@@ -171,11 +171,11 @@ export default class CreateModal extends Component {
                       <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='选择添加字段(可多选)' multi/>
                     </Col>
                     <Col sm={ 2 }>
-                      <Button onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+                      <Button bsStyle='link' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
                     </Col>
                   </FormGroup>
                 </Form>
-                { cards.length > 0 && <p>通过上下拖拽改变显示顺序。</p> }
+                { cards.length > 0 && <div style={ { marginBottom: '8px' } }>通过上下拖拽改变显示顺序。</div> }
                 { cards.length > 0 ?
                   cards.map((op, i) => {
                     return (
