@@ -520,7 +520,9 @@ html.docs .repl {
 html.docs .search {
 	position: relative;
 	margin-top: 2.0rem;
-	width: 100%
+	width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
 }
 
 html.docs .search input {

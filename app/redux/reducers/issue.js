@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogItemLoading: false, worklogLoaded: false };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogItemLoading: false, worklogLoaded: false, worklogOptions: {} };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -54,7 +54,7 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
-      return { ...state, itemLoading: true, itemData: { id: action.id }, commentsLoaded: false };
+      return { ...state, itemLoading: true, itemData: { id: action.id }, commentsLoaded: false, historyLoaded: false, worklogLoaded: false };
 
     case t.ISSUE_SHOW_SUCCESS:
       return { ...state, itemLoading: false, ecode: action.result.ecode, itemData: action.result.data };
@@ -249,7 +249,7 @@ export default function issue(state = initialState, action) {
       if (state.visitedCollection[forwardIndex]) {
         state.visitedCollection.splice(forwardIndex);
       }
-      if (state.visitedCollection.length <= 0 || (state.visitedCollection[state.visitedIndex] && state.visitedCollection[state.visitedIndex] !== state.itemData.id)) {
+      if (state.visitedCollection[state.visitedIndex] !== state.itemData.id) {
         state.visitedCollection.push(state.itemData.id);
       }
       return { ...state, visitedCollection: state.visitedCollection, visitedIndex: state.visitedCollection.length - 1 };

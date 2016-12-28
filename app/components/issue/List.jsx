@@ -42,6 +42,7 @@ export default class List extends Component {
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
+    worklogOptions: PropTypes.object.isRequired,
     worklogCollection: PropTypes.array.isRequired,
     worklogIndexLoading: PropTypes.bool.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
@@ -50,6 +51,7 @@ export default class List extends Component {
     indexHistory: PropTypes.func.isRequired,
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
+    historyLoaded: PropTypes.bool.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
     project: PropTypes.object,
@@ -177,7 +179,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogItemLoading, indexHistory, historyCollection, historyIndexLoading } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogItemLoading, indexHistory, historyCollection, historyIndexLoading, historyLoaded, worklogOptions } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -285,6 +287,7 @@ export default class List extends Component {
             editComments={ editComments }
             delComments={ delComments }
             indexWorklog={ indexWorklog }
+            worklogOptions={ worklogOptions }
             worklogCollection={ worklogCollection }
             worklogIndexLoading={ worklogIndexLoading }
             worklogLoading={ worklogLoading }
@@ -295,7 +298,8 @@ export default class List extends Component {
             delWorklog={ delWorklog }
             indexHistory={ indexHistory }
             historyCollection={ historyCollection }
-            historyIndexLoading={ historyIndexLoading }/> }
+            historyIndexLoading={ historyIndexLoading }
+            historyLoaded={ historyLoaded } /> }
         { options.total && options.total > 0 ? 
           <PaginationList 
             total={ options.total || 0 } 

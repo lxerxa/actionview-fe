@@ -206,7 +206,7 @@ class CreateModal extends Component {
     let flag = true;
     _.map(tts, (v) => {
       if (v) {
-        if (!_.endsWith(v, 'w') && !_.endsWith(v, 'd') && !_.endsWith(v, 'h') && !_.endsWith(v, 'm')) {
+        if (!_.endsWith(v.toLowerCase(), 'w') && !_.endsWith(v.toLowerCase(), 'd') && !_.endsWith(v.toLowerCase(), 'h') && !_.endsWith(v.toLowerCase(), 'm')) {
           flag = false;
         }
         let time = v.substr(0, v.length - 1);

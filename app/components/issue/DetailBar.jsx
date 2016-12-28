@@ -9,6 +9,7 @@ const moment = require('moment');
 const CreateModal = require('./CreateModal');
 const Comments = require('./comments/Comments');
 const History = require('./history/History');
+const Worklog = require('./worklog/Worklog');
 const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
 const DelFileModal = require('./DelFileModal');
@@ -54,6 +55,7 @@ export default class DetailBar extends Component {
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
+    worklogOptions: PropTypes.object.isRequired,
     worklogCollection: PropTypes.array.isRequired,
     worklogIndexLoading: PropTypes.bool.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
@@ -62,6 +64,7 @@ export default class DetailBar extends Component {
     indexHistory: PropTypes.func.isRequired,
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
+    historyLoaded: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -72,12 +75,14 @@ export default class DetailBar extends Component {
   }
 
   handleTabSelect(tabKey) {
-    const { indexComments, indexHistory, commentsLoaded } = this.props;
+    const { indexComments, indexHistory, indexWorklog, commentsLoaded, historyLoaded, worklogLoaded } = this.props;
     this.setState({ tabKey });
     if (tabKey === 2 && !commentsLoaded) {
       indexComments();
-    } else if (tabKey === 3) {
+    } else if (tabKey === 3 && !historyLoaded) {
       indexHistory();
+    } else if (tabKey === 4 && !worklogLoaded) {
+      indexWorklog();
     }
   }
 
@@ -200,7 +205,7 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading } = this.props;
+    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
@@ -389,12 +394,35 @@ export default class DetailBar extends Component {
               </Form>
             </Tab>
             <Tab eventKey={ 2 } title='备注'>
-              <Comments collection={ commentsCollection } indexComments={ indexComments } indexLoading={ commentsIndexLoading } loading={ commentsLoading } users={ options.users || [] } addComments={ addComments } editComments={ editComments } delComments={ delComments } itemLoading={ commentsItemLoading }/>
+              <Comments 
+                collection={ commentsCollection } 
+                indexComments={ indexComments } 
+                indexLoading={ commentsIndexLoading } 
+                loading={ commentsLoading } 
+                users={ options.users || [] } 
+                addComments={ addComments } 
+                editComments={ editComments } 
+                delComments={ delComments } 
+                itemLoading={ commentsItemLoading }/>
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
-              <History collection={ historyCollection } indexHistory={ indexHistory } indexLoading={ historyIndexLoading } />
+              <History 
+                collection={ historyCollection } 
+                indexHistory={ indexHistory } 
+                indexLoading={ historyIndexLoading } />
             </Tab>
-            <Tab eventKey={ 4 } title='工作日志'>Tab 3 content</Tab>
+            <Tab eventKey={ 4 } title='工作日志'>
+              <Worklog 
+                original_estimate = { data.original_estimate }
+                options={ worklogOptions }
+                collection={ worklogCollection } 
+                indexWorklog={ indexWorklog } 
+                indexLoading={ worklogIndexLoading } 
+                loading={ worklogLoading }
+                addWorklog={ addWorklog } 
+                editWorklog={ editWorklog } 
+                delWorklog={ delWorklog } />
+            </Tab>
           </Tabs>
         </div>
         { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
