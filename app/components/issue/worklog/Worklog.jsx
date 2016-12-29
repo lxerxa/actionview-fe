@@ -24,6 +24,7 @@ export default class Worklog extends Component {
     loading: PropTypes.bool.isRequired,
     indexWorklog: PropTypes.func.isRequired,
     addWorklog: PropTypes.func.isRequired,
+    editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired
   }
@@ -113,7 +114,7 @@ export default class Worklog extends Component {
   }
 
   render() {
-    const { indexWorklog, collection, indexLoading, loading, addWorklog, delWorklog, original_estimate } = this.props;
+    const { indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate } = this.props;
 
     let leave_estimate_m = undefined;
     if (original_estimate && original_estimate > 0) {
@@ -130,6 +131,9 @@ export default class Worklog extends Component {
         leave_estimate_m = (leave_estimate_m - spend_m) > 0 ? (leave_estimate_m - spend_m) : 0;
       } else if (v.adjust_type == 3 && v.leave_estimate) {
         leave_estimate_m = this.t2m(v.leave_estimate);
+      } else if (v.adjust_type == 4 && v.cut && leave_estimate_m !== undefined) {
+        const cut_m = this.t2m(v.cut);
+        leave_estimate_m = (leave_estimate_m - cut_m) > 0 ? (leave_estimate_m - cut_m) : 0;
       }
       _.extend(v, { leave_estimate_m });
       return v;
@@ -204,7 +208,8 @@ export default class Worklog extends Component {
             close={ () => { this.setState({ addWorklogShow: false }) } }
             data={ this.state.selectedWorklog }
             loading = { loading }
-            add={ addWorklog }/> }
+            add={ addWorklog }
+            edit={ editWorklog }/> }
         { this.state.delWorklogShow &&
           <DelWorklogModal show
             close={ () => { this.setState({ delWorklogShow: false }) } }

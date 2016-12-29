@@ -361,7 +361,7 @@ class CreateModal extends Component {
                     <RadioGroup
                       style={ { marginTop: '6px' } }
                       name={ v.name }
-                      value={ this.state.values[v.key] }
+                      selectedValue={ this.state.values[v.key] }
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }) } }>
                       { _.map(v.optionValues || [], (val, i) =>
                         <span style={ { marginLeft: '6px' } } key={ i }><Radio value={ val.id }/>{ ' ' + val.name + ' ' }</span>
