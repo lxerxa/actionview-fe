@@ -19,7 +19,7 @@ export default class Worklog extends Component {
 
   static propTypes = {
     options: PropTypes.object.isRequired,
-    original_estimate: PropTypes.string.isRequired,
+    original_estimate: PropTypes.string,
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     indexWorklog: PropTypes.func.isRequired,
@@ -114,14 +114,12 @@ export default class Worklog extends Component {
   }
 
   render() {
-    const { indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate } = this.props;
+    const { indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
 
     let leave_estimate_m = undefined;
-    if (original_estimate && original_estimate > 0) {
+    if (original_estimate) {
       leave_estimate_m = this.t2m(original_estimate);  
     }
-
-    leave_estimate_m = this.t2m('3w 4d');
 
     let spend_m = 0;
     _.map(collection, (v) => {
@@ -140,6 +138,10 @@ export default class Worklog extends Component {
     });
 
     const last = _.last(collection);
+    const rCollection = [];
+    _.map(collection, (val) => {
+      rCollection.unshift(val);
+    });
    
     return (
       <Form horizontal>
@@ -151,7 +153,7 @@ export default class Worklog extends Component {
             </div>
           </Col>
           <Col sm={ 12 } className={ indexLoading && 'hide' }>
-            <Table condensed hover responsive style={ { width: '96%', marginLeft: '10px' } }>
+            <Table condensed hover responsive style={ { width: '96%', marginLeft: '10px', marginTop: '5px' } }>
               <thead>
                 <th>原估时间</th>
                 <th>总耗费时间</th>
@@ -160,7 +162,7 @@ export default class Worklog extends Component {
               <tbody>
                 <tr>
                   <td style={ { color: '#ffd700', fontWeight: 'bold' } }>{ original_estimate || '-' }</td>
-                  <td style={ { color: '#ff4500', fontWeight: 'bold' } }>{ spend_m > 0 ? this.m2t(spend_m) : '-' }</td>
+                  <td style={ { color: '#ff4500', fontWeight: 'bold' } }>{ spend_m > 0 ? this.m2t(spend_m) : '0' }</td>
                   <td style={ { color: '#32cd32', fontWeight: 'bold' } }>{ collection.length <= 0 ? (original_estimate || '-') : (last.leave_estimate_m === undefined ? '-' : this.m2t(last.leave_estimate_m)) }</td>
                 </tr>
               </tbody>
@@ -171,7 +173,7 @@ export default class Worklog extends Component {
           { collection.length <= 0 && !indexLoading ?
             <div style={ { width: '100%', textAlign: 'left', marginTop: '10px', marginLeft: '10px' } }>暂无工作记录。</div>
             :
-            _.map(collection, (val, i) => {
+            _.map(rCollection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
                 <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && val.recorder.nameAndEmail || '') + '">' + (val.recorder && val.recorder.name || '') + '</a> 添加了工作日志 - ' + (val.recorded_at && moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span>

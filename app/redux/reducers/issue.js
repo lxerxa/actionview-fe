@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogItemLoading: false, worklogLoaded: false, worklogOptions: {} };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogLoaded: false, worklogOptions: {} };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -212,7 +212,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_WORKLOG_ADD_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.worklogCollection.unshift(action.result.data);
+        state.worklogCollection.push(action.result.data);
       }
       return { ...state, worklogLoading: false, ecode: action.result.ecode };
 
@@ -220,29 +220,29 @@ export default function issue(state = initialState, action) {
       return { ...state, worklogLoading: false, error: action.error };
 
     case t.ISSUE_WORKLOG_EDIT:
-      return { ...state, worklogItemLoading: true };
+      return { ...state, worklogLoading: true };
 
     case t.ISSUE_WORKLOG_EDIT_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.worklogCollection, { id: action.result.data.id });
         state.worklogCollection[ind] = action.result.data;
       }
-      return { ...state, worklogItemLoading: false, ecode: action.result.ecode };
+      return { ...state, worklogLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_WORKLOG_EDIT_FAIL:
-      return { ...state, worklogItemLoading: false, error: action.error };
+      return { ...state, worklogLoading: false, error: action.error };
 
     case t.ISSUE_WORKLOG_DELETE:
-      return { ...state, worklogItemLoading: true };
+      return { ...state, worklogLoading: true };
 
     case t.ISSUE_WORKLOG_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.worklogCollection = _.reject(state.worklogCollection, { id: action.id });
       }
-      return { ...state, worklogCollection: state.worklogCollection, worklogItemLoading: false, ecode: action.result.ecode };
+      return { ...state, worklogCollection: state.worklogCollection, worklogLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_WORKLOG_DELETE_FAIL:
-      return { ...state, worklogItemLoading: false, error: action.error };
+      return { ...state, worklogLoading: false, error: action.error };
 
     case t.ISSUE_RECORD:
       const forwardIndex = _.add(state.visitedIndex, 1);

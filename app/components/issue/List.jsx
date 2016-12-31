@@ -46,7 +46,6 @@ export default class List extends Component {
     worklogCollection: PropTypes.array.isRequired,
     worklogIndexLoading: PropTypes.bool.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
-    worklogItemLoading: PropTypes.bool.isRequired,
     worklogLoaded: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
     historyCollection: PropTypes.array.isRequired,
@@ -179,7 +178,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogItemLoading, indexHistory, historyCollection, historyIndexLoading, historyLoaded, worklogOptions } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, indexHistory, historyCollection, historyIndexLoading, historyLoaded, worklogOptions } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -291,7 +290,6 @@ export default class List extends Component {
             worklogCollection={ worklogCollection }
             worklogIndexLoading={ worklogIndexLoading }
             worklogLoading={ worklogLoading }
-            worklogItemLoading={ worklogItemLoading }
             worklogLoaded={ worklogLoaded }
             addWorklog={ addWorklog }
             editWorklog={ editWorklog }

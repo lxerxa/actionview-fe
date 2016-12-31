@@ -13,8 +13,12 @@ export default class AddWorklogModal extends Component {
     const { data={} } = this.props;
     const errors = {};
     if (data.id) {
-      errors.started_at = '必填';
-      errors.spend = '必填';
+      if (!data.started_at) {
+        errors.started_at = '必填';
+      }
+      if (!data.spend) {
+        errors.spend = '必填';
+      }
       if (data.adjust_type == '3' && (!data.leave_estimate || _.trim(data.leave_estimate) == '')) {
         errors.leave_estimate = '必填';
       } else if (data.adjust_type == '4' && !data.cut) {
@@ -25,32 +29,54 @@ export default class AddWorklogModal extends Component {
       errors.spend = '必填';
     }
 
-    this.state = { ecode: 0, errors, started_at: data.started_at || '', spend: data.spend || '', adjust_type: data.adjust_type || '1', comments: data.comments || '', touched: {} };
+    const values = {};
+    const oldValues = {};
+    oldValues['started_at'] = values['started_at'] = data.started_at ? moment.unix(data.started_at) : '';
+    oldValues['spend'] = values['spend'] = data.spend || '';
+    oldValues['adjust_type'] = values['adjust_type'] = data.adjust_type || '1';
+    oldValues['leave_estimate'] = values['leave_estimate'] = data.leave_estimate || '';
+    oldValues['cut'] = values['cut'] = data.cut || '';
+    oldValues['comments'] = values['comments'] = data.comments || '';
+
+    this.state = { ecode: 0, errors, values, oldValues, touched: {} };
     
     this.changeStartedAt = this.changeStartedAt.bind(this);
-    this.changeSpend = this.changeSpend.bind(this);
-    this.changeLe = this.changeLe.bind(this);
-    this.changeCut = this.changeCut.bind(this);
     this.changeType = this.changeType.bind(this);
+    this.changeTT = this.changeTT.bind(this);
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
 
   static propTypes = {
     close: PropTypes.func.isRequired,
+    add: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, edit, data } = this.props;
+    const { close, add, edit, data } = this.props;
 
     let ecode = 0;
     if (data.id) {
-      ecode = await edit();
+      const newValues = {};
+      _.mapKeys(this.state.values, (val, key) => {
+        if (key == 'started_at') {
+          if (!val.isSame(this.state.oldValues[key])) {
+            newValues[key] = this.state.values[key];
+          }
+        } else if (!_.isEqual(val, this.state.oldValues[key])) {
+          newValues[key] = this.state.values[key];
+        }
+      });
+      if (newValues.started_at) {
+        newValues.started_at = parseInt(moment(this.state.values.started_at).format('X'));
+      }
+      ecode = await edit(data.id, newValues);
     } else {
-      ecode = await edit();
+      this.state.values.started_at = parseInt(moment(this.state.values.started_at).format('X'));
+      ecode = await add(this.state.values);
     }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -79,6 +105,22 @@ export default class AddWorklogModal extends Component {
     return flag;
   }
 
+  changeTT(e, field) {
+    if (!e.target.value) {
+      this.state.errors[field] = '必填'
+    } else {
+      if (field == 'leave_estimate' && e.target.value == '0') {
+        delete this.state.errors[field];
+      } else if (!this.ttTest(e.target.value)) {
+        this.state.errors[field] = '格式有误';
+      } else {
+        delete this.state.errors[field];
+      }
+    }
+    this.state.values[field] = e.target.value;
+    this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched });
+  }
+
   changeStartedAt(newValue) {
     if (!newValue) {
       this.state.errors.started_at = '必填'
@@ -90,50 +132,28 @@ export default class AddWorklogModal extends Component {
       }
     }
     this.state.touched.started_at = true;
-    this.setState({ started_at: newValue, errors: this.state.errors, touched: this.state.touched });
-  }
-
-  changeSpend(e) {
-    if (!e.target.value) {
-      this.state.errors.spend = '必填'
-    } else {
-      if (!this.ttTest(e.target.value)) {
-        this.state.errors.spend = '格式有误';
-      } else {
-        delete this.state.errors.spend;
-      }
-    }
-    this.setState({ spend: e.target.value, errors: this.state.errors });
-  }
-
-  changeLe(e) {
-    if (!e.target.value) {
-      this.state.errors.leave_estimate = '必填'
-    } else {
-      if (!this.ttTest(e.target.value)) {
-        this.state.errors.leave_estimate = '格式有误';
-      } else {
-        delete this.state.errors.leave_estimate;
-      }
-    }
-    this.setState({ leave_estimate: e.target.value, errors: this.state.errors });
-  }
-
-  changeCut(e) {
-    if (!e.target.value) {
-      this.state.errors.cut = '必填'
-    } else {
-      if (!this.ttTest(e.target.value)) {
-        this.state.errors.cut = '格式有误';
-      } else {
-        delete this.state.errors.cut;
-      }
-    }
-    this.setState({ cut: e.target.value, errors: this.state.errors });
+    this.state.values.started_at = newValue;
+    this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched });
   }
 
   changeType(val) {
-    this.setState({ adjust_type: val });
+    this.state.values.adjust_type = val;
+
+    this.state.values.leave_estimate = '';
+    delete this.state.touched.leave_estimate;
+    delete this.state.errors.leave_estimate;
+
+    this.state.values.cut = '';
+    delete this.state.touched.cut;
+    delete this.state.errors.cut;
+
+    if (val == '3') {
+      this.state.errors.leave_estimate = '必填';
+    } else if (val == '4') {
+      this.state.errors.cut = '必填';
+    }
+
+    this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched });
   }
 
   cancel() {
@@ -143,6 +163,9 @@ export default class AddWorklogModal extends Component {
 
   render() {
     const { data, loading } = this.props;
+    const styles = { display: 'inline-block', width: '40%' };
+    const err_styles = { display: 'inline-block', width: '40%', borderColor: '#a94442' };
+
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
@@ -161,27 +184,27 @@ export default class AddWorklogModal extends Component {
                   locale='zh-cn'
                   dateFormat={ 'YYYY/MM/DD' }
                   timeFormat={ 'HH:mm' }
-                  value={ this.state.started_at }
+                  value={ this.state.values.started_at }
                   onChange={ (newValue) => { this.changeStartedAt(newValue) } } />
               </Col>
               <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                 { this.state.touched['started_at'] && (this.state.errors['started_at'] || '') }
+                 { this.state.touched.started_at && (this.state.errors.started_at || '') }
               </Col>
             </FormGroup>
             <FormGroup controlId='formControlsLabel' validationState={ this.state.touched.spend && this.state.errors.spend && 'error' }>
               <Col sm={ 3 } componentClass={ ControlLabel }>
                 <span className='txt-impt'>*</span> 耗费时间
               </Col>
-              <Col sm={ 6 }>
+              <Col sm={ 5 }>
                 <FormControl
                   type='text'
-                  value={ this.state.spend } 
-                  onChange={ (e) => { this.changeSpend(e) } }
+                  value={ this.state.values.spend } 
+                  onChange={ (e) => { this.changeTT(e, 'spend') } }
                   onBlur={ (e) => { this.state.touched.spend = true; this.setState({ touched: this.state.touched }); } }
-                  placeholder={ '例如：3w 4d 12h 30m' } />
+                  placeholder={ '例如：3w 4d 5h' } />
               </Col>
               <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                 { this.state.touched['spend'] && (this.state.errors['spend'] || '') }
+                 { this.state.touched.spend && (this.state.errors.spend || '') }
               </Col>
             </FormGroup>
             <FormGroup controlId='formControlsLabel'>
@@ -191,7 +214,7 @@ export default class AddWorklogModal extends Component {
               <Col sm={ 9 }>
                 <RadioGroup
                   style={ { marginTop: '6px' } }
-                  selectedValue={ this.state.adjust_type }
+                  selectedValue={ this.state.values.adjust_type }
                   onChange={ (val) => { this.changeType(val) } }
                   name='adjust_type'>
                   <ul className='list-unstyled clearfix' style={ { lineHeight: '40px' } }>
@@ -202,24 +225,26 @@ export default class AddWorklogModal extends Component {
                       <span> 设置为 </span>
                       <FormControl 
                         type='text' 
-                        value={ this.state.leave_estimate } 
-                        disabled={ this.state.adjust_type != '3' }
-                        placeholder={ '例如：3w 4d 12h 30m' } 
-                        style={ { display: 'inline-block', width: '40%' } } 
+                        value={ this.state.values.leave_estimate } 
+                        disabled={ this.state.values.adjust_type != '3' }
+                        placeholder={ '例如：3w 4d 5h' } 
+                        style={ this.state.touched.leave_estimate && this.state.errors.leave_estimate ? err_styles : styles } 
                         onBlur={ (e) => { this.state.touched.leave_estimate = true; this.setState({ touched: this.state.touched }); } }
-                        onChange={ (e) => { this.changeLe(e) } }/>
+                        onChange={ (e) => { this.changeTT(e, 'leave_estimate') } }/>
+                      <span style={ { marginLeft: '10px', color: '#a94442', fontWeight: 'bold' } }>{ this.state.touched.leave_estimate && (this.state.errors.leave_estimate || '') }</span>
                     </li>
                     <li>
                       <Radio value='4'/>
                       <span> 缩减 </span>
                       <FormControl 
                         type='text' 
-                        disabled={ this.state.adjust_type != '4' }
-                        value={ this.state.cut } 
+                        disabled={ this.state.values.adjust_type != '4' }
+                        value={ this.state.values.cut } 
                         onBlur={ (e) => { this.state.touched.cut = true; this.setState({ touched: this.state.touched }); } }
-                        onChange={ (e) => { this.changeCut(e) } }
-                        placeholder={ '例如：3w 4d 12h 30m' } 
+                        onChange={ (e) => { this.changeTT(e, 'cut') } }
+                        placeholder={ '例如：3w 4d 5h' } 
                         style={ { display: 'inline-block', width: '40%' } }/>
+                      <span style={ { marginLeft: '10px', color: '#a94442', fontWeight: 'bold' } }>{ this.state.touched.cut && (this.state.errors.cut || '') }</span>
                     </li>
                   </ul>
                 </RadioGroup>
@@ -233,7 +258,8 @@ export default class AddWorklogModal extends Component {
                 <FormControl
                   componentClass='textarea'
                   style={ { height: '120px' } }
-                  value={ this.state.comments } />
+                  value={ this.state.values['comments'] }
+                  onChange={ (e) => { this.state.values.comments = e.target.value; this.setState({ values: this.state.values }) } } />
               </Col>
             </FormGroup>
           </Form>
@@ -241,7 +267,7 @@ export default class AddWorklogModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ this.state.oldContents === this.state.contents || loading } onClick={ this.confirm }>确定</Button>
+          <Button disabled={ _.isEqual(this.state.oldValues, this.state.values) || loading || !_.isEmpty(this.state.errors) } onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>

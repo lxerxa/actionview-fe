@@ -59,7 +59,6 @@ export default class DetailBar extends Component {
     worklogCollection: PropTypes.array.isRequired,
     worklogIndexLoading: PropTypes.bool.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
-    worklogItemLoading: PropTypes.bool.isRequired,
     worklogLoaded: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
     historyCollection: PropTypes.array.isRequired,

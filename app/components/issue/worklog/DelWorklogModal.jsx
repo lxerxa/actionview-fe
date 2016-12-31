@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 const moment = require('moment');
 const img = require('../../../assets/images/loading.gif');
 
-export default class DelCommentsModal extends Component {
+export default class DelWorklogModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -41,10 +41,10 @@ export default class DelCommentsModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除备注</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除工作日志</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          此备注添加于 { moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') }<br/><br/>
+          此工作日志添加于 { moment.unix(data.recorded_at).format('YYYY/MM/DD HH:mm') }<br/><br/>
           确认要删除吗？
         </Modal.Body>
         <Modal.Footer>

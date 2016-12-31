@@ -61,7 +61,7 @@ export default function(router) {
   router.get('/project/:key/issue/:id/worklog', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', started_at: 1478414469, adjust_type: 1, spend: '3d 4h', comments: '1111111', recorder: {id:'aaa', name:'刘旭（研究院）'}, recorded_at: 1478414469 }, { id: '2222', started_at: 1478414469, adjust_type: 2, spend: '6h', comments: '2222222', recorder: {id:'aaa', name:'刘旭（研究院）'}, recorded_at: 1478414469 }, { id: '3333', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', comments: '333333',recorder: {id:'aaa', name:'刘旭（研究院）'}, recorded_at: 1478414469 }] };
+    const results = { ecode: 0, data: [{ id: '1111', started_at: 1478414469, adjust_type: '1', spend: '3d 4h', comments: '1111111', recorder: {id:'aaa', name:'刘旭（研究院）'}, recorded_at: 1478414469 }, { id: '2222', started_at: 1478414469, adjust_type: '2', spend: '6h', comments: '2222222', recorder: {id:'aaa', name:'刘旭（研究院）'}, recorded_at: 1478414469 }, { id: '3333', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', comments: '333333',recorder: {id:'aaa', name:'刘旭（研究院）'}, recorded_at: 1478414469 }] };
     return res.status(200).send(results);
   });
 
