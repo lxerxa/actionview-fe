@@ -158,3 +158,17 @@ export function forward(offset) {
 export function cleanRecord() {
   return { type: 'ISSUE_CLEAN_RECORD' };
 }
+
+export function createLink(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_LINK_CREATE',
+    promise: (client) => client.request({ url: '/project/' + key + '/link', method: 'post', data: values })
+  });
+}
+
+export function delLink(key, link_id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_LINK_DEL',
+    promise: (client) => client.request({ url: '/project/' + key + '/link/' + link_id, method: 'delete' })
+  });
+}

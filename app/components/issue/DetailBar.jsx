@@ -17,7 +17,7 @@ const DelFileModal = require('./DelFileModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
   }
@@ -64,6 +64,8 @@ export default class DetailBar extends Component {
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
     historyLoaded: PropTypes.bool.isRequired,
+    createLink: PropTypes.func.isRequired,
+    delLink: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -204,7 +206,7 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions } = this.props;
+    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
@@ -261,6 +263,21 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 4 }>
                     <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label>{ !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
+                  </Col>
+                </FormGroup>
+                <FormGroup controlId='formControlsLabel'>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    链接问题 
+                  </Col>
+                  <Col sm={ 9 }>
+                    <div>共4个问题<span style={ { marginLeft: '5px' } }><Button bsStyle='link' onClick={ () => { this.setState({ linkShow: !this.state.linkShow }) } }>{ this.state.linkShow ? '收起' : '展开' } <i className={ this.state.linkShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button></span></div>
+                    <Table condensed hover responsive className={ this.state.linkShow || 'hide' }>
+                      <tbody>
+                        <tr><td>1</td><td>bbb</td><td>链接问题链接问题链接问题链接问题链接问题链接问题</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>
+                        <tr><td>2</td><td>bbb</td><td>ccc</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>
+                        <tr><td>3</td><td>bbb</td><td>ccc</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>
+                      </tbody>
+                    </Table>
                   </Col>
                 </FormGroup>
                 { _.map(schema, (field, key) => {

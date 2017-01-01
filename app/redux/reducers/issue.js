@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogLoaded: false, worklogOptions: {} };
+const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogLoaded: false, worklogOptions: {}, linkLoading: false };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -38,7 +38,7 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_EDIT:
-      return { ...state, loading: true };
+      return { ...state, loading: true, historyLoaded: false };
 
     case t.ISSUE_EDIT_SUCCESS:
       if ( action.result.ecode === 0 ) {
@@ -106,7 +106,7 @@ export default function issue(state = initialState, action) {
       return { ...state, searcherLoading: false, error: action.error };
 
     case t.ISSUE_FILE_DELETE:
-      return { ...state, fileLoading: true };
+      return { ...state, fileLoading: true, historyLoaded: false };
 
     case t.ISSUE_FILE_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
@@ -122,10 +122,10 @@ export default function issue(state = initialState, action) {
         state.itemData[action.field_key] = [];
       }
       state.itemData[action.field_key].push(action.file);
-      return { ...state, itemData: state.itemData };
+      return { ...state, itemData: state.itemData, historyLoaded: false };
 
     case t.ISSUE_SET_ASSIGNEE:
-      return { ...state, itemLoading: true };
+      return { ...state, itemLoading: true, historyLoaded: false };
 
     case t.ISSUE_SET_ASSIGNEE_SUCCESS:
       if ( action.result.ecode === 0 ) {
@@ -259,6 +259,24 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_CLEAN_RECORD:
       return { ...state, visitedIndex: -1, visitedCollection: [] };
+
+    case t.ISSUE_LINK_CREATE:
+      return { ...state, linkLoading: false };
+
+    case t.ISSUE_LINK_CREATE_SUCCESS:
+      return { ...state };
+
+    case t.ISSUE_LINK_CREATE_FAIL:
+      return { ...state };
+
+    case t.ISSUE_LINK_DELETE:
+      return { ...state };
+
+    case t.ISSUE_LINK_DELETE_SUCCESS:
+      return { ...state };
+
+    case t.ISSUE_LINK_DELETE_FAIL:
+      return { ...state };
 
     default:
       return state;

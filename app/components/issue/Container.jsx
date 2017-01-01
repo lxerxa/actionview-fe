@@ -160,6 +160,16 @@ export default class Container extends Component {
     this.props.actions.cleanRecord();
   }
 
+  async createLink(values) {
+    await this.props.actions.createLink(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
+  async delLink(id) {
+    await this.props.actions.delLink(this.pid, id);
+    return this.props.issue.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -211,6 +221,8 @@ export default class Container extends Component {
           editWorklog={ this.editWorklog.bind(this) }
           delWorklog={ this.delWorklog.bind(this) }
           indexHistory={ this.indexHistory.bind(this) }
+          createLink={ this.createLink.bind(this) }
+          delLink={ this.delLink.bind(this) }
           { ...this.props.issue }/> 
       </div>
     );

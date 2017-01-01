@@ -73,6 +73,9 @@ export default class AddWorklogModal extends Component {
       if (newValues.started_at) {
         newValues.started_at = parseInt(moment(this.state.values.started_at).format('X'));
       }
+      if (newValues.leave_estimate || newValues.cut) {
+        newValues.adjust_type = this.state.values.adjust_type;
+      }
       ecode = await edit(data.id, newValues);
     } else {
       this.state.values.started_at = parseInt(moment(this.state.values.started_at).format('X'));
@@ -109,9 +112,7 @@ export default class AddWorklogModal extends Component {
     if (!e.target.value) {
       this.state.errors[field] = '必填'
     } else {
-      if (field == 'leave_estimate' && e.target.value == '0') {
-        delete this.state.errors[field];
-      } else if (!this.ttTest(e.target.value)) {
+      if (!this.ttTest(e.target.value)) {
         this.state.errors[field] = '格式有误';
       } else {
         delete this.state.errors[field];

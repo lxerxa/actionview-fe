@@ -110,6 +110,10 @@ export default class Worklog extends Component {
       newTT.push(new_remain_min + 'm');
     }
 
+    if (newTT.length <= 0) {
+      newTT.push('0');
+    }
+
     return newTT.join(' ');
   }
 
