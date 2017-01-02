@@ -13,11 +13,12 @@ const Worklog = require('./worklog/Worklog');
 const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
 const DelFileModal = require('./DelFileModal');
+const LinkIssueModal = require('./LinkIssueModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false, linkIssueModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
   }
@@ -66,6 +67,7 @@ export default class DetailBar extends Component {
     historyLoaded: PropTypes.bool.isRequired,
     createLink: PropTypes.func.isRequired,
     delLink: PropTypes.func.isRequired,
+    linkLoading: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -88,7 +90,6 @@ export default class DetailBar extends Component {
   }
 
   delFileNotify(field_key, id, name) {
-    const { data } = this.props;
     this.setState({ delFileShow: true, selectedFile: { field_key, id, name } });
   }
 
@@ -205,8 +206,17 @@ export default class DetailBar extends Component {
     }
   }
 
+  async operateSelect(eventKey) {
+    const { data, show } = this.props;
+    if (eventKey == '1') {
+      const ecode = await show(data.id);
+    } else if (eventKey == '2') {
+      this.setState({ linkIssueModalShow: true });
+    }
+  }
+
   render() {
-    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink } = this.props;
+    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
@@ -246,8 +256,9 @@ export default class DetailBar extends Component {
                   }) }
                   </ButtonGroup>
                   <div style={ { float: 'right' } }>
-                    <DropdownButton pullRight bsStyle='link' title='更多'>
-                      <MenuItem eventKey='2'>刷新</MenuItem>
+                    <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
+                      <MenuItem eventKey='1'>刷新</MenuItem>
+                      <MenuItem eventKey='2'>链接问题</MenuItem>
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
@@ -265,21 +276,46 @@ export default class DetailBar extends Component {
                     <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label>{ !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
                   </Col>
                 </FormGroup>
+                { data.links && data.links.length > 0 &&
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     链接问题 
                   </Col>
                   <Col sm={ 9 }>
-                    <div>共4个问题<span style={ { marginLeft: '5px' } }><Button bsStyle='link' onClick={ () => { this.setState({ linkShow: !this.state.linkShow }) } }>{ this.state.linkShow ? '收起' : '展开' } <i className={ this.state.linkShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button></span></div>
-                    <Table condensed hover responsive className={ this.state.linkShow || 'hide' }>
+                    { data.links.length > 2 &&
+                    <div style={ { marginTop: '6px' } }>共{ data.links.length }个问题<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>{ this.state.linkShow ? '收起' : '展开' } <i className={ this.state.linkShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
+                    <Table condensed hover responsive className={ this.state.linkShow || 'hide' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
-                        <tr><td>1</td><td>bbb</td><td>链接问题链接问题链接问题链接问题链接问题链接问题</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>
-                        <tr><td>2</td><td>bbb</td><td>ccc</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>
-                        <tr><td>3</td><td>bbb</td><td>ccc</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>
+                      { _.map(data.links, (val) => {
+                        let linkedIssue = {};
+                        let relation = '';
+                        if (val.src.id == data.id) {
+                          linkedIssue = val.dest;
+                          relation = val.relation;
+                        } else if (val.dest.id == data.id) {
+                          linkedIssue = val.src;
+                          relation = val.relation;
+                          if (relation == 'is blocked by') {
+                            relation = 'blocks';
+                          } else if (relation == 'blocks') {
+                            relation = 'is blocked by';
+                          } else if (relation == 'is cloned by') {
+                            relation = 'clones';
+                          } else if (relation == 'clones') {
+                            relation = 'is cloned by';
+                          } else if (relation == 'is duplicated by') {
+                            relation = 'duplicates';
+                          } else if (relation == 'duplicates') {
+                            relation = 'is duplicated by';
+                          }
+                         
+                        }
+                        return (<tr><td>{ relation }</td><td>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no }</td><td>{ linkedIssue.title }</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>); 
+                      }) }
                       </tbody>
                     </Table>
                   </Col>
-                </FormGroup>
+                </FormGroup> }
                 { _.map(schema, (field, key) => {
                   if (field.type !== 'File' && field.key !== 'assignee' && !data[field.key]) {
                     return;
@@ -444,6 +480,7 @@ export default class DetailBar extends Component {
         { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
         { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data }/> }
         { this.state.previewModalShow && <PreviewModal show close={ () => { this.setState({ previewModalShow: false }); } } collection={ wfCollection } /> }
+        { this.state.linkIssueModalShow && <LinkIssueModal show close={ () => { this.setState({ linkIssueModalShow: false }); } } loading={ linkLoading } createLink={ createLink } src={ data.id }/> }
       </div>
     );
   }

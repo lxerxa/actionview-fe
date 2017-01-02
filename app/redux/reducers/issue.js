@@ -261,22 +261,35 @@ export default function issue(state = initialState, action) {
       return { ...state, visitedIndex: -1, visitedCollection: [] };
 
     case t.ISSUE_LINK_CREATE:
-      return { ...state, linkLoading: false };
+      return { ...state, linkLoading: true };
 
     case t.ISSUE_LINK_CREATE_SUCCESS:
-      return { ...state };
+      if ( action.result.ecode === 0 ) {
+        if (!_.isEmpty(state.itemData) && action.result.data.src.id === state.itemData.id) {
+          state.itemData.links.push(action.result.data);
+        }
+      }
+      return { ...state, linkLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_LINK_CREATE_FAIL:
-      return { ...state };
+      return { ...state, linkLoading: false, error: action.error };
 
     case t.ISSUE_LINK_DELETE:
-      return { ...state };
+      return { ...state, linkLoading: true };
 
     case t.ISSUE_LINK_DELETE_SUCCESS:
-      return { ...state };
+      if ( action.result.ecode === 0 ) {
+        if (!_.isEmpty(state.itemData) && action.result.data.links && action.result.data.links.length > 0) {
+          const linkIndex = _.findIndex(action.result.data.links, { id : action.id });
+          if (linkIndex > -1) {
+            state.itemData.links.splice(linkIndex, 1);
+          }
+        }
+      }
+      return { ...state, linkLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_LINK_DELETE_FAIL:
-      return { ...state };
+      return { ...state, linkLoading: false, error: action.error };
 
     default:
       return state;
