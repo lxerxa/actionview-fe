@@ -302,7 +302,7 @@ export default class List extends Component {
             historyIndexLoading={ historyIndexLoading }
             historyLoaded={ historyLoaded } 
             linkLoading={ linkLoading }
-            creatLink={ createLink }
+            createLink={ createLink }
             delLink={ delLink }/> }
         { options.total && options.total > 0 ? 
           <PaginationList 

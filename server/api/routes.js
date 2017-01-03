@@ -58,6 +58,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/issue/search', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = {ecode: 0, data:[{id:'1111', title:'aaaa', no:111, type:'2222'}, {id:'2222', title:'bbbb', no:222, type:'2222'}, {id:'3333', title:'cccc', no:333, type:'2222'}]};
+    return res.status(200).send(results);
+  }); 
+
   router.get('/project/:key/issue/:id/worklog', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

@@ -259,7 +259,7 @@ export default class AddActionModal extends Component {
           <Modal.Title id='contained-modal-title-la'>添加动作</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' } style={ { height: '450px' } }>
+        <Modal.Body style={ { height: '450px' } }>
           <FormControl type='hidden' { ...id }/>
           <Tabs
             activeKey={ this.state.activeKey }
@@ -273,16 +273,16 @@ export default class AddActionModal extends Component {
                 </FormGroup>
                 <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
                   <ControlLabel><span className='txt-impt'>*</span>动作名</ControlLabel>
-                  <FormControl type='text' { ...name } placeholder='动作名'/>
+                  <FormControl disabled={ submitting } type='text' { ...name } placeholder='动作名'/>
                   { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
                   <ControlLabel><span className='txt-impt'>*</span>目标步骤</ControlLabel>
-                  <Select options={ stepOptions } simpleValue value={ destStep.value } onChange={ newValue => { destStep.onChange(newValue) } } placeholder='请选择目标步骤' clearable={ false } searchable={ false }/>
+                  <Select disabled={ submitting } options={ stepOptions } simpleValue value={ destStep.value } onChange={ newValue => { destStep.onChange(newValue) } } placeholder='请选择目标步骤' clearable={ false } searchable={ false }/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
                   <ControlLabel>动作界面</ControlLabel>
-                  <Select options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='无界面' searchable={ false }/>
+                  <Select disabled={ submitting } options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='无界面' searchable={ false }/>
                 </FormGroup>
               </div>
             </TabPane>
@@ -293,20 +293,20 @@ export default class AddActionModal extends Component {
               <CheckboxGroup name='conditions' value={ this.state.conditions } onChange={ this.conditionsChanged.bind(this) }>
                 <ui className='list-unstyled clearfix cond-list'>
                   <li>
-                    <Checkbox value='isReporter'/>
+                    <Checkbox disabled={ submitting } value='isReporter'/>
                     <span>只有</span><b>报告人</b><span>才能执行此动作</span>
                   </li>
                   <li>
-                    <Checkbox value='isAssignee'/>
+                    <Checkbox disabled={ submitting } value='isAssignee'/>
                     <span>只有</span><b>经办人</b><span>才能执行此动作</span>
                   </li>
                   <li>
-                    <Checkbox value='isTheUser'/>
+                    <Checkbox disabled={ submitting } value='isTheUser'/>
                     <span>只有用户</span>
-                    <select 
+                    <select
                       value={ this.state.userParam }
                       onChange={ (e) => this.setState({ userParam: e.target.value }) }
-                      disabled={ _.indexOf(this.state.conditions, 'isTheUser') !== -1 ? false : true } 
+                      disabled={ (_.indexOf(this.state.conditions, 'isTheUser') !== -1 && !submitting) ? false : true } 
                       style={ _.indexOf(this.state.conditions, 'isTheUser') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择用户</option>
                       { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.nameAndEmail }</option> ) }
@@ -314,12 +314,12 @@ export default class AddActionModal extends Component {
                     <span>才能执行此动作</span>
                   </li>
                   <li>
-                    <Checkbox value='checkSubTasksState'/>
+                    <Checkbox disabled={ submitting } value='checkSubTasksState'/>
                     <span>根据子任务状态</span>
                     <select 
                       value={ this.state.stateParam }
                       onChange={ (e) => this.setState({ stateParam: e.target.value }) }
-                      disabled={ _.indexOf(this.state.conditions, 'checkSubTasksState') !== -1 ? false : true } 
+                      disabled={ (_.indexOf(this.state.conditions, 'checkSubTasksState') !== -1 && !submitting) ? false : true } 
                       style={ _.indexOf(this.state.conditions, 'checkSubTasksState') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择状态</option>
                       { stateOptions.map( stateOption => <option value={ stateOption.id } key={ stateOption.id }>{ stateOption.name }</option> ) }
@@ -327,12 +327,12 @@ export default class AddActionModal extends Component {
                     <span>限制父任务动作</span>
                   </li>
                   <li>
-                    <Checkbox value='hasPermission'/>
+                    <Checkbox disabled={ submitting } value='hasPermission'/>
                     <span>只有具有权限</span>
                     <select 
                       value={ this.state.permissionParam }
                       onChange={ (e) => this.setState({ permissionParam: e.target.value }) }
-                      disabled={ _.indexOf(this.state.conditions, 'hasPermission') !== -1 ? false : true }
+                      disabled={ (_.indexOf(this.state.conditions, 'hasPermission') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.conditions, 'hasPermission') !== -1 ? selectEnableStyles : selectDisabledStyles }>
                       <option value='' key=''>请选择权限</option>
                       { permissionOptions.map( permissionOption => <option value={ permissionOption.id } key={ permissionOption.id }>{ permissionOption.name }</option> ) }
@@ -340,12 +340,12 @@ export default class AddActionModal extends Component {
                     <span>的用户才能执行此动作</span>
                   </li>
                   <li>
-                    <Checkbox value='belongsToRole'/>
+                    <Checkbox disabled={ submitting } value='belongsToRole'/>
                     <span>只有属于项目角色</span>
                     <select
                       value={ this.state.roleParam }
                       onChange={ (e) => this.setState({ roleParam: e.target.value }) }
-                      disabled={ _.indexOf(this.state.conditions, 'belongsToRole') !== -1 ? false : true }
+                      disabled={ (_.indexOf(this.state.conditions, 'belongsToRole') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.conditions, 'belongsToRole') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择角色</option>
                       { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
@@ -362,12 +362,12 @@ export default class AddActionModal extends Component {
               <CheckboxGroup name='postFunctions' value={ this.state.postFunctions } onChange={ this.postFunctionsChanged.bind(this) }>
                 <ui className='list-unstyled clearfix cond-list'>
                   <li>
-                    <Checkbox value='setResolution'/>
+                    <Checkbox disabled={ submitting } value='setResolution'/>
                     <span>问题的</span><b>解决结果</b><span>将被设置为</span>
                     <select
                       value={ this.state.resolutionParam }
                       onChange={ (e) => this.setState({ resolutionParam: e.target.newValue }) }
-                      disabled={ _.indexOf(this.state.postFunctions, 'setResolution') !== -1 ? false : true }
+                      disabled={ (_.indexOf(this.state.postFunctions, 'setResolution') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.postFunctions, 'setResolution') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择结果值</option>
                       { resolutionOptions.map( resolutionOption => <option value={ resolutionOption.id } key={ resolutionOption.id }>{ resolutionOption.name }</option> ) }
@@ -378,35 +378,35 @@ export default class AddActionModal extends Component {
                     <span>将状态设置为目标步骤链接的状态</span>
                   </li>
                   <li>
-                    <Checkbox value='assignIssue'/>
+                    <Checkbox disabled={ submitting } value='assignIssue'/>
                     <span>将问题分配给</span>
                     <select
                       value={ this.state.assigneeParam }
                       onChange={ (e) => this.setState({ assigneeParam: e.target.value }) }
-                      disabled={ _.indexOf(this.state.postFunctions, 'assignIssue') !== -1 ? false : true }
+                      disabled={ (_.indexOf(this.state.postFunctions, 'assignIssue') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.postFunctions, 'assignIssue') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择经办人</option>
                       { assigneeOptions.map( assigneeOption => <option value={ assigneeOption.id } key={ assigneeOption.id }>{ assigneeOption.name }</option> ) }
                     </select>
                   </li>
                   <li>
-                    <Checkbox value='assignIssueToUser'/>
+                    <Checkbox disabled={ submitting } value='assignIssueToUser'/>
                     <span>将问题分配给指定用户</span>
                     <select
                       value={ this.state.assignedUserParam }
                       onChange={ (e) => this.setState({ assignedUserParam: e.target.value }) }
-                      disabled={ _.indexOf(this.state.postFunctions, 'assignIssueToUser') !== -1 ? false : true }
+                      disabled={ (_.indexOf(this.state.postFunctions, 'assignIssueToUser') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.postFunctions, 'assignIssueToUser') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择用户</option>
                       { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name }</option> ) }
                     </select>
                   </li>
                   <li>
-                    <Checkbox value='addComments'/>
+                    <Checkbox disabled={ submitting } value='addComments'/>
                     <span>如果用户输入了备注，将备注添加到问题中</span>
                   </li>
                   <li>
-                    <Checkbox value='updateHistory'/>
+                    <Checkbox disabled={ submitting } value='updateHistory'/>
                     <span>更新问题的变动历史记录</span>
                   </li>
                   {/*

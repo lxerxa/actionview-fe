@@ -67,15 +67,15 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>新建工作流</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>工作流名</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='工作流名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='工作流名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='描述内容'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述内容'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

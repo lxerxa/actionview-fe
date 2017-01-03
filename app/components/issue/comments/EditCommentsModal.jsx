@@ -95,7 +95,7 @@ export default class EditCommentsModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <div className='edit-comments-inputor'>
-            <textarea style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents }/>
+            <textarea disabled={ loading } style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents }/>
           </div>
         </Modal.Body>
         <Modal.Footer>

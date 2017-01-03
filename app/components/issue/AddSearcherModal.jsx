@@ -71,13 +71,13 @@ export default class AddSearcherModal extends Component {
           <Modal.Title id='contained-modal-title-la'>保存检索</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup>
             <div><span>{ sqlTxt }</span></div>
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='过滤器名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='过滤器名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>

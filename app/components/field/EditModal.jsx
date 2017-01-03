@@ -77,20 +77,20 @@ export default class EditModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ '编辑字段 - ' + data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <FormControl type='hidden' { ...id }/>
             <ControlLabel><span className='txt-impt'>*</span>字段名</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='字段名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='字段名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>适用类型</ControlLabel>
-            <Select multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
+            <Select disabled={ submitting } multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='描述内容'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述内容'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

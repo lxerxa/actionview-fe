@@ -80,23 +80,23 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>创建模块</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='模块名'/ >
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='模块名'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>责任人</ControlLabel>
-            <Select clearable={ false } value={ principal.value } onChange={ newValue => { principal.onChange(newValue) } } options={ userOptions } placeholder='请输入责任人'/>
+            <Select disabled={ submitting } clearable={ false } value={ principal.value } onChange={ newValue => { principal.onChange(newValue) } } options={ userOptions } placeholder='请输入责任人'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>默认经办人</ControlLabel>
-            <Select options={ assigneeOptions } clearable={ false } value={ defaultAssignee.value } onChange={ newValue => { defaultAssignee.onChange(newValue) } } placeholder='默认经办人(项目负责人)'/>
+            <Select disabled={ submitting } options={ assigneeOptions } clearable={ false } value={ defaultAssignee.value } onChange={ newValue => { defaultAssignee.onChange(newValue) } } placeholder='默认经办人(项目负责人)'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='描述'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

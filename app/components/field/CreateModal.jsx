@@ -81,29 +81,29 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>创建字段</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>字段名</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='字段名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='字段名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ key.touched && key.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
-            <FormControl type='text' { ...key } placeholder='键值唯一'/>
+            <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值唯一'/>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect' validationState={ type.touched && type.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
-            <Select options={ fieldTypes } simpleValue value={ type.value } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择字段类型' clearable={ false }/>
+            <Select disabled={ submitting } options={ fieldTypes } simpleValue value={ type.value } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择字段类型' clearable={ false }/>
             { type.touched && type.error && <HelpBlock style={ { float: 'right' } }>{ type.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>适用类型</ControlLabel>
-            <Select multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
+            <Select disabled={ submitting } multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='描述内容'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述内容'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

@@ -77,16 +77,16 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>新建步骤</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <FormControl type='hidden' { ...id }/>
             <ControlLabel><span className='txt-impt'>*</span>步骤名</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='步骤名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='步骤名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel><span className='txt-impt'>*</span>链接状态</ControlLabel>
-            <Select options={ stateOptions } simpleValue value={ state.value } onChange={ newValue => { state.onChange(newValue) } } placeholder='请选择状态' clearable={ false } searchable={ false }/>
+            <Select disabled={ submitting } options={ stateOptions } simpleValue value={ state.value } onChange={ newValue => { state.onChange(newValue) } } placeholder='请选择状态' clearable={ false } searchable={ false }/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

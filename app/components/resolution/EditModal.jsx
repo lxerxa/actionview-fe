@@ -77,16 +77,16 @@ export default class EditModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ '编辑解决结果 - ' + data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='hidden' { ...id }/>
-            <FormControl type='text' { ...name } placeholder='解决结果名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='解决结果名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='结果描述'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='结果描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

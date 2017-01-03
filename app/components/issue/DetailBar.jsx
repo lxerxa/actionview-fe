@@ -14,11 +14,12 @@ const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
 const DelFileModal = require('./DelFileModal');
 const LinkIssueModal = require('./LinkIssueModal');
+const DelLinkModal = require('./DelLinkModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false, linkIssueModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: '' };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
   }
@@ -215,6 +216,10 @@ export default class DetailBar extends Component {
     }
   }
 
+  delLink(linkData) {
+    this.setState({ delLinkModalShow: true, delLinkData: linkData });
+  }
+
   render() {
     const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
@@ -284,9 +289,9 @@ export default class DetailBar extends Component {
                   <Col sm={ 9 }>
                     { data.links.length > 2 &&
                     <div style={ { marginTop: '6px' } }>共{ data.links.length }个问题<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>{ this.state.linkShow ? '收起' : '展开' } <i className={ this.state.linkShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
-                    <Table condensed hover responsive className={ this.state.linkShow || 'hide' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
-                      { _.map(data.links, (val) => {
+                      { _.map(data.links, (val, key) => {
                         let linkedIssue = {};
                         let relation = '';
                         if (val.src.id == data.id) {
@@ -310,7 +315,7 @@ export default class DetailBar extends Component {
                           }
                          
                         }
-                        return (<tr><td>{ relation }</td><td>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no }</td><td>{ linkedIssue.title }</td><td><span className='remove-icon'><i className='fa fa-trash'></i></span></td></tr>); 
+                        return (<tr key={ 'link' + key }><td>{ relation }</td><td>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no }</td><td>{ linkedIssue.title }</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -480,7 +485,8 @@ export default class DetailBar extends Component {
         { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
         { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data }/> }
         { this.state.previewModalShow && <PreviewModal show close={ () => { this.setState({ previewModalShow: false }); } } collection={ wfCollection } /> }
-        { this.state.linkIssueModalShow && <LinkIssueModal show close={ () => { this.setState({ linkIssueModalShow: false }); } } loading={ linkLoading } createLink={ createLink } src={ data.id }/> }
+        { this.state.linkIssueModalShow && <LinkIssueModal show close={ () => { this.setState({ linkIssueModalShow: false }); } } loading={ linkLoading } createLink={ createLink } issue={ data } types={ options.types } project={ project }/> }
+        { this.state.delLinkModalShow && <DelLinkModal show close={ () => { this.setState({ delLinkModalShow: false }); } } loading={ linkLoading } delLink={ delLink } delLinkData={ this.state.dellinkData }/> }
       </div>
     );
   }

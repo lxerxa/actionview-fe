@@ -89,18 +89,18 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>创建新角色</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText'>
             <ControlLabel><span className='txt-impt'>*</span>角色名</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='角色名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='角色名'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>权限集</ControlLabel>
-            <Select clearable={ false } searchable={ false } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择权限' multi/>
+            <Select disabled={ submitting } clearable={ false } searchable={ false } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择权限' multi/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='描述'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

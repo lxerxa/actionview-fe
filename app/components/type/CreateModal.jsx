@@ -102,28 +102,28 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>创建问题类型</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body className={ submitting ? 'disable' : 'enable' }>
+        <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl type='text' { ...name } placeholder='问题类型名'/ >
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题类型名'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
-            <FormControl type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
+            <FormControl disabled={ submitting } type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
             { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>界面</ControlLabel>
-            <Select options={ screenOptions } simpleValue clearable={ false } value={ screen_id.value } onChange={ newValue => { screen_id.onChange(newValue) } } placeholder='请选择一个界面'/>
+            <Select disabled={ submitting } options={ screenOptions } simpleValue clearable={ false } value={ screen_id.value } onChange={ newValue => { screen_id.onChange(newValue) } } placeholder='请选择一个界面'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>工作流</ControlLabel>
-            <Select options={ workflowOptions } simpleValue clearable={ false } value={ workflow_id.value } onChange={ newValue => { workflow_id.onChange(newValue) } } placeholder='请选择一个工作流'/>
+            <Select disabled={ submitting } options={ workflowOptions } simpleValue clearable={ false } value={ workflow_id.value } onChange={ newValue => { workflow_id.onChange(newValue) } } placeholder='请选择一个工作流'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl type='text' { ...description } placeholder='描述'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

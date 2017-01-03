@@ -238,7 +238,7 @@ class CreateModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>创建问题</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={ loading ? 'disable' : 'enable' } style={ { height: '580px', overflow: 'auto' } }>
+        <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
           <Form horizontal>
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>
@@ -253,7 +253,7 @@ class CreateModal extends Component {
                 <span className='txt-impt'>*</span>类型
               </Col>
               <Col sm={ 7 }>
-                <Select options={ typeOptions } simpleValue searchable={ false } clearable={ false } value={ this.state.type } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
+                <Select options={ typeOptions } disabled={ loading } simpleValue searchable={ false } clearable={ false } value={ this.state.type } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
                 <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
               </Col>
             </FormGroup>
@@ -274,6 +274,7 @@ class CreateModal extends Component {
                   <Col sm={ 9 }>
                     <FormControl 
                       type='text' 
+                      disabled={ loading }
                       value={ this.state.values[v.key] } 
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } } 
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
@@ -290,6 +291,7 @@ class CreateModal extends Component {
                   <Col sm={ 4 }>
                     <FormControl
                       type='text'
+                      disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
@@ -306,6 +308,7 @@ class CreateModal extends Component {
                   <Col sm={ 9 }>
                     <FormControl
                       componentClass='textarea'
+                      disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
@@ -323,6 +326,7 @@ class CreateModal extends Component {
                   <Col sm={ 7 }>
                     <Select 
                       simpleValue
+                      disabled={ loading }
                       multi={ v.type === 'MultiSelect' || v.type === 'MultiVersion' }
                       clearable={ !v.required } 
                       value={ this.state.values[v.key] } 
@@ -346,7 +350,7 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] && _.isString(this.state.values[v.key]) ? this.state.values[v.key].split(',') : this.state.values[v.key] }
                       onChange={ newValue => { v.required && newValue.length <= 0 ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } }>
                       { _.map(v.optionValues || [], (val, i) => 
-                        <span key={ i }><Checkbox value={ val.id }/>{ ' ' + val.name + ' ' }</span>
+                        <span key={ i }><Checkbox disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
                       }
                       { this.state.touched[v.key] && this.state.errors[v.key] && <div><ControlLabel>{ this.state.errors[v.key] || '' }</ControlLabel></div> }
@@ -364,7 +368,7 @@ class CreateModal extends Component {
                       selectedValue={ this.state.values[v.key] }
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }) } }>
                       { _.map(v.optionValues || [], (val, i) =>
-                        <span style={ { marginLeft: '6px' } } key={ i }><Radio value={ val.id }/>{ ' ' + val.name + ' ' }</span>
+                        <span style={ { marginLeft: '6px' } } key={ i }><Radio disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
                       }
                     </RadioGroup>
@@ -376,6 +380,7 @@ class CreateModal extends Component {
                   { title }
                   <Col sm={ 4 }>
                     <DateTime 
+                      disabled={ loading }
                       mode='date' 
                       locale='zh-cn'
                       dateFormat={ 'YYYY/MM/DD' }
@@ -417,6 +422,7 @@ class CreateModal extends Component {
                   <Col sm={ 7 }>
                     <FormControl
                       type='text'
+                      disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.urlTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
@@ -433,6 +439,7 @@ class CreateModal extends Component {
                   <Col sm={ 4 }>
                     <FormControl
                       type='text'
+                      disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.ttTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
