@@ -92,7 +92,6 @@ class CreateModal extends Component {
 
   async handleSubmit() {
     const { create, edit, close, options, data={} } = this.props;
-
     const schema = _.find(options.types, { id: this.state.type }).schema;
 
     let submitData = {};
@@ -101,7 +100,7 @@ class CreateModal extends Component {
       submitData = diffKeys.length > 0 ? _.pick(this.state.values, diffKeys) : {};
       diffKeys.indexOf('type') !== -1 && _.extend(submitData, { type: this.state.type });
     } else {
-      submitData = this.state.values;
+      _.extend(submitData, this.state.values);
       submitData['type'] = this.state.type;
     }
 
