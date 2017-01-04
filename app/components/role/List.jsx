@@ -147,7 +147,7 @@ export default class List extends Component {
     }
     const api = new ApiClient;
     const results = await api.request( { url: '/user?s=' + input } );
-    return { options: results.data };
+    return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
   }
 
   render() {

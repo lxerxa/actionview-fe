@@ -52,6 +52,10 @@ export default class EditCommentsModal extends Component {
 
   componentDidUpdate() {
     const { users } = this.props;
+    _.map(users || [], (v) => {
+      v.nameAndEmail = v.name + '(' + v.email + ')';
+      return v;
+    });
     const self = this;
     $('.edit-comments-inputor textarea').atwho({
       at: '@',

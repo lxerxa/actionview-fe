@@ -309,7 +309,7 @@ export default class AddActionModal extends Component {
                       disabled={ (_.indexOf(this.state.conditions, 'isTheUser') !== -1 && !submitting) ? false : true } 
                       style={ _.indexOf(this.state.conditions, 'isTheUser') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择用户</option>
-                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.nameAndEmail }</option> ) }
+                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name + '(' + userOption.email + ')' }</option> ) }
                     </select>
                     <span>才能执行此动作</span>
                   </li>

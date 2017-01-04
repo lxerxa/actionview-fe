@@ -179,7 +179,7 @@ export default class Worklog extends Component {
             :
             _.map(rCollection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && val.recorder.nameAndEmail || '') + '">' + (val.recorder && val.recorder.name || '') + '</a> 添加了工作日志 - ' + (val.recorded_at && moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder && val.recorder.name || '') + '</a> 添加了工作日志 - ' + (val.recorded_at && moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span>
                 <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditWorklog.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span>
               </div> ); 

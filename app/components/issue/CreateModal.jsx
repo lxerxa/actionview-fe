@@ -380,7 +380,6 @@ class CreateModal extends Component {
                   { title }
                   <Col sm={ 4 }>
                     <DateTime 
-                      disabled={ loading }
                       mode='date' 
                       locale='zh-cn'
                       dateFormat={ 'YYYY/MM/DD' }

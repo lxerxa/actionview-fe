@@ -36,7 +36,7 @@ export default class History extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && val.operator.nameAndEmail || '') + '">' + (val.operator && val.operator.name || '') + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + (val.operated_at && moment.unix(val.operated_at).format('YY/MM/DD HH:mm:ss')) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && (val.operator.name + '(' + val.operator.email + ')')) + '">' + (val.operator && val.operator.name || '') + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + (val.operated_at && moment.unix(val.operated_at).format('YY/MM/DD HH:mm:ss')) } } />
               </div> ); 
 
               return (

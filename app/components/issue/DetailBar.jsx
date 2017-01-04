@@ -233,7 +233,7 @@ export default class DetailBar extends Component {
     const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
-    const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.nameAndEmail, value: val.id } });
+    const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
 
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];

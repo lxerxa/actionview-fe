@@ -80,6 +80,10 @@ export default class Comments extends Component {
 
   componentDidUpdate() {
     const { users } = this.props;
+    _.map(users || [], (v) => {
+      v.nameAndEmail = v.name + '(' + v.email + ')';
+      return v;
+    });
     const self = this;
     $('.comments-inputor textarea').atwho({
       at: '@',
@@ -131,13 +135,13 @@ export default class Comments extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && val.creator.nameAndEmail || '') + '">' + (val.creator && val.creator.name || '') + '</a> 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (val.creator && val.creator.name || '') + '</a> 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span>
                 <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span>
               </div> ); 
               let contents = val.contents || '-';
               _.map(val.atWho || [], (v) => {
-                contents = contents.replace(eval('/@' + v.name + '/'), '<a title="' + v.nameAndEmail + '">@' + v.name + '</a>');
+                contents = contents.replace(eval('/@' + v.name + '/'), '<a title="' + v.name + '(' + v.email + ')' + '">@' + v.name + '</a>');
               });
               contents = contents.replace(/(\r\n)|(\n)/g, '<br/>'); 
 
@@ -150,14 +154,14 @@ export default class Comments extends Component {
                      { _.map(val.reply || [], (v, i) => {
                        let contents = v.contents || '-';
                        _.map(v.atWho || [], (value) => {
-                         contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.nameAndEmail + '">@' + value.name + '</a>');
+                         contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.name + '(' + value.email + ')' + '">@' + value.name + '</a>');
                        });
                        contents = contents.replace(/(\r\n)|(\n)/g, '<br/>'); 
 
                        return (
                        <li className='reply-contents-item'>
                          <div className='reply-item-header'>
-                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && v.creator.nameAndEmail || '') + '">' + (v.creator && v.creator.name || '') + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + v.to.name + '</a>') : '') + ' - ' + (v.created_at && moment.unix(v.created_at).format('YY/MM/DD HH:mm:ss')) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
+                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (v.creator && v.creator.name || '') + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + v.to.name + '</a>') : '') + ' - ' + (v.created_at && moment.unix(v.created_at).format('YY/MM/DD HH:mm:ss')) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
                            <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span>
                            <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span>
                          </div>
