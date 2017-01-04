@@ -48,8 +48,8 @@ export default class DelSearcherModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button className='ralign' disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -266,6 +266,9 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_LINK_CREATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         if (!_.isEmpty(state.itemData) && action.result.data.src.id === state.itemData.id) {
+          if (!state.itemData.links) {
+            state.itemData.links = [];
+          }
           state.itemData.links.push(action.result.data);
         }
       }
@@ -279,8 +282,8 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_LINK_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        if (!_.isEmpty(state.itemData) && action.result.data.links && action.result.data.links.length > 0) {
-          const linkIndex = _.findIndex(action.result.data.links, { id : action.id });
+        if (!_.isEmpty(state.itemData) && state.itemData.links && state.itemData.links.length > 0) {
+          const linkIndex = _.findIndex(state.itemData.links, { id : action.id });
           if (linkIndex > -1) {
             state.itemData.links.splice(linkIndex, 1);
           }

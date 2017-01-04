@@ -19,9 +19,10 @@ const DelLinkModal = require('./DelLinkModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: '' };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {} };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
+    this.goTo = this.goTo.bind(this);
   }
 
   static propTypes = {
@@ -179,7 +180,7 @@ export default class DetailBar extends Component {
       const nextInd = _.add(curInd, 1);
       const nextId = issueCollection[nextInd].id;
       const ecode = await show(nextId);
-      if (ecode == 0) {
+      if (ecode === 0) {
         record();
       }
     }
@@ -190,7 +191,7 @@ export default class DetailBar extends Component {
     if (curInd > 0 ) {
       const nextId = issueCollection[curInd - 1].id;
       const ecode = await show(nextId);
-      if (ecode == 0) {
+      if (ecode === 0) {
         record();
       }
     }
@@ -201,7 +202,7 @@ export default class DetailBar extends Component {
     const forwardIndex = _.add(visitedIndex, offset);
     if (visitedCollection[ forwardIndex ]) {
       const ecode = await show(visitedCollection[ forwardIndex ]);
-      if (ecode == 0) {
+      if (ecode === 0) {
         forward(offset);
       }
     }
@@ -218,6 +219,14 @@ export default class DetailBar extends Component {
 
   delLink(linkData) {
     this.setState({ delLinkModalShow: true, delLinkData: linkData });
+  }
+
+  async goTo(issue_id) {
+    const { show, record } = this.props;
+    const ecode = await show(issue_id);
+    if (ecode === 0) {
+      record();
+    }
   }
 
   render() {
@@ -294,9 +303,11 @@ export default class DetailBar extends Component {
                       { _.map(data.links, (val, key) => {
                         let linkedIssue = {};
                         let relation = '';
+                        let linkIssueId = ''
                         if (val.src.id == data.id) {
                           linkedIssue = val.dest;
                           relation = val.relation;
+                          linkIssueId = val.dest.id;
                         } else if (val.dest.id == data.id) {
                           linkedIssue = val.src;
                           relation = val.relation;
@@ -313,9 +324,9 @@ export default class DetailBar extends Component {
                           } else if (relation == 'duplicates') {
                             relation = 'is duplicated by';
                           }
-                         
+                          linkIssueId = val.src.id;
                         }
-                        return (<tr key={ 'link' + key }><td>{ relation }</td><td>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no }</td><td>{ linkedIssue.title }</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
+                        return (<tr key={ 'link' + key }><td>{ relation }</td><td>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ linkedIssue.title }</a></td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -486,7 +497,7 @@ export default class DetailBar extends Component {
         { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data }/> }
         { this.state.previewModalShow && <PreviewModal show close={ () => { this.setState({ previewModalShow: false }); } } collection={ wfCollection } /> }
         { this.state.linkIssueModalShow && <LinkIssueModal show close={ () => { this.setState({ linkIssueModalShow: false }); } } loading={ linkLoading } createLink={ createLink } issue={ data } types={ options.types } project={ project }/> }
-        { this.state.delLinkModalShow && <DelLinkModal show close={ () => { this.setState({ delLinkModalShow: false }); } } loading={ linkLoading } delLink={ delLink } delLinkData={ this.state.dellinkData }/> }
+        { this.state.delLinkModalShow && <DelLinkModal show close={ () => { this.setState({ delLinkModalShow: false }); } } loading={ linkLoading } delLink={ delLink } data={ this.state.delLinkData }/> }
       </div>
     );
   }

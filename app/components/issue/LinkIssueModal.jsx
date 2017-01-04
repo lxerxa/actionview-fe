@@ -102,8 +102,8 @@ export default class LinkIssueModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button className='ralign' disabled={ loading || !this.state.relation || !this.state.dest } onClick={ this.confirm }>确定</Button>
-          <Button disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading || !this.state.relation || !this.state.dest } onClick={ this.confirm }>确定</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

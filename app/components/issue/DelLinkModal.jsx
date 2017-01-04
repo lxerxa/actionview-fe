@@ -43,13 +43,14 @@ export default class DelLinkModal extends Component {
           <Modal.Title id='contained-modal-title-la'>删除链接</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此过滤器？
+          { data.title }<br/><br/>
+          确认要删除此链接？
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button className='ralign' disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

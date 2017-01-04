@@ -168,7 +168,8 @@ export function createLink(key, values) {
 
 export function delLink(key, link_id) {
   return asyncFuncCreator({
-    constant: 'ISSUE_LINK_DEL',
+    constant: 'ISSUE_LINK_DELETE',
+    id: link_id,
     promise: (client) => client.request({ url: '/project/' + key + '/link/' + link_id, method: 'delete' })
   });
 }
