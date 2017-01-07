@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, FormControl } from 'react-bootstrap';
 import _ from 'lodash';
 
 const $ = require('$');
@@ -99,7 +99,12 @@ export default class EditCommentsModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <div className='edit-comments-inputor'>
-            <textarea disabled={ loading } style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents }/>
+            <FormControl
+              componentClass='textarea'
+              disabled={ loading }
+              style={ { height: '150px' } }
+              onChange={ (e) => { this.setState({ contents: e.target.value }) } }
+              value={ this.state.contents } />
           </div>
         </Modal.Body>
         <Modal.Footer>
