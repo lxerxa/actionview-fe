@@ -25,13 +25,13 @@ export default class AddWorklogModal extends Component {
         errors.cut = '必填';
       }
     } else {
-      errors.started_at = '必填';
+      // errors.started_at = '必填';
       errors.spend = '必填';
     }
 
     const values = {};
     const oldValues = {};
-    oldValues['started_at'] = values['started_at'] = data.started_at ? moment.unix(data.started_at) : '';
+    oldValues['started_at'] = values['started_at'] = data.started_at ? moment.unix(data.started_at) : moment();
     oldValues['spend'] = values['spend'] = data.spend || '';
     oldValues['adjust_type'] = values['adjust_type'] = data.adjust_type || '1';
     oldValues['leave_estimate'] = values['leave_estimate'] = data.leave_estimate || '';

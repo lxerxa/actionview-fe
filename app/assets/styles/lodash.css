@@ -518,6 +518,8 @@ html.docs .repl {
 }
 
 html.docs .search {
+        font-style: italic;
+        font-weight: bold;
 	position: relative;
 	margin-top: 2.0rem;
 	width: 100%;

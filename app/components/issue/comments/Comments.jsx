@@ -120,7 +120,7 @@ export default class Comments extends Component {
           </Col>
           <Col sm={ 12 } className={ this.state.addCommentsShow || 'hide' }>
             <div className='comments-inputor'>
-              <textarea disabled={ loading } style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents } placeholder='输入备注'/>
+              <textarea disabled={ loading } style={ { height: '150px', width: '100%', borderColor: '#ccc', borderRadius: '4px', padding: '6px 12px' } } onChange={ (e) => { this.setState({ contents: e.target.value }) } } value={ this.state.contents } placeholder='输入备注'/>
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
