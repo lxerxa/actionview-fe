@@ -72,13 +72,14 @@ export default class AddSearcherModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup>
-            <div><span>{ sqlTxt }</span></div>
-          </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='过滤器名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>条件</ControlLabel>
+            <div><span style={ { marginLeft: '10px' } }>{ sqlTxt }</span></div>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

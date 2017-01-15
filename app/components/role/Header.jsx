@@ -29,9 +29,9 @@ export default class Header extends Component {
     return (
       <div>
         <div className='list-unstyled clearfix'>
-          <h3>#角色权限#</h3>
+          <h3><span style={ { marginLeft: '15px' } }>#角色权限#</span></h3>
         </div>
-        <div>
+        <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建角色</Button>
         </div>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }

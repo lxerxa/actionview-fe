@@ -95,11 +95,11 @@ export default class ConfigHeader extends Component {
 
     return (
       <div>
-        <h3>#工作流配置 - { workflowName }#</h3>
+        <h3><span style={ { marginLeft: '15px' } }>#工作流配置 - { workflowName }#</span></h3>
         { newCollection2JSON !== collection2JSON && collection.length > 0 && 
           <div style={ { marginTop: '20px', marginBottom: '10px', padding: '8px', backgroundColor: '#ffffbd' } }>&nbsp;<i className='fa fa-exclamation-triangle'></i>&nbsp;&nbsp;配置已修改，需保存后才能生效。</div>
         }
-        <div>
+        <div style={ { marginTop: '5px' } }>
           <Link to={ '/project/' + pid + '/workflow' }>
             <Button className='create-btn'><i className='fa fa-reply'></i>&nbsp;返回</Button>
           </Link>

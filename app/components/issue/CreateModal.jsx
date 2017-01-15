@@ -235,7 +235,7 @@ class CreateModal extends Component {
     return (
       <Modal { ...this.props } onHide={ close } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>创建问题</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑问题' : '创建问题' }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
           <Form horizontal>

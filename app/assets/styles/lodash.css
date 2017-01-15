@@ -432,7 +432,7 @@ html.docs .doc-container h2,html.docs .doc-container h3,html.docs .doc-container
 html.docs .doc-container h3 {
 	background-color: #eee;
 	margin: 0 -999rem;
-	padding: 2.4rem 999rem;
+	padding: 2.0rem 999rem;
 	overflow-y: hidden
 }
 

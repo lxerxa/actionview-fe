@@ -111,10 +111,13 @@ export default class Header extends Component {
   }
 
   operateSelect(eventKey) {
+    const { refresh } = this.props;
     if (eventKey === '1') {
-      this.setState({ addSearcherShow : true });
+      refresh();
     } else if (eventKey == '2') {
       this.setState({ condShow : !this.state.condShow });
+    } else if (eventKey === '3') {
+      this.setState({ addSearcherShow : true });
     }
   }
 
@@ -126,7 +129,7 @@ export default class Header extends Component {
     return (
       <div>
         <div className='list-unstyled clearfix'>
-          <h3>#问题#<Button className='btn-primary' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } } style={ { marginLeft: '20px' } }><i className='fa fa-plus'></i> 创建</Button></h3>
+          <h3><span style={ { marginLeft: '15px' } }>#问题#</span></h3>
         </div>
         { this.state.condShow &&
         <div className='cond-bar'>
@@ -134,13 +137,16 @@ export default class Header extends Component {
           <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } }><i className='fa fa-remove'></i></span>
           <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
         </div> }
-        <div>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searcherShow: !this.state.searcherShow, searchShow: false }); } }>过滤器&nbsp;<i className={ this.state.searcherShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+        <div style={ { marginTop: '5px' } }>
+          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>保存检索</MenuItem>
+              <MenuItem eventKey='1'>刷新</MenuItem>
               <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='3'>保存该检索</MenuItem>
+              <MenuItem eventKey='4'>过滤器配置</MenuItem>
             </DropdownButton>
           </div>
         </div>
