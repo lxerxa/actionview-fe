@@ -49,7 +49,7 @@ export default class Header extends Component {
     return (
       <div>
         <div className='list-unstyled clearfix'>
-          <h3><span style={ { marginLeft: '15px' } }>#问题优先级#</span></h3>
+          <h3><span style={ { marginLeft: '15px' } }>#优先级#</span></h3>
         </div>
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建优先级</Button>

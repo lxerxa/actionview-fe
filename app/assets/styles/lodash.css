@@ -693,9 +693,9 @@ html.docs .toc-container .fa-minus-square-o,html.docs .toc-container .fa-plus-sq
 		box-shadow: 0 0 .5rem #9da5ab;
 		display: block;
 		-webkit-box-flex: 3;
-		-webkit-flex: 3 3 0;
+		-webkit-flex: none;
 		-ms-flex: 3 3 0;
-		flex: 3 3 0;
+		flex: none;
 		height: auto;
 		position: relative
 	}

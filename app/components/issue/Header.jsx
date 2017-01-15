@@ -111,9 +111,9 @@ export default class Header extends Component {
   }
 
   operateSelect(eventKey) {
-    const { refresh } = this.props;
+    const { refresh, query } = this.props;
     if (eventKey === '1') {
-      refresh();
+      refresh(query);
     } else if (eventKey == '2') {
       this.setState({ condShow : !this.state.condShow });
     } else if (eventKey === '3') {
@@ -142,11 +142,13 @@ export default class Header extends Component {
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>刷新</MenuItem>
               <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='3'>保存该检索</MenuItem>
               <MenuItem eventKey='4'>过滤器配置</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='5'>导出</MenuItem>
+              <MenuItem eventKey='6'>导入</MenuItem>
             </DropdownButton>
           </div>
         </div>

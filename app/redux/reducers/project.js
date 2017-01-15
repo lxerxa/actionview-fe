@@ -1,6 +1,6 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { ecode: 0, collection: [], item: {} };
+const initialState = { ecode: 0, collection: [], item: {}, options: {} };
 
 export default function project(state = initialState, action) {
   switch (action.type) {

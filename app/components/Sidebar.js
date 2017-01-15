@@ -5,7 +5,7 @@ import { Label } from 'react-bootstrap';
 export default class Sidebar extends Component {
   constructor(props) {
     super(props);
-    this.state = { projectBrowseShow: false, projectConfigShow: false };
+    this.state = { projectBrowseShow: false, projectConfigShow: false, issueSearcherShow: false };
     const browseModules = [ 'issue', 'module', 'version' ];
     const configModules = [ 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role' ];
     if (props.pathname) {
@@ -46,8 +46,8 @@ export default class Sidebar extends Component {
         <div className='search'>
           社交化项目管理系统
         </div>
-        <h4><i className={ this.state.projectBrowseShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ () => { this.setState({ projectBrowseShow: !this.state.projectBrowseShow }) } }></i>问题过滤器</h4>
-        <ul className={ !this.state.projectBrowseShow && 'hide' }>
+        <h4><i className={ this.state.issueSearcherShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ () => { this.setState({ issueSearcherShow : !this.state.issueSearcherShow }) } }></i>过滤器</h4>
+        <ul className={ !this.state.issueSearcherShow && 'hide' }>
           <li><Link to={ '/project/' + project.item.key + '/issue' }>分配给我的</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/module' }>未解决的</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/version' }>我报告的</Link></li>
