@@ -121,6 +121,13 @@ export default class Header extends Component {
     }
   }
 
+  selectSearcher(eventKey) {
+    const { refresh, options={} } = this.props;
+    const searchers = options.searchers || [];
+    const searcher = _.find(searchers, { id: eventKey }) || {};
+    refresh(searcher.query || {});
+  }
+
   render() {
     const { create, addSearcher, delSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading, project } = this.props;
 
@@ -138,14 +145,19 @@ export default class Header extends Component {
           <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
         </div> }
         <div style={ { marginTop: '5px' } }>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>
+          <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
+            { _.map(options.searchers || [] , (val) => 
+              <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
+            ) }
+            <MenuItem divider/>
+            <MenuItem eventKey='3'>过滤器管理</MenuItem>
+          </DropdownButton>
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          <Button className='create-btn' bsStyle='primary' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
-              <MenuItem divider/>
               <MenuItem eventKey='3'>保存该检索</MenuItem>
-              <MenuItem eventKey='4'>过滤器配置</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='5'>导出</MenuItem>
               <MenuItem eventKey='6'>导入</MenuItem>

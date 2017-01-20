@@ -46,12 +46,6 @@ export default class Sidebar extends Component {
         <div className='search'>
           社交化项目管理系统
         </div>
-        <h4><i className={ this.state.issueSearcherShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ () => { this.setState({ issueSearcherShow : !this.state.issueSearcherShow }) } }></i>过滤器</h4>
-        <ul className={ !this.state.issueSearcherShow && 'hide' }>
-          <li><Link to={ '/project/' + project.item.key + '/issue' }>分配给我的</Link></li>
-          <li><Link to={ '/project/' + project.item.key + '/module' }>未解决的</Link></li>
-          <li><Link to={ '/project/' + project.item.key + '/version' }>我报告的</Link></li>
-        </ul>
         <h4><i className={ this.state.projectBrowseShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ () => { this.setState({ projectBrowseShow: !this.state.projectBrowseShow }) } }></i>项目概述</h4>
         <ul className={ !this.state.projectBrowseShow && 'hide' }>
           <li><Link to={ '/project/' + project.item.key + '/issue' }>问题</Link></li>

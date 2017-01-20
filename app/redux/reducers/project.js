@@ -1,17 +1,17 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { ecode: 0, collection: [], item: {}, options: {} };
+const initialState = { ecode: 0, collection: [], indexLoading: false, item: {}, loading: false, options: {} };
 
 export default function project(state = initialState, action) {
   switch (action.type) {
     case t.PROJECT_INDEX:
-      return { ...state, loading: true };
+      return { ...state, indexLoading: true };
 
     case t.PROJECT_INDEX_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, collection: action.result.data, item: {} };
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, item: {} };
 
     case t.PROJECT_INDEX_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, indexLoading: false, error: action.error };
 
     case t.PROJECT_SHOW:
       return { ...state, loading: true };

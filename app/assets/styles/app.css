@@ -243,7 +243,7 @@
 .cond-bar {
   vertical-align: middle;
   padding: 6px 0px 6px 10px;
-  margin: 10px 10px 0px 10px;
+  margin: 10px 10px 0px 0px;
   border: 1px #ccc solid;
   border-radius: 4px;
 }
