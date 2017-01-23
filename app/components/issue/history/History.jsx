@@ -52,8 +52,8 @@ export default class History extends Component {
                     { _.map(val.data || [], (v) => 
                       <tr>
                         <td>{ v.field || '' }</td>
-                        <td dangerouslySetInnerHTML = { { __html: v.before_value.replace(/(\r\n)|(\n)/g, '<br/>') || '' } }/>
-                        <td dangerouslySetInnerHTML = { { __html: v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') || '' } }/>
+                        <td dangerouslySetInnerHTML = { { __html: _.isString(v.before_value) ? v.before_value.replace(/(\r\n)|(\n)/g, '<br/>') : (v.before_value || '') } }/>
+                        <td dangerouslySetInnerHTML = { { __html: _.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : (v.after_value || '') } }/>
                       </tr> ) }
                     </tbody>
                   </Table>

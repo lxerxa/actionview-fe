@@ -7,22 +7,23 @@ import _ from 'lodash';
 const CreateModal = require('./CreateModal');
 const AddSearcherModal = require('./AddSearcherModal');
 const SearchList = require('./SearchList');
-const SearcherList = require('./SearcherList');
+const SearcherConfigModal = require('./SearcherConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false, searcherShow: false, searchShow: false, condShow: false, addSearcherShow: false };
+    this.state = { createModalShow: false, searcherConfigShow: false, searchShow: false, condShow: false, addSearcherShow: false };
     this.createModalClose = this.createModalClose.bind(this);
     this.addSearcherModalClose = this.addSearcherModalClose.bind(this);
+    this.searcherConfigModalClose = this.searcherConfigModalClose.bind(this);
     this.condsTxt = this.condsTxt.bind(this);
   }
 
   static propTypes = {
     create: PropTypes.func.isRequired,
     addSearcher: PropTypes.func.isRequired,
-    delSearcher: PropTypes.func.isRequired,
+    configSearcher: PropTypes.func.isRequired,
     refresh: PropTypes.func,
     getOptions: PropTypes.func,
     query: PropTypes.object,
@@ -106,8 +107,8 @@ export default class Header extends Component {
     return queryConds.join(' | ');
   }
 
-  hideSearcher() {
-    this.setState({ searcherShow: false });
+  searcherConfigModalClose() {
+    this.setState({ searcherConfigShow: false });
   }
 
   operateSelect(eventKey) {
@@ -122,17 +123,22 @@ export default class Header extends Component {
   }
 
   selectSearcher(eventKey) {
-    const { refresh, options={} } = this.props;
-    const searchers = options.searchers || [];
-    const searcher = _.find(searchers, { id: eventKey }) || {};
-    refresh(searcher.query || {});
+    if (eventKey == 'searcherConfig') {
+      alert('tt');
+      this.setState({ searcherConfigShow: true });
+    } else {
+      const { refresh, options={} } = this.props;
+      const searchers = options.searchers || [];
+      const searcher = _.find(searchers, { id: eventKey }) || {};
+      refresh(searcher.query || {});
+    }
   }
 
   render() {
-    const { create, addSearcher, delSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading, project } = this.props;
+    const { create, addSearcher, configSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading, project } = this.props;
 
     const sqlTxt = this.condsTxt();
-    
+
     return (
       <div>
         <div className='list-unstyled clearfix'>
@@ -145,14 +151,19 @@ export default class Header extends Component {
           <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
         </div> }
         <div style={ { marginTop: '5px' } }>
+          { options.searchers && options.searchers.length > 0 ?
           <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
-            { _.map(options.searchers || [] , (val) => 
+            { _.map(options.searchers, (val) => 
               <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
             ) }
             <MenuItem divider/>
-            <MenuItem eventKey='3'>过滤器管理</MenuItem>
+            <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
           </DropdownButton>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          :
+          <DropdownButton className='create-btn' title='过滤器'>
+            <MenuItem disabled>空</MenuItem>
+          </DropdownButton> }
+          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherConfigShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           <Button className='create-btn' bsStyle='primary' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
@@ -164,7 +175,7 @@ export default class Header extends Component {
             </DropdownButton>
           </div>
         </div>
-        <SearcherList className={ !this.state.searcherShow && 'hide' } searcherShow={ this.state.searcherShow } loading={ searcherLoading } indexLoading={ indexLoading } options={ options } delSearcher={ delSearcher } refresh={ refresh } hide={ this.hideSearcher.bind(this) }/>
+        { this.state.searcherConfigShow && <SearcherConfigModal show close={ this.searcherConfigModalClose } loading={ searcherLoading } config={ configSearcher } searchers={ options.searchers || [] }/> }
         <SearchList className={ !this.state.searchShow && 'hide' } query={ query } searchShow={ this.state.searchShow } indexLoading={ indexLoading } options={ options } refresh={ refresh }/>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading } project={ project }/> }
         { this.state.addSearcherShow && <AddSearcherModal show close={ this.addSearcherModalClose } searchers={ options.searchers || [] } create={ addSearcher } query={ query } loading={ searcherLoading } sqlTxt={ sqlTxt }/> }

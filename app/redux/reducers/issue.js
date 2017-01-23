@@ -93,16 +93,28 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_SEARCHER_ADD_FAIL:
       return { ...state, searcherLoading: false, error: action.error };
 
-    case t.ISSUE_SEARCHER_DELETE:
+    //case t.ISSUE_SEARCHER_DELETE:
+    //  return { ...state, searcherLoading: true };
+
+    //case t.ISSUE_SEARCHER_DELETE_SUCCESS:
+    //  if ( action.result.ecode === 0 ) {
+    //    state.options.searchers = _.reject(state.options.searchers, { id: action.id });
+    //  }
+    //  return { ...state, searcherLoading: false, ecode: action.result.ecode };
+
+    //case t.ISSUE_SEARCHER_DELETE_FAIL:
+    //  return { ...state, searcherLoading: false, error: action.error };
+
+    case t.ISSUE_SEARCHER_CONFIG:
       return { ...state, searcherLoading: true };
 
-    case t.ISSUE_SEARCHER_DELETE_SUCCESS:
+    case t.ISSUE_SEARCHER_CONFIG_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.options.searchers = _.reject(state.options.searchers, { id: action.id });
+        state.options.searchers = action.result.data;
       }
       return { ...state, searcherLoading: false, ecode: action.result.ecode };
 
-    case t.ISSUE_SEARCHER_DELETE_FAIL:
+    case t.ISSUE_SEARCHER_CONFIG_FAIL:
       return { ...state, searcherLoading: false, error: action.error };
 
     case t.ISSUE_FILE_DELETE:

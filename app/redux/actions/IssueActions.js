@@ -42,6 +42,13 @@ export function delSearcher(key, id) {
   });
 }
 
+export function configSearcher(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SEARCHER_CONFIG',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/searcher/batch', method: 'post', data: values })
+  });
+}
+
 export function delFile(key, issue_id, field_key, file_id) {
   return asyncFuncCreator({
     constant: 'ISSUE_FILE_DELETE',

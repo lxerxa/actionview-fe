@@ -83,6 +83,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async configSearcher(values) {
+    await this.props.actions.configSearcher(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
   async setAssignee(values) {
     await this.props.actions.setAssignee(this.pid, this.props.issue.itemData.id, values);
     return this.props.issue.ecode;
@@ -187,6 +192,7 @@ export default class Container extends Component {
         <Header 
           create={ this.create.bind(this) } 
           addSearcher={ this.addSearcher.bind(this) } 
+          configSearcher={ this.configSearcher.bind(this) } 
           delSearcher={ this.delSearcher.bind(this) } 
           getOptions={ this.getOptions.bind(this) } 
           query={ query } 
