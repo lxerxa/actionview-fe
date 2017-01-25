@@ -52,50 +52,84 @@ export default class Header extends Component {
     const { options: { types=[], states=[], priorities=[], resolutions=[], users=[] }, query } = this.props;
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
 
-    const errorMsg = ' 检索值解析失败，条件无法正常显示。';
+    const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
     const queryConds = [];
     let index;
     if (query.type) { 
-      if ((index = _.findIndex(types, { id: query.type })) !== -1) {
-        queryConds.push('类型：' + types[index].name);
-      } else {
-        return '类型' + errorMsg;
+      const typeQuery = query.type.split(',');
+      const typeQueryNames = [];
+      for (let i = 0; i < typeQuery.length; i++) {
+        if ((index = _.findIndex(types, { id: typeQuery[i] })) !== -1) {
+          typeQueryNames.push(types[index].name);
+        } else {
+          return '类型' + errorMsg;
+        }
       }
+      queryConds.push('类型：' + typeQueryNames.join('，'));
     }
     if (query.assignee) {
-      if ((index = _.findIndex(users, { id: query.assignee })) !== -1) {
-        queryConds.push('经办人：' + users[index].name);
-      } else {
-        return '经办人' + errorMsg;
+      const assigneeQuery = query.assignee.split(',');
+      const assigneeQueryNames = [];
+      for (let i = 0; i < assigneeQuery.length; i++) {
+        if (assigneeQuery[i] == 'me') {
+          assigneeQueryNames.push('当前用户');
+        } else if ((index = _.findIndex(users, { id: assigneeQuery[i] })) !== -1) {
+          assigneeQueryNames.push(users[index].name);
+        } else {
+          return '经办人' + errorMsg;
+        }
       }
+      queryConds.push('经办人：' + assigneeQueryNames.join('，'));
     }
     if (query.reporter) {
-      if ((index = _.findIndex(users, { id: query.reporter })) !== -1) {
-        queryConds.push('报告人：' + users[index].name);
-      } else {
-        return '报告人' + errorMsg;
+      const reporterQuery = query.reporter.split(',');
+      const reporterQueryNames = [];
+      for (let i = 0; i < reporterQuery.length; i++) {
+        if (reporterQuery[i] == 'me') {
+          reporterQueryNames.push('当前用户');
+        } else if ((index = _.findIndex(users, { id: reporterQuery[i] })) !== -1) {
+          reporterQueryNames.push(users[index].name);
+        } else {
+          return '报告人' + errorMsg;
+        }
       }
+      queryConds.push('报告人：' + reporterQueryNames.join('，'));
     }
     if (query.state) {
-      if ((index = _.findIndex(states, { id: query.state })) !== -1) {
-        queryConds.push('状态：' + states[index].name);
-      } else {
-        return '状态' + errorMsg;
+      const stateQuery = query.state.split(',');
+      const stateQueryNames = [];
+      for (let i = 0; i < stateQuery.length; i++) {
+        if ((index = _.findIndex(states, { id: stateQuery[i] })) !== -1) {
+          stateQueryNames.push(states[index].name);
+        } else {
+          return '状态' + errorMsg;
+        }
       }
+      queryConds.push('状态：' + stateQueryNames.join('，'));
     }
     if (query.resolution) {
-      if ((index = _.findIndex(resolutions, { id: query.resolution })) !== -1) {
-        queryConds.push('解决结果：' + resolutions[index].name);
-      } else {
-        return '解决结果' + errorMsg;
+      const resolutionQuery = query.resolution.split(',');
+      const resolutionQueryNames = [];
+      for (let i = 0; i < resolutionQuery.length; i++) {
+        if ((index = _.findIndex(resolutions, { id: resolutionQuery[i] })) !== -1) {
+          resolutionQueryNames.push(resolutions[index].name);
+        } else {
+          return '解决结果' + errorMsg;
+        }
       }
+      queryConds.push('解决结果：' + resolutionQueryNames.join('，'));
     }
     if (query.priority) {
-      if ((index = _.findIndex(priorities, { id: query.priority })) !== -1) {
-        queryConds.push('优先级：' + priorities[index].name);
-      } else {
-        return '优先级' + errorMsg;
+      const priorityQuery = query.priority.split(',');
+      const priorityQueryNames = [];
+      for (let i = 0; i < priorityQuery.length; i++) {
+        if ((index = _.findIndex(priorities, { id: priorityQuery[i] })) !== -1) {
+          priorityQueryNames.push(priorities[index].name);
+        } else {
+          return '优先级' + errorMsg;
+        }
       }
+      queryConds.push('优先级：' + priorityQueryNames.join('，'));
     }
 
     if (query.created_at) { queryConds.push('创建时间：' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
@@ -117,17 +151,19 @@ export default class Header extends Component {
       refresh(query);
     } else if (eventKey == '2') {
       this.setState({ condShow : !this.state.condShow });
-    } else if (eventKey === '3') {
-      this.setState({ addSearcherShow : true });
     }
   }
 
   selectSearcher(eventKey) {
+    const { refresh, options={} } = this.props;
+
     if (eventKey == 'searcherConfig') {
-      alert('tt');
       this.setState({ searcherConfigShow: true });
+    } else if(eventKey == 'saveSearcher') {
+      this.setState({ addSearcherShow : true });
+    } else if(eventKey == 'all') {
+      refresh({});
     } else {
-      const { refresh, options={} } = this.props;
       const searchers = options.searchers || [];
       const searcher = _.find(searchers, { id: eventKey }) || {};
       refresh(searcher.query || {});
@@ -153,22 +189,27 @@ export default class Header extends Component {
         <div style={ { marginTop: '5px' } }>
           { options.searchers && options.searchers.length > 0 ?
           <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
+            <MenuItem eventKey='all'>全部问题</MenuItem>
+            <MenuItem divider/>
             { _.map(options.searchers, (val) => 
               <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
             ) }
             <MenuItem divider/>
+            <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
             <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
           </DropdownButton>
           :
-          <DropdownButton className='create-btn' title='过滤器'>
-            <MenuItem disabled>空</MenuItem>
+          <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
+            <MenuItem eventKey='all'>全部问题</MenuItem>
+            <MenuItem divider/>
+            <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
+            <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
           </DropdownButton> }
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherConfigShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           <Button className='create-btn' bsStyle='primary' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
-              <MenuItem eventKey='3'>保存该检索</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='5'>导出</MenuItem>
               <MenuItem eventKey='6'>导入</MenuItem>
@@ -176,7 +217,7 @@ export default class Header extends Component {
           </div>
         </div>
         { this.state.searcherConfigShow && <SearcherConfigModal show close={ this.searcherConfigModalClose } loading={ searcherLoading } config={ configSearcher } searchers={ options.searchers || [] }/> }
-        <SearchList className={ !this.state.searchShow && 'hide' } query={ query } searchShow={ this.state.searchShow } indexLoading={ indexLoading } options={ options } refresh={ refresh }/>
+        <SearchList className={ !this.state.searchShow && 'hide' } query={ query } searchShow={ this.state.searchShow } indexLoading={ indexLoading } options={ options } refresh={ refresh } hide={ () => { this.setState({ searchShow: false }) } }/>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading } project={ project }/> }
         { this.state.addSearcherShow && <AddSearcherModal show close={ this.addSearcherModalClose } searchers={ options.searchers || [] } create={ addSearcher } query={ query } loading={ searcherLoading } sqlTxt={ sqlTxt }/> }
       </div>

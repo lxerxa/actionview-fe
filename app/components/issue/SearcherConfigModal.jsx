@@ -97,7 +97,7 @@ export default class SearcherConfigModal extends Component {
               );
             }) 
             :
-            <p>暂无定义过滤器。</p>
+            <p>暂无自定义过滤器。</p>
           }
           </Form>
         </Modal.Body>

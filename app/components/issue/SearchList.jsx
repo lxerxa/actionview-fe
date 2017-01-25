@@ -38,7 +38,8 @@ export default class SearchList extends Component {
   }
 
   static propTypes = {
-    refresh: PropTypes.func,
+    refresh: PropTypes.func.isRequired,
+    hide: PropTypes.func.isRequired,
     query: PropTypes.object,
     searchShow: PropTypes.bool,
     options: PropTypes.object,
@@ -69,10 +70,11 @@ export default class SearchList extends Component {
   }
 
   render() {
-    const { indexLoading, searchShow=false, options: { types=[], states=[], priorities=[], resolutions=[], users=[] } } = this.props;
+    const { indexLoading, searchShow=false, hide, options: { types=[], states=[], priorities=[], resolutions=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
+    userOptions.unshift({ value: 'me', label: '当前用户' });
     const stateOptions = _.map(states, (val) => { return { label: val.name, value: val.id } });
     const priorityOptions = _.map(priorities, (val) => { return { label: val.name, value: val.id } });
     const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });
@@ -87,6 +89,7 @@ export default class SearchList extends Component {
           <Col sm={ 3 }>
             <Select
               simpleValue
+              multi
               placeholder='选择类型'
               value={ this.state.type }
               onChange={ (newValue) => { this.setState({ type: newValue }); } }
@@ -98,9 +101,10 @@ export default class SearchList extends Component {
           <Col sm={ 3 }>
             <Select
               simpleValue
+              multi
               placeholder='选择经办人'
               value={ this.state.assignee }
-              onChange={ (newValue) => { this.setState({ assignee: newValue }); } }
+              onChange={ (newValue) => { this.setState({ assignee: newValue }) } }
               options={ userOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -109,6 +113,7 @@ export default class SearchList extends Component {
           <Col sm={ 3 }>
             <Select
               simpleValue
+              multi
               placeholder='选择报告人'
               value={ this.state.reporter }
               onChange={ (newValue) => { this.setState({ reporter: newValue }); } }
@@ -122,6 +127,7 @@ export default class SearchList extends Component {
           <Col sm={ 3 }>
             <Select
               simpleValue
+              multi
               placeholder='选择状态'
               value={ this.state.state }
               onChange={ (newValue) => { this.setState({ state: newValue }); } }
@@ -133,6 +139,7 @@ export default class SearchList extends Component {
           <Col sm={ 3 }>
             <Select
               simpleValue
+              multi
               placeholder='选择解决结果'
               value={ this.state.resolution }
               onChange={ (newValue) => { this.setState({ resolution: newValue }); } }
@@ -144,6 +151,7 @@ export default class SearchList extends Component {
           <Col sm={ 3 }>
             <Select
               simpleValue
+              multi
               placeholder='选择优先级'
               value={ this.state.priority }
               onChange={ (newValue) => { this.setState({ priority: newValue }); } }
@@ -186,8 +194,9 @@ export default class SearchList extends Component {
         </FormGroup>
         <FormGroup controlId='formControlsLabel'>
           <Col sm={ 12 }>
-            <Button style={ { float: 'right' } } className='create-btn' onClick={ this.clean.bind(this) }>清空 <i className='fa fa-undo'></i></Button>
-            <Button style={ { float: 'right' } } className='create-btn' disabled={ indexLoading } onClick={ this.search.bind(this) }>搜索 <i className='fa fa-search'></i></Button>
+            <Button style={ { float: 'right', marginTop: '0px', marginRight: '0px' } } className='create-btn' onClick={ this.clean.bind(this) }>清空 <i className='fa fa-undo'></i></Button>
+            <Button style={ { float: 'right', marginTop: '0px' } } className='create-btn' disabled={ indexLoading } onClick={ this.search.bind(this) }>搜索 <i className='fa fa-search'></i></Button>
+            <Button style={ { float: 'right', marginTop: '0px', marginRight: '30px' } } className='create-btn' onClick={ hide }>收起 <i className='fa fa-angle-double-up'></i></Button>
           </Col>
         </FormGroup>
       </Form>
