@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button, Label } from 'react-bootstrap';
+import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 
@@ -12,15 +12,17 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, willSetScreenTypeIds: [], settingScreenTypeIds: [], willSetWorkflowTypeIds: [], settingWorkflowTypeIds: [] , screen: {}, workflow: {} };
+    this.state = { editModalShow: false, delNotifyShow: false, willSetScreenTypeIds: [], settingScreenTypeIds: [], willSetWorkflowTypeIds: [], settingWorkflowTypeIds: [] , screen: {}, workflow: {}, operateShow: false, operation: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.show = this.show.bind(this);
+    this.delNotify = this.delNotify.bind(this);
   }
 
   static propTypes = {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    itemLoading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
@@ -48,8 +50,8 @@ export default class List extends Component {
     show(id);
   }
 
-  delNotify(id) {
-    this.setState({ delNotifyShow: true });
+  delNotify(id, operation) {
+    this.setState({ delNotifyShow: true, operation });
     const { show } = this.props;
     show(id);
   }
@@ -133,9 +135,33 @@ export default class List extends Component {
     this.setState({ workflow: this.state.workflow });
   }
 
+  operateSelect(eventKey) {
+    const { hoverRowId } = this.state;
+
+    if (eventKey === '1') {
+      this.show(hoverRowId);
+    } else if (eventKey === '2') {
+      this.delNotify(hoverRowId, 'del');
+    } else if (eventKey === '3') {
+      this.delNotify(hoverRowId, 'disable');
+    } else if (eventKey === '4') {
+      this.delNotify(hoverRowId, 'enable');
+    }
+  }
+
+  onRowMouseOver(rowData) {
+    this.setState({ operateShow: true, hoverRowId: rowData.id });
+  }
+
+  onMouseLeave() {
+    this.setState({ operateShow: false, hoverRowId: '' });
+  }
+
   render() {
-    const { collection, selectedItem, options, indexLoading, itemLoading, del, edit } = this.props;
-    const { willSetScreenTypeIds, settingScreenTypeIds, willSetWorkflowTypeIds, settingWorkflowTypeIds } = this.state;
+    const { collection, selectedItem, options, indexLoading, loading, del, edit } = this.props;
+    const { operateShow, hoverRowId, willSetScreenTypeIds, settingScreenTypeIds, willSetWorkflowTypeIds, settingWorkflowTypeIds } = this.state;
+
+    const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const { screens = [], workflows = [] } = options;
     const screenOptions = _.map(screens, function(val) {
@@ -149,12 +175,14 @@ export default class List extends Component {
     const typeNum = collection.length;
     for (let i = 0; i < typeNum; i++) {
       types.push({
+        id: collection[i].id,
         name: ( 
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ collection[i].abb && '-' + collection[i].abb }</span>
+            <span className='table-td-title'>{ collection[i].name }{ collection[i].abb && '-' + collection[i].abb }{ collection[i].disabled && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>禁用</Label> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
+        type: ( <span>{ collection[i].type == 'subtask' ? '子任务' : '标准' }</span> ),
         screen: (
           <div>
           { _.indexOf(willSetScreenTypeIds, collection[i].id) === -1 && _.indexOf(settingScreenTypeIds, collection[i].id) === -1 ?
@@ -211,11 +239,17 @@ export default class List extends Component {
         ),
         operation: (
           <div>
-            <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
-            </div>
-            <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            { operateShow && hoverRowId === collection[i].id &&
+              <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+                <MenuItem eventKey='1'>编辑</MenuItem>
+                <MenuItem eventKey='2'>删除</MenuItem>
+                { collection[i].disabled ?
+                  <MenuItem eventKey='4'>启用</MenuItem>
+                  :
+                  <MenuItem eventKey='3'>禁用</MenuItem>
+                }
+              </DropdownButton>
+            }
           </div>
         )
       });
@@ -228,16 +262,21 @@ export default class List extends Component {
       opts.noDataText = '暂无数据显示。';
     }
 
+    opts.onRowMouseOver = this.onRowMouseOver.bind(this);
+    opts.onMouseLeave = this.onMouseLeave.bind(this);
+
     return (
       <div>
         <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
-          <TableHeaderColumn dataField='name' isKey>名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='type'>类型</TableHeaderColumn>
           <TableHeaderColumn dataField='screen'>界面</TableHeaderColumn>
           <TableHeaderColumn dataField='workflow'>工作流</TableHeaderColumn>
-          <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
+          <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } options={ options } collection={ collection }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } loading={ loading } del={ del } edit={ edit } operation={ this.state.operation }/> }
       </div>
     );
   }

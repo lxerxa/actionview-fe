@@ -48,6 +48,8 @@ export default class Header extends Component {
     const { create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
     const defaultIndex = _.findIndex(collection, { default: true });
 
+    const standardCollection = _.reject(collection, { type: 'subtask' }) || [];
+
     return (
       <div>
         <div className='list-unstyled clearfix'>
@@ -62,7 +64,7 @@ export default class Header extends Component {
               <div className='default-set'>
                 <div className='edit-field-content'>
                   <FormControl componentClass='select' type='text' ref='defaultValue' disabled={ defaultLoading }>
-                    { collection.map( itemOption => <option value={ itemOption.id } key={ itemOption.id } selected={ itemOption.default && true }>{ itemOption.name }</option>) }
+                    { standardCollection.map( itemOption => <option value={ itemOption.id } key={ itemOption.id } selected={ itemOption.default && true }>{ itemOption.name }</option>) }
                   </FormControl>
                 </div>
                 <img src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>

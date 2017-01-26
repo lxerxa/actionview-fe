@@ -37,7 +37,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'type',
-  fields: ['name', 'abb', 'screen_id', 'workflow_id', 'description'],
+  fields: ['name', 'abb', 'screen_id', 'workflow_id', 'type', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -81,7 +81,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, abb, screen_id, workflow_id, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, abb, screen_id, workflow_id, type, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
     const { screens = [], workflows = [] } = options;
 
     if (abb.value) {
@@ -95,6 +95,7 @@ export default class CreateModal extends Component {
     const workflowOptions = _.map(workflows, function(val) {
       return { label: val.name, value: val.id };
     });
+    const typeOptions = [{ label: '标准', value: 'standard' }, { label: '子任务', value: 'subtask' }]; 
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -120,6 +121,10 @@ export default class CreateModal extends Component {
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>工作流</ControlLabel>
             <Select disabled={ submitting } options={ workflowOptions } simpleValue clearable={ false } value={ workflow_id.value } onChange={ newValue => { workflow_id.onChange(newValue) } } placeholder='请选择一个工作流'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>类型</ControlLabel>
+            <Select disabled={ submitting } options={ typeOptions } simpleValue clearable={ false } value={ type.value || 'standard' } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择问题类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

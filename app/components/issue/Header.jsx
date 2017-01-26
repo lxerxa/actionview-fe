@@ -195,15 +195,15 @@ export default class Header extends Component {
               <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
             ) }
             <MenuItem divider/>
-            <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
-            <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
+            <MenuItem eventKey='saveSearcher'><i className='fa fa-save'></i> 保存当前检索</MenuItem>
+            <MenuItem eventKey='searcherConfig'><i className='fa fa-cog'></i> 过滤器管理</MenuItem>
           </DropdownButton>
           :
           <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
             <MenuItem eventKey='all'>全部问题</MenuItem>
             <MenuItem divider/>
-            <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
-            <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
+            <MenuItem eventKey='saveSearcher'><i className='fa fa-remove'></i> 保存当前检索</MenuItem>
+            <MenuItem eventKey='searcherConfig'><i className='fa fa-cog'></i> 过滤器管理</MenuItem>
           </DropdownButton> }
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherConfigShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           <Button className='create-btn' bsStyle='primary' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>

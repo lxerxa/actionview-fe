@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], options: {}, indexLoading: false, loading: false, itemLoading: false, sortLoading: false, defaultLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], options: {}, indexLoading: false, loading: false, sortLoading: false, defaultLoading: false, selectedItem: {} };
 
 export default function type(state = initialState, action) {
   switch (action.type) {
@@ -41,19 +41,19 @@ export default function type(state = initialState, action) {
 
     case t.TYPE_SHOW:
       const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: el };
+      return { ...state, loading: false, selectedItem: el };
 
     case t.TYPE_DELETE:
-      return { ...state, itemLoading: true };
+      return { ...state, loading: true };
 
     case t.TYPE_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.collection = _.reject(state.collection, { id: action.id });
       }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.TYPE_DELETE_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      return { ...state, loading: false, error: action.error };
 
     case t.TYPE_SET_SORT:
       return { ...state, sortLoading: true };

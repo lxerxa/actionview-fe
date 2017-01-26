@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import Select from 'react-select';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
@@ -29,7 +30,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'type',
-  fields: ['id', 'name', 'abb', 'description'],
+  fields: ['id', 'name', 'abb', 'type', 'description'],
   validate
 })
 export default class EditModal extends Component {
@@ -79,12 +80,14 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, abb, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { id, name, abb, type, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     if (abb.value) {
       abb.value = abb.value.toUpperCase();
       abb.value = abb.value.substring(0, 1);
     }
+
+    const typeOptions = [{ label: '标准', value: 'standard' }, { label: '子任务', value: 'subtask' }];
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -103,6 +106,10 @@ export default class EditModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
             { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>类型</ControlLabel>
+            <Select disabled={ submitting } options={ typeOptions } simpleValue clearable={ false } value={ type.value || 'standard' } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择问题类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

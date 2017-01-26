@@ -196,7 +196,7 @@ export default class SearchList extends Component {
           <Col sm={ 12 }>
             <Button style={ { float: 'right', marginTop: '0px', marginRight: '0px' } } className='create-btn' onClick={ this.clean.bind(this) }>清空 <i className='fa fa-undo'></i></Button>
             <Button style={ { float: 'right', marginTop: '0px' } } className='create-btn' disabled={ indexLoading } onClick={ this.search.bind(this) }>搜索 <i className='fa fa-search'></i></Button>
-            <Button style={ { float: 'right', marginTop: '0px', marginRight: '30px' } } className='create-btn' onClick={ hide }>收起 <i className='fa fa-angle-double-up'></i></Button>
+            <Button style={ { float: 'right', marginTop: '0px', marginRight: '40px' } } className='create-btn' onClick={ hide }>收起 <i className='fa fa-angle-double-up'></i></Button>
           </Col>
         </FormGroup>
       </Form>
