@@ -13,12 +13,34 @@ const img = require('../../assets/images/loading.gif');
 class CreateModal extends Component {
   constructor(props) {
     super(props);
-    const { options, data={} } = this.props;
+    const { options, data={}, isSubtask=false } = this.props;
 
-    let defaultIndex = -1, schema = [], errors={}, values={}, oldValues={};
+    const typeTmpOptions = [];
+    if (isSubtask) {
+      _.map(options.types || [], function(val) {
+        if (val.type == 'subtask') {
+          typeTmpOptions.push(val);
+        }
+      });
+    } else {
+      _.map(options.types || [], function(val) {
+        if (val.type != 'subtask') {
+          typeTmpOptions.push(val);
+        }
+      });
+    }
+
+    let defaultIndex = -1, schema = [], errors={}, values={}, oldValues={}, typeOkOptions=[];
     if (!_.isEmpty(data) && data.id) {
-      defaultIndex = _.findIndex(options.types || [], { id: data.type });
-      schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
+
+      _.map(typeTmpOptions || [], function(val) {
+        if (!val.disabled || data.type == val.id) {
+          typeOkOptions.push(val);
+        }
+      });
+
+      defaultIndex = _.findIndex(typeOkOptions, { id: data.type });
+      schema = defaultIndex !== -1 ? typeOkOptions[defaultIndex].schema : [];
       _.map(schema, (v) => {
         if (!_.isUndefined(data[v.key])) {
           if (v.key == 'assignee' && data[v.key].id) {
@@ -40,9 +62,18 @@ class CreateModal extends Component {
         }
       });
     } else {
-      defaultIndex = _.findIndex(options.types || [], { default: true }); 
-      schema = defaultIndex !== -1 ? options.types[defaultIndex].schema : [];
-      _.map(schema, (v) => {
+      _.map(typeTmpOptions || [], function(val) {
+        if (!val.disabled) {
+          typeOkOptions.push(val);
+        }
+      });
+
+      defaultIndex = _.findIndex(typeOkOptions, { default: true }); 
+      if (defaultIndex === -1) {
+        defaultIndex = 0;
+      }
+      schema = typeOkOptions[defaultIndex].schema;
+      _.map(schema || [], (v) => {
         if (v.defaultValue) {
           values[v.key] = v.defaultValue;
         }
@@ -52,10 +83,10 @@ class CreateModal extends Component {
       });
     }
 
-    const type = defaultIndex !== -1 ? options.types[defaultIndex].id : ''; 
+    const type = defaultIndex !== -1 ? typeOkOptions[defaultIndex].id : ''; 
     _.extend(oldValues, { type });
 
-    this.state = { ecode: 0, errors, touched: {}, type, schema, values, oldValues };
+    this.state = { ecode: 0, errors, touched: {}, type, typeOptions: typeOkOptions, schema, values, oldValues };
 
     this.getChangedKeys = this.getChangedKeys.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -68,6 +99,8 @@ class CreateModal extends Component {
     project: PropTypes.object,
     options: PropTypes.object,
     loading: PropTypes.bool,
+    isSubtask: PropTypes.bool,
+    parent_id: PropTypes.string,
     create: PropTypes.func,
     edit: PropTypes.func
   }
@@ -91,7 +124,7 @@ class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { create, edit, close, options, data={} } = this.props;
+    const { create, edit, close, options, data={}, parent_id='' } = this.props;
     const schema = _.find(options.types, { id: this.state.type }).schema;
 
     let submitData = {};
@@ -121,7 +154,10 @@ class CreateModal extends Component {
     let ecode;
     if (!_.isEmpty(data) && data.id) {
       ecode = await edit(submitData);
-    } else { 
+    } else {
+      if (parent_id) {
+        _.extend(submitData, { parent_id });
+      }
       ecode = await create(submitData);
     }
     if (ecode === 0) {
@@ -218,10 +254,10 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { options, close, loading, project, data={} } = this.props;
+    const { options, close, loading, project, data={}, isSubtask=false } = this.props;
     const { schema } = this.state;
 
-    const typeOptions = _.map(options.types || [], function(val) {
+    const typeOptions = _.map(this.state.typeOptions, function(val) {
       return { 
         label: (
           <span>
@@ -235,7 +271,7 @@ class CreateModal extends Component {
     return (
       <Modal { ...this.props } onHide={ close } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑问题' : '创建问题' }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑问题' : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
           <Form horizontal>

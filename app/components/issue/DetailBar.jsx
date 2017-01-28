@@ -19,7 +19,7 @@ const DelLinkModal = require('./DelLinkModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {} };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -44,6 +44,7 @@ export default class DetailBar extends Component {
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
     addComments: PropTypes.func.isRequired,
@@ -155,6 +156,10 @@ export default class DetailBar extends Component {
     this.setState({ editModalShow: false });
   }
 
+  createSubtaskModalClose() {
+    this.setState({ createSubtaskModalShow: false });
+  }
+
   getFileIconCss(fileName) {
     const newFileName = (fileName || '').toLowerCase();
     if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
@@ -214,6 +219,8 @@ export default class DetailBar extends Component {
       const ecode = await show(data.id);
     } else if (eventKey == '2') {
       this.setState({ linkIssueModalShow: true });
+    } else if (eventKey == '3') {
+      this.setState({ createSubtaskModalShow: true });
     }
   }
 
@@ -230,10 +237,17 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
+    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, create, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
     const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
+
+    const subtaskTypeOptions = [];
+    _.map(options.types, (val) => {
+      if (val.type == 'subtask' && !val.disabled) {
+        subtaskTypeOptions.push(val);
+      }
+    });
 
     const type = _.find(options.types, { id : data.type });
     const schema = type && type.schema ? type.schema : [];
@@ -272,7 +286,9 @@ export default class DetailBar extends Component {
                   <div style={ { float: 'right' } }>
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='1'>刷新</MenuItem>
+                      <MenuItem eventKey='4'>分享链接</MenuItem>
                       <MenuItem eventKey='2'>链接问题</MenuItem>
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='3'>创建子任务</MenuItem> }
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
@@ -290,6 +306,25 @@ export default class DetailBar extends Component {
                     <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label>{ !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
                   </Col>
                 </FormGroup>
+
+                { data.subtasks && data.subtasks.length > 0 &&
+                <FormGroup controlId='formControlsLabel'>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    子任务 
+                  </Col>
+                  <Col sm={ 9 }>
+                    { data.subtasks.length > 2 &&
+                    <div style={ { marginTop: '6px' } }>共{ data.subtasks.length }个子任务<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>{ this.state.subtaskShow ? '收起' : '展开' } <i className={ this.state.subtaskShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
+                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                      <tbody>
+                      { _.map(data.subtasks, (val, key) => {
+                        return (<tr key={ 'subtask' + key }><td>{ _.find(options.types, { id : val.type }).name }/{ val.no }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ val.title }</a></td></tr>); 
+                      }) }
+                      </tbody>
+                    </Table>
+                  </Col>
+                </FormGroup> }
+
                 { data.links && data.links.length > 0 &&
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -494,7 +529,8 @@ export default class DetailBar extends Component {
           </Tabs>
         </div>
         { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
-        { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data }/> }
+        { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data } isSubtask={ data.parent_id && true }/> }
+        { this.state.createSubtaskModalShow && <CreateModal show close={ this.createSubtaskModalClose.bind(this) } options={ options } create={ create } loading={ loading } project={ project } parent_id={ data.id } isSubtask={ true }/> }
         { this.state.previewModalShow && <PreviewModal show close={ () => { this.setState({ previewModalShow: false }); } } collection={ wfCollection } /> }
         { this.state.linkIssueModalShow && <LinkIssueModal show close={ () => { this.setState({ linkIssueModalShow: false }); } } loading={ linkLoading } createLink={ createLink } issue={ data } types={ options.types } project={ project }/> }
         { this.state.delLinkModalShow && <DelLinkModal show close={ () => { this.setState({ delLinkModalShow: false }); } } loading={ linkLoading } delLink={ delLink } data={ this.state.delLinkData }/> }

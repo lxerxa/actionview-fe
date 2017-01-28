@@ -63,6 +63,7 @@ export default class List extends Component {
     query: PropTypes.object,
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
@@ -181,7 +182,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogOptions, indexHistory, historyCollection, historyIndexLoading, historyLoaded, createLink, delLink, linkLoading } = this.props;
+    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, create, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogOptions, indexHistory, historyCollection, historyIndexLoading, historyLoaded, createLink, delLink, linkLoading } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -260,6 +261,7 @@ export default class List extends Component {
         { this.state.barShow &&
           <DetailBar 
             edit={ edit } 
+            create={ create } 
             setAssignee={ setAssignee } 
             close={ this.closeDetail } 
             options={ options } 

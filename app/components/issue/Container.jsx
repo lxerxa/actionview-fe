@@ -203,6 +203,7 @@ export default class Container extends Component {
           index={ this.index.bind(this) } 
           show={ this.show.bind(this) } 
           edit={ this.edit.bind(this) } 
+          create={ this.create.bind(this) } 
           setAssignee={ this.setAssignee.bind(this) } 
           delFile={ this.delFile.bind(this) } 
           addFile={ this.props.actions.addFile } 

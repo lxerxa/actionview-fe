@@ -48,7 +48,7 @@ export default class Header extends Component {
     const { create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
     const defaultIndex = _.findIndex(collection, { default: true });
 
-    const standardCollection = _.reject(collection, { type: 'subtask' }) || [];
+    const standardCollection = _.reject(_.reject(collection, { type: 'subtask' }) || [], { disabled: true }) || [];
 
     return (
       <div>

@@ -173,6 +173,8 @@ export default class Header extends Component {
   render() {
     const { create, addSearcher, configSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading, project } = this.props;
 
+    const standardTypes = _.reject(_.reject(options.types || [], { type: 'subtask' }) || [], { disabled: true }) || [];
+
     const sqlTxt = this.condsTxt();
 
     return (
@@ -206,7 +208,7 @@ export default class Header extends Component {
             <MenuItem eventKey='searcherConfig'><i className='fa fa-cog'></i> 过滤器管理</MenuItem>
           </DropdownButton> }
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherConfigShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
-          <Button className='create-btn' bsStyle='primary' disabled={ optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>
+          <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button>
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>

@@ -178,7 +178,7 @@ export default class List extends Component {
         id: collection[i].id,
         name: ( 
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ collection[i].abb && '-' + collection[i].abb }{ collection[i].disabled && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>禁用</Label> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ collection[i].abb && ' (' + collection[i].abb + ')' }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }{ collection[i].type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子任务)</span> } </span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
@@ -237,17 +237,15 @@ export default class List extends Component {
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingWorkflowTypeIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
+        status: ( <span>{ collection[i].disabled  ? <Label>无效</Label> : <Label bsStyle='success'>有效</Label> }</span> ), 
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
-                { collection[i].disabled ?
-                  <MenuItem eventKey='4'>启用</MenuItem>
-                  :
-                  <MenuItem eventKey='3'>禁用</MenuItem>
-                }
+                { collection[i].disabled && <MenuItem eventKey='4'>启用</MenuItem> }
+                { !collection[i].disabled && <MenuItem eventKey='3'>禁用</MenuItem> }
               </DropdownButton>
             }
           </div>
@@ -270,9 +268,9 @@ export default class List extends Component {
         <BootstrapTable data={ types } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='type'>类型</TableHeaderColumn>
           <TableHeaderColumn dataField='screen'>界面</TableHeaderColumn>
           <TableHeaderColumn dataField='workflow'>工作流</TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='status'>状态</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } options={ options } collection={ collection }/> }
