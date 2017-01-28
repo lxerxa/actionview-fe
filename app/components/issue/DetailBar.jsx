@@ -307,6 +307,16 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup>
 
+                { data.parents && data.parents.id &&
+                <FormGroup controlId='formControlsLabel'>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    父任务
+                  </Col>
+                  <Col sm={ 9 }>
+                    <div style={ { marginTop: '6px' } }><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ _.find(options.types, { id : data.parents.type }).name }/{ data.parents.no } - { data.parents.title }</a></div>
+                  </Col>
+                </FormGroup> }
+
                 { data.subtasks && data.subtasks.length > 0 &&
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>

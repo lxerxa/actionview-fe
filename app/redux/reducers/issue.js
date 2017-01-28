@@ -31,7 +31,14 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_CREATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.collection.unshift(action.result.data);
+        if (!_.isEmpty(state.itemData) && action.result.data.parent_id === state.itemData.id) {
+          if (!state.itemData.subtasks) {
+            state.itemData.subtasks = [];
+          }
+          state.itemData.subtasks.push(_.pick(action.result.data, ['id', 'no', 'title', 'type', 'state']));
+        }
       }
+
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.ISSUE_CREATE_FAIL:
