@@ -286,8 +286,11 @@ export default class DetailBar extends Component {
                   <div style={ { float: 'right' } }>
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='1'>刷新</MenuItem>
+                      <MenuItem eventKey='5'>关注</MenuItem>
                       <MenuItem eventKey='4'>分享链接</MenuItem>
                       <MenuItem eventKey='2'>链接问题</MenuItem>
+                      <MenuItem eventKey='3'>移动</MenuItem>
+                      <MenuItem eventKey='6'>删除</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='3'>创建子任务</MenuItem> }
                     </DropdownButton>
                   </div>
@@ -297,13 +300,13 @@ export default class DetailBar extends Component {
                     类型/NO 
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '6px' } }>{ type ? type.name : '-' }/{ data.no || '' }</div>
+                    <div style={ { marginTop: '7px' } }>{ type ? type.name : '-' }/{ data.no || '' }</div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     状态
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '6px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label>{ !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
+                    <div style={ { marginTop: '7px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label>{ !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
                   </Col>
                 </FormGroup>
 
@@ -313,7 +316,14 @@ export default class DetailBar extends Component {
                     父任务
                   </Col>
                   <Col sm={ 9 }>
-                    <div style={ { marginTop: '6px' } }><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ _.find(options.types, { id : data.parents.type }).name }/{ data.parents.no } - { data.parents.title }</a></div>
+                    <Table condensed hover responsive style={ { marginBottom: '0px' } }>
+                      <tbody>
+                        <tr>
+                          <td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ _.find(options.types, { id : data.parents.type }).name }/{ data.parents.no } - { data.parents.title }</a></td>
+                          <td>处理中</td>
+                        </tr>
+                      </tbody>
+                    </Table>
                   </Col>
                 </FormGroup> }
 
@@ -324,11 +334,11 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     { data.subtasks.length > 2 &&
-                    <div style={ { marginTop: '6px' } }>共{ data.subtasks.length }个子任务<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>{ this.state.subtaskShow ? '收起' : '展开' } <i className={ this.state.subtaskShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
+                    <div style={ { marginTop: '7px' } }>共{ data.subtasks.length }个子任务<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>{ this.state.subtaskShow ? '收起' : '展开' } <i className={ this.state.subtaskShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
                     <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
-                        return (<tr key={ 'subtask' + key }><td>{ _.find(options.types, { id : val.type }).name }/{ val.no }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ val.title }</a></td></tr>); 
+                        return (<tr key={ 'subtask' + key }><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ _.find(options.types, { id : val.type }).name }/{ val.no } - { val.title }</a></td><td>处理中</td></tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -342,7 +352,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     { data.links.length > 2 &&
-                    <div style={ { marginTop: '6px' } }>共{ data.links.length }个问题<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>{ this.state.linkShow ? '收起' : '展开' } <i className={ this.state.linkShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
+                    <div style={ { marginTop: '7px' } }>共{ data.links.length }个问题<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>{ this.state.linkShow ? '收起' : '展开' } <i className={ this.state.linkShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
                     <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.links, (val, key) => {
@@ -371,7 +381,7 @@ export default class DetailBar extends Component {
                           }
                           linkIssueId = val.src.id;
                         }
-                        return (<tr key={ 'link' + key }><td>{ relation }</td><td>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ linkedIssue.title }</a></td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
+                        return (<tr key={ 'link' + key }><td>{ relation }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td><td>处理中</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -497,7 +507,7 @@ export default class DetailBar extends Component {
                         { field.name || '-' }
                       </Col>
                       <Col sm={ 9 }>
-                        <div style={ { marginTop: '6px' } }>
+                        <div style={ { marginTop: '7px' } }>
                           { contents }
                         </div>
                       </Col>

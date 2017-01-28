@@ -226,6 +226,12 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+                <MenuItem eventKey='2'>编辑</MenuItem>
+                <MenuItem eventKey='2'>分配</MenuItem>
+                <MenuItem eventKey='2'>分享链接</MenuItem>
+                <MenuItem eventKey='2'>关注</MenuItem>
+                <MenuItem eventKey='2'>创建子任务</MenuItem>
+                <MenuItem eventKey='2'>移动</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
             }
