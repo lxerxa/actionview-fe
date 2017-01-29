@@ -12,6 +12,7 @@ const PaginationList = require('./PaginationList');
 const AddWorklogModal = require('./worklog/AddWorklogModal');
 const CreateModal = require('./CreateModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
+const MoveModal = require('./MoveModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ export default class List extends Component {
       editModalShow: false,
       createSubtaskModalShow: false,
       convertTypeModalShow: false,
+      moveModalShow: false,
       detailId: '',
       selectedItem: {},
       hoverRowId: ''
@@ -122,6 +124,8 @@ export default class List extends Component {
       this.setState({ createSubtaskModalShow : true });
     } else if (eventKey === 'convert') {
       this.setState({ convertTypeModalShow : true });
+    } else if (eventKey === 'move') {
+      this.setState({ moveModalShow : true });
     } else {
       // todo err notify
       eventKey === '1' && this.setState({ editModalShow: true });
@@ -249,8 +253,8 @@ export default class List extends Component {
                 <MenuItem eventKey='2'>关注</MenuItem>
                 <MenuItem eventKey='2'>分享链接</MenuItem>
                 { !collection[i].parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                { !collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
-                <MenuItem eventKey='2'>移动</MenuItem>
+                { collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
+                { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
             }
@@ -371,6 +375,14 @@ export default class List extends Component {
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
+            edit={ edit }
+            loading={ loading }
+            issue={ selectedItem }/> }
+        { this.state.moveModalShow &&
+          <MoveModal show
+            close={ () => { this.setState({ moveModalShow: false }); } }
+            options={ options }
+            project={ project } 
             edit={ edit }
             loading={ loading }
             issue={ selectedItem }/> }
