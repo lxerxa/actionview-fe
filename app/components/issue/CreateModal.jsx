@@ -153,7 +153,7 @@ class CreateModal extends Component {
 
     let ecode;
     if (!_.isEmpty(data) && data.id) {
-      ecode = await edit(submitData);
+      ecode = await edit(data.id, submitData);
     } else {
       if (parent_id) {
         _.extend(submitData, { parent_id });

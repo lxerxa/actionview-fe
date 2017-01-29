@@ -18,6 +18,7 @@ export default class Worklog extends Component {
   }
 
   static propTypes = {
+    issue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     original_estimate: PropTypes.string,
     indexLoading: PropTypes.bool.isRequired,
@@ -118,7 +119,7 @@ export default class Worklog extends Component {
   }
 
   render() {
-    const { indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
+    const { issue, indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
 
     let leave_estimate_m = undefined;
     if (original_estimate) {
@@ -152,7 +153,7 @@ export default class Worklog extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog() } }><i className='fa fa-refresh'></i> 刷新</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id) } }><i className='fa fa-refresh'></i> 刷新</span>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span>
             </div>
           </Col>
@@ -211,6 +212,7 @@ export default class Worklog extends Component {
         </FormGroup>
         { this.state.addWorklogShow &&
           <AddWorklogModal show
+            issue={ issue }
             close={ () => { this.setState({ addWorklogShow: false }) } }
             data={ this.state.selectedWorklog }
             loading = { loading }
@@ -218,6 +220,7 @@ export default class Worklog extends Component {
             edit={ editWorklog }/> }
         { this.state.delWorklogShow &&
           <DelWorklogModal show
+            issue={ issue }
             close={ () => { this.setState({ delWorklogShow: false }) } }
             data={ this.state.selectedWorklog }
             loading = { loading }

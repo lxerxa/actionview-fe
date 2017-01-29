@@ -81,14 +81,14 @@ export default class DetailBar extends Component {
   }
 
   handleTabSelect(tabKey) {
-    const { indexComments, indexHistory, indexWorklog, commentsLoaded, historyLoaded, worklogLoaded } = this.props;
+    const { indexComments, indexHistory, indexWorklog, commentsLoaded, historyLoaded, worklogLoaded, data } = this.props;
     this.setState({ tabKey });
     if (tabKey === 2 && !commentsLoaded) {
-      indexComments();
+      indexComments(data.id);
     } else if (tabKey === 3 && !historyLoaded) {
-      indexHistory();
+      indexHistory(data.id);
     } else if (tabKey === 4 && !worklogLoaded) {
-      indexWorklog();
+      indexWorklog(data.id);
     }
   }
 
@@ -121,8 +121,8 @@ export default class DetailBar extends Component {
 
   async assignToMe(e) {
     e.preventDefault();
-    const { setAssignee } = this.props;
-    const ecode = await setAssignee({ assignee: '57afced21d41c8174d7421c1' });
+    const { setAssignee, data } = this.props;
+    const ecode = await setAssignee(data.id, { assignee: '57afced21d41c8174d7421c1' });
     // fix me
     //if (ecode === 0) {
     //} else {
@@ -135,8 +135,8 @@ export default class DetailBar extends Component {
 
   async setAssignee() {
     this.setState({ settingAssignee: true });
-    const { setAssignee } = this.props;
-    const ecode = await setAssignee({ assignee: this.state.newAssignee });
+    const { setAssignee, data } = this.props;
+    const ecode = await setAssignee(data.id, { assignee: this.state.newAssignee });
     if (ecode === 0) {
       this.setState({ settingAssignee: false, editAssignee: false, newAssignee: undefined });
     } else {
@@ -289,9 +289,10 @@ export default class DetailBar extends Component {
                       <MenuItem eventKey='5'>关注</MenuItem>
                       <MenuItem eventKey='4'>分享链接</MenuItem>
                       <MenuItem eventKey='2'>链接问题</MenuItem>
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='3'>创建子任务</MenuItem> }
+                      { data.parent_id && <MenuItem eventKey='7'>转换为标准问题</MenuItem> }
                       <MenuItem eventKey='3'>移动</MenuItem>
                       <MenuItem eventKey='6'>删除</MenuItem>
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='3'>创建子任务</MenuItem> }
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
@@ -518,6 +519,7 @@ export default class DetailBar extends Component {
             </Tab>
             <Tab eventKey={ 2 } title='备注'>
               <Comments 
+                issue_id={ data.id }
                 collection={ commentsCollection } 
                 indexComments={ indexComments } 
                 indexLoading={ commentsIndexLoading } 
@@ -530,12 +532,14 @@ export default class DetailBar extends Component {
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
               <History 
+                issue_id={ data.id }
                 collection={ historyCollection } 
                 indexHistory={ indexHistory } 
                 indexLoading={ historyIndexLoading } />
             </Tab>
             <Tab eventKey={ 4 } title='工作日志'>
               <Worklog 
+                issue={ data }
                 original_estimate = { data.original_estimate }
                 options={ worklogOptions }
                 collection={ worklogCollection } 

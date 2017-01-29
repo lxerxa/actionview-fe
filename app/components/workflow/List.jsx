@@ -83,6 +83,8 @@ export default class List extends Component {
     const { collection, selectedItem, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
+    const node = ( <span><i className='fa fa-cog'></i></span> );
+
     const workflows = [];
     const workflowNum = collection.length;
     for (let i = 0; i < workflowNum; i++) {
@@ -99,7 +101,7 @@ export default class List extends Component {
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton pullRight bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='3'>配置</MenuItem>
                 <MenuItem eventKey='4'>复制</MenuItem>
                 <MenuItem eventKey='1'>编辑</MenuItem>

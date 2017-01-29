@@ -67,8 +67,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async edit(values) {
-    await this.props.actions.edit(this.pid, this.props.issue.itemData.id, values);
+  async edit(id, values) {
+    await this.props.actions.edit(this.pid, id, values);
     return this.props.issue.ecode;
   }
 
@@ -88,8 +88,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async setAssignee(values) {
-    await this.props.actions.setAssignee(this.pid, this.props.issue.itemData.id, values);
+  async setAssignee(id, values) {
+    await this.props.actions.setAssignee(this.pid, id, values);
     return this.props.issue.ecode;
   }
 
@@ -108,48 +108,48 @@ export default class Container extends Component {
     return this.props.wfconfig.ecode;
   }
 
-  async indexComments() {
-    await this.props.actions.indexComments(this.pid, this.props.issue.itemData.id);
+  async indexComments(issue_id) {
+    await this.props.actions.indexComments(this.pid, issue_id);
     return this.props.issue.ecode;
   }
 
-  async addComments(values) {
-    await this.props.actions.addComments(this.pid, this.props.issue.itemData.id, values);
+  async addComments(issue_id, values) {
+    await this.props.actions.addComments(this.pid, issue_id, values);
     return this.props.issue.ecode;
   }
 
-  async delComments(id) {
-    await this.props.actions.delComments(this.pid, this.props.issue.itemData.id, id);
+  async delComments(issue_id, id) {
+    await this.props.actions.delComments(this.pid, issue_id, id);
     return this.props.issue.ecode;
   }
 
-  async editComments(id, value) {
-    await this.props.actions.editComments(this.pid, this.props.issue.itemData.id, id, value);
+  async editComments(issue_id, id, value) {
+    await this.props.actions.editComments(this.pid, issue_id, id, value);
     return this.props.issue.ecode;
   }
 
-  async indexWorklog() {
-    await this.props.actions.indexWorklog(this.pid, this.props.issue.itemData.id);
+  async indexWorklog(issue_id) {
+    await this.props.actions.indexWorklog(this.pid, issue_id);
     return this.props.issue.ecode;
   }
 
-  async addWorklog(values) {
-    await this.props.actions.addWorklog(this.pid, this.props.issue.itemData.id, values);
+  async addWorklog(issue_id, values) {
+    await this.props.actions.addWorklog(this.pid, issue_id, values);
     return this.props.issue.ecode;
   }
 
-  async delWorklog(id) {
-    await this.props.actions.delWorklog(this.pid, this.props.issue.itemData.id, id);
+  async delWorklog(issue_id, id) {
+    await this.props.actions.delWorklog(this.pid, issue_id, id);
     return this.props.issue.ecode;
   }
 
-  async editWorklog(id, value) {
-    await this.props.actions.editWorklog(this.pid, this.props.issue.itemData.id, id, value);
+  async editWorklog(issue_id, id, value) {
+    await this.props.actions.editWorklog(this.pid, issue_id, id, value);
     return this.props.issue.ecode;
   }
 
-  async indexHistory() {
-    await this.props.actions.indexHistory(this.pid, this.props.issue.itemData.id);
+  async indexHistory(issue_id) {
+    await this.props.actions.indexHistory(this.pid, issue_id);
     return this.props.issue.ecode;
   }
 

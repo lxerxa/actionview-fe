@@ -26,7 +26,8 @@ export default class Comments extends Component {
     editComments: PropTypes.func.isRequired,
     delComments: PropTypes.func.isRequired,
     users: PropTypes.array.isRequired,
-    collection: PropTypes.array.isRequired
+    collection: PropTypes.array.isRequired,
+    issue_id: PropTypes.string.isRequired
   }
 
   showCommentsInputor() {
@@ -54,7 +55,7 @@ export default class Comments extends Component {
   }
 
   async addComments() {
-    const { addComments, users } = this.props;
+    const { addComments, users, issue_id } = this.props;
     const newAtWho = [];
     _.map(_.uniq(this.state.atWho), (val) => {
       const user = _.find(users, { id: val });
@@ -62,7 +63,7 @@ export default class Comments extends Component {
         newAtWho.push(val);
       }
     });
-    const ecode = await addComments({ contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) }); 
+    const ecode = await addComments(issue_id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) }); 
     if (ecode === 0) {
       this.setState({ addCommentsShow: false, contents: '', atWho: [] });
     }
@@ -107,14 +108,14 @@ export default class Comments extends Component {
   }
 
   render() {
-    const { indexComments, collection, indexLoading, loading, itemLoading, delComments, editComments, users } = this.props;
+    const { indexComments, collection, indexLoading, loading, itemLoading, delComments, editComments, users, issue_id } = this.props;
 
     return (
       <Form horizontal>
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexComments() } }><i className='fa fa-refresh'></i> 刷新</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexComments(issue_id) } }><i className='fa fa-refresh'></i> 刷新</span>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</span>
             </div>
           </Col>
@@ -189,18 +190,21 @@ export default class Comments extends Component {
             data={ this.state.selectedComments }
             loading = { itemLoading }
             users ={ users }
+            issue_id={ issue_id }
             edit={ editComments }/> }
         { this.state.delReplyShow &&
           <DelReplyModal show
             close={ () => { this.setState({ delReplyShow: false }) } }
             data={ this.state.selectedComments }
             loading = { itemLoading }
+            issue_id={ issue_id }
             edit={ editComments }/> }
         { this.state.delCommentsShow &&
           <DelCommentsModal show
             close={ () => { this.setState({ delCommentsShow: false }) } }
             data={ this.state.selectedComments }
             loading = { itemLoading }
+            issue_id={ issue_id }
             del={ delComments }/> }
       </Form>
     );

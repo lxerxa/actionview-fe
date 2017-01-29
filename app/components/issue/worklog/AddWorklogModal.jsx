@@ -48,15 +48,16 @@ export default class AddWorklogModal extends Component {
   }
 
   static propTypes = {
+    issue: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
-    add: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    add: PropTypes.func,
+    edit: PropTypes.func,
     loading: PropTypes.bool.isRequired,
-    data: PropTypes.object.isRequired
+    data: PropTypes.object
   }
 
   async confirm() {
-    const { close, add, edit, data } = this.props;
+    const { issue, close, add, edit, data={} } = this.props;
 
     let ecode = 0;
     if (data.id) {
@@ -76,10 +77,10 @@ export default class AddWorklogModal extends Component {
       if (newValues.leave_estimate || newValues.cut) {
         newValues.adjust_type = this.state.values.adjust_type;
       }
-      ecode = await edit(data.id, newValues);
+      ecode = await edit(issue.id, data.id, newValues);
     } else {
       this.state.values.started_at = parseInt(moment(this.state.values.started_at).format('X'));
-      ecode = await add(this.state.values);
+      ecode = await add(issue.id, this.state.values);
     }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -163,14 +164,14 @@ export default class AddWorklogModal extends Component {
   }
 
   render() {
-    const { data, loading } = this.props;
+    const { data={}, loading, issue } = this.props;
     const styles = { display: 'inline-block', width: '40%' };
     const err_styles = { display: 'inline-block', width: '40%', borderColor: '#a94442' };
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑工作日志' : '添加工作日志' }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑工作日志' : ('添加工作日志' + (issue.no ? (' - ' + issue.no) : '')) }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form horizontal>

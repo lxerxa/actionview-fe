@@ -13,6 +13,7 @@ export default class DelWorklogModal extends Component {
   }
 
   static propTypes = {
+    issue: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -20,8 +21,8 @@ export default class DelWorklogModal extends Component {
   }
 
   async confirm() {
-    const { close, del, data } = this.props;
-    const ecode = await del(data.id);
+    const { issue, close, del, data } = this.props;
+    const ecode = await del(issue.id, data.id);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

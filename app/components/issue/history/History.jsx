@@ -13,20 +13,21 @@ export default class History extends Component {
   }
 
   static propTypes = {
+    issue_id: PropTypes.string.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired
   }
 
   render() {
-    const { indexHistory, collection, indexLoading } = this.props;
+    const { issue_id, indexHistory, collection, indexLoading } = this.props;
 
     return (
       <Form horizontal>
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory() } }><i className='fa fa-refresh'></i> 刷新</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory(issue_id) } }><i className='fa fa-refresh'></i> 刷新</span>
             </div>
           </Col>
           <Col sm={ 12 }>

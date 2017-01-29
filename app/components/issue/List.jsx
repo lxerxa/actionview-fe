@@ -9,6 +9,9 @@ const DelNotify = require('./DelNotify');
 const DetailBar = require('./DetailBar');
 const img = require('../../assets/images/loading.gif');
 const PaginationList = require('./PaginationList');
+const AddWorklogModal = require('./worklog/AddWorklogModal');
+const CreateModal = require('./CreateModal');
+const ConvertTypeModal = require('./ConvertTypeModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -17,7 +20,12 @@ export default class List extends Component {
       delNotifyShow: false, 
       operateShow: false, 
       barShow: false,
+      addWorklogShow: false,
+      editModalShow: false,
+      createSubtaskModalShow: false,
+      convertTypeModalShow: false,
       detailId: '',
+      selectedItem: {},
       hoverRowId: ''
     };
     this.delNotifyClose = this.delNotifyClose.bind(this);
@@ -51,7 +59,6 @@ export default class List extends Component {
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
     historyLoaded: PropTypes.bool.isRequired,
-    selectedItem: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
     project: PropTypes.object,
     options: PropTypes.object,
@@ -98,14 +105,24 @@ export default class List extends Component {
   }
 
   operateSelect(eventKey) {
+    const { delNotify, show, collection } = this.props;
+
     const { hoverRowId } = this.state;
-    const { delNotify, show } = this.props;
+    const selectedItem = _.find(collection, { id: hoverRowId }) || {}; 
+    this.setState({ selectedItem });
 
     if (eventKey === '2') {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
+    } else if (eventKey === 'worklog') {
+      this.setState({ addWorklogShow : true });
+    } else if (eventKey === 'edit') {
+      this.setState({ editModalShow : true });
+    } else if (eventKey === 'createSubtask') {
+      this.setState({ createSubtaskModalShow : true });
+    } else if (eventKey === 'convert') {
+      this.setState({ convertTypeModalShow : true });
     } else {
-      show(hoverRowId);
       // todo err notify
       eventKey === '1' && this.setState({ editModalShow: true });
       eventKey === '3' && this.setState({ defaultValueConfigShow: true });
@@ -173,7 +190,7 @@ export default class List extends Component {
 
   closeDetail() {
     this.setState({ barShow: false });
-    const { selectedItem, cleanRecord } = this.props;
+    const { cleanRecord } = this.props;
     $('.react-bs-container-body table tr').each(function(i) {
       $(this).css('background-color', '');
     });
@@ -182,8 +199,8 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, selectedItem, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, create, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogOptions, indexHistory, historyCollection, historyIndexLoading, historyLoaded, createLink, delLink, linkLoading } = this.props;
-    const { operateShow, hoverRowId } = this.state;
+    const { collection, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, create, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogOptions, indexHistory, historyCollection, historyIndexLoading, historyLoaded, createLink, delLink, linkLoading } = this.props;
+    const { operateShow, hoverRowId, selectedItem } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
@@ -226,16 +243,17 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='2'>编辑</MenuItem>
-                <MenuItem eventKey='2'>分配</MenuItem>
-                <MenuItem eventKey='2'>分享链接</MenuItem>
+                <MenuItem eventKey='edit'>编辑</MenuItem>
+                <MenuItem eventKey='assign'>分配</MenuItem>
+                <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
                 <MenuItem eventKey='2'>关注</MenuItem>
-                <MenuItem eventKey='2'>创建子任务</MenuItem>
+                <MenuItem eventKey='2'>分享链接</MenuItem>
+                { !collection[i].parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                { !collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                 <MenuItem eventKey='2'>移动</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
             }
-            <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -325,6 +343,37 @@ export default class List extends Component {
             close={ this.delNotifyClose } 
             data={ selectedItem } 
             del={ del }/> }
+        { this.state.addWorklogShow &&
+          <AddWorklogModal show
+            issue={ selectedItem }
+            close={ () => { this.setState({ addWorklogShow: false }) } }
+            loading = { worklogLoading }
+            add={ addWorklog }/> }
+        { this.state.editModalShow && 
+          <CreateModal show 
+            close={ () => { this.setState({ editModalShow: false }); } } 
+            options={ options } 
+            loading={ loading } 
+            project={ project } 
+            edit={ edit }
+            isSubtask={ selectedItem.parent_id && true }
+            data={ selectedItem }/> }
+        { this.state.createSubtaskModalShow && 
+          <CreateModal show 
+            close={ () => { this.setState({ createSubtaskModalShow: false }); } } 
+            options={ options } 
+            create={ create } 
+            loading={ loading } 
+            project={ project } 
+            parent_id={ selectedItem.id } 
+            isSubtask={ true }/> }
+        { this.state.convertTypeModalShow &&
+          <ConvertTypeModal show
+            close={ () => { this.setState({ convertTypeModalShow: false }); } }
+            options={ options }
+            edit={ edit }
+            loading={ loading }
+            issue={ selectedItem }/> }
       </div>
     );
   }

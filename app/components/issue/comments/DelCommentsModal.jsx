@@ -13,6 +13,7 @@ export default class DelCommentsModal extends Component {
   }
 
   static propTypes = {
+    issue_id: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -20,8 +21,8 @@ export default class DelCommentsModal extends Component {
   }
 
   async confirm() {
-    const { close, del, data } = this.props;
-    const ecode = await del(data.id);
+    const { issue_id, close, del, data } = this.props;
+    const ecode = await del(issue_id, data.id);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

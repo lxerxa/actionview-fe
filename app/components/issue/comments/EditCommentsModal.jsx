@@ -14,6 +14,7 @@ export default class EditCommentsModal extends Component {
   }
 
   static propTypes = {
+    issue_id: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -22,7 +23,7 @@ export default class EditCommentsModal extends Component {
   }
 
   async confirm() {
-    const { close, edit, users, data } = this.props;
+    const { issue_id, close, edit, users, data } = this.props;
 
     const newAtWho = [];
     _.map(_.uniq(this.state.atWho), (val) => {
@@ -33,9 +34,9 @@ export default class EditCommentsModal extends Component {
     });
     let ecode = 0;
     if (data.comments_id) {
-      ecode = await edit(data.comments_id, { contents: this.state.contents, to: data.to || {}, reply_id: data.id || '', atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ), operation: data.id ? 'editReply' : 'addReply' });
+      ecode = await edit(issue_id, data.comments_id, { contents: this.state.contents, to: data.to || {}, reply_id: data.id || '', atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ), operation: data.id ? 'editReply' : 'addReply' });
     } else {
-      ecode = await edit(data.id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) });
+      ecode = await edit(issue_id, data.id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) });
     }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
