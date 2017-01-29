@@ -15,11 +15,13 @@ const PreviewModal = require('../workflow/PreviewModal');
 const DelFileModal = require('./DelFileModal');
 const LinkIssueModal = require('./LinkIssueModal');
 const DelLinkModal = require('./DelLinkModal');
+const ConvertTypeModal = require('./ConvertTypeModal');
+const MoveModal = require('./MoveModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, convertTypeModalShow: false, moveModalShow: false, convertTypeModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -215,12 +217,16 @@ export default class DetailBar extends Component {
 
   async operateSelect(eventKey) {
     const { data, show } = this.props;
-    if (eventKey == '1') {
+    if (eventKey == 'refresh') {
       const ecode = await show(data.id);
-    } else if (eventKey == '2') {
+    } else if (eventKey == 'link') {
       this.setState({ linkIssueModalShow: true });
-    } else if (eventKey == '3') {
+    } else if (eventKey == 'subtask') {
       this.setState({ createSubtaskModalShow: true });
+    } else if (eventKey == 'convert') {
+      this.setState({ convertTypeModalShow: true });
+    } else if (eventKey == 'move') {
+      this.setState({ moveModalShow: true });
     }
   }
 
@@ -285,14 +291,14 @@ export default class DetailBar extends Component {
                   </ButtonGroup>
                   <div style={ { float: 'right' } }>
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
-                      <MenuItem eventKey='1'>刷新</MenuItem>
-                      <MenuItem eventKey='5'>关注</MenuItem>
-                      <MenuItem eventKey='4'>分享链接</MenuItem>
-                      <MenuItem eventKey='2'>链接问题</MenuItem>
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='3'>创建子任务</MenuItem> }
-                      { data.parent_id && <MenuItem eventKey='7'>转换为标准问题</MenuItem> }
-                      <MenuItem eventKey='3'>移动</MenuItem>
-                      <MenuItem eventKey='6'>删除</MenuItem>
+                      <MenuItem eventKey='refresh'>刷新</MenuItem>
+                      <MenuItem eventKey='follow'>关注</MenuItem>
+                      <MenuItem eventKey='share'>分享链接</MenuItem>
+                      <MenuItem eventKey='link'>链接问题</MenuItem>
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='subtask'>创建子任务</MenuItem> }
+                      { !data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
+                      { !data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                      <MenuItem eventKey='del'>删除</MenuItem>
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
@@ -558,6 +564,21 @@ export default class DetailBar extends Component {
         { this.state.previewModalShow && <PreviewModal show close={ () => { this.setState({ previewModalShow: false }); } } collection={ wfCollection } /> }
         { this.state.linkIssueModalShow && <LinkIssueModal show close={ () => { this.setState({ linkIssueModalShow: false }); } } loading={ linkLoading } createLink={ createLink } issue={ data } types={ options.types } project={ project }/> }
         { this.state.delLinkModalShow && <DelLinkModal show close={ () => { this.setState({ delLinkModalShow: false }); } } loading={ linkLoading } delLink={ delLink } data={ this.state.delLinkData }/> }
+        { this.state.convertTypeModalShow &&
+          <ConvertTypeModal show
+            close={ () => { this.setState({ convertTypeModalShow: false }); } }
+            options={ options }
+            edit={ edit }
+            loading={ loading }
+            issue={ data }/> }
+        { this.state.moveModalShow &&
+          <MoveModal show
+            close={ () => { this.setState({ moveModalShow: false }); } }
+            options={ options }
+            project={ project }
+            edit={ edit }
+            loading={ loading }
+            issue={ data }/> }
       </div>
     );
   }
