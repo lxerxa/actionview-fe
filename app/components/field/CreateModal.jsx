@@ -13,13 +13,11 @@ const validate = (values, props) => {
     errors.name = '必填';
   }
 
-  const usedKeys = [ 'id', 'type', 'state', 'reporter', 'created_at', 'updated_at', 'no', 'schema', 'parent_id', 'parents', 'subtasks', 'links', 'comments', 'page', 'orderBy' ];
+  const usedKeys = [ 'id', 'type', 'state', 'assignee', 'priority', 'resolution', 'reporter', 'created_at', 'updated_at', 'no', 'schema', 'parent_id', 'parents', 'subtasks', 'links', 'comments', 'page', 'orderBy' ];
   if (!values.key) {
     errors.key = '必填';
-  } else if (_.findIndex(props.collection || [], { key: values.key }) !== -1) {
-    errors.key = '该键值已存在';
-  } else if (_.indexOf(usedKeys, values.key) !== -1) {
-    errors.key = '该键值已被系统使用';
+  } else if (_.findIndex(props.collection || [], { key: values.key }) !== -1 || _.indexOf(usedKeys, values.key) !== -1) {
+    errors.key = '该键值已存在或已被系统使用';
   }
 
   if (!values.type) {

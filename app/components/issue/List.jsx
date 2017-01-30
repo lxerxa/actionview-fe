@@ -13,6 +13,8 @@ const AddWorklogModal = require('./worklog/AddWorklogModal');
 const CreateModal = require('./CreateModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
 const MoveModal = require('./MoveModal');
+const AssignModal = require('./AssignModal');
+
 
 export default class List extends Component {
   constructor(props) {
@@ -26,6 +28,7 @@ export default class List extends Component {
       createSubtaskModalShow: false,
       convertTypeModalShow: false,
       moveModalShow: false,
+      assignModalShow: false,
       detailId: '',
       selectedItem: {},
       hoverRowId: ''
@@ -116,6 +119,8 @@ export default class List extends Component {
     if (eventKey === '2') {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
+    } else if (eventKey === 'assign') {
+      this.setState({ assignModalShow : true });
     } else if (eventKey === 'worklog') {
       this.setState({ addWorklogShow : true });
     } else if (eventKey === 'edit') {
@@ -249,12 +254,13 @@ export default class List extends Component {
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='edit'>编辑</MenuItem>
                 <MenuItem eventKey='assign'>分配</MenuItem>
+                <MenuItem eventKey='follow'>关注</MenuItem>
                 <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
-                <MenuItem eventKey='2'>关注</MenuItem>
-                <MenuItem eventKey='2'>分享链接</MenuItem>
+                <MenuItem eventKey='share'>分享链接</MenuItem>
                 { !collection[i].parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
                 { collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                 { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                <MenuItem eventKey='reset'>重置流程</MenuItem>
                 <MenuItem eventKey='2'>删除</MenuItem>
               </DropdownButton>
             }
@@ -383,6 +389,13 @@ export default class List extends Component {
             close={ () => { this.setState({ moveModalShow: false }); } }
             options={ options }
             project={ project } 
+            edit={ edit }
+            loading={ loading }
+            issue={ selectedItem }/> }
+        { this.state.assignModalShow &&
+          <AssignModal show
+            close={ () => { this.setState({ assignModalShow: false }); } }
+            options={ options }
             edit={ edit }
             loading={ loading }
             issue={ selectedItem }/> }

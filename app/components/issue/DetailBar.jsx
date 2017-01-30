@@ -17,11 +17,12 @@ const LinkIssueModal = require('./LinkIssueModal');
 const DelLinkModal = require('./DelLinkModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
 const MoveModal = require('./MoveModal');
+const AssignModal = require('./AssignModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, convertTypeModalShow: false, moveModalShow: false, convertTypeModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, convertTypeModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -219,9 +220,11 @@ export default class DetailBar extends Component {
     const { data, show } = this.props;
     if (eventKey == 'refresh') {
       const ecode = await show(data.id);
+    } else if (eventKey == 'assign') {
+      this.setState({ assignModalShow: true });
     } else if (eventKey == 'link') {
       this.setState({ linkIssueModalShow: true });
-    } else if (eventKey == 'subtask') {
+    } else if (eventKey == 'createSubtask') {
       this.setState({ createSubtaskModalShow: true });
     } else if (eventKey == 'convert') {
       this.setState({ convertTypeModalShow: true });
@@ -246,7 +249,7 @@ export default class DetailBar extends Component {
     const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, create, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
 
-    const assigneeOptions = _.map(options.users || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
+    const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
 
     const subtaskTypeOptions = [];
     _.map(options.types, (val) => {
@@ -292,12 +295,14 @@ export default class DetailBar extends Component {
                   <div style={ { float: 'right' } }>
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
+                      <MenuItem eventKey='assign'>分配</MenuItem>
                       <MenuItem eventKey='follow'>关注</MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       <MenuItem eventKey='link'>链接问题</MenuItem>
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='subtask'>创建子任务</MenuItem> }
-                      { !data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
-                      { !data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                      { data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
+                      { data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                      <MenuItem eventKey='reset'>重置流程</MenuItem>
                       <MenuItem eventKey='del'>删除</MenuItem>
                     </DropdownButton>
                   </div>
@@ -558,12 +563,48 @@ export default class DetailBar extends Component {
             </Tab>
           </Tabs>
         </div>
-        { delFileShow && <DelFileModal show close={ this.delFileModalClose } del={ delFile } data={ selectedFile } loading={ fileLoading }/> }
-        { this.state.editModalShow && <CreateModal show close={ this.editModalClose.bind(this) } options={ options } edit={ edit } loading={ loading } project={ project } data={ data } isSubtask={ data.parent_id && true }/> }
-        { this.state.createSubtaskModalShow && <CreateModal show close={ this.createSubtaskModalClose.bind(this) } options={ options } create={ create } loading={ loading } project={ project } parent_id={ data.id } isSubtask={ true }/> }
-        { this.state.previewModalShow && <PreviewModal show close={ () => { this.setState({ previewModalShow: false }); } } collection={ wfCollection } /> }
-        { this.state.linkIssueModalShow && <LinkIssueModal show close={ () => { this.setState({ linkIssueModalShow: false }); } } loading={ linkLoading } createLink={ createLink } issue={ data } types={ options.types } project={ project }/> }
-        { this.state.delLinkModalShow && <DelLinkModal show close={ () => { this.setState({ delLinkModalShow: false }); } } loading={ linkLoading } delLink={ delLink } data={ this.state.delLinkData }/> }
+        { delFileShow && 
+          <DelFileModal show 
+            close={ this.delFileModalClose } 
+            del={ delFile } 
+            data={ selectedFile } 
+            loading={ fileLoading }/> }
+        { this.state.editModalShow && 
+          <CreateModal show 
+            close={ this.editModalClose.bind(this) } 
+            options={ options } 
+            edit={ edit } 
+            loading={ loading } 
+            project={ project } 
+            data={ data } 
+            isSubtask={ data.parent_id && true }/> }
+        { this.state.createSubtaskModalShow && 
+          <CreateModal show 
+            close={ this.createSubtaskModalClose.bind(this) } 
+            options={ options } 
+            create={ create } 
+            loading={ loading } 
+            project={ project } 
+            parent_id={ data.id } 
+            isSubtask={ true }/> }
+        { this.state.previewModalShow && 
+          <PreviewModal show 
+            close={ () => { this.setState({ previewModalShow: false }); } } 
+            collection={ wfCollection } /> }
+        { this.state.linkIssueModalShow && 
+          <LinkIssueModal show 
+            close={ () => { this.setState({ linkIssueModalShow: false }); } } 
+            loading={ linkLoading } 
+            createLink={ createLink } 
+            issue={ data } 
+            types={ options.types } 
+            project={ project }/> }
+        { this.state.delLinkModalShow && 
+          <DelLinkModal show 
+            close={ () => { this.setState({ delLinkModalShow: false }); } } 
+            loading={ linkLoading } 
+            delLink={ delLink } 
+            data={ this.state.delLinkData }/> }
         { this.state.convertTypeModalShow &&
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
@@ -576,6 +617,13 @@ export default class DetailBar extends Component {
             close={ () => { this.setState({ moveModalShow: false }); } }
             options={ options }
             project={ project }
+            edit={ edit }
+            loading={ loading }
+            issue={ data }/> }
+        { this.state.assignModalShow &&
+          <AssignModal show
+            close={ () => { this.setState({ assignModalShow: false }); } }
+            options={ options }
             edit={ edit }
             loading={ loading }
             issue={ data }/> }

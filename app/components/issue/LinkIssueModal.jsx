@@ -96,7 +96,7 @@ export default class LinkIssueModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>问题</ControlLabel>
-            <Select.Async simpleValue clearable={ false } disabled={ loading } options={ [] } value={ this.state.dest } onChange={ (newValue) => { this.setState({ dest: newValue }) } } valueKey='id' labelKey='name' loadOptions={ this.searchIssue.bind(this) } placeholder='请输入问题号或名称'/>
+            <Select.Async simpleValue clearable={ false } disabled={ loading } options={ [] } value={ this.state.dest } onChange={ (newValue) => { this.setState({ dest: newValue }) } } valueKey='id' labelKey='name' loadOptions={ this.searchIssue.bind(this) } placeholder='输入问题号或名称'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
