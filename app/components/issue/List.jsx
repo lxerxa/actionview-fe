@@ -225,8 +225,11 @@ export default class List extends Component {
     const issueNum = collection.length;
     for (let i = 0; i < issueNum; i++) {
 
-      const priorityInd = _.findIndex(options.priorities, { id: collection[i].priority }) || -1;
-      const priorityStyle = { backgroundColor: priorityInd !== -1 ? options.priorities[priorityInd].color : '#cccccc', marginLeft: '14px' };
+      const priorityInd = collection[i].priority ? _.findIndex(options.priorities, { id: collection[i].priority }) : -1;
+      const priorityStyle = { marginLeft: '14px' };
+      if (priorityInd !== -1) {
+        _.extend(priorityStyle, { backgroundColor: options.priorities[priorityInd].color });
+      }
 
       issues.push({
         id: collection[i].id,
@@ -245,7 +248,7 @@ export default class List extends Component {
           </div>
         ), 
         assignee: !_.isEmpty(collection[i].assignee) ? collection[i].assignee.name : '-',
-        priority: (<div className='circle' style={ priorityStyle } title={ priorityInd !== -1 ? options.priorities[priorityInd].name : '' }/>),
+        priority: priorityInd !== -1 ? <div className='circle' style={ priorityStyle } title={ options.priorities[priorityInd].name }/> : <div style={ priorityStyle }>-</div>,
         state: _.findIndex(options.states, { id: collection[i].state }) !== -1 ? _.find(options.states, { id: collection[i].state }).name : '-', 
         resolution: _.findIndex(options.resolutions, { id: collection[i].resolution }) !== -1 ? _.find(options.resolutions, { id: collection[i].resolution }).name : '-', 
         operation: (

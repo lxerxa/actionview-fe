@@ -94,6 +94,8 @@ export default class List extends Component {
     const { collection, selectedItem, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
+    const node = ( <span><i className='fa fa-cog'></i></span> );
+
     const screens = [];
     const screenNum = collection.length;
     for (let i = 0; i < screenNum; i++) {
@@ -106,13 +108,13 @@ export default class List extends Component {
           </div>
         ),
         workflow: ( 
-          <ul style={ { marginBottom: '0px', paddingLeft: '0px' } }>
+          <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             { _.isEmpty(collection[i].workflows) ? '-' : _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }
           </ul> ),
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton pullRight bsStyle='link' title='操作' key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='3'>界面配置</MenuItem>
                 <MenuItem eventKey='4'>字段配置</MenuItem>
                 <MenuItem eventKey='5'>复制</MenuItem>
