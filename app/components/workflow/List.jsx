@@ -131,7 +131,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
           <TableHeaderColumn dataField='latest_modify'>最近配置修改</TableHeaderColumn>
           <TableHeaderColumn dataField='step' width='200'>步骤</TableHeaderColumn>
-          <TableHeaderColumn width='80' dataField='operation'/>
+          <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem }/> }

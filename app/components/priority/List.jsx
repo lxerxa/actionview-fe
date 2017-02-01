@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button, Label } from 'react-bootstrap';
+import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -10,7 +10,7 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false };
+    this.state = { editModalShow: false, delNotifyShow: false, operateShow: false, hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
   }
@@ -51,8 +51,29 @@ export default class List extends Component {
     show(id);
   }
 
+  operateSelect(eventKey) {
+    const { hoverRowId } = this.state;
+
+    if (eventKey === '1') {
+      this.show(hoverRowId);
+    } else if (eventKey === '2') {
+      this.delNotify(hoverRowId);
+    }
+  }
+
+  onRowMouseOver(rowData) {
+    this.setState({ operateShow: true, hoverRowId: rowData.id });
+  }
+
+  onMouseLeave() {
+    this.setState({ operateShow: false, hoverRowId: '' });
+  }
+
   render() {
     const { collection, selectedItem, indexLoading, itemLoading, del, edit } = this.props;
+    const { hoverRowId, operateShow } = this.state;
+
+    const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const priorities = [];
     const priorityNum = collection.length;
@@ -66,10 +87,11 @@ export default class List extends Component {
         description: collection[i].description ? collection[i].description : '-',
         operation: (
           <div>
-            <div className={ itemLoading && selectedItem.id === collection[i].id && 'hide' }>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.show.bind(this, collection[i].id) }>编辑</Button>
-              <Button bsStyle='link' disabled = { itemLoading && true } onClick={ this.delNotify.bind(this, collection[i].id) }>删除</Button>
-            </div>
+          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='1'>编辑</MenuItem>
+              <MenuItem eventKey='2'>删除</MenuItem>
+            </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
         )
@@ -83,6 +105,9 @@ export default class List extends Component {
       opts.noDataText = '暂无数据显示。'; 
     } 
 
+    opts.onRowMouseOver = this.onRowMouseOver.bind(this);
+    opts.onMouseLeave = this.onMouseLeave.bind(this);
+
     return (
       <div>
         <BootstrapTable data={ priorities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
@@ -90,7 +115,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn width='200' dataField='color'>色彩</TableHeaderColumn>
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
-          <TableHeaderColumn width='120' dataField='operation'>操作</TableHeaderColumn>
+          <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } collection={ collection }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
