@@ -36,3 +36,11 @@ export function del(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + id, method: 'delete' })
   });
 }
+
+export function preview(key, id) {
+  return asyncFuncCreator({
+    constant: 'WORKFLOW_PREVIEW',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + id + '?flag=s' })
+  });
+}

@@ -110,7 +110,7 @@ export default class ConfigHeader extends Component {
           <Button className='create-btn' style={ { float: 'right' } } onClick={ () => { this.setState({ previewModalShow: true }); } } disabled={ collection.length <= 0 }><i className='fa fa-search'></i>&nbsp;预览</Button>
         </div>
         { this.state.createStepModalShow && <CreateStepModal show close={ this.createStepModalClose } create={ createStep } options={ options } collection={ collection }/> }
-        { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } collection={ collection } /> }
+        { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } collection={ collection } name={ workflowName } /> }
       </div>
     );
   }

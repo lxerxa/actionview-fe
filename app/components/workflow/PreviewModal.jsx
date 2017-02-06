@@ -2,7 +2,7 @@ import React, { ReactText, PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import _ from 'lodash';
 
-var mermaidAPI = require('mermaid').mermaidAPI;
+const mermaidAPI = require('mermaid').mermaidAPI;
 
 export default class PreviewModal extends Component {
   constructor(props) {
@@ -13,13 +13,13 @@ export default class PreviewModal extends Component {
   }
 
   static propTypes = {
+    name: PropTypes.string,
     collection: PropTypes.array.isRequired,
     close: PropTypes.func.isRequired
   }
 
-  render() {
-
-    const { collection, close } = this.props;
+  componentDidMount() {
+    const { collection } = this.props;
 
     const stepNum = collection.length;
 
@@ -40,13 +40,19 @@ export default class PreviewModal extends Component {
       });
     }
 
+    mermaidAPI.render('div', graphTxt, null, document.getElementById('chart'));
+  }
+
+  render() {
+    const { name, collection, close } = this.props;
+
     return (
       <Modal { ...this.props } onHide={ close } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>工作流预览</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>工作流预览{ name ? (' - ' + name) : '' }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className='mermaid' dangerouslySetInnerHTML={ { __html: mermaidAPI.render('xxx', graphTxt) } } />
+          <div className='mermaid' id='chart'/>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={ close }>关闭</Button>

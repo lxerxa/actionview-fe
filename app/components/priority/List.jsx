@@ -82,7 +82,7 @@ export default class List extends Component {
 
       priorities.push({
         id: collection[i].id,
-        name: ( <span className='table-td-title'>{ collection[i].name } { collection[i].category && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>全局</Label> } </span> ),
+        name: ( <span className='table-td-title'>{ collection[i].name }{ collection[i].category && <span style={ { fontWeight: 'normal' } }> (全局)</span> }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span> ),
         color: ( <div className='circle' style={ colorStyle } /> ),
         description: collection[i].description ? collection[i].description : '-',
         operation: (

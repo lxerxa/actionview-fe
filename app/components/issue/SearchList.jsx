@@ -182,14 +182,14 @@ export default class SearchList extends Component {
               options={ dateOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
-            主题
+            主题/NO
           </Col>
           <Col sm={ 3 }>
             <FormControl
               type='text'
               value={ this.state.title }
               onChange={ (e) => { this.setState({ title: e.target.value }) } }
-              placeholder={ '输入关键字' } />
+              placeholder={ '输入关键字或编号' } />
           </Col>
         </FormGroup>
         <FormGroup controlId='formControlsLabel'>

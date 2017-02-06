@@ -103,7 +103,7 @@ export default class List extends Component {
         id: collection[i].id,
         name:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name } { collection[i].category && <Label style={ { color: 'red', backgroundColor: '#ffffbd' } }>全局</Label> } </span>
+            <span className='table-td-title'>{ collection[i].name }{ collection[i].category && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),

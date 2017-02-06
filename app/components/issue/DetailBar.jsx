@@ -22,7 +22,7 @@ const AssignModal = require('./AssignModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, convertTypeModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -328,14 +328,9 @@ export default class DetailBar extends Component {
                     父任务
                   </Col>
                   <Col sm={ 9 }>
-                    <Table condensed hover responsive style={ { marginBottom: '0px' } }>
-                      <tbody>
-                        <tr>
-                          <td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ _.find(options.types, { id : data.parents.type }).name }/{ data.parents.no } - { data.parents.title }</a></td>
-                          <td>处理中</td>
-                        </tr>
-                      </tbody>
-                    </Table>
+                    <div style={ { marginTop: '7px' } }>
+                      <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ _.find(options.types, { id : data.parents.type }).name }/{ data.parents.no } - { data.parents.title }</a>
+                    </div>
                   </Col>
                 </FormGroup> }
 

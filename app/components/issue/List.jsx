@@ -14,6 +14,7 @@ const CreateModal = require('./CreateModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
 const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
+const ShareLinkModal = require('./ShareLinkModal');
 
 
 export default class List extends Component {
@@ -29,7 +30,7 @@ export default class List extends Component {
       convertTypeModalShow: false,
       moveModalShow: false,
       assignModalShow: false,
-      detailId: '',
+      shareModalShow: false,
       selectedItem: {},
       hoverRowId: ''
     };
@@ -92,9 +93,19 @@ export default class List extends Component {
     delNotify: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const { index, query={} } = this.props;
-    index(query);
+    let ecode = await index(query);
+    if (ecode === 0 && query.no) {
+      const { collection, show, record } = this.props;
+      if (collection.length > 0) {
+        this.state.barShow = true;
+        ecode = await show(collection[0].id); 
+        if (ecode === 0) {
+          record();
+        }
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -116,7 +127,7 @@ export default class List extends Component {
     const selectedItem = _.find(collection, { id: hoverRowId }) || {}; 
     this.setState({ selectedItem });
 
-    if (eventKey === '2') {
+    if (eventKey === 'del') {
       this.setState({ delNotifyShow : true });
       delNotify(hoverRowId);
     } else if (eventKey === 'assign') {
@@ -131,11 +142,10 @@ export default class List extends Component {
       this.setState({ convertTypeModalShow : true });
     } else if (eventKey === 'move') {
       this.setState({ moveModalShow : true });
+    } else if (eventKey === 'share') {
+      this.setState({ shareModalShow : true });
     } else {
       // todo err notify
-      eventKey === '1' && this.setState({ editModalShow: true });
-      eventKey === '3' && this.setState({ defaultValueConfigShow: true });
-      eventKey === '4' && this.setState({ optionValuesConfigShow: true });
     }
   }
 
@@ -264,7 +274,7 @@ export default class List extends Component {
                 { collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                 { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                 <MenuItem eventKey='reset'>重置流程</MenuItem>
-                <MenuItem eventKey='2'>删除</MenuItem>
+                <MenuItem eventKey='del'>删除</MenuItem>
               </DropdownButton>
             }
           </div>
@@ -401,6 +411,10 @@ export default class List extends Component {
             options={ options }
             edit={ edit }
             loading={ loading }
+            issue={ selectedItem }/> }
+        { this.state.shareModalShow &&
+          <ShareLinkModal show
+            close={ () => { this.setState({ shareModalShow: false }); } }
             issue={ selectedItem }/> }
       </div>
     );

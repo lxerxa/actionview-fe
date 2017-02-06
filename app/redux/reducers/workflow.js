@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], indexLoading: false, loading: false, itemLoading: false, selectedItem: {}, itemSteps: [] };
 
 export default function workflow(state = initialState, action) {
   switch (action.type) {
@@ -52,6 +52,18 @@ export default function workflow(state = initialState, action) {
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
     case t.WORKFLOW_DELETE_FAIL:
+      return { ...state, itemLoading: false, error: action.error };
+
+    case t.WORKFLOW_PREVIEW:
+      return { ...state, selectedItem: _.find(state.collection, { id: action.id }), itemLoading: true };
+
+    case t.WORKFLOW_PREVIEW_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.itemSteps = action.result.data.contents && action.result.data.contents.steps ? action.result.data.contents.steps : [];
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
+
+    case t.WORKFLOW_PREVIEW_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
     default:
