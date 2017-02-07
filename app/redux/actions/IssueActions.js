@@ -180,3 +180,10 @@ export function delLink(key, link_id) {
     promise: (client) => client.request({ url: '/project/' + key + '/link/' + link_id, method: 'delete' })
   });
 }
+
+export function resetState(key, id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_STATE_RESET',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/reset' })
+  });
+}

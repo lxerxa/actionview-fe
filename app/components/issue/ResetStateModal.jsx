@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 
 const img = require('../../assets/images/loading.gif');
 
-export default class DelSearcherModal extends Component {
+export default class ResetStateModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -13,14 +13,14 @@ export default class DelSearcherModal extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
+    resetState: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
-    data: PropTypes.object.isRequired
+    issue: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, del, data } = this.props;
-    const ecode = await del(data.id);
+    const { close, resetState, issue } = this.props;
+    const ecode = await resetState(issue.id);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -35,15 +35,15 @@ export default class DelSearcherModal extends Component {
   }
 
   render() {
-    const { data, loading } = this.props;
+    const { issue, loading } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除过滤器 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '重置状态 - ' + issue.no }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此过滤器？
+          确认要重置此问题状态？
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>

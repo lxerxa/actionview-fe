@@ -44,9 +44,11 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
+    case t.ISSUE_STATE_RESET:
     case t.ISSUE_EDIT:
       return { ...state, loading: true, historyLoaded: false };
 
+    case t.ISSUE_STATE_RESET_SUCCESS:
     case t.ISSUE_EDIT_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
@@ -57,6 +59,7 @@ export default function issue(state = initialState, action) {
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
+    case t.ISSUE_STATE_RESET_FAIL:
     case t.ISSUE_EDIT_FAIL:
       return { ...state, loading: false, error: action.error };
 

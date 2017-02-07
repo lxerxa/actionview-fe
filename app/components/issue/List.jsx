@@ -15,7 +15,7 @@ const ConvertTypeModal = require('./ConvertTypeModal');
 const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
 const ShareLinkModal = require('./ShareLinkModal');
-
+const ResetStateModal = require('./ResetStateModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -31,6 +31,7 @@ export default class List extends Component {
       moveModalShow: false,
       assignModalShow: false,
       shareModalShow: false,
+      resetModalShow: false,
       selectedItem: {},
       hoverRowId: ''
     };
@@ -144,6 +145,8 @@ export default class List extends Component {
       this.setState({ moveModalShow : true });
     } else if (eventKey === 'share') {
       this.setState({ shareModalShow : true });
+    } else if (eventKey === 'reset') {
+      this.setState({ resetModalShow : true });
     } else {
       // todo err notify
     }
@@ -273,7 +276,7 @@ export default class List extends Component {
                 { !collection[i].parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
                 { collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                 { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                <MenuItem eventKey='reset'>重置流程</MenuItem>
+                <MenuItem eventKey='reset'>重置状态</MenuItem>
                 <MenuItem eventKey='del'>删除</MenuItem>
               </DropdownButton>
             }
@@ -415,6 +418,12 @@ export default class List extends Component {
         { this.state.shareModalShow &&
           <ShareLinkModal show
             close={ () => { this.setState({ shareModalShow: false }); } }
+            issue={ selectedItem }/> }
+        { this.state.resetModalShow &&
+          <ResetStateModal show
+            close={ () => { this.setState({ resetModalShow: false }); } }
+            resetState={ edit }
+            loading={ loading }
             issue={ selectedItem }/> }
       </div>
     );

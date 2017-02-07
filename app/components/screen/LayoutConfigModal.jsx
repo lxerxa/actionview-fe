@@ -111,7 +111,7 @@ export default class LayoutConfigModal extends Component {
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
               <Col sm={ 10 }>
-                <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='请选择添加字段(可多选)' multi/>
+                <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='选择添加字段(可多选)' multi/>
               </Col>
               <Col sm={ 2 }>
                 <Button bsStyle='link' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>

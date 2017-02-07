@@ -135,6 +135,7 @@ export default class Header extends Component {
     if (query.created_at) { queryConds.push('创建时间：' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
     if (query.updated_at) { queryConds.push('更新时间：' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
     if (query.title) { queryConds.push('主题~' + query.title); }
+    if (query.no) { queryConds.push('编号：' + query.no); }
 
     if (queryConds.length <= 0) { return '全部问题'; }
 

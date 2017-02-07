@@ -18,11 +18,13 @@ const DelLinkModal = require('./DelLinkModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
 const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
+const ShareLinkModal = require('./ShareLinkModal');
+const ResetStateModal = require('./ResetStateModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false, shareModalShow: false, resetModalShow: false };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -230,6 +232,10 @@ export default class DetailBar extends Component {
       this.setState({ convertTypeModalShow: true });
     } else if (eventKey == 'move') {
       this.setState({ moveModalShow: true });
+    } else if (eventKey == 'share') {
+      this.setState({ shareModalShow: true });
+    } else if (eventKey == 'reset') {
+      this.setState({ resetModalShow: true });
     }
   }
 
@@ -302,7 +308,7 @@ export default class DetailBar extends Component {
                       { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
                       { data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                       { data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                      <MenuItem eventKey='reset'>重置流程</MenuItem>
+                      <MenuItem eventKey='reset'>重置状态</MenuItem>
                       <MenuItem eventKey='del'>删除</MenuItem>
                     </DropdownButton>
                   </div>
@@ -620,6 +626,16 @@ export default class DetailBar extends Component {
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             edit={ edit }
+            loading={ loading }
+            issue={ data }/> }
+        { this.state.shareModalShow &&
+          <ShareLinkModal show
+            close={ () => { this.setState({ shareModalShow: false }); } }
+            issue={ data }/> }
+        { this.state.resetModalShow &&
+          <ResetStateModal show
+            close={ () => { this.setState({ resetModalShow: false }); } }
+            resetState={ edit }
             loading={ loading }
             issue={ data }/> }
       </div>

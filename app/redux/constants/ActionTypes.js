@@ -131,6 +131,8 @@ export default generateConstants([
   'ISSUE_LINK_CREATE(ASYNC)',
   'ISSUE_LINK_DELETE(ASYNC)',
 
+  'ISSUE_STATE_RESET(ASYNC)',
+
   'USER_INFO_FETCH(ASYNC)',
 
   'LOCALE_INITIALIZE',
