@@ -131,7 +131,7 @@ export default class Comments extends Component {
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
-              <Button style={ { marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
+              <Button bsStyle='link' style={ { marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
               <Button bsStyle='link' style={ { marginRight: '5px' } } onClick={ () => { this.setState({ addCommentsShow: false }) } } disabled={ loading }>取消</Button>
             </div>
           </Col>
@@ -156,9 +156,10 @@ export default class Comments extends Component {
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
                   <span style={ { lineHeight: '24px' } } dangerouslySetInnerHTML={ { __html: contents } }/>
                   <div style={ { marginTop: '5px', fontSize: '12px' } }><span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, {}) }><i className='fa fa-share'></i> 回复</span></div>
-                  <div>
+                  { val.reply && val.reply.length > 0 &&
+                  <div className='reply-region'>
                     <ul className='reply-contents'>
-                     { _.map(val.reply || [], (v, i) => {
+                     { _.map(val.reply, (v, i) => {
                        let contents = v.contents || '-';
                        _.map(v.atWho || [], (value) => {
                          contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.name + '(' + value.email + ')' + '">@' + value.name + '</a>');
@@ -169,7 +170,7 @@ export default class Comments extends Component {
                        <li className='reply-contents-item'>
                          <div className='reply-item-header'>
                            <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (v.creator && v.creator.name || '') + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + v.to.name + '</a>') : '') + ' - ' + (v.created_at && moment.unix(v.created_at).format('YY/MM/DD HH:mm:ss')) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
-                           <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span>
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span>
                            <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span>
                          </div>
                          <div>
@@ -180,7 +181,7 @@ export default class Comments extends Component {
                          </div>
                        </li> ) } ) }
                     </ul>
-                  </div>
+                  </div> }
                 </Panel>) } ) }
           </Col>
         </FormGroup>
