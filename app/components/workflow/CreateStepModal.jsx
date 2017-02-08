@@ -15,7 +15,7 @@ const validate = (values, props) => {
   }
 
   if (!values.state) {
-    errors.state = 'Required';
+    errors.state = '必选';
   }
   return errors;
 };

@@ -28,10 +28,10 @@ const POST_FUNCTIONS = {
 const validate = (values) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'Required';
+    errors.name = '必填';
   }
   if (!values.destStep) {
-    errors.destStep = 'Required';
+    errors.destStep = '必选';
   }
   //if (!values.screen) {
   //  errors.name = 'Required';
@@ -227,14 +227,15 @@ export default class AddActionModal extends Component {
     // const { fields: { name, destStep, screen, relation, stateParam, permissionParam, roleParam, resolutionParam, assigneeParam, eventParam }, options, steps, stepData, handleSubmit, invalid, submitting } = this.props;
     const { fields: { id, name, destStep, screen }, options, steps, stepData, handleSubmit, invalid, submitting, data } = this.props;
 
-    const goneSteps = [ stepData.id ];
-    _.map(stepData.actions, (action) => {
-      _.map(action.results || [], (result) => {
-        goneSteps.push(result.step);
-      })
-    });
+    //const goneSteps = [ stepData.id ];
+    //_.map(stepData.actions, (action) => {
+    //  _.map(action.results || [], (result) => {
+    //    goneSteps.push(result.step);
+    //  })
+    //});
 
-    const stepOptions = _.map(_.filter(steps, (o) => { return _.indexOf(goneSteps, o.id) === -1 || o.id == (data && data.results ? data.results[0].step : '') } ), (val) => { return { label: val.name, value: val.id } });
+    //const stepOptions = _.map(_.filter(steps, (o) => { return _.indexOf(goneSteps, o.id) === -1 || o.id == (data && data.results ? data.results[0].step : '') } ), (val) => { return { label: val.name, value: val.id } });
+    const stepOptions = _.map(_.filter(steps, (o) => { return stepData.id !== o.id }), (val) => { return { label: val.name, value: val.id } });
 
     const screenOptions = _.map(options.screens, (val) => { return { label: val.name, value: val.id } });
     //screenOptions.unshift( { label: '不显示页面', value: '-1' } );;

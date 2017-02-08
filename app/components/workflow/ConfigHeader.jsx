@@ -81,7 +81,7 @@ export default class ConfigHeader extends Component {
 
     const initialActions = { id : 0, name: 'initial_action', results: [{ step: collection[0].id, status: 'Underway' }] };
 
-    save({ contents : { initial_actions: initialActions, steps: collection } });
+    save({ contents : { initial_action: initialActions, steps: collection } });
   }
 
   componentWillReceiveProps(nextProps) {

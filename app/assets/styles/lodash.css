@@ -27,7 +27,7 @@ h1,h2,h3,h4 {
 	color: #5f5f5f;
 	font-weight: 400;
 	letter-spacing: .5px;
-	margin-top: 2.0rem
+	margin-top: 1.0rem
 }
 
 h1,h2,h3,h4,ol,p,ul {
@@ -525,31 +525,6 @@ html.docs .search {
 	width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
-}
-
-html.docs .search input {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	border: none;
-	border-bottom: 2px solid #c5c5c5;
-	font-size: 1.4rem;
-	padding: 0 0 10px;
-	text-indent: 30px;
-	width: 100%
-}
-
-html.docs .search input:focus {
-	border-bottom-color: #858585;
-	outline: none
-}
-
-html.docs .search .fa-search {
-	color: #979797;
-	font-size: 1.5rem;
-	left: 7px;
-	position: absolute;
-	top: 5px
 }
 
 html.docs .toc-container {

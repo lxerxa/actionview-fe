@@ -63,6 +63,9 @@ export default class Sidebar extends Component {
           <li><Link to={ '/project/' + project.item.key + '/priority' }>优先级</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/role' }>角色权限</Link></li>
         </ul>
+        <div className='search'>
+          个人中心
+        </div>
         <h4><i className={ this.state.personalCenterShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ () => { this.setState({ personalCenterShow: !this.state.personalCenterShow }) } }></i>个人中心</h4>
         <ul className={ !this.state.personalCenterShow && 'hide' }>
           <li><Link to={ '/project/' + project.item.key + '/type' }>通知</Link></li>

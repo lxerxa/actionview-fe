@@ -15,7 +15,7 @@ const validate = (values, props) => {
   }
 
   if (!values.state) {
-    errors.name = 'Required';
+    errors.state = '必选';
   }
   return errors;
 };
@@ -74,7 +74,7 @@ export default class CreateModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>新建步骤</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>编辑步骤 - { data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>

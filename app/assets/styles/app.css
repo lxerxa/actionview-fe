@@ -423,11 +423,17 @@ table tr:hover .remove-icon{
   display: block;
 }
 
+.reply-region {
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: #ddd;
+  background-color: #f5f5f5;
+}
+
 .reply-contents {
   list-style: none; 
-  margin-left: 15px; 
   margin-bottom: 0px; 
-  padding: 0px;
+  padding: 0px 0px 10px 0px;
 }
 
 .reply-contents-item {
