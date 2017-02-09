@@ -153,6 +153,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async doAction(issue_id, action_id) {
+    await this.props.actions.doAction(this.pid, issue_id, action_id);
+    return this.props.issue.ecode;
+  }
+
   record() {
     this.props.actions.record();
   }
@@ -230,6 +235,7 @@ export default class Container extends Component {
           indexHistory={ this.indexHistory.bind(this) }
           createLink={ this.createLink.bind(this) }
           delLink={ this.delLink.bind(this) }
+          doAction={ this.doAction.bind(this) }
           { ...this.props.issue }/> 
       </div>
     );

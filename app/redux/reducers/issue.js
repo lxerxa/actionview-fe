@@ -44,7 +44,6 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.ISSUE_STATE_RESET:
     case t.ISSUE_EDIT:
       return { ...state, loading: true, historyLoaded: false };
 
@@ -146,9 +145,13 @@ export default function issue(state = initialState, action) {
       state.itemData[action.field_key].push(action.file);
       return { ...state, itemData: state.itemData, historyLoaded: false };
 
+    case t.ISSUE_WORKFLOW_ACTION:
+    case t.ISSUE_STATE_RESET:
     case t.ISSUE_SET_ASSIGNEE:
       return { ...state, itemLoading: true, historyLoaded: false };
 
+    case t.ISSUE_WORKFLOW_ACTION_SUCCESS:
+    case t.ISSUE_STATE_RESET_SUCCESS:
     case t.ISSUE_SET_ASSIGNEE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
@@ -159,6 +162,8 @@ export default function issue(state = initialState, action) {
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
+    case t.ISSUE_WORKFLOW_ACTION_FAIL:
+    case t.ISSUE_STATE_RESET_FAIL:
     case t.ISSUE_SET_ASSIGNEE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 

@@ -7,22 +7,22 @@ import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
 const CONDITION_FUNCTIONS = {
-  isSome: { name: 'App\\Workflow\\Util@isSome', args: [ 'someParam' ], sn: 1 },
-  isTheUser: { name: 'App\\Workflow\\Util@isTheUser', args: [ 'userParam' ], sn: 2 },
-  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ], sn: 3 },
-  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ], sn: 4 },
-  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ], sn: 5 }
+  isSome: { name: 'App\\Workflow\\Func@isSome', args: [ 'someParam' ], sn: 1 },
+  isTheUser: { name: 'App\\Workflow\\Func@isTheUser', args: [ 'userParam' ], sn: 2 },
+  checkSubTasksState: { name: 'App\\Workflow\\Func@checkSubTasksState', args: [ 'stateParam' ], sn: 3 },
+  hasPermission: { name: 'App\\Workflow\\Func@hasPermission', args: [ 'permissionParam' ], sn: 4 },
+  belongsToRole: { name: 'App\\Workflow\\Func@belongsToRole', args: [ 'roleParam' ], sn: 5 }
 };
 
 const POST_FUNCTIONS = {
-  setResolution: { name : 'App\\Workflow\\Util@setResolution', args: [ 'resolutionParam' ], sn: 1 },
-  assignIssue: { name : 'App\\Workflow\\Util@assignIssue', args: [ 'assigneeParam' ], sn: 2 },
-  assignIssueToUser: { name : 'App\\Workflow\\Util@assignIssueToUser', args: [ 'assignedUserParam' ], sn: 3 },
-  setState: { name : 'App\\Workflow\\Util@setState', sn: 4 },
-  addComments: { name : 'App\\Workflow\\Util@addComments', sn: 5 },
+  setResolution: { name : 'App\\Workflow\\Func@setResolution', args: [ 'resolutionParam' ], sn: 1 },
+  assignIssue: { name : 'App\\Workflow\\Func@assignIssue', args: [ 'assigneeParam' ], sn: 2 },
+  assignIssueToUser: { name : 'App\\Workflow\\Func@assignIssueToUser', args: [ 'assignedUserParam' ], sn: 3 },
+  setState: { name : 'App\\Workflow\\Func@setState', sn: 4 },
+  addComments: { name : 'App\\Workflow\\Func@addComments', sn: 5 },
   //updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 6 }
   //triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 }
-  updIssue: { name : 'App\\Workflow\\Util@updIssue', sn: 10 }
+  updIssue: { name : 'App\\Workflow\\Func@updIssue', sn: 10 }
 };
 
 const validate = (values) => {

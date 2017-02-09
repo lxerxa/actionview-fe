@@ -181,6 +181,13 @@ export function delLink(key, link_id) {
   });
 }
 
+export function doAction(key, id, action_id) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_WORKFLOW_ACTION',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/wfaction/' + action_id })
+  });
+}
+
 export function resetState(key, id) {
   return asyncFuncCreator({
     constant: 'ISSUE_STATE_RESET',

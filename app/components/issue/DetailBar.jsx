@@ -76,6 +76,7 @@ export default class DetailBar extends Component {
     createLink: PropTypes.func.isRequired,
     delLink: PropTypes.func.isRequired,
     linkLoading: PropTypes.bool.isRequired,
+    doAction: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -251,6 +252,11 @@ export default class DetailBar extends Component {
     }
   }
 
+  async doAction(action_id) {
+    const { doAction, data } = this.props;
+    await doAction(data.id, action_id);
+  }
+
   render() {
     const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, create, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
@@ -295,7 +301,7 @@ export default class DetailBar extends Component {
                   <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button>
                   <ButtonGroup style={ { marginLeft: '10px' } }>
                   { _.map(data.wfactions || [], (v, i) => {
-                    return ( <Button key={ i }>{ v.name }</Button> ); 
+                    return ( <Button key={ i } onClick={ this.doAction.bind(this, v.id) }>{ v.name }</Button> ); 
                   }) }
                   </ButtonGroup>
                   <div style={ { float: 'right' } }>
