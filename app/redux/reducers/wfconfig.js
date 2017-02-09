@@ -32,7 +32,7 @@ export default function wfconfig(state = initialState, action) {
 
     case t.WFCONFIG_STEP_CREATE:
       const maxStep = _.max(collection, step => step.id).id || 0;
-      collection.push({ id: maxStep+1, name: action.values.name, state: action.values.state, actions: [], results: [] });
+      collection.push({ id: maxStep+1, name: action.values.name, state: action.values.state, actions: [] });
       return { ...state, collection };
 
     case t.WFCONFIG_STEP_EDIT:

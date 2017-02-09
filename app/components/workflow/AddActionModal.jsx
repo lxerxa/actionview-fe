@@ -7,22 +7,22 @@ import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
 const CONDITION_FUNCTIONS = {
-  isReporter: { name: 'App\\Workflow\\Util@isReporter', sn: 1 },
-  isAssignee: { name: 'App\\Workflow\\Util@isAssignee', sn: 2 },
-  isTheUser: { name: 'App\\Workflow\\Util@isTheUser', args: [ 'userParam' ], sn: 3 },
-  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ], sn: 4 },
-  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ], sn: 5 },
-  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ], sn: 6 }
+  isSome: { name: 'App\\Workflow\\Util@isSome', args: [ 'someParam' ], sn: 1 },
+  isTheUser: { name: 'App\\Workflow\\Util@isTheUser', args: [ 'userParam' ], sn: 2 },
+  checkSubTasksState: { name: 'App\\Workflow\\Util@checkSubTasksState', args: [ 'stateParam' ], sn: 3 },
+  hasPermission: { name: 'App\\Workflow\\Util@hasPermission', args: [ 'permissionParam' ], sn: 4 },
+  belongsToRole: { name: 'App\\Workflow\\Util@belongsToRole', args: [ 'roleParam' ], sn: 5 }
 };
 
 const POST_FUNCTIONS = {
   setResolution: { name : 'App\\Workflow\\Util@setResolution', args: [ 'resolutionParam' ], sn: 1 },
-  setState: { name : 'App\\Workflow\\Util@setState', sn: 2 },
-  assignIssue: { name : 'App\\Workflow\\Util@assignIssue', args: [ 'assigneeParam' ], sn: 3 },
-  assignIssueToUser: { name : 'App\\Workflow\\Util@assignIssueToUser', args: [ 'assignedUserParam' ], sn: 4 },
+  assignIssue: { name : 'App\\Workflow\\Util@assignIssue', args: [ 'assigneeParam' ], sn: 2 },
+  assignIssueToUser: { name : 'App\\Workflow\\Util@assignIssueToUser', args: [ 'assignedUserParam' ], sn: 3 },
+  setState: { name : 'App\\Workflow\\Util@setState', sn: 4 },
   addComments: { name : 'App\\Workflow\\Util@addComments', sn: 5 },
-  updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 6 }
+  //updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 6 }
   //triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 }
+  updIssue: { name : 'App\\Workflow\\Util@updIssue', sn: 10 }
 };
 
 const validate = (values) => {
@@ -48,7 +48,7 @@ export default class AddActionModal extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { activeKey: '1', conditions: [], postFunctions: [], relation: '', userParam: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', assignedUserParam: '' };
+    this.state = { activeKey: '1', conditions: [], postFunctions: [ 'setState', 'updIssue' ], relation: '', someParam: '', userParam: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', assignedUserParam: '' };
 
     const state = this.state;
     const { data } = props;
@@ -241,8 +241,9 @@ export default class AddActionModal extends Component {
     //screenOptions.unshift( { label: '不显示页面', value: '-1' } );;
 
     const relationOptions = [{ label: '全部满足', value: 'and' }, { label: '满足任何一个即可', value: 'or' }];
-    const assigneeOptions = [ { id: 'whoami', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
-    const eventOptions = [ { id: 'normal', name: '一般事件' } ];
+    const someOptions = [ { id: 'assignee', name: '经办人' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
+    const assigneeOptions = [ { id: 'me', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
+    //const eventOptions = [ { id: 'normal', name: '一般事件' } ];
 
     const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
 
@@ -260,7 +261,7 @@ export default class AddActionModal extends Component {
           <Modal.Title id='contained-modal-title-la'>添加动作</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body style={ { height: '450px' } }>
+        <Modal.Body style={ { height: '420px' } }>
           <FormControl type='hidden' { ...id }/>
           <Tabs
             activeKey={ this.state.activeKey }
@@ -294,12 +295,17 @@ export default class AddActionModal extends Component {
               <CheckboxGroup name='conditions' value={ this.state.conditions } onChange={ this.conditionsChanged.bind(this) }>
                 <ui className='list-unstyled clearfix cond-list'>
                   <li>
-                    <Checkbox disabled={ submitting } value='isReporter'/>
-                    <span>只有</span><b>报告人</b><span>才能执行此动作</span>
-                  </li>
-                  <li>
-                    <Checkbox disabled={ submitting } value='isAssignee'/>
-                    <span>只有</span><b>经办人</b><span>才能执行此动作</span>
+                    <Checkbox disabled={ submitting } value='isSome'/>
+                    <span>只有</span>
+                    <select
+                      value={ this.state.someParam }
+                      onChange={ (e) => this.setState({ someParam: e.target.value }) }
+                      disabled={ (_.indexOf(this.state.conditions, 'isSome') !== -1 && !submitting) ? false : true } 
+                      style={ _.indexOf(this.state.conditions, 'isSome') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
+                      <option value='' key=''>请选择用户</option>
+                      { someOptions.map( someOption => <option value={ someOption.id } key={ someOption.id }>{ someOption.name }</option> ) }
+                    </select>
+                    <span>才能执行此动作</span>
                   </li>
                   <li>
                     <Checkbox disabled={ submitting } value='isTheUser'/>
@@ -375,10 +381,6 @@ export default class AddActionModal extends Component {
                     </select>
                   </li>
                   <li>
-                    <Checkbox value='setState'/>
-                    <span>将状态设置为目标步骤链接的状态</span>
-                  </li>
-                  <li>
                     <Checkbox disabled={ submitting } value='assignIssue'/>
                     <span>将问题分配给</span>
                     <select
@@ -403,14 +405,22 @@ export default class AddActionModal extends Component {
                     </select>
                   </li>
                   <li>
+                    <Checkbox value='setState'/>
+                    <span>将状态设置为目标步骤链接的状态</span>
+                  </li>
+                  <li>
                     <Checkbox disabled={ submitting } value='addComments'/>
                     <span>如果用户输入了备注，将备注添加到问题中</span>
                   </li>
+                  <li style={ { display: 'none' } }>
+                    <Checkbox disabled={ submitting } value='updIssue'/>
+                    <span>更新问题属性</span>
+                  </li>
+                  {/*
                   <li>
                     <Checkbox disabled={ submitting } value='updateHistory'/>
                     <span>更新问题的变动历史记录</span>
                   </li>
-                  {/*
                   <li>
                     <Checkbox value='triggerEvent'/>
                     <span>过程结束后触发</span>
