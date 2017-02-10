@@ -153,8 +153,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async doAction(issue_id, action_id) {
-    await this.props.actions.doAction(this.pid, issue_id, action_id);
+  async doAction(issue_id, workflow_id, action_id) {
+    await this.props.actions.doAction(this.pid, issue_id, workflow_id, action_id);
     return this.props.issue.ecode;
   }
 

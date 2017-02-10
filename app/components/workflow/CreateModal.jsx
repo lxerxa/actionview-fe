@@ -40,7 +40,7 @@ export default class CreateModal extends Component {
   async handleSubmit() {
     const { values, create, close } = this.props;
     const initialAction = { id : 0, name: 'initial_action', results: [{ step: 1, status: 'Underway' }] };
-    const ecode = await create(_.assign(values, { contents : { initial_action: initialAction, steps: [ { id: 1, name: '步骤1', actions: [], results: [] } ] } }));
+    const ecode = await create(_.assign(values, { contents : { initial_action: initialAction, steps: [ { id: 1, name: '开始', actions: [] } ] } }));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

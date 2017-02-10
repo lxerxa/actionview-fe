@@ -128,7 +128,7 @@ export default class DetailBar extends Component {
   async assignToMe(e) {
     e.preventDefault();
     const { setAssignee, data } = this.props;
-    const ecode = await setAssignee(data.id, { assignee: '57afced21d41c8174d7421c1' });
+    const ecode = await setAssignee(data.id, { assignee: 'me' });
     // fix me
     //if (ecode === 0) {
     //} else {
@@ -254,7 +254,7 @@ export default class DetailBar extends Component {
 
   async doAction(action_id) {
     const { doAction, data } = this.props;
-    await doAction(data.id, action_id);
+    await doAction(data.id, data.entry_id, action_id);
   }
 
   render() {
@@ -301,7 +301,7 @@ export default class DetailBar extends Component {
                   <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button>
                   <ButtonGroup style={ { marginLeft: '10px' } }>
                   { _.map(data.wfactions || [], (v, i) => {
-                    return ( <Button key={ i } onClick={ this.doAction.bind(this, v.id) }>{ v.name }</Button> ); 
+                    return ( <Button key={ v.id } onClick={ this.doAction.bind(this, v.id) }>{ v.name }</Button> ); 
                   }) }
                   </ButtonGroup>
                   <div style={ { float: 'right' } }>
