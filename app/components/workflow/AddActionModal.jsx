@@ -258,7 +258,7 @@ export default class AddActionModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>添加动作</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? ('编辑动作 - ' + data.name) : '添加动作' } </Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body style={ { height: '420px' } }>
@@ -373,7 +373,7 @@ export default class AddActionModal extends Component {
                     <span>问题的</span><b>解决结果</b><span>将被设置为</span>
                     <select
                       value={ this.state.resolutionParam }
-                      onChange={ (e) => this.setState({ resolutionParam: e.target.newValue }) }
+                      onChange={ (e) => this.setState({ resolutionParam: e.target.value }) }
                       disabled={ (_.indexOf(this.state.postFunctions, 'setResolution') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.postFunctions, 'setResolution') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择结果值</option>
