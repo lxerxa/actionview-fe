@@ -14,12 +14,13 @@ export default class PreviewModal extends Component {
 
   static propTypes = {
     name: PropTypes.string,
+    state: PropTypes.string,
     collection: PropTypes.array.isRequired,
     close: PropTypes.func.isRequired
   }
 
   componentDidMount() {
-    const { collection } = this.props;
+    const { collection, state } = this.props;
 
     const stepNum = collection.length;
 
@@ -38,6 +39,13 @@ export default class PreviewModal extends Component {
           graphTxt += _.find(collection, { id: v2.step }).name + ';';
         });
       });
+    }
+    
+    if (state) {
+      const current_step = _.find(collection, { state });
+      if (current_step) {
+        graphTxt += ' style ' + current_step.name + ' fill:#ffffbd;';
+      }
     }
 
     mermaidAPI.render('div', graphTxt, null, document.getElementById('chart'));

@@ -77,7 +77,7 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel><span className='txt-impt'>*</span>链接状态</ControlLabel>
-            <Select disabled={ submitting } options={ stateOptions } simpleValue value={ state.value } onChange={ newValue => { state.onChange(newValue) } } placeholder='请选择状态' clearable={ false } searchable={ false }/>
+            <Select disabled={ submitting } options={ stateOptions } simpleValue value={ state.value } onChange={ newValue => { state.onChange(newValue); if (!name.value) { name.onChange(_.find(stateOptions, { value: newValue }).label) } } } placeholder='请选择状态' clearable={ false } searchable={ false }/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

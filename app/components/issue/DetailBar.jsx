@@ -24,7 +24,7 @@ const ResetStateModal = require('./ResetStateModal');
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false, shareModalShow: false, resetModalShow: false };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false, shareModalShow: false, resetModalShow: false, workflowScreenShow: false, action_id: '' };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -118,8 +118,9 @@ export default class DetailBar extends Component {
 
   async viewWorkflow(e) {
     e.preventDefault();
-    const { viewWorkflow } = this.props;
-    const ecode = await viewWorkflow();
+    const { data, viewWorkflow } = this.props;
+    if (!data.definition_id) { return; }
+    const ecode = await viewWorkflow(data.definition_id);
     if (ecode === 0) {
       this.setState({ previewModalShow: true });
     }
@@ -160,6 +161,10 @@ export default class DetailBar extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  workflowScreenModalClose() {
+    this.setState({ workflowScreenShow: false });
   }
 
   createSubtaskModalClose() {
@@ -257,9 +262,14 @@ export default class DetailBar extends Component {
     await doAction(data.id, data.entry_id, action_id);
   }
 
+  async actionSelect(eventKey) {
+    const { data, doAction } = this.props;
+    await doAction(data.id, data.entry_id, eventKey);
+  }
+
   render() {
-    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, create, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading } = this.props;
-    const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile } = this.state;
+    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, create, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading, doAction } = this.props;
+    const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile, action_id } = this.state;
 
     const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
 
@@ -299,11 +309,20 @@ export default class DetailBar extends Component {
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '5px' } }>
                 <ButtonToolbar style={ { margin: '10px 10px 10px 5px' } }>
                   <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button>
-                  <ButtonGroup style={ { marginLeft: '10px' } }>
-                  { _.map(data.wfactions || [], (v, i) => {
-                    return ( <Button key={ v.id } onClick={ this.doAction.bind(this, v.id) }>{ v.name }</Button> ); 
-                  }) }
-                  </ButtonGroup>
+                  { data.wfactions && data.wfactions.length <= 3 ?
+                    <ButtonGroup style={ { marginLeft: '10px' } }>
+                    { _.map(data.wfactions || [], (v, i) => {
+                      return ( <Button key={ v.id } onClick={ this.doAction.bind(this, v.id) }>{ v.name }</Button> ); 
+                    }) }
+                    </ButtonGroup>
+                    :
+                    <div style={ { float: 'left', marginLeft: '10px' } }>
+                      <DropdownButton title='流程' onSelect={ this.actionSelect.bind(this) }>
+                      { _.map(data.wfactions || [], (v, i) => {
+                        return ( <MenuItem eventKey={ v.id }>{ v.name }</MenuItem> ); 
+                      }) }
+                      </DropdownButton>
+                    </div> }
                   <div style={ { float: 'right' } }>
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
@@ -330,10 +349,9 @@ export default class DetailBar extends Component {
                     状态
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }><Label>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' }</Label>{ !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
+                    <div style={ { marginTop: '7px' } }>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' } { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
                   </Col>
                 </FormGroup>
-
                 { data.parents && data.parents.id &&
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -345,7 +363,6 @@ export default class DetailBar extends Component {
                     </div>
                   </Col>
                 </FormGroup> }
-
                 { data.subtasks && data.subtasks.length > 0 &&
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -357,7 +374,7 @@ export default class DetailBar extends Component {
                     <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
-                        return (<tr key={ 'subtask' + key }><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ _.find(options.types, { id : val.type }).name }/{ val.no } - { val.title }</a></td><td>处理中</td></tr>); 
+                        return (<tr key={ 'subtask' + key }><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ _.find(options.types, { id : val.type }).name }/{ val.no } - { val.title }</a></td><td>{ _.find(options.states || [], { id: val.state }) ? _.find(options.states, { id: val.state }).name : '-' }</td></tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -400,7 +417,7 @@ export default class DetailBar extends Component {
                           }
                           linkIssueId = val.src.id;
                         }
-                        return (<tr key={ 'link' + key }><td>{ relation }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td><td>处理中</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
+                        return (<tr key={ 'link' + key }><td>{ relation }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td><td>{ _.find(options.states || [], { id: linkedIssue.state }) ? _.find(options.states, { id: linkedIssue.state }).name : '-' }</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -585,6 +602,16 @@ export default class DetailBar extends Component {
             project={ project } 
             data={ data } 
             isSubtask={ data.parent_id && true }/> }
+        { this.state.workflowScreenModalShow &&
+          <CreateModal show
+            close={ this.workflowScreenModalClose.bind(this) }
+            options={ options }
+            edit={ edit }
+            loading={ loading }
+            project={ project }
+            data={ data }
+            action_id={ action_id  }
+            doAction={ doAction }/> }
         { this.state.createSubtaskModalShow && 
           <CreateModal show 
             close={ this.createSubtaskModalClose.bind(this) } 
@@ -597,6 +624,7 @@ export default class DetailBar extends Component {
         { this.state.previewModalShow && 
           <PreviewModal show 
             close={ () => { this.setState({ previewModalShow: false }); } } 
+            state={ data.state }
             collection={ wfCollection } /> }
         { this.state.linkIssueModalShow && 
           <LinkIssueModal show 

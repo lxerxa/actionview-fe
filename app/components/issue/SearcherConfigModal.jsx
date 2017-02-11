@@ -82,7 +82,7 @@ export default class SearcherConfigModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>过滤器管理</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { maxHeight: '450px', overflow: 'auto' } }>
+        <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
           <Form horizontal>
           { cards.length > 0 && <div style={ { marginBottom: '8px' } }>通过上下拖拽改变过滤器显示顺序。</div> }
           { cards.length > 0 ?

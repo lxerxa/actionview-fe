@@ -78,7 +78,7 @@ export default class SortCardsModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>编辑解决结果顺序</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { maxHeight: '450px', overflow: 'auto' } }>
+        <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
           <div style={ { marginBottom: '8px' } }>通过上下拖拽改变显示顺序。</div>
           <div style={ style }>
             { cards.map((card, i) => {

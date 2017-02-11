@@ -145,7 +145,7 @@ export default class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>新建界面</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body style={ { height: '450px', overflow: 'auto' } }>
+        <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <Tabs
             activeKey={ this.state.activeKey }
             onTabClick={ this.onTabClick.bind(this) } 

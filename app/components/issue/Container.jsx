@@ -103,8 +103,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async viewWorkflow() {
-    await this.props.wfActions.index(this.pid, '546761');
+  async viewWorkflow(definition_id) {
+    await this.props.wfActions.index(this.pid, definition_id);
     return this.props.wfconfig.ecode;
   }
 
