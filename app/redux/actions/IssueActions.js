@@ -181,10 +181,10 @@ export function delLink(key, link_id) {
   });
 }
 
-export function doAction(key, id, workflow_id, action_id) {
+export function doAction(key, id, workflow_id, action_id, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_WORKFLOW_ACTION',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/workflow/' + workflow_id + '/action/' + action_id })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/workflow/' + workflow_id + '/action/' + action_id, method: 'post', values: values || {} })
   });
 }
 

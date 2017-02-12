@@ -257,14 +257,30 @@ export default class DetailBar extends Component {
     }
   }
 
-  async doAction(action_id) {
+  doAction(action_id) {
     const { doAction, data } = this.props;
-    await doAction(data.id, data.entry_id, action_id);
+    const action = _.find(data.wfactions || {}, { id: action_id });
+    if (action && action.schema) {
+      if (action.screen == 'comments') {
+      } else {
+        this.setState({ workflowScreenShow: true, action_id });
+      }
+    } else {
+      doAction(data.id, data.entry_id, action_id);
+    }
   }
 
-  async actionSelect(eventKey) {
+  actionSelect(eventKey) {
     const { data, doAction } = this.props;
-    await doAction(data.id, data.entry_id, eventKey);
+    const action = _.find(data.wfactions || {}, { id: eventKey });
+    if (action && action.schema) {
+      if (action.screen == 'comments') {
+      } else {
+        this.setState({ workflowScreenShow: true, action_id: eventKey });
+      }
+    } else {
+      doAction(data.id, data.entry_id, eventKey);
+    }
   }
 
   render() {
@@ -602,7 +618,7 @@ export default class DetailBar extends Component {
             project={ project } 
             data={ data } 
             isSubtask={ data.parent_id && true }/> }
-        { this.state.workflowScreenModalShow &&
+        { this.state.workflowScreenShow &&
           <CreateModal show
             close={ this.workflowScreenModalClose.bind(this) }
             options={ options }
@@ -611,7 +627,8 @@ export default class DetailBar extends Component {
             project={ project }
             data={ data }
             action_id={ action_id  }
-            doAction={ doAction }/> }
+            doAction={ doAction }
+            isFromWorkflow={ true }/> }
         { this.state.createSubtaskModalShow && 
           <CreateModal show 
             close={ this.createSubtaskModalClose.bind(this) } 

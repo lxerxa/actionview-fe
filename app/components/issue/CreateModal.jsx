@@ -13,34 +13,43 @@ const img = require('../../assets/images/loading.gif');
 class CreateModal extends Component {
   constructor(props) {
     super(props);
-    const { options, data={}, isSubtask=false } = this.props;
+    const { options, data={}, isSubtask=false, isFromWorkflow=false, action_id='' } = this.props;
 
     const typeTmpOptions = [];
-    if (isSubtask) {
-      _.map(options.types || [], function(val) {
-        if (val.type == 'subtask') {
-          typeTmpOptions.push(val);
-        }
-      });
-    } else {
-      _.map(options.types || [], function(val) {
-        if (val.type != 'subtask') {
-          typeTmpOptions.push(val);
-        }
-      });
+    if (!isFromWorkflow) {
+      if (isSubtask) {
+        _.map(options.types || [], function(val) {
+          if (val.type == 'subtask') {
+            typeTmpOptions.push(val);
+          }
+        });
+      } else {
+        _.map(options.types || [], function(val) {
+          if (val.type != 'subtask') {
+            typeTmpOptions.push(val);
+          }
+        });
+      }
     }
 
-    let defaultIndex = -1, schema = [], errors={}, values={}, oldValues={}, typeOkOptions=[];
+    let type = '', defaultIndex = -1, schema = [], errors={}, values={}, oldValues={}, typeOkOptions=[];
     if (!_.isEmpty(data) && data.id) {
-
-      _.map(typeTmpOptions || [], function(val) {
-        if (!val.disabled || data.type == val.id) {
-          typeOkOptions.push(val);
+      if (isFromWorkflow) {
+        const action = _.find(data.wfactions, { id: action_id });
+        if (action && action.schema) {
+          schema = action.schema;
         }
-      });
+      } else {
+        _.map(typeTmpOptions || [], function(val) {
+          if (!val.disabled || data.type == val.id) {
+            typeOkOptions.push(val);
+          }
+        });
 
-      defaultIndex = _.findIndex(typeOkOptions, { id: data.type });
-      schema = defaultIndex !== -1 ? typeOkOptions[defaultIndex].schema : [];
+        defaultIndex = _.findIndex(typeOkOptions, { id: data.type });
+        schema = defaultIndex !== -1 ? typeOkOptions[defaultIndex].schema : [];
+      }
+      type = data.type;
       _.map(schema, (v) => {
         if (!_.isUndefined(data[v.key])) {
           if (v.key == 'assignee' && data[v.key].id) {
@@ -61,6 +70,7 @@ class CreateModal extends Component {
           errors[v.key] = '必填';
         }
       });
+      _.extend(oldValues, { type: data.type });
     } else {
       _.map(typeTmpOptions || [], function(val) {
         if (!val.disabled) {
@@ -72,6 +82,8 @@ class CreateModal extends Component {
       if (defaultIndex === -1) {
         defaultIndex = 0;
       }
+
+      type = typeOkOptions[defaultIndex].id;
       schema = typeOkOptions[defaultIndex].schema;
       _.map(schema || [], (v) => {
         if (v.defaultValue) {
@@ -83,10 +95,11 @@ class CreateModal extends Component {
       });
     }
 
-    const type = defaultIndex !== -1 ? typeOkOptions[defaultIndex].id : ''; 
-    _.extend(oldValues, { type });
-
-    this.state = { ecode: 0, errors, touched: {}, type, typeOptions: typeOkOptions, schema, values, oldValues };
+    if (isFromWorkflow) {
+      this.state = { ecode: 0, errors, touched: {}, type: data.type, schema, values, oldValues };
+    } else {
+      this.state = { ecode: 0, errors, touched: {}, type, typeOptions: typeOkOptions, schema, values, oldValues };
+    }
 
     this.getChangedKeys = this.getChangedKeys.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -102,7 +115,10 @@ class CreateModal extends Component {
     isSubtask: PropTypes.bool,
     parent_id: PropTypes.string,
     create: PropTypes.func,
-    edit: PropTypes.func
+    edit: PropTypes.func,
+    doAction: PropTypes.func,
+    action_id: PropTypes.string,
+    isFromWorkflow: PropTypes.bool
   }
 
   getChangedKeys() {
@@ -124,7 +140,7 @@ class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { create, edit, close, options, data={}, parent_id='' } = this.props;
+    const { create, edit, close, options, data={}, parent_id='', doAction=undefined, action_id='' } = this.props;
     const schema = _.find(options.types, { id: this.state.type }).schema;
 
     let submitData = {};
@@ -162,6 +178,9 @@ class CreateModal extends Component {
     }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
+      if (data && data.id && doAction && action_id) {
+        doAction(data.id, data.entry_id, action_id);
+      }
       close();
     } else {
       this.setState({ ecode: ecode });
@@ -254,7 +273,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { options, close, loading, project, data={}, isSubtask=false } = this.props;
+    const { options, close, loading, project, data={}, isSubtask=false, isFromWorkflow=false } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(this.state.typeOptions, function(val) {
@@ -268,13 +287,19 @@ class CreateModal extends Component {
       };
     });
 
+    let bodyStyles = { height: '580px', overflow: 'auto' };
+    if (isFromWorkflow) {
+      bodyStyles = { maxHeight: '580px', overflow: 'auto' };
+    }
+
     return (
-      <Modal { ...this.props } onHide={ close } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal { ...this.props } onHide={ close } bsSize={ isFromWorkflow ? 'middle' : 'large' } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑问题' : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : '编辑问题') : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
+        <Modal.Body style={ bodyStyles }>
           <Form horizontal>
+            { !isFromWorkflow &&
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>
                 项目名称
@@ -282,7 +307,8 @@ class CreateModal extends Component {
               <Col sm={ 9 }>
                 <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>{ project.name || '-' }</span></div>
               </Col>
-            </FormGroup>
+            </FormGroup> }
+            { !isFromWorkflow &&
             <FormGroup controlId='formControlsSelect' style={ { height: '68px', borderBottom: '1px solid #ddd' } }>
               <Col sm={ 2 } componentClass={ ControlLabel }>
                 <span className='txt-impt'>*</span>类型
@@ -291,7 +317,7 @@ class CreateModal extends Component {
                 <Select options={ typeOptions } disabled={ loading } simpleValue searchable={ false } clearable={ false } value={ this.state.type } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
                 <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
               </Col>
-            </FormGroup>
+            </FormGroup> }
             <div>
             { _.map(schema, (v, key) => {
 
