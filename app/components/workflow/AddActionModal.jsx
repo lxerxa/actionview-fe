@@ -238,7 +238,7 @@ export default class AddActionModal extends Component {
     const stepOptions = _.map(_.filter(steps, (o) => { return stepData.id !== o.id }), (val) => { return { label: val.name, value: val.id } });
 
     const screenOptions = _.map(options.screens, (val) => { return { label: val.name, value: val.id } });
-    //screenOptions.unshift( { label: '不显示页面', value: '-1' } );;
+    screenOptions.unshift( { label: '流程备注页面', value: 'comments' } );;
 
     const relationOptions = [{ label: '全部满足', value: 'and' }, { label: '满足任何一个即可', value: 'or' }];
     const someOptions = [ { id: 'assignee', name: '经办人' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];

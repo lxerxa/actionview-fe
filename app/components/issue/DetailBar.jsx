@@ -20,11 +20,12 @@ const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
 const ShareLinkModal = require('./ShareLinkModal');
 const ResetStateModal = require('./ResetStateModal');
+const WorkflowCommentsModal = require('./WorkflowCommentsModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false, shareModalShow: false, resetModalShow: false, workflowScreenShow: false, action_id: '' };
+    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false, shareModalShow: false, resetModalShow: false, workflowScreenShow: false, workflowCommentsShow: false, action_id: '' };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -167,6 +168,10 @@ export default class DetailBar extends Component {
     this.setState({ workflowScreenShow: false });
   }
 
+  workflowCommentsModalClose() {
+    this.setState({ workflowCommentsShow: false });
+  }
+
   createSubtaskModalClose() {
     this.setState({ createSubtaskModalShow: false });
   }
@@ -260,8 +265,9 @@ export default class DetailBar extends Component {
   doAction(action_id) {
     const { doAction, data } = this.props;
     const action = _.find(data.wfactions || {}, { id: action_id });
-    if (action && action.schema) {
+    if (action && action.screen) {
       if (action.screen == 'comments') {
+        this.setState({ workflowCommentsShow: true, action_id });
       } else {
         this.setState({ workflowScreenShow: true, action_id });
       }
@@ -629,6 +635,12 @@ export default class DetailBar extends Component {
             action_id={ action_id  }
             doAction={ doAction }
             isFromWorkflow={ true }/> }
+        { this.state.workflowCommentsShow &&
+          <WorkflowCommentsModal show
+            close={ this.workflowCommentsModalClose.bind(this) }
+            data={ data }
+            action_id={ action_id  }
+            doAction={ doAction }/> }
         { this.state.createSubtaskModalShow && 
           <CreateModal show 
             close={ this.createSubtaskModalClose.bind(this) } 
