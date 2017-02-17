@@ -158,6 +158,10 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  watch(issue_id, flag) {
+    this.props.actions.watch(this.pid, issue_id, flag);
+  }
+
   record() {
     this.props.actions.record();
   }
@@ -236,6 +240,7 @@ export default class Container extends Component {
           createLink={ this.createLink.bind(this) }
           delLink={ this.delLink.bind(this) }
           doAction={ this.doAction.bind(this) }
+          watch={ this.watch.bind(this) }
           { ...this.props.issue }/> 
       </div>
     );

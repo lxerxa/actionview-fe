@@ -188,6 +188,13 @@ export function doAction(key, id, workflow_id, action_id, values) {
   });
 }
 
+export function watch(key, id, flag) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_WATCHING',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/watching', method: 'post', data: { flag } })
+  });
+}
+
 export function resetState(key, id) {
   return asyncFuncCreator({
     constant: 'ISSUE_STATE_RESET',

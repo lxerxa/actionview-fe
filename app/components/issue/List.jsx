@@ -92,6 +92,7 @@ export default class List extends Component {
     delLink: PropTypes.func.isRequired,
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
+    watch: PropTypes.func.isRequired,
     delNotify: PropTypes.func.isRequired
   }
 
@@ -123,7 +124,7 @@ export default class List extends Component {
   }
 
   operateSelect(eventKey) {
-    const { delNotify, show, collection } = this.props;
+    const { delNotify, show, watch, collection } = this.props;
 
     const { hoverRowId } = this.state;
     const selectedItem = _.find(collection, { id: hoverRowId }) || {}; 
@@ -148,6 +149,8 @@ export default class List extends Component {
       this.setState({ shareModalShow : true });
     } else if (eventKey === 'reset') {
       this.setState({ resetModalShow : true });
+    } else if (eventKey === 'watch') {
+      watch(selectedItem.id, !selectedItem.watching) ;
     } else {
       // todo err notify
     }
@@ -222,7 +225,7 @@ export default class List extends Component {
 
   render() {
 
-    const { collection, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, create, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogOptions, indexHistory, historyCollection, historyIndexLoading, historyLoaded, createLink, delLink, linkLoading, doAction } = this.props;
+    const { collection, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, create, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogOptions, indexHistory, historyCollection, historyIndexLoading, historyLoaded, createLink, delLink, linkLoading, watch, doAction } = this.props;
     const { operateShow, hoverRowId, selectedItem } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -271,7 +274,7 @@ export default class List extends Component {
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='edit'>编辑</MenuItem>
                 <MenuItem eventKey='assign'>分配</MenuItem>
-                <MenuItem eventKey='follow'>关注</MenuItem>
+                <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
                 <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
                 <MenuItem eventKey='share'>分享链接</MenuItem>
                 { !collection[i].parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
@@ -357,6 +360,7 @@ export default class List extends Component {
             linkLoading={ linkLoading }
             createLink={ createLink }
             delLink={ delLink }
+            watch={ watch }
             doAction={ doAction }/> }
         { options.total && options.total > 0 ? 
           <PaginationList 

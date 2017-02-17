@@ -320,6 +320,29 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_LINK_DELETE_FAIL:
       return { ...state, linkLoading: false, error: action.error };
 
+    case t.ISSUE_WATCHING_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.collection, { id: action.result.data.id });
+        state.collection[ind].watching = action.result.data.watching;
+        if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
+          state.itemData.watching = action.result.data.watching;
+          if (action.result.data.user) {
+            if (!state.itemData.watchers) {
+              state.itemData.watchers = [];
+            }
+            if (state.itemData.watching) {
+              state.itemData.watchers.unshift(action.result.data.user);
+            } else {
+              const ui = _.findIndex(state.itemData.watchers, { id: action.result.data.user.id });
+              if (ui !== -1) {
+                state.itemData.watchers.splice(ui, 1);
+              }
+            }
+          }
+        }
+      }
+      return { ...state, ecode: action.result.ecode };
+
     default:
       return state;
   }

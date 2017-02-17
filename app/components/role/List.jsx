@@ -5,6 +5,7 @@ import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
+import Person from '../share/Person';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -194,7 +195,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { permissions.length > 0 ?
                 <span>
-                { _.map(permissions, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label bsStyle='info' key={ v.id }>{ v.name }</Label></div> }) }
+                { _.map(permissions, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
                 </span>
                 :
                 '-' }
@@ -220,7 +221,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].users && collection[i].users.length > 0 ?
                 <span>
-                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label bsStyle='success' key={ v.id }>{ v.name }</Label></div> }) }
+                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Person key={ v.id } data={ v }/></div> }) }
                 </span>
                 :
                 '-' }

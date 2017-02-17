@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, ControlLabel, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup, OverlayTrigger, Popover, ListGroup, ListGroupItem } from 'react-bootstrap';
 import DropzoneComponent from 'react-dropzone-component';
 import Lightbox from 'react-image-lightbox';
 import Select from 'react-select';
@@ -78,6 +78,7 @@ export default class DetailBar extends Component {
     delLink: PropTypes.func.isRequired,
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
+    watch: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -230,7 +231,7 @@ export default class DetailBar extends Component {
   }
 
   async operateSelect(eventKey) {
-    const { data, show } = this.props;
+    const { data, show, watch } = this.props;
     if (eventKey == 'refresh') {
       const ecode = await show(data.id);
     } else if (eventKey == 'assign') {
@@ -247,6 +248,8 @@ export default class DetailBar extends Component {
       this.setState({ shareModalShow: true });
     } else if (eventKey == 'reset') {
       this.setState({ resetModalShow: true });
+    } else if (eventKey == 'watch') {
+      watch(data.id, !data.watching);
     }
   }
 
@@ -307,6 +310,18 @@ export default class DetailBar extends Component {
 
     const curInd = _.findIndex(issueCollection, { id: data.id });
 
+    const popoverClickRootClose = (
+      <Popover id='popover-trigger-click-root-close'>
+        { data.watchers && data.watchers.length > 0 ?
+          <ListGroup>
+            { _.map(data.watchers, (v) => {
+              return (<ListGroupItem><b>{ v.name }</b><br/>({ v.email })</ListGroupItem>) }) }
+          </ListGroup>
+          :
+          <span>暂无关注人</span> }
+      </Popover>
+    );
+
     return (
       <div className='animate-dialog'>
         <Button className='close' onClick={ close } title='关闭'>
@@ -324,7 +339,12 @@ export default class DetailBar extends Component {
         <Button className='angle' onClick={ this.forward.bind(this, -1) } disabled={ visitedIndex <= 0 } title='后退'>
           <i className='fa fa-angle-left'></i>
         </Button>
-        <div className='panel panel-default'>
+        <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
+          <Button className='angle' title='查看关注者'>
+            <i className='fa fa-eye'></i>
+          </Button>
+        </OverlayTrigger>
+        <div className='panel panel-default' style={ { marginBottom: '0px' } }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
@@ -349,7 +369,7 @@ export default class DetailBar extends Component {
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
                       <MenuItem eventKey='assign'>分配</MenuItem>
-                      <MenuItem eventKey='follow'>关注</MenuItem>
+                      <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       <MenuItem eventKey='link'>链接问题</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
@@ -371,7 +391,7 @@ export default class DetailBar extends Component {
                     状态
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' } { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>查看</span></a> : <img src={ img } className='small-loading'/> }</div>
+                    <div style={ { marginTop: '7px' } }>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' } { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/> }</div>
                   </Col>
                 </FormGroup>
                 { data.parents && data.parents.id &&
@@ -572,9 +592,9 @@ export default class DetailBar extends Component {
                     </FormGroup>
                   );
                 }) }
-              </Form>
-            </Tab>
-            <Tab eventKey={ 2 } title='备注'>
+      </Form>
+    </Tab>
+    <Tab eventKey={ 2 } title='备注'>
               <Comments 
                 issue_id={ data.id }
                 collection={ commentsCollection } 
