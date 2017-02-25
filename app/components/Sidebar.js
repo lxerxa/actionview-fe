@@ -7,7 +7,7 @@ export default class Sidebar extends Component {
     super(props);
     this.state = { projectBrowseShow: false, projectConfigShow: false, personalCenterShow: false };
     const browseModules = [ 'issue', 'module', 'version' ];
-    const configModules = [ 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role' ];
+    const configModules = [ 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role', 'events' ];
     if (props.pathname) {
       const sections = props.pathname.split('/');
       let modulename = sections.pop();
@@ -62,6 +62,7 @@ export default class Sidebar extends Component {
           <li><Link to={ '/project/' + project.item.key + '/resolution' }>解决结果</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/priority' }>优先级</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/role' }>角色权限</Link></li>
+          <li><Link to={ '/project/' + project.item.key + '/events' }>通知事件</Link></li>
         </ul>
         <div className='search'>
           个人中心

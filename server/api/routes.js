@@ -659,4 +659,18 @@ export default function(router) {
   router.post('/project/:key/file', function(req, res) {
     return res.status(200).send({ecode: 0, data: { field:'attachments', file: {id: '546761'}}});
   });
+
+  /*******************events*****************/
+  router.get('/project/:key/events', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '创建问题', notifications: [  'assignee', 'reporter','project_principal' ] },{ id: '546763', name: '编辑问题', notifications: [ 'assignee', 'reporter', 'project_principal' ] },{ id: '546762', name: '删除问题' },{ id: '2323', name: '添加备注', notifications: [ 'assignee', 'reporter', 'module_principal' ] }], options:{ users: [{ id: '111', name:'刘旭', email:'liuxuyjy@chinamobile.com' }, { id: '222', name:'葛鹏', email: 'gepeng@chinamobile.com' }], roles: [{id: '1111', name:'role1'}, {id: '2222', name:'role2'}, {id: '3333', name:'role3'}] }};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/events', function(req, res) {
+    const results = { ecode: 0, data: { id: 'were', name: '5C问题', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程1'}} };
+    return res.status(200).send(results);
+  });
+  /******************Events*************/
 }
