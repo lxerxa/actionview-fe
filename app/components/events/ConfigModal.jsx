@@ -3,6 +3,8 @@ import { Modal, Button } from 'react-bootstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
+const img = require('../../assets/images/loading.gif');
+
 export default class ConfigModal extends Component {
   constructor(props) {
     super(props);
@@ -38,11 +40,12 @@ export default class ConfigModal extends Component {
   }
 
   async confirm() {
-    const { close, edit, data } = this.props;
+    const { close, edit, data, options } = this.props;
     const notifications = [];
     _.map(this.state.notifications, (v) => {
       if (v == 'user' && this.state.userParam) {
-        notifications.push({ key: v, value: this.state.userParam });
+        const ind = _.find(options.users, { id: this.state.userParam });
+        notifications.push({ key: v, value: options.users[ind] });
       } else if (v == 'role' && this.state.roleParam) {
         notifications.push({ key: v, value: this.state.roleParam });
       } else {
@@ -150,6 +153,8 @@ export default class ConfigModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button onClick={ this.confirm } disabled={ !isChanged || loading }>确定</Button>
           <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
