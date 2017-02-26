@@ -198,8 +198,8 @@ export default class Header extends Component {
               <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
             ) }
             <MenuItem divider/>
-            <MenuItem eventKey='saveSearcher'><i className='fa fa-save'></i> 保存当前检索</MenuItem>
-            <MenuItem eventKey='searcherConfig'><i className='fa fa-cog'></i> 过滤器管理</MenuItem>
+            <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
+            <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
           </DropdownButton>
           :
           <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>

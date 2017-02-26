@@ -43,11 +43,15 @@ export default class ConfigModal extends Component {
     const { close, edit, data, options } = this.props;
     const notifications = [];
     _.map(this.state.notifications, (v) => {
-      if (v == 'user' && this.state.userParam) {
-        const ind = _.find(options.users, { id: this.state.userParam });
-        notifications.push({ key: v, value: options.users[ind] });
-      } else if (v == 'role' && this.state.roleParam) {
-        notifications.push({ key: v, value: this.state.roleParam });
+      if (v == 'user') {
+        if (this.state.userParam) {
+          const user = _.find(options.users, { id: this.state.userParam });
+          notifications.push({ key: v, value: user });
+        }
+      } else if (v == 'role') {
+        if (this.state.roleParam) {
+          notifications.push({ key: v, value: this.state.roleParam });
+        }
       } else {
         notifications.push(v);
       }
@@ -98,34 +102,34 @@ export default class ConfigModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <div style={ { paddingTop: '10px', paddingBottom: '0px', paddingLeft: '5px' } }>
-            <CheckboxGroup name='postFunctions' value={ this.state.notifications } onChange={ this.notificationsChanged.bind(this) }>
+            <CheckboxGroup name='notifications' value={ this.state.notifications } onChange={ this.notificationsChanged.bind(this) }>
               <ui className='list-unstyled clearfix cond-list'>
                 <li>
-                  <Checkbox disabled={ false } value='current_user'/>
+                  <Checkbox disabled={ loading } value='current_user'/>
                   <span>当前用户</span>
                 </li>
                 <li>
-                  <Checkbox disabled={ false } value='assignee'/>
+                  <Checkbox disabled={ loading } value='assignee'/>
                   <span>经办人</span>
                 </li>
                 <li>
-                  <Checkbox disabled={ false } value='reporter'/>
+                  <Checkbox disabled={ loading } value='reporter'/>
                   <span>报告者</span>
                 </li>
                 <li>
-                  <Checkbox disabled={ false } value='project_principal'/>
+                  <Checkbox disabled={ loading } value='project_principal'/>
                   <span>项目负责人</span>
                 </li>
                 <li>
-                  <Checkbox disabled={ false } value='module_principal'/>
+                  <Checkbox disabled={ loading } value='module_principal'/>
                   <span>模块负责人</span>
                 </li>
                 <li>
-                  <Checkbox disabled={ false } value='watchers'/>
+                  <Checkbox disabled={ loading } value='watchers'/>
                   <span>所有关注者</span>
                 </li>
                 <li>
-                  <Checkbox disabled={ false } value='user'/>
+                  <Checkbox disabled={ loading } value='user'/>
                   <span>单一用户</span>
                   <select
                     value={ this.state.userParam }
@@ -137,7 +141,7 @@ export default class ConfigModal extends Component {
                   </select>
                 </li>
                 <li>
-                  <Checkbox disabled={ false } value='role'/>
+                  <Checkbox disabled={ loading } value='role'/>
                   <span>项目角色</span>
                   <select
                     value={ this.state.roleParam }

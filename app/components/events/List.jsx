@@ -28,6 +28,7 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -119,7 +120,7 @@ export default class List extends Component {
                   name = '模块负责人';
                 } else if (v == 'current_user') {
                   name = '当前用户';
-                } else if (v == 'wathers') {
+                } else if (v == 'watchers') {
                   name = '所有关注者';
                 } else if (v.key == 'user' && v.value && v.value.name) {
                   name = '单一用户: ' + v.value.name;

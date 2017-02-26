@@ -48,6 +48,12 @@ export default class Container extends Component {
     return this.props.events.ecode;
   }
 
+  async reset(id) {
+    const { actions } = this.props;
+    await actions.reset(this.pid, id);
+    return this.props.events.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -57,7 +63,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header create={ this.create.bind(this) } { ...this.props.events }/>
-        <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.events }/>
+        <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } reset={ this.reset.bind(this) } { ...this.props.events }/>
       </div>
     );
   }

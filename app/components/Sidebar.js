@@ -49,6 +49,7 @@ export default class Sidebar extends Component {
         <h4><i className={ this.state.projectBrowseShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ () => { this.setState({ projectBrowseShow: !this.state.projectBrowseShow }) } }></i>项目概述</h4>
         <ul className={ !this.state.projectBrowseShow && 'hide' }>
           <li><Link to={ '/project/' + project.item.key + '/issue' }>问题</Link></li>
+          <li><Link to={ '/project/' + project.item.key + '/activity' }>活动</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/module' }>模块</Link></li>
           <li><Link to={ '/project/' + project.item.key + '/version' }>版本</Link></li>
         </ul>
