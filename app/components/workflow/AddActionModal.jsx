@@ -21,7 +21,7 @@ const POST_FUNCTIONS = {
   setState: { name : 'App\\Workflow\\Func@setState', sn: 4 },
   addComments: { name : 'App\\Workflow\\Func@addComments', sn: 5 },
   //updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 6 }
-  //triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 }
+  triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 },
   updIssue: { name : 'App\\Workflow\\Func@updIssue', sn: 10 }
 };
 
@@ -243,10 +243,10 @@ export default class AddActionModal extends Component {
     const relationOptions = [{ label: '全部满足', value: 'and' }, { label: '满足任何一个即可', value: 'or' }];
     const someOptions = [ { id: 'assignee', name: '经办人' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
     const assigneeOptions = [ { id: 'me', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
-    //const eventOptions = [ { id: 'normal', name: '一般事件' } ];
 
     const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
 
+    const eventOptions = options.events || [];
     const stateOptions = options.states || [];
     const permissionOptions = require('../share/Permissions.js');
     const roleOptions = options.roles || [];
@@ -421,6 +421,7 @@ export default class AddActionModal extends Component {
                     <Checkbox disabled={ submitting } value='updateHistory'/>
                     <span>更新问题的变动历史记录</span>
                   </li>
+                  */}
                   <li>
                     <Checkbox value='triggerEvent'/>
                     <span>过程结束后触发</span>
@@ -432,9 +433,8 @@ export default class AddActionModal extends Component {
                       <option value='' key=''>请选择事件</option>
                       { eventOptions.map( eventOption => <option value={ eventOption.id } key={ eventOption.id }>{ eventOption.name }</option> ) }
                     </select>
-                    <span>事件(待开发)</span>
+                    <span>通知事件</span>
                   </li>
-                  */}
                 </ui>
               </CheckboxGroup>
             </TabPane>

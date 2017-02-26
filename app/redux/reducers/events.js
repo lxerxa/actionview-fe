@@ -43,6 +43,19 @@ export default function resolution(state = initialState, action) {
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: el };
 
+    case t.EVENTS_RESET:
+      return { ...state, itemLoading: true };
+
+    case t.EVENTS_RESET_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.collection, { id: action.id });
+        state.collection[ind] = action.result.data;
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
+
+    case t.EVENTS_RESET_FAIL:
+      return { ...state, itemLoading: false, error: action.error };
+
     case t.EVENTS_DELETE:
       return { ...state, itemLoading: true };
 

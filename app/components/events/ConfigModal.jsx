@@ -110,7 +110,7 @@ export default class ConfigModal extends Component {
                 </li>
                 <li>
                   <Checkbox disabled={ loading } value='assignee'/>
-                  <span>经办人</span>
+                  <span>当前经办人</span>
                 </li>
                 <li>
                   <Checkbox disabled={ loading } value='reporter'/>

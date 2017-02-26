@@ -32,3 +32,11 @@ export function del(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/events/' + id, method: 'delete' })
   });
 }
+
+export function reset(key, id) {
+  return asyncFuncCreator({
+    constant: 'EVENTS_RESET',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/events/' + id + '/reset' })
+  });
+}

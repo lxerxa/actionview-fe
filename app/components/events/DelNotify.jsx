@@ -10,14 +10,19 @@ export default class DelNotify extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
+    del: PropTypes.func,
+    reset: PropTypes.func,
     data: PropTypes.object.isRequired
   }
 
   confirm() {
-    const { close, del, data } = this.props;
+    const { close, del=null, reset=null, data } = this.props;
     close();
-    del(data.id);
+    if (reset) {
+      reset(data.id);
+    } else  {
+      del(data.id);
+    }
   }
 
   cancel() {
@@ -26,15 +31,15 @@ export default class DelNotify extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, reset=null, del=null } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除通知事件 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ reset ? '重置' : '删除' }通知事件 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此事件？
+          { reset ? '确认要重置此事件？' : '确认要删除此事件？' }
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={ this.confirm }>确定</Button>

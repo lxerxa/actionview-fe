@@ -12,9 +12,10 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, configModalShow: false, delNotifyShow: false, operateShow: false, hoverRowId: '' };
+    this.state = { editModalShow: false, configModalShow: false, delNotifyShow: false, resetNotifyShow: false, operateShow: false, hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.resetNotifyClose = this.resetNotifyClose.bind(this);
     this.configModalClose = this.configModalClose.bind(this);
   }
 
@@ -45,6 +46,10 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
+  resetNotifyClose() {
+    this.setState({ resetNotifyShow: false });
+  }
+
   configModalClose() {
     this.setState({ configModalShow: false });
   }
@@ -57,6 +62,12 @@ export default class List extends Component {
 
   delNotify(id) {
     this.setState({ delNotifyShow: true });
+    const { show } = this.props;
+    show(id);
+  }
+
+  resetNotify(id) {
+    this.setState({ resetNotifyShow: true });
     const { show } = this.props;
     show(id);
   }
@@ -74,6 +85,8 @@ export default class List extends Component {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.config(hoverRowId);
+    } else if (eventKey === '3') {
+      this.resetNotify(hoverRowId);
     } else if (eventKey === '4') {
       this.delNotify(hoverRowId);
     }
@@ -88,7 +101,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, del, edit, options } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, del, edit, reset, options } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -111,7 +124,7 @@ export default class List extends Component {
               _.map(collection[i].notifications, function(v, i) { 
                 let name = '';
                 if (v == 'assignee') {
-                  name = '经办人';
+                  name = '当前经办人';
                 } else if (v == 'reporter') {
                   name = '报告者';
                 } else if (v == 'project_principal') {
@@ -140,10 +153,10 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
-              <MenuItem eventKey='2'>设置</MenuItem>
-              <MenuItem eventKey='3'>恢复默认</MenuItem>
-              <MenuItem eventKey='4'>删除</MenuItem>
+              { !collection[i].category && <MenuItem eventKey='1'>编辑</MenuItem> }
+              <MenuItem eventKey='2'>通知设置</MenuItem>
+              { collection[i].category && <MenuItem eventKey='3'>重置通知</MenuItem> }
+              { !collection[i].category && <MenuItem eventKey='4'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -171,6 +184,7 @@ export default class List extends Component {
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } collection={ collection }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.resetNotifyShow && <DelNotify show close={ this.resetNotifyClose } data={ selectedItem } reset={ reset }/> }
         { this.state.configModalShow && <ConfigModal show loading={ loading } close={ this.configModalClose } data={ selectedItem } edit={ edit } options={ options }/> }
       </div>
     );
