@@ -21,7 +21,7 @@ const POST_FUNCTIONS = {
   setState: { name : 'App\\Workflow\\Func@setState', sn: 4 },
   addComments: { name : 'App\\Workflow\\Func@addComments', sn: 5 },
   //updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 6 }
-  triggerEvent: { name : 'App\\Workflow\\Util@triggerEvent', args: [ 'eventParam' ], sn: 6 },
+  triggerEvent: { name : 'App\\Workflow\\Func@triggerEvent', args: [ 'eventParam' ], sn: 6 },
   updIssue: { name : 'App\\Workflow\\Func@updIssue', sn: 10 }
 };
 
@@ -48,14 +48,12 @@ export default class AddActionModal extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { activeKey: '1', conditions: [], postFunctions: [ 'setState', 'addComments', 'updIssue' ], relation: '', someParam: '', userParam: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', assignedUserParam: '' };
+    this.state = { activeKey: '1', conditions: [], postFunctions: [ 'setState', 'addComments', 'triggerEvent', 'updIssue' ], relation: '', someParam: '', userParam: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', assignedUserParam: '', eventParam: 'normal' };
 
     const state = this.state;
     const { data } = props;
-    if (!_.isEmpty(data))
-    {
-      if (data.restrict_to && data.restrict_to.conditions && data.restrict_to.conditions.list.length > 0)
-      {
+    if (!_.isEmpty(data)) {
+      if (data.restrict_to && data.restrict_to.conditions && data.restrict_to.conditions.list.length > 0) {
         this.state.conditions = _.map(data.restrict_to.conditions.list, function(value) { 
           value.args && _.assign(state, value.args);
           return _.findKey(CONDITION_FUNCTIONS, { name: value.name });
@@ -63,13 +61,16 @@ export default class AddActionModal extends Component {
         this.state.relation = data.restrict_to.conditions.type || 'and';
       }
 
-      if (data.post_functions && data.post_functions.length > 0)
-      {
+      if (data.post_functions && data.post_functions.length > 0) {
         this.state.postFunctions = _.map(data.post_functions, function(value) { 
           value.args && _.assign(state, value.args);
           return _.findKey(POST_FUNCTIONS, { name: value.name });
         });
       }
+    }
+    // special handling
+    if (_.indexOf(this.state.postFunctions, 'triggerEvent') === -1) {
+      this.state.eventParam = '';
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);

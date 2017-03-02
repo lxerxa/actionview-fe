@@ -71,12 +71,10 @@ export default class EditModal extends Component {
   async handleSubmit() {
     const { values, edit, close } = this.props;
 
-    if (values.start_time)
-    {
+    if (values.start_time) {
       values.start_time = parseInt(moment(values.start_time).startOf('day').format('X'));
     }
-    if (values.end_time)
-    {
+    if (values.end_time) {
       values.end_time = parseInt(moment(values.end_time).endOf('day').format('X'));
     }
 

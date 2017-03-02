@@ -462,3 +462,7 @@ table tr:hover .remove-icon{
 .table-responsive .table {
   margin-bottom: 10px;
 }
+
+.rc-tabs-top {
+  border-bottom: 2px solid #fff;
+}
