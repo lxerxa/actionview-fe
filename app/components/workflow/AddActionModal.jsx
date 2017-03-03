@@ -104,56 +104,53 @@ export default class AddActionModal extends Component {
 
     const postFunctions = [];
     const postFuncsLength = this.state.postFunctions.length;
-    for (let i = 0; i < postFuncsLength; i++)
-    {
+    for (let i = 0; i < postFuncsLength; i++) {
       const funcKey = this.state.postFunctions[i];
+      if (!POST_FUNCTIONS[funcKey]) {
+        continue;
+      }
       const funcArgs = {};
       const argsLength = POST_FUNCTIONS[funcKey].args ? POST_FUNCTIONS[funcKey].args.length : 0;
       let validFlag = 1;
-      for (let j = 0; j < argsLength; j++) 
-      {
+      for (let j = 0; j < argsLength; j++) {
         const arg = (POST_FUNCTIONS[funcKey].args)[j];
-        if (!this.state[arg])
-        {
+        if (!this.state[arg]) {
           validFlag = 0;
           break;
         }
         funcArgs[arg] = this.state[arg];
       }
 
-      if (validFlag === 1)
-      {
+      if (validFlag === 1) {
         argsLength > 0 ?
           postFunctions.push({ name: POST_FUNCTIONS[funcKey].name, args: funcArgs, sn: POST_FUNCTIONS[funcKey].sn }) :
           postFunctions.push({ name: POST_FUNCTIONS[funcKey].name, sn: POST_FUNCTIONS[funcKey].sn })
       }
     }
-    if (postFunctions.length > 0)
-    {
+    if (postFunctions.length > 0) {
       addedAction.post_functions = _.map(_.sortBy(postFunctions, 'sn'), function(value) { return _.pick(value, ['name', 'args']); });
     }
 
     const restrictConditions = [];
     const restrictCondLength = this.state.conditions.length;
-    for (let i = 0; i < restrictCondLength; i++)
-    {
+    for (let i = 0; i < restrictCondLength; i++) {
       const condKey = this.state.conditions[i];
+      if (!CONDITION_FUNCTIONS[condKey]) {
+        continue;
+      }
       const condArgs = {};
       let validFlag = 1;
       const argsLength = CONDITION_FUNCTIONS[condKey].args ? CONDITION_FUNCTIONS[condKey].args.length : 0;
-      for (let j = 0; j < argsLength; j++)
-      {
+      for (let j = 0; j < argsLength; j++) {
         const arg = (CONDITION_FUNCTIONS[condKey].args)[j];
-        if (!this.state[arg])
-        {
+        if (!this.state[arg]) {
           validFlag = 0;
           break;
         }
         condArgs[arg] = this.state[arg];
       }
 
-      if (validFlag === 1)
-      {
+      if (validFlag === 1) {
         argsLength > 0 ?
           restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name, args: condArgs, sn: CONDITION_FUNCTIONS[condKey].sn }) :
           restrictConditions.push({ name: CONDITION_FUNCTIONS[condKey].name, sn: CONDITION_FUNCTIONS[condKey].sn })

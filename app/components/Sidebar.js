@@ -6,7 +6,7 @@ export default class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = { projectBrowseShow: false, projectConfigShow: false, personalCenterShow: false };
-    const browseModules = [ 'issue', 'module', 'version' ];
+    const browseModules = [ 'issue', 'activity', 'module', 'version' ];
     const configModules = [ 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role', 'events' ];
     if (props.pathname) {
       const sections = props.pathname.split('/');

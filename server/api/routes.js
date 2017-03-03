@@ -673,4 +673,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
   /******************Events*************/
+
+  /******************Activity***************/
+  router.get('/project/:key/activity', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', event_key: 'del_file', user : { id : '57afced21d41c8174d7421c1', name : '刘旭', email : 'liuxuyjy@chinamobile.com' }, data : 'aaa.jpg', issue: { id: '1111', name: '1111111111111' } }, { id: '546763', event_key: 'add_file', user : { id : '57afced21d41c8174d7421c1', name : '刘旭', email : 'liuxuyjy@chinamobile.com' }, data : 'bbb.jpg', issue: { id: '1111', name: '1111111111111' } }, { id: '546761', event_key: 'create_issue', user : { id : '57afced21d41c8174d7421c1', name : '刘旭', email : 'liuxuyjy@chinamobile.com' }, issue: { id: '1111', name: '1111111111111' }, data: '' }, { id: '546763', user : { id : '57afced21d41c8174d7421c1', name : '刘旭', email : 'liuxuyjy@chinamobile.com' }, event_key: 'edit_issue', data: [{ name : '主题', value : 'jjjjjjj', type : 'Text' }, { name : '优先级', value : '一般', type : 'Select'} ], issue: { id: '1111', name: '1111111111111' } }] };
+    return res.status(200).send(results);
+  });
+  /******************Activity***************/
 }

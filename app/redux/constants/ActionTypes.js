@@ -143,6 +143,8 @@ export default generateConstants([
 
   'ISSUE_WATCHING(ASYNC)',
 
+  'ACTIVITY_INDEX(ASYNC)',
+
   'USER_INFO_FETCH(ASYNC)',
 
   'LOCALE_INITIALIZE',

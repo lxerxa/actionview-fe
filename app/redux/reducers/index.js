@@ -15,5 +15,6 @@ export { default as role } from './role';
 export { default as module } from './module';
 export { default as version } from './version';
 export { default as events } from './events';
+export { default as activity } from './activity';
 export { reducer as form } from 'redux-form';
 export { routerReducer as routing } from 'react-router-redux';

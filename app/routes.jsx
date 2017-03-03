@@ -21,6 +21,7 @@ const ResolutionContainer = require('./components/resolution/Container');
 const PriorityContainer = require('./components/priority/Container');
 const RoleContainer = require('./components/role/Container');
 const EventsContainer = require('./components/events/Container');
+const ActivityContainer = require('./components/activity/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -32,6 +33,7 @@ export default (
         <IndexRoute component={ Profile }/>
         <Route path='/project/:key/profile' component={ Profile }/>
         <Route path='/project/:key/issue' component={ IssueContainer }/>
+        <Route path='/project/:key/activity' component={ ActivityContainer }/>
         <Route path='/project/:key/module' component={ ModuleContainer }/>
         <Route path='/project/:key/version' component={ VersionContainer }/>
         <Route path='/project/:key/type' component={ TypeContainer }/>
@@ -44,6 +46,7 @@ export default (
         <Route path='/project/:key/priority' component={ PriorityContainer }/>
         <Route path='/project/:key/role' component={ RoleContainer }/>
         <Route path='/project/:key/events' component={ EventsContainer }/>
+        <Route path='/project/:key/activity' component={ ActivityContainer }/>
       </Route>
     </Route>
   </Route>

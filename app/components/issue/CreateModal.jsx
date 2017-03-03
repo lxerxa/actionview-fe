@@ -211,7 +211,7 @@ class CreateModal extends Component {
       }
 
       if (v.required && !values[v.key]) {
-        errors[v.key] = 'requried';
+        errors[v.key] = '必填';
       }
     });
 
