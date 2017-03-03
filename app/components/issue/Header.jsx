@@ -164,6 +164,10 @@ export default class Header extends Component {
       this.setState({ addSearcherShow : true });
     } else if(eventKey == 'all') {
       refresh({});
+    } else if(eventKey == 'todos') {
+      refresh({ assignee: 'me', reolution: 'Unresolved' });
+    } else if(eventKey == 'myreports') {
+      refresh({ reporter: 'me' });
     } else {
       const searchers = options.searchers || [];
       const searcher = _.find(searchers, { id: eventKey }) || {};
@@ -193,6 +197,8 @@ export default class Header extends Component {
           { options.searchers && options.searchers.length > 0 ?
           <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
             <MenuItem eventKey='all'>全部问题</MenuItem>
+            <MenuItem eventKey='todos'>分配给我的</MenuItem>
+            <MenuItem eventKey='myreports'>我报告的</MenuItem>
             <MenuItem divider/>
             { _.map(options.searchers, (val) => 
               <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>

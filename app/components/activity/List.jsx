@@ -28,6 +28,8 @@ export default class List extends Component {
     const { collection, indexLoading } = this.props;
     const { hoverRowId } = this.state;
 
+    const titleStyles = { marginLeft: '5px', fontWeight: 600 };
+
     const activities = [];
     const activityNum = collection.length;
     for (let i = 0; i < activityNum; i++) {
@@ -54,9 +56,20 @@ export default class List extends Component {
         id: collection[i].id,
         summary: (
           <div>
-            <span>{ user }{ title }</span>
+            <span>{ user }</span>
+            { collection[i].event_key == 'create_issue' && <span style={ titleStyles }>创建了</span> }
+            { collection[i].event_key == 'edit_issue' && <span style={ titleStyles }>更新了</span> }
+            { collection[i].issue && <span style={ titleStyles }>问题</span> }
+            { collection[i].issue && <span style={ titleStyles }>{ cur_activity.issue.name }</span> } 
+            { collection[i].event_key == 'add_file' && <span style={ titleStyles }>上传了文档 { collection[i].data }</span> }
+            { collection[i].event_key == 'del_file' && <span style={ titleStyles }>删除了文档 { collection[i].data }</span> }
+            <ul className='list-unstyled clearfix' style={ { marginTop: '5px', marginBottom: '5px' } }>
+              <li>{ title }</li>
+              <li>{ title }</li>
+            </ul>
           </div>
-        )
+        ),
+        time: '3天前'
       });
     }
 
@@ -69,9 +82,10 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ activities } bordered={ false } hover options={ opts } trClassName='tr-top'>
+        <BootstrapTable data={ activities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='summary'/>
+          <TableHeaderColumn dataField='time' width='100'/>
         </BootstrapTable>
       </div>
     );
