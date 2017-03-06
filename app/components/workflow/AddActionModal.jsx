@@ -21,8 +21,8 @@ const POST_FUNCTIONS = {
   setState: { name : 'App\\Workflow\\Func@setState', sn: 4 },
   addComments: { name : 'App\\Workflow\\Func@addComments', sn: 5 },
   //updateHistory: { name : 'App\\Workflow\\Util@updateHistory', sn: 6 }
-  triggerEvent: { name : 'App\\Workflow\\Func@triggerEvent', args: [ 'eventParam' ], sn: 6 },
-  updIssue: { name : 'App\\Workflow\\Func@updIssue', sn: 10 }
+  updIssue: { name : 'App\\Workflow\\Func@updIssue', sn: 9 },
+  triggerEvent: { name : 'App\\Workflow\\Func@triggerEvent', args: [ 'eventParam' ], sn: 10 }
 };
 
 const validate = (values) => {

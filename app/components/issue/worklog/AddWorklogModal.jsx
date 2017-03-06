@@ -79,8 +79,9 @@ export default class AddWorklogModal extends Component {
       }
       ecode = await edit(issue.id, data.id, newValues);
     } else {
-      this.state.values.started_at = parseInt(moment(this.state.values.started_at).format('X'));
-      ecode = await add(issue.id, this.state.values);
+      const newValues = _.clone(this.state.values);
+      newValues.started_at = parseInt(moment(this.state.values.started_at).format('X'));
+      ecode = await add(issue.id, newValues);
     }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
