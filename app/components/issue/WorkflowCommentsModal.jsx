@@ -38,6 +38,7 @@ export default class WorkflowCommentsModal extends Component {
             componentClass='textarea'
             style={ { height: '150px' } }
             onChange={ (e) => { this.setState({ comments: e.target.value }) } }
+            placeholder='输入备注'
             value={ this.state.comments } />
         </Modal.Body>
         <Modal.Footer>

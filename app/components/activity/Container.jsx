@@ -5,6 +5,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button } from 'react-bootstrap';
 import * as ActivityActions from 'redux/actions/ActivityActions';
 
+const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
 
@@ -27,8 +28,13 @@ export default class Container extends Component {
     activity: PropTypes.object.isRequired
   }
 
-  async index() {
-    await this.props.actions.index(this.pid);
+  async index(query) {
+    await this.props.actions.index(this.pid, qs.stringify(query || {}));
+    return this.props.activity.ecode;
+  }
+
+  async more(query) {
+    await this.props.actions.more(this.pid, qs.stringify(query || {}));
     return this.props.activity.ecode;
   }
 
@@ -41,7 +47,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header { ...this.props.activity }/>
-        <List index={ this.index.bind(this) } { ...this.props.activity }/>
+        <List index={ this.index.bind(this) } more={ this.more.bind(this) } { ...this.props.activity }/>
       </div>
     );
   }

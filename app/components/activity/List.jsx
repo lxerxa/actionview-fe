@@ -1,9 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem } from 'react-bootstrap';
 import Person from '../share/Person';
-import { Link } from 'react-router';
 import _ from 'lodash';
 
 const moment = require('moment');
@@ -12,22 +11,37 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { operateShow: false, hoverRowId: '' };
+    this.state = { limit: 30, category: 'all', operateShow: false, hoverRowId: '' };
   }
 
   static propTypes = {
     collection: PropTypes.array.isRequired,
+    increaseCollection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
-    index: PropTypes.func.isRequired
+    index: PropTypes.func.isRequired,
+    moreLoading: PropTypes.bool.isRequired,
+    more: PropTypes.func.isRequired
   }
 
   componentWillMount() {
     const { index } = this.props;
-    index();
+    index({ limit: this.state.limit });
+  }
+
+  more() {
+    const { more, collection } = this.props;
+    more({ category: this.state.category, offset_id: collection[collection.length - 1].issue_id, limit: this.state.limit });
+  }
+
+  handleSelect(selectedKey) {
+    this.setState({ category: selectedKey });
+
+    const { index } = this.props;
+    index({ category: selectedKey, limit: this.state.limit });
   }
 
   render() {
-    const { collection, indexLoading } = this.props;
+    const { collection, increaseCollection, indexLoading, moreLoading } = this.props;
     const { hoverRowId } = this.state;
 
     const timeAgos = [ { key : 'just', name : '刚刚' },
@@ -57,8 +71,6 @@ export default class List extends Component {
                        { key : '1y', name : '1年前' },
                        { key : '2y', name : '2年前' } ];
 
-    const titleStyles = { marginLeft: '5px', fontWeight: 600 };
-
     const activities = [];
     const activityNum = collection.length;
     for (let i = 0; i < activityNum; i++) {
@@ -86,29 +98,29 @@ export default class List extends Component {
         id: collection[i].id,
         summary: (
           <div>
-            <span>{ user }</span>
-            { collection[i].event_key == 'create_issue' && <span style={ titleStyles }>创建了</span> }
-            { collection[i].event_key == 'edit_issue' && <span style={ titleStyles }>更新了</span> }
-            { collection[i].event_key == 'resolve_issue' && <span style={ titleStyles }>解决了</span> }
-            { collection[i].event_key == 'close_issue' && <span style={ titleStyles }>关闭了</span> }
-            { normalEventFlag && <span style={ titleStyles }>处理了</span> }
-            { collection[i].issue && <span style={ titleStyles }>问题</span> }
-            { collection[i].issue && <a href='#'><span style={ titleStyles }>{ collection[i].issue.name }</span></a> } 
+            <span style={ { marginRight: '5px' } }>{ user }</span>
+            { collection[i].event_key == 'create_issue' && <span>创建了</span> }
+            { collection[i].event_key == 'edit_issue' && <span>更新了</span> }
+            { collection[i].event_key == 'resolve_issue' && <span>解决了</span> }
+            { collection[i].event_key == 'close_issue' && <span>关闭了</span> }
+            { normalEventFlag && <span>处理了</span> }
+            { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
+            { collection[i].issue && <a href='#'><span style={ { marginRight: '5px' } }>{ collection[i].issue.title }</span></a> } 
             { normalEventFlag && 
             <span>
             { _.map(collection[i].data, (v) => {
-              return (<span style={ titleStyles }>{ ', ' + v.field + ' 更新为: ' + v.after_value }</span>);
+              return (<span>{ ', ' + v.field + ' 更新为: ' + v.after_value }</span>);
             }) }
             </span> }
-            { collection[i].event_key == 'edit_issue' && <span style={ titleStyles }>字段</span> }
-            { collection[i].event_key == 'add_file' && <span style={ titleStyles }>上传了文档 { collection[i].data }</span> }
-            { collection[i].event_key == 'del_file' && <span style={ titleStyles }>删除了文档 { collection[i].data }</span> }
-            { collection[i].event_key == 'add_comments' && <span style={ titleStyles }>添加了备注</span> }
-            { collection[i].event_key == 'edit_comments' && <span style={ titleStyles }>编辑了备注</span> }
-            { collection[i].event_key == 'del_comments' && <span style={ titleStyles }>删除了备注</span> }
-            { collection[i].event_key == 'add_worklog' && <span style={ titleStyles }>添加了工作日志</span> }
-            { collection[i].event_key == 'edit_worklog' && <span style={ titleStyles }>编辑了工作日志</span> }
-            { collection[i].event_key == 'del_worklog' && <span style={ titleStyles }>删除了工作日志</span> }
+            { collection[i].event_key == 'edit_issue' && <span>字段</span> }
+            { collection[i].event_key == 'add_file' && <span>上传了文档 { collection[i].data }</span> }
+            { collection[i].event_key == 'del_file' && <span>删除了文档 { collection[i].data }</span> }
+            { collection[i].event_key == 'add_comments' && <span>添加了备注</span> }
+            { collection[i].event_key == 'edit_comments' && <span>编辑了备注</span> }
+            { collection[i].event_key == 'del_comments' && <span>删除了备注</span> }
+            { collection[i].event_key == 'add_worklog' && <span>添加了工作日志</span> }
+            { collection[i].event_key == 'edit_worklog' && <span>编辑了工作日志</span> }
+            { collection[i].event_key == 'del_worklog' && <span>删除了工作日志</span> }
             { comments &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
               <li dangerouslySetInnerHTML={ { __html: comments } }/>
@@ -147,12 +159,21 @@ export default class List extends Component {
     } 
 
     return (
-      <div>
+      <div style={ { marginTop: '15px', marginBottom: '20px', lineHeight: '1.0' } }>
+        <Nav bsStyle='pills' activeKey={ this.state.category } onSelect={ this.handleSelect.bind(this) }>
+          <NavItem eventKey='all' href='#'>全部</NavItem>
+          <NavItem eventKey='comments' href='#'>备注</NavItem>
+          <NavItem eventKey='worklog' href='#'>工作日志</NavItem>
+        </Nav>
         <BootstrapTable data={ activities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='summary'/>
           <TableHeaderColumn dataField='time' width='100'/>
         </BootstrapTable>
+        { increaseCollection.length > 0 && increaseCollection.length % this.state.limit === 0 && 
+        <ButtonGroup vertical block>
+          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
+        </ButtonGroup> }
       </div>
     );
   }

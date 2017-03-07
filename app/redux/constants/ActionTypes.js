@@ -144,6 +144,7 @@ export default generateConstants([
   'ISSUE_WATCHING(ASYNC)',
 
   'ACTIVITY_INDEX(ASYNC)',
+  'ACTIVITY_MORE(ASYNC)',
 
   'USER_INFO_FETCH(ASYNC)',
 
