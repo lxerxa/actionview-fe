@@ -165,7 +165,7 @@ export default class Header extends Component {
     } else if(eventKey == 'all') {
       refresh({});
     } else if(eventKey == 'todos') {
-      refresh({ assignee: 'me', reolution: 'Unresolved' });
+      refresh({ assignee: 'me', resolution: 'Unresolved' });
     } else if(eventKey == 'myreports') {
       refresh({ reporter: 'me' });
     } else {

@@ -713,6 +713,7 @@ export default class DetailBar extends Component {
             issue={ data }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show
+            project={ project }
             close={ () => { this.setState({ shareModalShow: false }); } }
             issue={ data }/> }
         { this.state.resetModalShow &&

@@ -9,7 +9,13 @@ export default class Header extends Component {
     super(props);
   }
 
+  componentWillMount() {
+    const { getOptions } = this.props;
+    getOptions();
+  }
+
   static propTypes = {
+    getOptions: PropTypes.func,
     indexLoading: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired
   }

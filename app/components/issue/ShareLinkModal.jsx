@@ -4,12 +4,15 @@ import { Modal, Button, FormControl } from 'react-bootstrap';
 export default class ShareLinkModal extends Component {
   constructor(props) {
     super(props);
-    const urls = window.location.href.split('?');
-    this.state = { url: urls.shift() + '?' + 'no=' + props.issue.no };
+    const protocol = window.location.protocol;
+    const host = window.location.host;
+
+    this.state = { url: protocol + '//' + host + '/project/' + props.project.key + '/issue?no=' + props.issue.no };
   }
 
   static propTypes = {
     close: PropTypes.func.isRequired,
+    project: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired
   }
 

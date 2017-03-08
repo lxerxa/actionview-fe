@@ -7,11 +7,12 @@ import _ from 'lodash';
 
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
+const DetailBar = require('../issue/DetailBar');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 30, category: 'all', operateShow: false, hoverRowId: '' };
+    this.state = { limit: 30, category: 'all', barShow: false, hoverRowId: '' };
   }
 
   static propTypes = {
@@ -20,7 +21,57 @@ export default class List extends Component {
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     moreLoading: PropTypes.bool.isRequired,
-    more: PropTypes.func.isRequired
+    more: PropTypes.func.isRequired,
+
+    wfCollection: PropTypes.array.isRequired,
+    wfLoading: PropTypes.bool.isRequired,
+    viewWorkflow: PropTypes.func.isRequired,
+    indexComments: PropTypes.func.isRequired,
+    addComments: PropTypes.func.isRequired,
+    editComments: PropTypes.func.isRequired,
+    delComments: PropTypes.func.isRequired,
+    commentsCollection: PropTypes.array.isRequired,
+    commentsIndexLoading: PropTypes.bool.isRequired,
+    commentsLoading: PropTypes.bool.isRequired,
+    commentsItemLoading: PropTypes.bool.isRequired,
+    commentsLoaded: PropTypes.bool.isRequired,
+    indexWorklog: PropTypes.func.isRequired,
+    addWorklog: PropTypes.func.isRequired,
+    editWorklog: PropTypes.func.isRequired,
+    delWorklog: PropTypes.func.isRequired,
+    worklogOptions: PropTypes.object.isRequired,
+    worklogCollection: PropTypes.array.isRequired,
+    worklogIndexLoading: PropTypes.bool.isRequired,
+    worklogLoading: PropTypes.bool.isRequired,
+    worklogLoaded: PropTypes.bool.isRequired,
+    indexHistory: PropTypes.func.isRequired,
+    historyCollection: PropTypes.array.isRequired,
+    historyIndexLoading: PropTypes.bool.isRequired,
+    historyLoaded: PropTypes.bool.isRequired,
+    itemData: PropTypes.object.isRequired,
+    project: PropTypes.object,
+    options: PropTypes.object,
+    loading: PropTypes.bool.isRequired,
+    itemLoading: PropTypes.bool.isRequired,
+    indexLoading: PropTypes.bool.isRequired,
+    index: PropTypes.func.isRequired,
+    show: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
+    setAssignee: PropTypes.func.isRequired,
+    fileLoading: PropTypes.bool.isRequired,
+    delFile: PropTypes.func.isRequired,
+    addFile: PropTypes.func.isRequired,
+    record: PropTypes.func.isRequired,
+    forward: PropTypes.func.isRequired,
+    cleanRecord: PropTypes.func.isRequired,
+    visitedIndex: PropTypes.number.isRequired,
+    visitedCollection: PropTypes.array.isRequired,
+    createLink: PropTypes.func.isRequired,
+    delLink: PropTypes.func.isRequired,
+    linkLoading: PropTypes.bool.isRequired,
+    doAction: PropTypes.func.isRequired,
+    watch: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -28,9 +79,14 @@ export default class List extends Component {
     index({ limit: this.state.limit });
   }
 
+  refresh() {
+    const { index } = this.props;
+    index({ category: this.state.category, limit: this.state.limit });
+  }
+
   more() {
     const { more, collection } = this.props;
-    more({ category: this.state.category, offset_id: collection[collection.length - 1].issue_id, limit: this.state.limit });
+    more({ category: this.state.category, offset_id: collection[collection.length - 1].id, limit: this.state.limit });
   }
 
   handleSelect(selectedKey) {
@@ -40,8 +96,76 @@ export default class List extends Component {
     index({ category: selectedKey, limit: this.state.limit });
   }
 
+  closeDetail() {
+    this.setState({ barShow: false });
+    const { cleanRecord } = this.props;
+    cleanRecord();
+  }
+
+  async issueView(id) {
+    this.setState({ barShow: true });
+    const { show, record } = this.props;
+    const ecode = await show(id);
+    if (ecode === 0) {
+      record();
+    }
+  }
+
   render() {
-    const { collection, increaseCollection, indexLoading, moreLoading } = this.props;
+    const { 
+      collection, 
+      increaseCollection, 
+      indexLoading, 
+      moreLoading, 
+      wfCollection,
+      wfLoading,
+      viewWorkflow,
+      indexComments,
+      addComments,
+      editComments,
+      delComments,
+      commentsCollection,
+      commentsIndexLoading,
+      commentsLoading,
+      commentsItemLoading,
+      commentsLoaded,
+      indexWorklog,
+      addWorklog,
+      editWorklog,
+      delWorklog,
+      worklogOptions,
+      worklogCollection,
+      worklogIndexLoading,
+      worklogLoading,
+      worklogLoaded,
+      indexHistory,
+      historyCollection,
+      historyIndexLoading,
+      historyLoaded,
+      itemData,
+      project,
+      options,
+      loading,
+      itemLoading,
+      show,
+      edit,
+      create,
+      setAssignee,
+      fileLoading,
+      delFile,
+      addFile,
+      record,
+      forward,
+      cleanRecord,
+      visitedIndex,
+      visitedCollection,
+      createLink,
+      delLink,
+      linkLoading,
+      doAction,
+      watch
+    } = this.props;
+
     const { hoverRowId } = this.state;
 
     const timeAgos = [ { key : 'just', name : '刚刚' },
@@ -105,7 +229,7 @@ export default class List extends Component {
             { collection[i].event_key == 'close_issue' && <span>关闭了</span> }
             { normalEventFlag && <span>处理了</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
-            { collection[i].issue && <a href='#'><span style={ { marginRight: '5px' } }>{ collection[i].issue.title }</span></a> } 
+            { collection[i].issue && <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.title }</span></a> } 
             { normalEventFlag && 
             <span>
             { _.map(collection[i].data, (v) => {
@@ -159,12 +283,13 @@ export default class List extends Component {
     } 
 
     return (
-      <div style={ { marginTop: '15px', marginBottom: '20px', lineHeight: '1.0' } }>
-        <Nav bsStyle='pills' activeKey={ this.state.category } onSelect={ this.handleSelect.bind(this) }>
+      <div style={ { marginTop: '15px', marginBottom: '20px' } }>
+        <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.category } onSelect={ this.handleSelect.bind(this) }>
           <NavItem eventKey='all' href='#'>全部</NavItem>
           <NavItem eventKey='comments' href='#'>备注</NavItem>
           <NavItem eventKey='worklog' href='#'>工作日志</NavItem>
         </Nav>
+        <Button style={ { float: 'right' } } onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i>&nbsp;刷新</Button>
         <BootstrapTable data={ activities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='summary'/>
@@ -174,6 +299,56 @@ export default class List extends Component {
         <ButtonGroup vertical block>
           <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
         </ButtonGroup> }
+        { this.state.barShow &&
+          <DetailBar
+            edit={ edit }
+            create={ create }
+            setAssignee={ setAssignee }
+            close={ this.closeDetail.bind(this) }
+            options={ options }
+            data={ itemData }
+            record={ record }
+            forward={ forward }
+            visitedIndex={ visitedIndex }
+            visitedCollection={ visitedCollection }
+            issueCollection={ [] }
+            show = { show }
+            itemLoading={ itemLoading }
+            loading={ loading }
+            fileLoading={ fileLoading }
+            project={ project }
+            delFile={ delFile }
+            addFile={ addFile }
+            wfCollection={ wfCollection }
+            wfLoading={ wfLoading }
+            viewWorkflow={ viewWorkflow }
+            indexComments={ indexComments }
+            commentsCollection={ commentsCollection }
+            commentsIndexLoading={ commentsIndexLoading }
+            commentsLoading={ commentsLoading }
+            commentsItemLoading={ commentsItemLoading }
+            commentsLoaded={ commentsLoaded }
+            addComments={ addComments }
+            editComments={ editComments }
+            delComments={ delComments }
+            indexWorklog={ indexWorklog }
+            worklogOptions={ worklogOptions }
+            worklogCollection={ worklogCollection }
+            worklogIndexLoading={ worklogIndexLoading }
+            worklogLoading={ worklogLoading }
+            worklogLoaded={ worklogLoaded }
+            addWorklog={ addWorklog }
+            editWorklog={ editWorklog }
+            delWorklog={ delWorklog }
+            indexHistory={ indexHistory }
+            historyCollection={ historyCollection }
+            historyIndexLoading={ historyIndexLoading }
+            historyLoaded={ historyLoaded }
+            linkLoading={ linkLoading }
+            createLink={ createLink }
+            delLink={ delLink }
+            watch={ watch }
+            doAction={ doAction }/> }
       </div>
     );
   }

@@ -223,7 +223,6 @@ export default class Container extends Component {
           delNotify={ this.props.actions.delNotify } 
           query={ query } 
           refresh={ this.refresh.bind(this) } 
-          clean={ this.props.actions.clean } 
           project={ this.props.project.item } 
           wfCollection={ this.props.wfconfig.collection || [] } 
           wfLoading={ this.props.wfconfig.indexLoading } 
