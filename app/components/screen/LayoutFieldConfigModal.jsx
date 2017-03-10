@@ -3,6 +3,7 @@ import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-boots
 import Select from 'react-select';
 import { reduxForm } from 'redux-form';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -52,12 +53,11 @@ export default class LayoutFieldConfigModal extends Component {
       values.required_fields = values.required_fields.split(',');
     }
     values.required_fields = values.required_fields || [];
-    let ecode = 0;
-    ecode = await config(values);
-
+    const ecode = await config(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('配置完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

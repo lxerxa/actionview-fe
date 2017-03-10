@@ -6,6 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
 import Card from '../share/Card';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -39,10 +40,10 @@ export default class OptionValuesConfigModal extends Component {
     let ecode = 0;
     const values = { id: data.id, optionValues: _.map(this.state.cards, (val) => { return { id: val.text, name: val.text } }) };
     ecode = await config(values);
-
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('配置完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

@@ -5,6 +5,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import _ from 'lodash';
 import Card from '../share/Card';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 const style = {
@@ -50,13 +51,12 @@ export default class SortCardsModal extends Component {
 
   async save() {
     const { close, setSort } = this.props;
-    let ecode = 0;
     const values = { sequence: _.map(this.state.cards, _.iteratee('id')) }; 
-    ecode = await setSort(values);
-
+    const ecode = await setSort(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('保存完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

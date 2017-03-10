@@ -5,6 +5,7 @@ import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock } from '
 import Select from 'react-select';
 import DateTime from 'react-datetime';
 import _ from 'lodash'
+import { notify } from 'react-notify-toast';
 
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -72,6 +73,7 @@ export default class DefaultValueConfigModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('设置完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

@@ -4,6 +4,7 @@ import DropzoneComponent from 'react-dropzone-component';
 import Lightbox from 'react-image-lightbox';
 import Select from 'react-select';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const moment = require('moment');
 const CreateModal = require('./CreateModal');
@@ -249,7 +250,14 @@ export default class DetailBar extends Component {
     } else if (eventKey == 'reset') {
       this.setState({ resetModalShow: true });
     } else if (eventKey == 'watch') {
-      watch(data.id, !data.watching);
+      const ecode = await watch(data.id, !data.watching);
+      if (ecode === 0) {
+        if (data.watching) {
+          notify.show('关注成功。', 'success', 2000);
+        } else {
+          notify.show('已取消关注。', 'success', 2000);
+        }
+      }
     }
   }
 

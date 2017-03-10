@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -53,7 +54,6 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-
     if (eventKey === '1') {
       this.show(hoverRowId);
     } else if (eventKey === '2') {

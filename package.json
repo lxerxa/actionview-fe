@@ -96,6 +96,7 @@
     "react-datetime": "~2.2.1",
     "lodash": "~3.10.1",
     "rc-tabs": "~5.9.2",
-    "react-image-lightbox": "~3.2.0"
+    "react-image-lightbox": "~3.2.0",
+    "react-notify-toast": "~0.1.5"
   }
 }

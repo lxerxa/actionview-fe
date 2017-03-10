@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button, Label } from 'react-bootstrap';
 import { Link } from 'react-router';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const CreateStepModal = require('./CreateStepModal');
 const PreviewModal = require('./PreviewModal');
@@ -49,7 +50,7 @@ export default class ConfigHeader extends Component {
     }
   }
 
-  saveWorkflow() {
+  async saveWorkflow() {
     const { save, collection, workflowName } = this.props;
 
     const allSteps = [];
@@ -81,7 +82,12 @@ export default class ConfigHeader extends Component {
 
     const initialActions = { id : 0, name: 'initial_action', results: [{ step: collection[0].id, status: 'Underway' }] };
 
-    save({ contents : { initial_action: initialActions, steps: collection } });
+    const ecode = await save({ contents : { initial_action: initialActions, steps: collection } });
+    if (ecode === 0) {
+      notify.show('保存成功。', 'success', 2000);
+    } else {
+      notify.show('保存失败。', 'error', 2000);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Notifications from 'react-notify-toast';
 
 import * as SessionActions from 'redux/actions/SessionActions';
 
@@ -24,6 +25,7 @@ class Layout extends Component {
     return (
       <div style={ { height: '100%' } }>
         { this.props.children }
+        <Notifications />
       </div>
     );
   }

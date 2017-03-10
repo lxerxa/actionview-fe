@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -26,10 +27,25 @@ export default class DelNotify extends Component {
 
     if (operation == 'disable') {
       ecode = await edit({ id: data.id, disabled: true });
+      if (ecode === 0) {
+        notify.show('禁用成功。', 'success', 2000);
+      } else {
+        notify.show('禁用失败。', 'error', 2000);
+      }
     } else if (operation == 'enable') {
       ecode = await edit({ id: data.id, disabled: false });
+      if (ecode === 0) {
+        notify.show('启用成功。', 'success', 2000);
+      } else {
+        notify.show('启用失败。', 'error', 2000);
+      }
     } else {
       ecode = await del(data.id);
+      if (ecode === 0) {
+        notify.show('删除完成。', 'success', 2000);
+      } else {
+        notify.show('删除失败。', 'error', 2000);
+      }
     }
 
     if (ecode === 0) {

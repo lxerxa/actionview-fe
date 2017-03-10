@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button, FormControl } from 'react-bootstrap';
 import { findDOMNode } from 'react-dom';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const CreateModal = require('./CreateModal');
 const SortCardsModal = require('./SortCardsModal');
@@ -30,7 +31,11 @@ export default class Header extends Component {
     const defaultValue = findDOMNode(this.refs.defaultValue).value;
     const { setDefault } = this.props;
     const ecode = await setDefault({ 'defaultValue': defaultValue });
-    // fix me add tip
+    if (ecode === 0) {
+      notify.show('设置完成。', 'success', 2000);
+    } else {
+      notify.show('设置失败。', 'error', 2000);
+    }
     this.setState({ defaultSetShow: false });
   }
 

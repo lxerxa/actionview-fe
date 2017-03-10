@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, Form, FormControl, FormGroup, Col, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 import Tabs, { TabPane } from 'rc-tabs';
 
@@ -62,6 +63,7 @@ export default class CreateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('新建完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

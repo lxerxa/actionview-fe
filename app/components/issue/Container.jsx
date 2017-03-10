@@ -158,8 +158,9 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  watch(issue_id, flag) {
-    this.props.actions.watch(this.pid, issue_id, flag);
+  async watch(issue_id, flag) {
+    await this.props.actions.watch(this.pid, issue_id, flag);
+    return this.props.issue.ecode;
   }
 
   record() {
