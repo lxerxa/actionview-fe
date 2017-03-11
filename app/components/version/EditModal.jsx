@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import _ from 'lodash';
 import DateTime from 'react-datetime';
+import { notify } from 'react-notify-toast';
 
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -82,6 +83,7 @@ export default class EditModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('更新完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

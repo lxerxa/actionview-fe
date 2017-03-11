@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -60,6 +61,7 @@ export default class ConfigModal extends Component {
     const ecode = await edit({ id: data.id, notifications });
     if (ecode === 0) {
       close();
+      notify.show('配置完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

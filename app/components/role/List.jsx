@@ -6,6 +6,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
 import Person from '../share/Person';
+import { notify } from 'react-notify-toast';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -104,11 +105,13 @@ export default class List extends Component {
       this.state.settingPermissionRoleIds.splice(settingIndex, 1);
 
       this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
+      notify.show('配置完成。', 'success', 2000);
     }else {
       const settingIndex = _.indexOf(this.state.settingPermissionRoleIds, roleId);
       this.state.settingPermissionRoleIds.splice(settingIndex, 1);
 
       this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
+      notify.show('配置失败。', 'error', 2000);
     }
   }
 
@@ -140,11 +143,12 @@ export default class List extends Component {
       this.state.settingUserRoleIds.splice(settingIndex, 1);
 
       this.setState({ willSetUserRoleIds: this.state.willSetUserRoleIds, settingUserRoleIds: this.state.settingUserRoleIds });
-
+      notify.show('配置完成。', 'success', 2000);
     }else {
       const settingIndex = _.indexOf(this.state.settingUserRoleIds, roleId);
       this.state.settingUserRoleIds.splice(settingIndex, 1);
       this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
+      notify.show('配置失败。', 'error', 2000);
     }
   }
 

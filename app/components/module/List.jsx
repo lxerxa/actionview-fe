@@ -4,6 +4,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -99,11 +100,13 @@ export default class List extends Component {
       this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds, willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds });
+      notify.show('设置完成。', 'success', 2000);
     } else {
       const settingIndex = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
       this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
+      notify.show('设置失败。', 'error', 2000);
     }
   }
 
@@ -140,11 +143,13 @@ export default class List extends Component {
       this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds, willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds });
+      notify.show('设置完成。', 'success', 2000);
     } else {
       const settingIndex = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
       this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
+      notify.show('设置失败。', 'error', 2000);
     }
   }
 

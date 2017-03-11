@@ -4,6 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-boots
 import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 const allPermissions = require('../share/Permissions.js');
@@ -55,6 +56,7 @@ export default class CreateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('新建完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

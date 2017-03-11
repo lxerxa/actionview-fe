@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 export default class DelNotify extends Component {
   constructor(props) {
@@ -15,13 +16,24 @@ export default class DelNotify extends Component {
     data: PropTypes.object.isRequired
   }
 
-  confirm() {
+  async confirm() {
     const { close, del=null, reset=null, data } = this.props;
+    let ecode = 0;
     close();
     if (reset) {
-      reset(data.id);
+      ecode = await reset(data.id);
+      if (ecode === 0) {
+        notify.show('重置完成。', 'success', 2000);
+      } else {
+        notify.show('重置失败。', 'error', 2000);
+      }
     } else  {
-      del(data.id);
+      ecode = await del(data.id);
+      if (ecode === 0) {
+        notify.show('删除成功。', 'success', 2000);
+      } else {
+        notify.show('删除失败。', 'success', 2000);
+      }
     }
   }
 

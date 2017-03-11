@@ -4,6 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import Select from 'react-select';
 import _ from 'lodash';
 import DateTime from 'react-datetime';
+import { notify } from 'react-notify-toast';
 
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -77,6 +78,7 @@ export default class CreateModal extends Component {
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
+      notify.show('新建完成。', 'success', 2000);
       close();
     } else {
       this.setState({ ecode: ecode });

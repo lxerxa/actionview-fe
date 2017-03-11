@@ -229,7 +229,7 @@ export default class List extends Component {
             { collection[i].event_key == 'close_issue' && <span>关闭了</span> }
             { normalEventFlag && <span>处理了</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
-            { collection[i].issue && <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.title }</span></a> } 
+            { collection[i].issue && <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a> } 
             { normalEventFlag && 
             <span>
             { _.map(collection[i].data, (v) => {

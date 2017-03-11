@@ -6,6 +6,7 @@ import { RadioGroup, Radio } from 'react-radio-group';
 import DateTime from 'react-datetime';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');

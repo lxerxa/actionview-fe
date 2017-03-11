@@ -467,7 +467,7 @@ export default class DetailBar extends Component {
                           }
                           linkIssueId = val.src.id;
                         }
-                        return (<tr key={ 'link' + key }><td>{ relation }</td><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td><td>{ _.find(options.states || [], { id: linkedIssue.state }) ? _.find(options.states, { id: linkedIssue.state }).name : '-' }</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
+                        return (<tr key={ 'link' + key }><td>{ relation }<br/><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td><td>{ _.find(options.states || [], { id: linkedIssue.state }) ? _.find(options.states, { id: linkedIssue.state }).name : '-' }</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
                       }) }
                       </tbody>
                     </Table>
