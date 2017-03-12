@@ -195,6 +195,8 @@ export default class List extends Component {
                        { key : '1y', name : '1年前' },
                        { key : '2y', name : '2年前' } ];
 
+    const ltStyles = { textDecoration: 'line-through' };
+
     const activities = [];
     const activityNum = collection.length;
     for (let i = 0; i < activityNum; i++) {
@@ -225,11 +227,13 @@ export default class List extends Component {
             <span style={ { marginRight: '5px' } }>{ user }</span>
             { collection[i].event_key == 'create_issue' && <span>创建了</span> }
             { collection[i].event_key == 'edit_issue' && <span>更新了</span> }
+            { collection[i].event_key == 'del_issue' && <span>删除了</span> }
             { collection[i].event_key == 'resolve_issue' && <span>解决了</span> }
             { collection[i].event_key == 'close_issue' && <span>关闭了</span> }
             { normalEventFlag && <span>处理了</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
-            { collection[i].issue && <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a> } 
+            { collection[i].issue && collection[i].issue.del_flg === 1  && <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> }
+            { collection[i].issue && collection[i].issue.del_flg !== 1 && <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a> } 
             { normalEventFlag && 
             <span>
             { _.map(collection[i].data, (v) => {
@@ -237,31 +241,31 @@ export default class List extends Component {
             }) }
             </span> }
             { collection[i].event_key == 'edit_issue' && <span>字段</span> }
-            { collection[i].event_key == 'add_file' && <span>上传了文档 { collection[i].data }</span> }
-            { collection[i].event_key == 'del_file' && <span>删除了文档 { collection[i].data }</span> }
-            { collection[i].event_key == 'add_comments' && <span>添加了备注</span> }
-            { collection[i].event_key == 'edit_comments' && <span>编辑了备注</span> }
-            { collection[i].event_key == 'del_comments' && <span>删除了备注</span> }
-            { collection[i].event_key == 'add_worklog' && <span>添加了工作日志</span> }
-            { collection[i].event_key == 'edit_worklog' && <span>编辑了工作日志</span> }
-            { collection[i].event_key == 'del_worklog' && <span>删除了工作日志</span> }
-            { comments &&
-            <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              <li dangerouslySetInnerHTML={ { __html: comments } }/>
-            </ul> }
             { collection[i].event_key == 'edit_issue' &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
             { _.map(collection[i].data, (v) => {
               return (<li dangerouslySetInnerHTML={ { __html: v.field + ': ' + v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') } }/>);
             }) }
             </ul> }
+            { collection[i].event_key == 'add_file' && <span>上传了文档 { collection[i].data }</span> }
+            { collection[i].event_key == 'del_file' && <span>删除了文档 <span style={ ltStyles }>{ collection[i].data }</span></span> }
+            { collection[i].event_key == 'add_comments' && <span>添加了备注</span> }
+            { collection[i].event_key == 'edit_comments' && <span>编辑了备注</span> }
+            { collection[i].event_key == 'del_comments' && <span>删除了备注</span> }
+            { comments &&
+            <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
+              <li style={ collection[i].event_key == 'del_comments' ? ltStyles : {} } dangerouslySetInnerHTML={ { __html: comments } }/>
+            </ul> }
+            { collection[i].event_key == 'add_worklog' && <span>添加了工作日志</span> }
+            { collection[i].event_key == 'edit_worklog' && <span>编辑了工作日志</span> }
+            { collection[i].event_key == 'del_worklog' && <span>删除了工作日志</span> }
             { (collection[i].event_key == 'add_worklog' || collection[i].event_key == 'edit_worklog' || collection[i].event_key == 'del_worklog') &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              { collection[i].data && collection[i].data.started_at && <li>开始时间: { moment.unix(collection[i].data.started_at).format('YY/MM/DD') }</li> }
-              { collection[i].data && collection[i].data.spend && <li>耗时: { collection[i].data.spend }</li> }
-              { collection[i].data && collection[i].data.leave_estimate && <li>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
-              { collection[i].data && collection[i].data.cut && <li>剩余时间缩减: { collection[i].data.cut }</li> }
-              { collection[i].data && collection[i].data.comments && <li dangerouslySetInnerHTML={ { __html: '备注 : ' + collection[i].data.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
+              { collection[i].data && collection[i].data.started_at && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>开始时间: { moment.unix(collection[i].data.started_at).format('YY/MM/DD') }</li> }
+              { collection[i].data && collection[i].data.spend && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
+              { collection[i].data && collection[i].data.leave_estimate && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
+              { collection[i].data && collection[i].data.cut && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }
+              { collection[i].data && collection[i].data.comments && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} } dangerouslySetInnerHTML={ { __html: '备注 : ' + collection[i].data.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
             </ul> }
             {/* (collection[i].event_key == 'create_version' || collection[i].event_key == 'edit_version') &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>

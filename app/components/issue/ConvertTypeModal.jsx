@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -43,11 +44,10 @@ export default class ConvertTypeModal extends Component {
     const { values, edit, close, issue } = this.props;
     values.parent_id = '';
     const ecode = await edit(issue.id, values);
+    this.setState({ ecode });
     if (ecode === 0) {
-      this.setState({ ecode: 0 });
       close();
-    } else { 
-      this.setState({ ecode: ecode });
+      notify.show('问题已转换。', 'success', 2000);
     }
   }
 

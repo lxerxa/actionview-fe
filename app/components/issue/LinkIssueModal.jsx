@@ -3,6 +3,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup } from 'react-boots
 import Select from 'react-select';
 import ApiClient from '../../../shared/api-client';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -33,6 +34,7 @@ export default class LinkIssueModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('创建成功。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

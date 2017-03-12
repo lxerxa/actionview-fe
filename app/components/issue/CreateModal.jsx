@@ -171,21 +171,30 @@ class CreateModal extends Component {
     let ecode;
     if (!_.isEmpty(data) && data.id) {
       ecode = await edit(data.id, submitData);
+      if (ecode === 0) {
+        close();
+        if (data && data.id && doAction && action_id) {
+          ecode = await doAction(data.id, data.entry_id, action_id);
+          if (ecode === 0) {
+            notify.show('提交完成。', 'success', 2000);
+          } else {
+            notify.show('提交失败。', 'error', 2000);
+          }
+        } else {
+          notify.show('问题已更新。', 'success', 2000);
+        }
+      }
     } else {
       if (parent_id) {
         _.extend(submitData, { parent_id });
       }
       ecode = await create(submitData);
-    }
-    if (ecode === 0) {
-      this.setState({ ecode: 0 });
-      if (data && data.id && doAction && action_id) {
-        doAction(data.id, data.entry_id, action_id);
+      if (ecode === 0) {
+        close();
+        notify.show('问题已创建。', 'success', 2000);
       }
-      close();
-    } else {
-      this.setState({ ecode: ecode });
     }
+    this.setState({ ecode: ecode });
   }
 
   handleCancel() {

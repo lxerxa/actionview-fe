@@ -5,6 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
 import Card from '../share/Card';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -37,10 +38,10 @@ export default class SearcherConfigModal extends Component {
     let ecode = 0;
     const values = { sequence: _.map(this.state.cards, _.iteratee('id')) };
     ecode = await config(values);
-
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('保存完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

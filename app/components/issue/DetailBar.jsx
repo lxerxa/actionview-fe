@@ -133,6 +133,11 @@ export default class DetailBar extends Component {
     e.preventDefault();
     const { setAssignee, data } = this.props;
     const ecode = await setAssignee(data.id, { assignee: 'me' });
+    if (ecode === 0) {
+      notify.show('已分配给我。', 'success', 2000);
+    } else {
+      notify.show('问题分配失败。', 'error', 2000);
+    }
     // fix me
     //if (ecode === 0) {
     //} else {
@@ -149,8 +154,10 @@ export default class DetailBar extends Component {
     const ecode = await setAssignee(data.id, { assignee: this.state.newAssignee });
     if (ecode === 0) {
       this.setState({ settingAssignee: false, editAssignee: false, newAssignee: undefined });
+      notify.show('问题已分配。', 'success', 2000);
     } else {
       this.setState({ settingAssignee: false });
+      notify.show('问题分配失败。', 'error', 2000);
     }
   }
 
@@ -233,8 +240,10 @@ export default class DetailBar extends Component {
 
   async operateSelect(eventKey) {
     const { data, show, watch } = this.props;
+
+    let ecode = 0;
     if (eventKey == 'refresh') {
-      const ecode = await show(data.id);
+      ecode = await show(data.id);
     } else if (eventKey == 'assign') {
       this.setState({ assignModalShow: true });
     } else if (eventKey == 'link') {
@@ -250,12 +259,18 @@ export default class DetailBar extends Component {
     } else if (eventKey == 'reset') {
       this.setState({ resetModalShow: true });
     } else if (eventKey == 'watch') {
-      const ecode = await watch(data.id, !data.watching);
+      ecode = await watch(data.id, !data.watching);
       if (ecode === 0) {
         if (data.watching) {
           notify.show('关注成功。', 'success', 2000);
         } else {
           notify.show('已取消关注。', 'success', 2000);
+        }
+      } else {
+        if (data.watching) {
+          notify.show('关注失败。', 'error', 2000);
+        } else {
+          notify.show('取消失败。', 'error', 2000);
         }
       }
     }
@@ -273,7 +288,7 @@ export default class DetailBar extends Component {
     }
   }
 
-  doAction(action_id) {
+  async doAction(action_id) {
     const { doAction, data } = this.props;
     const action = _.find(data.wfactions || {}, { id: action_id });
     if (action && action.screen) {
@@ -283,11 +298,16 @@ export default class DetailBar extends Component {
         this.setState({ workflowScreenShow: true, action_id });
       }
     } else {
-      doAction(data.id, data.entry_id, action_id);
+      const ecode = await doAction(data.id, data.entry_id, action_id);
+      if (ecode === 0) {
+        notify.show('提交完成。', 'success', 2000);
+      } else {
+        notify.show('提交失败。', 'error', 2000);
+      }
     }
   }
 
-  actionSelect(eventKey) {
+  async actionSelect(eventKey) {
     const { data, doAction } = this.props;
     const action = _.find(data.wfactions || {}, { id: eventKey });
     if (action && action.schema) {
@@ -296,7 +316,12 @@ export default class DetailBar extends Component {
         this.setState({ workflowScreenShow: true, action_id: eventKey });
       }
     } else {
-      doAction(data.id, data.entry_id, eventKey);
+      const ecode = await doAction(data.id, data.entry_id, eventKey);
+      if (ecode === 0) {
+        notify.show('提交完成。', 'success', 2000);
+      } else {
+        notify.show('提交失败。', 'error', 2000);
+      }
     }
   }
 
@@ -377,13 +402,19 @@ export default class DetailBar extends Component {
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
                       <MenuItem eventKey='assign'>分配</MenuItem>
-                      <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
+                      <MenuItem divider/>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
-                      <MenuItem eventKey='link'>链接问题</MenuItem>
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                      <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
+                      <MenuItem divider/>
+                      { !data.parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='createSubtask'>创建子任务</MenuItem> }
+                      { !data.parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='convert2Sub'>转换为子任务</MenuItem> }
                       { data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
+                      <MenuItem divider/>
                       { data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                      <MenuItem eventKey='link'>链接问题</MenuItem>
+                      <MenuItem eventKey='copy'>复制</MenuItem>
                       <MenuItem eventKey='reset'>重置状态</MenuItem>
+                      <MenuItem divider/>
                       <MenuItem eventKey='del'>删除</MenuItem>
                     </DropdownButton>
                   </div>

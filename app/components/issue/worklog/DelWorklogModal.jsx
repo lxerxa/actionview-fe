@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 const moment = require('moment');
 const img = require('../../../assets/images/loading.gif');
@@ -26,6 +27,7 @@ export default class DelWorklogModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('日志已删除。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

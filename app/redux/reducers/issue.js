@@ -70,16 +70,14 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_SHOW_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
-    case t.ISSUE_DELETE_NOTIFY:
-      const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name } };
-
     case t.ISSUE_DELETE:
       return { ...state, itemLoading: true };
 
     case t.ISSUE_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection = _.reject(state.collection, { id: action.id });
+        _.map(action.result.data.ids || [], (val) => {
+          state.collection = _.reject(state.collection, { id: val });
+        });
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 

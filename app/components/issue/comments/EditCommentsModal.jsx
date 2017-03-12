@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, FormControl } from 'react-bootstrap';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const $ = require('$');
 const img = require('../../../assets/images/loading.gif');
@@ -35,14 +36,22 @@ export default class EditCommentsModal extends Component {
     let ecode = 0;
     if (data.comments_id) {
       ecode = await edit(issue_id, data.comments_id, { contents: this.state.contents, to: data.to || {}, reply_id: data.id || '', atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ), operation: data.id ? 'editReply' : 'addReply' });
+      this.setState({ ecode });
+      if (ecode === 0) {
+        close();
+        if (data.id) {
+          notify.show('已更新回复。', 'success', 2000);
+        } else {
+          notify.show('已添加回复。', 'success', 2000);
+        }
+      }
     } else {
       ecode = await edit(issue_id, data.id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) });
-    }
-    if (ecode === 0) {
-      this.setState({ ecode: 0 });
-      close();
-    } else {
-      this.setState({ ecode: ecode });
+      this.setState({ ecode });
+      if (ecode === 0) {
+        close();
+        notify.show('已更新备注。', 'success', 2000);
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../../assets/images/loading.gif');
 
@@ -22,11 +23,10 @@ export default class DelCommentsModal extends Component {
   async confirm() {
     const { issue_id, close, edit, data } = this.props;
     const ecode = await edit(issue_id, data.comments_id, { reply_id: data.id, operation: 'delReply' });
+    this.setState({ ecode: ecode });
     if (ecode === 0) {
-      this.setState({ ecode: 0 });
       close();
-    } else {
-      this.setState({ ecode: ecode });
+      notify.show('回复已删除。', 'success', 2000);
     }
   }
 

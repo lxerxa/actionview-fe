@@ -66,10 +66,6 @@ export function show(key, id) {
   });
 }
 
-export function delNotify(id) {
-  return { type: 'ISSUE_DELETE_NOTIFY', id: id };
-}
-
 export function del(key, id) {
   return asyncFuncCreator({
     constant: 'ISSUE_DELETE',

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem, Label, Nav, NavItem } from 'react-bootstrap';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const $ = require('$');
 const moment = require('moment');
@@ -82,7 +83,6 @@ export default class List extends Component {
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
     record: PropTypes.func.isRequired,
     forward: PropTypes.func.isRequired,
     cleanRecord: PropTypes.func.isRequired,
@@ -93,7 +93,7 @@ export default class List extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
-    delNotify: PropTypes.func.isRequired
+    del: PropTypes.func.isRequired
   }
 
   async componentWillMount() {
@@ -123,16 +123,16 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  operateSelect(eventKey) {
-    const { delNotify, show, watch, collection } = this.props;
+  async operateSelect(eventKey) {
+    const { show, watch, collection } = this.props;
 
     const { hoverRowId } = this.state;
     const selectedItem = _.find(collection, { id: hoverRowId }) || {}; 
     this.setState({ selectedItem });
 
+    let ecode = 0;
     if (eventKey === 'del') {
       this.setState({ delNotifyShow : true });
-      delNotify(hoverRowId);
     } else if (eventKey === 'assign') {
       this.setState({ assignModalShow : true });
     } else if (eventKey === 'worklog') {
@@ -150,7 +150,20 @@ export default class List extends Component {
     } else if (eventKey === 'reset') {
       this.setState({ resetModalShow : true });
     } else if (eventKey === 'watch') {
-      watch(selectedItem.id, !selectedItem.watching) ;
+      ecode = await watch(selectedItem.id, !selectedItem.watching);
+      if (ecode === 0) {
+        if (selectedItem.watching) {
+          notify.show('关注成功。', 'success', 2000);
+        } else {
+          notify.show('已取消关注。', 'success', 2000);
+        }
+      } else {
+        if (selectedItem.watching) {
+          notify.show('关注失败。', 'error', 2000);
+        } else {
+          notify.show('取消失败。', 'error', 2000);
+        }
+      }
     } else {
       // todo err notify
     }
@@ -238,6 +251,13 @@ export default class List extends Component {
       mainOrder.order = _.trim(tmp[1] || 'asc');
     }
 
+    const subtaskTypeOptions = [];
+    _.map(options.types, (val) => {
+      if (val.type == 'subtask' && !val.disabled) {
+        subtaskTypeOptions.push(val);
+      }
+    });
+
     const issues = [];
     const issueNum = collection.length;
     for (let i = 0; i < issueNum; i++) {
@@ -274,13 +294,20 @@ export default class List extends Component {
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='edit'>编辑</MenuItem>
                 <MenuItem eventKey='assign'>分配</MenuItem>
-                <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
-                <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
+                <MenuItem divider/>
                 <MenuItem eventKey='share'>分享链接</MenuItem>
-                { !collection[i].parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
+                <MenuItem divider/>
+                <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
+                <MenuItem divider/>
+                { !collection[i].parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='createSubtask'>创建子任务</MenuItem> }
+                { !collection[i].parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='createSubtask'>转换为子任务</MenuItem> }
                 { collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
+                <MenuItem divider/>
                 { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                <MenuItem eventKey='copy'>复制</MenuItem>
                 <MenuItem eventKey='reset'>重置状态</MenuItem>
+                <MenuItem divider/>
                 <MenuItem eventKey='del'>删除</MenuItem>
               </DropdownButton>
             }
@@ -374,6 +401,7 @@ export default class List extends Component {
           <DelNotify show 
             close={ this.delNotifyClose } 
             data={ selectedItem } 
+            loading = { itemLoading }
             del={ del }/> }
         { this.state.addWorklogShow &&
           <AddWorklogModal show
@@ -424,6 +452,7 @@ export default class List extends Component {
         { this.state.shareModalShow &&
           <ShareLinkModal show
             close={ () => { this.setState({ shareModalShow: false }); } }
+            project={ project }
             issue={ selectedItem }/> }
         { this.state.resetModalShow &&
           <ResetStateModal show

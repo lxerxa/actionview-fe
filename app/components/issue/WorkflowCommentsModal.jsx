@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, FormControl } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 export default class WorkflowCommentsModal extends Component {
   constructor(props) {
@@ -16,10 +17,15 @@ export default class WorkflowCommentsModal extends Component {
     data: PropTypes.object.isRequired
   }
 
-  confirm() {
+  async confirm() {
     const { close, data, doAction, action_id } = this.props;
-    doAction(data.id, data.entry_id, action_id, { comments: this.state.comments });
-    close();
+    const ecode = await doAction(data.id, data.entry_id, action_id, { comments: this.state.comments });
+    if (ecode === 0) {
+      close();
+      notify.show('提交完成。', 'success', 2000);
+    } else {
+      notify.show('提交失败。', 'error', 2000);
+    }
   }
 
   cancel() {

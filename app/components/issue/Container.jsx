@@ -221,7 +221,6 @@ export default class Container extends Component {
           forward={ this.forward.bind(this) } 
           cleanRecord={ this.cleanRecord.bind(this) } 
           del={ this.del.bind(this) } 
-          delNotify={ this.props.actions.delNotify } 
           query={ query } 
           refresh={ this.refresh.bind(this) } 
           project={ this.props.project.item } 

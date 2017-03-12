@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const $ = require('$');
 const img = require('../../../assets/images/loading.gif');
@@ -66,6 +67,9 @@ export default class Comments extends Component {
     const ecode = await addComments(issue_id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) }); 
     if (ecode === 0) {
       this.setState({ addCommentsShow: false, contents: '', atWho: [] });
+      notify.show('已添加备注。', 'success', 2000);
+    } else {
+      notify.show('备注添加失败。', 'error', 2000);
     }
   }
 

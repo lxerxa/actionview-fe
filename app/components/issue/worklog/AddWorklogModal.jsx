@@ -4,6 +4,7 @@ import { RadioGroup, Radio } from 'react-radio-group';
 import DateTime from 'react-datetime';
 import _ from 'lodash';
 const moment = require('moment');
+import { notify } from 'react-notify-toast';
 
 const img = require('../../../assets/images/loading.gif');
 
@@ -78,16 +79,20 @@ export default class AddWorklogModal extends Component {
         newValues.adjust_type = this.state.values.adjust_type;
       }
       ecode = await edit(issue.id, data.id, newValues);
+      this.setState({ ecode });
+      if (ecode === 0) {
+        close();
+        notify.show('日志已更新。', 'success', 2000);
+      }
     } else {
       const newValues = _.clone(this.state.values);
       newValues.started_at = parseInt(moment(this.state.values.started_at).format('X'));
       ecode = await add(issue.id, newValues);
-    }
-    if (ecode === 0) {
-      this.setState({ ecode: 0 });
-      close();
-    } else {
-      this.setState({ ecode: ecode });
+      this.setState({ ecode });
+      if (ecode === 0) {
+        close();
+        notify.show('已添加日志。', 'success', 2000);
+      }
     }
   }
 
