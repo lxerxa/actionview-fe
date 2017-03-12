@@ -25,7 +25,7 @@ export default class DelLinkModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('删除完成。', 'success', 2000);
+      notify.show('链接已删除。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

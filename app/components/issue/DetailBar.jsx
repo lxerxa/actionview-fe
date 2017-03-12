@@ -455,7 +455,9 @@ export default class DetailBar extends Component {
                     <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
-                        return (<tr key={ 'subtask' + key }><td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ _.find(options.types, { id : val.type }).name }/{ val.no } - { val.title }</a></td><td>{ _.find(options.states || [], { id: val.state }) ? _.find(options.states, { id: val.state }).name : '-' }</td></tr>); 
+                        return (<tr key={ 'subtask' + key }>
+                          <td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ _.find(options.types, { id : val.type }).name }/{ val.no } - { val.title }</a></td>
+                          <td style={ { whiteSpace: 'nowrap' } }>{ _.find(options.states || [], { id: val.state }) ? _.find(options.states, { id: val.state }).name : '-' }</td></tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -498,7 +500,11 @@ export default class DetailBar extends Component {
                           }
                           linkIssueId = val.src.id;
                         }
-                        return (<tr key={ 'link' + key }><td>{ relation }<br/><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td><td>{ _.find(options.states || [], { id: linkedIssue.state }) ? _.find(options.states, { id: linkedIssue.state }).name : '-' }</td><td><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td></tr>); 
+                        return (<tr key={ 'link' + key }>
+                          <td>{ relation }<br/><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td>
+                          <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle' } }>{ _.find(options.states || [], { id: linkedIssue.state }) ? _.find(options.states, { id: linkedIssue.state }).name : '-' }</td>
+                          <td style={ { verticalAlign: 'middle' } }><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td>
+                        </tr>); 
                       }) }
                       </tbody>
                     </Table>
