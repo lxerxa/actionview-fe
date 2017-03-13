@@ -185,6 +185,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async resetState(id) {
+    await this.props.actions.resetState(this.pid, id);
+    return this.props.issue.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -240,6 +245,7 @@ export default class Container extends Component {
           delLink={ this.delLink.bind(this) }
           doAction={ this.doAction.bind(this) }
           watch={ this.watch.bind(this) }
+          resetState={ this.resetState.bind(this) }
           { ...this.props.issue }/> 
       </div>
     );

@@ -456,7 +456,7 @@ export default class DetailBar extends Component {
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
                         return (<tr key={ 'subtask' + key }>
-                          <td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ _.find(options.types, { id : val.type }).name }/{ val.no } - { val.title }</a></td>
+                          <td><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ val.no } - { val.title }</a></td>
                           <td style={ { whiteSpace: 'nowrap' } }>{ _.find(options.states || [], { id: val.state }) ? _.find(options.states, { id: val.state }).name : '-' }</td></tr>); 
                       }) }
                       </tbody>
@@ -501,7 +501,7 @@ export default class DetailBar extends Component {
                           linkIssueId = val.src.id;
                         }
                         return (<tr key={ 'link' + key }>
-                          <td>{ relation }<br/><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ _.find(options.types, { id : linkedIssue.type }).name }/{ linkedIssue.no } - { linkedIssue.title }</a></td>
+                          <td>{ relation }<br/><a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ linkedIssue.no } - { linkedIssue.title }</a></td>
                           <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle' } }>{ _.find(options.states || [], { id: linkedIssue.state }) ? _.find(options.states, { id: linkedIssue.state }).name : '-' }</td>
                           <td style={ { verticalAlign: 'middle' } }><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td>
                         </tr>); 

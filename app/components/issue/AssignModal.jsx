@@ -46,7 +46,7 @@ export default class AssignModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('分配完成。', 'success', 2000);
+      notify.show('已分配。', 'success', 2000);
     } else { 
       this.setState({ ecode: ecode });
     }
