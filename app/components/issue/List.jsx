@@ -17,6 +17,7 @@ const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
 const ShareLinkModal = require('./ShareLinkModal');
 const ResetStateModal = require('./ResetStateModal');
+const CopyModal = require('./CopyModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ export default class List extends Component {
       assignModalShow: false,
       shareModalShow: false,
       resetModalShow: false,
+      copyModalShow: false,
       selectedItem: {},
       hoverRowId: ''
     };
@@ -93,6 +95,8 @@ export default class List extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
+    copy: PropTypes.func.isRequired,
+    resetState: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -149,6 +153,8 @@ export default class List extends Component {
       this.setState({ shareModalShow : true });
     } else if (eventKey === 'reset') {
       this.setState({ resetModalShow : true });
+    } else if (eventKey === 'copy') {
+      this.setState({ copyModalShow : true });
     } else if (eventKey === 'watch') {
       ecode = await watch(selectedItem.id, !selectedItem.watching);
       if (ecode === 0) {
@@ -237,10 +243,61 @@ export default class List extends Component {
   }
 
   render() {
+    const { 
+      collection, 
+      itemData={}, 
+      loading, 
+      indexLoading, 
+      itemLoading, 
+      options={}, 
+      show, 
+      record, 
+      forward,
+      visitedIndex,
+      visitedCollection, 
+      del, 
+      edit, 
+      create, 
+      setAssignee, 
+      query, 
+      refresh, 
+      project, 
+      delFile, 
+      addFile, 
+      fileLoading, 
+      wfCollection, 
+      wfLoading, 
+      viewWorkflow, 
+      indexComments, 
+      commentsCollection, 
+      commentsIndexLoading, 
+      commentsLoading, 
+      commentsLoaded, 
+      addComments, 
+      editComments, 
+      delComments, 
+      commentsItemLoading, 
+      indexWorklog, 
+      worklogCollection, 
+      worklogIndexLoading, 
+      worklogLoading, 
+      worklogLoaded, 
+      addWorklog, 
+      editWorklog, 
+      delWorklog, 
+      worklogOptions, 
+      indexHistory, 
+      historyCollection, 
+      historyIndexLoading, 
+      historyLoaded, 
+      createLink, 
+      delLink, 
+      linkLoading, 
+      watch, 
+      copy,
+      doAction } = this.props;
 
-    const { collection, itemData={}, loading, indexLoading, itemLoading, options={}, show, record, forward, visitedIndex, visitedCollection, del, edit, create, setAssignee, query, refresh, project, delFile, addFile, fileLoading, wfCollection, wfLoading, viewWorkflow, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsLoaded, addComments, editComments, delComments, commentsItemLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, worklogLoaded, addWorklog, editWorklog, delWorklog, worklogOptions, indexHistory, historyCollection, historyIndexLoading, historyLoaded, createLink, delLink, linkLoading, watch, doAction } = this.props;
     const { operateShow, hoverRowId, selectedItem } = this.state;
-
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const mainOrder = {};
@@ -341,8 +398,9 @@ export default class List extends Component {
         </BootstrapTable>
         { this.state.barShow &&
           <DetailBar 
-            edit={ edit } 
             create={ create } 
+            edit={ edit } 
+            del={ del } 
             setAssignee={ setAssignee } 
             close={ this.closeDetail } 
             options={ options } 
@@ -460,6 +518,12 @@ export default class List extends Component {
             resetState={ edit }
             loading={ loading }
             issue={ selectedItem }/> }
+        { this.state.copyModalShow &&
+          <CopyModal show
+            close={ () => { this.setState({ copyModalShow: false }); } }
+            loading={ loading }
+            copy={ copy }
+            data={ selectedItem }/> }
       </div>
     );
   }

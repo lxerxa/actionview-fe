@@ -8,15 +8,15 @@ const img = require('../../assets/images/loading.gif');
 
 const validate = (values) => {
   const errors = {};
-  if (!values.name) {
-    errors.name = '必填';
+  if (!values.title) {
+    errors.title = '必填';
   }
   return errors;
 };
 
 @reduxForm({
-  form: 'screen',
-  fields: [ 'id', 'name', 'description' ],
+  form: 'copy_issue',
+  fields: [ 'id', 'title' ],
   validate
 })
 export default class CopyModal extends Component {
@@ -41,8 +41,9 @@ export default class CopyModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    _.extend(data, { name: '复制 - ' + data.name });
-    initializeForm(data);
+    const copyData = _.clone(data);
+    _.extend(copyData, { title: '复制 - ' + data.title });
+    initializeForm(copyData);
   }
 
   async handleSubmit() {
@@ -67,24 +68,20 @@ export default class CopyModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, description }, handleSubmit, invalid, submitting, data } = this.props;
+    const { fields: { id, title }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>复制界面</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '复制问题 - ' + data.no }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormControl type='hidden' { ...id }/>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>新界面名</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='界面名'/>
+          <FormGroup controlId='formControlsText' validationState={ title.touched && title.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>主题</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...title } placeholder='主题'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述内容'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

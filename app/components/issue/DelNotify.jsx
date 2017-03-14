@@ -14,17 +14,19 @@ export default class DelNotify extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
+    detailClose: PropTypes.func,
     loading: PropTypes.bool.isRequired,
     del: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, del, data } = this.props;
+    const { close, del, data, detailClose=null } = this.props;
     const ecode = await del(data.id);
     this.setState({ ecode: ecode });
     if (ecode === 0) {
       close();
+      detailClose && detailClose();
       notify.show('问题已删除。', 'success', 2000);
     }
   }

@@ -197,3 +197,10 @@ export function resetState(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/reset' })
   });
 }
+
+export function copy(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_COPY',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/copy', method: 'post', data: values || {} })
+  });
+}

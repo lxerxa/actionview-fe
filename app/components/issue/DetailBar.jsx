@@ -22,11 +22,36 @@ const AssignModal = require('./AssignModal');
 const ShareLinkModal = require('./ShareLinkModal');
 const ResetStateModal = require('./ResetStateModal');
 const WorkflowCommentsModal = require('./WorkflowCommentsModal');
+const DelNotify = require('./DelNotify');
 
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 1, delFileShow: false, selectedFile: {}, previewShow: false, photoIndex: 0, editAssignee: false, settingAssignee: false, editModalShow: false, previewModalShow: false, subtaskShow: false, linkShow: false, linkIssueModalShow: false, delLinkModalShow: false, delLinkData: {}, createSubtaskModalShow: false, moveModalShow: false, convertTypeModalShow: false, assignModalShow: false, shareModalShow: false, resetModalShow: false, workflowScreenShow: false, workflowCommentsShow: false, action_id: '' };
+    this.state = { 
+      tabKey: 1, 
+      delFileShow: false, 
+      selectedFile: {}, 
+      previewShow: false, 
+      photoIndex: 0, 
+      editAssignee: false, 
+      settingAssignee: false, 
+      editModalShow: false, 
+      previewModalShow: false, 
+      subtaskShow: false, 
+      linkShow: false, 
+      linkIssueModalShow: false, 
+      delLinkModalShow: false, 
+      delLinkData: {}, 
+      createSubtaskModalShow: false, 
+      moveModalShow: false, 
+      convertTypeModalShow: false, 
+      assignModalShow: false, 
+      shareModalShow: false, 
+      resetModalShow: false, 
+      workflowScreenShow: false, 
+      workflowCommentsShow: false, 
+      delNotifyShow: false,
+      action_id: '' };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -80,6 +105,7 @@ export default class DetailBar extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -273,6 +299,8 @@ export default class DetailBar extends Component {
           notify.show('取消失败。', 'error', 2000);
         }
       }
+    } else if (eventKey == 'del') {
+      this.setState({ delNotifyShow : true });
     }
   }
 
@@ -326,7 +354,47 @@ export default class DetailBar extends Component {
   }
 
   render() {
-    const { close, data={}, record, visitedIndex, visitedCollection, issueCollection=[], loading, itemLoading, options, project, fileLoading, delFile, edit, create, wfCollection, wfLoading, indexComments, commentsCollection, commentsIndexLoading, commentsLoading, commentsItemLoading, addComments, editComments, delComments, indexHistory, historyCollection, historyIndexLoading, indexWorklog, worklogCollection, worklogIndexLoading, worklogLoading, addWorklog, editWorklog, delWorklog, worklogOptions, createLink, delLink, linkLoading, doAction } = this.props;
+    const { 
+      close, 
+      data={}, 
+      record, 
+      visitedIndex, 
+      visitedCollection, 
+      issueCollection=[], 
+      loading, 
+      itemLoading, 
+      options, 
+      project, 
+      fileLoading, 
+      delFile, 
+      create, 
+      edit, 
+      del,
+      wfCollection, 
+      wfLoading, 
+      indexComments, 
+      commentsCollection, 
+      commentsIndexLoading, 
+      commentsLoading, 
+      commentsItemLoading, 
+      addComments, 
+      editComments, 
+      delComments, 
+      indexHistory, 
+      historyCollection, 
+      historyIndexLoading, 
+      indexWorklog, 
+      worklogCollection, 
+      worklogIndexLoading, 
+      worklogLoading, 
+      addWorklog, 
+      editWorklog, 
+      delWorklog, 
+      worklogOptions, 
+      createLink, 
+      delLink, 
+      linkLoading, 
+      doAction } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile, action_id } = this.state;
 
     const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -767,6 +835,12 @@ export default class DetailBar extends Component {
             resetState={ edit }
             loading={ loading }
             issue={ data }/> }
+        { this.state.delNotifyShow &&
+          <DelNotify show
+            close={ () => { this.setState({ delNotifyShow: false }) } }
+            data={ data }
+            del={ del }
+            detailClose={ close }/> }
       </div>
     );
   }
