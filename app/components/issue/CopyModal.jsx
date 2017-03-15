@@ -4,6 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 
 const validate = (values) => {
@@ -58,6 +59,10 @@ export default class CopyModal extends Component {
     }
   }
 
+  handleEntry() {
+    $('input[name=title]').select();
+  }
+
   handleCancel() {
     const { close, submitting } = this.props;
     if (submitting) {
@@ -71,7 +76,7 @@ export default class CopyModal extends Component {
     const { fields: { id, title }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal { ...this.props } onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '复制问题 - ' + data.no }</Modal.Title>
         </Modal.Header>

@@ -4,6 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 
 const validate = (values) => {
@@ -57,6 +58,10 @@ export default class CopyModal extends Component {
     }
   }
 
+  handleEntry() {
+    $('input[name=name]').select();
+  }
+
   handleCancel() {
     const { close, submitting } = this.props;
     if (submitting) {
@@ -70,11 +75,11 @@ export default class CopyModal extends Component {
     const { fields: { id, name, description }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal { ...this.props } onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>复制界面</Modal.Title>
         </Modal.Header>
-        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
+        <form onSubmit={ handleSubmit(this.handleSubmit) } onEntered={ () => { $('input[name=name]').select(); } } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormControl type='hidden' { ...id }/>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
