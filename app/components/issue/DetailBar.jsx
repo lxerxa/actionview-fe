@@ -23,6 +23,7 @@ const ShareLinkModal = require('./ShareLinkModal');
 const ResetStateModal = require('./ResetStateModal');
 const WorkflowCommentsModal = require('./WorkflowCommentsModal');
 const DelNotify = require('./DelNotify');
+const CopyModal = require('./CopyModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
@@ -51,6 +52,7 @@ export default class DetailBar extends Component {
       workflowScreenShow: false, 
       workflowCommentsShow: false, 
       delNotifyShow: false,
+      copyModalShow: false,
       action_id: '' };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
@@ -105,6 +107,7 @@ export default class DetailBar extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
+    copy: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
@@ -282,6 +285,8 @@ export default class DetailBar extends Component {
       this.setState({ moveModalShow: true });
     } else if (eventKey == 'share') {
       this.setState({ shareModalShow: true });
+    } else if (eventKey == 'copy') {
+      this.setState({ copyModalShow: true });
     } else if (eventKey == 'reset') {
       this.setState({ resetModalShow: true });
     } else if (eventKey == 'watch') {
@@ -370,6 +375,7 @@ export default class DetailBar extends Component {
       create, 
       edit, 
       del,
+      copy,
       wfCollection, 
       wfLoading, 
       indexComments, 
@@ -841,6 +847,12 @@ export default class DetailBar extends Component {
             data={ data }
             del={ del }
             detailClose={ close }/> }
+        { this.state.copyModalShow &&
+          <CopyModal show
+            close={ () => { this.setState({ copyModalShow: false }); } }
+            loading={ loading }
+            copy={ copy }
+            data={ data }/> }
       </div>
     );
   }

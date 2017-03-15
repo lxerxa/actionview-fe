@@ -446,6 +446,7 @@ export default class List extends Component {
             createLink={ createLink }
             delLink={ delLink }
             watch={ watch }
+            copy={ copy }
             doAction={ doAction }/> }
         { options.total && options.total > 0 ? 
           <PaginationList 
