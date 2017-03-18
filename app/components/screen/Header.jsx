@@ -26,9 +26,6 @@ export default class Header extends Component {
 
     return (
       <div>
-        <div className='list-unstyled clearfix'>
-          <h3><span style={ { marginLeft: '15px' } }>#界面#</span></h3>
-        </div>
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建界面</Button>
         </div>

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Header from './Header';
 import Sidebar from './Sidebar';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
@@ -29,9 +30,8 @@ export default class Home extends Component {
 
     return (
       <div className='doc-main'>
-        <div className='toc-container'>
-          <Sidebar project={ project } pathname={ pathname }/>
-        </div>
+        <Header project={ project } pathname={ pathname }/>
+        <Sidebar project={ project } pathname={ pathname }/>
         { this.props.children }
       </div>
     );

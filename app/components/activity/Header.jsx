@@ -24,11 +24,7 @@ export default class Header extends Component {
     const {  indexLoading, collection } = this.props;
 
     return (
-      <div>
-        <div className='list-unstyled clearfix'>
-          <h3><span style={ { marginLeft: '15px' } }>#活动#</span></h3>
-        </div>
-      </div>
+      <div/>
     );
   }
 }

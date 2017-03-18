@@ -3,6 +3,7 @@ import { Button, Label, DropdownButton, MenuItem, Form, FormControl, FormGroup, 
 import Select from 'react-select';
 import { Link } from 'react-router';
 import _ from 'lodash';
+const $ = require('$');
 
 const CreateModal = require('./CreateModal');
 const AddSearcherModal = require('./AddSearcherModal');
@@ -184,9 +185,6 @@ export default class Header extends Component {
 
     return (
       <div>
-        <div className='list-unstyled clearfix'>
-          <h3><span style={ { marginLeft: '15px' } }>#问题#</span></h3>
-        </div>
         { this.state.condShow &&
         <div className='cond-bar'>
           <span>{ sqlTxt }</span>
