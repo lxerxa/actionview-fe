@@ -43,8 +43,8 @@ export default class ResetStateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ '重置状态 - ' + issue.no }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要重置此问题状态？<br/>
-          如果你重置了这个问题，原来的流程信息将会丢失，状态会初始化为开始值，解决结果 变为 未解决。<br/>
+          确认要重置此问题？<br/>
+          如果你重置了此问题，原来的流程信息将会丢失，状态被初始化为开始值，解决结果被置为未解决。<br/>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>

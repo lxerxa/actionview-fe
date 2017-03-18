@@ -295,6 +295,7 @@ export default class List extends Component {
       linkLoading, 
       watch, 
       copy,
+      resetState,
       doAction } = this.props;
 
     const { operateShow, hoverRowId, selectedItem } = this.state;
@@ -447,6 +448,7 @@ export default class List extends Component {
             delLink={ delLink }
             watch={ watch }
             copy={ copy }
+            resetState={ resetState }
             doAction={ doAction }/> }
         { options.total && options.total > 0 ? 
           <PaginationList 
@@ -506,7 +508,6 @@ export default class List extends Component {
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             edit={ edit }
-            loading={ loading }
             issue={ selectedItem }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show
@@ -516,8 +517,8 @@ export default class List extends Component {
         { this.state.resetModalShow &&
           <ResetStateModal show
             close={ () => { this.setState({ resetModalShow: false }); } }
-            resetState={ edit }
-            loading={ loading }
+            resetState={ resetState }
+            loading={ itemLoading }
             issue={ selectedItem }/> }
         { this.state.copyModalShow &&
           <CopyModal show

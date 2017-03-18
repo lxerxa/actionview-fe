@@ -108,6 +108,7 @@ export default class DetailBar extends Component {
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
+    resetState: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
@@ -376,6 +377,7 @@ export default class DetailBar extends Component {
       edit, 
       del,
       copy,
+      resetState,
       wfCollection, 
       wfLoading, 
       indexComments, 
@@ -828,7 +830,6 @@ export default class DetailBar extends Component {
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             edit={ edit }
-            loading={ loading }
             issue={ data }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show
@@ -838,8 +839,8 @@ export default class DetailBar extends Component {
         { this.state.resetModalShow &&
           <ResetStateModal show
             close={ () => { this.setState({ resetModalShow: false }); } }
-            resetState={ edit }
-            loading={ loading }
+            resetState={ resetState }
+            loading={ itemLoading }
             issue={ data }/> }
         { this.state.delNotifyShow &&
           <DelNotify show
