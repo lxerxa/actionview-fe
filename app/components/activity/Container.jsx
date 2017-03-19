@@ -159,6 +159,16 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async resetState(id) {
+    await this.props.issueActions.resetState(this.pid, id);
+    return this.props.issue.ecode;
+  }
+
+  async copy(values) {
+    await this.props.issueActions.copy(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -197,6 +207,8 @@ export default class Container extends Component {
           delLink={ this.delLink.bind(this) }
           doAction={ this.doAction.bind(this) }
           watch={ this.watch.bind(this) }
+          copy={ this.copy.bind(this) }
+          resetState={ this.resetState.bind(this) }
           { ...this.props.issue }
           { ...this.props.activity }/>
       </div>

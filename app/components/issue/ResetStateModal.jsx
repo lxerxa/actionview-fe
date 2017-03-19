@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -24,6 +25,7 @@ export default class ResetStateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
+      notify.show('问题已重置。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
