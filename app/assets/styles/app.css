@@ -285,7 +285,7 @@
 .animate-dialog {
   overflow-x: hidden;
   overflow-y: auto;
-  width: 500px;
+  width: 600px;
   position: fixed;
   top: 0px;
   right: 0;
@@ -351,10 +351,10 @@ table tr:hover .remove-icon{
 
 .attachment-content {
   border: 1px solid #f0f0f0;
-  height: 193px;
+  height: 223px;
   margin: 0 4px 4px 0;
   padding: 6px 2px;
-  width: 170px;
+  width: 200px;
   text-align: center;
 }
 
@@ -365,9 +365,9 @@ table tr:hover .remove-icon{
 .attachment-thumb {
   cursor: pointer;
   float: none;
-  height: 160px;
+  height: 190px;
   margin: 0 auto;
-  width: 160px;
+  width: 190px;
   display: table-cell;
   text-align: center;
   vertical-align: middle;
@@ -378,7 +378,7 @@ table tr:hover .remove-icon{
   display: block;
   height: 20px;
   overflow: hidden;
-  width: 150px;
+  width: 180px;
 }
 
 .attachment-title {
@@ -386,7 +386,7 @@ table tr:hover .remove-icon{
   float: left;
   height: 21px;
   white-space: nowrap;
-  width: 150px;
+  width: 180px;
   word-wrap: normal;
 }
 

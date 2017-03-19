@@ -497,16 +497,65 @@ export default class DetailBar extends Component {
                 </ButtonToolbar>
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    类型/NO 
+                    主题 
+                  </Col>
+                  <Col sm={ 9 }>
+                    <div style={ { marginTop: '7px' } }>{ data.title }</div>
+                  </Col>
+                </FormGroup>
+                <FormGroup controlId='formControlsLabel'>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    类型 
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>{ type ? type.name : '-' }/{ data.no || '' }</div>
+                    <div style={ { marginTop: '7px' } }>{ type ? type.name : '-' }</div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     状态
                   </Col>
                   <Col sm={ 4 }>
                     <div style={ { marginTop: '7px' } }>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' } { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/> }</div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    优先级
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>{ _.find(options.priorities || [], { id: data.priority }) ? _.find(options.priorities, { id: data.priority }).name : '-' }</div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    解决结果
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>{ _.find(options.resolutions || [], { id: data.resolution }) ? _.find(options.resolutions, { id: data.resolution }).name : '-' }</div>
+                  </Col>
+                </FormGroup>
+                <FormGroup controlId='formControlsLabel'>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    经办人
+                  </Col>
+                  <Col sm={ 9 }>
+                  { !editAssignee ?
+                    <div style={ { marginTop: '7px' } }>
+                      <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
+                        <span>
+                          <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
+                            { data['assignee'] && data['assignee'].name || '-' }
+                          </div>
+                        </span>
+                        <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
+                      </div>
+                      <span style={ { float: 'left' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span>
+                    </div>
+                    :
+                    <div style={ { marginTop: '7px' } }>
+                      <Select simpleValue clearable={ false } disabled={ settingAssignee } options={ assigneeOptions } value={ newAssignee || data['assignee'].id } onChange={ this.handleAssigneeSelectChange.bind(this) } placeholder='选择经办人'/>
+                      <div style={ { float: 'right' } }>
+                        <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
+                        <Button className='edit-ok-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
+                      </div>
+                    </div> }
                   </Col>
                 </FormGroup>
                 { data.parents && data.parents.id &&
@@ -587,35 +636,15 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if (field.type !== 'File' && field.key !== 'assignee' && !data[field.key]) {
+                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee') {
+                    return;
+                  }
+                  if (field.type !== 'File' && !data[field.key]) {
                     return;
                   }
 
                   let contents = '';
-                  if (field.key === 'assignee') {
-                    contents = (
-                      !editAssignee ?
-                      <div>
-                        <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
-                          <span>
-                            <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
-                              { data[field.key] && data[field.key].name || '-' }
-                            </div>
-                          </span>
-                          <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
-                        </div>
-                        <span style={ { float: 'left' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span>
-                      </div>
-                      :
-                      <div>
-                        <Select simpleValue clearable={ false } disabled={ settingAssignee } options={ assigneeOptions } value={ newAssignee || data[field.key].id } onChange={ this.handleAssigneeSelectChange.bind(this) } placeholder='选择经办人'/>
-                        <div style={ { float: 'right' } }>
-                          <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
-                          <Button className='edit-ok-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
-                        </div>
-                      </div>
-                    );
-                  } else if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingeVersion') {
+                  if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingeVersion') {
                     const optionValues = field.optionValues || [];
                     contents = _.find(optionValues, { id: data[field.key] }) ? _.find(optionValues, { id: data[field.key] }).name : '-';
                   } else if (field.type === 'MultiSelect' || field.type === 'CheckboxGroup' || field.type === 'MultiVersion') {
