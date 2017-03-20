@@ -82,6 +82,7 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setAssignee2: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -96,6 +97,8 @@ export default class List extends Component {
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
+    move: PropTypes.func.isRequired,
+    convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -259,6 +262,7 @@ export default class List extends Component {
       edit, 
       create, 
       setAssignee, 
+      setAssignee2, 
       query, 
       refresh, 
       project, 
@@ -295,6 +299,8 @@ export default class List extends Component {
       linkLoading, 
       watch, 
       copy,
+      move,
+      convert,
       resetState,
       doAction } = this.props;
 
@@ -365,8 +371,8 @@ export default class List extends Component {
                 <MenuItem divider/>
                 { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                 <MenuItem eventKey='copy'>复制</MenuItem>
-                <MenuItem eventKey='reset'>重置状态</MenuItem>
                 <MenuItem divider/>
+                <MenuItem eventKey='reset'>重置状态</MenuItem>
                 <MenuItem eventKey='del'>删除</MenuItem>
               </DropdownButton>
             }
@@ -404,6 +410,7 @@ export default class List extends Component {
             edit={ edit } 
             del={ del } 
             setAssignee={ setAssignee } 
+            setAssignee2={ setAssignee2 } 
             close={ this.closeDetail } 
             options={ options } 
             data={ itemData } 
@@ -449,6 +456,8 @@ export default class List extends Component {
             delLink={ delLink }
             watch={ watch }
             copy={ copy }
+            move={ move }
+            convert={ convert }
             resetState={ resetState }
             doAction={ doAction }/> }
         { options.total && options.total > 0 ? 
@@ -493,7 +502,7 @@ export default class List extends Component {
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
-            edit={ edit }
+            convert={ convert }
             loading={ loading }
             issue={ selectedItem }/> }
         { this.state.moveModalShow &&
@@ -501,14 +510,14 @@ export default class List extends Component {
             close={ () => { this.setState({ moveModalShow: false }); } }
             options={ options }
             project={ project } 
-            edit={ edit }
+            move={ move }
             loading={ loading }
             issue={ selectedItem }/> }
         { this.state.assignModalShow &&
           <AssignModal show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
-            edit={ edit }
+            setAssignee={ setAssignee2 }
             issue={ selectedItem }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show

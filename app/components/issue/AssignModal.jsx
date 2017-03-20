@@ -36,13 +36,13 @@ export default class AssignModal extends Component {
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    setAssignee: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, edit, close, issue } = this.props;
-    const ecode = await edit(issue.id, values);
+    const { values, setAssignee, close, issue } = this.props;
+    const ecode = await setAssignee(issue.id, values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

@@ -78,10 +78,17 @@ export function addFile(field_key, file) {
   return { type: 'ISSUE_FILE_ADD', field_key, file };
 }
 
+export function setAssignee2(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SET_ASSIGNEE2',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/assign', method: 'post', data: values })
+  });
+}
+
 export function setAssignee(key, id, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_SET_ASSIGNEE',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id, method: 'put', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/assign', method: 'post', data: values })
   });
 }
 
@@ -195,6 +202,20 @@ export function resetState(key, id) {
   return asyncFuncCreator({
     constant: 'ISSUE_STATE_RESET',
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/reset' })
+  });
+}
+
+export function move(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_MOVE',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/move', method: 'post', data: values || {} })
+  });
+}
+
+export function convert(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_CONVERT',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/convert', method: 'post', data: values || {} })
   });
 }
 

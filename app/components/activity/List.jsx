@@ -22,7 +22,6 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     moreLoading: PropTypes.bool.isRequired,
     more: PropTypes.func.isRequired,
-
     wfCollection: PropTypes.array.isRequired,
     wfLoading: PropTypes.bool.isRequired,
     viewWorkflow: PropTypes.func.isRequired,
@@ -59,8 +58,11 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
+    move: PropTypes.func.isRequired,
+    convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setAssignee2: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -153,6 +155,7 @@ export default class List extends Component {
       edit,
       create,
       setAssignee,
+      setAssignee2,
       fileLoading,
       delFile,
       addFile,
@@ -166,6 +169,8 @@ export default class List extends Component {
       linkLoading,
       watch,
       copy,
+      move,
+      convert,
       resetState,
       doAction
     } = this.props;
@@ -248,6 +253,7 @@ export default class List extends Component {
             { collection[i].event_key == 'del_issue'       && <span>删除了</span> }
             { collection[i].event_key == 'assign_issue'    && <span>分配了</span> }
             { collection[i].event_key == 'reset_issue'     && <span>重置了</span> }
+            { collection[i].event_key == 'move_issue'      && <span>移动了</span> }
             { collection[i].event_key == 'resolve_issue'   && <span>解决了</span> }
             { collection[i].event_key == 'close_issue'     && <span>关闭了</span> }
             { collection[i].event_key.indexOf('_') === -1  && <span>将</span> }
@@ -272,7 +278,7 @@ export default class List extends Component {
               return (<li dangerouslySetInnerHTML={ { __html: v.field + ': ' + v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') } }/>);
             }) }
             </ul> }
-            { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.name }</span> }
+            { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && collection[i].data.new_user.name || '' }</span> }
 
             { collection[i].event_key == 'add_file' && <span>上传了文档 { collection[i].data }</span> }
             { collection[i].event_key == 'del_file' && <span>删除了文档 <span style={ ltStyles }>{ collection[i].data }</span></span> }
@@ -337,6 +343,7 @@ export default class List extends Component {
             edit={ edit }
             create={ create }
             setAssignee={ setAssignee }
+            setAssignee2={ setAssignee2 }
             close={ this.closeDetail.bind(this) }
             options={ options }
             data={ itemData }
@@ -382,6 +389,8 @@ export default class List extends Component {
             delLink={ delLink }
             watch={ watch }
             copy={ copy }
+            move={ move }
+            convert={ convert }
             resetState={ resetState }
             doAction={ doAction }/> }
       </div>

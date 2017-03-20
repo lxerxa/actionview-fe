@@ -93,6 +93,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async setAssignee2(id, values) {
+    await this.props.actions.setAssignee2(this.pid, id, values);
+    return this.props.issue.ecode;
+  }
+
   async delSearcher(id) {
     await this.props.actions.delSearcher(this.pid, id);
     return this.props.issue.ecode;
@@ -190,6 +195,16 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async convert(id, values) {
+    await this.props.actions.convert(this.pid, id, values);
+    return this.props.issue.ecode;
+  }
+
+  async move(id, values) {
+    await this.props.actions.move(this.pid, id, values);
+    return this.props.issue.ecode;
+  }
+
   async copy(values) {
     await this.props.actions.copy(this.pid, values);
     return this.props.issue.ecode;
@@ -225,6 +240,7 @@ export default class Container extends Component {
           edit={ this.edit.bind(this) } 
           create={ this.create.bind(this) } 
           setAssignee={ this.setAssignee.bind(this) } 
+          setAssignee2={ this.setAssignee2.bind(this) } 
           delFile={ this.delFile.bind(this) } 
           addFile={ this.props.actions.addFile } 
           record={ this.record.bind(this) } 
@@ -252,6 +268,8 @@ export default class Container extends Component {
           watch={ this.watch.bind(this) }
           resetState={ this.resetState.bind(this) }
           copy={ this.copy.bind(this) }
+          move={ this.move.bind(this) }
+          convert={ this.convert.bind(this) }
           { ...this.props.issue }/> 
       </div>
     );

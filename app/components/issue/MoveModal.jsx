@@ -38,13 +38,13 @@ export default class MoveModal extends Component {
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    move: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, edit, close, issue } = this.props;
-    const ecode = await edit(issue.id, values);
+    const { values, move, close, issue } = this.props;
+    const ecode = await move(issue.id, values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

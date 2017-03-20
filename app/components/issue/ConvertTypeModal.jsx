@@ -36,14 +36,14 @@ export default class ConvertTypeModal extends Component {
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    convert: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, edit, close, issue } = this.props;
+    const { values, convert, close, issue } = this.props;
     values.parent_id = '';
-    const ecode = await edit(issue.id, values);
+    const ecode = await convert(issue.id, values);
     this.setState({ ecode });
     if (ecode === 0) {
       close();

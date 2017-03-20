@@ -78,6 +78,7 @@ export default class DetailBar extends Component {
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setAssignee2: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
@@ -108,6 +109,8 @@ export default class DetailBar extends Component {
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
+    move: PropTypes.func.isRequired,
+    convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
@@ -377,7 +380,10 @@ export default class DetailBar extends Component {
       edit, 
       del,
       copy,
+      move,
+      convert,
       resetState,
+      setAssignee2,
       wfCollection, 
       wfLoading, 
       indexComments, 
@@ -488,10 +494,10 @@ export default class DetailBar extends Component {
                       { data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                       <MenuItem divider/>
                       { data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                      <MenuItem eventKey='link'>链接问题</MenuItem>
+                      <MenuItem eventKey='link'>链接</MenuItem>
                       <MenuItem eventKey='copy'>复制</MenuItem>
-                      <MenuItem eventKey='reset'>重置状态</MenuItem>
                       <MenuItem divider/>
+                      <MenuItem eventKey='reset'>重置状态</MenuItem>
                       <MenuItem eventKey='del'>删除</MenuItem>
                     </DropdownButton>
                   </div>
@@ -566,7 +572,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
-                      <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ _.find(options.types, { id : data.parents.type }).name }/{ data.parents.no } - { data.parents.title }</a>
+                      <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ data.parents.no } - { data.parents.title }</a>
                     </div>
                   </Col>
                 </FormGroup> }
@@ -844,7 +850,7 @@ export default class DetailBar extends Component {
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
-            edit={ edit }
+            convert={ convert }
             loading={ loading }
             issue={ data }/> }
         { this.state.moveModalShow &&
@@ -852,14 +858,14 @@ export default class DetailBar extends Component {
             close={ () => { this.setState({ moveModalShow: false }); } }
             options={ options }
             project={ project }
-            edit={ edit }
+            move={ move }
             loading={ loading }
             issue={ data }/> }
         { this.state.assignModalShow &&
           <AssignModal show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
-            edit={ edit }
+            setAssignee={ setAssignee2 }
             issue={ data }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show
