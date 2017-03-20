@@ -357,9 +357,10 @@ export default class List extends Component {
                 <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
                 <MenuItem divider/>
                 <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
-                <MenuItem divider/>
-                { !collection[i].parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='createSubtask'>创建子任务</MenuItem> }
-                { !collection[i].parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='createSubtask'>转换为子任务</MenuItem> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem divider/> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>转换为子任务</MenuItem> }
+                { collection[i].parent_id && <MenuItem divider/> }
                 { collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                 <MenuItem divider/>
                 { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }

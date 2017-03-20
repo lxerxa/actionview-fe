@@ -481,9 +481,10 @@ export default class DetailBar extends Component {
                       <MenuItem divider/>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
-                      <MenuItem divider/>
-                      { !data.parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='createSubtask'>创建子任务</MenuItem> }
-                      { !data.parent_id && <MenuItem disabled={ subtaskTypeOptions.length <= 0 } eventKey='convert2Sub'>转换为子任务</MenuItem> }
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem divider/> }
+                      { !data.parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                      { !data.parent_id && <MenuItem eventKey='convert2Sub'>转换为子任务</MenuItem> }
+                      { data.parent_id && <MenuItem divider/> }
                       { data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
                       <MenuItem divider/>
                       { data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
@@ -535,7 +536,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     经办人
                   </Col>
-                  <Col sm={ 9 }>
+                  <Col sm={ 7 }>
                   { !editAssignee ?
                     <div style={ { marginTop: '7px' } }>
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
