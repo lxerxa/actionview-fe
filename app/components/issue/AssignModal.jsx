@@ -42,7 +42,7 @@ export default class AssignModal extends Component {
 
   async handleSubmit() {
     const { values, setAssignee, close, issue } = this.props;
-    const ecode = await setAssignee(issue.id, values);
+    const ecode = await setAssignee(issue.id, values, true);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

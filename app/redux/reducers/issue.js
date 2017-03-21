@@ -69,13 +69,11 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_EDIT:
     case t.ISSUE_COPY:
     case t.ISSUE_CONVERT:
-    case t.ISSUE_SET_ASSIGNEE2:
       return { ...state, loading: true, historyLoaded: false };
 
     case t.ISSUE_EDIT_SUCCESS:
     case t.ISSUE_COPY_SUCCESS:
     case t.ISSUE_CONVERT_SUCCESS:
-    case t.ISSUE_SET_ASSIGNEE2_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
@@ -88,7 +86,6 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_EDIT_FAIL:
     case t.ISSUE_COPY_FAIL:
     case t.ISSUE_CONVERT_FAIL:
-    case t.ISSUE_SET_ASSIGNEE2_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
@@ -175,8 +172,10 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKFLOW_ACTION:
       return { ...state, itemLoading: true, historyLoaded: false, commentsLoaded: false };
 
-    case t.ISSUE_STATE_RESET:
     case t.ISSUE_SET_ASSIGNEE:
+      return { ...state, historyLoaded: false, itemLoading: !action.modelFlag };
+
+    case t.ISSUE_STATE_RESET:
       return { ...state, itemLoading: true, historyLoaded: false };
 
     case t.ISSUE_WORKFLOW_ACTION_SUCCESS:

@@ -82,7 +82,6 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
-    setAssignee2: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -262,7 +261,6 @@ export default class List extends Component {
       edit, 
       create, 
       setAssignee, 
-      setAssignee2, 
       query, 
       refresh, 
       project, 
@@ -410,7 +408,6 @@ export default class List extends Component {
             edit={ edit } 
             del={ del } 
             setAssignee={ setAssignee } 
-            setAssignee2={ setAssignee2 } 
             close={ this.closeDetail } 
             options={ options } 
             data={ itemData } 
@@ -517,7 +514,7 @@ export default class List extends Component {
           <AssignModal show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
-            setAssignee={ setAssignee2 }
+            setAssignee={ setAssignee }
             issue={ selectedItem }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show

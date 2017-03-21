@@ -62,7 +62,6 @@ export default class List extends Component {
     convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
-    setAssignee2: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -155,7 +154,6 @@ export default class List extends Component {
       edit,
       create,
       setAssignee,
-      setAssignee2,
       fileLoading,
       delFile,
       addFile,
@@ -343,7 +341,6 @@ export default class List extends Component {
             edit={ edit }
             create={ create }
             setAssignee={ setAssignee }
-            setAssignee2={ setAssignee2 }
             close={ this.closeDetail.bind(this) }
             options={ options }
             data={ itemData }

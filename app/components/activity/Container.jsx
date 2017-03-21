@@ -73,11 +73,6 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async setAssignee2(id, values) {
-    await this.props.issueActions.setAssignee2(this.pid, id, values);
-    return this.props.issue.ecode;
-  }
-
   async delFile(field_key, file_id) {
     await this.props.issueActions.delFile(this.pid, this.props.issue.itemData.id, field_key, file_id);
     return this.props.issue.ecode;
@@ -200,7 +195,6 @@ export default class Container extends Component {
           edit={ this.edit.bind(this) }
           create={ this.create.bind(this) }
           setAssignee={ this.setAssignee.bind(this) }
-          setAssignee2={ this.setAssignee2.bind(this) }
           delFile={ this.delFile.bind(this) }
           addFile={ this.props.issueActions.addFile }
           record={ this.record.bind(this) }

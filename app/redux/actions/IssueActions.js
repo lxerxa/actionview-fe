@@ -78,16 +78,10 @@ export function addFile(field_key, file) {
   return { type: 'ISSUE_FILE_ADD', field_key, file };
 }
 
-export function setAssignee2(key, id, values) {
-  return asyncFuncCreator({
-    constant: 'ISSUE_SET_ASSIGNEE2',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/assign', method: 'post', data: values })
-  });
-}
-
-export function setAssignee(key, id, values) {
+export function setAssignee(key, id, values, modalFlag) {
   return asyncFuncCreator({
     constant: 'ISSUE_SET_ASSIGNEE',
+    modalFlag: modalFlag && true,
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/assign', method: 'post', data: values })
   });
 }

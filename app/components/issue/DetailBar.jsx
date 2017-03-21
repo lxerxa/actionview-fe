@@ -78,7 +78,6 @@ export default class DetailBar extends Component {
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
-    setAssignee2: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
@@ -382,8 +381,8 @@ export default class DetailBar extends Component {
       copy,
       move,
       convert,
+      setAssignee,
       resetState,
-      setAssignee2,
       wfCollection, 
       wfLoading, 
       indexComments, 
@@ -865,7 +864,7 @@ export default class DetailBar extends Component {
           <AssignModal show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
-            setAssignee={ setAssignee2 }
+            setAssignee={ setAssignee }
             issue={ data }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show
