@@ -13,6 +13,7 @@ const PaginationList = require('./PaginationList');
 const AddWorklogModal = require('./worklog/AddWorklogModal');
 const CreateModal = require('./CreateModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
+const ConvertType2Modal = require('./ConvertType2Modal');
 const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
 const ShareLinkModal = require('./ShareLinkModal');
@@ -30,6 +31,7 @@ export default class List extends Component {
       editModalShow: false,
       createSubtaskModalShow: false,
       convertTypeModalShow: false,
+      convertType2ModalShow: false,
       moveModalShow: false,
       assignModalShow: false,
       shareModalShow: false,
@@ -148,7 +150,9 @@ export default class List extends Component {
       this.setState({ editModalShow : true });
     } else if (eventKey === 'createSubtask') {
       this.setState({ createSubtaskModalShow : true });
-    } else if (eventKey === 'convert') {
+    } else if (eventKey === 'convert2Subtask') {
+      this.setState({ convertType2ModalShow : true });
+    } else if (eventKey === 'convert2Standard') {
       this.setState({ convertTypeModalShow : true });
     } else if (eventKey === 'move') {
       this.setState({ moveModalShow : true });
@@ -367,9 +371,9 @@ export default class List extends Component {
                 <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
                 { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem divider/> }
                 { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>转换为子任务</MenuItem> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
                 { collection[i].parent_id && <MenuItem divider/> }
-                { collection[i].parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
+                { collection[i].parent_id && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                 <MenuItem divider/>
                 { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                 <MenuItem eventKey='copy'>复制</MenuItem>
@@ -503,6 +507,14 @@ export default class List extends Component {
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
+            convert={ convert }
+            loading={ loading }
+            issue={ selectedItem }/> }
+        { this.state.convertType2ModalShow &&
+          <ConvertType2Modal show
+            close={ () => { this.setState({ convertType2ModalShow: false }); } }
+            options={ options }
+            project={ project } 
             convert={ convert }
             loading={ loading }
             issue={ selectedItem }/> }

@@ -17,6 +17,7 @@ const DelFileModal = require('./DelFileModal');
 const LinkIssueModal = require('./LinkIssueModal');
 const DelLinkModal = require('./DelLinkModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
+const ConvertType2Modal = require('./ConvertType2Modal');
 const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
 const ShareLinkModal = require('./ShareLinkModal');
@@ -46,6 +47,7 @@ export default class DetailBar extends Component {
       createSubtaskModalShow: false, 
       moveModalShow: false, 
       convertTypeModalShow: false, 
+      convertType2ModalShow: false, 
       assignModalShow: false, 
       shareModalShow: false, 
       resetModalShow: false, 
@@ -282,7 +284,9 @@ export default class DetailBar extends Component {
       this.setState({ linkIssueModalShow: true });
     } else if (eventKey == 'createSubtask') {
       this.setState({ createSubtaskModalShow: true });
-    } else if (eventKey == 'convert') {
+    } else if (eventKey == 'convert2Subtask') {
+      this.setState({ convertType2ModalShow: true });
+    } else if (eventKey == 'convert2Standard') {
       this.setState({ convertTypeModalShow: true });
     } else if (eventKey == 'move') {
       this.setState({ moveModalShow: true });
@@ -488,9 +492,9 @@ export default class DetailBar extends Component {
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem divider/> }
                       { !data.parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                      { !data.parent_id && <MenuItem eventKey='convert2Sub'>转换为子任务</MenuItem> }
+                      { !data.parent_id && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
                       { data.parent_id && <MenuItem divider/> }
-                      { data.parent_id && <MenuItem eventKey='convert'>转换为标准问题</MenuItem> }
+                      { data.parent_id && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                       <MenuItem divider/>
                       { data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                       <MenuItem eventKey='link'>链接</MenuItem>
@@ -838,6 +842,14 @@ export default class DetailBar extends Component {
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
+            convert={ convert }
+            loading={ loading }
+            issue={ data }/> }
+        { this.state.convertType2ModalShow &&
+          <ConvertType2Modal show
+            close={ () => { this.setState({ convertType2ModalShow: false }); } }
+            options={ options }
+            project={ project }
             convert={ convert }
             loading={ loading }
             issue={ data }/> }

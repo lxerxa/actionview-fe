@@ -84,7 +84,14 @@ export default class LinkIssueModal extends Component {
   render() {
     const { loading } = this.props;
 
-    const relationOptions = [ { value: 'blocks', label: 'blocks' }, { value: 'is blocked by', label: 'is blocked by' }, { value: 'clones', label: 'clones' }, { value: 'is cloned by', label: 'is cloned by' }, { value: 'duplicates', label: 'duplicates' }, { value: 'is duplicated by', label: 'is duplicated by' }, { value: 'relates to', label: 'relates to' } ];
+    const relationOptions = [ 
+      { value: 'blocks', label: 'blocks' }, 
+      { value: 'is blocked by', label: 'is blocked by' }, 
+      { value: 'clones', label: 'clones' }, 
+      { value: 'is cloned by', label: 'is cloned by' }, 
+      { value: 'duplicates', label: 'duplicates' }, 
+      { value: 'is duplicated by', label: 'is duplicated by' }, 
+      { value: 'relates to', label: 'relates to' } ];
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
