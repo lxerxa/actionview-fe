@@ -40,6 +40,7 @@ export default class List extends Component {
     };
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
+    this.show = this.show.bind(this);
   }
 
   static propTypes = {
@@ -210,12 +211,10 @@ export default class List extends Component {
     refresh(_.assign(query, { orderBy: newOrders.join(','), page: 1 })); 
   }
 
-  async show(e) {
-    e.preventDefault();
-
+  async show(id) {
     this.setState({ barShow: true }); 
     const { show, record } = this.props;
-    const ecode = await show(this.state.hoverRowId);  //fix me
+    const ecode = await show(id);  //fix me
     if (ecode == 0) {
       record();
     }
@@ -336,10 +335,15 @@ export default class List extends Component {
           <span className='type-abb' title={ _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).name : '' }>
             { _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).abb : '-' }
           </span>),
-        no: ( <a href='#' onClick={ this.show.bind(this) }>{ collection[i].no }</a> ),
+        no: ( <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } }>{ collection[i].no }</a> ),
         name: (
           <div>
-            <a href='#' onClick={ this.show.bind(this) } style={ { whiteSpace: 'pre-wrap' } }>
+            { collection[i].parent &&
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].parent.id) } } style={ { whiteSpace: 'pre-wrap' } }>
+              { collection[i].parent.title ? collection[i].parent.title : '-' }
+            </a> }
+            { collection[i].parent && <span> / </span> }
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } } style={ { whiteSpace: 'pre-wrap' } }>
               { collection[i].title ? collection[i].title : '-' }
             </a>
             { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  |  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }</span> }

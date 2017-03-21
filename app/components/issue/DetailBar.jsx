@@ -506,7 +506,7 @@ export default class DetailBar extends Component {
                     主题 
                   </Col>
                   <Col sm={ 9 }>
-                    <div style={ { marginTop: '7px' } }>{ data.title }</div>
+                    <div style={ { marginTop: '7px' } }>{ data.parent && <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>{ data.parent.title }</a> }{ data.parent && ' / ' }{ data.title }</div>
                   </Col>
                 </FormGroup>
                 <FormGroup controlId='formControlsLabel'>
@@ -564,17 +564,6 @@ export default class DetailBar extends Component {
                     </div> }
                   </Col>
                 </FormGroup>
-                { data.parents && data.parents.id &&
-                <FormGroup controlId='formControlsLabel'>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    父任务
-                  </Col>
-                  <Col sm={ 9 }>
-                    <div style={ { marginTop: '7px' } }>
-                      <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parents.id); } }>{ data.parents.no } - { data.parents.title }</a>
-                    </div>
-                  </Col>
-                </FormGroup> }
                 { data.subtasks && data.subtasks.length > 0 &&
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
