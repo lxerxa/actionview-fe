@@ -52,8 +52,6 @@ export default class List extends Component {
     options: PropTypes.object,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
-    indexLoading: PropTypes.bool.isRequired,
-    index: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
