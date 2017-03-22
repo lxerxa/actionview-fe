@@ -238,11 +238,11 @@ export default class List extends Component {
             { collection[i].issue_link &&
               <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
                 <li>
-                  { collection[i].issue_link && collection[i].issue_link.src && (collection[i].issue_link.src.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue_link.src.no + ' - ' + collection[i].issue_link.src.title }</span> : <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue_link.src.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue_link.src.no + ' - ' + collection[i].issue_link.src.title }</span></a>) }
+                  { collection[i].issue_link && collection[i].issue_link.src && (collection[i].issue_link.src.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue_link.src.no + ' - ' + collection[i].issue_link.src.title }</span> : <a style={ collection[i].issue_link.src.state == 'Resolved' || collection[i].issue_link.src.state == 'Closed' ? { textDecoration: 'line-through' } : {} } href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue_link.src.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue_link.src.no + ' - ' + collection[i].issue_link.src.title }</span></a>) }
                 </li>
                 <li>{ collection[i].issue_link && collection[i].issue_link.relation || '' }</li>
                 <li>
-                  { collection[i].issue_link && collection[i].issue_link.dest && (collection[i].issue_link.dest.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue_link.dest.no + ' - ' + collection[i].issue_link.dest.title }</span> : <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue_link.dest.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue_link.dest.no + ' - ' + collection[i].issue_link.dest.title }</span></a>) }
+                  { collection[i].issue_link && collection[i].issue_link.dest && (collection[i].issue_link.dest.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue_link.dest.no + ' - ' + collection[i].issue_link.dest.title }</span> : <a style={ collection[i].issue_link.dest.state == 'Resolved' || collection[i].issue_link.dest.state == 'Closed' ? { textDecoration: 'line-through' } : {} } href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue_link.dest.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue_link.dest.no + ' - ' + collection[i].issue_link.dest.title }</span></a>) }
                 </li>
               </ul> }
 
@@ -256,7 +256,7 @@ export default class List extends Component {
             { collection[i].event_key == 'close_issue'     && <span>关闭了</span> }
             { collection[i].event_key.indexOf('_') === -1  && <span>将</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
-            { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
+            { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Resolved' || collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
             { wfEventFlag && collection[i].event_key.indexOf('_') !== -1 && <span>, </span> }
             { wfEventFlag && collection[i].event_key.indexOf('_') === -1 && <span>的</span> }
             { wfEventFlag &&
