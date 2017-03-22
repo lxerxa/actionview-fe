@@ -81,7 +81,7 @@ export default class SearchList extends Component {
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
 
     return (
-      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px' } } className={ !searchShow && 'hide' }>
+      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '10px', backgroundColor: '#eee' } } className={ !searchShow && 'hide' }>
         <FormGroup controlId='formControlsLabel'>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             类型 
@@ -192,7 +192,7 @@ export default class SearchList extends Component {
               placeholder={ '输入关键字或编号' } />
           </Col>
         </FormGroup>
-        <FormGroup controlId='formControlsLabel'>
+        <FormGroup controlId='formControlsLabel' style={ { marginBottom: '0px' } }>
           <Col sm={ 12 }>
             <Button style={ { float: 'right', marginTop: '0px', marginRight: '0px' } } className='create-btn' onClick={ this.clean.bind(this) }>清空 <i className='fa fa-undo'></i></Button>
             <Button style={ { float: 'right', marginTop: '0px' } } className='create-btn' disabled={ indexLoading } onClick={ this.search.bind(this) }>搜索 <i className='fa fa-search'></i></Button>
