@@ -68,7 +68,7 @@ export default class Sidebar extends Component {
     return (
       <div className='toc-container'>
         <div className='react-menu-container'>
-          <div style={ { height: '50px', paddingTop: '0.8rem' } }>
+          <div style={ { height: '50px', lineHeight: '35px', paddingTop: '0.8rem' } }>
             <span style={ { fontSize: '19px', cursor: 'pointer', float: 'left' } } onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
             <span style={ { fontSize: '19px', cursor: 'pointer', float: 'right', paddingLeft: '5px', paddingRight: '5px', marginRight: '-8px' } } id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
             <span style={ { fontSize: '19px', cursor: 'pointer', float: 'right', display: 'none', marginRight: '-8px' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>

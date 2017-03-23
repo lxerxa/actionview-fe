@@ -53,15 +53,17 @@ export default class Header extends Component {
       }
     }
 
+    const rHeader = { paddingTop: '0px', color: '#8f8f8f', fontSize: '17px' }; 
+
     return (
       <div className='head'>
         <span style={ { display: 'none', cursor: 'pointer', marginRight: '15px' } } onClick={ (e) => { this.showBar(e); } } id='show-bar'><i className='fa fa-bars'></i></span>
         <span style={ { color: '#5c5c5c' } }>{ activeModule.name }</span>
         <span style={ { float: 'right', marginRight: '10px' } } title='创建项目'>
-          <Button bsStyle='link' style={ { paddingTop: '3px', color: '#8f8f8f' } }><i className='fa fa-plus'></i></Button>
+          <Button bsStyle='link' style={ rHeader }><i className='fa fa-plus'></i></Button>
         </span>
         <span style={ { float: 'right' } }>
-          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ { paddingTop: '3px', color: '#8f8f8f' } }>
+          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ rHeader }>
             <MenuItem eventKey={ 3.1 }>Action</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey={ 3.4 }>社交化项目管理系统</MenuItem>

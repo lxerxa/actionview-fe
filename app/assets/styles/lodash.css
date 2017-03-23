@@ -408,7 +408,7 @@ html.docs .doc-container {
 	overflow-x: hidden;
 	overflow-y: auto;
 	padding: 0rem 1.2rem;
-        margin-top: 50px;
+        margin-top: 55px;
 	-webkit-overflow-scrolling: touch
 }
 
@@ -446,7 +446,8 @@ html.docs .head {
 	padding: 0.8rem 0rem;
         padding-left: 265px;
         font-size: 19px;
-        height: 50px;
+        height: 55px;
+        line-height: 35px;
         border-bottom: solid 1px #e5e5e5;
         color: #5c5c5c;
         left: 0;
