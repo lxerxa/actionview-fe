@@ -56,7 +56,13 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } stop={ this.close.bind(this) } { ...this.props.myproject }/>
+        <List 
+          index={ this.index.bind(this) } 
+          create={ this.create.bind(this) } 
+          show={ this.props.actions.show } 
+          edit={ this.edit.bind(this) } 
+          stop={ this.close.bind(this) } 
+          { ...this.props.myproject }/>
       </div>
     );
   }

@@ -22,6 +22,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/checkkey/:key', function(req, res) {
+    const startTime = new Date().getTime(); 
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { flag : 1 } };
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key', function(req, res) {
     const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', creator: '刘旭', create_time: 144444 }, options: { }};
     return res.status(200).send(results);
@@ -29,6 +36,13 @@ export default function(router) {
 
   router.post('/project', function(req, res) {
     const startTime = new Date().getTime(); 
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id: 'zzz', name: '王世喜' }, creator: '刘旭', create_time: 144444 }};
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:id', function(req, res) {
+    const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id: 'zzz', name: '王世喜' }, creator: '刘旭', create_time: 144444 }};
     return res.status(200).send(results);

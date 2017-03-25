@@ -1,7 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import Select from 'react-select';
 import _ from 'lodash';
+import ApiClient from '../../../shared/api-client';
 import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
@@ -10,17 +12,38 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (!values.key) {
+  } 
+
+  if (!values.key) {
     errors.key = '必填';
-  } else if (!values.principal) {
-    errors.key = '必填';
-  }
+  } else {
+    const Regex = '^\\w+$';
+    const re = new RegExp(Regex);
+    if (!re.test(values.key)) {
+      errors.key = '需输入英文字符、数字或下划线';
+    }
+  } 
   return errors;
+};
+
+
+const asyncValidate = (values) => {
+  return new Promise(async (resolve, reject) => {
+    const api = new ApiClient;
+    const results = await api.request({ url: '/project/checkkey/' + values.key });
+    if (results.data && results.data.flag == '2') {
+      reject({ key: '键值已被占用' });
+    } else {
+      resolve();
+    }
+  });
 };
 
 @reduxForm({
   form: 'myproject',
   fields: ['name', 'key', 'principal', 'description'],
+  asyncValidate,
+  asyncBlurFields: [ 'key' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -32,6 +55,7 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
+    asyncValidating: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -62,8 +86,19 @@ export default class CreateModal extends Component {
     close();
   }
 
+  async searchUsers(input) {
+    input = input.toLowerCase();
+    if (!input)
+    {
+      return { options: [] };
+    }
+    const api = new ApiClient;
+    const results = await api.request( { url: '/user?s=' + input } );
+    return { options: _.map(results.data, (val) => { val.name = val.name + '(' + val.email + ')'; return val; }) };
+  }
+
   render() {
-    const { fields: { name, description }, handleSubmit, invalid, submitting } = this.props;
+    const { asyncValidating, fields: { name, key, principal, description }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -74,12 +109,24 @@ export default class CreateModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题状态名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='项目名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ key.touched && key.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值'/>
+            <FormControl.Feedback>
+              { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : '' }
+            </FormControl.Feedback>
+            { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>责任人</ControlLabel>
+            <Select.Async simpleValue clearable={ false } disabled={ submitting } options={ [] } value={ principal.value } onChange={ (newValue) => { principal.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchUsers.bind(this) } placeholder='输入责任人(默认创建者)'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='状态描述'/>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='项目描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

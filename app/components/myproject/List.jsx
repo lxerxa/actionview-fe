@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { FormGroup, FormControl, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
+import { FormGroup, FormControl, ButtonGroup, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 
+const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const CloseNotify = require('./CloseNotify');
 const img = require('../../assets/images/loading.gif');
@@ -19,20 +20,24 @@ export default class List extends Component {
       hoverRowId: '', 
       limit: 3, 
       name: '', 
-      status: '1' };
+      status: 'active' };
 
+    this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.closeNotifyClose = this.closeNotifyClose.bind(this);
   }
 
   static propTypes = {
     collection: PropTypes.array.isRequired,
+    increaseCollection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
+    moreLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     more: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     stop: PropTypes.func.isRequired
   }
@@ -40,6 +45,10 @@ export default class List extends Component {
   componentWillMount() {
     const { index } = this.props;
     index();
+  }
+
+  createModalClose() {
+    this.setState({ createModalShow: false });
   }
 
   editModalClose() {
@@ -93,7 +102,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, indexLoading, itemLoading, stop, edit } = this.props;
+    const { collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, edit } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -110,6 +119,7 @@ export default class List extends Component {
           </div> ),
         key: collection[i].key,
         principal: collection[i].principal && collection[i].principal.name,
+        status: collection[i].status == 'active' ? '活动中' : '已关闭',
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
@@ -138,21 +148,21 @@ export default class List extends Component {
         <div>
           <div style={ { marginTop: '5px', height: '40px' } }>
             <FormGroup>
-              <span style={ { float: 'left', width: '30%' } }>
+              <span style={ { float: 'left', width: '27%' } }>
                 <FormControl
                   type='text'
                   value={ this.state.name }
                   onChange={ (e) => { this.setState({ name: e.target.value }) } }
                   placeholder={ '项目名称查询...' } />
               </span>
-              <span style={ { float: 'left', width: '100px', marginLeft: '10px' } }>
+              <span style={ { float: 'left', width: '90px', marginLeft: '10px' } }>
                 <Select
                   simpleValue
                   clearable={ false }
-                  placeholder='选择项目状态'
+                  placeholder='项目状态'
                   value={ this.state.status }
                   onChange={ (newValue) => { this.setState({ status: newValue }); } }
-                  options={ [{ value: '1', label: '活动中' }, { value: '2', label: '已关闭' }] }/>
+                  options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
               </span>
               <span style={ { float: 'left', width: '20%', marginLeft: '20px' } }>
                 <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
@@ -166,11 +176,17 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
             <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
+            <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } collection={ collection }/> }
+          { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
         </div>
+        { increaseCollection.length > 0 && increaseCollection.length % this.state.limit === 0 && 
+        <ButtonGroup vertical block>
+          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
+        </ButtonGroup> }
       </div>
     );
   }

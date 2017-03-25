@@ -23,6 +23,18 @@ export default function myproject(state = initialState, action) {
     case t.MYPROJECT_MORE_FAIL:
       return { ...state, moreLoading: false, error: action.error };
 
+    case t.MYPROJECT_CREATE:
+      return { ...state, loading: true };
+
+    case t.MYPROJECT_CREATE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.collection.unshift(action.result.data);
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.MYPROJECT_CREATE_FAIL:
+      return { ...state, loading: false, error: action.error };
+
     case t.MYPROJECT_SHOW:
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: el };
