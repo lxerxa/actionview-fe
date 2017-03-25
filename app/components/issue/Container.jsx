@@ -2,8 +2,6 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button } from 'react-bootstrap';
 import _ from 'lodash';
 
 import * as IssueActions from 'redux/actions/IssueActions';

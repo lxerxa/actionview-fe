@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button } from 'react-bootstrap';
 import * as ActivityActions from 'redux/actions/ActivityActions';
 
 import * as IssueActions from 'redux/actions/IssueActions';

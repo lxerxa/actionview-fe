@@ -408,7 +408,7 @@ html.docs .doc-container {
 	overflow-x: hidden;
 	overflow-y: auto;
 	padding: 0rem 1.2rem;
-        margin-top: 55px;
+        margin-top: 50px;
 	-webkit-overflow-scrolling: touch
 }
 
@@ -443,10 +443,10 @@ html.docs .doc-container h3 {
 html.docs .head {
         background-color: #fafafa;
         width: 100%;
-	padding: 0.8rem 0rem;
+	padding: 7px 0;
         padding-left: 265px;
         font-size: 19px;
-        height: 55px;
+        height: 50px;
         line-height: 35px;
         border-bottom: solid 1px #e5e5e5;
         color: #5c5c5c;

@@ -18,6 +18,10 @@ export default class Home extends Component {
     super(props);
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   static propTypes = {
     actions: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
@@ -25,12 +29,16 @@ export default class Home extends Component {
     children: PropTypes.element.isRequired
   }
 
+  entry(pathname) {
+    this.context.router.push({ pathname });
+  }
+
   render() {
     const { location: { pathname='' }, project } = this.props;
 
     return (
       <div className='doc-main'>
-        <Header project={ project } pathname={ pathname }/>
+        <Header project={ project } pathname={ pathname } entry={ this.entry.bind(this) }/>
         <Sidebar project={ project } pathname={ pathname }/>
         { this.props.children }
       </div>

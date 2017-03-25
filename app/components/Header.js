@@ -11,6 +11,7 @@ export default class Header extends Component {
 
   static propTypes = {
     project: PropTypes.object.isRequired,
+    entry: PropTypes.func.isRequired,
     pathname: PropTypes.string
   }
 
@@ -22,12 +23,18 @@ export default class Header extends Component {
     e.nativeEvent.stopImmediatePropagation();
   }
 
+  operateSelect(eventKey) {
+    const { entry } = this.props;
+    entry('/myproject');
+  }
+
   render() {
     const { pathname, project } = this.props;
 
     const sections = pathname.split('/');
     let modulename = sections.pop();
     const Modules = [
+      { key: 'myproject', name: '项目中心' }, 
       { key: 'issue', name: '问题' }, 
       { key: 'activity', name: '活动' },
       { key: 'module', name: '模块' },
@@ -63,14 +70,14 @@ export default class Header extends Component {
           <Button bsStyle='link' style={ rHeader }><i className='fa fa-plus'></i></Button>
         </span>
         <span style={ { float: 'right' } }>
-          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ rHeader }>
-            <MenuItem eventKey={ 3.1 }>Action</MenuItem>
+          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ rHeader } onSelect={ this.operateSelect.bind(this) }>
+            <MenuItem disabled>Action</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey={ 3.4 }>社交化项目管理系统</MenuItem>
             <MenuItem eventKey={ 3.4 }>Separated link</MenuItem>
             <MenuItem eventKey={ 3.4 }>Separated link</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey={ 3.4 }>更多</MenuItem>
+            <MenuItem eventKey='myproject'>项目中心</MenuItem>
           </DropdownButton>
         </span>
       </div>
