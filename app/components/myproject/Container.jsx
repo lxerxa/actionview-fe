@@ -33,7 +33,12 @@ export default class Container extends Component {
   }
 
   async index() {
-    await this.props.actions.index(this.pid);
+    await this.props.actions.index();
+    return this.props.myproject.ecode;
+  }
+
+  async more() {
+    await this.props.actions.more();
     return this.props.myproject.ecode;
   }
 
@@ -53,15 +58,23 @@ export default class Container extends Component {
     return this.props.myproject.ecode;
   }
 
+  async reopen(id) {
+    const { actions } = this.props;
+    await actions.reopen(id);
+    return this.props.myproject.ecode;
+  }
+
   render() {
     return (
       <div>
         <List 
           index={ this.index.bind(this) } 
+          more={ this.more.bind(this) } 
           create={ this.create.bind(this) } 
           show={ this.props.actions.show } 
           edit={ this.edit.bind(this) } 
           stop={ this.close.bind(this) } 
+          reopen={ this.reopen.bind(this) } 
           { ...this.props.myproject }/>
       </div>
     );

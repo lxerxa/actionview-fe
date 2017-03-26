@@ -42,9 +42,11 @@ export default function myproject(state = initialState, action) {
     case t.MYPROJECT_EDIT:
       return { ...state, loading: true };
     case t.MYPROJECT_CLOSE:
+    case t.MYPROJECT_REOPEN:
       return { ...state, itemLoading: true };
 
     case t.MYPROJECT_CLOSE_SUCCESS:
+    case t.MYPROJECT_REOPEN_SUCCESS:
     case t.MYPROJECT_EDIT_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
@@ -53,6 +55,7 @@ export default function myproject(state = initialState, action) {
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
     case t.MYPROJECT_CLOSE_FAIL:
+    case t.MYPROJECT_REOPEN_FAIL:
     case t.MYPROJECT_EDIT_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 

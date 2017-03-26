@@ -110,18 +110,19 @@ export default class CreateModal extends Component {
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='项目名'/>
+            <FormControl.Feedback/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ key.touched && key.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值'/>
             <FormControl.Feedback>
-              { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : '' }
+              { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
             </FormControl.Feedback>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>责任人</ControlLabel>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>责任人</ControlLabel>
             <Select.Async simpleValue clearable={ false } disabled={ submitting } options={ [] } value={ principal.value } onChange={ (newValue) => { principal.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchUsers.bind(this) } placeholder='输入责任人(默认创建者)'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
@@ -132,7 +133,7 @@ export default class CreateModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
+          <Button disabled={ asyncValidating || submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>
