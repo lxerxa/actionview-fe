@@ -17,7 +17,17 @@ const allPermissions = require('../share/Permissions.js');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, willSetPermissionRoleIds: [], settingPermissionRoleIds: [], willSetUserRoleIds: [], settingUserRoleIds: [], permissions: {}, users: {}, operateShow: false, hoverRowId: '' };
+    this.state = { 
+      editModalShow: false, 
+      delNotifyShow: false, 
+      willSetPermissionRoleIds: [], 
+      settingPermissionRoleIds: [], 
+      willSetUserRoleIds: [], 
+      settingUserRoleIds: [], 
+      permissions: {}, 
+      users: {}, 
+      operateShow: false, 
+      hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.searchUsers = this.searchUsers.bind(this);
@@ -95,8 +105,8 @@ export default class List extends Component {
     this.state.settingPermissionRoleIds.push(roleId);
     this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
 
-    const { edit } = this.props;
-    const ecode = await edit({ permissions: _.map(this.state.permissions[roleId], _.iteratee('value')), id: roleId });
+    const { edit, collection } = this.props;
+    const ecode = await edit({ permissions: _.map(this.state.permissions[roleId] || _.find(collection, { id: roleId }).permissions, _.iteratee('value')), id: roleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
       this.state.willSetPermissionRoleIds.splice(willSetIndex, 1);
@@ -133,8 +143,8 @@ export default class List extends Component {
     this.state.settingUserRoleIds.push(roleId);
     this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
 
-    const { edit } = this.props;
-    const ecode = await edit({ users: _.map(this.state.users[roleId], _.iteratee('id')), id: roleId });
+    const { edit, collection } = this.props;
+    const ecode = await edit({ users: _.map(this.state.users[roleId] || _.find(collection, { id: roleId }).users, _.iteratee('id')), id: roleId });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetUserRoleIds.indexOf(roleId);
       this.state.willSetUserRoleIds.splice(willSetIndex, 1);

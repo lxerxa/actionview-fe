@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as MyprojectActions from 'redux/actions/MyprojectActions';
 
+const qs = require('qs');
 const List = require('./List');
 
 function mapDispatchToProps(dispatch) {
@@ -32,13 +33,13 @@ export default class Container extends Component {
     this.context.router.push({ pathname });
   }
 
-  async index() {
-    await this.props.actions.index();
+  async index(query) {
+    await this.props.actions.index(qs.stringify(query || {}));
     return this.props.myproject.ecode;
   }
 
-  async more() {
-    await this.props.actions.more();
+  async more(query) {
+    await this.props.actions.more(qs.stringify(query || {}));
     return this.props.myproject.ecode;
   }
 

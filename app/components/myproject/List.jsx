@@ -7,6 +7,7 @@ import ApiClient from '../../../shared/api-client';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const CloseNotify = require('./CloseNotify');
@@ -51,7 +52,7 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index } = this.props;
-    index();
+    index({ status: this.state.status, name: this.state.name, limit: this.state.limit });
   }
 
   createModalClose() {
@@ -70,6 +71,20 @@ export default class List extends Component {
     this.setState({ editModalShow: true });
     const { show } = this.props;
     show(id);
+  }
+
+  componentDidMount() {
+    const self = this;
+    $('#pname').bind('keypress',function(event){  
+      if(event.keyCode == '13') {  
+        const { index } = self.props;
+        if (_.trim(self.state.name)) {
+          index({ status: self.state.status, name: _.trim(self.state.name), limit: self.state.limit });
+        } else {
+          index({ status: self.state.status, limit: self.state.limit });
+        }
+      }
+    });
   }
 
   closeNotify(id) {
@@ -106,13 +121,6 @@ export default class List extends Component {
     more({ status: this.state.status, name: this.state.name, offset_id: collection[collection.length - 1].id, limit: this.state.limit });
   }
 
-  handleSelect(selectedKey) {
-    this.setState({ status: selectedKey });
-
-    const { index } = this.props;
-    index({ status: selectedKey, name: this.state.name, limit: this.state.limit });
-  }
-
   willSetPrincipal(pid) {
     this.state.willSetPrincipalPids.push(pid);
     this.setState({ willSetPrincipalPids: this.state.willSetPrincipalPids });
@@ -131,8 +139,8 @@ export default class List extends Component {
     this.state.settingPrincipalPids.push(pid);
     this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
 
-    const { edit } = this.props;
-    const ecode = await edit(pid, { principal: this.state.principal[pid].id });
+    const { edit, collection } = this.props;
+    const ecode = await edit(pid, { principal: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetPrincipalPids.indexOf(pid);
       this.state.willSetPrincipalPids.splice(willSetIndex, 1);
@@ -164,6 +172,13 @@ export default class List extends Component {
     const api = new ApiClient;
     const results = await api.request( { url: '/user?s=' + input } );
     return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
+  }
+
+  statusChange(newValue) {
+    this.setState({ status: newValue }); 
+
+    const { index } = this.props;
+    index({ status: newValue, name: this.state.name, limit: this.state.limit });
   }
 
   onRowMouseOver(rowData) {
@@ -253,6 +268,7 @@ export default class List extends Component {
               <span style={ { float: 'left', width: '27%' } }>
                 <FormControl
                   type='text'
+                  id='pname'
                   value={ this.state.name }
                   onChange={ (e) => { this.setState({ name: e.target.value }) } }
                   placeholder={ '项目名称查询...' } />
@@ -263,7 +279,7 @@ export default class List extends Component {
                   clearable={ false }
                   placeholder='项目状态'
                   value={ this.state.status }
-                  onChange={ (newValue) => { this.setState({ status: newValue }); } }
+                  onChange={ this.statusChange.bind(this) }
                   options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
               </span>
               <span style={ { float: 'left', width: '20%', marginLeft: '20px' } }>
