@@ -27,10 +27,11 @@ export default function myproject(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.MYPROJECT_CREATE_SUCCESS:
+      const collection = _.clone(state.collection);
       if ( action.result.ecode === 0 ) {
-        state.collection.unshift(action.result.data);
+        collection.unshift(action.result.data);
       }
-      return { ...state, loading: false, ecode: action.result.ecode };
+      return { ...state, collection, loading: false, ecode: action.result.ecode };
 
     case t.MYPROJECT_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };

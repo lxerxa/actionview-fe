@@ -60,16 +60,13 @@ export default class Header extends Component {
       }
     }
 
-    const rHeader = { paddingTop: '0px', color: '#8f8f8f', fontSize: '17px' }; 
+    const rHeader = { paddingTop: '0px', color: '#5f5f5f', fontSize: '17px' }; 
 
     return (
       <div className='head'>
-        <span style={ { display: 'none', cursor: 'pointer', marginRight: '15px' } } onClick={ (e) => { this.showBar(e); } } id='show-bar'><i className='fa fa-bars'></i></span>
-        <span style={ { color: '#5c5c5c' } }>{ activeModule.name }</span>
-        <span style={ { float: 'right', marginRight: '10px' } } title='创建项目'>
-          <Button bsStyle='link' style={ rHeader }><i className='fa fa-plus'></i></Button>
-        </span>
-        <span style={ { float: 'right' } }>
+        <span className='show-bar-icon' style={ { display: 'none' } } onClick={ (e) => { this.showBar(e); } } id='show-bar'><i className='fa fa-bars'></i></span>
+        <span style={ { color: '#5f5f5f' } }>{ activeModule.name }</span>
+        <span style={ { float: 'right', marginRight: '10px' } }>
           <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ rHeader } onSelect={ this.operateSelect.bind(this) }>
             <MenuItem disabled>Action</MenuItem>
             <MenuItem divider />

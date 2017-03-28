@@ -69,9 +69,9 @@ export default class Sidebar extends Component {
       <div className='toc-container'>
         <div className='react-menu-container'>
           <div style={ { height: '50px', lineHeight: '35px', paddingTop: '7px' } }>
-            <span style={ { fontSize: '19px', cursor: 'pointer', float: 'left' } } onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
-            <span style={ { fontSize: '19px', cursor: 'pointer', float: 'right', paddingLeft: '5px', paddingRight: '5px', marginRight: '-8px' } } id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
-            <span style={ { fontSize: '19px', cursor: 'pointer', float: 'right', display: 'none', marginRight: '-8px' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
+            <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
+            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
+            <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           <h4>社交化项目管理系统</h4>
           <h4><i className={ this.state.projectBrowseShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectBrowseShow: !this.state.projectBrowseShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目概述</h4>

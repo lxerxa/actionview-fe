@@ -440,7 +440,7 @@ html.docs .doc-container h3 {
 	overflow-y: hidden
 }
 
-html.docs .head {
+html.docs .doc-main .head {
         background-color: #fafafa;
         width: 100%;
 	padding: 7px 0;
@@ -454,6 +454,16 @@ html.docs .head {
         top: 0;
         z-index: 100;
         position: fixed;
+}
+
+html.docs .doc-main .head .show-bar-icon {
+  cursor: pointer;
+  margin-right: 15px;
+  color: #5f5f5f;
+}
+
+html.docs .doc-main .head .show-bar-icon:hover {
+  color: #000;
 }
 
 html.docs .doc-container h3 a {
@@ -618,6 +628,42 @@ html.docs .toc-container div>h2 {
 
 html.docs .toc-container div>h2 code {
 	font-family: Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif
+}
+
+html.docs .toc-container .span-bar-icon {
+  font-size: 19px;
+  cursor: pointer;
+  float: left;
+  color: #5f5f5f;
+}
+
+html.docs .toc-container .span-bar-icon:hover {
+  color: #000;
+}
+
+html.docs .toc-container .span-angle-double {
+  font-size: 19px;
+  cursor: pointer;
+  float: right;
+  color: #5f5f5f;
+  padding: 0px 5px;
+  margin-right: -8px;
+}
+
+html.docs .toc-container .span-angle-double:hover {
+  color: #000;
+}
+
+html.docs .toc-container .span-tack-bar {
+  font-size: 19px;
+  cursor: pointer;
+  float: right;
+  color: #5f5f5f;
+  margin-right: -8px;
+}
+
+html.docs .toc-container .span-tack-bar:hover {
+  color: #000;
 }
 
 html.docs .toc-container ul {

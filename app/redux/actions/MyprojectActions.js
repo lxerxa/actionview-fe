@@ -31,7 +31,7 @@ export function edit(id, values) {
 export function close(id) {
   return asyncFuncCreator({
     constant: 'MYPROJECT_CLOSE',
-    promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: { status: 'close' } })
+    promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: { status: 'closed' } })
   });
 }
 

@@ -52,7 +52,7 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index } = this.props;
-    index({ status: this.state.status, name: this.state.name, limit: this.state.limit });
+    index({ status: this.state.status, limit: this.state.limit });
   }
 
   createModalClose() {
@@ -118,7 +118,7 @@ export default class List extends Component {
 
   more() {
     const { more, collection } = this.props;
-    more({ status: this.state.status, name: this.state.name, offset_id: collection[collection.length - 1].id, limit: this.state.limit });
+    more({ status: this.state.status, name: this.state.name, offset_key: collection[collection.length - 1].key, limit: this.state.limit });
   }
 
   willSetPrincipal(pid) {
@@ -178,7 +178,11 @@ export default class List extends Component {
     this.setState({ status: newValue }); 
 
     const { index } = this.props;
-    index({ status: newValue, name: this.state.name, limit: this.state.limit });
+    if (_.trim(this.state.name)) {
+      index({ status: newValue, name: _.trim(this.state.name), limit: this.state.limit });
+    } else {
+      index({ status: newValue, limit: this.state.limit });
+    }
   }
 
   onRowMouseOver(rowData) {
@@ -195,6 +199,8 @@ export default class List extends Component {
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
+
+    alert(increaseCollection.length);
 
     const states = [];
     const stateNum = collection.length;
@@ -225,7 +231,16 @@ export default class List extends Component {
             </div>
             :
             <div>
-              <Select.Async clearable={ false } disabled={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 && true } options={ [] } value={ this.state.principal[collection[i].id] || collection[i].principal } onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } valueKey='id' labelKey='nameAndEmail' loadOptions={ this.searchUsers } placeholder='请输入用户'/>
+              <Select.Async 
+                clearable={ false } 
+                disabled={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 && true } 
+                options={ [] } 
+                value={ this.state.principal[collection[i].id] || collection[i].principal } 
+                onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } 
+                valueKey='id' 
+                labelKey='nameAndEmail' 
+                loadOptions={ this.searchUsers } 
+                placeholder='请输入用户'/>
               <div className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -261,32 +276,30 @@ export default class List extends Component {
     opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
-      <div className='doc-container'>
-        <div>
-          <div style={ { marginTop: '5px', height: '40px' } }>
-            <FormGroup>
-              <span style={ { float: 'left', width: '27%' } }>
-                <FormControl
-                  type='text'
-                  id='pname'
-                  value={ this.state.name }
-                  onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                  placeholder={ '项目名称查询...' } />
-              </span>
-              <span style={ { float: 'left', width: '90px', marginLeft: '10px' } }>
-                <Select
-                  simpleValue
-                  clearable={ false }
-                  placeholder='项目状态'
-                  value={ this.state.status }
-                  onChange={ this.statusChange.bind(this) }
-                  options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
-              </span>
-              <span style={ { float: 'left', width: '20%', marginLeft: '20px' } }>
-                <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
-              </span>
-            </FormGroup>
-          </div>
+      <div>
+        <div style={ { marginTop: '5px', height: '40px' } }>
+          <FormGroup>
+            <span style={ { float: 'left', width: '27%' } }>
+              <FormControl
+                type='text'
+                id='pname'
+                value={ this.state.name }
+                onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                placeholder={ '项目名称查询...' } />
+            </span>
+            <span style={ { float: 'left', width: '90px', marginLeft: '10px' } }>
+              <Select
+                simpleValue
+                clearable={ false }
+                placeholder='项目状态'
+                value={ this.state.status }
+                onChange={ this.statusChange.bind(this) }
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
+            </span>
+            <span style={ { float: 'left', width: '20%', marginLeft: '20px' } }>
+              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
+            </span>
+          </FormGroup>
         </div>
         <div>
           <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle'>

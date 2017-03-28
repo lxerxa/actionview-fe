@@ -67,7 +67,7 @@ export default class Container extends Component {
 
   render() {
     return (
-      <div>
+      <div className='doc-container'>
         <List 
           index={ this.index.bind(this) } 
           more={ this.more.bind(this) } 

@@ -133,7 +133,7 @@ export default class CreateModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ asyncValidating || submitting || invalid } type='submit'>确定</Button>
+          <Button disabled={ key.active === true || asyncValidating || submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>
