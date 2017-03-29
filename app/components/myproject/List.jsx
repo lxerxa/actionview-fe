@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-// import { Link } from 'react-router';
+import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { FormGroup, FormControl, ButtonGroup, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
@@ -200,8 +200,6 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    alert(increaseCollection.length);
-
     const states = [];
     const stateNum = collection.length;
     for (let i = 0; i < stateNum; i++) {
@@ -209,7 +207,7 @@ export default class List extends Component {
         id: collection[i].id,
         name: ( 
           <div> 
-            <span className='table-td-title'>{ collection[i].name }</span>
+            <Link to={ '/project/' + collection[i].key + '/issue' }><span className='table-td-title'>{ collection[i].name }</span></Link>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         key: collection[i].key,

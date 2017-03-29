@@ -208,7 +208,7 @@ export default class List extends Component {
 
       const user = <Person data={ collection[i].user } />;
 
-      const wfEventFlag = collection[i].event_key === 'close_issue' || collection[i].event_key === 'resolve_issue' || collection[i].event_key === 'reset_issue' || collection[i].event_key.indexOf('_') === -1;
+      const wfEventFlag = collection[i].event_key === 'close_issue' || collection[i].event_key === 'resolve_issue' || collection[i].event_key === 'reset_issue' || collection[i].event_key === 'start_progress_issue' || collection[i].event_key === 'stop_progress_issue' || collection[i].event_key === 'reopen_issue' || collection[i].event_key.indexOf('_') === -1;
 
       let comments = '';
       if (collection[i].event_key == 'add_comments' || collection[i].event_key == 'edit_comments' || collection[i].event_key == 'del_comments') {
@@ -250,8 +250,11 @@ export default class List extends Component {
             { collection[i].event_key == 'assign_issue'    && <span>分配了</span> }
             { collection[i].event_key == 'reset_issue'     && <span>重置了</span> }
             { collection[i].event_key == 'move_issue'      && <span>移动了</span> }
+            { collection[i].event_key == 'start_progress_issue'   && <span>开始解决</span> }
+            { collection[i].event_key == 'stop_progress_issue'    && <span>停止解决</span> }
             { collection[i].event_key == 'resolve_issue'   && <span>解决了</span> }
             { collection[i].event_key == 'close_issue'     && <span>关闭了</span> }
+            { collection[i].event_key == 'reopen_issue'    && <span>重新打开</span> }
             { collection[i].event_key.indexOf('_') === -1  && <span>将</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
             { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Resolved' || collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }

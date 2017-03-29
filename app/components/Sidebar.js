@@ -73,7 +73,7 @@ export default class Sidebar extends Component {
             <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
-          <h4>社交化项目管理系统</h4>
+          <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>{ project.item.name || '' }</h4>
           <h4><i className={ this.state.projectBrowseShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectBrowseShow: !this.state.projectBrowseShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目概述</h4>
           <ul className={ !this.state.projectBrowseShow && 'hide' }>
             <li><Link to={ '/project/' + project.item.key + '/issue' }>问题</Link></li>

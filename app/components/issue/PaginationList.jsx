@@ -51,6 +51,7 @@ export default class PaginationList extends Component {
             <span>{ _.add((curPage - 1) * sizePerPage, 1) }-{ curPage * sizePerPage >= total ? total : curPage * sizePerPage } 共{ total }条 { pages }页</span>
           </div>
           <div className='col-md-6'>
+            { pages > 1 &&
             <ul className='pagination' style={ { float:'right', marginTop: '0px' } }>
               { curPage - paginationSize > 1 &&
               <li key='first'>
@@ -75,7 +76,7 @@ export default class PaginationList extends Component {
               <li key='last'>
                 <span className='page-button' onClick={ this.goPage.bind(this, pages) } title='尾页'>&gt;&gt;</span>
               </li> }
-            </ul>
+            </ul> }
           </div>
         </div>
       </div>
