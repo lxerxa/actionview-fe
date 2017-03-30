@@ -174,7 +174,7 @@ class CreateModal extends Component {
       if (ecode === 0) {
         close();
         if (data && data.id && doAction && action_id) {
-          ecode = await doAction(data.id, data.entry_id, action_id);
+          ecode = await doAction(data.id, data.entry_id, action_id, { comments: submitData.comments || '' });
           if (ecode === 0) {
             notify.show('提交完成。', 'success', 2000);
           } else {
@@ -299,7 +299,7 @@ class CreateModal extends Component {
 
     let bodyStyles = { height: '580px', overflow: 'auto' };
     if (isFromWorkflow) {
-      bodyStyles = { maxHeight: '580px', overflow: 'auto' };
+      bodyStyles = { maxHeight: '500px', overflow: 'auto' };
     }
 
     return (

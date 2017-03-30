@@ -332,11 +332,12 @@ export default class DetailBar extends Component {
     const { doAction, data } = this.props;
     const action = _.find(data.wfactions || {}, { id: action_id });
     if (action && action.screen) {
-      if (action.screen == 'comments') {
-        this.setState({ workflowCommentsShow: true, action_id });
-      } else {
-        this.setState({ workflowScreenShow: true, action_id });
-      }
+      //if (action.screen == 'comments') {
+      //  this.setState({ workflowCommentsShow: true, action_id });
+      //} else {
+      //  this.setState({ workflowScreenShow: true, action_id });
+      //}
+      this.setState({ workflowScreenShow: true, action_id });
     } else {
       const ecode = await doAction(data.id, data.entry_id, action_id);
       if (ecode === 0) {

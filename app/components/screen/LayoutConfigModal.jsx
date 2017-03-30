@@ -107,14 +107,14 @@ export default class LayoutConfigModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '界面配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
+        <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
               <Col sm={ 10 }>
                 <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='选择添加字段(可多选)' multi/>
               </Col>
               <Col sm={ 2 }>
-                <Button bsStyle='link' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+                <Button bsStyle='link' style={ { marginLeft: '-15px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
               </Col>
             </FormGroup>
           </Form>
@@ -131,7 +131,7 @@ export default class LayoutConfigModal extends Component {
               );
             }) 
             :
-            <p>此界面暂无字段。</p>
+            <p>此界面暂无字段。<br/>注意：如果此页面将作为问题的创建或编辑页面，首先应将主题字段配置上。</p>
           }
         </Modal.Body>
         <Modal.Footer>
