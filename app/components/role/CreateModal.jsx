@@ -85,6 +85,11 @@ export default class CreateModal extends Component {
   render() {
     const { fields: { name, description, permissions }, handleSubmit, invalid, submitting } = this.props;
 
+    let permissionOptions = _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; });
+    if (_.findIndex(permissions.value, { value: 'all' }) !== -1) {
+      permissions.value = permissionOptions = _.reject(permissionOptions, { value: 'all' });
+    }
+
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
@@ -98,7 +103,15 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>权限集</ControlLabel>
-            <Select disabled={ submitting } clearable={ false } searchable={ false } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ permissions.value } onChange={ newValue => { permissions.onChange(newValue) } } placeholder='请选择权限' multi/>
+            <Select 
+              multi
+              disabled={ submitting } 
+              clearable={ false } 
+              searchable={ false } 
+              options={ permissionOptions } 
+              value={ permissions.value } 
+              onChange={ newValue => { permissions.onChange(newValue) } } 
+              placeholder='请选择权限'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

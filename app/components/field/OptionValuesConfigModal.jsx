@@ -121,11 +121,17 @@ export default class OptionValuesConfigModal extends Component {
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
-              <Col sm={ 10 }>
-                <FormControl type='text' ref='addOpt' onChange={ this.handleChange.bind(this) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } } onKeyUp={ this.handlerKeyUp.bind(this) }/>
+              <Col sm={ 11 }>
+                <FormControl 
+                  type='text' 
+                  ref='addOpt' 
+                  placeholder='输入可选值'
+                  onChange={ this.handleChange.bind(this) } 
+                  onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } } 
+                  onKeyUp={ this.handlerKeyUp.bind(this) }/>
               </Col>
-              <Col sm={ 2 }>
-                <Button bsStyle='link' onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+              <Col sm={ 1 }>
+                <Button bsStyle='link' style={ { marginLeft: '-25px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
               </Col>
             </FormGroup>
           </Form>
@@ -141,7 +147,7 @@ export default class OptionValuesConfigModal extends Component {
                   deleteCard={ this.deleteCard.bind(this, i) }/>
               );
             }) :
-            <p>可选值为空</p>
+            <p>可选值列表为空</p>
           }
         </Modal.Body>
         <Modal.Footer>

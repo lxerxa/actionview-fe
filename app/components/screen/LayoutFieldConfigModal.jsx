@@ -90,7 +90,14 @@ export default class LayoutFieldConfigModal extends Component {
           <FormControl type='hidden' { ...id }/>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>必填字段</ControlLabel>
-            <Select simpleValue options={ screenFields } clearable={ false } value={ required_fields.value } onChange={ newValue => { required_fields.onChange(newValue) } } placeholder='选择必填字段(可多选)' multi/>
+            <Select 
+              simpleValue 
+              multi
+              options={ screenFields } 
+              clearable={ false } 
+              value={ required_fields.value } 
+              onChange={ newValue => { required_fields.onChange(newValue) } } 
+              placeholder='选择必填字段(可多选)'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

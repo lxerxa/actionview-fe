@@ -478,7 +478,7 @@ export default class DetailBar extends Component {
                     </ButtonGroup>
                     :
                     <div style={ { float: 'left', marginLeft: '10px' } }>
-                      <DropdownButton title='流程' onSelect={ this.actionSelect.bind(this) }>
+                      <DropdownButton title='动作' onSelect={ this.actionSelect.bind(this) }>
                       { _.map(data.wfactions || [], (v, i) => {
                         return ( <MenuItem eventKey={ v.id }>{ v.name }</MenuItem> ); 
                       }) }

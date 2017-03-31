@@ -207,7 +207,7 @@ export default class List extends Component {
         id: collection[i].id,
         name: ( 
           <div> 
-            <Link to={ '/project/' + collection[i].key + '/issue' }><span className='table-td-title'>{ collection[i].name }</span></Link>
+            <Link to={ '/project/' + collection[i].key + '/issue' }>{ collection[i].name }</Link>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         key: collection[i].key,
