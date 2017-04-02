@@ -33,22 +33,22 @@ export default (
       <Route path='/myproject' component={ MyprojectContainer }/>
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
-        <Route path='/project/:key/profile' component={ Profile }/>
-        <Route path='/project/:key/issue' component={ IssueContainer }/>
-        <Route path='/project/:key/activity' component={ ActivityContainer }/>
-        <Route path='/project/:key/module' component={ ModuleContainer }/>
-        <Route path='/project/:key/version' component={ VersionContainer }/>
-        <Route path='/project/:key/type' component={ TypeContainer }/>
-        <Route path='/project/:key/field' component={ FieldContainer }/>
-        <Route path='/project/:key/screen' component={ ScreenContainer }/>
-        <Route path='/project/:key/workflow' component={ WorkflowContainer }/>
-        <Route path='/project/:key/workflow/:id' component={ WorkflowConfigContainer }/>
-        <Route path='/project/:key/state' component={ StateContainer }/>
-        <Route path='/project/:key/resolution' component={ ResolutionContainer }/>
-        <Route path='/project/:key/priority' component={ PriorityContainer }/>
-        <Route path='/project/:key/role' component={ RoleContainer }/>
-        <Route path='/project/:key/events' component={ EventsContainer }/>
-        <Route path='/project/:key/activity' component={ ActivityContainer }/>
+        <Route path='profile' component={ Profile }/>
+        <Route path='issue' component={ IssueContainer }/>
+        <Route path='activity' component={ ActivityContainer }/>
+        <Route path='module' component={ ModuleContainer }/>
+        <Route path='version' component={ VersionContainer }/>
+        <Route path='type' component={ TypeContainer }/>
+        <Route path='field' component={ FieldContainer }/>
+        <Route path='screen' component={ ScreenContainer }/>
+        <Route path='workflow' component={ WorkflowContainer }/>
+        <Route path='workflow/:id' component={ WorkflowConfigContainer }/>
+        <Route path='state' component={ StateContainer }/>
+        <Route path='resolution' component={ ResolutionContainer }/>
+        <Route path='priority' component={ PriorityContainer }/>
+        <Route path='role' component={ RoleContainer }/>
+        <Route path='events' component={ EventsContainer }/>
+        <Route path='activity' component={ ActivityContainer }/>
       </Route>
     </Route>
   </Route>

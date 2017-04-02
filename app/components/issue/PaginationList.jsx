@@ -45,7 +45,7 @@ export default class PaginationList extends Component {
     }
 
     return (
-      <div className='row' style={ { marginTop: '15px' } }>
+      <div className='row' style={ { marginTop: '15px', height: '50px' } }>
         <div>
           <div className='col-md-6'>
             <span>{ _.add((curPage - 1) * sizePerPage, 1) }-{ curPage * sizePerPage >= total ? total : curPage * sizePerPage } 共{ total }条 { pages }页</span>

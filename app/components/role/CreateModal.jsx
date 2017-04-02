@@ -83,11 +83,11 @@ export default class CreateModal extends Component {
   //}
 
   render() {
-    const { fields: { name, description, permissions }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, description, permissions }, values, handleSubmit, invalid, submitting } = this.props;
 
     let permissionOptions = _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; });
     if (_.findIndex(permissions.value, { value: 'all' }) !== -1) {
-      permissions.value = permissionOptions = _.reject(permissionOptions, { value: 'all' });
+      values.permissions = permissions.value = permissionOptions = _.reject(permissionOptions, { value: 'all' });
     }
 
     return (

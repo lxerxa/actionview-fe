@@ -13,16 +13,24 @@ function mapDispatchToProps(dispatch) {
 
 @connect(({ project }) => ({ project }), mapDispatchToProps)
 export default class Project extends Component {
+  constructor(props) {
+    super(props);
+    this.key = '';
+  }
+
   static propTypes = {
     actions: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired
   }
 
-  componentWillMount() {
+  componentWillReceiveProps(nextProps) {
     const { actions } = this.props;
-    const { params: { key } } = this.props;
-    actions.show(key);
+    const { params: { key } } = nextProps;
+    if (key !== this.key) {
+      this.key = key;
+      actions.show(key);
+    }
   }
 
   render() {

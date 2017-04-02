@@ -190,7 +190,7 @@ export default class CreateModal extends Component {
                     );
                   }) 
                   :
-                  <p>此界面暂无字段。<br/>注意：如果此页面将作为问题的创建或编辑页面，首先应将主题字段配置上。</p>
+                  <p>此界面暂无字段。<br/>注意：如果此页面将作为问题的创建或编辑页面，首先应将主题字段添加到列表中，且将其设置为必填字段。</p>
                 }
               </div>
             </TabPane>

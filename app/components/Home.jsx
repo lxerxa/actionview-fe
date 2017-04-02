@@ -29,6 +29,11 @@ export default class Home extends Component {
     children: PropTypes.element.isRequired
   }
 
+  async recents() {
+    await this.props.actions.recents();
+    return this.props.project.ecode;
+  }
+
   entry(pathname) {
     this.context.router.push({ pathname });
   }
@@ -38,8 +43,14 @@ export default class Home extends Component {
 
     return (
       <div className='doc-main'>
-        <Header project={ project } pathname={ pathname } entry={ this.entry.bind(this) }/>
-        <Sidebar project={ project } pathname={ pathname }/>
+        <Header 
+          project={ project } 
+          pathname={ pathname } 
+          recents={ this.recents.bind(this) }
+          entry={ this.entry.bind(this) }/>
+        <Sidebar 
+          project={ project } 
+          pathname={ pathname }/>
         { this.props.children }
       </div>
     );

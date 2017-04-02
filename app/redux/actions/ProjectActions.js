@@ -20,3 +20,10 @@ export function show(key) {
     promise: (client) => client.request({ url: '/project/' + key })
   });
 }
+
+export function recents() {
+  return asyncFuncCreator({
+    constant: 'PROJECT_RECENTS',
+    promise: (client) => client.request({ url: '/myproject' + '?status=active&limit=5' })
+  });
+}

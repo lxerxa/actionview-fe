@@ -71,6 +71,7 @@ export default class Container extends Component {
         <List 
           index={ this.index.bind(this) } 
           more={ this.more.bind(this) } 
+          entry={ this.entry.bind(this) } 
           create={ this.create.bind(this) } 
           show={ this.props.actions.show } 
           edit={ this.edit.bind(this) } 

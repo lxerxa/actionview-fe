@@ -11,8 +11,14 @@ export default class Header extends Component {
 
   static propTypes = {
     project: PropTypes.object.isRequired,
+    recents: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
     pathname: PropTypes.string
+  }
+
+  componentWillMount() {
+    const { recents } = this.props;
+    recents();
   }
 
   showBar(e) {
@@ -25,14 +31,22 @@ export default class Header extends Component {
 
   operateSelect(eventKey) {
     const { entry } = this.props;
-    entry('/myproject');
+    if (eventKey === 'myproject') {
+      entry('/myproject');
+    } else {
+      entry('/project/' + eventKey);
+    }
   }
 
   render() {
     const { pathname, project } = this.props;
 
-    const sections = pathname.split('/');
-    let modulename = sections.pop();
+    let curProject = project.item || {};
+    let recentProjects = project.recents;
+    if (!_.isEmpty(curProject)) {
+      recentProjects = _.reject(recentProjects, { key: curProject.key });
+    }
+
     const Modules = [
       { key: 'myproject', name: '项目中心' }, 
       { key: 'issue', name: '问题' }, 
@@ -50,14 +64,28 @@ export default class Header extends Component {
       { key: 'events', name: '通知事件' }
     ];
 
-    let activeModule = _.find(Modules, { key: modulename });
-    if (!activeModule) {
-      if (sections.length > 1) {
-        modulename = sections.pop(); 
-        if (modulename === 'workflow') {
-          activeModule = { key: 'wfconfig', name: '工作流配置' };
-        }
+    const patten0 = new RegExp('^/myproject$');
+    const patten1 = new RegExp('^/project/(\\w+)$');
+    const patten2 = new RegExp('^/project/(\\w+)/(\\w+)$');
+    const patten3 = new RegExp('^/project/(\\w+)/workflow/(\\w+)$');
+
+    let modulename = '';
+    if (patten0.exec(pathname)) {
+      modulename = '项目中心';
+    } else if (patten1.exec(pathname)) {
+      modulename = '项目首页';
+    } else if (patten2.exec(pathname)) {
+      const moduleKey = RegExp.$2;
+      const module = _.find(Modules, { key: moduleKey }); 
+      if (module) {
+        modulename = module.name;
+      } else {
+        modulename = '其他';
       }
+    } else if (patten3.exec(pathname)) {
+      modulename = '工作流配置';
+    } else {
+      modulename = '其他';
     }
 
     const rHeader = { paddingTop: '0px', color: '#5f5f5f', fontSize: '17px' }; 
@@ -65,15 +93,13 @@ export default class Header extends Component {
     return (
       <div className='head'>
         <span className='show-bar-icon' style={ { display: 'none' } } onClick={ (e) => { this.showBar(e); } } id='show-bar'><i className='fa fa-bars'></i></span>
-        <span style={ { color: '#5f5f5f' } }>{ activeModule.name }</span>
+        <span style={ { color: '#5f5f5f' } }>{ modulename }</span>
         <span style={ { float: 'right', marginRight: '10px' } }>
           <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ rHeader } onSelect={ this.operateSelect.bind(this) }>
-            <MenuItem disabled>Action</MenuItem>
-            <MenuItem divider />
-            <MenuItem eventKey={ 3.4 }>社交化项目管理系统</MenuItem>
-            <MenuItem eventKey={ 3.4 }>Separated link</MenuItem>
-            <MenuItem eventKey={ 3.4 }>Separated link</MenuItem>
-            <MenuItem divider />
+            { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }
+            { !_.isEmpty(curProject) && <MenuItem divider /> }
+            { _.map(recentProjects, (v) => <MenuItem eventKey={ v.key }>{ v.name }</MenuItem> ) }
+            { recentProjects.length > 0 && <MenuItem divider /> }
             <MenuItem eventKey='myproject'>项目中心</MenuItem>
           </DropdownButton>
         </span>

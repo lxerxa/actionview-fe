@@ -41,7 +41,7 @@ export default function screen(state = initialState, action) {
 
     case t.SCREEN_SHOW:
       const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, fields: el.schema } };
+      return { ...state, itemLoading: false, selectedItem: el };
 
     case t.SCREEN_DELETE:
       return { ...state, itemLoading: true };

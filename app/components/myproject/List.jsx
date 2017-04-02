@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Link } from 'react-router';
+//import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { FormGroup, FormControl, ButtonGroup, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
@@ -32,6 +32,7 @@ export default class List extends Component {
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.closeNotifyClose = this.closeNotifyClose.bind(this);
+    this.entry = this.entry.bind(this);
   }
 
   static propTypes = {
@@ -43,6 +44,7 @@ export default class List extends Component {
     moreLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     more: PropTypes.func.isRequired,
+    entry: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
@@ -71,6 +73,11 @@ export default class List extends Component {
     this.setState({ editModalShow: true });
     const { show } = this.props;
     show(id);
+  }
+
+  entry(key) {
+    const { entry } = this.props;
+    entry('/project/' + key); 
   }
 
   componentDidMount() {
@@ -207,7 +214,7 @@ export default class List extends Component {
         id: collection[i].id,
         name: ( 
           <div> 
-            <Link to={ '/project/' + collection[i].key + '/issue' }>{ collection[i].name }</Link>
+            <a herf='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         key: collection[i].key,
