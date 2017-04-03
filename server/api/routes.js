@@ -652,6 +652,8 @@ export default function(router) {
   });
 
   router.post('/session', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { _id: 'nhy67ujm', name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1'}};
     return res.status(200).send(results);
   });

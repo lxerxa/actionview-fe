@@ -466,3 +466,47 @@ table tr:hover .remove-icon{
 .rc-tabs-top {
   border-bottom: 2px solid #fff;
 }
+
+.login-panel {
+  width: 400px;
+  margin: 5% auto 2% auto;
+  border: none;
+}
+
+.login-footer {
+  border-top: 1px #e8edf3 solid;
+  padding: 20px;
+  text-align: center;
+  line-height: 14px;
+  margin-top: 15px;
+}
+
+.login-footer a {
+  color: #6f6e6b;
+}
+
+.login-footer .split {
+  display: inline-block;
+  height: 14px;
+  margin: 0 15px;
+  border-left: 1px #e8edf3 solid;
+}
+
+.login-form input {
+  height: auto;
+  margin-top: 25px;
+  width: 100%;
+  padding: 12px;	
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.login-form button {
+  height: auto;
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 20px;
+}
