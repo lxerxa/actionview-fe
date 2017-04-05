@@ -175,7 +175,7 @@ export default class List extends Component {
     opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
-      <div>
+      <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>

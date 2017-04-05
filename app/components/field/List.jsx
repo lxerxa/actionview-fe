@@ -142,14 +142,14 @@ export default class List extends Component {
     opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
-      <div>
+      <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ fields } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='key'>键值</TableHeaderColumn>
           <TableHeaderColumn dataField='type'>类型</TableHeaderColumn>
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
-          <TableHeaderColumn width='80' dataField='operation'/>
+          <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } options={ options }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }

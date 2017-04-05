@@ -156,7 +156,7 @@ export default class ConfigList extends Component {
     } 
 
     return (
-      <div>
+      <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ steps } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='step'>步骤</TableHeaderColumn>

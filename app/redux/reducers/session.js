@@ -1,6 +1,6 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { token: '', ecode: 0 };
+const initialState = { token: '', ecode: 0, user: {} };
 
 export default function session(state = initialState, action) {
   switch (action.type) {

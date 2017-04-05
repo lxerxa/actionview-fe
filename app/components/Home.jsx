@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import { notify } from 'react-notify-toast';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
 
@@ -12,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ project }) => ({ project }), mapDispatchToProps)
+@connect(({ project, state, session }) => ({ project, state, session }), mapDispatchToProps)
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +26,8 @@ export default class Home extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
+    state: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired
   }
@@ -38,8 +41,15 @@ export default class Home extends Component {
     this.context.router.push({ pathname });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.state.ecode === -10001) {
+      notify.show('session失效，请重新登录。', 'warning', 2000);
+      this.context.router.push({ pathname: '/login' });
+    }
+  }
+
   render() {
-    const { location: { pathname='' }, project } = this.props;
+    const { location: { pathname='' }, project, session } = this.props;
 
     return (
       <div className='doc-main'>
@@ -50,6 +60,7 @@ export default class Home extends Component {
           entry={ this.entry.bind(this) }/>
         <Sidebar 
           project={ project } 
+          session={ session } 
           pathname={ pathname }/>
         { this.props.children }
       </div>
