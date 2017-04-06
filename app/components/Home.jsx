@@ -6,14 +6,16 @@ import Sidebar from './Sidebar';
 import { notify } from 'react-notify-toast';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
+import * as SessionActions from 'redux/actions/SessionActions';
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(ProjectActions, dispatch)
+    actions: bindActionCreators(ProjectActions, dispatch),
+    sessionActions: bindActionCreators(SessionActions, dispatch)
   };
 }
 
-@connect(({ project, state, session }) => ({ project, state, session }), mapDispatchToProps)
+@connect(({ project, session }) => ({ project, session }), mapDispatchToProps)
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +27,7 @@ export default class Home extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    sessionActions: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     state: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
@@ -37,14 +40,28 @@ export default class Home extends Component {
     return this.props.project.ecode;
   }
 
+  async logout() {
+    await this.props.sessionActions.destroy();
+    if (this.props.project.ecode === 0) {
+      notify.show('已退出系统。', 'success', 2000);
+      this.context.router.push({ pathname: '/login' });
+    }
+  }
+
   entry(pathname) {
     this.context.router.push({ pathname });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.state.ecode === -10001) {
-      notify.show('session失效，请重新登录。', 'warning', 2000);
-      this.context.router.push({ pathname: '/login' });
+    const { location: { pathname='' } } = this.props;
+
+    if (nextProps.session.invalid === true) {
+      notify.show('回话过期，请重新登录。', 'warning', 2000);
+      if (pathname) {
+        this.context.router.push({ pathname: '/login', query: { request_url: encodeURI(pathname) } });
+      } else {
+        this.context.router.push({ pathname: '/login' });
+      }
     }
   }
 
@@ -54,6 +71,7 @@ export default class Home extends Component {
     return (
       <div className='doc-main'>
         <Header 
+          session={ session } 
           project={ project } 
           pathname={ pathname } 
           recents={ this.recents.bind(this) }

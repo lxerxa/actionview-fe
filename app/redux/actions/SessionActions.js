@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux';
 import { asyncFuncCreator } from '../utils';
-import { SESSION_DESTROY } from '../constants/ActionTypes';
+import { SESSION_DESTROY, SESSION_INVALIDATE } from '../constants/ActionTypes';
 
 export function create(values) {
   return asyncFuncCreator({
@@ -10,8 +10,12 @@ export function create(values) {
 }
 
 export function destroy() {
-  return (dispatch) => {
-    dispatch({ type: SESSION_DESTROY });
-    dispatch(push('/login'));
-  };
+  return asyncFuncCreator({
+    constant: 'SESSION_DESTROY',
+    promise: (client) => client.request({ url: '/session', method: 'delete' })
+  });
+}
+
+export function invalidate() {
+  return { type: SESSION_INVALIDATE };
 }

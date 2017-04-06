@@ -1,11 +1,11 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { token: '', ecode: 0, user: {} };
+const initialState = { token: '', ecode: 0, invalid: false, user: {} };
 
 export default function session(state = initialState, action) {
   switch (action.type) {
     case t.SESSION_CREATE:
-      return { ...state, loading: true };
+      return { ...state, loading: true, invalid: false };
 
     case t.SESSION_CREATE_SUCCESS:
       return { ...state, loading: false, ecode: action.result.ecode, user: action.result.data };
@@ -14,7 +14,10 @@ export default function session(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.SESSION_DESTROY:
-      return { ...state, token: '' };
+      return { ...state, user: {} };
+
+    case t.SESSION_INVALIDATE:
+      return { ...state, user: {}, invalid: true };
 
     default:
       return state;

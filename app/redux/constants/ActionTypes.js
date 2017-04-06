@@ -9,6 +9,7 @@ export default generateConstants([
 
   'SESSION_CREATE(ASYNC)',
   'SESSION_DESTROY',
+  'SESSION_INVALIDATE',
 
   'PROJECT_INDEX(ASYNC)',
   'PROJECT_CREATE(ASYNC)',

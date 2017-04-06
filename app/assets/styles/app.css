@@ -510,3 +510,10 @@ table tr:hover .remove-icon{
   font-weight: 600;
   line-height: 20px;
 }
+
+.no-avatar {
+  width: 26px;
+  height: 26px;
+  text-decoration: 'blink';
+  border-radius: 50%;
+}

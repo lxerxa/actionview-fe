@@ -97,16 +97,6 @@ export default class Sidebar extends Component {
             <li><Link to={ '/project/' + project.item.key + '/events' }>通知事件</Link></li>
           </ul>
           <h4>&nbsp;</h4><h4>&nbsp;</h4>
-          { session.user && session.user.id &&
-          <div id='carbonads'>
-            <Person data={ session.user }/>
-            <div style={ { marginTop: '5px' } }>
-              <span>登录于 16/12/20 20:45</span>
-              <span style={ { marginLeft: '10px' } }>
-                <i className='fa fa-sign-out' title='退出'></i>
-              </span>
-            </div>
-          </div> }
         </div>
         :
         <div className='react-menu-container'>
@@ -116,16 +106,6 @@ export default class Sidebar extends Component {
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           { !project.loading && <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>请选择要查看的项目</h4> } 
-          { session.user && session.user.id &&
-          <div id='carbonads'>
-            <Person data={ session.user }/>
-            <div style={ { marginTop: '5px' } }>
-              <span>登录于 16/12/20 20:45</span>
-              <span style={ { marginLeft: '10px' } }>
-                <i className='fa fa-sign-out' title='退出'></i>
-              </span>
-            </div>
-          </div> }
         </div> }
       </div>);
   }

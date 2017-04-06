@@ -1,4 +1,6 @@
-// // from https://github.com/erikras/react-redux-universal-hot-example/blob/master/src%2Fredux%2FclientMiddleware.js
+
+import { SESSION_INVALIDATE } from './constants/ActionTypes';
+
 export default function clientMiddleware(client) {
   return () => {
     return (next) => (action) => {
@@ -8,7 +10,7 @@ export default function clientMiddleware(client) {
       const [ REQUEST, SUCCESS, FAILURE ] = types;
       next({ ...rest, type: REQUEST });
       return promise(client).then(
-        (result) => next({ ...rest, result, type: SUCCESS }),
+        (result) => { if (result.ecode === -10001) { next({ type: SESSION_INVALIDATE }); } else { return next({ ...rest, result, type: SUCCESS }); } },
         (error) => next({ ...rest, error, type: FAILURE })
       );
     };

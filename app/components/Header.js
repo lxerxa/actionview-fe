@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropdownButton, MenuItem, Button } from 'react-bootstrap';
 import _ from 'lodash';
 
+const no_avatar = require('../assets/images/no_avatar.png');
 const $ = require('$');
 
 export default class Header extends Component {
@@ -11,8 +12,10 @@ export default class Header extends Component {
 
   static propTypes = {
     project: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     recents: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
     pathname: PropTypes.string
   }
 
@@ -38,8 +41,17 @@ export default class Header extends Component {
     }
   }
 
+  userOperateSelect(eventKey) {
+    const { entry, logout } = this.props;
+
+    if (eventKey === 'setting') {
+    } else if (eventKey === 'logout') {
+      logout();
+    }
+  }
+
   render() {
-    const { pathname, project } = this.props;
+    const { pathname, project, session } = this.props;
 
     let curProject = project.item || {};
     let recentProjects = project.recents;
@@ -88,14 +100,24 @@ export default class Header extends Component {
       modulename = '其他';
     }
 
-    const rHeader = { paddingTop: '0px', color: '#5f5f5f', fontSize: '17px' }; 
+    const headerProject = { paddingTop: '0px', color: '#5f5f5f', fontSize: '17px', textDecoration: 'blink' }; 
+    const headerUser = { paddingTop: '5px', color: '#5f5f5f', textDecoration: 'blink' }; 
+    const avatar = (<img className='no-avatar' src={ no_avatar }/>);
 
     return (
       <div className='head'>
         <span className='show-bar-icon' style={ { display: 'none' } } onClick={ (e) => { this.showBar(e); } } id='show-bar'><i className='fa fa-bars'></i></span>
         <span style={ { color: '#5f5f5f' } }>{ modulename }</span>
         <span style={ { float: 'right', marginRight: '10px' } }>
-          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ rHeader } onSelect={ this.operateSelect.bind(this) }>
+          <DropdownButton pullRight bsStyle='link' title={ avatar } style={ headerUser }>
+            <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
+            <MenuItem divider />
+            <MenuItem eventKey='setting'>个人设置</MenuItem>
+            <MenuItem eventKey='logout'>退出</MenuItem>
+          </DropdownButton>
+        </span>
+        <span style={ { float: 'right' } }>
+          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ headerProject } onSelect={ this.operateSelect.bind(this) }>
             { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }
             { !_.isEmpty(curProject) && <MenuItem divider /> }
             { _.map(recentProjects, (v) => <MenuItem eventKey={ v.key }>{ v.name }</MenuItem> ) }

@@ -54,6 +54,7 @@ class Login extends Component {
   }
 
   static propTypes = {
+    location: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
@@ -82,11 +83,16 @@ class Login extends Component {
   }
 
   async handleSubmit() {
+    const { location: { query={} } } = this.props;
     const { values, actions } = this.props;
     await actions.create(values);
     const { session } = this.props;
     if (session.ecode === 0) {
-      this.context.router.push({ pathname: '/myproject' });    
+      if (query.request_url) {
+        this.context.router.push({ pathname: decodeURI(query.request_url) });    
+      } else {
+        this.context.router.push({ pathname: '/myproject' });    
+      }
     } else {
       this.setState({ alertShow: true });
     }
@@ -98,7 +104,7 @@ class Login extends Component {
     return (
       <div className='login-panel'>
         <div className='login-form'>
-        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
+        <form onSubmit={ handleSubmit(this.handleSubmit) }>
           <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
             <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱/手机号'/>
             { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
