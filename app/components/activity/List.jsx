@@ -6,6 +6,7 @@ import Person from '../share/Person';
 import _ from 'lodash';
 
 const moment = require('moment');
+const no_avatar = require('../../assets/images/no_avatar.png');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
 
@@ -227,9 +228,10 @@ export default class List extends Component {
 
       activities.push({
         id: collection[i].id,
+        avatar: ( <img src={ no_avatar } className='no-avatar'/> ),
         summary: (
           <div>
-            <span style={ { marginRight: '5px' } }>{ user }</span>
+            <span style={ { marginRight: '5px' } }><b>{ collection[i].user.name }</b></span>
 
             { collection[i].event_key == 'create_link'     && <span>创建了问题链接</span> }
             { collection[i].event_key == 'del_link'        && <span>删除了问题链接</span> }
@@ -330,6 +332,7 @@ export default class List extends Component {
         <Button style={ { float: 'right' } } onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i>&nbsp;刷新</Button>
         <BootstrapTable data={ activities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
+          <TableHeaderColumn dataField='avatar' width='40'/>
           <TableHeaderColumn dataField='summary'/>
           <TableHeaderColumn dataField='time' width='100'/>
         </BootstrapTable>

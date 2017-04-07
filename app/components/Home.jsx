@@ -29,7 +29,6 @@ export default class Home extends Component {
     actions: PropTypes.object.isRequired,
     sessionActions: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
-    state: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired
@@ -40,9 +39,14 @@ export default class Home extends Component {
     return this.props.project.ecode;
   }
 
+  async getSess() {
+    await this.props.sessionActions.getSess();
+    return this.props.session.ecode;
+  }
+
   async logout() {
     await this.props.sessionActions.destroy();
-    if (this.props.project.ecode === 0) {
+    if (this.props.session.ecode === 0) {
       notify.show('已退出系统。', 'success', 2000);
       this.context.router.push({ pathname: '/login' });
     }
@@ -53,10 +57,12 @@ export default class Home extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { location: { pathname='' } } = this.props;
+    const { session, location: { pathname='' } } = this.props;
 
     if (nextProps.session.invalid === true) {
-      notify.show('回话过期，请重新登录。', 'warning', 2000);
+      if (session.user.id) {
+        notify.show('回话过期，请重新登录。', 'warning', 2000);
+      }
       if (pathname) {
         this.context.router.push({ pathname: '/login', query: { request_url: encodeURI(pathname) } });
       } else {
@@ -75,6 +81,8 @@ export default class Home extends Component {
           project={ project } 
           pathname={ pathname } 
           recents={ this.recents.bind(this) }
+          getSess={ this.getSess.bind(this) }
+          logout={ this.logout.bind(this) }
           entry={ this.entry.bind(this) }/>
         <Sidebar 
           project={ project } 

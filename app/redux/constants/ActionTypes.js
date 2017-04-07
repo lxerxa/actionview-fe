@@ -1,14 +1,14 @@
 import { generateConstants } from '../utils';
 
 export default generateConstants([
-  'USERS_SHOW',
-  'USERS_CLEAR_ERROR',
-  'USERS_INDEX(ASYNC)',
-
-  'README_LOAD(ASYNC)',
+  'USER_REGISTER(ASYNC)',
+  'USER_PWD_RETRIEVE(ASYNC)',
+  'USER_INDEX(ASYNC)',
+  'USER_SHOW',
 
   'SESSION_CREATE(ASYNC)',
-  'SESSION_DESTROY',
+  'SESSION_DESTROY(ASYNC)',
+  'SESSION_GET(ASYNC)',
   'SESSION_INVALIDATE',
 
   'PROJECT_INDEX(ASYNC)',

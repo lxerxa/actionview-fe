@@ -1,4 +1,4 @@
-export { default as users } from './users';
+export { default as user } from './user';
 export { default as i18n } from './i18n';
 export { default as session } from './session';
 export { default as project } from './project';

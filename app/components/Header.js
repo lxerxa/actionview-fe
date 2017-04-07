@@ -13,6 +13,7 @@ export default class Header extends Component {
   static propTypes = {
     project: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
+    getSess: PropTypes.func.isRequired,
     recents: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
@@ -20,7 +21,10 @@ export default class Header extends Component {
   }
 
   componentWillMount() {
-    const { recents } = this.props;
+    const { recents, session, getSess } = this.props;
+    if (!session.user.id) {
+      getSess();
+    }
     recents();
   }
 
@@ -101,7 +105,7 @@ export default class Header extends Component {
     }
 
     const headerProject = { paddingTop: '0px', color: '#5f5f5f', fontSize: '17px', textDecoration: 'blink' }; 
-    const headerUser = { paddingTop: '5px', color: '#5f5f5f', textDecoration: 'blink' }; 
+    const headerUser = { paddingTop: '4px', color: '#5f5f5f', textDecoration: 'blink' }; 
     const avatar = (<img className='no-avatar' src={ no_avatar }/>);
 
     return (
@@ -109,7 +113,7 @@ export default class Header extends Component {
         <span className='show-bar-icon' style={ { display: 'none' } } onClick={ (e) => { this.showBar(e); } } id='show-bar'><i className='fa fa-bars'></i></span>
         <span style={ { color: '#5f5f5f' } }>{ modulename }</span>
         <span style={ { float: 'right', marginRight: '10px' } }>
-          <DropdownButton pullRight bsStyle='link' title={ avatar } style={ headerUser }>
+          <DropdownButton pullRight bsStyle='link' title={ avatar } style={ headerUser } onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
@@ -117,10 +121,18 @@ export default class Header extends Component {
           </DropdownButton>
         </span>
         <span style={ { float: 'right' } }>
+          <DropdownButton pullRight bsStyle='link' title='系统' id='basic-nav-dropdown' style={ headerProject } onSelect={ this.operateSelect.bind(this) }>
+            <MenuItem eventKey='scheme'>项目类型方案</MenuItem>
+            <MenuItem divider />
+            <MenuItem eventKey='user'>用户</MenuItem>
+            <MenuItem eventKey='project'>项目</MenuItem>
+          </DropdownButton>
+        </span>
+        <span style={ { float: 'right' } }>
           <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ headerProject } onSelect={ this.operateSelect.bind(this) }>
             { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }
             { !_.isEmpty(curProject) && <MenuItem divider /> }
-            { _.map(recentProjects, (v) => <MenuItem eventKey={ v.key }>{ v.name }</MenuItem> ) }
+            { _.map(recentProjects, (v, i) => <MenuItem key={ i } eventKey={ v.key }>{ v.name }</MenuItem> ) }
             { recentProjects.length > 0 && <MenuItem divider /> }
             <MenuItem eventKey='myproject'>项目中心</MenuItem>
           </DropdownButton>

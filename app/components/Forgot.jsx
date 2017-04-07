@@ -7,7 +7,7 @@ import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-b
 const img = require('../assets/images/loading.gif');
 const $ = require('$');
 
-import * as SessionActions from 'redux/actions/SessionActions';
+import * as UserActions from 'redux/actions/UserActions';
 
 const validate = (values) => {
   const errors = {};
@@ -16,29 +16,19 @@ const validate = (values) => {
   } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
     errors.email = '输入格式有误';
   }
-
-  if (!values.password) {
-    errors.password = '密码不能为空';
-  }
   return errors;
 };
 
-function mapStateToProps(state) {
-  return {
-    session: state.session
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(SessionActions, dispatch)
+    actions: bindActionCreators(UserActions, dispatch)
   };
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(({ user }) => ({ user }), mapDispatchToProps)
 @reduxForm({
-  form: 'login',
-  fields: ['email', 'password'],
+  form: 'forgot',
+  fields: [ 'email' ],
   validate
 })
 class Login extends Component {
@@ -55,9 +45,8 @@ class Login extends Component {
 
   static propTypes = {
     location: PropTypes.object.isRequired,
-    session: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
     submitting: PropTypes.bool,
     handleSubmit: PropTypes.func.isRequired,
     invalid: PropTypes.bool,
@@ -67,13 +56,9 @@ class Login extends Component {
 
   componentDidMount() {
     $('input[name=email]').attr('autocomplete', 'Off');
-    $('input[name=password]').attr('autocomplete', 'Off');
 
     const self = this;
     $('input[name=email]').bind('keypress', function() {
-      self.hideAlert();
-    });
-    $('input[name=password]').bind('keypress', function() {
       self.hideAlert();
     });
   }
@@ -83,23 +68,15 @@ class Login extends Component {
   }
 
   async handleSubmit() {
-    const { location: { query={} } } = this.props;
     const { values, actions } = this.props;
-    await actions.create(values);
-    const { session } = this.props;
-    if (session.ecode === 0) {
-      if (query.request_url) {
-        this.context.router.push({ pathname: decodeURI(query.request_url) });    
-      } else {
-        this.context.router.push({ pathname: '/myproject' });    
-      }
-    } else {
+    const ecode = await actions.retrieve(values.email);
+    if (ecode === 0) {
       this.setState({ alertShow: true });
     }
   }
 
   render() {
-    const { fields: { email, password }, handleSubmit, invalid, submitting } = this.props;
+    const { session, fields: { email }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <div className='login-panel'>
@@ -109,17 +86,13 @@ class Login extends Component {
             <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱/手机号'/>
             { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
-            <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
-            { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
-          </FormGroup>
-          <Button bsStyle='success' disabled={ submitting } type='submit'>登  录</Button>
+          <Button bsStyle='success' disabled={ submitting } type='submit'>发送重置密码的邮件</Button>
           <div style={ { textAlign: 'center', height: '40px' } }>
             <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-            { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>登录失败，用户名或密码错误。</div> }
+            { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>抱歉，此邮箱未被注册。</div> }
           </div>
           <div className='login-footer'>
-            <a href='#'>忘记密码</a>
+            <a href='#'>返回登录</a>
             <span className='split'/>
             <a href='#'>用户注册</a>
           </div>
@@ -130,4 +103,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Forgot;

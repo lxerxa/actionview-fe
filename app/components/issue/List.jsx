@@ -469,8 +469,8 @@ export default class List extends Component {
           <PaginationList 
             total={ options.total || 0 } 
             curPage={ query.page || 1 } 
-            sizePerPage={ options.sizePerPage || 5 } 
-            paginationSize={ 5 } 
+            sizePerPage={ options.sizePerPage || 50 } 
+            paginationSize={ 4 } 
             query={ query } refresh={ refresh }/> 
           : '' }
         { this.state.delNotifyShow && 
