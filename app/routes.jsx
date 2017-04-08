@@ -3,6 +3,8 @@ import { Route, IndexRoute } from 'react-router';
 import Layout from './components/Layout';
 import Cover from './components/Cover';
 import Login from './components/Login';
+import Forgot from './components/Forgot';
+import Register from './components/Register';
 import Home from './components/Home';
 import Project from './components/Project';
 import Profile from './components/Profile';
@@ -28,6 +30,8 @@ export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Cover }/>
     <Route path='/login' component={ Login }/>
+    <Route path='/forgot' component={ Forgot }/>
+    <Route path='/register' component={ Register }/>
     <Route path='/home' component={ Home }>
       <IndexRoute component={ ProjectList }/>
       <Route path='/myproject' component={ MyprojectContainer }/>

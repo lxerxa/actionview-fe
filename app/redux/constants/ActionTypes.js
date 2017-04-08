@@ -2,7 +2,7 @@ import { generateConstants } from '../utils';
 
 export default generateConstants([
   'USER_REGISTER(ASYNC)',
-  'USER_PWD_RETRIEVE(ASYNC)',
+  'USER_PWD_RESET(ASYNC)',
   'USER_INDEX(ASYNC)',
   'USER_SHOW',
 

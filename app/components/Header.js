@@ -104,9 +104,9 @@ export default class Header extends Component {
       modulename = '其他';
     }
 
-    const headerProject = { paddingTop: '0px', color: '#5f5f5f', fontSize: '17px', textDecoration: 'blink' }; 
     const headerUser = { paddingTop: '4px', color: '#5f5f5f', textDecoration: 'blink' }; 
     const avatar = (<img className='no-avatar' src={ no_avatar }/>);
+    const sysTitle = (<span><i className='fa fa-cog'></i></span>);
 
     return (
       <div className='head'>
@@ -121,7 +121,7 @@ export default class Header extends Component {
           </DropdownButton>
         </span>
         <span style={ { float: 'right' } }>
-          <DropdownButton pullRight bsStyle='link' title='系统' id='basic-nav-dropdown' style={ headerProject } onSelect={ this.operateSelect.bind(this) }>
+          <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.operateSelect.bind(this) }>
             <MenuItem eventKey='scheme'>项目类型方案</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='user'>用户</MenuItem>
@@ -129,7 +129,7 @@ export default class Header extends Component {
           </DropdownButton>
         </span>
         <span style={ { float: 'right' } }>
-          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ headerProject } onSelect={ this.operateSelect.bind(this) }>
+          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ headerUser } onSelect={ this.operateSelect.bind(this) }>
             { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }
             { !_.isEmpty(curProject) && <MenuItem divider /> }
             { _.map(recentProjects, (v, i) => <MenuItem key={ i } eventKey={ v.key }>{ v.name }</MenuItem> ) }

@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { Link } from 'react-router';
 import { reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -83,6 +84,8 @@ class Login extends Component {
   }
 
   async handleSubmit() {
+    this.setState({ alertShow: false });
+
     const { location: { query={} } } = this.props;
     const { values, actions } = this.props;
     await actions.create(values);
@@ -119,9 +122,9 @@ class Login extends Component {
             { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>登录失败，用户名或密码错误。</div> }
           </div>
           <div className='login-footer'>
-            <a href='#'>忘记密码</a>
+            <Link to='/forgot'>忘记密码</Link>
             <span className='split'/>
-            <a href='#'>用户注册</a>
+            <Link to='/register'>用户注册</Link>
           </div>
           </form>
         </div>

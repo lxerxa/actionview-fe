@@ -17,6 +17,13 @@ const validate = (values) => {
   } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email)) {
     errors.email = '输入格式有误';
   }
+  if (!values.name) {
+    errors.name = '姓名不能为空';
+  }
+  if (!values.password) {
+    errors.password = '密码不能为空';
+  }
+
   return errors;
 };
 
@@ -29,13 +36,13 @@ function mapDispatchToProps(dispatch) {
 @connect(({ user }) => ({ user }), mapDispatchToProps)
 @reduxForm({
   form: 'forgot',
-  fields: [ 'email' ],
+  fields: [ 'email', 'name', 'password' ],
   validate
 })
-class Forgot extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { alertShow: false, emailShow: true };
+    this.state = { ecode: 0, alertShow: false, emailShow: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
   }
@@ -52,6 +59,8 @@ class Forgot extends Component {
 
   componentDidMount() {
     $('input[name=email]').attr('autocomplete', 'Off');
+    $('input[name=name]').attr('autocomplete', 'Off');
+    $('input[name=password]').attr('autocomplete', 'Off');
 
     const self = this;
     $('input[name=email]').bind('keypress', function() {
@@ -67,16 +76,16 @@ class Forgot extends Component {
     this.setState({ alertShow: false });
 
     const { values, actions, user } = this.props;
-    await actions.resetpwd(values.email);
+    await actions.register(values);
     if (user.ecode === 0) {
       this.setState({ emailShow: false });
     } else {
-      this.setState({ alertShow: true });
+      this.setState({ ecode: user.ecode, alertShow: true });
     }
   }
 
   render() {
-    const { fields: { email }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { email, name, password }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <div className='login-panel'>
@@ -87,20 +96,26 @@ class Forgot extends Component {
               <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱'/>
               { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
             </FormGroup>
-            <Button bsStyle='success' disabled={ invalid || submitting } type='submit'>发送重置密码的邮件</Button>
+            <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+              <FormControl disabled={ submitting } type='text' { ...name } placeholder='姓名'/>
+              { name.touched && name.error && <HelpBlock style={ { marginLeft: '5px' } }>{ name.error }</HelpBlock> }
+            </FormGroup>
+            <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
+              <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
+              { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
+            </FormGroup>
+            <Button bsStyle='success' disabled={ invalid || submitting } type='submit'>注  册</Button>
           </form>
           :
           <div className='reset-pwd-msg'>
-            <span>重置密码链接已发送至邮箱。</span>
+            <span>账号激活链接已发送至邮箱。</span>
           </div> }
           <div style={ { textAlign: 'center', height: '40px' } }>
             <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-            { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>抱歉，此邮箱未被注册。</div> }
+            { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>{ this.state.ecode === -10002 ? '此邮箱已被注册。' : '抱歉，注册失败，请重试。' }</div> }
           </div>
           <div className='login-footer'>
             <Link to='/login'>返回登录</Link>
-            <span className='split'/>
-            <Link to='/register'>用户注册</Link>
           </div>
         </div>
       </div>
@@ -108,4 +123,4 @@ class Forgot extends Component {
   }
 }
 
-export default Forgot;
+export default Register;

@@ -13,13 +13,13 @@ export default function users(state = initialState, action) {
     case at.USER_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
 
-    case at.USER_PWD_RETRIEVE:
+    case at.USER_PWD_RESET:
       return { ...state, loading: true };
 
-    case at.USER_PWD_RETRIEVE_SUCCESS:
+    case at.USER_PWD_RESET_SUCCESS:
       return { ...state, ecode: action.result.ecode, loading: false };
 
-    case at.USER_PWD_RETRIEVE_FAIL:
+    case at.USER_PWD_RESET_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case at.USER_REGISTER:
