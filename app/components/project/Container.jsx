@@ -1,18 +1,19 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as MyprojectActions from 'redux/actions/MyprojectActions';
+
+import * as ProjectActions from 'redux/actions/ProjectActions';
 
 const qs = require('qs');
 const List = require('./List');
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(MyprojectActions, dispatch)
+    actions: bindActionCreators(ProjectActions, dispatch)
   };
 }
 
-@connect(({ myproject }) => ({ myproject }), mapDispatchToProps)
+@connect(({ project }) => ({ project }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +25,14 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    myproject: PropTypes.object.isRequired
+    project: PropTypes.object.isRequired
+  }
+
+  refresh(query) {
+    const pathname = '/project';
+    this.context.router.push({ pathname, query });
   }
 
   entry(pathname) {
@@ -33,50 +40,49 @@ export default class Container extends Component {
   }
 
   async index(query) {
+    if (!query.page) { query.page = 1; }
     await this.props.actions.index(qs.stringify(query || {}));
-    return this.props.myproject.ecode;
-  }
-
-  async more(query) {
-    await this.props.actions.more(qs.stringify(query || {}));
-    return this.props.myproject.ecode;
+    return this.props.project.ecode;
   }
 
   async create(values) {
     await this.props.actions.create(values);
-    return this.props.myproject.ecode;
+    return this.props.project.ecode;
   }
 
   async edit(id, values) {
     await this.props.actions.edit(id, values);
-    return this.props.myproject.ecode;
+    return this.props.project.ecode;
   }
 
   async close(id) {
     const { actions } = this.props;
     await actions.close(id);
-    return this.props.myproject.ecode;
+    return this.props.project.ecode;
   }
 
   async reopen(id) {
     const { actions } = this.props;
     await actions.reopen(id);
-    return this.props.myproject.ecode;
+    return this.props.project.ecode;
   }
 
   render() {
+    const { location: { query={} } } = this.props;
+
     return (
       <div className='doc-container'>
         <List 
           index={ this.index.bind(this) } 
-          more={ this.more.bind(this) } 
           entry={ this.entry.bind(this) } 
+          refresh={ this.refresh.bind(this) } 
           create={ this.create.bind(this) } 
           show={ this.props.actions.show } 
           edit={ this.edit.bind(this) } 
           stop={ this.close.bind(this) } 
           reopen={ this.reopen.bind(this) } 
-          { ...this.props.myproject }/>
+          query={ query }
+          { ...this.props.project }/>
       </div>
     );
   }

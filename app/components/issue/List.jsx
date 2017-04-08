@@ -9,7 +9,7 @@ const moment = require('moment');
 const DelNotify = require('./DelNotify');
 const DetailBar = require('./DetailBar');
 const img = require('../../assets/images/loading.gif');
-const PaginationList = require('./PaginationList');
+const PaginationList = require('../share/PaginationList');
 const AddWorklogModal = require('./worklog/AddWorklogModal');
 const CreateModal = require('./CreateModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
@@ -471,7 +471,8 @@ export default class List extends Component {
             curPage={ query.page || 1 } 
             sizePerPage={ options.sizePerPage || 50 } 
             paginationSize={ 4 } 
-            query={ query } refresh={ refresh }/> 
+            query={ query } 
+            refresh={ refresh }/> 
           : '' }
         { this.state.delNotifyShow && 
           <DelNotify show 

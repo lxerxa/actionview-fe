@@ -1,9 +1,9 @@
 import { asyncFuncCreator } from '../utils';
 
-export function index() {
+export function index(qs) {
   return asyncFuncCreator({
     constant: 'PROJECT_INDEX',
-    promise: (client) => client.request({ url: '/project' })
+    promise: (client) => client.request({ url: '/project' + (qs ? '?' + qs : '') })
   });
 }
 
@@ -14,11 +14,29 @@ export function create(values) {
   });
 }
 
-export function show(key) {
+export function edit(id, values) {
   return asyncFuncCreator({
-    constant: 'PROJECT_SHOW',
-    promise: (client) => client.request({ url: '/project/' + key })
+    constant: 'PROJECT_EDIT',
+    promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: values })
   });
+}
+
+export function close(id) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_CLOSE',
+    promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: { status: 'closed' } })
+  });
+}
+
+export function reopen(id) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_REOPEN',
+    promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: { status: 'active' } })
+  });
+}
+
+export function show(id) {
+  return { type: 'PROJECT_SHOW', id: id };
 }
 
 export function recents() {

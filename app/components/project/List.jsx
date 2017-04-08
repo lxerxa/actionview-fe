@@ -8,9 +8,10 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const $ = require('$');
-const CreateModal = require('../project/CreateModal');
-const EditModal = require('../project/EditModal');
-const CloseNotify = require('../project/CloseNotify');
+const PaginationList = require('../share/PaginationList');
+const CreateModal = require('./CreateModal');
+const EditModal = require('./EditModal');
+const CloseNotify = require('./CloseNotify');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -25,7 +26,6 @@ export default class List extends Component {
       willSetPrincipalPids: [], 
       settingPrincipalPids: [],
       principal: {},
-      limit: 3, 
       name: '', 
       status: 'active' };
 
@@ -36,14 +36,14 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    options: PropTypes.object,
     collection: PropTypes.array.isRequired,
-    increaseCollection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
-    moreLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    more: PropTypes.func.isRequired,
+    refresh: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
@@ -54,7 +54,7 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index } = this.props;
-    index({ status: this.state.status, limit: this.state.limit });
+    index({ status: this.state.status });
   }
 
   createModalClose() {
@@ -84,11 +84,11 @@ export default class List extends Component {
     const self = this;
     $('#pname').bind('keypress',function(event){  
       if(event.keyCode == '13') {  
-        const { index } = self.props;
+        const { refresh } = self.props;
         if (_.trim(self.state.name)) {
-          index({ status: self.state.status, name: _.trim(self.state.name), limit: self.state.limit });
+          refresh({ status: self.state.status, name: _.trim(self.state.name) });
         } else {
-          index({ status: self.state.status, limit: self.state.limit });
+          refresh({ status: self.state.status });
         }
       }
     });
@@ -121,11 +121,6 @@ export default class List extends Component {
     } else if (eventKey === '3') {
       this.reopen(hoverRowId);
     }
-  }
-
-  more() {
-    const { more, collection } = this.props;
-    more({ status: this.state.status, name: this.state.name, offset_key: collection[collection.length - 1].key, limit: this.state.limit });
   }
 
   willSetPrincipal(pid) {
@@ -186,9 +181,9 @@ export default class List extends Component {
 
     const { index } = this.props;
     if (_.trim(this.state.name)) {
-      index({ status: newValue, name: _.trim(this.state.name), limit: this.state.limit });
+      index({ status: newValue, name: _.trim(this.state.name) });
     } else {
-      index({ status: newValue, limit: this.state.limit });
+      index({ status: newValue });
     }
   }
 
@@ -201,7 +196,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, edit } = this.props;
+    const { collection, selectedItem, indexLoading, itemLoading, refresh, create, stop, edit, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -319,10 +314,15 @@ export default class List extends Component {
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
         </div>
-        { increaseCollection.length > 0 && increaseCollection.length % this.state.limit === 0 && 
-        <ButtonGroup vertical block>
-          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
-        </ButtonGroup> }
+        { options.total && options.total > 0 ?
+          <PaginationList
+            total={ options.total || 0 }
+            curPage={ query.page || 1 }
+            sizePerPage={ options.sizePerPage || 5 }
+            paginationSize={ 4 }
+            query={ query }
+            refresh={ refresh }/>
+          : '' }
       </div>
     );
   }

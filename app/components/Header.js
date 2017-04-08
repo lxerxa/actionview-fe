@@ -49,8 +49,21 @@ export default class Header extends Component {
     const { entry, logout } = this.props;
 
     if (eventKey === 'setting') {
+      entry('/user/setting');
     } else if (eventKey === 'logout') {
       logout();
+    }
+  }
+
+  sysOperateSelect(eventKey) {
+    const { entry } = this.props;
+
+    if (eventKey === 'project') {
+      entry('/project');
+    } else if (eventKey === 'user') {
+      entry('/user');
+    } else if (eventKey === 'setting') {
+      entry('/sys/setting');
     }
   }
 
@@ -121,11 +134,13 @@ export default class Header extends Component {
           </DropdownButton>
         </span>
         <span style={ { float: 'right' } }>
-          <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.operateSelect.bind(this) }>
+          <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.sysOperateSelect.bind(this) }>
             <MenuItem eventKey='scheme'>项目类型方案</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='user'>用户</MenuItem>
+            <MenuItem eventKey='user'>用户管理</MenuItem>
             <MenuItem eventKey='project'>项目</MenuItem>
+            <MenuItem divider />
+            <MenuItem eventKey='setting'>系统设置</MenuItem>
           </DropdownButton>
         </span>
         <span style={ { float: 'right' } }>
