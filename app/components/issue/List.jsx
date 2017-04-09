@@ -123,7 +123,7 @@ export default class List extends Component {
   componentWillReceiveProps(nextProps) {
     const newQuery = nextProps.query || {};
     const { index, query } = this.props;
-    if (JSON.stringify(newQuery) !== JSON.stringify(query)) {
+    if (!_.isEqual(newQuery, query)) {
       index(newQuery);
     }
   }
@@ -465,7 +465,7 @@ export default class List extends Component {
             convert={ convert }
             resetState={ resetState }
             doAction={ doAction }/> }
-        { options.total && options.total > 0 ? 
+        { !indexLoading && options.total && options.total > 0 ? 
           <PaginationList 
             total={ options.total || 0 } 
             curPage={ query.page || 1 } 

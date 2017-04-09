@@ -67,6 +67,12 @@ export default class Container extends Component {
     return this.props.project.ecode;
   }
 
+  async getOptions() {
+    const { actions } = this.props;
+    await actions.getOptions();
+    return this.props.project.ecode;
+  }
+
   render() {
     const { location: { query={} } } = this.props;
 
@@ -81,6 +87,7 @@ export default class Container extends Component {
           edit={ this.edit.bind(this) } 
           stop={ this.close.bind(this) } 
           reopen={ this.reopen.bind(this) } 
+          getOptions={ this.getOptions.bind(this) } 
           query={ query }
           { ...this.props.project }/>
       </div>

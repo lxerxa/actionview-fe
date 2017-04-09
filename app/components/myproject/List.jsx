@@ -25,7 +25,6 @@ export default class List extends Component {
       willSetPrincipalPids: [], 
       settingPrincipalPids: [],
       principal: {},
-      limit: 3, 
       name: '', 
       status: 'active' };
 
@@ -36,6 +35,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     increaseCollection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
@@ -54,7 +54,7 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index } = this.props;
-    index({ status: this.state.status, limit: this.state.limit });
+    index({ status: this.state.status });
   }
 
   createModalClose() {
@@ -86,9 +86,9 @@ export default class List extends Component {
       if(event.keyCode == '13') {  
         const { index } = self.props;
         if (_.trim(self.state.name)) {
-          index({ status: self.state.status, name: _.trim(self.state.name), limit: self.state.limit });
+          index({ status: self.state.status, name: _.trim(self.state.name) });
         } else {
-          index({ status: self.state.status, limit: self.state.limit });
+          index({ status: self.state.status });
         }
       }
     });
@@ -125,7 +125,7 @@ export default class List extends Component {
 
   more() {
     const { more, collection } = this.props;
-    more({ status: this.state.status, name: this.state.name, offset_key: collection[collection.length - 1].key, limit: this.state.limit });
+    more({ status: this.state.status, name: this.state.name, offset_key: collection[collection.length - 1].key });
   }
 
   willSetPrincipal(pid) {
@@ -186,9 +186,9 @@ export default class List extends Component {
 
     const { index } = this.props;
     if (_.trim(this.state.name)) {
-      index({ status: newValue, name: _.trim(this.state.name), limit: this.state.limit });
+      index({ status: newValue, name: _.trim(this.state.name) });
     } else {
-      index({ status: newValue, limit: this.state.limit });
+      index({ status: newValue });
     }
   }
 
@@ -201,7 +201,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, edit } = this.props;
+    const { collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, edit, options={} } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -284,15 +284,18 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'left', width: '27%' } }>
+            <span style={ { float: 'left', width: '20%' } }>
+              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
+            </span>
+            <span style={ { float: 'right', width: '27%' } }>
               <FormControl
                 type='text'
                 id='pname'
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '项目名称查询...' } />
+                placeholder={ '项目名称键值查询...' } />
             </span>
-            <span style={ { float: 'left', width: '90px', marginLeft: '10px' } }>
+            <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
               <Select
                 simpleValue
                 clearable={ false }
@@ -300,9 +303,6 @@ export default class List extends Component {
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
-            </span>
-            <span style={ { float: 'left', width: '20%', marginLeft: '20px' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span>
           </FormGroup>
         </div>
@@ -319,7 +319,7 @@ export default class List extends Component {
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
         </div>
-        { increaseCollection.length > 0 && increaseCollection.length % this.state.limit === 0 && 
+        { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
         <ButtonGroup vertical block>
           <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
         </ButtonGroup> }

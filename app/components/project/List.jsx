@@ -23,9 +23,10 @@ export default class List extends Component {
       closeNotifyShow: false, 
       operateShow: false, 
       hoverRowId: '', 
+      selectedIds: [],
       willSetPrincipalPids: [], 
       settingPrincipalPids: [],
-      principal: {},
+      principal: '',
       name: '', 
       status: 'active' };
 
@@ -33,10 +34,12 @@ export default class List extends Component {
     this.editModalClose = this.editModalClose.bind(this);
     this.closeNotifyClose = this.closeNotifyClose.bind(this);
     this.entry = this.entry.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   static propTypes = {
     options: PropTypes.object,
+    getOptions: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
@@ -53,8 +56,24 @@ export default class List extends Component {
   }
 
   componentWillMount() {
-    const { index } = this.props;
-    index({ status: this.state.status });
+    const { index, getOptions, query={} } = this.props;
+    if (query.status) this.state.status = query.status;
+    if (query.principal) this.state.principal = query.principal;
+    if (query.name) this.state.name = query.name;
+
+    const newQuery = {};
+    if (this.state.status) {
+      newQuery.status = this.state.status;
+    }
+    if (this.state.principal) {
+      newQuery.principal = this.state.principal;
+    }
+    if (this.state.name) {
+      newQuery.name = this.state.name;
+    }
+    index(newQuery);
+
+    getOptions();
   }
 
   createModalClose() {
@@ -84,14 +103,17 @@ export default class List extends Component {
     const self = this;
     $('#pname').bind('keypress',function(event){  
       if(event.keyCode == '13') {  
-        const { refresh } = self.props;
-        if (_.trim(self.state.name)) {
-          refresh({ status: self.state.status, name: _.trim(self.state.name) });
-        } else {
-          refresh({ status: self.state.status });
-        }
+        self.refresh();
       }
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const newQuery = nextProps.query || {};
+    const { index, query } = this.props;
+    if (!_.isEqual(newQuery, query)) {
+      index(newQuery);
+    }
   }
 
   closeNotify(id) {
@@ -177,14 +199,27 @@ export default class List extends Component {
   }
 
   statusChange(newValue) {
-    this.setState({ status: newValue }); 
+    this.state.status = newValue;
+    this.refresh();
+  }
 
-    const { index } = this.props;
+  principalChange(newValue) {
+    this.state.principal = newValue;
+    this.refresh();
+  }
+
+  refresh() {
+    const { refresh } = this.props;
+    const query = {};
     if (_.trim(this.state.name)) {
-      index({ status: newValue, name: _.trim(this.state.name) });
-    } else {
-      index({ status: newValue });
+      query.name = _.trim(this.state.name);
     }
+    if (this.state.principal) {
+      query.principal = this.state.principal;
+    }
+    query.status = this.state.status;
+
+    refresh(query);
   }
 
   onRowMouseOver(rowData) {
@@ -193,6 +228,35 @@ export default class List extends Component {
 
   onMouseLeave() {
     this.setState({ operateShow: false, hoverRowId: '' });
+  }
+
+  onSelectAll(isSelected, rows) {
+    if (isSelected) {
+      const length = rows.length;
+      for (let i = 0; i < length; i++) {
+        this.state.selectedIds.push(rows[i].id);
+      }
+    } else {
+      this.state.selectedIds = [];
+    }
+    console.log(this.state.selectedIds);
+    this.setState({ selectedIds: this.state.selectedIds });
+  }
+
+  onSelect(row, isSelected) {
+    if (isSelected) {
+      this.state.selectedIds.push(row.id);
+    } else {
+      const newSelectedIds = [];
+      const length = this.state.selectedIds.length;
+      for (let i = 0; i < length; i++) {
+        if (this.state.selectedIds[i] !== row.id) {
+          newSelectedIds.push(this.state.selectedIds[i]);
+        }
+      }
+      this.state.selectedIds = newSelectedIds;
+    }
+    this.setState({ selectedIds: this.state.selectedIds });
   }
 
   render() {
@@ -275,11 +339,18 @@ export default class List extends Component {
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
     opts.onMouseLeave = this.onMouseLeave.bind(this);
 
+    const selectRowProp = {
+      mode: 'checkbox',
+      selected: this.state.selectedIds,
+      onSelect: this.onSelect.bind(this),
+      onSelectAll: this.onSelectAll.bind(this)
+    };
+
     return (
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'left', width: '27%' } }>
+            <span style={ { float: 'right', width: '27%' } }>
               <FormControl
                 type='text'
                 id='pname'
@@ -287,7 +358,7 @@ export default class List extends Component {
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '项目名称查询...' } />
             </span>
-            <span style={ { float: 'left', width: '90px', marginLeft: '10px' } }>
+            <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
               <Select
                 simpleValue
                 clearable={ false }
@@ -296,13 +367,28 @@ export default class List extends Component {
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
             </span>
-            <span style={ { float: 'left', width: '20%', marginLeft: '20px' } }>
+            <span style={ { float: 'right', width: '200px', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='责任人'
+                value={ this.state.principal }
+                onChange={ this.principalChange.bind(this) }
+                options={ _.map(options.principals, (v) => { return { value: v.id, label: v.name + '(' + v.email + ')' } } ) }/>
+            </span>
+            { this.state.selectedIds.length > 0 &&
+            <span style={ { float: 'left', marginRight: '10px' } }>
+              <DropdownButton title='操作'>
+                <MenuItem eventKey='close'>关闭</MenuItem>
+                <MenuItem eventKey='reopen'>重新打开</MenuItem>
+              </DropdownButton>
+            </span> }
+            <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span>
           </FormGroup>
         </div>
         <div>
-          <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+          <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
@@ -314,7 +400,7 @@ export default class List extends Component {
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
         </div>
-        { options.total && options.total > 0 ?
+        { !indexLoading && options.total && options.total > 0 ?
           <PaginationList
             total={ options.total || 0 }
             curPage={ query.page || 1 }

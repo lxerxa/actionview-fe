@@ -97,6 +97,7 @@ export default class Header extends Component {
     const patten1 = new RegExp('^/project/(\\w+)$');
     const patten2 = new RegExp('^/project/(\\w+)/(\\w+)$');
     const patten3 = new RegExp('^/project/(\\w+)/workflow/(\\w+)$');
+    const patten4 = new RegExp('^/project$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -113,6 +114,8 @@ export default class Header extends Component {
       }
     } else if (patten3.exec(pathname)) {
       modulename = '工作流配置';
+    } else if (patten4.exec(pathname)) {
+      modulename = '项目列表';
     } else {
       modulename = '其他';
     }
@@ -138,7 +141,7 @@ export default class Header extends Component {
             <MenuItem eventKey='scheme'>项目类型方案</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='user'>用户管理</MenuItem>
-            <MenuItem eventKey='project'>项目</MenuItem>
+            <MenuItem eventKey='project'>项目管理</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>系统设置</MenuItem>
           </DropdownButton>

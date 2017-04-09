@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], increaseCollection: [], indexLoading: false, loading: false, moreLoading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], increaseCollection: [], indexLoading: false, loading: false, moreLoading: false, itemLoading: false, selectedItem: {}, options: {} };
 
 export default function myproject(state = initialState, action) {
   switch (action.type) {
@@ -9,7 +9,7 @@ export default function myproject(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
 
     case t.MYPROJECT_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, increaseCollection: action.result.data };
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, increaseCollection: action.result.data, options: action.result.options || {} };
 
     case t.MYPROJECT_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };

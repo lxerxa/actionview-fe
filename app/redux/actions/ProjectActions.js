@@ -36,12 +36,22 @@ export function reopen(id) {
 }
 
 export function show(id) {
-  return { type: 'PROJECT_SHOW', id: id };
+  return asyncFuncCreator({
+    constant: 'PROJECT_SHOW',
+    promise: (client) => client.request({ url: '/project/' + id, method: 'get' })
+  });
 }
 
 export function recents() {
   return asyncFuncCreator({
     constant: 'PROJECT_RECENTS',
     promise: (client) => client.request({ url: '/myproject' + '?status=active&limit=5' })
+  });
+}
+
+export function getOptions() {
+  return asyncFuncCreator({
+    constant: 'PROJECT_OPTIONS',
+    promise: (client) => client.request({ url: '/project/options' })
   });
 }

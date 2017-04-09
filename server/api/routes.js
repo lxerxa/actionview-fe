@@ -27,13 +27,24 @@ export default function(router) {
   });
 
   router.get('/myproject', function(req, res) {
+    const startTime = new Date().getTime(); 
+    while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [{ id: '1111', name: '社交化项目管理系统', description: 'aaaabbbbccc测试测试测试测试测试测试测测试时测试测试测试测试测试测试', key: 'SPMS', creator: '卢红兵', create_time: 144444, principal: { id: 'zzz', nameAndEmail:'liuxu@aa.com', name: '刘旭' } },{ id: '2222', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444, principal: { id: 'zzz', name: '刘旭' } },{ id: '3333', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444, principal: { id: 'zzz', name: '刘旭' } },{ id: '4444', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444, principal: { id: 'zzz', name: '王世喜' }}] };
     return res.status(200).send(results);
   });
 
   router.get('/project', function(req, res) {
-    const results = { ecode: 0, data: [{ id: '546761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5s46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54r676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5i46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54aa676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '54bgg6761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 }], options: { 'total': 8 } };
+    const startTime = new Date().getTime(); 
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5s46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54r676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5i46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54aa676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '54bgg6761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 }], options: { 'total': 8 } };
 
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/options', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode:0, data: { principals: [{ id: '111', name: '1111', email: 'aa@aa.aa' }, { id: '222', name: '2222', email: 'aa@aa.aa' }, { id: '333', name: '3333', email: 'aa@aa.aa' }, { id: '444', name: '4444', email: 'aa@aa.aa' } ]} };
     return res.status(200).send(results);
   });
 

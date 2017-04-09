@@ -6,14 +6,24 @@ const initialState = { ecode: 0, collection: [], indexLoading: false, itemLoadin
 export default function project(state = initialState, action) {
   switch (action.type) {
     case t.PROJECT_INDEX:
-      return { ...state, indexLoading: true };
+      return { ...state, indexLoading: true, collection: [] };
 
     case t.PROJECT_INDEX_SUCCESS:
       _.assign(state.options, action.result.options || {});
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, item: {} };
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
 
     case t.PROJECT_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
+
+    case t.PROJECT_OPTIONS:
+      return { ...state, loading: true };
+
+    case t.PROJECT_OPTIONS_SUCCESS:
+      _.assign(state.options, action.result.data || {});
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.PROJECT_OPTIONS_FAIL:
+      return { ...state, loading: false, error: action.error };
 
     case t.PROJECT_RECENTS:
       return { ...state, recentsLoading: true };
@@ -35,8 +45,15 @@ export default function project(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.PROJECT_SHOW:
-      const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: el };
+      return { ...state, loading: true };
+
+    case t.PROJECT_SHOW_SUCCESS:
+      const newRecents = _.reject(state.recents, { key: action.result.data.key });
+      newRecents.unshift(action.result.data);
+      return { ...state, loading: false, ecode: action.result.ecode, item: action.result.data, recents: newRecents, options: action.result.options };
+
+    case t.PROJECT_SHOW_FAIL:
+      return { ...state, loading: false, error: action.error };
 
     case t.PROJECT_EDIT:
       return { ...state, loading: true };
