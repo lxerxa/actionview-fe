@@ -14,15 +14,15 @@ export function create(key, values) {
   });
 }
 
-export function edit(key, values) {
+export function update(key, values) {
   return asyncFuncCreator({
-    constant: 'EVENTS_EDIT',
+    constant: 'EVENTS_UPDATE',
     promise: (client) => client.request({ url: '/project/' + key + '/events/' + values.id, method: 'put', data: values })
   });
 }
 
-export function show(id) {
-  return { type: 'EVENTS_SHOW', id: id };
+export function select(id) {
+  return { type: 'EVENTS_SELECT', id: id };
 }
 
 export function del(key, id) {

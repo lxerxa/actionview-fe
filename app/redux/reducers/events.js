@@ -26,20 +26,20 @@ export default function resolution(state = initialState, action) {
     case t.EVENTS_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.EVENTS_EDIT:
+    case t.EVENTS_UPDATE:
       return { ...state, loading: true };
 
-    case t.EVENTS_EDIT_SUCCESS:
+    case t.EVENTS_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
-    case t.EVENTS_EDIT_FAIL:
+    case t.EVENTS_UPDATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.EVENTS_SHOW:
+    case t.EVENTS_SELECT:
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: el };
 

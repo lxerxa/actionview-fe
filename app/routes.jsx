@@ -24,7 +24,7 @@ const PriorityContainer = require('./components/priority/Container');
 const RoleContainer = require('./components/role/Container');
 const EventsContainer = require('./components/events/Container');
 const ActivityContainer = require('./components/activity/Container');
-const MyprojectContainer = require('./components/myproject/Container');
+//const MyprojectContainer = require('./components/myproject/Container');
 const ProjectContainer = require('./components/project/Container');
 
 export default (
@@ -36,7 +36,7 @@ export default (
     <Route path='/home' component={ Home }>
       <IndexRoute component={ ProjectList }/>
       <Route path='/project' component={ ProjectContainer }/>
-      <Route path='/myproject' component={ MyprojectContainer }/>
+      <Route path='/myproject' component={ ProjectContainer }/>
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
         <Route path='profile' component={ Profile }/>

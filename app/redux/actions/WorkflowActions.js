@@ -14,15 +14,15 @@ export function create(key, values) {
   });
 }
 
-export function edit(key, values) {
+export function update(key, values) {
   return asyncFuncCreator({
-    constant: 'WORKFLOW_EDIT',
+    constant: 'WORKFLOW_UPDATE',
     promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + values.id, method: 'put', data: values })
   });
 }
 
-export function show(id) {
-  return { type: 'WORKFLOW_SHOW', id: id };
+export function select(id) {
+  return { type: 'WORKFLOW_SELECT', id: id };
 }
 
 export function delNotify(id) {

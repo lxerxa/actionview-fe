@@ -48,9 +48,9 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     reopen: PropTypes.func.isRequired,
     stop: PropTypes.func.isRequired
   }
@@ -88,10 +88,10 @@ export default class List extends Component {
     this.setState({ closeNotifyShow: false });
   }
 
-  show(id) {
+  edit(id) {
     this.setState({ editModalShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   entry(key) {
@@ -118,13 +118,13 @@ export default class List extends Component {
 
   closeNotify(id) {
     this.setState({ closeNotifyShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   async reopen(id) {
-    const { show, reopen } = this.props;
-    show(id);
+    const { select, reopen } = this.props;
+    select(id);
     const ecode = await reopen(id);
     if (ecode === 0) {
       notify.show('项目已打开。', 'success', 2000);    
@@ -137,7 +137,7 @@ export default class List extends Component {
     const { hoverRowId } = this.state;
 
     if (eventKey === '1') {
-      this.show(hoverRowId);
+      this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.closeNotify(hoverRowId);
     } else if (eventKey === '3') {
@@ -163,8 +163,8 @@ export default class List extends Component {
     this.state.settingPrincipalPids.push(pid);
     this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
 
-    const { edit, collection } = this.props;
-    const ecode = await edit(pid, { principal: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
+    const { update, collection } = this.props;
+    const ecode = await update(pid, { principal: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetPrincipalPids.indexOf(pid);
       this.state.willSetPrincipalPids.splice(willSetIndex, 1);
@@ -260,7 +260,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, indexLoading, itemLoading, refresh, create, stop, edit, options, query } = this.props;
+    const { collection, selectedItem, indexLoading, itemLoading, refresh, create, stop, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -396,7 +396,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+          { this.state.editModalShow && <EditModal show close={ this.editModalClose } updata={ update } data={ selectedItem }/> }
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
         </div>

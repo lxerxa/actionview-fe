@@ -15,25 +15,25 @@ export default class DelNotify extends Component {
   static propTypes = {
     close: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     operation: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, del, edit, data, operation, loading } = this.props;
+    const { close, del, update, data, operation, loading } = this.props;
     let ecode = 0;
 
     if (operation == 'disable') {
-      ecode = await edit({ id: data.id, disabled: true });
+      ecode = await update({ id: data.id, disabled: true });
       if (ecode === 0) {
         notify.show('禁用成功。', 'success', 2000);
       } else {
         notify.show('禁用失败。', 'error', 2000);
       }
     } else if (operation == 'enable') {
-      ecode = await edit({ id: data.id, disabled: false });
+      ecode = await update({ id: data.id, disabled: false });
       if (ecode === 0) {
         notify.show('启用成功。', 'success', 2000);
       } else {

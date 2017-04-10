@@ -38,8 +38,8 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     config: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
@@ -72,9 +72,9 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { show } = this.props;
+    const { select } = this.props;
 
-    show(hoverRowId);
+    select(hoverRowId);
     eventKey === '1' && this.setState({ editModalShow: true });
     eventKey === '2' && this.setState({ delNotifyShow : true });
     eventKey === '3' && this.setState({ layoutConfigShow: true });
@@ -91,7 +91,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, options, loading, indexLoading, itemLoading, del, edit, create } = this.props;
+    const { collection, selectedItem, options, loading, indexLoading, itemLoading, del, update, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -146,11 +146,11 @@ export default class List extends Component {
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ selectedItem } config={ edit } options= { options } loading={ loading }/> }
-        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }
+        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ selectedItem } config={ update } options= { options } loading={ loading }/> }
+        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ selectedItem } config={ update } loading={ loading }/> }
       </div>
     );
   }

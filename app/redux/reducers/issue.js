@@ -1,7 +1,35 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], itemData: {}, options: {}, indexLoading: false, visitedCollection: [], visitedIndex: -1, optionsLoading: false, searchLoading: false, searcherLoading: false, loading: false, itemLoading: false, fileLoading: false, selectedItem: {}, commentsCollection: [], commentsIndexLoading: false, commentsLoading: false, commentsItemLoading: false, commentsLoaded: false, historyCollection: [], historyIndexLoading: false, historyLoaded: false, worklogCollection: [], worklogIndexLoading: false, worklogLoading: false, worklogLoaded: false, worklogOptions: {}, linkLoading: false };
+const initialState = { 
+  ecode: 0, 
+  collection: [], 
+  itemData: {}, 
+  options: {}, 
+  indexLoading: false, 
+  visitedCollection: [], 
+  visitedIndex: -1, 
+  optionsLoading: false, 
+  searchLoading: false, 
+  searcherLoading: false, 
+  loading: false, 
+  itemLoading: false, 
+  fileLoading: false, 
+  selectedItem: {}, 
+  commentsCollection: [], 
+  commentsIndexLoading: false, 
+  commentsLoading: false, 
+  commentsItemLoading: false, 
+  commentsLoaded: false, 
+  historyCollection: [], 
+  historyIndexLoading: false, 
+  historyLoaded: false, 
+  worklogCollection: [], 
+  worklogIndexLoading: false, 
+  worklogLoading: false, 
+  worklogLoaded: false, 
+  worklogOptions: {}, 
+  linkLoading: false };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {

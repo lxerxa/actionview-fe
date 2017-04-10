@@ -14,15 +14,15 @@ export function create(key, values) {
   });
 }
 
-export function edit(key, values) {
+export function update(key, values) {
   return asyncFuncCreator({
-    constant: 'ROLE_EDIT',
+    constant: 'ROLE_UPDATE',
     promise: (client) => client.request({ url: '/project/' + key + '/role/' + values.id, method: 'put', data: values })
   });
 }
 
-export function show(id) {
-  return { type: 'ROLE_SHOW', id: id };
+export function select(id) {
+  return { type: 'ROLE_SELECT', id: id };
 }
 
 export function del(key, id) {

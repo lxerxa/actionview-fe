@@ -14,15 +14,15 @@ export function create(key, values) {
   });
 }
 
-export function edit(key, values) {
+export function update(key, values) {
   return asyncFuncCreator({
-    constant: 'MODULE_EDIT',
+    constant: 'MODULE_UPDATE',
     promise: (client) => client.request({ url: '/project/' + key + '/module/' + values.id, method: 'put', data: values })
   });
 }
 
-export function show(id) {
-  return { type: 'MODULE_SHOW', id: id };
+export function select(id) {
+  return { type: 'MODULE_SELECT', id: id };
 }
 
 export function del(key, id) {

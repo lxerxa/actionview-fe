@@ -14,15 +14,15 @@ export function create(key, values) {
   });
 }
 
-export function edit(key, values) {
+export function update(key, values) {
   return asyncFuncCreator({
-    constant: 'RESOLUTION_EDIT',
+    constant: 'RESOLUTION_UPDATE',
     promise: (client) => client.request({ url: '/project/' + key + '/resolution/' + values.id, method: 'put', data: values })
   });
 }
 
-export function show(id) {
-  return { type: 'RESOLUTION_SHOW', id: id };
+export function select(id) {
+  return { type: 'RESOLUTION_SELECT', id: id };
 }
 
 export function del(key, id) {

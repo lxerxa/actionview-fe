@@ -26,20 +26,20 @@ export default function priority(state = initialState, action) {
     case t.PRIORITY_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.PRIORITY_EDIT:
+    case t.PRIORITY_UPDATE:
       return { ...state, loading: true };
 
-    case t.PRIORITY_EDIT_SUCCESS:
+    case t.PRIORITY_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
-    case t.PRIORITY_EDIT_FAIL:
+    case t.PRIORITY_UPDATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.PRIORITY_SHOW:
+    case t.PRIORITY_SELECT:
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, color: el.color, description: el.description } };
 

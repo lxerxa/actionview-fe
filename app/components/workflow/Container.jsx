@@ -44,8 +44,8 @@ export default class Container extends Component {
     return this.props.workflow.ecode;
   }
 
-  async edit(values) {
-    await this.props.actions.edit(this.pid, values);
+  async update(values) {
+    await this.props.actions.update(this.pid, values);
     return this.props.workflow.ecode;
   }
 
@@ -72,8 +72,8 @@ export default class Container extends Component {
         <List 
           index={ this.index.bind(this) } 
           create={ this.create.bind(this) } 
-          show={ this.props.actions.show } 
-          edit={ this.edit.bind(this) } 
+          select={ this.props.actions.select } 
+          update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           preview={ this.preview.bind(this) } 
           goConfig={ this.goConfig.bind(this) } 

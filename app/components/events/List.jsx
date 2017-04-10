@@ -27,8 +27,8 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -56,26 +56,26 @@ export default class List extends Component {
 
   edit(id) {
     this.setState({ editModalShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   delNotify(id) {
     this.setState({ delNotifyShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   resetNotify(id) {
     this.setState({ resetNotifyShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   config(id) {
     this.setState({ configModalShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   operateSelect(eventKey) {
@@ -101,7 +101,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, del, edit, reset, options } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, del, update, reset, options } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -182,10 +182,10 @@ export default class List extends Component {
           <TableHeaderColumn dataField='notifications'>通知设置</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } collection={ collection }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } collection={ collection }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
         { this.state.resetNotifyShow && <DelNotify show close={ this.resetNotifyClose } data={ selectedItem } reset={ reset }/> }
-        { this.state.configModalShow && <ConfigModal show loading={ loading } close={ this.configModalClose } data={ selectedItem } edit={ edit } options={ options }/> }
+        { this.state.configModalShow && <ConfigModal show loading={ loading } close={ this.configModalClose } data={ selectedItem } update={ update } options={ options }/> }
       </div>
     );
   }

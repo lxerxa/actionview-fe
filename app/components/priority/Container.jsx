@@ -35,8 +35,8 @@ export default class Container extends Component {
     return this.props.priority.ecode;
   }
 
-  async edit(values) {
-    await this.props.actions.edit(this.pid, values);
+  async update(values) {
+    await this.props.actions.update(this.pid, values);
     return this.props.priority.ecode;
   }
 
@@ -64,8 +64,18 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header setDefault={ this.setDefault.bind(this) } setSort={ this.setSort.bind(this) } create={ this.create.bind(this) } { ...this.props.priority }/>
-        <List index={ this.index.bind(this) } show={ this.props.actions.show } edit={ this.edit.bind(this) } del={ this.del.bind(this) } delNotify={ this.props.actions.delNotify } { ...this.props.priority }/>
+        <Header 
+          setDefault={ this.setDefault.bind(this) } 
+          setSort={ this.setSort.bind(this) } 
+          create={ this.create.bind(this) } 
+          { ...this.props.priority }/>
+        <List 
+          index={ this.index.bind(this) } 
+          select={ this.props.actions.select } 
+          update={ this.update.bind(this) } 
+          del={ this.del.bind(this) } 
+          delNotify={ this.props.actions.delNotify } 
+          { ...this.props.priority }/>
       </div>
     );
   }

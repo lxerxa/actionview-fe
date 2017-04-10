@@ -35,8 +35,8 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     preview: PropTypes.func.isRequired,
@@ -66,7 +66,7 @@ export default class List extends Component {
 
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { show, preview, goConfig } = this.props;
+    const { select, preview, goConfig } = this.props;
 
     let ecode = 0;
     if (eventKey === '3') {
@@ -77,7 +77,7 @@ export default class List extends Component {
         this.setState({ previewModalShow: true }); 
       }
     } else {
-      show(hoverRowId);
+      select(hoverRowId);
       eventKey === '1' && this.setState({ editModalShow: true });
       eventKey === '2' && this.setState({ delNotifyShow: true });
       eventKey === '4' && this.setState({ copyModalShow: true });
@@ -93,7 +93,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, itemSteps, del, edit, create } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, itemSteps, del, update, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -147,7 +147,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='step' width='200'>步骤</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
         { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } collection={ itemSteps } name={ selectedItem.name }/> }

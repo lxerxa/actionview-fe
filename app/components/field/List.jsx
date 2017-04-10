@@ -36,8 +36,8 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     config: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -65,9 +65,9 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { show } = this.props;
+    const { select } = this.props;
 
-    show(hoverRowId);
+    select(hoverRowId);
     eventKey === '1' && this.setState({ editModalShow: true });
     eventKey === '2' && this.setState({ delNotifyShow : true });
     eventKey === '3' && this.setState({ defaultValueConfigShow: true });
@@ -83,7 +83,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, del, edit, options } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, del, update, options } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -151,10 +151,10 @@ export default class List extends Component {
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } options={ options }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }
-        { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ selectedItem } config={ edit } loading={ loading }/> }
+        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ selectedItem } config={ update } loading={ loading }/> }
+        { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ selectedItem } config={ update } loading={ loading }/> }
       </div>
     );
   }

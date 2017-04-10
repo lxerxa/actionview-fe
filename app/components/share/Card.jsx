@@ -82,7 +82,7 @@ export default class Card extends Component {
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
     text: PropTypes.string.isRequired,
-    deleteCard: PropTypes.func.isRequired,
+    deleteCard: PropTypes.func,
     moveCard: PropTypes.func.isRequired
   };
 

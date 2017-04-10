@@ -37,7 +37,7 @@ export default class EditModal extends Component {
     close: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -46,8 +46,8 @@ export default class EditModal extends Component {
   }
 
   async handleSubmit() {
-    const { values, edit, close } = this.props;
-    const ecode = await edit(values);
+    const { values, update, close } = this.props;
+    const ecode = await update(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

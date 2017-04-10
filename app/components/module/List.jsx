@@ -24,8 +24,8 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired
   }
@@ -43,22 +43,22 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  show(id) {
+  edit(id) {
     this.setState({ editModalShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   delNotify(id) {
     this.setState({ delNotifyShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     if (eventKey === '1') {
-      this.show(hoverRowId);
+      this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId);
     }
@@ -90,8 +90,8 @@ export default class List extends Component {
     this.state.settingPrincipalModuleIds.push(moduleId);
     this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
 
-    const { edit } = this.props;
-    const ecode = await edit({ principal: this.state.principal[moduleId], id: moduleId });
+    const { update } = this.props;
+    const ecode = await update({ principal: this.state.principal[moduleId], id: moduleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetPrincipalModuleIds, moduleId);
       this.state.willSetPrincipalModuleIds.splice(willSetIndex, 1);
@@ -133,8 +133,8 @@ export default class List extends Component {
     this.state.settingDefaultAssigneeModuleIds.push(moduleId);
     this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
 
-    const { edit } = this.props;
-    const ecode = await edit({ defaultAssignee: this.state.defaultAssignee[moduleId], id: moduleId });
+    const { update } = this.props;
+    const ecode = await update({ defaultAssignee: this.state.defaultAssignee[moduleId], id: moduleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetDefalutAssigneeModuleIds, moduleId);
       this.state.willSetDefalutAssigneeModuleIds.splice(willSetIndex, 1);
@@ -159,7 +159,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, options, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, options, indexLoading, itemLoading, del, update } = this.props;
     const { hoverRowId, operateShow, willSetPrincipalModuleIds, settingPrincipalModuleIds, willSetDefalutAssigneeModuleIds, settingDefaultAssigneeModuleIds } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -270,7 +270,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='defaultAssignee'>默认经办人</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } options={ options } collection={ collection }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options } collection={ collection }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );

@@ -26,20 +26,20 @@ export default function workflow(state = initialState, action) {
     case t.WORKFLOW_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.WORKFLOW_EDIT:
+    case t.WORKFLOW_UPDATE:
       return { ...state, loading: true };
 
-    case t.WORKFLOW_EDIT_SUCCESS:
+    case t.WORKFLOW_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
-    case t.WORKFLOW_EDIT_FAIL:
+    case t.WORKFLOW_UPDATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.WORKFLOW_SHOW:
+    case t.WORKFLOW_SELECT:
       return { ...state, itemLoading: false, selectedItem: _.find(state.collection, { id: action.id }) };
 
     case t.WORKFLOW_DELETE:

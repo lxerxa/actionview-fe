@@ -26,20 +26,20 @@ export default function field(state = initialState, action) {
     case t.FIELD_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.FIELD_EDIT:
+    case t.FIELD_UPDATE:
       return { ...state, loading: true };
 
-    case t.FIELD_EDIT_SUCCESS:
+    case t.FIELD_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = _.assign(state.collection[ind], action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
-    case t.FIELD_EDIT_FAIL:
+    case t.FIELD_UPDATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.FIELD_SHOW:
+    case t.FIELD_SELECT:
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: el };
 

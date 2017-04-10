@@ -1,12 +1,12 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], indexLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], indexLoading: false, increaseCollection: [], moreLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
 
 export default function project(state = initialState, action) {
   switch (action.type) {
     case t.PROJECT_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
 
     case t.PROJECT_INDEX_SUCCESS:
       _.assign(state.options, action.result.options || {});
@@ -14,6 +14,15 @@ export default function project(state = initialState, action) {
 
     case t.PROJECT_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
+
+    case t.PROJECT_MORE:
+      return { ...state, moreLoading: true };
+
+    case t.PROJECT_MORE_SUCCESS:
+      return { ...state, moreLoading: false, ecode: action.result.ecode, collection: state.collection.concat(action.result.data), increaseCollection: action.result.data };
+
+    case t.PROJECT_MORE_FAIL:
+      return { ...state, moreLoading: false, error: action.error };
 
     case t.PROJECT_OPTIONS:
       return { ...state, loading: true };
@@ -74,6 +83,10 @@ export default function project(state = initialState, action) {
     case t.PROJECT_REOPEN_FAIL:
     case t.PROJECT_EDIT_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.PROJECT_SELECT:
+      const el = _.find(state.collection, { id: action.id });
+      return { ...state, selectedItem: el };
 
     default:
       return state;

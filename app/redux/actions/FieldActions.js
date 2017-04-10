@@ -14,15 +14,15 @@ export function create(key, values) {
   });
 }
 
-export function edit(key, values) {
+export function update(key, values) {
   return asyncFuncCreator({
-    constant: 'FIELD_EDIT',
+    constant: 'FIELD_UPDATE',
     promise: (client) => client.request({ url: '/project/' + key + '/field/' + values.id, method: 'put', data: values })
   });
 }
 
-export function show(id) {
-  return { type: 'FIELD_SHOW', id: id };
+export function select(id) {
+  return { type: 'FIELD_SELECT', id: id };
 }
 
 export function del(key, id) {

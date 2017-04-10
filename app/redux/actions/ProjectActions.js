@@ -7,6 +7,20 @@ export function index(qs) {
   });
 }
 
+export function myIndex(qs) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_INDEX',
+    promise: (client) => client.request({ url: '/myproject' + (qs ? '?' + qs : '') })
+  });
+}
+
+export function more(qs) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_MORE',
+    promise: (client) => client.request({ url: '/myproject' + (qs ? '?' + qs : '') })
+  });
+}
+
 export function create(values) {
   return asyncFuncCreator({
     constant: 'PROJECT_CREATE',
@@ -14,9 +28,9 @@ export function create(values) {
   });
 }
 
-export function edit(id, values) {
+export function update(id, values) {
   return asyncFuncCreator({
-    constant: 'PROJECT_EDIT',
+    constant: 'PROJECT_UPDATE',
     promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: values })
   });
 }
@@ -54,4 +68,8 @@ export function getOptions() {
     constant: 'PROJECT_OPTIONS',
     promise: (client) => client.request({ url: '/project/options' })
   });
+}
+
+export function select(id) {
+  return { type: 'PROJECT_SELECT', id: id };
 }

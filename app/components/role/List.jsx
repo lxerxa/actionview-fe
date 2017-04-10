@@ -39,8 +39,8 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -57,23 +57,23 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  show(id) {
+  edit(id) {
     this.setState({ editModalShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   delNotify(id) {
     this.setState({ delNotifyShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
 
     if (eventKey === '1') {
-      this.show(hoverRowId);
+      this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId);
     }
@@ -105,8 +105,8 @@ export default class List extends Component {
     this.state.settingPermissionRoleIds.push(roleId);
     this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
 
-    const { edit, collection } = this.props;
-    const ecode = await edit({ permissions: _.map(this.state.permissions[roleId] || _.find(collection, { id: roleId }).permissions, _.iteratee('value')), id: roleId });
+    const { update, collection } = this.props;
+    const ecode = await update({ permissions: _.map(this.state.permissions[roleId] || _.find(collection, { id: roleId }).permissions, _.iteratee('value')), id: roleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
       this.state.willSetPermissionRoleIds.splice(willSetIndex, 1);
@@ -143,8 +143,8 @@ export default class List extends Component {
     this.state.settingUserRoleIds.push(roleId);
     this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
 
-    const { edit, collection } = this.props;
-    const ecode = await edit({ users: _.map(this.state.users[roleId] || _.find(collection, { id: roleId }).users, _.iteratee('id')), id: roleId });
+    const { update, collection } = this.props;
+    const ecode = await update({ users: _.map(this.state.users[roleId] || _.find(collection, { id: roleId }).users, _.iteratee('id')), id: roleId });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetUserRoleIds.indexOf(roleId);
       this.state.willSetUserRoleIds.splice(willSetIndex, 1);
@@ -184,7 +184,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, indexLoading, itemLoading, del, edit } = this.props;
+    const { collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
     const { willSetPermissionRoleIds, settingPermissionRoleIds, willSetUserRoleIds, settingUserRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -286,7 +286,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );

@@ -26,20 +26,20 @@ export default function type(state = initialState, action) {
     case t.TYPE_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.TYPE_EDIT:
+    case t.TYPE_UPDATE:
       return { ...state, loading: true };
 
-    case t.TYPE_EDIT_SUCCESS:
+    case t.TYPE_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
-    case t.TYPE_EDIT_FAIL:
+    case t.TYPE_UPDATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.TYPE_SHOW:
+    case t.TYPE_SELECT:
       const el = _.find(state.collection, { id: action.id });
       return { ...state, loading: false, selectedItem: el };
 

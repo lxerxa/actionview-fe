@@ -6,6 +6,7 @@ import * as ProjectActions from 'redux/actions/ProjectActions';
 
 const qs = require('qs');
 const List = require('./List');
+const Mylist = require('./Mylist');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -45,13 +46,23 @@ export default class Container extends Component {
     return this.props.project.ecode;
   }
 
+  async myIndex(query) {
+    await this.props.actions.myIndex(qs.stringify(query || {}));
+    return this.props.project.ecode;
+  }
+
+  async more(query) {
+    await this.props.actions.more(qs.stringify(query || {}));
+    return this.props.project.ecode;
+  }
+
   async create(values) {
     await this.props.actions.create(values);
     return this.props.project.ecode;
   }
 
-  async edit(id, values) {
-    await this.props.actions.edit(id, values);
+  async update(id, values) {
+    await this.props.actions.update(id, values);
     return this.props.project.ecode;
   }
 
@@ -67,6 +78,12 @@ export default class Container extends Component {
     return this.props.project.ecode;
   }
 
+  async show(id) {
+    const { actions } = this.props;
+    await actions.show(id);
+    return this.props.project.ecode;
+  }
+
   async getOptions() {
     const { actions } = this.props;
     await actions.getOptions();
@@ -74,22 +91,36 @@ export default class Container extends Component {
   }
 
   render() {
-    const { location: { query={} } } = this.props;
+    const { location: { pathname, query={} } } = this.props;
 
     return (
       <div className='doc-container'>
+        { pathname.indexOf('project') === 1 ?
         <List 
           index={ this.index.bind(this) } 
           entry={ this.entry.bind(this) } 
           refresh={ this.refresh.bind(this) } 
           create={ this.create.bind(this) } 
-          show={ this.props.actions.show } 
-          edit={ this.edit.bind(this) } 
+          show={ this.show.bind(this) } 
+          select={ this.props.actions.select } 
+          update={ this.update.bind(this) } 
           stop={ this.close.bind(this) } 
           reopen={ this.reopen.bind(this) } 
           getOptions={ this.getOptions.bind(this) } 
           query={ query }
           { ...this.props.project }/>
+        :
+        <Mylist
+          index={ this.myIndex.bind(this) }
+          more={ this.more.bind(this) }
+          entry={ this.entry.bind(this) }
+          create={ this.create.bind(this) }
+          select={ this.props.actions.select } 
+          show={ this.show.bind(this) }
+          update={ this.update.bind(this) }
+          stop={ this.close.bind(this) }
+          reopen={ this.reopen.bind(this) }
+          { ...this.props.project }/> }
       </div>
     );
   }

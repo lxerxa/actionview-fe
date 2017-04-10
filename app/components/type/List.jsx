@@ -15,7 +15,6 @@ export default class List extends Component {
     this.state = { editModalShow: false, delNotifyShow: false, willSetScreenTypeIds: [], settingScreenTypeIds: [], willSetWorkflowTypeIds: [], settingWorkflowTypeIds: [] , screen: {}, workflow: {}, operateShow: false, operation: '', hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
-    this.show = this.show.bind(this);
     this.delNotify = this.delNotify.bind(this);
   }
 
@@ -25,8 +24,8 @@ export default class List extends Component {
     loading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired
   }
@@ -44,16 +43,16 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  show(id) {
+  edit(id) {
     this.setState({ editModalShow: true });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   delNotify(id, operation) {
     this.setState({ delNotifyShow: true, operation });
-    const { show } = this.props;
-    show(id);
+    const { select } = this.props;
+    select(id);
   }
 
   willSetScreen(typeId) {
@@ -74,8 +73,8 @@ export default class List extends Component {
     this.state.settingScreenTypeIds.push(typeId);
     this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds });
 
-    const { edit } = this.props;
-    const ecode = await edit({ screen_id: this.state.screen[typeId], id: typeId });
+    const { update } = this.props;
+    const ecode = await update({ screen_id: this.state.screen[typeId], id: typeId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetScreenTypeIds, typeId);
       this.state.willSetScreenTypeIds.splice(willSetIndex, 1);
@@ -113,8 +112,8 @@ export default class List extends Component {
     this.state.settingWorkflowTypeIds.push(typeId);
     this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds });
 
-    const { edit } = this.props;
-    const ecode = await edit({ workflow_id: this.state.workflow[typeId], id: typeId });
+    const { update } = this.props;
+    const ecode = await update({ workflow_id: this.state.workflow[typeId], id: typeId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetWorkflowTypeIds, typeId);
       this.state.willSetWorkflowTypeIds.splice(willSetIndex, 1);
@@ -139,7 +138,7 @@ export default class List extends Component {
     const { hoverRowId } = this.state;
 
     if (eventKey === '1') {
-      this.show(hoverRowId);
+      this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId, 'del');
     } else if (eventKey === '3') {
@@ -158,7 +157,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, options, indexLoading, loading, del, edit } = this.props;
+    const { collection, selectedItem, options, indexLoading, loading, del, update } = this.props;
     const { operateShow, hoverRowId, willSetScreenTypeIds, settingScreenTypeIds, willSetWorkflowTypeIds, settingWorkflowTypeIds } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -273,8 +272,8 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='status'>状态</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } edit={ edit } data={ selectedItem } options={ options } collection={ collection }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } loading={ loading } del={ del } edit={ edit } operation={ this.state.operation }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options } collection={ collection }/> }
+        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } loading={ loading } del={ del } update={ update } operation={ this.state.operation }/> }
       </div>
     );
   }
