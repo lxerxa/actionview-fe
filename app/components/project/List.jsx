@@ -12,6 +12,7 @@ const PaginationList = require('../share/PaginationList');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const CloseNotify = require('./CloseNotify');
+const MultiOperateNotify = require('./MultiOperateNotify');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -22,6 +23,8 @@ export default class List extends Component {
       editModalShow: false, 
       closeNotifyShow: false, 
       operateShow: false, 
+      multiOperateNotifyShow: false,
+      multiOperate: '',
       hoverRowId: '', 
       selectedIds: [],
       willSetPrincipalPids: [], 
@@ -33,6 +36,7 @@ export default class List extends Component {
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.closeNotifyClose = this.closeNotifyClose.bind(this);
+    this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.entry = this.entry.bind(this);
     this.refresh = this.refresh.bind(this);
   }
@@ -43,6 +47,7 @@ export default class List extends Component {
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
@@ -52,6 +57,10 @@ export default class List extends Component {
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     reopen: PropTypes.func.isRequired,
+    createIndex: PropTypes.func.isRequired,
+    multiReopen: PropTypes.func.isRequired,
+    multiStop: PropTypes.func.isRequired,
+    multiCreateIndex: PropTypes.func.isRequired,
     stop: PropTypes.func.isRequired
   }
 
@@ -86,6 +95,10 @@ export default class List extends Component {
 
   closeNotifyClose() {
     this.setState({ closeNotifyShow: false });
+  }
+
+  multiOperateNotifyClose() {
+    this.setState({ multiOperateNotifyShow: false });
   }
 
   edit(id) {
@@ -133,6 +146,17 @@ export default class List extends Component {
     }
   }
 
+  async createIndex(id) {
+    const { select, createIndex } = this.props;
+    select(id);
+    const ecode = await createIndex(id);
+    if (ecode === 0) {
+      notify.show('优化完成。', 'success', 2000);
+    } else {
+      notify.show('优化失败。', 'error', 2000);
+    }
+  }
+
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
 
@@ -142,7 +166,13 @@ export default class List extends Component {
       this.closeNotify(hoverRowId);
     } else if (eventKey === '3') {
       this.reopen(hoverRowId);
+    } else if (eventKey === '4') {
+      this.createIndex(hoverRowId);
     }
+  }
+
+  multiOperateSelect(eventKey) {
+    this.setState({ multiOperateNotifyShow: true, multiOperate: eventKey });
   }
 
   willSetPrincipal(pid) {
@@ -260,7 +290,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, indexLoading, itemLoading, refresh, create, stop, update, options, query } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, multiCreateIndex, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -322,6 +352,7 @@ export default class List extends Component {
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
+              <MenuItem eventKey='4'>重建索引</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -367,7 +398,7 @@ export default class List extends Component {
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
             </span>
-            <span style={ { float: 'right', width: '200px', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '240px', marginRight: '10px' } }>
               <Select
                 simpleValue
                 placeholder='责任人'
@@ -377,9 +408,10 @@ export default class List extends Component {
             </span>
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
-              <DropdownButton title='操作'>
+              <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
                 <MenuItem eventKey='close'>关闭</MenuItem>
                 <MenuItem eventKey='reopen'>重新打开</MenuItem>
+                <MenuItem eventKey='create_index'>重建索引</MenuItem>
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', width: '20%' } }>
@@ -399,6 +431,7 @@ export default class List extends Component {
           { this.state.editModalShow && <EditModal show close={ this.editModalClose } updata={ update } data={ selectedItem }/> }
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
+          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } operate={ this.state.multiOperate } loading={ loading }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

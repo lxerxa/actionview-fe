@@ -49,6 +49,13 @@ export function reopen(id) {
   });
 }
 
+export function createIndex(id) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_CREATEINDEX',
+    promise: (client) => client.request({ url: '/project/' + id + '/createindex' })
+  });
+}
+
 export function show(id) {
   return asyncFuncCreator({
     constant: 'PROJECT_SHOW',
@@ -72,4 +79,28 @@ export function getOptions() {
 
 export function select(id) {
   return { type: 'PROJECT_SELECT', id: id };
+}
+
+export function multiReopen(ids) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_MULTI_REOPEN',
+    ids,
+    promise: (client) => client.request({ url: '/project/batch/status', method: 'post', data: { ids, status: 'active' } })
+  });
+}
+
+export function multiClose(ids) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_MULTI_CLOSE',
+    ids,
+    promise: (client) => client.request({ url: '/project/batch/status', method: 'post', data: { ids, status: 'closed' } })
+  });
+}
+
+export function multiCreateIndex(ids) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_MULTI_CREATEINDEX',
+    ids,
+    promise: (client) => client.request({ url: '/project/batch/createindex', method: 'post', data: { ids } })
+  });
 }

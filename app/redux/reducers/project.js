@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], indexLoading: false, increaseCollection: [], moreLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], loading: false, indexLoading: false, increaseCollection: [], moreLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
 
 export default function project(state = initialState, action) {
   switch (action.type) {
@@ -83,6 +83,37 @@ export default function project(state = initialState, action) {
     case t.PROJECT_REOPEN_FAIL:
     case t.PROJECT_EDIT_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.PROJECT_MULTI_CLOSE:
+    case t.PROJECT_MULTI_REOPEN:
+    case t.PROJECT_MULTI_CREATEINDEX:
+      return { ...state, loading: false };
+
+    case t.PROJECT_MULTI_CLOSE_SUCCESS:
+      if (action.result.ecode === 0) {
+        _.map(state.collection, (v, i) => {
+          if (action.ids.indexOf(v.id) !== -1) {
+            state.collection[i].status = 'closed';
+          }
+        });
+      }
+      return { ...state, loading: true, ecode: action.result.ecode };
+    case t.PROJECT_MULTI_REOPEN_SUCCESS:
+      if (action.result.ecode === 0) {
+        _.map(state.collection, (v, i) => {
+          if (action.ids.indexOf(v.id) !== -1) {
+            state.collection[i].status = 'active';
+          }
+        });
+      }
+      return { ...state, loading: true, ecode: action.result.ecode };
+    case t.PROJECT_MULTI_CREATEINDEX_SUCCESS:
+      return { ...state, loading: false };
+
+    case t.PROJECT_MULTI_CLOSE_FAIL:
+    case t.PROJECT_MULTI_REOPEN_FAIL:
+    case t.PROJECT_MULTI_CREATEINDEX_FAIL:
+      return { ...state, loading: false, error: action.error };
 
     case t.PROJECT_SELECT:
       const el = _.find(state.collection, { id: action.id });

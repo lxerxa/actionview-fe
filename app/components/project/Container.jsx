@@ -78,6 +78,26 @@ export default class Container extends Component {
     return this.props.project.ecode;
   }
 
+  async createIndex(id) {
+    alert('aa');
+  }
+
+  async multiClose(ids) {
+    const { actions } = this.props;
+    await actions.multiClose(ids);
+    return this.props.project.ecode;
+  }
+
+  async multiReopen(ids) {
+    const { actions } = this.props;
+    await actions.multiReopen(ids);
+    return this.props.project.ecode;
+  }
+
+  async multiCreateIndex(ids) {
+    alert('aa');
+  }
+
   async show(id) {
     const { actions } = this.props;
     await actions.show(id);
@@ -106,6 +126,10 @@ export default class Container extends Component {
           update={ this.update.bind(this) } 
           stop={ this.close.bind(this) } 
           reopen={ this.reopen.bind(this) } 
+          createIndex={ this.createIndex.bind(this) }
+          multiStop={ this.multiClose.bind(this) }
+          multiReopen={ this.multiReopen.bind(this) }
+          multiCreateIndex={ this.multiCreateIndex.bind(this) }
           getOptions={ this.getOptions.bind(this) } 
           query={ query }
           { ...this.props.project }/>
@@ -120,6 +144,7 @@ export default class Container extends Component {
           update={ this.update.bind(this) }
           stop={ this.close.bind(this) }
           reopen={ this.reopen.bind(this) }
+          createIndex={ this.createIndex.bind(this) }
           { ...this.props.project }/> }
       </div>
     );

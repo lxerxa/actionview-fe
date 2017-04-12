@@ -1,6 +1,7 @@
 import { generateConstants } from '../utils';
 
 export default generateConstants([
+
   'USER_REGISTER(ASYNC)',
   'USER_PWD_RESET(ASYNC)',
   'USER_INDEX(ASYNC)',
@@ -17,6 +18,10 @@ export default generateConstants([
   'PROJECT_UPDATE(ASYNC)',
   'PROJECT_CLOSE(ASYNC)',
   'PROJECT_REOPEN(ASYNC)',
+  'PROJECT_CREATEINDEX(ASYNC)',
+  'PROJECT_MULTI_CLOSE(ASYNC)',
+  'PROJECT_MULTI_REOPEN(ASYNC)',
+  'PROJECT_MULTI_CREATEINDEX(ASYNC)',
   'PROJECT_SHOW(ASYNC)',
   'PROJECT_SELECT',
   'PROJECT_OPTIONS(ASYNC)',

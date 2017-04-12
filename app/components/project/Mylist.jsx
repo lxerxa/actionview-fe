@@ -49,6 +49,7 @@ export default class List extends Component {
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     reopen: PropTypes.func.isRequired,
+    createIndex: PropTypes.func.isRequired,
     stop: PropTypes.func.isRequired
   }
 
@@ -111,6 +112,17 @@ export default class List extends Component {
     }
   }
 
+  async createIndex(id) {
+    const { select, createIndex } = this.props;
+    select(id);
+    const ecode = await createIndex(id);
+    if (ecode === 0) {
+      notify.show('优化完成。', 'success', 2000);
+    } else {
+      notify.show('优化失败。', 'error', 2000);
+    }
+  }
+
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
 
@@ -120,6 +132,8 @@ export default class List extends Component {
       this.closeNotify(hoverRowId);
     } else if (eventKey === '3') {
       this.reopen(hoverRowId);
+    } else if (eventKey === '4') {
+      this.createIndex(hoverRowId);
     }
   }
 
@@ -263,6 +277,7 @@ export default class List extends Component {
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
+              <MenuItem eventKey='4'>性能优化</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
