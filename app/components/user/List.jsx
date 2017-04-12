@@ -8,9 +8,11 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const $ = require('$');
-const CreateModal = require('../project/CreateModal');
-const EditModal = require('../project/EditModal');
-const CloseNotify = require('../project/CloseNotify');
+const PaginationList = require('../share/PaginationList');
+const CreateModal = require('./CreateModal');
+const EditModal = require('./EditModal');
+const CloseNotify = require('./CloseNotify');
+const MultiOperateNotify = require('./MultiOperateNotify');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -21,41 +23,54 @@ export default class List extends Component {
       editModalShow: false, 
       closeNotifyShow: false, 
       operateShow: false, 
+      multiOperateNotifyShow: false,
+      multiOperate: '',
       hoverRowId: '', 
-      willSetPrincipalPids: [], 
-      settingPrincipalPids: [],
-      principal: {},
+      selectedIds: [],
       name: '', 
       status: 'active' };
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.closeNotifyClose = this.closeNotifyClose.bind(this);
+    this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.entry = this.entry.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   static propTypes = {
-    options: PropTypes.object.isRequired,
+    options: PropTypes.object,
     collection: PropTypes.array.isRequired,
-    increaseCollection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
-    moreLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    more: PropTypes.func.isRequired,
+    refresh: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     reopen: PropTypes.func.isRequired,
-    createIndex: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired
+    stop: PropTypes.func.isRequired,
+    multiReopen: PropTypes.func.isRequired,
+    multiStop: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    const { index } = this.props;
-    index({ status: this.state.status });
+    const { index, getOptions, query={} } = this.props;
+    if (query.status) this.state.status = query.status;
+    if (query.name) this.state.name = query.name;
+
+    const newQuery = {};
+    if (this.state.status) {
+      newQuery.status = this.state.status;
+    }
+    if (this.state.name) {
+      newQuery.name = this.state.name;
+    }
+    index(newQuery);
   }
 
   createModalClose() {
@@ -68,6 +83,10 @@ export default class List extends Component {
 
   closeNotifyClose() {
     this.setState({ closeNotifyShow: false });
+  }
+
+  multiOperateNotifyClose() {
+    this.setState({ multiOperateNotifyShow: false });
   }
 
   edit(id) {
@@ -85,14 +104,17 @@ export default class List extends Component {
     const self = this;
     $('#pname').bind('keypress',function(event){  
       if(event.keyCode == '13') {  
-        const { index } = self.props;
-        if (_.trim(self.state.name)) {
-          index({ status: self.state.status, name: _.trim(self.state.name) });
-        } else {
-          index({ status: self.state.status });
-        }
+        self.refresh();
       }
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const newQuery = nextProps.query || {};
+    const { index, query } = this.props;
+    if (!_.isEqual(newQuery, query)) {
+      index(newQuery);
+    }
   }
 
   closeNotify(id) {
@@ -106,20 +128,9 @@ export default class List extends Component {
     select(id);
     const ecode = await reopen(id);
     if (ecode === 0) {
-      notify.show('项目已打开。', 'success', 2000);    
+      notify.show('用户已启用。', 'success', 2000);    
     } else {
-      notify.show('打开失败。', 'error', 2000);    
-    }
-  }
-
-  async createIndex(id) {
-    const { select, createIndex } = this.props;
-    select(id);
-    const ecode = await createIndex(id);
-    if (ecode === 0) {
-      notify.show('优化完成。', 'success', 2000);
-    } else {
-      notify.show('优化失败。', 'error', 2000);
+      notify.show('启用失败。', 'error', 2000);    
     }
   }
 
@@ -132,78 +143,25 @@ export default class List extends Component {
       this.closeNotify(hoverRowId);
     } else if (eventKey === '3') {
       this.reopen(hoverRowId);
-    } else if (eventKey === '4') {
-      this.createIndex(hoverRowId);
     }
   }
 
-  more() {
-    const { more, collection } = this.props;
-    more({ status: this.state.status, name: this.state.name, offset_key: collection[collection.length - 1].key });
+  multiOperateSelect(eventKey) {
+    this.setState({ multiOperateNotifyShow: true, multiOperate: eventKey });
   }
 
-  willSetPrincipal(pid) {
-    this.state.willSetPrincipalPids.push(pid);
-    this.setState({ willSetPrincipalPids: this.state.willSetPrincipalPids });
-  }
-
-  cancelSetPrincipal(pid) {
-    const index = _.indexOf(this.state.willSetPrincipalPids, pid);
-    this.state.willSetPrincipalPids.splice(index, 1);
-    // clean permission in the state
-    this.state.principal[pid] = undefined;
-
-    this.setState({ willSetPrincipalPids: this.state.willSetPrincipalPids });
-  }
-
-  async setPrincipal(pid) {
-    this.state.settingPrincipalPids.push(pid);
-    this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
-
-    const { update, collection } = this.props;
-    const ecode = await update(pid, { principal: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
-    if (ecode === 0) {
-      const willSetIndex = this.state.willSetPrincipalPids.indexOf(pid);
-      this.state.willSetPrincipalPids.splice(willSetIndex, 1);
-
-      const settingIndex = _.indexOf(this.state.settingPrincipalPids, pid);
-      this.state.settingPrincipalPids.splice(settingIndex, 1);
-
-      this.setState({ willSetPrincipalPids: this.state.willSetPrincipalPids, settingPrincipalPids: this.state.settingPrincipalPids });
-      notify.show('设置完成。', 'success', 2000);
-    }else {
-      const settingIndex = _.indexOf(this.state.settingPrincipalPids, pid);
-      this.state.settingPrincipalPids.splice(settingIndex, 1);
-      this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
-      notify.show('设置失败。', 'error', 2000);
-    }
-  }
-
-  handlePrincipalSelectChange(pid, value) {
-    this.state.principal[pid] = value;
-    this.setState({ principal: this.state.principal });
-  }
-
-  async searchUsers(input) {
-    input = input.toLowerCase();
-    if (!input)
-    {
-      return { options: [] };
-    }
-    const api = new ApiClient;
-    const results = await api.request( { url: '/user?s=' + input } );
-    return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
-  }
-
-  statusChange(newValue) {
-    this.setState({ status: newValue }); 
-
-    const { index } = this.props;
+  refresh() {
+    const { refresh } = this.props;
+    const query = {};
     if (_.trim(this.state.name)) {
-      index({ status: newValue, name: _.trim(this.state.name) });
-    } else {
-      index({ status: newValue });
+      query.name = _.trim(this.state.name);
     }
+    if (this.state.principal) {
+      query.principal = this.state.principal;
+    }
+    query.status = this.state.status;
+
+    refresh(query);
   }
 
   onRowMouseOver(rowData) {
@@ -214,8 +172,41 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
+  onSelectAll(isSelected, rows) {
+    if (isSelected) {
+      const length = rows.length;
+      for (let i = 0; i < length; i++) {
+        this.state.selectedIds.push(rows[i].id);
+      }
+    } else {
+      this.state.selectedIds = [];
+    }
+    console.log(this.state.selectedIds);
+    this.setState({ selectedIds: this.state.selectedIds });
+  }
+
+  onSelect(row, isSelected) {
+    if (isSelected) {
+      this.state.selectedIds.push(row.id);
+    } else {
+      const newSelectedIds = [];
+      const length = this.state.selectedIds.length;
+      for (let i = 0; i < length; i++) {
+        if (this.state.selectedIds[i] !== row.id) {
+          newSelectedIds.push(this.state.selectedIds[i]);
+        }
+      }
+      this.state.selectedIds = newSelectedIds;
+    }
+    this.setState({ selectedIds: this.state.selectedIds });
+  }
+
+  cancelSelected() {
+    this.setState({ selectedIds: [] });
+  }
+
   render() {
-    const { collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, update, options={} } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, multiCreateIndex, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -226,7 +217,6 @@ export default class List extends Component {
     for (let i = 0; i < stateNum; i++) {
       states.push({
         id: collection[i].id,
-        no: i + 1,
         name: ( 
           <div> 
             <a herf='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
@@ -278,7 +268,7 @@ export default class List extends Component {
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
-              <MenuItem eventKey='4'>性能优化</MenuItem>
+              <MenuItem eventKey='4'>重建索引</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -296,20 +286,24 @@ export default class List extends Component {
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
     opts.onMouseLeave = this.onMouseLeave.bind(this);
 
+    const selectRowProp = {
+      mode: 'checkbox',
+      selected: this.state.selectedIds,
+      onSelect: this.onSelect.bind(this),
+      onSelectAll: this.onSelectAll.bind(this)
+    };
+
     return (
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'left', width: '20%' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
-            </span>
             <span style={ { float: 'right', width: '27%' } }>
               <FormControl
                 type='text'
                 id='pname'
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '项目名称键值查询...' } />
+                placeholder={ '项目名称查询...' } />
             </span>
             <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
               <Select
@@ -320,26 +314,50 @@ export default class List extends Component {
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
             </span>
+            <span style={ { float: 'right', width: '240px', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='责任人'
+                value={ this.state.principal }
+                onChange={ this.principalChange.bind(this) }
+                options={ _.map(options.principals, (v) => { return { value: v.id, label: v.name + '(' + v.email + ')' } } ) }/>
+            </span>
+            { this.state.selectedIds.length > 0 &&
+            <span style={ { float: 'left', marginRight: '10px' } }>
+              <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
+                <MenuItem eventKey='close'>关闭</MenuItem>
+                <MenuItem eventKey='reopen'>重新打开</MenuItem>
+                <MenuItem eventKey='create_index'>重建索引</MenuItem>
+              </DropdownButton>
+            </span> }
+            <span style={ { float: 'left', width: '20%' } }>
+              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
+            </span>
           </FormGroup>
         </div>
         <div>
-          <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+          <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
             <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
+          { this.state.editModalShow && <EditModal show close={ this.editModalClose } updata={ update } data={ selectedItem }/> }
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
+          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
         </div>
-        { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
-        <ButtonGroup vertical block>
-          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
-        </ButtonGroup> }
+        { !indexLoading && options.total && options.total > 0 ?
+          <PaginationList
+            total={ options.total || 0 }
+            curPage={ query.page || 1 }
+            sizePerPage={ options.sizePerPage || 5 }
+            paginationSize={ 4 }
+            query={ query }
+            refresh={ refresh }/>
+          : '' }
       </div>
     );
   }

@@ -26,6 +26,7 @@ const EventsContainer = require('./components/events/Container');
 const ActivityContainer = require('./components/activity/Container');
 //const MyprojectContainer = require('./components/myproject/Container');
 const ProjectContainer = require('./components/project/Container');
+const UserContainer = require('./components/project/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -36,6 +37,7 @@ export default (
     <Route path='/home' component={ Home }>
       <IndexRoute component={ ProjectList }/>
       <Route path='/project' component={ ProjectContainer }/>
+      <Route path='/user' component={ UserContainer }/>
       <Route path='/myproject' component={ ProjectContainer }/>
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>

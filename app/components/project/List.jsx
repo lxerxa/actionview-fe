@@ -29,7 +29,8 @@ export default class List extends Component {
       selectedIds: [],
       willSetPrincipalPids: [], 
       settingPrincipalPids: [],
-      principal: '',
+      principal: {},
+      principal_id: '',
       name: '', 
       status: 'active' };
 
@@ -67,15 +68,15 @@ export default class List extends Component {
   componentWillMount() {
     const { index, getOptions, query={} } = this.props;
     if (query.status) this.state.status = query.status;
-    if (query.principal) this.state.principal = query.principal;
+    if (query.principal_id) this.state.principal_id = query.principal_id;
     if (query.name) this.state.name = query.name;
 
     const newQuery = {};
     if (this.state.status) {
       newQuery.status = this.state.status;
     }
-    if (this.state.principal) {
-      newQuery.principal = this.state.principal;
+    if (this.state.principal_id) {
+      newQuery.principal_id = this.state.principal_id;
     }
     if (this.state.name) {
       newQuery.name = this.state.name;
@@ -194,7 +195,7 @@ export default class List extends Component {
     this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
 
     const { update, collection } = this.props;
-    const ecode = await update(pid, { principal: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
+    const ecode = await update(pid, { principal_id: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetPrincipalPids.indexOf(pid);
       this.state.willSetPrincipalPids.splice(willSetIndex, 1);
@@ -234,7 +235,7 @@ export default class List extends Component {
   }
 
   principalChange(newValue) {
-    this.state.principal = newValue;
+    this.state.principal_id = newValue;
     this.refresh();
   }
 
@@ -244,8 +245,8 @@ export default class List extends Component {
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
-    if (this.state.principal) {
-      query.principal = this.state.principal;
+    if (this.state.principal_id) {
+      query.principal_id = this.state.principal_id;
     }
     query.status = this.state.status;
 
@@ -287,6 +288,10 @@ export default class List extends Component {
       this.state.selectedIds = newSelectedIds;
     }
     this.setState({ selectedIds: this.state.selectedIds });
+  }
+
+  cancelSelected() {
+    this.setState({ selectedIds: [] });
   }
 
   render() {
@@ -402,7 +407,7 @@ export default class List extends Component {
               <Select
                 simpleValue
                 placeholder='责任人'
-                value={ this.state.principal }
+                value={ this.state.principal_id }
                 onChange={ this.principalChange.bind(this) }
                 options={ _.map(options.principals, (v) => { return { value: v.id, label: v.name + '(' + v.email + ')' } } ) }/>
             </span>
@@ -431,7 +436,7 @@ export default class List extends Component {
           { this.state.editModalShow && <EditModal show close={ this.editModalClose } updata={ update } data={ selectedItem }/> }
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
-          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } operate={ this.state.multiOperate } loading={ loading }/> }
+          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

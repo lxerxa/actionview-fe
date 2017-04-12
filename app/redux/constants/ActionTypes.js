@@ -3,9 +3,14 @@ import { generateConstants } from '../utils';
 export default generateConstants([
 
   'USER_REGISTER(ASYNC)',
+  'USER_ADD(ASYNC)',
   'USER_PWD_RESET(ASYNC)',
   'USER_INDEX(ASYNC)',
-  'USER_SHOW',
+  'USER_CLOSE(ASYNC)',
+  'USER_REOPEN(ASYNC)',
+  'USER_MULTI_CLOSE(ASYNC)',
+  'USER_MULTI_REOPEN(ASYNC)',
+  'USER_SELECT',
 
   'SESSION_CREATE(ASYNC)',
   'SESSION_DESTROY(ASYNC)',
@@ -157,8 +162,6 @@ export default generateConstants([
 
   'ACTIVITY_INDEX(ASYNC)',
   'ACTIVITY_MORE(ASYNC)',
-
-  'USER_INFO_FETCH(ASYNC)',
 
   'LOCALE_INITIALIZE',
   'LOCALE_CHANGE(ASYNC)'

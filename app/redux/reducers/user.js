@@ -1,35 +1,123 @@
-import at from '../constants/ActionTypes';
+import * as t from '../constants/ActionTypes';
+import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], indexLoading: false, loading: false, itemLoading: false };
+const initialState = { ecode: 0, collection: [], indexLoading: false, increaseCollection: [], moreLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
 
-export default function users(state = initialState, action) {
+export default function project(state = initialState, action) {
   switch (action.type) {
-    case at.USER_INDEX:
-      return { ...state, indexLoading: true };
+    case t.PROJECT_INDEX:
+      return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
 
-    case at.USER_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, collection: action.result.data };
+    case t.PROJECT_INDEX_SUCCESS:
+      _.assign(state.options, action.result.options || {});
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
 
-    case at.USER_INDEX_FAIL:
+    case t.PROJECT_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
 
-    case at.USER_PWD_RESET:
+    case t.PROJECT_MORE:
+      return { ...state, moreLoading: true };
+
+    case t.PROJECT_MORE_SUCCESS:
+      return { ...state, moreLoading: false, ecode: action.result.ecode, collection: state.collection.concat(action.result.data), increaseCollection: action.result.data };
+
+    case t.PROJECT_MORE_FAIL:
+      return { ...state, moreLoading: false, error: action.error };
+
+    case t.PROJECT_OPTIONS:
       return { ...state, loading: true };
 
-    case at.USER_PWD_RESET_SUCCESS:
-      return { ...state, ecode: action.result.ecode, loading: false };
+    case t.PROJECT_OPTIONS_SUCCESS:
+      _.assign(state.options, action.result.data || {});
+      return { ...state, loading: false, ecode: action.result.ecode };
 
-    case at.USER_PWD_RESET_FAIL:
+    case t.PROJECT_OPTIONS_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case at.USER_REGISTER:
+    case t.PROJECT_RECENTS:
+      return { ...state, recentsLoading: true };
+
+    case t.PROJECT_RECENTS_SUCCESS:
+      return { ...state, recentsLoading: false, ecode: action.result.ecode, recents: action.result.data };
+
+    case t.PROJECT_RECENTS_FAIL:
+      return { ...state, recentsLoading: false, error: action.error };
+
+    case t.PROJECT_CREATE:
       return { ...state, loading: true };
 
-    case at.USER_REGISTER_SUCCESS:
-      return { ...state, ecode: action.result.ecode, loading: false };
+    case t.PROJECT_CREATE_SUCCESS:
+      state.collection.unshift(action.result.data);
+      return { ...state, loading: false, ecode: action.result.ecode };
 
-    case at.USER_REGISTER_FAIL:
+    case t.PROJECT_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
+
+    case t.PROJECT_SHOW:
+      return { ...state, loading: true };
+
+    case t.PROJECT_SHOW_SUCCESS:
+      const newRecents = _.reject(state.recents, { key: action.result.data.key });
+      newRecents.unshift(action.result.data);
+      return { ...state, loading: false, ecode: action.result.ecode, item: action.result.data, recents: newRecents, options: action.result.options };
+
+    case t.PROJECT_SHOW_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case t.PROJECT_EDIT:
+      return { ...state, loading: true };
+    case t.PROJECT_CLOSE:
+    case t.PROJECT_REOPEN:
+      return { ...state, itemLoading: true };
+
+    case t.PROJECT_CLOSE_SUCCESS:
+    case t.PROJECT_REOPEN_SUCCESS:
+    case t.PROJECT_EDIT_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.collection, { id: action.result.data.id });
+        state.collection[ind] = action.result.data;
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
+
+    case t.PROJECT_CLOSE_FAIL:
+    case t.PROJECT_REOPEN_FAIL:
+    case t.PROJECT_EDIT_FAIL:
+      return { ...state, itemLoading: false, error: action.error };
+
+    case t.PROJECT_MULTI_CLOSE:
+    case t.PROJECT_MULTI_REOPEN:
+    case t.PROJECT_MULTI_CREATEINDEX:
+      return { ...state, loading: false };
+
+    case t.PROJECT_MULTI_CLOSE_SUCCESS:
+      if (action.result.ecode === 0) {
+        _.map(state.collection, (v, i) => {
+          if (action.ids.indexOf(v.id) !== -1) {
+            state.collection[i].status = 'closed';
+          }
+        });
+      }
+      return { ...state, loading: true, ecode: action.result.ecode };
+    case t.PROJECT_MULTI_REOPEN_SUCCESS:
+      if (action.result.ecode === 0) {
+        _.map(state.collection, (v, i) => {
+          if (action.ids.indexOf(v.id) !== -1) {
+            state.collection[i].status = 'active';
+          }
+        });
+      }
+      return { ...state, loading: true, ecode: action.result.ecode };
+    case t.PROJECT_MULTI_CREATEINDEX_SUCCESS:
+      return { ...state, loading: false };
+
+    case t.PROJECT_MULTI_CLOSE_FAIL:
+    case t.PROJECT_MULTI_REOPEN_FAIL:
+    case t.PROJECT_MULTI_CREATEINDEX_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case t.PROJECT_SELECT:
+      const el = _.find(state.collection, { id: action.id });
+      return { ...state, selectedItem: el };
 
     default:
       return state;

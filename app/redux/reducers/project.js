@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], loading: false, indexLoading: false, increaseCollection: [], moreLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], indexLoading: false, increaseCollection: [], moreLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
 
 export default function project(state = initialState, action) {
   switch (action.type) {
@@ -10,7 +10,7 @@ export default function project(state = initialState, action) {
 
     case t.PROJECT_INDEX_SUCCESS:
       _.assign(state.options, action.result.options || {});
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
+      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, increaseCollection: action.result.data };
 
     case t.PROJECT_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
@@ -64,7 +64,7 @@ export default function project(state = initialState, action) {
     case t.PROJECT_SHOW_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.PROJECT_EDIT:
+    case t.PROJECT_UPDATE:
       return { ...state, loading: true };
     case t.PROJECT_CLOSE:
     case t.PROJECT_REOPEN:
@@ -72,7 +72,7 @@ export default function project(state = initialState, action) {
 
     case t.PROJECT_CLOSE_SUCCESS:
     case t.PROJECT_REOPEN_SUCCESS:
-    case t.PROJECT_EDIT_SUCCESS:
+    case t.PROJECT_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
@@ -81,7 +81,7 @@ export default function project(state = initialState, action) {
 
     case t.PROJECT_CLOSE_FAIL:
     case t.PROJECT_REOPEN_FAIL:
-    case t.PROJECT_EDIT_FAIL:
+    case t.PROJECT_UPDATE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
     case t.PROJECT_MULTI_CLOSE:
