@@ -1,9 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
-import Select from 'react-select';
 import _ from 'lodash';
-import ApiClient from '../../../shared/api-client';
 import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
@@ -14,36 +12,21 @@ const validate = (values, props) => {
     errors.name = '必填';
   } 
 
-  if (!values.key) {
-    errors.key = '必填';
-  } else {
-    const Regex = '^\\w+$';
-    const re = new RegExp(Regex);
-    if (!re.test(values.key)) {
-      errors.key = '需输入英文字符、数字或下划线';
-    }
+  if (!values.email) {
+    errors.email = '必填';
+  } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
+    errors.email = '格式有误';
   } 
+
+  if (values.phone) {
+  }
+
   return errors;
 };
 
-
-const asyncValidate = (values) => {
-  return new Promise(async (resolve, reject) => {
-    const api = new ApiClient;
-    const results = await api.request({ url: '/project/checkkey/' + values.key });
-    if (results.data && results.data.flag == '2') {
-      reject({ key: '键值已被占用' });
-    } else {
-      resolve();
-    }
-  });
-};
-
 @reduxForm({
-  form: 'myproject',
-  fields: ['name', 'key', 'principal', 'description'],
-  asyncValidate,
-  asyncBlurFields: [ 'key' ],
+  form: 'user',
+  fields: [ 'name', 'email', 'phone' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -55,7 +38,6 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
-    asyncValidating: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -86,54 +68,36 @@ export default class CreateModal extends Component {
     close();
   }
 
-  async searchUsers(input) {
-    input = input.toLowerCase();
-    if (!input)
-    {
-      return { options: [] };
-    }
-    const api = new ApiClient;
-    const results = await api.request( { url: '/user?s=' + input } );
-    return { options: _.map(results.data, (val) => { val.name = val.name + '(' + val.email + ')'; return val; }) };
-  }
-
   render() {
-    const { asyncValidating, fields: { name, key, principal, description }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { name, email, phone }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>创建项目</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>添加用户</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>姓名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='项目名'/>
-            <FormControl.Feedback/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ key.touched && key.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值'/>
-            <FormControl.Feedback>
-              { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
-            </FormControl.Feedback>
-            { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
+          <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>邮箱</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...email } placeholder='Email'/>
+            { email.touched && email.error && <HelpBlock style={ { float: 'right' } }>{ email.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>责任人</ControlLabel>
-            <Select.Async simpleValue clearable={ false } disabled={ submitting } options={ [] } value={ principal.value } onChange={ (newValue) => { principal.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchUsers.bind(this) } placeholder='输入责任人(默认创建者)'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='项目描述'/>
+            <ControlLabel>手机</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...phone } placeholder='手机号'/>
+            { phone.touched && phone.error && <HelpBlock style={ { float: 'right' } }>{ phone.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ key.active === true || asyncValidating || submitting || invalid } type='submit'>确定</Button>
+          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>

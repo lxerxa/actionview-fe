@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
-import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -11,17 +10,26 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
+  } 
+
+  if (!values.email) {
+    errors.email = '必填';
+  } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
+    errors.email = '格式有误';
+  } 
+
+  if (values.phone) {
   }
 
   return errors;
 };
 
 @reduxForm({
-  form: 'myproject',
-  fields: ['id', 'name', 'description'],
+  form: 'user',
+  fields: [ 'id', 'name', 'email', 'phone' ],
   validate
 })
-export default class EditModal extends Component {
+export default class CreateModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -39,12 +47,8 @@ export default class EditModal extends Component {
     close: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
-  }
-
-  componentWillMount() {
-    const { initializeForm, data } = this.props;
-    initializeForm(data);
+    update: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
@@ -53,7 +57,7 @@ export default class EditModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('项目已更新。', 'success', 2000);
+      notify.show('用户已更新。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -68,25 +72,36 @@ export default class EditModal extends Component {
     close();
   }
 
+  componentWillMount() {
+    const { initializeForm, data } = this.props;
+    initializeForm(data);
+  }
+
   render() {
-    const { fields: { id, name, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { id, name, email, phone }, dirty, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '编辑项目 - ' + data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>编辑用户</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>姓名</ControlLabel>
             <FormControl type='hidden' { ...id }/>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题状态名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='项目名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>邮箱</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...email } placeholder='Email'/>
+            { email.touched && email.error && <HelpBlock style={ { float: 'right' } }>{ email.error }</HelpBlock> }
+          </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='状态描述'/>
+            <ControlLabel>手机</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...phone } placeholder='手机号'/>
+            { phone.touched && phone.error && <HelpBlock style={ { float: 'right' } }>{ phone.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

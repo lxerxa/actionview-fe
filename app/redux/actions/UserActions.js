@@ -23,7 +23,7 @@ export function index(qs) {
 
 export function create(values) {
   return asyncFuncCreator({
-    constant: 'USER_ADD',
+    constant: 'USER_CREATE',
     promise: (client) => client.request({ url: '/user', method: 'post', data: values })
   });
 }

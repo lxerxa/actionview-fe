@@ -3,7 +3,8 @@ import { generateConstants } from '../utils';
 export default generateConstants([
 
   'USER_REGISTER(ASYNC)',
-  'USER_ADD(ASYNC)',
+  'USER_CREATE(ASYNC)',
+  'USER_UPDATE(ASYNC)',
   'USER_PWD_RESET(ASYNC)',
   'USER_INDEX(ASYNC)',
   'USER_CLOSE(ASYNC)',

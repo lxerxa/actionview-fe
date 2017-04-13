@@ -17,7 +17,7 @@ const validate = (values, props) => {
 };
 
 @reduxForm({
-  form: 'myproject',
+  form: 'project',
   fields: ['id', 'name', 'description'],
   validate
 })

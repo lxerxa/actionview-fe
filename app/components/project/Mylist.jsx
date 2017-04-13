@@ -221,10 +221,10 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const states = [];
-    const stateNum = collection.length;
-    for (let i = 0; i < stateNum; i++) {
-      states.push({
+    const projects = [];
+    const projectNum = collection.length;
+    for (let i = 0; i < projectNum; i++) {
+      projects.push({
         id: collection[i].id,
         no: i + 1,
         name: ( 
@@ -323,7 +323,7 @@ export default class List extends Component {
           </FormGroup>
         </div>
         <div>
-          <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+          <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>

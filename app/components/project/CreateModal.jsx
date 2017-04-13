@@ -40,7 +40,7 @@ const asyncValidate = (values) => {
 };
 
 @reduxForm({
-  form: 'myproject',
+  form: 'project',
   fields: ['name', 'key', 'principal', 'description'],
   asyncValidate,
   asyncBlurFields: [ 'key' ],

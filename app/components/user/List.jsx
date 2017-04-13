@@ -34,7 +34,6 @@ export default class List extends Component {
     this.editModalClose = this.editModalClose.bind(this);
     this.closeNotifyClose = this.closeNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
-    this.entry = this.entry.bind(this);
     this.refresh = this.refresh.bind(this);
   }
 
@@ -48,7 +47,6 @@ export default class List extends Component {
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
-    entry: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
@@ -59,7 +57,7 @@ export default class List extends Component {
   }
 
   componentWillMount() {
-    const { index, getOptions, query={} } = this.props;
+    const { index, query={} } = this.props;
     if (query.status) this.state.status = query.status;
     if (query.name) this.state.name = query.name;
 
@@ -95,15 +93,10 @@ export default class List extends Component {
     select(id);
   }
 
-  entry(key) {
-    const { entry } = this.props;
-    entry('/project/' + key); 
-  }
-
   componentDidMount() {
     const self = this;
-    $('#pname').bind('keypress',function(event){  
-      if(event.keyCode == '13') {  
+    $('#uname').bind('keypress',function(event) { 
+      if(event.keyCode == '13') {
         self.refresh();
       }
     });
@@ -148,6 +141,11 @@ export default class List extends Component {
 
   multiOperateSelect(eventKey) {
     this.setState({ multiOperateNotifyShow: true, multiOperate: eventKey });
+  }
+
+  statusChange(newValue) {
+    this.state.status = newValue;
+    this.refresh();
   }
 
   refresh() {
@@ -206,7 +204,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, multiCreateIndex, update, options, query } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -217,58 +215,16 @@ export default class List extends Component {
     for (let i = 0; i < stateNum; i++) {
       states.push({
         id: collection[i].id,
-        name: ( 
-          <div> 
-            <a herf='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
-            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
-          </div> ),
-        key: collection[i].key,
-        principal: (
-          <div>
-          { _.indexOf(willSetPrincipalPids, collection[i].id) === -1 && _.indexOf(settingPrincipalPids, collection[i].id) === -1 ?
-            <div className='editable-list-field'>
-              <div style={ { display: 'table', width: '100%' } }>
-              { collection[i].principal ?
-                <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
-                    { collection[i].principal.name || '-' }
-                  </div>
-                </span>
-                :
-                '-' }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
-              </div>
-            </div>
-            :
-            <div>
-              <Select.Async 
-                clearable={ false } 
-                disabled={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 && true } 
-                options={ [] } 
-                value={ this.state.principal[collection[i].id] || collection[i].principal } 
-                onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } 
-                valueKey='id' 
-                labelKey='nameAndEmail' 
-                loadOptions={ this.searchUsers } 
-                placeholder='请输入用户'/>
-              <div className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
-                <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
-              </div>
-            </div>
-          }
-          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
-          </div>
-        ),
-
+        name: collection[i].name,
+        email: collection[i].email,
+        phone: collection[i].phone,
         status: collection[i].status == 'active' ? '活动中' : '已关闭',
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
-              <MenuItem eventKey='4'>重建索引</MenuItem>
+              { collection[i].status == 'active' ? <MenuItem eventKey='2'>禁用</MenuItem> : <MenuItem eventKey='3'>启用</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -300,60 +256,51 @@ export default class List extends Component {
             <span style={ { float: 'right', width: '27%' } }>
               <FormControl
                 type='text'
-                id='pname'
+                id='uname'
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '项目名称查询...' } />
+                placeholder={ '用户姓名、邮箱、手机号查询...' } />
             </span>
             <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
               <Select
                 simpleValue
                 clearable={ false }
-                placeholder='项目状态'
+                placeholder='用户状态'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
-            </span>
-            <span style={ { float: 'right', width: '240px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='责任人'
-                value={ this.state.principal }
-                onChange={ this.principalChange.bind(this) }
-                options={ _.map(options.principals, (v) => { return { value: v.id, label: v.name + '(' + v.email + ')' } } ) }/>
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '启用' }, { value: 'closed', label: '已禁用' }] }/>
             </span>
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                <MenuItem eventKey='close'>关闭</MenuItem>
-                <MenuItem eventKey='reopen'>重新打开</MenuItem>
-                <MenuItem eventKey='create_index'>重建索引</MenuItem>
+                <MenuItem eventKey='close'>禁用</MenuItem>
+                <MenuItem eventKey='reopen'>启用</MenuItem>
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', width: '20%' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
+              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
             </span>
           </FormGroup>
         </div>
         <div>
           <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-            <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
-            <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
+            <TableHeaderColumn dataField='name'>姓名</TableHeaderColumn>
+            <TableHeaderColumn dataField='email'>邮箱</TableHeaderColumn>
+            <TableHeaderColumn dataField='phone'>手机号</TableHeaderColumn>
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } updata={ update } data={ selectedItem }/> }
+          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
-          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
+          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList
             total={ options.total || 0 }
             curPage={ query.page || 1 }
-            sizePerPage={ options.sizePerPage || 5 }
+            sizePerPage={ options.sizePerPage || 30 }
             paginationSize={ 4 }
             query={ query }
             refresh={ refresh }/>

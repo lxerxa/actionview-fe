@@ -35,7 +35,7 @@ function mapDispatchToProps(dispatch) {
 
 @connect(({ user }) => ({ user }), mapDispatchToProps)
 @reduxForm({
-  form: 'forgot',
+  form: 'register',
   fields: [ 'email', 'name', 'password' ],
   validate
 })

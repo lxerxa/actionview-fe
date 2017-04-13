@@ -47,7 +47,9 @@ export default function project(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.PROJECT_CREATE_SUCCESS:
-      state.collection.unshift(action.result.data);
+      if ( action.result.ecode === 0 ) { 
+        state.collection.unshift(action.result.data);
+      }
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.PROJECT_CREATE_FAIL:

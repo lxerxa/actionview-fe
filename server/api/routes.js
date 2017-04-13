@@ -26,6 +26,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/user', function(req, res) {
+    const startTime = new Date().getTime(); 
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', name: '刘旭111', email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'}, {id: '111122', name: '刘旭111',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'},  { id: '111111', name: '刘旭11331',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'}, { id: '11133111', name: '刘旭111333', email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'closed'} ] };
+    return res.status(200).send(results);
+  });
+
   router.get('/myproject', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
