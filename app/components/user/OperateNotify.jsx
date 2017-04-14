@@ -2,9 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 
-const img = require('../../assets/images/loading.gif');
-
-export default class MultiOperateNotify extends Component {
+export default class OperateNotify extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -13,72 +11,58 @@ export default class MultiOperateNotify extends Component {
   }
 
   static propTypes = {
-    ids: PropTypes.array.isRequired,
-    loading: PropTypes.bool.isRequired,
-    operate: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
-    cancelSelected: PropTypes.func.isRequired,
-    multiRenew: PropTypes.func.isRequired,
-    multiDel: PropTypes.func.isRequired
+    operate: PropTypes.string.isRequired,
+    renew: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { multiRenew, multiDel, cancelSelected, ids=[], operate, close } = this.props;
-
-    if (ids.length <= 0) {
-      return;
-    }
+    const { close, operate, renew, del, data } = this.props;
+    close();
 
     let ecode = 0, msg = '';
-    if (operate == 'renew') {
-      ecode = await multiRenew(ids);
+    if (operate === 'renew') {
+      ecode = await renew(data.id);
       msg = '密码已重置。'; 
-    } else if (operate == 'del') {
-      ecode = await multiDel(ids);
+    } else {
+      ecode = await del(data.id);
       msg = '用户已删除。'; 
     }
     if (ecode === 0) {
-      close();
-      cancelSelected();
       notify.show(msg, 'success', 2000);    
     } else {
       notify.show('操作失败。', 'error', 2000);    
     }
-    this.setState({ ecode: ecode });
   }
 
   cancel() {
-    const { close, loading } = this.props;
-    if (loading) {
-      return;
-    }
-    this.setState({ ecode: 0 });
+    const { close } = this.props;
     close();
   }
 
   render() {
-    const { operate, loading } = this.props;
+    const { operate, data } = this.props;
     const operateTitle = operate === 'renew' ? '密码重置' : '用户删除';
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>批处理用户 - { operateTitle }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ operateTitle } - { data.name }</Modal.Title>
         </Modal.Header>
         { operate === 'renew' && 
         <Modal.Body>
-          是否重置选中用户的密码？
+          是否重置该用户的密码？
         </Modal.Body> }
         { operate === 'del' && 
         <Modal.Body>
           用户被删除后，项目中的用户也同时被删除。<br/>
-          是否要删除选中的用户？
+          是否删除该用户？
         </Modal.Body> }
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
-          <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

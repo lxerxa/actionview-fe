@@ -35,17 +35,18 @@ export function update(id, values) {
   });
 }
 
-export function close(id) {
+export function del(id) {
   return asyncFuncCreator({
-    constant: 'USER_CLOSE',
-    promise: (client) => client.request({ url: '/user/' + id, method: 'put', data: { status: 'closed' } })
+    constant: 'USER_DELETE',
+    id,
+    promise: (client) => client.request({ url: '/user/' + id, method: 'delete' })
   });
 }
 
-export function reopen(id) {
+export function renewPwd(id) {
   return asyncFuncCreator({
-    constant: 'USER_REOPEN',
-    promise: (client) => client.request({ url: '/user/' + id, method: 'put', data: { status: 'active' } })
+    constant: 'USER_PWD_RENEW',
+    promise: (client) => client.request({ url: '/user/' + id + '/renewpwd' })
   });
 }
 
@@ -53,18 +54,17 @@ export function select(id) {
   return { type: 'USER_SELECT', id: id };
 }
 
-export function multiReopen(ids) {
+export function multiDel(ids) {
   return asyncFuncCreator({
-    constant: 'USER_MULTI_REOPEN',
+    constant: 'USER_MULTI_DELETE',
     ids,
-    promise: (client) => client.request({ url: '/user/batch/status', method: 'post', data: { ids, status: 'active' } })
+    promise: (client) => client.request({ url: '/user/batch/delete', method: 'post', data: { ids } })
   });
 }
 
-export function multiClose(ids) {
+export function multiDel(ids) {
   return asyncFuncCreator({
-    constant: 'USER_MULTI_CLOSE',
-    ids,
-    promise: (client) => client.request({ url: '/user/batch/status', method: 'post', data: { ids, status: 'closed' } })
+    constant: 'USER_MULTI_PWDRENEW',
+    promise: (client) => client.request({ url: '/user/batch/renewpwd', method: 'post', data: { ids } })
   });
 }

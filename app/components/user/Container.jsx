@@ -55,15 +55,9 @@ export default class Container extends Component {
     return this.props.user.ecode;
   }
 
-  async close(id) {
+  async del(id) {
     const { actions } = this.props;
-    await actions.close(id);
-    return this.props.user.ecode;
-  }
-
-  async reopen(id) {
-    const { actions } = this.props;
-    await actions.reopen(id);
+    await actions.del(id);
     return this.props.user.ecode;
   }
 
@@ -73,15 +67,15 @@ export default class Container extends Component {
     return this.props.user.ecode;
   }
 
-  async multiClose(ids) {
+  async multiRenewPwd(ids) {
     const { actions } = this.props;
-    await actions.multiClose(ids);
+    await actions.multiDel(ids);
     return this.props.user.ecode;
   }
 
-  async multiReopen(ids) {
+  async multiDel(ids) {
     const { actions } = this.props;
-    await actions.multiReopen(ids);
+    await actions.multiDel(ids);
     return this.props.user.ecode;
   }
 
@@ -97,10 +91,10 @@ export default class Container extends Component {
           create={ this.create.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
-          stop={ this.close.bind(this) } 
-          reopen={ this.reopen.bind(this) } 
-          multiStop={ this.multiClose.bind(this) }
-          multiReopen={ this.multiReopen.bind(this) }
+          renew={ this.renewPwd.bind(this) } 
+          del={ this.del.bind(this) } 
+          multiRenew={ this.multiRenewPwd.bind(this) }
+          multiDel={ this.multiDel.bind(this) }
           query={ query }
           { ...this.props.user }/>
       </div>

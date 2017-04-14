@@ -11,7 +11,7 @@ const $ = require('$');
 const PaginationList = require('../share/PaginationList');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
-const CloseNotify = require('./CloseNotify');
+const OperateNotify = require('./OperateNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
 const img = require('../../assets/images/loading.gif');
 
@@ -21,7 +21,8 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
-      closeNotifyShow: false, 
+      operateNotifyShow: false, 
+      operate: '',
       operateShow: false, 
       multiOperateNotifyShow: false,
       multiOperate: '',
@@ -32,7 +33,7 @@ export default class List extends Component {
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
-    this.closeNotifyClose = this.closeNotifyClose.bind(this);
+    this.operateNotifyClose = this.operateNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.refresh = this.refresh.bind(this);
   }
@@ -50,10 +51,10 @@ export default class List extends Component {
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
-    reopen: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired,
-    multiReopen: PropTypes.func.isRequired,
-    multiStop: PropTypes.func.isRequired
+    renew: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired,
+    multiRenew: PropTypes.func.isRequired,
+    multiDel: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -79,8 +80,8 @@ export default class List extends Component {
     this.setState({ editModalShow: false });
   }
 
-  closeNotifyClose() {
-    this.setState({ closeNotifyShow: false });
+  operateNotifyClose() {
+    this.setState({ operateNotifyShow: false });
   }
 
   multiOperateNotifyClose() {
@@ -110,42 +111,25 @@ export default class List extends Component {
     }
   }
 
-  closeNotify(id) {
-    this.setState({ closeNotifyShow: true });
+  operateNotify(id) {
+    this.setState({ operateNotifyShow: true });
     const { select } = this.props;
     select(id);
-  }
-
-  async reopen(id) {
-    const { select, reopen } = this.props;
-    select(id);
-    const ecode = await reopen(id);
-    if (ecode === 0) {
-      notify.show('用户已启用。', 'success', 2000);    
-    } else {
-      notify.show('启用失败。', 'error', 2000);    
-    }
   }
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
 
-    if (eventKey === '1') {
+    if (eventKey === 'edit') {
       this.edit(hoverRowId);
-    } else if (eventKey === '2') {
-      this.closeNotify(hoverRowId);
-    } else if (eventKey === '3') {
-      this.reopen(hoverRowId);
+    } else {
+      this.operateNotify(hoverRowId);
+      this.setState({ operate: eventKey });
     }
   }
 
   multiOperateSelect(eventKey) {
     this.setState({ multiOperateNotifyShow: true, multiOperate: eventKey });
-  }
-
-  statusChange(newValue) {
-    this.state.status = newValue;
-    this.refresh();
   }
 
   refresh() {
@@ -154,10 +138,6 @@ export default class List extends Component {
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
-    if (this.state.principal) {
-      query.principal = this.state.principal;
-    }
-    query.status = this.state.status;
 
     refresh(query);
   }
@@ -204,27 +184,27 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, update, options, query } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, del, renew, multiDel, multiRenew, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const states = [];
-    const stateNum = collection.length;
-    for (let i = 0; i < stateNum; i++) {
-      states.push({
+    const users = [];
+    const userNum = collection.length;
+    for (let i = 0; i < userNum; i++) {
+      users.push({
         id: collection[i].id,
         name: collection[i].name,
         email: collection[i].email,
         phone: collection[i].phone,
-        status: collection[i].status == 'active' ? '活动中' : '已关闭',
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>禁用</MenuItem> : <MenuItem eventKey='3'>启用</MenuItem> }
+              <MenuItem eventKey='edit'>编辑</MenuItem>
+              <MenuItem eventKey='del'>删除</MenuItem>
+              <MenuItem eventKey='renew'>重置密码</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -261,20 +241,11 @@ export default class List extends Component {
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '用户姓名、邮箱、手机号查询...' } />
             </span>
-            <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                clearable={ false }
-                placeholder='用户状态'
-                value={ this.state.status }
-                onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '启用' }, { value: 'closed', label: '已禁用' }] }/>
-            </span>
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                <MenuItem eventKey='close'>禁用</MenuItem>
-                <MenuItem eventKey='reopen'>启用</MenuItem>
+                <MenuItem eventKey='del'>删除</MenuItem>
+                <MenuItem eventKey='renew'>重置密码</MenuItem>
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', width: '20%' } }>
@@ -283,18 +254,17 @@ export default class List extends Component {
           </FormGroup>
         </div>
         <div>
-          <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
+          <BootstrapTable data={ users } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>姓名</TableHeaderColumn>
             <TableHeaderColumn dataField='email'>邮箱</TableHeaderColumn>
             <TableHeaderColumn dataField='phone'>手机号</TableHeaderColumn>
-            <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
-          { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
-          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
+          { this.state.operateNotifyShow && <OperateNotify show close={ this.operateNotifyClose } data={ selectedItem } operate={ this.state.operate } del={ del } renew={ renew }/> }
+          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiDel={ multiDel } multiRenew={ multiRenew } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList
