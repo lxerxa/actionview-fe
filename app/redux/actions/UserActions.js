@@ -10,7 +10,7 @@ export function resetpwd(email) {
 export function register(values) {
   return asyncFuncCreator({
     constant: 'USER_REGISTER',
-    promise: (client) => client.request({ url: '/user', method: 'post', data: values })
+    promise: (client) => client.request({ url: '/user/register', method: 'post', data: values })
   });
 }
 

@@ -98,6 +98,7 @@ export default class Header extends Component {
     const patten2 = new RegExp('^/project/(\\w+)/(\\w+)$');
     const patten3 = new RegExp('^/project/(\\w+)/workflow/(\\w+)$');
     const patten4 = new RegExp('^/project$');
+    const patten5 = new RegExp('^/user$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -116,11 +117,13 @@ export default class Header extends Component {
       modulename = '工作流配置';
     } else if (patten4.exec(pathname)) {
       modulename = '项目列表';
+    } else if (patten5.exec(pathname)) {
+      modulename = '用户管理';
     } else {
       modulename = '其他';
     }
 
-    const headerUser = { paddingTop: '4px', color: '#5f5f5f', textDecoration: 'blink' }; 
+    const headerUser = { paddingTop: '4px', color: '#5f5f5f', textDecoration: 'blink', fontSize: '16px' }; 
     const avatar = (<img className='no-avatar' src={ no_avatar }/>);
     const sysTitle = (<span><i className='fa fa-cog'></i></span>);
 

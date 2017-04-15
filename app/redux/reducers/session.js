@@ -1,6 +1,6 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { token: '', ecode: 0, invalid: false, user: {}, sys_permissions: [] };
+const initialState = { token: '', ecode: 0, invalid: false, user: {} };
 
 export default function session(state = initialState, action) {
   switch (action.type) {
@@ -28,7 +28,6 @@ export default function session(state = initialState, action) {
     case t.SESSION_DESTROY_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.user = {};
-        state.sys_permissions = [];
       }
       return { ...state, ecode: action.result.ecode };
 

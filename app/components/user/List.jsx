@@ -28,8 +28,7 @@ export default class List extends Component {
       multiOperate: '',
       hoverRowId: '', 
       selectedIds: [],
-      name: '', 
-      status: 'active' };
+      name: '' }; 
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
@@ -59,13 +58,9 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index, query={} } = this.props;
-    if (query.status) this.state.status = query.status;
     if (query.name) this.state.name = query.name;
 
     const newQuery = {};
-    if (this.state.status) {
-      newQuery.status = this.state.status;
-    }
     if (this.state.name) {
       newQuery.name = this.state.name;
     }
@@ -195,16 +190,17 @@ export default class List extends Component {
     for (let i = 0; i < userNum; i++) {
       users.push({
         id: collection[i].id,
-        name: collection[i].name,
-        email: collection[i].email,
-        phone: collection[i].phone,
+        name: collection[i].first_name || '-',
+        email: collection[i].email || '-',
+        phone: collection[i].phone || '-',
+        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>未激活</Label>,
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='edit'>编辑</MenuItem>
               <MenuItem eventKey='del'>删除</MenuItem>
-              <MenuItem eventKey='renew'>重置密码</MenuItem>
+              {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -245,7 +241,7 @@ export default class List extends Component {
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
                 <MenuItem eventKey='del'>删除</MenuItem>
-                <MenuItem eventKey='renew'>重置密码</MenuItem>
+                {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', width: '20%' } }>
@@ -259,6 +255,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>姓名</TableHeaderColumn>
             <TableHeaderColumn dataField='email'>邮箱</TableHeaderColumn>
             <TableHeaderColumn dataField='phone'>手机号</TableHeaderColumn>
+            <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }

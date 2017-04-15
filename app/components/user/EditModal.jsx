@@ -8,8 +8,8 @@ const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
-  if (!values.name) {
-    errors.name = '必填';
+  if (!values.first_name) {
+    errors.first_name = '必填';
   } 
 
   if (!values.email) {
@@ -26,7 +26,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'user',
-  fields: [ 'id', 'name', 'email', 'phone' ],
+  fields: [ 'id', 'first_name', 'email', 'phone' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -78,7 +78,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, email, phone }, dirty, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { id, first_name, email, phone }, dirty, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -87,11 +87,11 @@ export default class CreateModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>姓名</ControlLabel>
             <FormControl type='hidden' { ...id }/>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='项目名'/>
-            { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+            <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='项目名'/>
+            { first_name.touched && first_name.error && <HelpBlock style={ { float: 'right' } }>{ first_name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>邮箱</ControlLabel>

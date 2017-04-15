@@ -270,8 +270,7 @@ export default class List extends Component {
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
-
-        status: collection[i].status == 'active' ? '活动中' : '已关闭',
+        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
