@@ -270,7 +270,6 @@ export default class List extends Component {
     } else {
       this.state.selectedIds = [];
     }
-    console.log(this.state.selectedIds);
     this.setState({ selectedIds: this.state.selectedIds });
   }
 
@@ -391,7 +390,7 @@ export default class List extends Component {
                 id='pname'
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '项目名或键值查询...' } />
+                placeholder={ '项目名、键值查询...' } />
             </span>
             <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
               <Select

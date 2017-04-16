@@ -19,8 +19,10 @@ const validate = (values, props) => {
   } 
 
   if (values.phone) {
+    if (!/^1(3|4|5|7|8)\d{9}$/.test(values.phone)) {
+      errors.phone = '格式有误';
+    }
   }
-
   return errors;
 };
 
@@ -98,7 +100,7 @@ export default class CreateModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...email } placeholder='Email'/>
             { email.touched && email.error && <HelpBlock style={ { float: 'right' } }>{ email.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup controlId='formControlsText' validationState={ phone.touched && phone.error ? 'error' : '' }>
             <ControlLabel>手机</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...phone } placeholder='手机号'/>
             { phone.touched && phone.error && <HelpBlock style={ { float: 'right' } }>{ phone.error }</HelpBlock> }

@@ -69,7 +69,7 @@ export default class Container extends Component {
 
   async multiRenewPwd(ids) {
     const { actions } = this.props;
-    await actions.multiDel(ids);
+    await actions.multiRenewPwd(ids);
     return this.props.user.ecode;
   }
 

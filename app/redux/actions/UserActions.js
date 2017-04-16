@@ -62,7 +62,7 @@ export function multiDel(ids) {
   });
 }
 
-export function multiDel(ids) {
+export function multiRenewPwd(ids) {
   return asyncFuncCreator({
     constant: 'USER_MULTI_PWDRENEW',
     promise: (client) => client.request({ url: '/user/batch/renewpwd', method: 'post', data: { ids } })
