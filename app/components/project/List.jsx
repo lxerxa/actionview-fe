@@ -152,9 +152,9 @@ export default class List extends Component {
     select(id);
     const ecode = await createIndex(id);
     if (ecode === 0) {
-      notify.show('优化完成。', 'success', 2000);
+      notify.show('索引已创建。', 'success', 2000);
     } else {
-      notify.show('优化失败。', 'error', 2000);
+      notify.show('创建失败。', 'error', 2000);
     }
   }
 

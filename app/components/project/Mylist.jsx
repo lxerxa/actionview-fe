@@ -117,9 +117,9 @@ export default class List extends Component {
     select(id);
     const ecode = await createIndex(id);
     if (ecode === 0) {
-      notify.show('优化完成。', 'success', 2000);
+      notify.show('索引已创建。', 'success', 2000);
     } else {
-      notify.show('优化失败。', 'error', 2000);
+      notify.show('创建失败。', 'error', 2000);
     }
   }
 
@@ -161,7 +161,7 @@ export default class List extends Component {
     this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
 
     const { update, collection } = this.props;
-    const ecode = await update(pid, { principal: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
+    const ecode = await update(pid, { principal_id: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetPrincipalPids.indexOf(pid);
       this.state.willSetPrincipalPids.splice(willSetIndex, 1);
@@ -277,7 +277,7 @@ export default class List extends Component {
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
-              <MenuItem eventKey='4'>性能优化</MenuItem>
+              <MenuItem eventKey='4'>重建索引</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
