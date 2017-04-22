@@ -31,7 +31,7 @@ export default class Container extends Component {
   }
 
   refresh(query) {
-    const pathname = '/user';
+    const pathname = '/admin/user';
     this.context.router.push({ pathname, query });
   }
 

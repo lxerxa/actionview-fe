@@ -128,7 +128,7 @@ export default class Sidebar extends Component {
               <li><Link to='/admin/scheme/type'>问题类型</Link></li>
               <li><Link to='/admin/scheme/workflow'>工作流</Link></li>
               <li><Link to='/admin/scheme/field'>字段</Link></li>
-              <li><Link to='/admin/scheme/state'>界面</Link></li>
+              <li><Link to='/admin/scheme/screen'>界面</Link></li>
               <li><Link to='/admin/scheme/state'>状态</Link></li>
               <li><Link to='/admin/scheme/resolution'>解决结果</Link></li>
               <li><Link to='/admin/scheme/priority'>优先级</Link></li>

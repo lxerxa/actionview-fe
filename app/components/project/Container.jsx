@@ -32,7 +32,7 @@ export default class Container extends Component {
   }
 
   refresh(query) {
-    const pathname = '/project';
+    const pathname = '/admin/project';
     this.context.router.push({ pathname, query });
   }
 
@@ -115,7 +115,7 @@ export default class Container extends Component {
 
     return (
       <div className='doc-container'>
-        { pathname.indexOf('project') === 1 ?
+        { pathname.indexOf('admin') === 1 ?
         <List 
           index={ this.index.bind(this) } 
           entry={ this.entry.bind(this) } 

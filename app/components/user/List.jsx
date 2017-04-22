@@ -228,7 +228,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '27%' } }>
+            <span style={ { float: 'right', width: '22%' } }>
               <FormControl
                 type='text'
                 id='uname'

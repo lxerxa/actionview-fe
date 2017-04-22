@@ -302,13 +302,13 @@ export default class List extends Component {
             <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span>
-            <span style={ { float: 'right', width: '27%' } }>
+            <span style={ { float: 'right', width: '22%' } }>
               <FormControl
                 type='text'
                 id='pname'
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '项目名称键值查询...' } />
+                placeholder={ '名称、键值查询...' } />
             </span>
             <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
               <Select

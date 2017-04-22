@@ -4,8 +4,6 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
-import ApiClient from '../../../shared/api-client';
-import Person from '../share/Person';
 import { notify } from 'react-notify-toast';
 
 const EditModal = require('./EditModal');
@@ -22,15 +20,11 @@ export default class List extends Component {
       delNotifyShow: false, 
       willSetPermissionRoleIds: [], 
       settingPermissionRoleIds: [], 
-      willSetUserRoleIds: [], 
-      settingUserRoleIds: [], 
       permissions: {}, 
-      users: {}, 
       operateShow: false, 
       hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
-    this.searchUsers = this.searchUsers.bind(this);
   }
 
   static propTypes = {
@@ -125,75 +119,23 @@ export default class List extends Component {
     }
   }
 
-  willSetUsers(roleId) {
-    this.state.willSetUserRoleIds.push(roleId);
-    this.setState({ willSetUserRoleIds: this.state.willSetUserRoleIds });
-  }
-
-  cancelSetUsers(roleId) {
-    const index = _.indexOf(this.state.willSetUserRoleIds, roleId);
-    this.state.willSetUserRoleIds.splice(index, 1);
-    // clean permission in the state
-    this.state.users[roleId] = undefined;
-
-    this.setState({ willSetUserRoleIds: this.state.willSetUserRoleIds });
-  }
-
-  async setUsers(roleId) {
-    this.state.settingUserRoleIds.push(roleId);
-    this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
-
-    const { update, collection } = this.props;
-    const ecode = await update({ users: _.map(this.state.users[roleId] || _.find(collection, { id: roleId }).users, _.iteratee('id')), id: roleId });
-    if (ecode === 0) {
-      const willSetIndex = this.state.willSetUserRoleIds.indexOf(roleId);
-      this.state.willSetUserRoleIds.splice(willSetIndex, 1);
-
-      const settingIndex = _.indexOf(this.state.settingUserRoleIds, roleId);
-      this.state.settingUserRoleIds.splice(settingIndex, 1);
-
-      this.setState({ willSetUserRoleIds: this.state.willSetUserRoleIds, settingUserRoleIds: this.state.settingUserRoleIds });
-      notify.show('配置完成。', 'success', 2000);
-    }else {
-      const settingIndex = _.indexOf(this.state.settingUserRoleIds, roleId);
-      this.state.settingUserRoleIds.splice(settingIndex, 1);
-      this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
-      notify.show('配置失败。', 'error', 2000);
-    }
-  }
-
   handlePermissionSelectChange(roleId, value) {
     this.state.permissions[roleId] = value;
     this.setState({ permissions: this.state.permissions });
   }
 
-  handleUserSelectChange(roleId, value) {
-    this.state.users[roleId] = value;
-    this.setState({ users: this.state.users });
-  }
-
-  async searchUsers(input) {
-    input = input.toLowerCase();
-    if (!input)
-    {
-      return { options: [] };
-    }
-    const api = new ApiClient;
-    const results = await api.request( { url: '/user?s=' + input } );
-    return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
-  }
-
   render() {
     const { collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
-    const { willSetPermissionRoleIds, settingPermissionRoleIds, willSetUserRoleIds, settingUserRoleIds } = this.state;
+    const { willSetPermissionRoleIds, settingPermissionRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
+    const somePermissions = _.clone(allPermissions); somePermissions.shift();
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const roles = [];
     const roleNum = collection.length;
     for (let i = 0; i < roleNum; i++) {
-      const permissions = _.filter(allPermissions, function(o) { return _.indexOf(collection[i].permissions || [], o.id) !== -1; });
+      const permissions = _.filter(somePermissions, function(o) { return _.indexOf(collection[i].permissions || [], o.id) !== -1; });
       roles.push({
         id: collection[i].id,
         name:  (
@@ -218,7 +160,7 @@ export default class List extends Component {
             </div> 
             :
             <div>
-              <Select multi clearable={ false } searchable={ false } disabled={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 && true } options={ _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ this.state.permissions[collection[i].id] || collection[i].permissions } onChange={ this.handlePermissionSelectChange.bind(this, collection[i].id) } placeholder='请选择相应权限'/>
+              <Select multi clearable={ false } searchable={ false } disabled={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 && true } options={ _.map(somePermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ this.state.permissions[collection[i].id] || collection[i].permissions } onChange={ this.handlePermissionSelectChange.bind(this, collection[i].id) } placeholder='请选择相应权限'/>
               <div className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPermissions.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetPermissions.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -226,32 +168,6 @@ export default class List extends Component {
             </div> 
           }
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
-          </div>
-        ), 
-        users: (
-          <div>
-          { _.indexOf(willSetUserRoleIds, collection[i].id) === -1 && _.indexOf(settingUserRoleIds, collection[i].id) === -1 ?
-            <div className='editable-list-field'>
-              <div style={ { display: 'table', width: '100%' } }>
-              { collection[i].users && collection[i].users.length > 0 ?
-                <span>
-                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Person key={ v.id } data={ v }/></div> }) }
-                </span>
-                :
-                '-' }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetUsers.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
-              </div>
-            </div> 
-            :
-            <div>
-              <Select.Async multi clearable={ false } disabled={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 && true } options={ [] } value={ this.state.users[collection[i].id] || collection[i].users } onChange={ this.handleUserSelectChange.bind(this, collection[i].id) } valueKey='id' labelKey='nameAndEmail' loadOptions={ this.searchUsers } placeholder='请输入用户'/>
-              <div className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
-                <Button className='edit-ok-button' onClick={ this.setUsers.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetUsers.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
-              </div>
-            </div> 
-          }
-          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ), 
         operation: (
@@ -282,8 +198,7 @@ export default class List extends Component {
         <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
-          <TableHeaderColumn dataField='permissions'>权限</TableHeaderColumn>
-          <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
+          <TableHeaderColumn dataField='permissions'>权限集</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
