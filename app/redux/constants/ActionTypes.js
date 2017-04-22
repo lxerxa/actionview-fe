@@ -38,6 +38,7 @@ export default generateConstants([
   'PROJECT_SELECT',
   'PROJECT_OPTIONS(ASYNC)',
   'PROJECT_RECENTS(ASYNC)',
+  'PROJECT_CLEAN_SELECTED',
 
   'TYPE_INDEX(ASYNC)',
   'TYPE_INIT',

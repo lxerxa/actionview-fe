@@ -83,6 +83,7 @@ export default class Home extends Component {
           recents={ this.recents.bind(this) }
           getSess={ this.getSess.bind(this) }
           logout={ this.logout.bind(this) }
+          cleanSelectedProject={ this.props.actions.cleanSelectedProject }
           entry={ this.entry.bind(this) }/>
         <Sidebar 
           project={ project } 

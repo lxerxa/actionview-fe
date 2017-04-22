@@ -12,7 +12,18 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, willSetScreenTypeIds: [], settingScreenTypeIds: [], willSetWorkflowTypeIds: [], settingWorkflowTypeIds: [] , screen: {}, workflow: {}, operateShow: false, operation: '', hoverRowId: '' };
+    this.state = { 
+      editModalShow: false, 
+      delNotifyShow: false, 
+      willSetScreenTypeIds: [], 
+      settingScreenTypeIds: [], 
+      willSetWorkflowTypeIds: [], 
+      settingWorkflowTypeIds: [] , 
+      screen: {}, 
+      workflow: {}, 
+      operateShow: false, 
+      operation: '', 
+      hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.delNotify = this.delNotify.bind(this);

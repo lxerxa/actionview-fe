@@ -16,6 +16,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -70,7 +71,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { pkey, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -82,7 +83,7 @@ export default class List extends Component {
 
       priorities.push({
         id: collection[i].id,
-        name: ( <span className='table-td-title'>{ collection[i].name }{ collection[i].category && <span style={ { fontWeight: 'normal' } }> (全局)</span> }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span> ),
+        name: ( <span className='table-td-title'>{ collection[i].name }{ pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span> ),
         color: ( <div className='circle' style={ colorStyle } /> ),
         description: collection[i].description ? collection[i].description : '-',
         operation: (

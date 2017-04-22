@@ -121,6 +121,9 @@ export default function project(state = initialState, action) {
       const el = _.find(state.collection, { id: action.id });
       return { ...state, selectedItem: el };
 
+    case t.PROJECT_CLEAN_SELECTED:
+      return { ...state, item: {} };
+
     default:
       return state;
   }

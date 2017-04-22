@@ -16,6 +16,7 @@ export default class Header extends Component {
     getSess: PropTypes.func.isRequired,
     recents: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
+    cleanSelectedProject: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     pathname: PropTypes.string
   }
@@ -56,7 +57,8 @@ export default class Header extends Component {
   }
 
   sysOperateSelect(eventKey) {
-    const { entry } = this.props;
+    const { entry, cleanSelectedProject } = this.props;
+    cleanSelectedProject();
 
     if (eventKey === 'project') {
       entry('/admin/project');

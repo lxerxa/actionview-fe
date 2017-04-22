@@ -70,6 +70,7 @@ export default class Container extends Component {
           create={ this.create.bind(this) } 
           { ...this.props.events }/>
         <List 
+          pkey={ this.pid }
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 

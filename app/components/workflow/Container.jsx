@@ -75,8 +75,11 @@ export default class Container extends Component {
   render() {
     return (
       <div>
-        <Header create={ this.create.bind(this) } { ...this.props.workflow }/>
+        <Header 
+          create={ this.create.bind(this) } 
+          { ...this.props.workflow }/>
         <List 
+          pkey={ this.pid }
           index={ this.index.bind(this) } 
           create={ this.create.bind(this) } 
           select={ this.props.actions.select } 

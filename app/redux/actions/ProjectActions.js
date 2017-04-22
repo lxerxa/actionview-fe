@@ -104,3 +104,8 @@ export function multiCreateIndex(ids) {
     promise: (client) => client.request({ url: '/project/batch/createindex', method: 'post', data: { ids } })
   });
 }
+
+export function cleanSelectedProject() {
+  return { type: 'PROJECT_CLEAN_SELECTED' };
+}
+

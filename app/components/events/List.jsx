@@ -20,6 +20,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     options: PropTypes.object.isRequired,
     selectedItem: PropTypes.object.isRequired,
@@ -101,7 +102,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, del, update, reset, options } = this.props;
+    const { pkey, collection, selectedItem, loading, indexLoading, itemLoading, del, update, reset, options } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -113,7 +114,7 @@ export default class List extends Component {
         id: collection[i].id,
         name: (
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ collection[i].category && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> } 
           </div>
         ),
