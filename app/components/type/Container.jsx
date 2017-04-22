@@ -22,6 +22,7 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     type: PropTypes.object.isRequired
   }
@@ -58,8 +59,13 @@ export default class Container extends Component {
   }
 
   componentWillMount() {
-    const { params: { key } } = this.props;
-    this.pid = key;
+    const { location: { pathname='' } } = this.props;
+    if (/^\/admin\/scheme/.test(pathname)) {
+      this.pid = '$_sys_$';
+    } else {
+      const { params: { key } } = this.props;
+      this.pid = key;
+    }
   }
 
   render() {

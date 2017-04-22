@@ -28,7 +28,6 @@ export default class ConfigList extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     options: PropTypes.object.isRequired,
-    loading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     editStep: PropTypes.func.isRequired,

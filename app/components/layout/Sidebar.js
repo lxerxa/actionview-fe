@@ -9,6 +9,7 @@ export default class Sidebar extends Component {
     this.state = { 
       projectPanelShow: false,
       projectBrowseShow: false, 
+      schemeConfigShow: false, 
       projectConfigShow: false, 
       adminPanelShow: false,
       adminSchemeShow: false, 
@@ -54,8 +55,9 @@ export default class Sidebar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const browseModules = [ 'summary', 'issue', 'activity', 'module', 'version' ];
-    const configModules = [ 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role', 'events' ];
+    const browseModules = [ 'summary', 'issue', 'activity' ];
+    const schemeModules = [ 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role', 'events' ];
+    const configModules = [ 'module', 'version', 'team' ];
     if (nextProps.pathname) {
       const sections = nextProps.pathname.split('/');
       if (sections.length > 1) {
@@ -80,11 +82,13 @@ export default class Sidebar extends Component {
           this.state.projectBrowseShow = true;
         } else if (configModules.indexOf(modulename) !== -1) {
           this.state.projectConfigShow = true;
+        } else if (schemeModules.indexOf(modulename) !== -1) {
+          this.state.schemeConfigShow = true;
         } else {
           if (sections.length > 1) {
             modulename = sections.pop();
             if (modulename === 'workflow') {
-              this.state.projectConfigShow = true;
+              this.state.schemeConfigShow = true;
             }
           }else {
             this.state.projectBrowseShow = true;
@@ -160,11 +164,15 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/summary' }>概要</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/issue' }>问题</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/activity' }>活动</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/module' }>模块</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/version' }>版本</Link></li>
             </ul>
             <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目管理</h4>
             <ul className={ !this.state.projectConfigShow && 'hide' }>
+              <li><Link to={ '/project/' + project.item.key + '/module' }>模块</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/version' }>版本</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/team' }>成员</Link></li>
+            </ul>
+            <h4><i className={ this.state.schemeConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ schemeConfigShow: !this.state.schemeConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>问题方案配置</h4>
+            <ul className={ !this.state.schemeConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/type' }>问题类型</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/workflow' }>工作流</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/field' }>字段</Link></li>

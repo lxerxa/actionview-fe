@@ -119,7 +119,7 @@ export default class Header extends Component {
         modulename = '其他';
       }
     } else if (patten3.exec(pathname)) {
-      modulename = '工作流配置';
+      modulename = (curProject.key ? curProject.key + ' - ' : '') + '工作流配置';
     } else if (patten6.exec(pathname)) {
       const moduleKey = RegExp.$1;
       const module = _.find(Modules, { key: moduleKey });

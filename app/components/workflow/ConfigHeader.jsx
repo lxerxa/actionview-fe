@@ -17,7 +17,7 @@ export default class ConfigHeader extends Component {
   }
 
   static propTypes = {
-    pid: PropTypes.string.isRequired,
+    pathname: PropTypes.string.isRequired,
     workflowName: PropTypes.string,
     ecode: PropTypes.number.isRequired,
     collection: PropTypes.array.isRequired,
@@ -95,7 +95,7 @@ export default class ConfigHeader extends Component {
   }
 
   render() {
-    const { createStep, options, pid, collection, collection2JSON, workflowName, saveLoading, ecode } = this.props;
+    const { createStep, options, pathname, collection, collection2JSON, workflowName, saveLoading, ecode } = this.props;
 
     const newCollection2JSON = JSON.stringify(collection);
 
@@ -110,13 +110,13 @@ export default class ConfigHeader extends Component {
           </div>
         }
         <div style={ { marginTop: '5px' } }>
-          <Link to={ '/project/' + pid + '/workflow' }>
+          <Link to={ pathname.substr(0, pathname.lastIndexOf('/')) }>
             <Button className='create-btn'><i className='fa fa-reply'></i>&nbsp;返回</Button>
           </Link>
           <Button className='create-btn' onClick={ () => { this.setState({ previewModalShow: true }); } } disabled={ collection.length <= 0 }><i className='fa fa-search'></i>&nbsp;预览</Button>
           <Button className='create-btn' onClick={ () => { this.setState({ createStepModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建步骤</Button>
-          <span style={ { float: 'right', marginTop: '20px', marginRight: '10px' } }>{ workflowName }</span>
-          <span style={ { float: 'right', marginTop: '20px', fontWeight: 'bold' } }>名称：</span>
+          <span style={ { float: 'right', marginTop: '20px', marginRight: '10px', fontWeight: 'bold' } }>{ workflowName }</span>
+          <span style={ { float: 'right', marginTop: '20px' } }>工作流名称：</span>
         </div>
         { this.state.createStepModalShow && <CreateStepModal show close={ this.createStepModalClose } create={ createStep } options={ options } collection={ collection }/> }
         { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } collection={ collection } name={ workflowName } /> }

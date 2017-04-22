@@ -22,6 +22,7 @@ export default class ConfigContainer extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     wfconfig: PropTypes.object.isRequired
   }
@@ -37,8 +38,14 @@ export default class ConfigContainer extends Component {
   }
 
   componentWillMount() {
-    const { params: { key, id } } = this.props;
-    this.pid = key;
+    const { location: { pathname='' } } = this.props;
+    if (/^\/admin\/scheme/.test(pathname)) {
+      this.pid = '$_sys_$';
+    } else {
+      const { params: { key } } = this.props;
+      this.pid = key;
+    }
+    const { params: { id } } = this.props;
     this.id = id;
   }
 
@@ -48,10 +55,23 @@ export default class ConfigContainer extends Component {
     //  this.props.wfconfig.options.users = this.props.project.options.users || []; 
     //}
 
+    const { location: { pathname='' } } = this.props;
+
     return (
       <div>
-        <Header createStep={ this.props.actions.createStep } save={ this.save.bind(this) } pid={ this.pid } { ...this.props.wfconfig }/>
-        <List index={ this.index.bind(this) } editStep={ this.props.actions.editStep } delStep={ this.props.actions.delStep } addAction={ this.props.actions.addAction } editAction={ this.props.actions.editAction } delAction={ this.props.actions.delAction } { ...this.props.wfconfig }/>
+        <Header 
+          createStep={ this.props.actions.createStep } 
+          save={ this.save.bind(this) } 
+          pathname={ pathname }
+          { ...this.props.wfconfig }/>
+        <List 
+          index={ this.index.bind(this) } 
+          editStep={ this.props.actions.editStep } 
+          delStep={ this.props.actions.delStep } 
+          addAction={ this.props.actions.addAction } 
+          editAction={ this.props.actions.editAction } 
+          delAction={ this.props.actions.delAction } 
+          { ...this.props.wfconfig }/>
       </div>
     );
   }

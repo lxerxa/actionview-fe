@@ -21,6 +21,7 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     workflow: PropTypes.object.isRequired
   }
@@ -30,8 +31,9 @@ export default class Container extends Component {
   }
 
   goConfig(id) {
-    const pathname = '/project/' + this.pid + '/workflow/' + id;
-    this.context.router.push({ pathname });
+    const { location: { pathname='' } } = this.props;
+    const uri = pathname + '/' + id;
+    this.context.router.push({ pathname: uri });
   }
 
   async index() {
@@ -61,8 +63,13 @@ export default class Container extends Component {
   }
 
   componentWillMount() {
-    const { params: { key } } = this.props;
-    this.pid = key;
+    const { location: { pathname='' } } = this.props;
+    if (/^\/admin\/scheme/.test(pathname)) {
+      this.pid = '$_sys_$';
+    } else {
+      const { params: { key } } = this.props;
+      this.pid = key;
+    }
   }
 
   render() {
