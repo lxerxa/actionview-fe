@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
-const img = require('../assets/images/loading.gif');
+const img = require('../../assets/images/loading.gif');
 const $ = require('$');
 
 import * as UserActions from 'redux/actions/UserActions';

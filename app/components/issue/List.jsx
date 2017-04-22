@@ -343,10 +343,9 @@ export default class List extends Component {
         name: (
           <div>
             { collection[i].parent &&
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].parent.id) } } style={ { whiteSpace: 'pre-wrap' } }>
-              { collection[i].parent.title ? collection[i].parent.title : '-' }
-            </a> }
-            { collection[i].parent && <span> / </span> }
+            <span style={ { whiteSpace: 'pre-wrap' } }>
+              { collection[i].parent.title ? collection[i].parent.title + ' / ' : '- / ' }
+            </span> }
             <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } } style={ { whiteSpace: 'pre-wrap' } }>
               { collection[i].title ? collection[i].title : '-' }
             </a>

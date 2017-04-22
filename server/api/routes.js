@@ -12,6 +12,13 @@ const simplifyUsers = (collection) => collection
 
 export default function(router) {
 
+  router.get('/scheme', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '软件开发类', description: 'aaaaaaaaaaa'},{ id: '546763', name: '市场供求类', description: 'aaaaaaaaaaa', disabled: false },{ id: '546762', name: '跟哥哥哥哥', disabled: true }]};
+    return res.status(200).send(results);
+  });
+
   router.get('/user/resetpwd', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);

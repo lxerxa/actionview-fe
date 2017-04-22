@@ -1,14 +1,13 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import Layout from './components/Layout';
-import Cover from './components/Cover';
-import Login from './components/Login';
-import Forgot from './components/Forgot';
-import Register from './components/Register';
-import Home from './components/Home';
-import Project from './components/Project';
+import Layout from './components/layout/Layout';
+import Home from './components/layout/Home';
+import Login from './components/login/Login';
+import Forgot from './components/login/Forgot';
+import Register from './components/login/Register';
+import Project from './components/project/Project';
+import Scheme from './components/scheme/Scheme';
 import Profile from './components/Profile';
-import ProjectList from './components/ProjectList';
 
 const IssueContainer = require('./components/issue/Container');
 const ModuleContainer = require('./components/module/Container');
@@ -27,21 +26,18 @@ const ActivityContainer = require('./components/activity/Container');
 //const MyprojectContainer = require('./components/myproject/Container');
 const ProjectContainer = require('./components/project/Container');
 const UserContainer = require('./components/user/Container');
+const SchemeContainer = require('./components/scheme/Container');
 
 export default (
   <Route path='/' component={ Layout }>
-    <IndexRoute component={ Cover }/>
     <Route path='/login' component={ Login }/>
     <Route path='/forgot' component={ Forgot }/>
     <Route path='/register' component={ Register }/>
     <Route path='/home' component={ Home }>
-      <IndexRoute component={ ProjectList }/>
-      <Route path='/project' component={ ProjectContainer }/>
-      <Route path='/user' component={ UserContainer }/>
       <Route path='/myproject' component={ ProjectContainer }/>
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
-        <Route path='profile' component={ Profile }/>
+        <Route path='summary' component={ Profile }/>
         <Route path='issue' component={ IssueContainer }/>
         <Route path='activity' component={ ActivityContainer }/>
         <Route path='module' component={ ModuleContainer }/>
@@ -57,6 +53,21 @@ export default (
         <Route path='role' component={ RoleContainer }/>
         <Route path='events' component={ EventsContainer }/>
         <Route path='activity' component={ ActivityContainer }/>
+      </Route>
+      <Route path='/admin/project' component={ ProjectContainer }/>
+      <Route path='/admin/user' component={ UserContainer }/>
+      <Route path='/admin/scheme' component={ Scheme }>
+        <IndexRoute component={ TypeContainer }/>
+        <Route path='type' component={ TypeContainer }/>
+        <Route path='field' component={ FieldContainer }/>
+        <Route path='screen' component={ ScreenContainer }/>
+        <Route path='workflow' component={ WorkflowContainer }/>
+        <Route path='workflow/:id' component={ WorkflowConfigContainer }/>
+        <Route path='state' component={ StateContainer }/>
+        <Route path='resolution' component={ ResolutionContainer }/>
+        <Route path='priority' component={ PriorityContainer }/>
+        <Route path='role' component={ RoleContainer }/>
+        <Route path='events' component={ EventsContainer }/>
       </Route>
     </Route>
   </Route>

@@ -2,6 +2,12 @@ import { generateConstants } from '../utils';
 
 export default generateConstants([
 
+  'SCHEME_INDEX(ASYNC)',
+  'SCHEME_CREATE(ASYNC)',
+  'SCHEME_SELECT',
+  'SCHEME_UPDATE(ASYNC)',
+  'SCHEME_DELETE(ASYNC)',
+
   'USER_REGISTER(ASYNC)',
   'USER_CREATE(ASYNC)',
   'USER_UPDATE(ASYNC)',

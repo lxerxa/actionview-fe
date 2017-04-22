@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropdownButton, MenuItem, Button } from 'react-bootstrap';
 import _ from 'lodash';
 
-const no_avatar = require('../assets/images/no_avatar.png');
+const no_avatar = require('../../assets/images/no_avatar.png');
 const $ = require('$');
 
 export default class Header extends Component {
@@ -59,11 +59,13 @@ export default class Header extends Component {
     const { entry } = this.props;
 
     if (eventKey === 'project') {
-      entry('/project');
+      entry('/admin/project');
     } else if (eventKey === 'user') {
-      entry('/user');
+      entry('/admin/user');
+    } else if (eventKey === 'scheme') {
+      entry('/admin/scheme/type');
     } else if (eventKey === 'setting') {
-      entry('/sys/setting');
+      entry('/admin/setting');
     }
   }
 
@@ -78,6 +80,7 @@ export default class Header extends Component {
 
     const Modules = [
       { key: 'myproject', name: '项目中心' }, 
+      { key: 'summary', name: '概要' }, 
       { key: 'issue', name: '问题' }, 
       { key: 'activity', name: '活动' },
       { key: 'module', name: '模块' },
@@ -97,24 +100,36 @@ export default class Header extends Component {
     const patten1 = new RegExp('^/project/(\\w+)$');
     const patten2 = new RegExp('^/project/(\\w+)/(\\w+)$');
     const patten3 = new RegExp('^/project/(\\w+)/workflow/(\\w+)$');
-    const patten4 = new RegExp('^/project$');
-    const patten5 = new RegExp('^/user$');
+    const patten4 = new RegExp('^/admin/project$');
+    const patten5 = new RegExp('^/admin/user$');
+    const patten6 = new RegExp('^/admin/scheme/(\\w+)$');
+    const patten7 = new RegExp('^/admin/scheme/workflow/(\\w+)$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
       modulename = '项目中心';
     } else if (patten1.exec(pathname)) {
-      modulename = '项目首页';
+      modulename = (curProject.key ? curProject.key + ' - ' : '') + '概要';
     } else if (patten2.exec(pathname)) {
       const moduleKey = RegExp.$2;
       const module = _.find(Modules, { key: moduleKey }); 
       if (module) {
-        modulename = module.name;
+        modulename = (curProject.key ? curProject.key + ' - ' : '') + module.name;
       } else {
         modulename = '其他';
       }
     } else if (patten3.exec(pathname)) {
       modulename = '工作流配置';
+    } else if (patten6.exec(pathname)) {
+      const moduleKey = RegExp.$1;
+      const module = _.find(Modules, { key: moduleKey });
+      if (module) {
+        modulename = '方案配置 - ' + module.name;
+      } else {
+        modulename = '其他';
+      }
+    } else if (patten7.exec(pathname)) {
+      modulename = '方案配置 - 工作流配置';
     } else if (patten4.exec(pathname)) {
       modulename = '项目列表';
     } else if (patten5.exec(pathname)) {
@@ -141,7 +156,7 @@ export default class Header extends Component {
         </span>
         <span style={ { float: 'right' } }>
           <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.sysOperateSelect.bind(this) }>
-            <MenuItem eventKey='scheme'>项目类型方案</MenuItem>
+            <MenuItem eventKey='scheme'>问题方案配置</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='user'>用户管理</MenuItem>
             <MenuItem eventKey='project'>项目管理</MenuItem>
