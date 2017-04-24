@@ -28,6 +28,7 @@ const ActivityContainer = require('./components/activity/Container');
 const ProjectContainer = require('./components/project/Container');
 const UserContainer = require('./components/user/Container');
 const SchemeContainer = require('./components/scheme/Container');
+const MysettingContainer = require('./components/setting/my/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -36,6 +37,7 @@ export default (
     <Route path='/register' component={ Register }/>
     <Route path='/home' component={ Home }>
       <Route path='/myproject' component={ ProjectContainer }/>
+      <Route path='/mysetting' component={ MysettingContainer }/>
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
         <Route path='summary' component={ Profile }/>

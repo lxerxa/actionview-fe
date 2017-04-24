@@ -107,10 +107,10 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const states = [];
-    const stateNum = collection.length;
-    for (let i = 0; i < stateNum; i++) {
-      states.push({
+    const events = [];
+    const eventNum = collection.length;
+    for (let i = 0; i < eventNum; i++) {
+      events.push({
         id: collection[i].id,
         name: (
           <div>
@@ -177,7 +177,7 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px' } }>
-        <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-top'>
+        <BootstrapTable data={ events } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='notifications'>通知设置</TableHeaderColumn>

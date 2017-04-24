@@ -12,6 +12,13 @@ const simplifyUsers = (collection) => collection
 
 export default function(router) {
 
+  router.get('/mysetting', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { accounts: { avatar: '', name: '刘旭研究院', email: 'liuxuyjy@chinamobile.com', department: '科技管理部', phone: 13811450899}, notifications: { mail_notify: true, mobile_notify: true, daily_notify: false, monthly_notify: false }, favorites: { language: 'chinese' } } };
+    return res.status(200).send(results);
+  });
+
   router.get('/scheme', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

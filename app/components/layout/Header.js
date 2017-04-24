@@ -50,7 +50,7 @@ export default class Header extends Component {
     const { entry, logout } = this.props;
 
     if (eventKey === 'setting') {
-      entry('/user/setting');
+      entry('/mysetting');
     } else if (eventKey === 'logout') {
       logout();
     }

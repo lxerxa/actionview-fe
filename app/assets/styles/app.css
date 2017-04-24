@@ -518,6 +518,13 @@ table tr:hover .remove-icon{
   border-radius: 50%;
 }
 
+.big-no-avatar {
+  width: 80px;
+  height: 80px;
+  text-decoration: 'blink';
+  border-radius: 50%;
+}
+
 .reset-pwd-msg {
   height: 120px;
   font-size: 19px;
