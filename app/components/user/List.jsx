@@ -199,7 +199,7 @@ export default class List extends Component {
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='edit'>编辑</MenuItem>
               <MenuItem eventKey='del'>删除</MenuItem>
-              {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
+              <MenuItem eventKey='renew'>重置密码</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>

@@ -33,6 +33,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/user/:id/renewpwd', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: '' };
+    return res.status(200).send(results);
+  });
+
   router.get('/user/resetpwd', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);

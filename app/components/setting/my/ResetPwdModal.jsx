@@ -53,7 +53,7 @@ export default class ResetPwdModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('修改完成。', 'success', 2000);
+      notify.show('密码已修改。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

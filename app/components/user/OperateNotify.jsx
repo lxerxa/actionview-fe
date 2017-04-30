@@ -53,7 +53,7 @@ export default class OperateNotify extends Component {
         </Modal.Header>
         { operate === 'renew' && 
         <Modal.Body>
-          是否重置该用户的密码？
+          是否将用户密码设置成系统默认值？
         </Modal.Body> }
         { operate === 'del' && 
         <Modal.Body>

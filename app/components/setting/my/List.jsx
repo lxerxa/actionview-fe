@@ -43,6 +43,9 @@ export default class List extends Component {
 
   handleTabSelect(tabKey) {
     this.setState({ tabKey });
+    if (tabKey == 'favorite') {
+      notify.show('暂只支持中文，下个版本考虑支持多语言', 'warning', 2000);
+    }
   }
 
   async notifyChange(values) {
@@ -216,12 +219,7 @@ export default class List extends Component {
       ),
       contents: (
         <div style={ styles }>
-          <div className='editable-list-field'>
-            <div style={ { display: 'table', width: '100%' } }>
-              <div style={ { margin: '3px' } }>中文</div>
-              <span className='edit-icon-zone edit-icon'><i className='fa fa-pencil'></i></span>
-            </div>
-          </div>
+          <div style={ { margin: '3px' } }>中文</div>
         </div>
       )
     });
