@@ -28,6 +28,11 @@ export default class Container extends Component {
     return this.props.mysetting.ecode;
   }
 
+  async resetPwd(values) {
+    await this.props.actions.resetPwd(values);
+    return this.props.mysetting.ecode;
+  }
+
   async updAccount(values) {
     await this.props.actions.updAccount(values);
     return this.props.mysetting.ecode;
@@ -50,6 +55,7 @@ export default class Container extends Component {
           <List 
             getUser={ this.getUser.bind(this) }
             updAccount={ this.updAccount.bind(this) }
+            resetPwd={ this.resetPwd.bind(this) }
             updNotify={ this.updNotify.bind(this) }
             updFavorite={ this.updFavorite.bind(this) }
             { ...this.props.mysetting }/>

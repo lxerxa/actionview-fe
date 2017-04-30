@@ -23,6 +23,15 @@ export default function mysetting(state = initialState, action) {
     case t.MYSETTING_ACCOUNT_UPDATE_FAIL:
       return { ...state, accountLoading: false, error: action.error };
 
+    case t.MYSETTING_PWD_RESET:
+      return { ...state, accountLoading: true };
+
+    case t.MYSETTING_PWD_RESET_SUCCESS:
+      return { ...state, accountLoading: false, ecode: action.result.ecode };
+
+    case t.MYSETTING_PWD_RESET_FAIL:
+      return { ...state, accountLoading: false, error: action.error };
+
     case t.MYSETTING_NOTIFY_UPDATE:
       return { ...state, notifyLoading: true };
 

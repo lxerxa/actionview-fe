@@ -14,6 +14,13 @@ export function updAccount(values) {
   });
 }
 
+export function resetPwd(values) {
+  return asyncFuncCreator({
+    constant: 'MYSETTING_PWD_RESET',
+    promise: (client) => client.request({ url: '/mysetting/resetpwd', method: 'post', data: values })
+  });
+}
+
 export function updNotify(values) {
   return asyncFuncCreator({
     constant: 'MYSETTING_NOTIFY_UPDATE',

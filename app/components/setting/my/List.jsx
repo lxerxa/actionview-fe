@@ -9,16 +9,19 @@ import _ from 'lodash';
 const no_avatar = require('../../../assets/images/no_avatar.png');
 const img = require('../../../assets/images/loading.gif');
 const EditModal = require('./EditModal');
+const ResetPwdModal = require('./ResetPwdModal');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 'account', editModalShow: false, accounts: {}, favorites: {}, notifications: {} };
+    this.state = { tabKey: 'account', editModalShow: false, resetPwdModalShow: false, accounts: {}, favorites: {}, notifications: {} };
     this.editModalClose = this.editModalClose.bind(this);
+    this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
   }
 
   static propTypes = {
     getUser: PropTypes.func.isRequired,
+    resetPwd: PropTypes.func.isRequired,
     updAccount: PropTypes.func.isRequired,
     updNotify: PropTypes.func.isRequired,
     updFavorite: PropTypes.func.isRequired,
@@ -32,6 +35,10 @@ export default class List extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  resetPwdModalClose() {
+    this.setState({ resetPwdModalShow: false });
   }
 
   handleTabSelect(tabKey) {
@@ -75,7 +82,6 @@ export default class List extends Component {
     this.notifyChange({ weekly_notify: newValues.length > 0 });
   }
 
-
   async languageChange(newValue) {
     _.extend(this.state.favorites, { language: newValue });
     this.setState({ favorites: this.state.favorites });
@@ -112,7 +118,7 @@ export default class List extends Component {
     const startStyles = { color: '#54d09f', fontSize: '12px' };
     const closeStyles = { color: '#da4f4a', fontSize: '12px' };
 
-    const { accounts, accountLoading, notifyLoading, favoriteLoading, updAccount } = this.props;
+    const { accounts, accountLoading, notifyLoading, favoriteLoading, updAccount, resetPwd } = this.props;
     const { notifications, favorites } = this.state;
 
     const accountItems = [];
@@ -176,7 +182,7 @@ export default class List extends Component {
       ),
       contents: (
         <div style={ styles }>
-          <Button style={ { marginLeft: '15px' } }>修改密码</Button>
+          <Button style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ resetPwdModalShow: true }) } }>修改密码</Button>
         </div>
       )
     });
@@ -337,6 +343,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='blank'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ updAccount } data={ accounts }/> }
+        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd }/> }
       </div>
     );
   }
