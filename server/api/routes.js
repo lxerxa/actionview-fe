@@ -12,6 +12,13 @@ const simplifyUsers = (collection) => collection
 
 export default function(router) {
 
+  router.post('/mysetting/notify', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { mail_notify: true, mobile_notify: true } };
+    return res.status(200).send(results);
+  });
+
   router.get('/mysetting', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

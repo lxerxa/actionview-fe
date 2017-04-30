@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, loading: false, accounts: {}, notifications: {}, favorites: {} };
+const initialState = { ecode: 0, loading: false, accountLoading: false, accounts: {}, notifyLoading: false, notifications: {}, favoriteLoading: false, favorites: {} };
 
 export default function mysetting(state = initialState, action) {
   switch (action.type) {
@@ -15,31 +15,31 @@ export default function mysetting(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.MYSETTING_ACCOUNT_UPDATE:
-      return { ...state, loading: true };
+      return { ...state, accountLoading: true };
 
     case t.MYSETTING_ACCOUNT_UPDATE_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, accounts: action.result.data.accounts || {} };
+      return { ...state, accountLoading: false, ecode: action.result.ecode, accounts: action.result.data.accounts || {} };
 
     case t.MYSETTING_ACCOUNT_UPDATE_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, accountLoading: false, error: action.error };
 
     case t.MYSETTING_NOTIFY_UPDATE:
-      return { ...state, loading: true };
+      return { ...state, notifyLoading: true };
 
     case t.MYSETTING_NOTIFY_UPDATE_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, notifications: action.result.data.notifications || {} };
+      return { ...state, notifyLoading: false, ecode: action.result.ecode, notifications: action.result.data.notifications || {} };
 
     case t.MYSETTING_NOTIFY_UPDATE_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, notifyLoading: false, error: action.error };
 
     case t.MYSETTING_FAVORITE_UPDATE:
-      return { ...state, loading: true };
+      return { ...state, favoriteLoading: true };
 
     case t.MYSETTING_FAVORITE_UPDATE_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, favorites: action.result.data.favorites || {} };
+      return { ...state, favoriteLoading: false, ecode: action.result.ecode, favorites: action.result.data.favorites || {} };
 
     case t.MYSETTING_FAVORITE_UPDATE_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, favoriteLoading: false, error: action.error };
 
     default:
       return state;

@@ -16,7 +16,7 @@ body,h1,h2,html,p {
 }
 
 body {
-	font-family: Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-family: "Helvetica Neue",helvetica,'lucida grande','lucida sans unicode',lucida,'Hiragino Sans GB','Microsoft YaHei','WenQuanYi Micro Hei',sans-serif;
 	font-size: 14px;
 	line-height: 1.5;
 	min-height: 100%;
