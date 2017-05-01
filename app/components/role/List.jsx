@@ -136,6 +136,7 @@ export default class List extends Component {
     const roles = [];
     const roleNum = collection.length;
     for (let i = 0; i < roleNum; i++) {
+      const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
       const permissions = _.filter(somePermissions, function(o) { return _.indexOf(collection[i].permissions || [], o.id) !== -1; });
       roles.push({
         id: collection[i].id,
@@ -171,7 +172,7 @@ export default class List extends Component {
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ), 
-        operation: (
+        operation: !isGlobal ? (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
@@ -180,7 +181,7 @@ export default class List extends Component {
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
-        )
+        ) : ( <div>&nbsp;</div> )
       });
     }
 

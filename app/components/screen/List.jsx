@@ -100,6 +100,7 @@ export default class List extends Component {
     const screens = [];
     const screenNum = collection.length;
     for (let i = 0; i < screenNum; i++) {
+      const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
       screens.push({
         id: collection[i].id,
         name:  (
@@ -116,11 +117,11 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='3'>界面配置</MenuItem>
-                <MenuItem eventKey='4'>字段配置</MenuItem>
+                { !isGlobal && <MenuItem eventKey='3'>界面配置</MenuItem> }
+                { !isGlobal && <MenuItem eventKey='4'>字段配置</MenuItem> }
                 <MenuItem eventKey='5'>复制</MenuItem>
-                <MenuItem eventKey='1'>编辑</MenuItem>
-                <MenuItem eventKey='2'>删除</MenuItem>
+                { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+                { !isGlobal && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }
             <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>

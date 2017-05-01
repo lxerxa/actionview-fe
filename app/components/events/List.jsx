@@ -110,11 +110,12 @@ export default class List extends Component {
     const events = [];
     const eventNum = collection.length;
     for (let i = 0; i < eventNum; i++) {
+      const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
       events.push({
         id: collection[i].id,
         name: (
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> } 
           </div>
         ),
@@ -154,10 +155,10 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              { !collection[i].category && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
               <MenuItem eventKey='2'>通知设置</MenuItem>
-              { collection[i].category && <MenuItem eventKey='3'>重置通知</MenuItem> }
-              { !collection[i].category && <MenuItem eventKey='4'>删除</MenuItem> }
+              { isGlobal && <MenuItem eventKey='3'>重置通知</MenuItem> }
+              { !isGlobal && <MenuItem eventKey='4'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>

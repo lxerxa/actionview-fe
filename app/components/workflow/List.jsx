@@ -102,11 +102,12 @@ export default class List extends Component {
     const workflows = [];
     const workflowNum = collection.length;
     for (let i = 0; i < workflowNum; i++) {
+      const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
       workflows.push({
         id: collection[i].id,
         name:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
@@ -117,10 +118,10 @@ export default class List extends Component {
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='5'>预览</MenuItem>
-                <MenuItem eventKey='3'>配置</MenuItem>
+                { !isGlobal && <MenuItem eventKey='3'>配置</MenuItem> }
                 <MenuItem eventKey='4'>复制</MenuItem>
-                <MenuItem eventKey='1'>编辑</MenuItem>
-                <MenuItem eventKey='2'>删除</MenuItem>
+                { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+                { !isGlobal && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }
             <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>

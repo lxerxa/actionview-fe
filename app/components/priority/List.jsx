@@ -79,14 +79,15 @@ export default class List extends Component {
     const priorities = [];
     const priorityNum = collection.length;
     for (let i = 0; i < priorityNum; i++) {
+      const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
       const colorStyle = { backgroundColor: collection[i].color || '#cccccc' };
 
       priorities.push({
         id: collection[i].id,
-        name: ( <span className='table-td-title'>{ collection[i].name }{ pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span> ),
+        name: ( <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span> ),
         color: ( <div className='circle' style={ colorStyle } /> ),
         description: collection[i].description ? collection[i].description : '-',
-        operation: (
+        operation: !isGlobal ? (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
@@ -95,7 +96,7 @@ export default class List extends Component {
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
-        )
+        ) : ( <div>&nbsp;</div> )
       });
     }
 

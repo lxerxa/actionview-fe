@@ -92,6 +92,8 @@ export default class List extends Component {
     const fields = [];
     const fieldNum = collection.length;
     for (let i = 0; i < fieldNum; i++) {
+      const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
+
       let screens = '';
       if (_.isEmpty(collection[i].screens))
       {
@@ -108,14 +110,14 @@ export default class List extends Component {
         id: collection[i].id,
         name: (
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
         key: collection[i].key,
         type: _.find(fieldTypes, { value: collection[i].type }).label,
         screen: ( <span dangerouslySetInnerHTML={ { __html: screens } }/> ),
-        operation: (
+        operation: !isGlobal ? (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
@@ -128,7 +130,7 @@ export default class List extends Component {
             }
             <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
           </div>
-        )
+        ) : (<div>&nbsp;</div>)
       });
     }
 

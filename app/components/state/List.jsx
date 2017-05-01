@@ -79,11 +79,12 @@ export default class List extends Component {
     const states = [];
     const stateNum = collection.length;
     for (let i = 0; i < stateNum; i++) {
+      const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
       states.push({
         id: collection[i].id,
-        name: ( <span className='table-td-title'>{ collection[i].name }{ pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span> ),
+        name: ( <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span> ),
         description: collection[i].description ? collection[i].description : '-',
-        operation: (
+        operation: !isGlobal ? (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
@@ -92,7 +93,7 @@ export default class List extends Component {
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
-        )
+        ) : ( <div>&nbsp;</div> )
       });
     }
 
