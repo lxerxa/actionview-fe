@@ -14,8 +14,8 @@ const validate = (values) => {
   const errors = {};
   if (!values.email) {
     errors.email = '账号不能为空';
-  } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
-    errors.email = '输入格式有误';
+  //} else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
+  //  errors.email = '输入格式有误';
   }
 
   if (!values.password) {
@@ -109,14 +109,14 @@ class Login extends Component {
         <div className='login-form'>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
           <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
-            <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱/手机号'/>
+            <FormControl disabled={ submitting } type='text' { ...email } placeholder='用户名/邮箱'/>
             { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
             <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
             { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
           </FormGroup>
-          <Button bsStyle='success' disabled={ invalid || submitting } type='submit'>登  录</Button>
+          <Button bsStyle='success' disabled={ submitting } type='submit'>登  录</Button>
           <div style={ { textAlign: 'center', height: '40px' } }>
             <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
             { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>登录失败，用户名或密码错误。</div> }
