@@ -146,7 +146,7 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
-        permissions: (
+        permissions: !isGlobal ? (
           <div>
           { _.indexOf(willSetPermissionRoleIds, collection[i].id) === -1 && _.indexOf(settingPermissionRoleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
@@ -170,6 +170,17 @@ export default class List extends Component {
             </div> 
           }
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+          </div>
+        ) : (
+          <div>
+            <div style={ { display: 'table', width: '100%' } }>
+            { permissions.length > 0 ?
+              <span>
+              { _.map(permissions, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
+              </span>
+              :
+              '-' }
+            </div>
           </div>
         ), 
         operation: !isGlobal ? (

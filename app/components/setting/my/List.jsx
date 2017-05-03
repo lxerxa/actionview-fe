@@ -230,7 +230,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>邮件通知</span>
-          <span className='table-td-issue-desc'>修改手机时 ActionView 会发送短信到新的手机号，请按照短信中的验证码修改你的手机号码。</span>
+          <span className='table-td-issue-desc'>当问题有重要操作时，会根据相应的通知方案配置，发送提醒邮件给你。</span>
         </div>
       ),
       contents: (
@@ -252,7 +252,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>移动端通知</span>
-          <span className='table-td-issue-desc'>修改手机时 ActionView 会发送短信到新的手机号，请按照短信中的验证码修改你的手机号码。</span>
+          <span className='table-td-issue-desc'>当问题有重要操作时，会根据相应的通知方案配置，自动将消息推送到 ActionView 移动客户端</span>
         </div>
       ),
       contents: (

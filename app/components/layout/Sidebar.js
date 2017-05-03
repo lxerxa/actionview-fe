@@ -123,7 +123,7 @@ export default class Sidebar extends Component {
           </div>
           <div>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>管理员管理面板</h4>
-            <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>问题方案配置</h4>
+            <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
             <ul className={ !this.state.adminSchemeShow && 'hide' }>
               <li><Link to='/admin/scheme/type'>问题类型</Link></li>
               <li><Link to='/admin/scheme/workflow'>工作流</Link></li>
@@ -171,7 +171,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/version' }>版本</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/team' }>成员</Link></li>
             </ul>
-            <h4><i className={ this.state.schemeConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ schemeConfigShow: !this.state.schemeConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>问题方案配置</h4>
+            <h4><i className={ this.state.schemeConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ schemeConfigShow: !this.state.schemeConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
             <ul className={ !this.state.schemeConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/type' }>问题类型</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/workflow' }>工作流</Link></li>

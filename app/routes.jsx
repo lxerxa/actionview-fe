@@ -29,6 +29,7 @@ const ProjectContainer = require('./components/project/Container');
 const UserContainer = require('./components/user/Container');
 const SchemeContainer = require('./components/scheme/Container');
 const MysettingContainer = require('./components/setting/my/Container');
+const SyssettingContainer = require('./components/setting/sys/Container');
 
 export default (
   <Route path='/' component={ Layout }>
@@ -60,6 +61,7 @@ export default (
       </Route>
       <Route path='/admin/project' component={ ProjectContainer }/>
       <Route path='/admin/user' component={ UserContainer }/>
+      <Route path='/admin/syssetting' component={ SyssettingContainer }/>
       <Route path='/admin/scheme' component={ Scheme }>
         <IndexRoute component={ TypeContainer }/>
         <Route path='type' component={ TypeContainer }/>

@@ -1,0 +1,108 @@
+import React, { PropTypes, Component } from 'react';
+import { reduxForm } from 'redux-form';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import _ from 'lodash';
+import { notify } from 'react-notify-toast';
+
+const img = require('../../../assets/images/loading.gif');
+
+const validate = (values, props) => {
+  const errors = {};
+  if (!values.password) {
+    errors.password = '必填';
+  }
+  if (!values.new_password) {
+    errors.new_password = '必填';
+  }
+  if (!values.new_password2) {
+    errors.new_password2 = '必填';
+  }
+  if (values.new_password != values.new_password2) {
+    errors.new_password2 = '密码不一致';
+  }
+
+  return errors;
+};
+
+@reduxForm({
+  form: 'mysetting',
+  fields: ['id', 'password', 'new_password', 'new_password2'],
+  validate
+})
+export default class ResetPwdModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { ecode: 0 };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+  }
+
+  static propTypes = {
+    submitting: PropTypes.bool,
+    invalid: PropTypes.bool,
+    values: PropTypes.object,
+    fields: PropTypes.object,
+    handleSubmit: PropTypes.func.isRequired,
+    close: PropTypes.func.isRequired,
+    resetPwd: PropTypes.func.isRequired
+  }
+
+  async handleSubmit() {
+    const { values, resetPwd, close } = this.props;
+    const ecode = await resetPwd(values);
+    if (ecode === 0) {
+      this.setState({ ecode: 0 });
+      close();
+      notify.show('密码已修改。', 'success', 2000);
+    } else {
+      this.setState({ ecode: ecode });
+    }
+  }
+
+  handleCancel() {
+    const { close, submitting } = this.props;
+    if (submitting) {
+      return;
+    }
+    this.setState({ ecode: 0 });
+    close();
+  }
+
+  render() {
+    const { fields: { id, password, new_password, new_password2 }, handleSubmit, invalid, submitting } = this.props;
+
+    return (
+      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+          <Modal.Title id='contained-modal-title-la'>重置密码</Modal.Title>
+        </Modal.Header>
+        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
+        <Modal.Body>
+          <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>原密码</ControlLabel>
+            <FormControl type='hidden' { ...id }/>
+            <FormControl disabled={ submitting } type='password' { ...password } placeholder='原密码'/>
+            { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ new_password.touched && new_password.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>新密码</ControlLabel>
+            <FormControl disabled={ submitting } type='password' { ...new_password } placeholder='新密码'/>
+            { new_password.touched && new_password.error && <HelpBlock style={ { float: 'right' } }>{ new_password.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ new_password2.touched && new_password2.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>确认密码</ControlLabel>
+            <FormControl disabled={ submitting } type='password' { ...new_password2 } placeholder='新确认密码'/>
+            { new_password2.touched && new_password2.error && <HelpBlock style={ { float: 'right' } }>{ new_password2.error }</HelpBlock> }
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
+          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+        </Modal.Footer>
+        </form>
+      </Modal>
+    );
+  }
+}

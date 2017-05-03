@@ -67,7 +67,7 @@ export default class Header extends Component {
     } else if (eventKey === 'scheme') {
       entry('/admin/scheme/type');
     } else if (eventKey === 'setting') {
-      entry('/admin/setting');
+      entry('/admin/syssetting');
     }
   }
 
@@ -87,6 +87,7 @@ export default class Header extends Component {
       { key: 'activity', name: '活动' },
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
+      { key: 'team', name: '项目成员' },
       { key: 'type', name: '问题类型' },
       { key: 'workflow', name: '工作流' },
       { key: 'field', name: '字段' },
@@ -106,6 +107,8 @@ export default class Header extends Component {
     const patten5 = new RegExp('^/admin/user$');
     const patten6 = new RegExp('^/admin/scheme/(\\w+)$');
     const patten7 = new RegExp('^/admin/scheme/workflow/(\\w+)$');
+    const patten8 = new RegExp('^/admin/syssetting$');
+    const patten9 = new RegExp('^/mysetting$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -136,6 +139,10 @@ export default class Header extends Component {
       modulename = '项目列表';
     } else if (patten5.exec(pathname)) {
       modulename = '用户管理';
+    } else if (patten8.exec(pathname)) {
+      modulename = '系统设置';
+    } else if (patten9.exec(pathname)) {
+      modulename = '个人设置';
     } else {
       modulename = '其他';
     }
