@@ -9,16 +9,30 @@ import _ from 'lodash';
 const img = require('../../../assets/images/loading.gif');
 const PropertiesModal = require('./PropertiesModal');
 const TimeTrackModal = require('./TimeTrackModal');
+const SmtpServerModal = require('./SmtpServerModal');
+const ResetPwdModal = require('./ResetPwdModal');
+const SendTestMailModal = require('./SendTestMailModal');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 'properties', propertiesModalShow: false, timeTrackModalShow: false };
+    this.state = { 
+      tabKey: 'properties', 
+      propertiesModalShow: false, 
+      timeTrackModalShow: false, 
+      smtpServerModalShow: false, 
+      sendTestMailModalShow: false, 
+      resetPwdModalShow: false };
+
     this.propertiesModalClose = this.propertiesModalClose.bind(this);
     this.timeTrackModalClose = this.timeTrackModalClose.bind(this);
+    this.smtpServerModalClose = this.smtpServerModalClose.bind(this);
+    this.sendTestMailModalClose = this.sendTestMailModalClose.bind(this);
+    this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
   }
 
   static propTypes = {
+    loading: PropTypes.bool.isRequired,
     settings: PropTypes.object.isRequired,
     show: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired
@@ -32,28 +46,34 @@ export default class List extends Component {
     this.setState({ timeTrackModalShow: false });
   }
 
+  smtpServerModalClose() {
+    this.setState({ smtpServerModalShow: false });
+  }
+
+  sendTestMailModalClose() {
+    this.setState({ sendTestMailModalShow: false });
+  }
+
+  resetPwdModalClose() {
+    this.setState({ resetPwdModalShow: false });
+  }
+
   handleTabSelect(tabKey) {
     this.setState({ tabKey });
   }
 
-  editSetting() {
-    if (this.state.tabKey === 'properties') {
-      this.setState({ propertiesModalShow: true });
-    } else if (this.state.tabKey === 'timetrack') {
-      this.setState({ timeTrackModalShow: true });
-    }
-  }
-
-  async componentWillMount() {
+  componentWillMount() {
+    const { show } = this.props;
+    show();
   }
 
   render() {
-    const { update, settings } = this.props;
+    const { update, loading, settings: { properties={}, timetrack={}, smtp={}, permission={} } } = this.props;
 
-    const styles = { marginLeft: '20px', marginTop: '10px', marginBottom: '10px' };
+    const styles = { marginTop: '10px', marginBottom: '10px' };
  
-    const properties = [];
-    properties.push({
+    const propertyItems = [];
+    propertyItems.push({
       id: 'mail_domain',
       title: (
         <div>
@@ -62,25 +82,65 @@ export default class List extends Component {
       ),
       contents: (
         <div>
-          chinamobile.com
+          { properties.mail_domain || '-' }
         </div>
       )
     });
-    properties.push({
+    propertyItems.push({
       id: 'allowed_login_num',
       title: (
         <div>
           <span className='table-td-title'>最大尝试验证登录次数</span>
-          <span className='table-td-issue-desc'>如果设置次数内没有登录成功，需输入验证码。（暂不支持此功能）</span>
+          <span className='table-td-issue-desc'>如果设置次数内没有登录成功，需输入验证码。（暂不支持此功能配置）</span>
         </div>
       ),
       contents: (
-        <div>3</div>
+        <div>{ properties.allowed_login_num || '-' }</div>
+      )
+    })
+    propertyItems.push({
+      id: 'default_locale',
+      title: (
+        <div>
+          <span className='table-td-title'>默认语言</span>
+          <span className='table-td-issue-desc'>不支持此功能配置</span>
+        </div>
+      ),
+      contents: (
+        <div>{ '中文' }</div>
+      )
+    });
+    propertyItems.push({
+      id: 'default_timezone',
+      title: (
+        <div>
+          <span className='table-td-title'>默认用户时区</span>
+          <span className='table-td-issue-desc'>不支持此功能配置</span>
+        </div>
+      ),
+      contents: (
+        <div>{ '(GMT+08:00) 上海' }</div>
+      )
+    });
+    propertyItems.push({
+      id: 'ip',
+      title: (
+        <div>
+          <span className='table-td-title'>时间追踪</span>
+        </div>
+      ),
+      contents: (
+        <div>
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+            <li>每周有效工作日：{ properties.week2day || '-' }</li>
+            <li>每天有效工作时间：{ properties.day2hour || '-' }</li>
+          </ul>
+        </div>
       )
     });
 
-    const timeTrack = [];
-    timeTrack.push({
+    const timeTrackItems = [];
+    timeTrackItems.push({
       id: 'week2day',
       title: (
         <div>
@@ -88,10 +148,10 @@ export default class List extends Component {
         </div>
       ),
       contents: (
-        <div>5 天</div>
+        <div>{ timetrack.week2day || 5 } 天</div>
       )
     });
-    timeTrack.push({
+    timeTrackItems.push({
       id: 'day2hour',
       title: (
         <div>
@@ -99,58 +159,49 @@ export default class List extends Component {
         </div>
       ),
       contents: (
-        <div>8 小时</div>
+        <div>{ timetrack.day2hour || 8 } 小时</div>
       )
     });
 
-    const mailServer = [];
-    mailServer.push({
+    const mailServerItems = [];
+    mailServerItems.push({
       id: 'ip',
       title: (
         <div>
-          <span className='table-td-title'>SMTP服务器IP</span>
+          <span className='table-td-title'>SMTP服务器</span>
         </div>
       ),
       contents: (
-        <div>10.2.5.91</div>
-      )
-    });
-    mailServer.push({
-      id: 'port',
-      title: (
-        <div>
-          <span className='table-td-title'>端口</span>
+        <div style={ styles }>
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+            <li>服务器：{ smtp.ip || '-' }</li>
+            <li>端口：{ smtp.port || '-' }</li>
+            <li>发件地址：{ smtp.send_addr || '-' }</li>
+            <li>发送验证：{ smtp.send_auth === 1 ? '开启' : '关闭' }</li>
+          </ul>
+          <Button disabled={ loading } style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ smtpServerModalShow: true }) } }>编辑服务器</Button>
         </div>
-      ),
-      contents: (
-        <div>25</div>
-      )
-    });
-    mailServer.push({
-      id: 'account',
-      title: (
-        <div>
-          <span className='table-td-title'>帐号</span>
-        </div>
-      ),
-      contents: (
-        <div>actionview@chinamobile.com</div>
-      )
-    });
-    mailServer.push({
-      id: 'password',
-      title: (
-        <div>
-          <span className='table-td-title'>密码</span>
-        </div>
-      ),
-      contents: (
-        <div>******</div>
       )
     });
 
-    const permissions = [];
-    permissions.push({
+    if (smtp.send_auth === 1) {
+      mailServerItems.push({
+        id: 'send_auth_pwd',
+        title: (
+          <div>
+            <span className='table-td-title'>验证密码</span>
+          </div>
+        ),
+        contents: (
+          <div style={ styles }>
+            <Button disabled={ loading } style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ resetPwdModalShow: true }) } }>设置验证密码</Button>
+          </div>
+        )
+      });
+    }
+
+    const permissionItems = [];
+    permissionItems.push({
       id: 'sysadmin',
       title: (
         <div>
@@ -164,20 +215,20 @@ export default class List extends Component {
 
     let data = [];
     if (this.state.tabKey == 'properties') {
-      data = properties;
+      data = propertyItems;
     } else if (this.state.tabKey == 'timetrack') {
-      data = timeTrack;
+      data = timeTrackItems;
     } else if (this.state.tabKey == 'mailserver') {
-      data = mailServer;
+      data = mailServerItems;
     } else if (this.state.tabKey == 'permissions') {
-      data = permissions;
+      data = permissionItems;
     }
 
     return (
       <div>
         <Nav bsStyle='pills' style={ { marginTop: '10px', float: 'left', lineHeight: '1.0' } } activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) }>
           <NavItem eventKey='properties' href='#'>通用设置</NavItem>
-          <NavItem eventKey='timetrack' href='#'>时间追踪</NavItem>
+          {/*<NavItem eventKey='timetrack' href='#'>时间追踪</NavItem>*/}
           <NavItem eventKey='mailserver' href='#'>邮件服务器</NavItem>
           <NavItem eventKey='permissions' href='#'>全局权限</NavItem>
         </Nav>
@@ -187,11 +238,19 @@ export default class List extends Component {
           <TableHeaderColumn width='200' dataField='contents'/>
           <TableHeaderColumn dataField='blank'/>
         </BootstrapTable>
+        { this.state.tabKey == 'properties' &&
         <div style={ { width: '100%', marginTop: '20px' } }>
-          <Button onClick={ this.editSetting.bind(this) }>修改设置</Button>
-        </div>
-        { this.state.propertiesModalShow && <PropertiesModal show close={ this.propertiesModalClose } update={ update } data={ settings.properties || {} }/> }
-        { this.state.timeTrackModalShow && <TimeTrackModal show close={ this.timeTrackModalClose } update={ update } data={ settings.timetrack || {} }/> }
+          <Button disabled={ loading } onClick={ () => { this.setState({ propertiesModalShow: true }) } }>修改设置</Button>
+        </div> }
+        { this.state.tabKey == 'mailserver' &&
+        <div style={ { width: '100%', marginTop: '20px' } }>
+          <Button disabled={ loading } onClick={ () => { this.setState({ sendTestMailModalShow: true }) } }>发送测试邮件</Button>
+        </div> }
+        { this.state.propertiesModalShow && <PropertiesModal show close={ this.propertiesModalClose } update={ update } data={ properties }/> }
+        { this.state.timeTrackModalShow && <TimeTrackModal show close={ this.timeTrackModalClose } update={ update } data={ timetrack }/> }
+        { this.state.smtpServerModalShow && <SmtpServerModal show close={ this.smtpServerModalClose } update={ update } data={ smtp }/> }
+        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } update={ update }/> }
+        { this.state.sendTestMailModalShow && <SendTestMailModal show close={ this.sendTestMailModalClose } sendMail={ update }/> }
       </div>
     );
   }

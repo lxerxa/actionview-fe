@@ -187,14 +187,11 @@ export default class List extends Component {
           { _.indexOf(willSetPrincipalModuleIds, collection[i].id) === -1 && _.indexOf(settingPrincipalModuleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
               <div style={ { display: 'table', width: '100%' } }>
-              { collection[i].principal ?
                 <span>
                   <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
-                    { collection[i].principal.name || '-' } 
+                    { collection[i].principal && collection[i].principal.name || '-' } 
                   </div>
                 </span> 
-                :
-                '-' }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>
             </div>
@@ -222,7 +219,9 @@ export default class List extends Component {
                   </div>
                 </span> 
                 :
-                '-' }
+                <span>
+                  <div style={ { display: 'inline-block', margin: '3px' } }>-</div>
+                </span> }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>
             </div>

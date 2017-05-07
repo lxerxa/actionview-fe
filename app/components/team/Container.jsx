@@ -29,8 +29,8 @@ export default class Container extends Component {
     return this.props.role.ecode;
   }
 
-  async update(values) {
-    await this.props.actions.update(this.pid, values);
+  async setActor(values) {
+    await this.props.actions.setActor(this.pid, values);
     return this.props.role.ecode;
   }
 
@@ -44,7 +44,7 @@ export default class Container extends Component {
       <div>
         <List 
           index={ this.index.bind(this) } 
-          update={ this.update.bind(this) } 
+          setActor={ this.setActor.bind(this) } 
           { ...this.props.role }/>
       </div>
     );

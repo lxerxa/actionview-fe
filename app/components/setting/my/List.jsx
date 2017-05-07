@@ -43,9 +43,6 @@ export default class List extends Component {
 
   handleTabSelect(tabKey) {
     this.setState({ tabKey });
-    if (tabKey == 'favorite') {
-      notify.show('暂只支持中文，下个版本考虑支持多语言', 'warning', 2000);
-    }
   }
 
   async notifyChange(values) {
@@ -214,7 +211,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>语言设置</span>
-          <span className='table-td-issue-desc'>请选择您喜欢的语言</span>
+          <span className='table-td-issue-desc'>请选择您喜欢的语言(暂不支持此功能)</span>
         </div>
       ),
       contents: (

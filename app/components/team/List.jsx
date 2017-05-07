@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button } from 'react-bootstrap';
+import { Button, Label } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
@@ -25,7 +25,7 @@ export default class List extends Component {
     selectedItem: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
+    setActor: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -59,8 +59,8 @@ export default class List extends Component {
     this.state.settingUserRoleIds.push(roleId);
     this.setState({ settingUserRoleIds: this.state.settingUserRoleIds });
 
-    const { update, collection } = this.props;
-    const ecode = await update({ users: _.map(this.state.users[roleId] || _.find(collection, { id: roleId }).users, _.iteratee('id')), id: roleId });
+    const { setActor, collection } = this.props;
+    const ecode = await setActor({ users: _.map(this.state.users[roleId] || _.find(collection, { id: roleId }).users, _.iteratee('id')), id: roleId });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetUserRoleIds.indexOf(roleId);
       this.state.willSetUserRoleIds.splice(willSetIndex, 1);
@@ -95,7 +95,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, indexLoading, update } = this.props;
+    const { collection, indexLoading, setActor } = this.props;
     const { willSetUserRoleIds, settingUserRoleIds, hoverRowId } = this.state;
 
     const roles = [];
@@ -116,10 +116,12 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].users && collection[i].users.length > 0 ?
                 <span>
-                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Person key={ v.id } data={ v }/></div> }) }
+                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
                 </span>
                 :
-                '-' }
+                <span>
+                  <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
+                </span> }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetUsers.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>
             </div> 

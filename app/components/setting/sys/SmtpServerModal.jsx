@@ -9,15 +9,30 @@ const img = require('../../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
+  if (!values.ip) {
+    errors.ip = '必填';
+  }
+  // if (!/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/.test(values.ip)) {
+  else if (!/^[\w-]+([.][\w-]+)+$/.test(values.ip)) {
+    errors.ip = '格式有误';
+  }
+  if (values.port && !/^[1-9][0-9]*$/.test(values.port)) {
+    errors.port = '必须输入正整数';
+  }
+  if (!values.send_addr) {
+    errors.send_addr = '必填';
+  } else if (!/^[\w-]+@[\w-]+([.][\w-]+)+$/.test(values.send_addr)) {
+    errors.send_addr = '格式有误';
+  }
   return errors;
 };
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'week2day', 'day2hour' ],
+  fields: [ 'ip', 'port', 'send_addr', 'send_auth' ],
   validate
 })
-export default class TimeTrackModal extends Component {
+export default class SmtpServerModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -40,18 +55,12 @@ export default class TimeTrackModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    if (!data.week2day) {
-      data.week2day = 5;
-    }
-    if (!data.day2hour) {
-      data.day2hour = 8;
-    }
     initializeForm(data);
   }
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update({ timetrack: _.pick(values, [ 'week2day', 'day2hour' ]) });
+    const ecode = await update(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -71,54 +80,39 @@ export default class TimeTrackModal extends Component {
   }
 
   render() {
-    const { fields: { week2day, day2hour }, handleSubmit, invalid, dirty, submitting, data } = this.props;
-    const dayOptions = [ 
-      { value: 6, label: '6' }, 
-      { value: 5.5, label: '5.5' }, 
-      { value: 5, label: '5' }, 
-      { value: 4.5, label: '4.5' }, 
-      { value: 4, label: '4' } 
-    ];
-
-    const hourOptions = [ 
-      { value: 10, label: '10' }, 
-      { value: 9.5, label: '9.5' }, 
-      { value: 9, label: '9' }, 
-      { value: 8.5, label: '8.5' }, 
-      { value: 8, label: '8' }, 
-      { value: 7.5, label: '7.5' }, 
-      { value: 7, label: '7' }, 
-      { value: 6.5, label: '6.5' },
-      { value: 6, label: '6' }
-    ];
+    const { fields: { ip, port, send_addr, send_auth }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>时间追踪</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>SMPT服务器设置</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>每周有效工作日(天)</ControlLabel>
-            <Select
-              disabled={ submitting }
-              clearable={ false }
-              searchable={ false }
-              options={ dayOptions }
-              value={ week2day.value }
-              onChange={ newValue => { week2day.onChange(newValue) } }
-              placeholder='请选择'/>
+          <FormGroup controlId='formControlsText' validationState={ ip.touched && ip.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>服务器</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...ip } placeholder='主机名称或IP地址'/>
+            { ip.touched && ip.error && <HelpBlock style={ { float: 'right' } }>{ ip.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ port.touched && port.error ? 'error' : '' }>
+            <ControlLabel>端口</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...port } placeholder='端口'/>
+            { port.touched && port.error && <HelpBlock style={ { float: 'right' } }>{ port.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ send_addr.touched && send_addr.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>发送邮箱地址</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...send_addr } placeholder='邮箱账号'/>
+            { send_addr.touched && send_addr.error && <HelpBlock style={ { float: 'right' } }>{ send_addr.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>每天有效工作时间(小时)</ControlLabel>
+            <ControlLabel>发送验证</ControlLabel>
             <Select
               disabled={ submitting }
               clearable={ false }
               searchable={ false }
-              options={ hourOptions }
-              value={ day2hour.value }
-              onChange={ newValue => { day2hour.onChange(newValue) } }
+              options={ [ { value: 1, label: '开启' }, { value: 0, label: '关闭' } ] }
+              value={ send_auth.value || 0 }
+              onChange={ newValue => { send_auth.onChange(newValue) } }
               placeholder='请选择'/>
           </FormGroup>
         </Modal.Body>

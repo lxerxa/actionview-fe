@@ -12,6 +12,19 @@ const simplifyUsers = (collection) => collection
 
 export default function(router) {
 
+  router.get('/admin/syssetting', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { properties: { allowed_login_num: 3, login_mail_domain: 'chinamobile.com', week2day: 5, day2hour: 8 }, smtp: { ip: '10.2.5.34', port: 25, send_addr: 'actionview@chinamobile.com', auth_pwd: '111' }, permissions: { } } };
+    return res.status(200).send(results);
+  });
+
+  router.post('/admin/syssetting', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);                                                                               const results = { ecode: 0, data: { properties: { allowed_login_num: 5, mail_domain: 'chinamobile.com' }, timetrack: { week2day: 6, day2hour: 7 }, smtp: { ip: '10.2.5.34', port: 25, account: 'actionview@chinamobile.com' }, permissions: { } } };
+    return res.status(200).send(results);
+  });
+
   router.post('/mysetting/notify', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

@@ -21,6 +21,13 @@ export function update(key, values) {
   });
 }
 
+export function setActor(key, values) {
+  return asyncFuncCreator({
+    constant: 'ROLE_SET_ACTOR',
+    promise: (client) => client.request({ url: '/project/' + key + '/role/' + values.id + '/actor', method: 'post', data: values })
+  });
+}
+
 export function select(id) {
   return { type: 'ROLE_SELECT', id: id };
 }

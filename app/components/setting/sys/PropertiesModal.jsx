@@ -9,12 +9,18 @@ const img = require('../../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
+  if (values.login_mail_domain && !/^[\w-]+([.][\w-]+)+$/.test(values.login_mail_domain)) {
+    errors.login_mail_domain = '格式有误';
+  }
+  //if (values.allowed_login_num && !/^[1-9][0-9]*$/.test(values.allowed_login_num)) {
+  //  errors.allowed_login_num = '必须输入正整数';
+  //}
   return errors;
 };
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'mail_domain', 'allowed_login_num' ],
+  fields: [ 'login_mail_domain', 'week2day', 'day2hour' ],
   validate
 })
 export default class PropertiesModal extends Component {
@@ -45,7 +51,7 @@ export default class PropertiesModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update(values);
+    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'week2day', 'day2hour' ]) });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -65,7 +71,27 @@ export default class PropertiesModal extends Component {
   }
 
   render() {
-    const { fields: { mail_domain, allowed_login_num }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { login_mail_domain, week2day, day2hour }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+
+    const dayOptions = [
+      { value: 6, label: '6' },
+      { value: 5.5, label: '5.5' },
+      { value: 5, label: '5' },
+      { value: 4.5, label: '4.5' },
+      { value: 4, label: '4' }
+    ];
+
+    const hourOptions = [
+      { value: 10, label: '10' },
+      { value: 9.5, label: '9.5' },
+      { value: 9, label: '9' },
+      { value: 8.5, label: '8.5' },
+      { value: 8, label: '8' },
+      { value: 7.5, label: '7.5' },
+      { value: 7, label: '7' },
+      { value: 6.5, label: '6.5' },
+      { value: 6, label: '6' }
+    ];
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -74,15 +100,37 @@ export default class PropertiesModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ mail_domain.touched && mail_domain.error ? 'error' : '' }>
-            <ControlLabel>邮箱域名</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...mail_domain } placeholder='默认邮箱域名'/>
-            { mail_domain.touched && mail_domain.error && <HelpBlock style={ { float: 'right' } }>{ mail_domain.error }</HelpBlock> }
+          <FormGroup controlId='formControlsText' validationState={ login_mail_domain.touched && login_mail_domain.error ? 'error' : '' }>
+            <ControlLabel>默认登陆邮箱域名</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...login_mail_domain } placeholder='邮箱域名'/>
+            { login_mail_domain.touched && login_mail_domain.error && <HelpBlock style={ { float: 'right' } }>{ login_mail_domain.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ allowed_login_num.touched && allowed_login_num.error ? 'error' : '' }>
+          {/*<FormGroup controlId='formControlsText' validationState={ allowed_login_num.touched && allowed_login_num.error ? 'error' : '' }>
             <ControlLabel>最大登录次数</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...allowed_login_num } placeholder='默认邮箱域名'/>
+            <FormControl disabled={ submitting } type='text' { ...allowed_login_num } placeholder='登录次数'/>
             { allowed_login_num.touched && allowed_login_num.error && <HelpBlock style={ { float: 'right' } }>{ allowed_login_num.error }</HelpBlock> }
+          </FormGroup>*/}
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>每周有效工作日(天)</ControlLabel>
+            <Select
+              disabled={ submitting }
+              clearable={ false }
+              searchable={ false }
+              options={ dayOptions }
+              value={ week2day.value }
+              onChange={ newValue => { week2day.onChange(newValue) } }
+              placeholder='请选择'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>每天有效工作时间(小时)</ControlLabel>
+            <Select
+              disabled={ submitting }
+              clearable={ false }
+              searchable={ false }
+              options={ hourOptions }
+              value={ day2hour.value }
+              onChange={ newValue => { day2hour.onChange(newValue) } }
+              placeholder='请选择'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

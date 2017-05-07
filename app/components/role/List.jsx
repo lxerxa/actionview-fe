@@ -156,7 +156,9 @@ export default class List extends Component {
                 { _.map(permissions, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
                 </span>
                 :
-                '-' }
+                <span>
+                  <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
+                </span> }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetPermissions.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>
             </div> 
