@@ -12,6 +12,7 @@ const TimeTrackModal = require('./TimeTrackModal');
 const SmtpServerModal = require('./SmtpServerModal');
 const ResetPwdModal = require('./ResetPwdModal');
 const SendTestMailModal = require('./SendTestMailModal');
+const ConfigActorModal = require('./ConfigActorModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -22,20 +23,24 @@ export default class List extends Component {
       timeTrackModalShow: false, 
       smtpServerModalShow: false, 
       sendTestMailModalShow: false, 
-      resetPwdModalShow: false };
+      resetPwdModalShow: false,
+      configActorModalShow: false };
 
     this.propertiesModalClose = this.propertiesModalClose.bind(this);
     this.timeTrackModalClose = this.timeTrackModalClose.bind(this);
     this.smtpServerModalClose = this.smtpServerModalClose.bind(this);
     this.sendTestMailModalClose = this.sendTestMailModalClose.bind(this);
     this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
+    this.configActorModalClose = this.configActorModalClose.bind(this);
   }
 
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     settings: PropTypes.object.isRequired,
     show: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired,
+    resetPwd: PropTypes.func.isRequired,
+    sendTestMail: PropTypes.func.isRequired
   }
 
   propertiesModalClose() {
@@ -58,6 +63,10 @@ export default class List extends Component {
     this.setState({ resetPwdModalShow: false });
   }
 
+  configActorModalClose() {
+    this.setState({ configActorModalShow: false });
+  }
+
   handleTabSelect(tabKey) {
     this.setState({ tabKey });
   }
@@ -68,7 +77,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { update, loading, settings: { properties={}, timetrack={}, smtp={}, permission={} } } = this.props;
+    const { update, resetPwd, sendTestMail, loading, settings: { properties={}, timetrack={}, smtp={}, sysroles={} } } = this.props;
 
     const styles = { marginTop: '10px', marginBottom: '10px' };
  
@@ -82,7 +91,7 @@ export default class List extends Component {
       ),
       contents: (
         <div>
-          { properties.mail_domain || '-' }
+          { properties.login_mail_domain || '-' }
         </div>
       )
     });
@@ -209,7 +218,12 @@ export default class List extends Component {
         </div>
       ),
       contents: (
-        <div>******</div>
+        <div>
+          <span>
+          {/* _.map(sysroles.sys_admin || [], function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) */}
+          { sysroles.sys_admin && sysroles.sys_admin.length > 0 ? _.map(sysroles.sys_admin || [], function(v, i){ if (i === 0) { return v.name } else { return ', ' + v.name } }) : '-' }
+          </span>
+        </div>
       )
     });
 
@@ -220,7 +234,7 @@ export default class List extends Component {
       data = timeTrackItems;
     } else if (this.state.tabKey == 'mailserver') {
       data = mailServerItems;
-    } else if (this.state.tabKey == 'permissions') {
+    } else if (this.state.tabKey == 'sysroles') {
       data = permissionItems;
     }
 
@@ -230,7 +244,7 @@ export default class List extends Component {
           <NavItem eventKey='properties' href='#'>通用设置</NavItem>
           {/*<NavItem eventKey='timetrack' href='#'>时间追踪</NavItem>*/}
           <NavItem eventKey='mailserver' href='#'>邮件服务器</NavItem>
-          <NavItem eventKey='permissions' href='#'>全局权限</NavItem>
+          <NavItem eventKey='sysroles' href='#'>系统角色</NavItem>
         </Nav>
         <BootstrapTable data={ data } bordered={ false } hover trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
@@ -246,11 +260,16 @@ export default class List extends Component {
         <div style={ { width: '100%', marginTop: '20px' } }>
           <Button disabled={ loading } onClick={ () => { this.setState({ sendTestMailModalShow: true }) } }>发送测试邮件</Button>
         </div> }
+        { this.state.tabKey == 'sysroles' &&
+        <div style={ { width: '100%', marginTop: '20px' } }>
+          <Button disabled={ loading } onClick={ () => { this.setState({ configActorModalShow: true }) } }>角色配置</Button>
+        </div> }
         { this.state.propertiesModalShow && <PropertiesModal show close={ this.propertiesModalClose } update={ update } data={ properties }/> }
         { this.state.timeTrackModalShow && <TimeTrackModal show close={ this.timeTrackModalClose } update={ update } data={ timetrack }/> }
         { this.state.smtpServerModalShow && <SmtpServerModal show close={ this.smtpServerModalClose } update={ update } data={ smtp }/> }
-        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } update={ update }/> }
-        { this.state.sendTestMailModalShow && <SendTestMailModal show close={ this.sendTestMailModalClose } sendMail={ update }/> }
+        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd }/> }
+        { this.state.sendTestMailModalShow && <SendTestMailModal show close={ this.sendTestMailModalClose } sendMail={ sendTestMail }/> }
+        { this.state.configActorModalShow && <ConfigActorModal show close={ this.configActorModalClose } update={ update } data={ sysroles }/> }
       </div>
     );
   }

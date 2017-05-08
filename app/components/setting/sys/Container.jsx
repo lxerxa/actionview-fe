@@ -33,6 +33,16 @@ export default class Container extends Component {
     return this.props.syssetting.ecode;
   }
 
+  async resetPwd(values) {
+    await this.props.actions.resetPwd(values);
+    return this.props.syssetting.ecode;
+  }
+
+  async sendTestMail(values) {
+    await this.props.actions.sendTestMail(values);
+    return this.props.syssetting.ecode;
+  }
+
   render() {
     return (
       <div className='doc-container'>
@@ -40,6 +50,8 @@ export default class Container extends Component {
           <List 
             show={ this.show.bind(this) }
             update={ this.update.bind(this) }
+            resetPwd={ this.resetPwd.bind(this) }
+            sendTestMail={ this.sendTestMail.bind(this) }
             { ...this.props.syssetting }/>
         </div>
       </div>

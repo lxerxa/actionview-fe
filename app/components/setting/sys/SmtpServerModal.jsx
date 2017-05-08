@@ -60,7 +60,7 @@ export default class SmtpServerModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update(values);
+    const ecode = await update({ smtp: values });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

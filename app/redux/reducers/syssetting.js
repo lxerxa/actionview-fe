@@ -14,12 +14,24 @@ export default function syssetting(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.SYSSETTING_UPDATE:
+    case t.SYSSETTING_RESET_PWD:
       return { ...state, loading: true };
 
     case t.SYSSETTING_UPDATE_SUCCESS:
+    case t.SYSSETTING_RESET_PWD_SUCCESS:
       return { ...state, loading: false, ecode: action.result.ecode, settings: action.result.data || {} };
 
     case t.SYSSETTING_UPDATE_FAIL:
+    case t.SYSSETTING_RESET_PWD_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case t.SYSSETTING_SEND_TESTMAIL:
+      return { ...state, loading: true };
+
+    case t.SYSSETTING_SEND_TESTMAIL_SUCCESS:
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.SYSSETTING_SEND_TESTMAIL_FAIL:
       return { ...state, loading: false, error: action.error };
 
     default:

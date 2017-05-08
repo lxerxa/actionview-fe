@@ -58,7 +58,7 @@ export default class Header extends Component {
 
   sysOperateSelect(eventKey) {
     const { entry, cleanSelectedProject } = this.props;
-    cleanSelectedProject();
+    //cleanSelectedProject();
 
     if (eventKey === 'project') {
       entry('/admin/project');
@@ -74,9 +74,10 @@ export default class Header extends Component {
   render() {
     const { pathname, project, session } = this.props;
 
-    let curProject = project.item || {};
+    let curProject = {};
     let recentProjects = project.recents;
-    if (!_.isEmpty(curProject)) {
+    if (/^\/project/.test(pathname)) {
+      curProject = project.item;
       recentProjects = _.reject(recentProjects, { key: curProject.key });
     }
 
@@ -165,7 +166,7 @@ export default class Header extends Component {
         </span>
         <span style={ { float: 'right' } }>
           <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.sysOperateSelect.bind(this) }>
-            <MenuItem eventKey='scheme'>问题方案配置</MenuItem>
+            <MenuItem eventKey='scheme'>方案配置</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='user'>用户管理</MenuItem>
             <MenuItem eventKey='project'>项目管理</MenuItem>

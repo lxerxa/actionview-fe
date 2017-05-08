@@ -48,7 +48,7 @@ export default class ResetPwdModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('邮件已成功发送。', 'success', 2000);
+      notify.show('邮件已发送。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -71,7 +71,7 @@ export default class ResetPwdModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>发送测试邮件</Modal.Title>
         </Modal.Header>
-        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
+        <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ to.touched && to.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>收件人</ControlLabel>
@@ -83,9 +83,9 @@ export default class ResetPwdModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...subject } placeholder='主题'/>
             { subject.touched && subject.error && <HelpBlock style={ { float: 'right' } }>{ subject.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup controlId='formControlsTextarea'>
             <ControlLabel>内容</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...contents } placeholder='主题'/>
+            <FormControl style={ { height: '100px' } } disabled={ submitting } componentClass='textarea' { ...contents } placeholder='内容'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

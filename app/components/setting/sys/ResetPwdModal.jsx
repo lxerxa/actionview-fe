@@ -34,12 +34,12 @@ export default class ResetPwdModal extends Component {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
+    resetPwd: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, update, close } = this.props;
-    const ecode = await update({ smpt: _.pick(values, [ 'send_auth_pwd' ]) });
+    const { values, resetPwd, close } = this.props;
+    const ecode = await resetPwd({ smpt: _.pick(values, [ 'send_auth_pwd' ]) });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
