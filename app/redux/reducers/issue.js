@@ -28,7 +28,6 @@ const initialState = {
   worklogIndexLoading: false, 
   worklogLoading: false, 
   worklogLoaded: false, 
-  worklogOptions: {}, 
   linkLoading: false };
 
 export default function issue(state = initialState, action) {
@@ -284,7 +283,6 @@ export default function issue(state = initialState, action) {
       return { ...state, worklogIndexLoading: true, worklogCollection: [] };
 
     case t.ISSUE_WORKLOG_INDEX_SUCCESS:
-      _.assign(state.options, action.result.options || {});
       return { ...state, worklogIndexLoading: false, worklogLoaded: true, ecode: action.result.ecode, worklogCollection: action.result.data };
 
     case t.ISSUE_WORKLOG_INDEX_FAIL:

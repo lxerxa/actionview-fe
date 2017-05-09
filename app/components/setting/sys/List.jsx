@@ -136,6 +136,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>时间追踪</span>
+          <span className='table-td-issue-desc'>建议启用此功能之前，确定此相关参数。若改动，可能会影响到原有问题的估算。</span>
         </div>
       ),
       contents: (

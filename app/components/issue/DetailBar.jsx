@@ -95,7 +95,6 @@ export default class DetailBar extends Component {
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
-    worklogOptions: PropTypes.object.isRequired,
     worklogCollection: PropTypes.array.isRequired,
     worklogIndexLoading: PropTypes.bool.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
@@ -408,7 +407,6 @@ export default class DetailBar extends Component {
       addWorklog, 
       editWorklog, 
       delWorklog, 
-      worklogOptions, 
       createLink, 
       delLink, 
       linkLoading, 
@@ -768,7 +766,7 @@ export default class DetailBar extends Component {
               <Worklog 
                 issue={ data }
                 original_estimate = { data.original_estimate }
-                options={ worklogOptions }
+                options={ options.timetrack || {} }
                 collection={ worklogCollection } 
                 indexWorklog={ indexWorklog } 
                 indexLoading={ worklogIndexLoading } 
