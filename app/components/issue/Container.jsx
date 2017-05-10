@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ issue, project, wfconfig }) => ({ issue, project, wfconfig }), mapDispatchToProps)
+@connect(({ session, issue, project, wfconfig }) => ({ session, issue, project, wfconfig }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +34,7 @@ export default class Container extends Component {
     wfActions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     wfconfig: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired
@@ -262,6 +263,7 @@ export default class Container extends Component {
           copy={ this.copy.bind(this) }
           move={ this.move.bind(this) }
           convert={ this.convert.bind(this) }
+          user={ this.props.session.user }
           { ...this.props.issue }/> 
       </div>
     );

@@ -164,6 +164,7 @@ export default class Header extends Component {
             <MenuItem eventKey='logout'>退出</MenuItem>
           </DropdownButton>
         </span>
+        { session.user && session.user.permissions && session.user.permissions.sys_admin &&
         <span style={ { float: 'right' } }>
           <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.sysOperateSelect.bind(this) }>
             <MenuItem eventKey='scheme'>方案配置</MenuItem>
@@ -173,7 +174,7 @@ export default class Header extends Component {
             <MenuItem divider />
             <MenuItem eventKey='setting'>系统设置</MenuItem>
           </DropdownButton>
-        </span>
+        </span> }
         <span style={ { float: 'right' } }>
           <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ headerUser } onSelect={ this.operateSelect.bind(this) }>
             { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }

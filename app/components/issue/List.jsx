@@ -102,7 +102,8 @@ export default class List extends Component {
     move: PropTypes.func.isRequired,
     convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired
+    del: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
   }
 
   async componentWillMount() {
@@ -303,7 +304,8 @@ export default class List extends Component {
       move,
       convert,
       resetState,
-      doAction } = this.props;
+      doAction,
+      user } = this.props;
 
     const { operateShow, hoverRowId, selectedItem } = this.state;
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -463,7 +465,8 @@ export default class List extends Component {
             move={ move }
             convert={ convert }
             resetState={ resetState }
-            doAction={ doAction }/> }
+            doAction={ doAction }
+            user={ user }/> }
         { !indexLoading && options.total && options.total > 0 ? 
           <PaginationList 
             total={ options.total || 0 } 

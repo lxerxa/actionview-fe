@@ -113,7 +113,8 @@ export default class DetailBar extends Component {
     convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
-    close: PropTypes.func.isRequired
+    close: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
   }
 
   componentWillReceiveProps(nextProps) {
@@ -410,7 +411,8 @@ export default class DetailBar extends Component {
       createLink, 
       delLink, 
       linkLoading, 
-      doAction } = this.props;
+      doAction,
+      user } = this.props;
     const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile, action_id } = this.state;
 
     const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -555,7 +557,8 @@ export default class DetailBar extends Component {
                         </span>
                         <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
                       </div>
-                      <span style={ { float: 'left' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span>
+                      { (!data['assignee'] || data['assignee'].id !== user.id) &&
+                      <span style={ { float: 'left' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span> }
                     </div>
                     :
                     <div style={ { marginTop: '7px' } }>
