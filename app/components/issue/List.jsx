@@ -134,14 +134,16 @@ export default class List extends Component {
   }
 
   async operateSelect(eventKey) {
-    const { show, watch, collection } = this.props;
+    const { watch, collection } = this.props;
 
     const { hoverRowId } = this.state;
     const selectedItem = _.find(collection, { id: hoverRowId }) || {}; 
     this.setState({ selectedItem });
 
     let ecode = 0;
-    if (eventKey === 'del') {
+    if (eventKey === 'view') {
+      this.show(hoverRowId); 
+    } else if (eventKey === 'del') {
       this.setState({ delNotifyShow : true });
     } else if (eventKey === 'assign') {
       this.setState({ assignModalShow : true });
@@ -363,24 +365,25 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='edit'>编辑</MenuItem>
-                <MenuItem eventKey='assign'>分配</MenuItem>
+                <MenuItem eventKey='view'>查看</MenuItem>
+                { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
+                { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
                 <MenuItem divider/>
                 <MenuItem eventKey='share'>分享链接</MenuItem>
                 <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
                 <MenuItem divider/>
                 <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem divider/> }
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
-                { collection[i].parent_id && <MenuItem divider/> }
-                { collection[i].parent_id && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && _.intersection(options.permissions, ['create_issue', 'edit_issue']).length > 0 && <MenuItem divider/> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+                { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
+                { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                 <MenuItem divider/>
-                { collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                <MenuItem eventKey='copy'>复制</MenuItem>
+                { options.permissions && options.permissions.indexOf('move_issue') !== -1 && collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
                 <MenuItem divider/>
-                <MenuItem eventKey='reset'>重置状态</MenuItem>
-                <MenuItem eventKey='del'>删除</MenuItem>
+                { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
+                { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
               </DropdownButton>
             }
           </div>

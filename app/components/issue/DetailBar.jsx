@@ -497,7 +497,7 @@ export default class DetailBar extends Component {
                       { !data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
                       { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
                       { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
-                      { options.permissions && _.intersection(options.permissions, ['link_issue', 'move_issue', 'create_issue']).length > 0 && <MenuItem divider/> }
+                      { options.permissions && (_.intersection(options.permissions, ['link_issue', 'create_issue']).length > 0 || (options.permissions.indexOf('move_issue') !== -1 && data.parent_id)) && <MenuItem divider/> }
                       { options.permissions && options.permissions.indexOf('move_issue') !== -1 && data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                       { options.permissions && options.permissions.indexOf('link_issue') !== -1 && <MenuItem eventKey='link'>链接</MenuItem> }
                       { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
