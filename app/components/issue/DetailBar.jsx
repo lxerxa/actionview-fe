@@ -470,7 +470,8 @@ export default class DetailBar extends Component {
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '5px' } }>
                 <ButtonToolbar style={ { margin: '10px 10px 10px 5px' } }>
                   <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button>
-                  { data.wfactions && data.wfactions.length <= 3 ?
+                  { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
+                    data.wfactions && data.wfactions.length <= 3 ?
                     <ButtonGroup style={ { marginLeft: '10px' } }>
                     { _.map(data.wfactions || [], (v, i) => {
                       return ( <Button key={ v.id } onClick={ this.doAction.bind(this, v.id) }>{ v.name }</Button> ); 
@@ -483,26 +484,26 @@ export default class DetailBar extends Component {
                         return ( <MenuItem eventKey={ v.id }>{ v.name }</MenuItem> ); 
                       }) }
                       </DropdownButton>
-                    </div> }
+                    </div> ) }
                   <div style={ { float: 'right' } }>
                     <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
-                      <MenuItem eventKey='assign'>分配</MenuItem>
+                      { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && <MenuItem divider/> }
-                      { !data.parent_id && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                      { !data.parent_id && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
-                      { data.parent_id && <MenuItem divider/> }
-                      { data.parent_id && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
-                      <MenuItem divider/>
-                      { data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                      <MenuItem eventKey='link'>链接</MenuItem>
-                      <MenuItem eventKey='copy'>复制</MenuItem>
-                      <MenuItem divider/>
-                      <MenuItem eventKey='reset'>重置状态</MenuItem>
-                      <MenuItem eventKey='del'>删除</MenuItem>
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && _.intersection(options.permissions, ['create_issue', 'edit_issue']).length > 0 && <MenuItem divider/> }
+                      { !data.parent_id && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                      { !data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+                      { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
+                      { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
+                      { options.permissions && _.intersection(options.permissions, ['link_issue', 'move_issue', 'create_issue']).length > 0 && <MenuItem divider/> }
+                      { options.permissions && options.permissions.indexOf('move_issue') !== -1 && data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('link_issue') !== -1 && <MenuItem eventKey='link'>链接</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
+                      { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
+                      { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
@@ -525,7 +526,10 @@ export default class DetailBar extends Component {
                     状态
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>{ _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' } { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/> }</div>
+                    <div style={ { marginTop: '7px' } }>
+                      { _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' } 
+                      { options.permissions && options.permissions.indexOf('view_workflow') !== -1 && (!wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/>) }
+                    </div>
                   </Col>
                 </FormGroup>
                 <FormGroup>
@@ -549,6 +553,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 7 }>
                   { !editAssignee ?
                     <div style={ { marginTop: '7px' } }>
+                      { options.permissions && options.permissions.indexOf('assign_issue') !== -1 ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                         <span>
                           <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
@@ -556,8 +561,12 @@ export default class DetailBar extends Component {
                           </div>
                         </span>
                         <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
-                      </div>
-                      { (!data['assignee'] || data['assignee'].id !== user.id) &&
+                      </div> 
+                      : 
+                      <div>
+                        <span>{ data['assignee'] && data['assignee'].name || '-' }</span>
+                      </div> }
+                      { (!data['assignee'] || data['assignee'].id !== user.id) && options.permissions && options.permissions.indexOf('assigned_issue') !== -1 &&
                       <span style={ { float: 'left' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span> }
                     </div>
                     :
@@ -629,7 +638,9 @@ export default class DetailBar extends Component {
                         return (<tr key={ 'link' + key }>
                           <td>{ relation }<br/><a href='#' style={ linkedIssue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>{ linkedIssue.no } - { linkedIssue.title }</a></td>
                           <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle' } }>{ _.find(options.states || [], { id: linkedIssue.state }) ? _.find(options.states, { id: linkedIssue.state }).name : '-' }</td>
-                          <td style={ { verticalAlign: 'middle' } }><span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span></td>
+                          <td style={ { verticalAlign: 'middle' } }>
+                            { options.permissions && options.permissions.indexOf('link_issue') !== -1 ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
+                          </td>
                         </tr>); 
                       }) }
                       </tbody>
