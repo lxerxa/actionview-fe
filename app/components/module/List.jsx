@@ -19,6 +19,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -183,6 +184,13 @@ export default class List extends Component {
           </div>
         ),
         principal: (
+          options.permissions && options.permissions.indexOf('manage_project') === -1 ?
+          <div>
+            <span>
+            { collection[i].principal && collection[i].principal.name || '-' } 
+            </span>
+          </div> 
+          :
           <div>
           { _.indexOf(willSetPrincipalModuleIds, collection[i].id) === -1 && _.indexOf(settingPrincipalModuleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
@@ -208,6 +216,13 @@ export default class List extends Component {
           </div>
         ),
         defaultAssignee: (
+          options.permissions && options.permissions.indexOf('manage_project') === -1 ?
+          <div>
+            <span>
+            { _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }) ? _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }).label : '-' }
+            </span>
+          </div> 
+          :
           <div>
           { _.indexOf(willSetDefalutAssigneeModuleIds, collection[i].id) === -1 && _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
@@ -238,6 +253,7 @@ export default class List extends Component {
           </div>
         ),
         operation: (
+          options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>

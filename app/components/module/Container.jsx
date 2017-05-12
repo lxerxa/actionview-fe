@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
+
 import * as ModuleActions from 'redux/actions/ModuleActions';
 
 const Header = require('./Header');
@@ -13,7 +15,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ module }) => ({ module }), mapDispatchToProps)
+@connect(({ project, module }) => ({ project, module }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +23,7 @@ export default class Container extends Component {
   }
 
   static propTypes = {
+    project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     module: PropTypes.object.isRequired
@@ -53,11 +56,9 @@ export default class Container extends Component {
   }
 
   render() {
-
-    //if (this.props.module && this.props.project && this.props.project.options) {
-    //  this.props.module.options = {};
-    //  this.props.module.options.users = this.props.project.options.users || [];
-    //}
+    if (this.props.module && this.props.project && this.props.project.options) {
+      _.assign(this.props.module.options, this.props.project.options);
+    }
 
     return (
       <div>

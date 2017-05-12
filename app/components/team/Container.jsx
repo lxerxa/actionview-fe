@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 import * as RoleActions from 'redux/actions/RoleActions';
 
 const List = require('./List');
@@ -11,7 +12,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ role }) => ({ role }), mapDispatchToProps)
+@connect(({ project, role }) => ({ project, role }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,7 @@ export default class Container extends Component {
   }
 
   static propTypes = {
+    project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     role: PropTypes.object.isRequired
@@ -40,6 +42,10 @@ export default class Container extends Component {
   }
 
   render() {
+    if (this.props.role && this.props.project && this.props.project.options) {
+      _.assign(this.props.role.options, this.props.project.options);
+    }
+
     return (
       <div>
         <List 

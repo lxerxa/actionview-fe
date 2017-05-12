@@ -469,7 +469,7 @@ export default class DetailBar extends Component {
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '5px' } }>
                 <ButtonToolbar style={ { margin: '10px 10px 10px 5px' } }>
-                  <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button>
+                  { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button> }
                   { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
                     data.wfactions && data.wfactions.length <= 3 ?
                     <ButtonGroup style={ { marginLeft: '10px' } }>
@@ -697,7 +697,7 @@ export default class DetailBar extends Component {
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
                                 <td><i className={ this.getFileIconCss(f.name) }></i> <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a></td>
-                                <td width='2%'><span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></span></td>
+                                { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <td width='2%'><span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></span></td> }
                               </tr> ) }
                           </tbody>
                         </Table> }
@@ -713,18 +713,19 @@ export default class DetailBar extends Component {
                                  </div>
                                  <div className='attachment-title-container'>
                                     <div className='attachment-title'>{ f.name }</div>
-                                    <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div>
+                                    { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
                                  </div>
                                </div>
                              </Col> ) }
                            </Row>
                          </Grid> }
+                      { options.permissions && options.permissions.indexOf('edit_issue') !== -1 &&
                       <div style={ { marginTop: '8px' } }>
                         <DropzoneComponent 
                           config={ componentConfig } 
                           eventHandlers={ eventHandlers } 
                           djsConfig={ djsConfig } />
-                      </div>
+                      </div> }
                       { previewShow &&
                         <Lightbox
                           mainSrc={  '/api/project/' + project.key + '/file/' + imgFiles[photoIndex].id }

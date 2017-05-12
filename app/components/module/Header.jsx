@@ -23,13 +23,14 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, indexLoading, collection, options } = this.props;
+    const { create, indexLoading, collection, options={} } = this.props;
 
     return (
       <div>
+        { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建模块</Button>
-        </div>
+        </div> }
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } options={ options }/> }
       </div>
     );

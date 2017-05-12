@@ -19,6 +19,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -72,7 +73,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { options={}, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -107,8 +108,9 @@ export default class List extends Component {
           </div>
         ),
         operation: (
+          options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+            { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               <MenuItem eventKey='2'>删除</MenuItem>

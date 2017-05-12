@@ -13,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ version }) => ({ version }), mapDispatchToProps)
+@connect(({ project, version }) => ({ project, version }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +21,7 @@ export default class Container extends Component {
   }
 
   static propTypes = {
+    project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     version: PropTypes.object.isRequired
@@ -53,10 +54,13 @@ export default class Container extends Component {
   }
 
   render() {
+    const { project: { options={} } } = this.props;
+
     return (
       <div>
         <Header 
           create={ this.create.bind(this) } 
+          options={ options }
           { ...this.props.version }/>
         <List 
           index={ this.index.bind(this) } 
@@ -64,6 +68,7 @@ export default class Container extends Component {
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           delNotify={ this.props.actions.delNotify } 
+          options={ options }
           { ...this.props.version }/>
       </div>
     );

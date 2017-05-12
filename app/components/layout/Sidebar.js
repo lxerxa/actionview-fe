@@ -165,6 +165,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/team' }>成员</Link></li>
             </ul>
             <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>配置管理</h4>
+            { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/type' }>问题类型</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/workflow' }>工作流</Link></li>
@@ -175,7 +176,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/priority' }>优先级</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/role' }>角色权限</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/events' }>通知事件</Link></li>
-            </ul>
+            </ul> }
             <h4>&nbsp;</h4><h4>&nbsp;</h4>
           </div>
           :
