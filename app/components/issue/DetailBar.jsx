@@ -297,15 +297,16 @@ export default class DetailBar extends Component {
     } else if (eventKey == 'reset') {
       this.setState({ resetModalShow: true });
     } else if (eventKey == 'watch') {
-      ecode = await watch(data.id, !data.watching);
+      const watching = data.watching;
+      ecode = await watch(data.id, !watching);
       if (ecode === 0) {
-        if (data.watching) {
+        if (!watching) {
           notify.show('关注成功。', 'success', 2000);
         } else {
           notify.show('已取消关注。', 'success', 2000);
         }
       } else {
-        if (data.watching) {
+        if (!watching) {
           notify.show('关注失败。', 'error', 2000);
         } else {
           notify.show('取消失败。', 'error', 2000);
@@ -759,6 +760,7 @@ export default class DetailBar extends Component {
     </Tab>
     <Tab eventKey={ 2 } title='备注'>
               <Comments 
+                currentUser={ user }
                 issue_id={ data.id }
                 collection={ commentsCollection } 
                 indexComments={ indexComments } 
@@ -779,6 +781,7 @@ export default class DetailBar extends Component {
             </Tab>
             <Tab eventKey={ 4 } title='工作日志'>
               <Worklog 
+                currentUser={ user }
                 issue={ data }
                 original_estimate = { data.original_estimate }
                 options={ options.timetrack || {} }

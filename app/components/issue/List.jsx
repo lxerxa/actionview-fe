@@ -63,7 +63,6 @@ export default class List extends Component {
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
-    worklogOptions: PropTypes.object.isRequired,
     worklogCollection: PropTypes.array.isRequired,
     worklogIndexLoading: PropTypes.bool.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
@@ -293,7 +292,6 @@ export default class List extends Component {
       addWorklog, 
       editWorklog, 
       delWorklog, 
-      worklogOptions, 
       indexHistory, 
       historyCollection, 
       historyIndexLoading, 
@@ -378,10 +376,10 @@ export default class List extends Component {
                 { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
                 { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
                 { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
-                <MenuItem divider/>
+                { options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('move_issue') !== -1 && collection[i].parent_id)) && <MenuItem divider/> }
                 { options.permissions && options.permissions.indexOf('move_issue') !== -1 && collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                 { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
-                <MenuItem divider/>
+                { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
                 { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
                 { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
               </DropdownButton>
@@ -448,7 +446,6 @@ export default class List extends Component {
             editComments={ editComments }
             delComments={ delComments }
             indexWorklog={ indexWorklog }
-            worklogOptions={ worklogOptions }
             worklogCollection={ worklogCollection }
             worklogIndexLoading={ worklogIndexLoading }
             worklogLoading={ worklogLoading }

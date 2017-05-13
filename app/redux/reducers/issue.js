@@ -103,7 +103,9 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_CONVERT_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind] = action.result.data;
+        if (ind !== -1) {
+          state.collection[ind] = action.result.data;
+        }
         if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
           state.itemData = action.result.data;
         }
@@ -210,7 +212,9 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_SET_ASSIGNEE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind] = action.result.data;
+        if (ind !== -1) {
+          state.collection[ind] = action.result.data;
+        }
         if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
           state.itemData = action.result.data;
         }
@@ -378,7 +382,9 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WATCHING_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind].watching = action.result.data.watching;
+        if (ind !== -1) {
+          state.collection[ind].watching = action.result.data.watching;
+        }
         if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
           state.itemData.watching = action.result.data.watching;
           if (action.result.data.user) {

@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ activity, project, issue, wfconfig }) => ({ activity, project, issue, wfconfig }), mapDispatchToProps)
+@connect(({ session, activity, project, issue, wfconfig }) => ({ session, activity, project, issue, wfconfig }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +26,7 @@ export default class Container extends Component {
   }
 
   static propTypes = {
+    session: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     issueActions: PropTypes.object.isRequired,
     wfActions: PropTypes.object.isRequired,
@@ -133,6 +134,7 @@ export default class Container extends Component {
 
   watch(issue_id, flag) {
     this.props.issueActions.watch(this.pid, issue_id, flag);
+    return this.props.issue.ecode;
   }
 
   record() {
@@ -174,6 +176,11 @@ export default class Container extends Component {
 
   async move(id, values) {
     await this.props.issueActions.move(this.pid, id, values);
+    return this.props.issue.ecode;
+  }
+
+  async del(id) {
+    await this.props.issueActions.del(this.pid, id);
     return this.props.issue.ecode;
   }
 
@@ -219,6 +226,8 @@ export default class Container extends Component {
           move={ this.move.bind(this) }
           convert={ this.convert.bind(this) }
           resetState={ this.resetState.bind(this) }
+          del={ this.del.bind(this) }
+          user={ this.props.session.user }
           { ...this.props.issue }
           { ...this.props.activity }/>
       </div>

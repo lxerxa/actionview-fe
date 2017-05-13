@@ -39,7 +39,6 @@ export default class List extends Component {
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
-    worklogOptions: PropTypes.object.isRequired,
     worklogCollection: PropTypes.array.isRequired,
     worklogIndexLoading: PropTypes.bool.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
@@ -54,6 +53,7 @@ export default class List extends Component {
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     show: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
@@ -73,7 +73,8 @@ export default class List extends Component {
     delLink: PropTypes.func.isRequired,
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
-    watch: PropTypes.func.isRequired
+    watch: PropTypes.func.isRequired,
+    user: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -135,7 +136,6 @@ export default class List extends Component {
       addWorklog,
       editWorklog,
       delWorklog,
-      worklogOptions,
       worklogCollection,
       worklogIndexLoading,
       worklogLoading,
@@ -169,7 +169,9 @@ export default class List extends Component {
       move,
       convert,
       resetState,
-      doAction
+      del,
+      doAction,
+      user
     } = this.props;
 
     const { hoverRowId } = this.state;
@@ -344,6 +346,7 @@ export default class List extends Component {
           <DetailBar
             edit={ edit }
             create={ create }
+            del={ del }
             setAssignee={ setAssignee }
             close={ this.closeDetail.bind(this) }
             options={ options }
@@ -373,7 +376,6 @@ export default class List extends Component {
             editComments={ editComments }
             delComments={ delComments }
             indexWorklog={ indexWorklog }
-            worklogOptions={ worklogOptions }
             worklogCollection={ worklogCollection }
             worklogIndexLoading={ worklogIndexLoading }
             worklogLoading={ worklogLoading }
@@ -393,7 +395,8 @@ export default class List extends Component {
             move={ move }
             convert={ convert }
             resetState={ resetState }
-            doAction={ doAction }/> }
+            doAction={ doAction }
+            user={ user }/> }
       </div>
     );
   }

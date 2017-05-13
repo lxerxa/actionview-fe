@@ -19,6 +19,7 @@ export default class Comments extends Component {
   }
 
   static propTypes = {
+    currentUser: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -112,7 +113,7 @@ export default class Comments extends Component {
   }
 
   render() {
-    const { indexComments, collection, indexLoading, loading, itemLoading, delComments, editComments, users, issue_id } = this.props;
+    const { currentUser, indexComments, collection, indexLoading, loading, itemLoading, delComments, editComments, users, issue_id } = this.props;
 
     return (
       <Form horizontal>
@@ -135,7 +136,7 @@ export default class Comments extends Component {
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
-              <Button bsStyle='link' style={ { marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
+              <Button style={ { marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
               <Button bsStyle='link' style={ { marginRight: '5px' } } onClick={ () => { this.setState({ addCommentsShow: false }) } } disabled={ loading }>取消</Button>
             </div>
           </Col>
@@ -147,8 +148,10 @@ export default class Comments extends Component {
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
                 <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (val.creator && val.creator.name || '') + '</a> 添加备注 - ' + (val.created_at && moment.unix(val.created_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
-                <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span>
-                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span>
+                { val.creator && currentUser.id === val.creator.id &&  
+                <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }
+                { val.creator && currentUser.id === val.creator.id &&  
+                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span> }
               </div> ); 
               let contents = val.contents || '-';
               _.map(val.atWho || [], (v) => {
@@ -174,8 +177,10 @@ export default class Comments extends Component {
                        <li className='reply-contents-item'>
                          <div className='reply-item-header'>
                            <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (v.creator && v.creator.name || '') + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + v.to.name + '</a>') : '') + ' - ' + (v.created_at && moment.unix(v.created_at).format('YY/MM/DD HH:mm:ss')) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
-                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span>
-                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span>
+                           { v.creator && currentUser.id === v.creator.id &&  
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span> }
+                           { v.creator && currentUser.id === v.creator.id &&  
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span> }
                          </div>
                          <div>
                            <span style={ { lineHeight: '24px', wordBreak: 'break-all' } } dangerouslySetInnerHTML={ { __html: contents } }/>

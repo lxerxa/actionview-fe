@@ -8,6 +8,7 @@ import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-b
 const img = require('../../assets/images/loading.gif');
 const $ = require('$');
 
+import * as ProjectActions from 'redux/actions/ProjectActions';
 import * as SessionActions from 'redux/actions/SessionActions';
 
 const validate = (values) => {
@@ -32,6 +33,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    projectActions: bindActionCreators(ProjectActions, dispatch),
     actions: bindActionCreators(SessionActions, dispatch)
   };
 }
@@ -57,6 +59,7 @@ class Login extends Component {
   static propTypes = {
     location: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
+    projectActions: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     submitting: PropTypes.bool,
@@ -87,13 +90,14 @@ class Login extends Component {
     this.setState({ alertShow: false });
 
     const { location: { query={} } } = this.props;
-    const { values, actions } = this.props;
+    const { values, actions, projectActions } = this.props;
     await actions.create(values);
     const { session } = this.props;
     if (session.ecode === 0) {
       if (query.request_url) {
         this.context.router.push({ pathname: decodeURI(query.request_url) });    
       } else {
+        projectActions.cleanSelectedProject();
         this.context.router.push({ pathname: '/myproject' });    
       }
     } else {

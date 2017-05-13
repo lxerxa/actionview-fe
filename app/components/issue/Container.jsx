@@ -87,13 +87,13 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async setAssignee(id, values, modalFlag) {
-    await this.props.actions.setAssignee(this.pid, id, values, modalFlag);
+  async delSearcher(id) {
+    await this.props.actions.delSearcher(this.pid, id);
     return this.props.issue.ecode;
   }
 
-  async delSearcher(id) {
-    await this.props.actions.delSearcher(this.pid, id);
+  async setAssignee(id, values, modalFlag) {
+    await this.props.actions.setAssignee(this.pid, id, values, modalFlag);
     return this.props.issue.ecode;
   }
 

@@ -18,6 +18,7 @@ export default class Worklog extends Component {
   }
 
   static propTypes = {
+    currentUser: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     original_estimate: PropTypes.string,
@@ -119,7 +120,7 @@ export default class Worklog extends Component {
   }
 
   render() {
-    const { issue, indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
+    const { currentUser, issue, indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
 
     let leave_estimate_m = undefined;
     if (original_estimate) {
