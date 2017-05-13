@@ -98,7 +98,11 @@ class Login extends Component {
         this.context.router.push({ pathname: decodeURI(query.request_url) });    
       } else {
         projectActions.cleanSelectedProject();
-        this.context.router.push({ pathname: '/myproject' });    
+        if (session.user && session.user.latest_access_project) {
+          this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });    
+        } else {
+          this.context.router.push({ pathname: '/myproject' });    
+        }
       }
     } else {
       this.setState({ alertShow: true });
