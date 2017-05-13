@@ -12,9 +12,7 @@ export default [
   { id: 'reset_issue', name: '重置问题' },
   { id: 'close_issue', name: '关闭问题' },
   { id: 'view_workflow', name: '查看流程' },
-  { id: 'exec_workflow', name: '执行流程' },
-  { id: 'manage_comments', name: '管理备注' },
-  { id: 'manage_worklog', name: '管理工作日志' }
+  { id: 'exec_workflow', name: '执行流程' }
   //{ id: 'add_comments', name: '添加备注' },
   //{ id: 'edit_comments', name: '编辑备注' },
   //{ id: 'edit_self_comments', name: '编辑自己的备注' },

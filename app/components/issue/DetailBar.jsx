@@ -761,6 +761,7 @@ export default class DetailBar extends Component {
     <Tab eventKey={ 2 } title='备注'>
               <Comments 
                 currentUser={ user }
+                permissions={ options.permissions || [] }
                 issue_id={ data.id }
                 collection={ commentsCollection } 
                 indexComments={ indexComments } 
@@ -782,6 +783,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 4 } title='工作日志'>
               <Worklog 
                 currentUser={ user }
+                permissions={ options.permissions || [] }
                 issue={ data }
                 original_estimate = { data.original_estimate }
                 options={ options.timetrack || {} }
