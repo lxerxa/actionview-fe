@@ -67,7 +67,7 @@ export default class ConfigActorModal extends Component {
       return { options: [] };
     }
     const api = new ApiClient;
-    const results = await api.request( { url: '/user?s=' + input } );
+    const results = await api.request( { url: '/user/search?s=' + input } );
     return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
   }
 

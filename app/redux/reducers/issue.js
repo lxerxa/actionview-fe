@@ -36,7 +36,9 @@ export default function issue(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.ISSUE_INDEX_SUCCESS:
-      _.assign(state.options, action.result.options || {});
+      if (action.result.ecode === 0) {
+        _.assign(state.options, action.result.options || {});
+      }
       return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
 
     case t.ISSUE_INDEX_FAIL:
@@ -46,7 +48,9 @@ export default function issue(state = initialState, action) {
       return { ...state, optionsLoading: true };
 
     case t.ISSUE_OPTIONS_SUCCESS:
-      _.assign(state.options, action.result.data || {});
+      if (action.result.ecode === 0) {
+        _.assign(state.options, action.result.data || {});
+      }
       return { ...state, optionsLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_OPTIONS_FAIL:
@@ -121,7 +125,10 @@ export default function issue(state = initialState, action) {
       return { ...state, itemLoading: true, itemData: { id: action.id }, commentsLoaded: false, historyLoaded: false, worklogLoaded: false };
 
     case t.ISSUE_SHOW_SUCCESS:
-      return { ...state, itemLoading: false, ecode: action.result.ecode, itemData: action.result.data };
+      if (action.result.ecode === 0) {
+        state.itemData = action.result.data;
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_SHOW_FAIL:
       return { ...state, itemLoading: false, error: action.error };
@@ -230,8 +237,11 @@ export default function issue(state = initialState, action) {
       return { ...state, commentsIndexLoading: true, commentsCollection: [] };
 
     case t.ISSUE_COMMENTS_INDEX_SUCCESS:
-      _.assign(state.options, action.result.options || {});
-      return { ...state, commentsIndexLoading: false, commentsLoaded: true, ecode: action.result.ecode, commentsCollection: action.result.data };
+      if (action.result.ecode === 0) {
+        state.commentsCollection = action.result.data;
+        _.assign(state.options, action.result.options || {});
+      }
+      return { ...state, commentsIndexLoading: false, commentsLoaded: true, ecode: action.result.ecode };
 
     case t.ISSUE_COMMENTS_INDEX_FAIL:
       return { ...state, commentsIndexLoading: false, error: action.error };
@@ -277,8 +287,11 @@ export default function issue(state = initialState, action) {
       return { ...state, historyIndexLoading: true, historyCollection: [] };
 
     case t.ISSUE_HISTORY_INDEX_SUCCESS:
-      _.assign(state.options, action.result.options || {});
-      return { ...state, historyIndexLoading: false, historyLoaded: true, ecode: action.result.ecode, historyCollection: action.result.data };
+      if (action.result.ecode === 0) {
+        state.historyCollection = action.result.data;
+        _.assign(state.options, action.result.options || {});
+      }
+      return { ...state, historyIndexLoading: false, historyLoaded: true, ecode: action.result.ecode };
 
     case t.ISSUE_HISTORY_INDEX_FAIL:
       return { ...state, historyIndexLoading: false, error: action.error };
@@ -287,7 +300,10 @@ export default function issue(state = initialState, action) {
       return { ...state, worklogIndexLoading: true, worklogCollection: [] };
 
     case t.ISSUE_WORKLOG_INDEX_SUCCESS:
-      return { ...state, worklogIndexLoading: false, worklogLoaded: true, ecode: action.result.ecode, worklogCollection: action.result.data };
+      if (action.result.ecode === 0) {
+        state.worklogCollection = action.result.data;
+      }
+      return { ...state, worklogIndexLoading: false, worklogLoaded: true, ecode: action.result.ecode };
 
     case t.ISSUE_WORKLOG_INDEX_FAIL:
       return { ...state, worklogIndexLoading: false, error: action.error };

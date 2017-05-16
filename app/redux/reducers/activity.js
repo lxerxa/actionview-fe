@@ -9,7 +9,11 @@ export default function activity(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
 
     case t.ACTIVITY_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, increaseCollection: action.result.data };
+      if (action.result.ecode === 0) {
+        state.collection = action.result.data;
+        state.increaseCollection = action.result.data;
+      }
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.ACTIVITY_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
@@ -18,7 +22,11 @@ export default function activity(state = initialState, action) {
       return { ...state, moreLoading: true };
 
     case t.ACTIVITY_MORE_SUCCESS:
-      return { ...state, moreLoading: false, ecode: action.result.ecode, collection: state.collection.concat(action.result.data), increaseCollection: action.result.data };
+      if (action.result.ecode === 0) {
+        state.collection = state.collection.concat(action.result.data);
+        state.increaseCollection = action.result.data;
+      }
+      return { ...state, moreLoading: false, ecode: action.result.ecode };
 
     case t.ACTIVITY_MORE_FAIL:
       return { ...state, moreLoading: false, error: action.error };

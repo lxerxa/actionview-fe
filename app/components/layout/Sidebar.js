@@ -156,6 +156,7 @@ export default class Sidebar extends Component {
           <div>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>{ project.item.name || '' }</h4>
             <h4><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSummaryShow: !this.state.projectSummaryShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目概述</h4>
+            { project.options.permissions && project.options.permissions.length > 0 &&
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/summary' }>概要</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/issue' }>问题</Link></li>
@@ -163,7 +164,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/module' }>模块</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/version' }>版本</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/team' }>成员</Link></li>
-            </ul>
+            </ul> }
             <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>配置管理</h4>
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectConfigShow && 'hide' }>

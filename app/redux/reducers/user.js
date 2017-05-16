@@ -18,8 +18,11 @@ export default function project(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
 
     case t.USER_INDEX_SUCCESS:
-      _.assign(state.options, action.result.options || {});
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
+      if (action.result.ecode === 0) {
+        _.assign(state.options, action.result.options || {});
+        state.collection = action.result.data;
+      }
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.USER_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };

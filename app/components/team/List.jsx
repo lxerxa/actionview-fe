@@ -22,6 +22,7 @@ export default class List extends Component {
 
   static propTypes = {
     collection: PropTypes.array.isRequired,
+    options: PropTypes.object.isRequired,
     selectedItem: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
@@ -90,12 +91,12 @@ export default class List extends Component {
       return { options: [] };
     }
     const api = new ApiClient;
-    const results = await api.request( { url: '/user?s=' + input } );
+    const results = await api.request( { url: '/user/search?s=' + input } );
     return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
   }
 
   render() {
-    const { collection, indexLoading, setActor } = this.props;
+    const { options, collection, indexLoading, setActor } = this.props;
     const { willSetUserRoleIds, settingUserRoleIds, hoverRowId } = this.state;
 
     const roles = [];
@@ -110,6 +111,13 @@ export default class List extends Component {
           </div>
         ),
         users: (
+          options.permissions && options.permissions.indexOf('manage_project') === -1 ?
+          <div>
+            <span>
+              { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
+            </span>
+          </div>
+          :
           <div>
           { _.indexOf(willSetUserRoleIds, collection[i].id) === -1 && _.indexOf(settingUserRoleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>

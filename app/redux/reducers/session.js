@@ -8,7 +8,10 @@ export default function session(state = initialState, action) {
       return { ...state, loading: true, invalid: false };
 
     case t.SESSION_CREATE_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, user: action.result.data && action.result.data.user };
+      if (action.result.ecode === 0) {
+        state.user = action.result.data && action.result.data.user;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.SESSION_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
@@ -17,7 +20,10 @@ export default function session(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.SESSION_GET_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, user: action.result.data && action.result.data.user };
+      if (action.result.ecode === 0) {
+        state.user = action.result.data && action.result.data.user;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.SESSION_GET_FAIL:
       return { ...state, loading: false, error: action.error };

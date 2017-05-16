@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import Layout from './components/layout/Layout';
 import Home from './components/layout/Home';
+import Error from './components/layout/Error';
 import Login from './components/login/Login';
 import Forgot from './components/login/Forgot';
 import Register from './components/login/Register';
@@ -76,5 +77,6 @@ export default (
         <Route path='events' component={ EventsContainer }/>
       </Route>
     </Route>
+    <Route path='*' component={ Error }/>
   </Route>
 );

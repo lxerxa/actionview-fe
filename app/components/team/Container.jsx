@@ -42,9 +42,12 @@ export default class Container extends Component {
   }
 
   render() {
+    console.log(this.props.role);
     if (this.props.role && this.props.project && this.props.project.options) {
       _.assign(this.props.role.options, this.props.project.options);
     }
+
+    console.log(this.props.role);
 
     return (
       <div>

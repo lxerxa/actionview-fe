@@ -9,7 +9,10 @@ export default function version(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.VERSION_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
+      if (action.result.ecode === 0) {
+        state.collection = action.result.data;
+      }
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.VERSION_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };

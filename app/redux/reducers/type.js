@@ -9,7 +9,11 @@ export default function type(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.TYPE_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, options: action.result.options };
+      if (action.result.ecode === 0) {
+        state.collection = action.result.data;
+        state.options = action.result.options;
+      }
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.TYPE_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
@@ -71,7 +75,10 @@ export default function type(state = initialState, action) {
       return { ...state, defaultLoading: true };
 
     case t.TYPE_SET_DEFAULT_SUCCESS:
-      return { ...state, defaultLoading: false, ecode: action.result.ecode, collection: action.result.data };
+      if ( action.result.ecode === 0 ) {
+        state.collection = action.result.data;
+      }
+      return { ...state, defaultLoading: false, ecode: action.result.ecode };
 
     case t.TYPE_SET_DEFAULT_FAIL:
       return { ...state, defaultLoading: false, error: action.error };

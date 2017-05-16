@@ -11,10 +11,14 @@ export default function wfconfig(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.WFCONFIG_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, 
-        collection: action.result.data.contents && action.result.data.contents.steps ? action.result.data.contents.steps : [],
-        collection2JSON: JSON.stringify(action.result.data.contents && action.result.data.contents.steps ? action.result.data.contents.steps : []), 
-        workflowId: action.result.data.id, workflowName:action.result.data.name, options: action.result.options };
+      if (action.result.ecode === 0) {
+        state.collection = action.result.data.contents && action.result.data.contents.steps ? action.result.data.contents.steps : [];
+        state.collection2JSON = JSON.stringify(state.collection);
+        state.workflowId = action.result.data.id;
+        state.workflowName = action.result.data.name;
+        state.options = action.result.options;
+      }
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.WFCONFIG_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };

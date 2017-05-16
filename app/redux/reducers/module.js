@@ -9,7 +9,11 @@ export default function module(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [] };
 
     case t.MODULE_INDEX_SUCCESS:
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, options: action.result.options };
+      if ( action.result.ecode === 0 ) {
+        state.collection = action.result.data;
+        state.options = action.result.options;
+      }
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.MODULE_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };

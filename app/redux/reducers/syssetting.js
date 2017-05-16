@@ -8,7 +8,10 @@ export default function syssetting(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.SYSSETTING_SHOW_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, settings: action.result.data || {} };
+      if (action.result.ecode === 0) {
+        state.settings = action.result.data || {};
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.SYSSETTING_SHOW_FAIL:
       return { ...state, loading: false, error: action.error };
@@ -19,7 +22,10 @@ export default function syssetting(state = initialState, action) {
 
     case t.SYSSETTING_UPDATE_SUCCESS:
     case t.SYSSETTING_RESET_PWD_SUCCESS:
-      return { ...state, loading: false, ecode: action.result.ecode, settings: action.result.data || {} };
+      if (action.result.ecode === 0) {
+        state.settings = action.result.data || {};
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.SYSSETTING_UPDATE_FAIL:
     case t.SYSSETTING_RESET_PWD_FAIL:

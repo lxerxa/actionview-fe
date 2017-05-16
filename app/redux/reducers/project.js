@@ -9,8 +9,12 @@ export default function project(state = initialState, action) {
       return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
 
     case t.PROJECT_INDEX_SUCCESS:
-      _.assign(state.options, action.result.options || {});
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data, increaseCollection: action.result.data };
+      if (action.result.ecode === 0) {
+        _.assign(state.options, action.result.options || {});
+        state.collection = action.result.data;
+        state.increaseCollection = action.result.data;
+      }
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.PROJECT_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
@@ -19,7 +23,11 @@ export default function project(state = initialState, action) {
       return { ...state, moreLoading: true };
 
     case t.PROJECT_MORE_SUCCESS:
-      return { ...state, moreLoading: false, ecode: action.result.ecode, collection: state.collection.concat(action.result.data), increaseCollection: action.result.data };
+      if (action.result.ecode === 0) {
+        state.collection = state.collection.concat(action.result.data);
+        state.increaseCollection = action.result.data;
+      }
+      return { ...state, moreLoading: false, ecode: action.result.ecode };
 
     case t.PROJECT_MORE_FAIL:
       return { ...state, moreLoading: false, error: action.error };
@@ -28,7 +36,9 @@ export default function project(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.PROJECT_OPTIONS_SUCCESS:
-      _.assign(state.options, action.result.data || {});
+      if (action.result.ecode === 0) {
+        _.assign(state.options, action.result.data || {});
+      }
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.PROJECT_OPTIONS_FAIL:
@@ -38,7 +48,10 @@ export default function project(state = initialState, action) {
       return { ...state, recentsLoading: true };
 
     case t.PROJECT_RECENTS_SUCCESS:
-      return { ...state, recentsLoading: false, ecode: action.result.ecode, recents: action.result.data };
+      if (action.result.ecode === 0) {
+        state.recents = action.result.data;
+      }
+      return { ...state, recentsLoading: false, ecode: action.result.ecode };
 
     case t.PROJECT_RECENTS_FAIL:
       return { ...state, recentsLoading: false, error: action.error };
