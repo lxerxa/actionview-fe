@@ -6,9 +6,11 @@ const initialState = { ecode: 0, collection: [], options: {}, indexLoading: fals
 export default function role(state = initialState, action) {
   switch (action.type) {
     case t.ROLE_INDEX:
+    case t.ROLE_TEAM_INDEX:
       return { ...state, indexLoading: true, collection: [] };
 
     case t.ROLE_INDEX_SUCCESS:
+    case t.ROLE_TEAM_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
         state.options = action.result.options || {};
@@ -16,6 +18,7 @@ export default function role(state = initialState, action) {
       return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.ROLE_INDEX_FAIL:
+    case t.ROLE_TEAM_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
 
     case t.ROLE_CREATE:

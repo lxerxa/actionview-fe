@@ -529,7 +529,8 @@ export default class DetailBar extends Component {
                   <Col sm={ 4 }>
                     <div style={ { marginTop: '7px' } }>
                       { _.find(options.states || [], { id: data.state }) ? _.find(options.states, { id: data.state }).name : '-' } 
-                      { options.permissions && options.permissions.indexOf('view_workflow') !== -1 && (!wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/>) }
+                      {/* options.permissions && options.permissions.indexOf('view_workflow') !== -1 && (!wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/>) */}
+                      { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/> }
                     </div>
                   </Col>
                 </FormGroup>

@@ -7,6 +7,13 @@ export function index(key) {
   });
 }
 
+export function teamIndex(key) {
+  return asyncFuncCreator({
+    constant: 'ROLE_TEAM_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/team' })
+  });
+}
+
 export function create(key, values) {
   return asyncFuncCreator({
     constant: 'ROLE_CREATE',

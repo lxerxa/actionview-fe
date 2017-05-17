@@ -112,6 +112,7 @@ export default generateConstants([
   'PRIORITY_SET_DEFAULT(ASYNC)',
 
   'ROLE_INDEX(ASYNC)',
+  'ROLE_TEAM_INDEX(ASYNC)',
   'ROLE_CREATE(ASYNC)',
   'ROLE_SELECT',
   'ROLE_UPDATE(ASYNC)',

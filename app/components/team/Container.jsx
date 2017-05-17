@@ -27,7 +27,7 @@ export default class Container extends Component {
   }
 
   async index() {
-    await this.props.actions.index(this.pid);
+    await this.props.actions.teamIndex(this.pid);
     return this.props.role.ecode;
   }
 

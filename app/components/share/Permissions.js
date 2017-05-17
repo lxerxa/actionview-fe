@@ -11,14 +11,14 @@ export default [
   { id: 'resolve_issue', name: '解决问题' },
   { id: 'reset_issue', name: '重置问题' },
   { id: 'close_issue', name: '关闭问题' },
-  { id: 'view_workflow', name: '查看流程' },
-  { id: 'exec_workflow', name: '执行流程' }
+  //{ id: 'view_workflow', name: '查看流程' },
+  { id: 'exec_workflow', name: '执行流程' },
   //{ id: 'add_comments', name: '添加备注' },
   //{ id: 'edit_comments', name: '编辑备注' },
   //{ id: 'edit_self_comments', name: '编辑自己的备注' },
   //{ id: 'delete_comments', name: '删除备注' },
   //{ id: 'delete_self_comments', name: '删除自己的备注' },
-  //{ id: 'add_worklog', name: '添加工作日志' },
+  { id: 'add_worklog', name: '添加工作日志' }
   //{ id: 'edit_worklog', name: '编辑工作日志' },
   //{ id: 'edit_self_worklog', name: '编辑自己的工作日志' },
   //{ id: 'delete_worklog', name: '删除工作日志' },
