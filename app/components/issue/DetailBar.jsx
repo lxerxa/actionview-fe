@@ -757,9 +757,9 @@ export default class DetailBar extends Component {
                     </FormGroup>
                   );
                 }) }
-      </Form>
-    </Tab>
-    <Tab eventKey={ 2 } title='备注'>
+              </Form>
+            </Tab>
+            <Tab eventKey={ 2 } title='备注'>
               <Comments 
                 currentUser={ user }
                 permissions={ options.permissions || [] }

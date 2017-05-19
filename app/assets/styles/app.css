@@ -532,3 +532,14 @@ table tr:hover .remove-icon{
   text-align: center;
   padding-top: 30px;
 }
+
+.brand {
+  text-align: center;
+  padding-top: 25px;
+  padding-bottom: 10px;
+}
+
+.toc-logo {
+  position: absolute;
+  left: 52%;
+}

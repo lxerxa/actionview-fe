@@ -35,6 +35,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    user: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     increaseCollection: PropTypes.array.isRequired,
@@ -215,7 +216,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, update, options={} } = this.props;
+    const { user, collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, update, options={} } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -272,6 +273,7 @@ export default class List extends Component {
         ),
         status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
         operation: (
+          collection[i].principal.id = user.id &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>

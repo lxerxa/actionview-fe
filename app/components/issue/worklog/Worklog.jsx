@@ -156,7 +156,8 @@ export default class Worklog extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span>
+              { permissions.indexOf('add_worklog') !== -1 &&
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span> }
             </div>
           </Col>
           <Col sm={ 12 } className={ indexLoading && 'hide' }>
@@ -182,8 +183,7 @@ export default class Worklog extends Component {
             :
             _.map(rCollection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                { permissions.indexOf('add_worklog') !== -1 &&
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder && val.recorder.name || '') + '</a> 添加了工作日志 - ' + (val.recorded_at && moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } /> }
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder && val.recorder.name || '') + '</a> 添加了工作日志 - ' + (val.recorded_at && moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 { ((val.recorder && currentUser.id === val.recorder.id) || permissions.indexOf('manage_project') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }
                 { ((val.recorder && currentUser.id === val.recorder.id) || permissions.indexOf('manage_project') !== -1) &&  

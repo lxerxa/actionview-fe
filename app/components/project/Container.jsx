@@ -14,7 +14,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ project }) => ({ project }), mapDispatchToProps)
+@connect(({ session, project }) => ({ session, project }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +28,7 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired
   }
 
@@ -145,6 +146,7 @@ export default class Container extends Component {
           stop={ this.close.bind(this) }
           reopen={ this.reopen.bind(this) }
           createIndex={ this.createIndex.bind(this) }
+          user={ this.props.session.user }
           { ...this.props.project }/> }
       </div>
     );

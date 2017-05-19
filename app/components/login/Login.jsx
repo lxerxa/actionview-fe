@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
+const brand = require('../../assets/images/brand.png');
 const img = require('../../assets/images/loading.gif');
 const $ = require('$');
 
@@ -115,6 +116,7 @@ class Login extends Component {
     return (
       <div className='login-panel'>
         <div className='login-form'>
+        <div className='brand'><img src={ brand } width={ 200 }/></div>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
           <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
             <FormControl disabled={ submitting } type='text' { ...email } placeholder='用户名/邮箱'/>

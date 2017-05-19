@@ -42,11 +42,13 @@ export default class Sidebar extends Component {
     $('.toc-container').animate({ left: '-250px' });
     $('.toc-container').css({ position: 'fixed' });
     $('.head').css({ paddingLeft: '15px' });
+    $('.toc-logo').css({ left: '45%' });
     $('#show-bar').show();
   }
 
   tackBar() {
     $('.head').css({ paddingLeft: '265px' });
+    $('.toc-logo').css({ left: '52%' });
     $('.toc-container').css({ position: 'relative', boxShadow: 'none', borderRight: 'solid 1px #e5e5e5' });
     $('#show-bar').hide();
     $('#tack-bar').hide();

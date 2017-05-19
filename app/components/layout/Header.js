@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropdownButton, MenuItem, Button } from 'react-bootstrap';
 import _ from 'lodash';
 
+const logo = require('../../assets/images/brand.png');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const $ = require('$');
 
@@ -156,6 +157,7 @@ export default class Header extends Component {
       <div className='head'>
         <span className='show-bar-icon' style={ { display: 'none' } } onClick={ (e) => { this.showBar(e); } } id='show-bar'><i className='fa fa-bars'></i></span>
         <span style={ { color: '#5f5f5f' } }>{ modulename }</span>
+        <span className='toc-logo'><img src={ logo } width={ 120 }/></span>
         <span style={ { float: 'right', marginRight: '10px' } }>
           <DropdownButton pullRight bsStyle='link' title={ avatar } style={ headerUser } onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
