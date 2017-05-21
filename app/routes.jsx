@@ -10,6 +10,7 @@ import Project from './components/project/Project';
 import Scheme from './components/scheme/Scheme';
 import Profile from './components/Profile';
 
+const SummaryContainer = require('./components/summary/Container');
 const IssueContainer = require('./components/issue/Container');
 const ModuleContainer = require('./components/module/Container');
 const VersionContainer = require('./components/version/Container');
@@ -42,7 +43,7 @@ export default (
       <Route path='/mysetting' component={ MysettingContainer }/>
       <Route path='/project/:key' component={ Project }>
         <IndexRoute component={ Profile }/>
-        <Route path='summary' component={ Profile }/>
+        <Route path='summary' component={ SummaryContainer }/>
         <Route path='issue' component={ IssueContainer }/>
         <Route path='activity' component={ ActivityContainer }/>
         <Route path='module' component={ ModuleContainer }/>

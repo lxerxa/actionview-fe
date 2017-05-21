@@ -129,6 +129,8 @@ export default generateConstants([
   'EVENTS_RESET(ASYNC)',
   'EVENTS_DELETE(ASYNC)',
 
+  'PROJECT_SUMMARY(ASYNC)',
+
   'ISSUE_INDEX(ASYNC)',
   'ISSUE_CREATE(ASYNC)',
   'ISSUE_OPTIONS(ASYNC)',

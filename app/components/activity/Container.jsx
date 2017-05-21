@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as ActivityActions from 'redux/actions/ActivityActions';
 
 import * as IssueActions from 'redux/actions/IssueActions';
-import * as WfconfigActions from 'redux/actions/WfconfigActions';
+import * as WorkflowActions from 'redux/actions/WorkflowActions';
 
 const qs = require('qs');
 const Header = require('./Header');
@@ -14,11 +14,11 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(ActivityActions, dispatch),
     issueActions: bindActionCreators(IssueActions, dispatch),
-    wfActions: bindActionCreators(WfconfigActions, dispatch)
+    wfActions: bindActionCreators(WorkflowActions, dispatch)
   };
 }
 
-@connect(({ session, activity, project, issue, wfconfig }) => ({ session, activity, project, issue, wfconfig }), mapDispatchToProps)
+@connect(({ session, activity, project, issue, workflow }) => ({ session, activity, project, issue, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +33,7 @@ export default class Container extends Component {
     params: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired,
-    wfconfig: PropTypes.object.isRequired,
+    workflow: PropTypes.object.isRequired,
     activity: PropTypes.object.isRequired
   }
 
@@ -78,8 +78,8 @@ export default class Container extends Component {
   }
 
   async viewWorkflow(definition_id) {
-    await this.props.wfActions.index(this.pid, definition_id);
-    return this.props.wfconfig.ecode;
+    await this.props.wfActions.preview(this.pid, definition_id);
+    return this.props.workflow.ecode;
   }
 
   async indexComments(issue_id) {
@@ -206,8 +206,8 @@ export default class Container extends Component {
           forward={ this.forward.bind(this) }
           cleanRecord={ this.cleanRecord.bind(this) }
           project={ this.props.project.item }
-          wfCollection={ this.props.wfconfig.collection || [] }
-          wfLoading={ this.props.wfconfig.indexLoading }
+          wfCollection={ this.props.workflow.itemSteps || [] }
+          wfLoading={ this.props.workflow.itemLoading }
           viewWorkflow={ this.viewWorkflow.bind(this) }
           indexComments={ this.indexComments.bind(this) }
           addComments={ this.addComments.bind(this) }

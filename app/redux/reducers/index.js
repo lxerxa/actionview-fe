@@ -1,6 +1,7 @@
 export { default as user } from './user';
 export { default as session } from './session';
 export { default as project } from './project';
+export { default as summary } from './summary';
 export { default as issue } from './issue';
 export { default as type } from './type';
 export { default as field } from './field';

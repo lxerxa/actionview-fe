@@ -235,6 +235,11 @@ export default class List extends Component {
           </div> ),
         key: collection[i].key,
         principal: (
+          collection[i].principal.id !== user.id ?
+          <div>
+            <span>{ collection[i].principal.name }</span>
+          </div>
+          : 
           <div>
           { _.indexOf(willSetPrincipalPids, collection[i].id) === -1 && _.indexOf(settingPrincipalPids, collection[i].id) === -1 ?
             <div className='editable-list-field'>
@@ -273,7 +278,7 @@ export default class List extends Component {
         ),
         status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
         operation: (
-          collection[i].principal.id = user.id &&
+          collection[i].principal.id === user.id &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>

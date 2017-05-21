@@ -38,8 +38,9 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         _.assign(state.options, action.result.options || {});
+        state.collection = action.result.data;
       }
-      return { ...state, indexLoading: false, ecode: action.result.ecode, collection: action.result.data };
+      return { ...state, indexLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_INDEX_FAIL:
       return { ...state, indexLoading: false, error: action.error };
@@ -278,7 +279,7 @@ export default function issue(state = initialState, action) {
       if ( action.result.ecode === 0 ) {
         state.commentsCollection = _.reject(state.commentsCollection, { id: action.id });
       }
-      return { ...state, commentsCollection: state.commentsCollection, commentsItemLoading: false, ecode: action.result.ecode };
+      return { ...state, commentsItemLoading: false, ecode: action.result.ecode };
 
     case t.ISSUE_COMMENTS_DELETE_FAIL:
       return { ...state, commentsItemLoading: false, error: action.error };

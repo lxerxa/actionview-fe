@@ -72,9 +72,15 @@ export default function project(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.PROJECT_SHOW_SUCCESS:
-      const newRecents = _.reject(state.recents, { key: action.result.data.key });
-      newRecents.unshift(action.result.data);
-      return { ...state, loading: false, ecode: action.result.ecode, item: action.result.data, recents: newRecents, options: action.result.options };
+      if (action.result.ecode === 0) {
+        state.item = action.result.data;
+        state.options = action.result.options;
+
+        const newRecents = _.reject(state.recents, { key: action.result.data.key });
+        newRecents.unshift(action.result.data);
+        state.recents = newRecents;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.PROJECT_SHOW_FAIL:
       return { ...state, loading: false, error: action.error };
