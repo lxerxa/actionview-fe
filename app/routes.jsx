@@ -42,7 +42,7 @@ export default (
       <Route path='/myproject' component={ ProjectContainer }/>
       <Route path='/mysetting' component={ MysettingContainer }/>
       <Route path='/project/:key' component={ Project }>
-        <IndexRoute component={ Profile }/>
+        <IndexRoute component={ SummaryContainer }/>
         <Route path='summary' component={ SummaryContainer }/>
         <Route path='issue' component={ IssueContainer }/>
         <Route path='activity' component={ ActivityContainer }/>

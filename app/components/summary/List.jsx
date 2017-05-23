@@ -41,6 +41,7 @@ export default class List extends Component {
           <span style={ { marginLeft: '15px', fontSize: '14px' } }>负责人：{ project.principal && project.principal.name || '-' }</span>
         </div>
         <Panel header={ '一周动态：' + options.weekAgo + ' ~ 现在' }>
+          { data.new_issues && data.new_issues.total ?
           <Table responsive hover>
             <thead>
               <tr>
@@ -62,8 +63,11 @@ export default class List extends Component {
               </tr>
             </tbody>
           </Table>
+          :
+          <div>暂无信息</div> }
         </Panel>
         <Panel header='未解决问题：按经办人'>
+          { data.assignee_unresolved_issues && !_.isEmpty(data.assignee_unresolved_issues) ?
           <Table responsive hover>
             <thead>
               <tr>
@@ -82,8 +86,11 @@ export default class List extends Component {
                 </tr>) }) }
             </tbody>
           </Table>
+          :
+          <div>暂无信息</div> }
         </Panel>
         <Panel header='未解决问题：按优先级'>
+          { data.priority_unresolved_issues && !_.isEmpty(data.priority_unresolved_issues) ?
           <Table responsive hover>
             <thead>
               <tr>
@@ -102,6 +109,8 @@ export default class List extends Component {
                 </tr>) }) }
             </tbody>
           </Table>
+          :
+          <div>暂无信息</div> }
         </Panel>
       </div>
     );
