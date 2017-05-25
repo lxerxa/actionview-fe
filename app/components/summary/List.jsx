@@ -19,11 +19,6 @@ export default class List extends Component {
     index: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
-    const { index } = this.props;
-    index();
-  }
-
   render() {
     const { project, data, options, loading } = this.props;
 

@@ -20,7 +20,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'login_mail_domain', 'week2day', 'day2hour' ],
+  fields: [ 'login_mail_domain', 'allow_create_project', 'week2day', 'day2hour' ],
   validate
 })
 export default class PropertiesModal extends Component {
@@ -51,7 +51,7 @@ export default class PropertiesModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'week2day', 'day2hour' ]) });
+    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'allow_create_project', 'week2day', 'day2hour' ]) });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -71,7 +71,7 @@ export default class PropertiesModal extends Component {
   }
 
   render() {
-    const { fields: { login_mail_domain, week2day, day2hour }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { fields: { login_mail_domain, allow_create_project, week2day, day2hour }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     const dayOptions = [
       { value: 6, label: '6' },
@@ -105,6 +105,18 @@ export default class PropertiesModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...login_mail_domain } placeholder='邮箱域名'/>
             { login_mail_domain.touched && login_mail_domain.error && <HelpBlock style={ { float: 'right' } }>{ login_mail_domain.error }</HelpBlock> }
           </FormGroup>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>是否允许用户创建项目</ControlLabel>
+            <Select
+              simpleValue
+              disabled={ submitting }
+              clearable={ false }
+              searchable={ false }
+              options={ [ { value: 1, label: '是' }, { value: 0, label: '否' } ] }
+              value={ allow_create_project.value || 0 }
+              onChange={ newValue => { allow_create_project.onChange(newValue) } }
+              placeholder='请选择'/>
+          </FormGroup>
           {/*<FormGroup controlId='formControlsText' validationState={ allowed_login_num.touched && allowed_login_num.error ? 'error' : '' }>
             <ControlLabel>最大登录次数</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...allowed_login_num } placeholder='登录次数'/>
@@ -113,6 +125,7 @@ export default class PropertiesModal extends Component {
           <FormGroup controlId='formControlsText'>
             <ControlLabel>每周有效工作日(天)</ControlLabel>
             <Select
+              simpleValue
               disabled={ submitting }
               clearable={ false }
               searchable={ false }
@@ -124,6 +137,7 @@ export default class PropertiesModal extends Component {
           <FormGroup controlId='formControlsText'>
             <ControlLabel>每天有效工作时间(小时)</ControlLabel>
             <Select
+              simpleValue
               disabled={ submitting }
               clearable={ false }
               searchable={ false }

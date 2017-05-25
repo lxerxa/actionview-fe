@@ -32,8 +32,18 @@ export default class Container extends Component {
   }
 
   componentWillMount() {
-    const { params: { key } } = this.props;
+    const { actions, params: { key } } = this.props;
+    actions.index(key);
     this.pid = key;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { actions } = this.props;
+    const { params: { key } } = nextProps;
+    if (key !== this.pid) {
+      actions.index(key);
+      this.pid = key;
+    }
   }
 
   render() {

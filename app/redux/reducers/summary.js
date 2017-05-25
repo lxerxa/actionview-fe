@@ -8,7 +8,6 @@ export default function summary(state = initialState, action) {
       return { ...state, loading: true, data: {}, options: {} };
 
     case t.PROJECT_SUMMARY_SUCCESS:
-      console.log(action.result);
       if (action.result.ecode === 0) {
         state.data = action.result.data;
         state.options = action.result.options;

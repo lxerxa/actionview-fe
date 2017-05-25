@@ -306,9 +306,10 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
+            { options.allow_create_project === 1 &&
             <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
-            </span>
+            </span> }
             <span style={ { float: 'right', width: '22%' } }>
               <FormControl
                 type='text'

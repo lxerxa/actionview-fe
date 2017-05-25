@@ -96,6 +96,19 @@ export default class List extends Component {
       )
     });
     propertyItems.push({
+      id: 'allow_create_project',
+      title: (
+        <div>
+          <span className='table-td-title'>是否允许用户创建项目</span>
+        </div>
+      ),
+      contents: (
+        <div>
+          { properties.allow_create_project === 1 ? '是' : '否' }
+        </div>
+      )
+    });
+    propertyItems.push({
       id: 'allowed_login_num',
       title: (
         <div>

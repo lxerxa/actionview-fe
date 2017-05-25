@@ -24,12 +24,18 @@ export default class Project extends Component {
     params: PropTypes.object.isRequired
   }
 
+  componentDidMount() {
+    const { actions, params: { key } } = this.props;
+    actions.show(key);
+    this.key = key;
+  }
+
   componentWillReceiveProps(nextProps) {
     const { actions } = this.props;
     const { params: { key } } = nextProps;
     if (key !== this.key) {
-      this.key = key;
       actions.show(key);
+      this.key = key;
     }
   }
 
