@@ -16,7 +16,7 @@ export default class LayoutConfigModal extends Component {
     super(props);
     this.moveCard = this.moveCard.bind(this);
     this.state = { cards: [], ecode: 0, addFieldIds: '', enableAdd: false };
-    const fields = this.props.data.fields || [];
+    const fields = this.props.data.schema || [];
     const fieldNum = fields.length;
     for (let i = 0; i < fieldNum; i++) {
       this.state.cards.push({

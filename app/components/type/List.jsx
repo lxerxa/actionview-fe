@@ -253,7 +253,7 @@ export default class List extends Component {
             { operateShow && hoverRowId === collection[i].id &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='1'>编辑</MenuItem>
-                <MenuItem eventKey='2'>删除</MenuItem>
+                { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
                 { collection[i].disabled && <MenuItem eventKey='4'>启用</MenuItem> }
                 { !collection[i].disabled && <MenuItem eventKey='3'>禁用</MenuItem> }
               </DropdownButton>

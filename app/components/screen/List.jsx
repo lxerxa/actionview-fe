@@ -121,7 +121,7 @@ export default class List extends Component {
                 { !isGlobal && <MenuItem eventKey='4'>字段配置</MenuItem> }
                 <MenuItem eventKey='5'>复制</MenuItem>
                 { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
-                { !isGlobal && <MenuItem eventKey='2'>删除</MenuItem> }
+                { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }
             <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>

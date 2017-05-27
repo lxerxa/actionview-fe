@@ -36,7 +36,7 @@ export default class LayoutFieldConfigModal extends Component {
     const { initializeForm, data } = this.props;
 
     const required_fields = [];
-    const fields = data.fields || [];
+    const fields = data.schema || [];
     const fieldNum = fields.length;
     for (let i = 0; i < fieldNum; i++) {
       if (fields[i].required) {
