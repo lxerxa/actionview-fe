@@ -79,6 +79,10 @@ export default class Header extends Component {
             }
           </div>
         </div>
+        <div className='info-col'>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'>只能删除没有应用到项目问题中的优先级。</div>
+        </div>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
         { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading }/> }
       </div>

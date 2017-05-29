@@ -13,6 +13,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    isSysConfig: PropTypes.bool,
     indexLoading: PropTypes.bool,
     collection: PropTypes.array,
     options: PropTypes.object,
@@ -24,12 +25,18 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, indexLoading, collection, options } = this.props;
+    const { isSysConfig, create, indexLoading, collection, options } = this.props;
 
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建字段</Button>
+        </div>
+        <div className='info-col'>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'> 
+            <span>创建字段时键值必须唯一，且创建后键值不能改变。<br/>只能删除没有应用到界面{ isSysConfig && '（包括各项目自定义界面）' }中的字段。</span>
+          </div>
         </div>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } options={ options }/> }
       </div>

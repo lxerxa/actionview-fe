@@ -13,6 +13,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    isSysConfig: PropTypes.bool.isRequired,
     create: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired
   }
@@ -22,7 +23,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, collection } = this.props;
+    const { isSysConfig, create, collection } = this.props;
     const styles = { display: 'inline-block', marginLeft: '15px' };
     const defaultIndex = _.findIndex(collection, { default: true }) || 0;
 
@@ -31,6 +32,11 @@ export default class Header extends Component {
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建角色</Button>
         </div>
+        { isSysConfig && 
+        <div className='info-col'>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'>只能删除在项目中未生效的角色。</div>
+        </div> }
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
       </div>
     );

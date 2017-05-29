@@ -241,9 +241,10 @@
 .page-button:hover { cursor: pointer }
 
 .cond-bar {
+  background-color: #fafafa;
   vertical-align: middle;
-  padding: 6px 0px 6px 10px;
-  margin: 10px 10px 0px 0px;
+  padding: 6px 6px 6px 10px;
+  margin: 10px 0px 10px 0px;
   border: 1px #ccc solid;
   border-radius: 4px;
 }
@@ -251,10 +252,6 @@
 .cond-bar .remove-icon {
   opacity: 0 !important;
   margin-left: 5px;
-}
-
-.cond-bar:hover {
-  box-shadow: 0 0 0 1px #ccc;
 }
 
 .cond-bar:hover .remove-icon{
@@ -543,3 +540,23 @@ table tr:hover .remove-icon{
   position: absolute;
   left: 52%;
 }
+
+.info-col {
+  background-color: #fafafa;
+  vertical-align: middle;
+  padding: 8px;
+  margin: 10px 0px 10px 0px;
+  border: 1px #ccc solid;
+  border-radius: 4px;
+  line-height: 2;
+}
+
+.info-icon {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 5px;
+}
+
+.info-content {
+  display: inline-block;
+};

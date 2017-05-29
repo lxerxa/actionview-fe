@@ -59,9 +59,11 @@ export default class Container extends Component {
   }
 
   render() {
+    const { location: { pathname='' } } = this.props;
     return (
       <div>
         <Header 
+          isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           create={ this.create.bind(this) } 
           { ...this.props.field }/>
         <List 

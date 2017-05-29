@@ -184,12 +184,6 @@ export default class Header extends Component {
 
     return (
       <div>
-        { this.state.condShow &&
-        <div className='cond-bar'>
-          <span>{ sqlTxt }</span>
-          <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } }><i className='fa fa-remove'></i></span>
-          <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
-        </div> }
         <div style={ { marginTop: '5px' } }>
           { options.searchers && options.searchers.length > 0 ?
           <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
@@ -225,6 +219,12 @@ export default class Header extends Component {
             </DropdownButton>
           </div>
         </div>
+        { this.state.condShow &&
+        <div className='cond-bar'>
+          <span>{ sqlTxt }</span>
+          <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } }><i className='fa fa-remove'></i></span>
+          <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
+        </div> }
         { this.state.searcherConfigShow && <SearcherConfigModal show close={ this.searcherConfigModalClose } loading={ searcherLoading } config={ configSearcher } searchers={ options.searchers || [] }/> }
         <SearchList className={ !this.state.searchShow && 'hide' } query={ query } searchShow={ this.state.searchShow } indexLoading={ indexLoading } options={ options } refresh={ refresh } hide={ () => { this.setState({ searchShow: false }) } }/>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading } project={ project }/> }

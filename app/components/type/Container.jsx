@@ -69,14 +69,19 @@ export default class Container extends Component {
   }
 
   render() {
+    const { location: { pathname='' } } = this.props;
+    const isSysConfig = /^\/admin\/scheme/.test(pathname);
+
     return (
       <div>
         <Header 
+          isSysConfig={ isSysConfig }
           setSort={ this.setSort.bind(this) } 
           setDefault={ this.setDefault.bind(this) } 
           create={ this.create.bind(this) } 
           { ...this.props.type }/>
         <List 
+          isSysConfig={ isSysConfig }
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 

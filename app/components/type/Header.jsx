@@ -18,6 +18,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    isSysConfig: PropTypes.bool.isRequired,
     create: PropTypes.func.isRequired,
     setSort: PropTypes.func.isRequired,
     setDefault: PropTypes.func.isRequired,
@@ -29,7 +30,6 @@ export default class Header extends Component {
   }
 
   async setDefaultValue() {
-
     const defaultValue = findDOMNode(this.refs.defaultValue).value;
     const { setDefault } = this.props;
     const ecode = await setDefault({ 'defaultValue': defaultValue });
@@ -51,7 +51,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
+    const { isSysConfig, create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
     const defaultIndex = _.findIndex(collection, { default: true });
 
     const standardCollection = _.reject(_.reject(collection, { type: 'subtask' }) || [], { disabled: true }) || [];
@@ -82,6 +82,11 @@ export default class Header extends Component {
                 <Button className='edit-icon' onClick={ () => { this.setState({ defaultSetShow: true }); } }><i className='fa fa-pencil'></i></Button>
               </span>
             }
+          </div>
+        </div>
+        <div className='info-col'>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'><span>每一个问题类型都需要绑定自己的界面和工作流。</span>{ isSysConfig || <span><br/>只能删除没有应用到项目问题中的类型，如果想将某一类型在创建或编辑问题时移除可使用禁用功能。</span> }
           </div>
         </div>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options } collection={ collection }/> }

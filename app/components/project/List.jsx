@@ -110,7 +110,7 @@ export default class List extends Component {
 
   entry(key) {
     const { entry } = this.props;
-    entry('/project/' + key + '/summary'); 
+    entry('/project/' + key); 
   }
 
   componentDidMount() {

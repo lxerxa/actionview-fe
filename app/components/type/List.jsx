@@ -30,6 +30,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    isSysConfig: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -168,7 +169,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, options, indexLoading, loading, del, update } = this.props;
+    const { isSysConfig, collection, selectedItem, options, indexLoading, loading, del, update } = this.props;
     const { operateShow, hoverRowId, willSetScreenTypeIds, settingScreenTypeIds, willSetWorkflowTypeIds, settingWorkflowTypeIds } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -254,8 +255,8 @@ export default class List extends Component {
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
-                { collection[i].disabled && <MenuItem eventKey='4'>启用</MenuItem> }
-                { !collection[i].disabled && <MenuItem eventKey='3'>禁用</MenuItem> }
+                { !isSysConfig && collection[i].disabled && <MenuItem eventKey='4'>启用</MenuItem> }
+                { !isSysConfig && !collection[i].disabled && <MenuItem eventKey='3'>禁用</MenuItem> }
               </DropdownButton>
             }
           </div>
