@@ -84,8 +84,12 @@ class CreateModal extends Component {
         defaultIndex = 0;
       }
 
-      type = typeOkOptions[defaultIndex].id;
-      schema = typeOkOptions[defaultIndex].schema;
+      if (!typeOkOptions[defaultIndex]) {
+        schema = [];
+      } else {
+        type = typeOkOptions[defaultIndex].id;
+        schema = typeOkOptions[defaultIndex].schema;
+      }
       _.map(schema || [], (v) => {
         if (v.defaultValue) {
           values[v.key] = v.defaultValue;
