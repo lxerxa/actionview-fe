@@ -90,6 +90,7 @@ export default class Header extends Component {
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
       { key: 'team', name: '项目成员' },
+      { key: 'config', name: '配置概要' },
       { key: 'type', name: '问题类型' },
       { key: 'workflow', name: '工作流' },
       { key: 'field', name: '字段' },

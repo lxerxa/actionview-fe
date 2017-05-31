@@ -15,6 +15,7 @@ const IssueContainer = require('./components/issue/Container');
 const ModuleContainer = require('./components/module/Container');
 const VersionContainer = require('./components/version/Container');
 const TeamContainer = require('./components/team/Container');
+const ConfigContainer = require('./components/config/Container');
 const TypeContainer = require('./components/type/Container');
 const FieldContainer = require('./components/field/Container');
 const ScreenContainer = require('./components/screen/Container');
@@ -49,6 +50,7 @@ export default (
         <Route path='module' component={ ModuleContainer }/>
         <Route path='version' component={ VersionContainer }/>
         <Route path='team' component={ TeamContainer }/>
+        <Route path='config' component={ ConfigContainer }/>
         <Route path='type' component={ TypeContainer }/>
         <Route path='field' component={ FieldContainer }/>
         <Route path='screen' component={ ScreenContainer }/>

@@ -136,6 +136,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/config', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { types: [{ id: '546761', abb:'T', name: '任务', description:'bbbbb', screen_id:'111', workflow_id:'111'},{ id: '546763', name: '需求', abb:'D', screen_id:'222', workflow_id:'111', default: true },{ id: '546762', abb: 'C', name: '缺陷', screen_id:'111', workflow_id:'111'},{ id: '2323', abb:'S', name: '子任务', screen_id:'111', workflow_id:'222'}]}};
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/type', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

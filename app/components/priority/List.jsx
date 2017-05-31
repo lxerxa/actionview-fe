@@ -80,12 +80,11 @@ export default class List extends Component {
     const priorityNum = collection.length;
     for (let i = 0; i < priorityNum; i++) {
       const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
-      const colorStyle = { backgroundColor: collection[i].color || '#cccccc' };
 
       priorities.push({
         id: collection[i].id,
         name: ( <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span> ),
-        color: ( <div className='circle' style={ colorStyle } /> ),
+        color: ( <div className='circle' style={ { backgroundColor: collection[i].color || '#ccc' } } /> ),
         description: collection[i].description ? collection[i].description : '-',
         operation: !isGlobal ? (
           <div>
@@ -115,7 +114,7 @@ export default class List extends Component {
         <BootstrapTable data={ priorities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn width='200' dataField='color'>色彩</TableHeaderColumn>
+          <TableHeaderColumn width='200' dataField='color'>图案</TableHeaderColumn>
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>

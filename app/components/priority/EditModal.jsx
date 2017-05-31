@@ -101,7 +101,7 @@ export default class EditModal extends Component {
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
-            <ControlLabel>色彩值</ControlLabel>
+            <ControlLabel>图案颜色</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...color } placeholder='#cccccc'/>
             <FormControl.Feedback>
               <span className='circle' style={ colorStyle }/>
