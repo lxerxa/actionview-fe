@@ -49,12 +49,12 @@ export default class List extends Component {
               <tr>
                 <td>新建问题</td>
                 <td><Link to={ '/project/' + project.key + '/issue?created_at=1w' }>{ data.new_issues && data.new_issues['total'] || 0 }</Link></td>
-                { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?type=' + v.id + 'created_at=1w' }>{ data.new_issues && data.new_issues[v.id] || 0 }</Link></td>) }) }
+                { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&created_at=1w' }>{ data.new_issues && data.new_issues[v.id] || 0 }</Link></td>) }) }
               </tr>
               <tr>
                 <td>关闭问题</td>
                 <td><Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>{ data.closed_issues && data.closed_issues['total'] || 0 }</Link></td>
-                { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?type=' + v.id + 'updated_at=1w' }>{ data.closed_issues && data.closed_issues[v.id] || 0 }</Link></td>) }) }
+                { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&updated_at=1w' }>{ data.closed_issues && data.closed_issues[v.id] || 0 }</Link></td>) }) }
               </tr>
             </tbody>
           </Table>

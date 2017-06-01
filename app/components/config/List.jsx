@@ -5,13 +5,15 @@ import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
+const allPermissions = require('../share/Permissions.js');
 
 const PreviewModal = require('../workflow/PreviewModal');
+const ScreenPreviewModal = require('../screen/PreviewModal');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { screenPreviewModalShow: false, screenSchema: [], wfPreviewModalShow: false, wfSteps: [] };
+    this.state = { screenPreviewModalShow: false, screenSchema: [], screenName: '', wfPreviewModalShow: false, wfSteps: [], wfName: '' };
   }
 
   static propTypes = {
@@ -23,6 +25,7 @@ export default class List extends Component {
   }
 
   render() {
+
     const { project, data, options, loading } = this.props;
 
     return ( loading ?
@@ -53,8 +56,8 @@ export default class List extends Component {
                       <span className='table-td-desc'>{ v.description || '' }</span>
                     </td>
                     <td>{ v.type === 'subtask' ? '子任务' : '标准' }</td>
-                    <td><a href='#' onClick={ (e) => { e.preventDefault(); } }>{ v.screen && v.screen.name || '' }</a></td>
-                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ wfPreviewModalShow: true, wfSteps: v.workflow && v.workflow.contents && v.workflow.contents.steps || [] }); } }>{ v.workflow && v.workflow.name || '' }</a></td>
+                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ screenPreviewModalShow: true, screenSchema: v.screen && v.screen.schema || [], screenName: v.screen && v.screen.name || '' }); } }>{ v.screen && v.screen.name || '' }</a></td>
+                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ wfPreviewModalShow: true, wfSteps: v.workflow && v.workflow.contents && v.workflow.contents.steps || [], wfName: v.workflow && v.workflow.name || '' }); } }>{ v.workflow && v.workflow.name || '' }</a></td>
                   </tr>
                 );
               }) }
@@ -74,7 +77,7 @@ export default class List extends Component {
               </tr>
             </thead>
             <tbody>
-              { _.map(data.types, (v) => {
+              { _.map(data.priorities || [], (v) => {
                 return (
                   <tr>
                     <td><span className='table-td-title'>{ v.name || '' }{ v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span></td>
@@ -98,7 +101,7 @@ export default class List extends Component {
               </tr>
             </thead>
             <tbody>
-              { _.map(data.types, (v) => {
+              { _.map(data.roles, (v) => {
                 return (
                   <tr>
                     <td>
@@ -106,17 +109,15 @@ export default class List extends Component {
                       <span className='table-td-desc'>{ v.description || '' }</span>
                     </td>
                     <td>
-                      <div className='editable-list-field'>
-                        <div style={ { display: 'table', width: '100%' } }>
-                        { v.permissions.length > 0 ?
-                          <span>
-                          { _.map(v.permissions, function(val){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ val.id }>{ val.name }</Label></div> }) }
-                         </span>
-                         :
-                         <span>
-                           <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
-                         </span> }
-                        </div>
+                      <div style={ { display: 'table', width: '100%' } }>
+                      { v.permissions && v.permissions.length > 0 ?
+                        <span>
+                        { _.map(v.permissions, function(val, i){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ i }>{ _.find(allPermissions, { id: val }) ? _.find(allPermissions, { id: val }).name : '' }</Label></div> }) }
+                       </span>
+                       :
+                       <span>
+                         <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
+                       </span> }
                       </div>
                     </td>
                   </tr>
@@ -130,7 +131,13 @@ export default class List extends Component {
         { this.state.wfPreviewModalShow &&
           <PreviewModal show
             close={ () => { this.setState({ wfPreviewModalShow: false }); } }
+            name={ this.state.wfName }
             collection={ this.state.wfSteps } /> }
+        { this.state.screenPreviewModalShow &&
+          <ScreenPreviewModal show
+            close={ () => { this.setState({ screenPreviewModalShow: false }); } }
+            name={ this.state.screenName }
+            data={ this.state.screenSchema } /> }
       </div>
     );
   }

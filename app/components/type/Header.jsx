@@ -86,7 +86,7 @@ export default class Header extends Component {
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'><span>每一个问题类型都需要绑定自己的界面和工作流。</span>{ isSysConfig || <span><br/>只能删除没有应用到项目问题中的类型，如果将某一类型在创建或编辑问题时移除可使用禁用功能。</span> }{ isSysConfig || <span><br/>若要创建子任务问题，需创建有效的子任务类型的问题类型。</span> }
+          <div className='info-content'><span>每一个问题类型都需要绑定自己的界面和工作流。</span>{ isSysConfig || <span><br/>只能删除没有应用到项目问题中的类型，如果将某一类型在创建或编辑问题时移除可使用禁用功能。</span> }{ isSysConfig || <span><br/>若要创建子任务类型问题，需指定有效的子任务类型的问题类型。</span> }
           </div>
         </div>
         { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options } collection={ collection }/> }

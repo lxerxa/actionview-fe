@@ -4,6 +4,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
+const PreviewModal = require('./PreviewModal');
 const EditModal = require('./EditModal');
 const CopyModal = require('./CopyModal');
 const DelNotify = require('./DelNotify');
@@ -15,6 +16,7 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      previewModalShow: false, 
       editModalShow: false, 
       copyModalShow: false, 
       delNotifyShow: false, 
@@ -23,6 +25,7 @@ export default class List extends Component {
       operateShow: false,
       hoverRowId: ''
     };
+    this.previewModalClose = this.previewModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.copyModalClose = this.copyModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
@@ -49,6 +52,10 @@ export default class List extends Component {
   componentWillMount() {
     const { index } = this.props;
     index();
+  }
+
+  previewModalClose() {
+    this.setState({ previewModalShow: false });
   }
 
   editModalClose() {
@@ -81,6 +88,7 @@ export default class List extends Component {
     eventKey === '3' && this.setState({ layoutConfigShow: true });
     eventKey === '4' && this.setState({ layoutFieldConfigShow: true });
     eventKey === '5' && this.setState({ copyModalShow: true });
+    eventKey === '6' && this.setState({ previewModalShow: true });
   }
 
   onRowMouseOver(rowData) {
@@ -117,6 +125,7 @@ export default class List extends Component {
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+                <MenuItem eventKey='6'>预览</MenuItem>
                 { !isGlobal && <MenuItem eventKey='3'>界面配置</MenuItem> }
                 { !isGlobal && <MenuItem eventKey='4'>字段配置</MenuItem> }
                 <MenuItem eventKey='5'>复制</MenuItem>
@@ -148,6 +157,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
+        { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } name={ selectedItem.name || '' } data={ selectedItem.schema || [] }/> }
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
         { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
