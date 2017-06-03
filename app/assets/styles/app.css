@@ -158,14 +158,7 @@
   float: left;
 }
 
-.table-td-title {
-  display: block;
-  font-weight: bold;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-
-.table-td-issue-title {
+.table-td-title .table-td-issue-title {
   display: block;
   font-weight: bold;
   word-wrap: break-word;
@@ -188,6 +181,12 @@
   color: #999;
   margin-top: 5px;
   font-size: 12px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.table-td-title-nobold {
+  display: block;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
@@ -542,7 +541,7 @@ table tr:hover .remove-icon{
 }
 
 .info-col {
-  background-color: #fafafa;
+  background-color: #f5f5f5;
   vertical-align: middle;
   padding: 8px;
   margin: 10px 0px 10px 0px;

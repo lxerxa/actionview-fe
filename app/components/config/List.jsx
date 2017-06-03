@@ -52,7 +52,7 @@ export default class List extends Component {
                 return (
                   <tr>
                     <td>
-                      <span className='table-td-title'>{ v.name || '' }({ v.abb || '' }){ v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }{ v.type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子任务)</span> }</span>
+                      <span className='table-td-title-nobold'>{ v.name || '' }({ v.abb || '' }){ v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }{ v.type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子任务)</span> }</span>
                       <span className='table-td-desc'>{ v.description || '' }</span>
                     </td>
                     <td>{ v.type === 'subtask' ? '子任务' : '标准' }</td>
@@ -80,7 +80,7 @@ export default class List extends Component {
               { _.map(data.priorities || [], (v) => {
                 return (
                   <tr>
-                    <td><span className='table-td-title'>{ v.name || '' }{ v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span></td>
+                    <td><span className='table-td-title-nobold'>{ v.name || '' }{ v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span></td>
                     <td><div className='circle' style={ { backgroundColor: v.color || '#ccc' } } /></td>
                     <td>{ v.description || '-' }</td>
                   </tr>
@@ -105,7 +105,7 @@ export default class List extends Component {
                 return (
                   <tr>
                     <td>
-                      <span className='table-td-title'>{ v.name || '' }</span>
+                      <span className='table-td-title-nobold'>{ v.name || '' }</span>
                       <span className='table-td-desc'>{ v.description || '' }</span>
                     </td>
                     <td>

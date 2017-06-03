@@ -70,6 +70,22 @@ class Login extends Component {
     values: PropTypes.object
   }
 
+  async componentWillMount() {
+    const { actions, session, projectActions } = this.props;
+    if (!session.invalid) {
+      await actions.getSess();
+      const { session } = this.props;
+      if (session.ecode === 0 && session.user.id) {
+        projectActions.cleanSelectedProject();
+        if (session.user && session.user.latest_access_project) {
+          this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });
+        } else {
+          this.context.router.push({ pathname: '/myproject' });
+        }  
+      }
+    }
+  }
+
   componentDidMount() {
     $('input[name=email]').attr('autocomplete', 'Off');
     $('input[name=password]').attr('autocomplete', 'Off');
