@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as MysettingActions from 'redux/actions/MysettingActions';
 
 const List = require('./List');
+const SysadminList = require('./SysadminList');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -11,7 +12,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ mysetting }) => ({ mysetting }), mapDispatchToProps)
+@connect(({ session, mysetting }) => ({ session, mysetting }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +21,7 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     mysetting: PropTypes.object.isRequired
   }
 
@@ -49,16 +51,23 @@ export default class Container extends Component {
   }
 
   render() {
+    const { session } = this.props;
     return (
       <div className='doc-container'>
         <div>
+          { session.user.email !== 'admin@action.view' ? 
+          <SysadminList 
+            getUser={ this.getUser.bind(this) }
+            resetPwd={ this.resetPwd.bind(this) }
+            { ...this.props.mysetting }/>
+          :
           <List 
             getUser={ this.getUser.bind(this) }
             updAccount={ this.updAccount.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }
             updNotify={ this.updNotify.bind(this) }
             updFavorite={ this.updFavorite.bind(this) }
-            { ...this.props.mysetting }/>
+            { ...this.props.mysetting }/> }
         </div>
       </div>
     );

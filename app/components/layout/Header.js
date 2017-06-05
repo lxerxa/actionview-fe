@@ -178,6 +178,7 @@ export default class Header extends Component {
             <MenuItem eventKey='setting'>系统设置</MenuItem>
           </DropdownButton>
         </span> }
+        { session.user && session.user.email && session.user.email !== 'admin@action.view' &&
         <span style={ { float: 'right' } }>
           <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ headerUser } onSelect={ this.operateSelect.bind(this) }>
             { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }
@@ -186,7 +187,7 @@ export default class Header extends Component {
             { recentProjects.length > 0 && <MenuItem divider /> }
             <MenuItem eventKey='myproject'>项目中心</MenuItem>
           </DropdownButton>
-        </span>
+        </span> }
       </div>
     );
   }

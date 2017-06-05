@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const $ = require('$');
-const CreateModal = require('../project/CreateModal');
+const CreateModal = require('../project/CreateModal2');
 const EditModal = require('../project/EditModal');
 const CloseNotify = require('../project/CloseNotify');
 const img = require('../../assets/images/loading.gif');
@@ -306,7 +306,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            { options.allow_create_project === 1 &&
+            { options.allow_create_project === 1 && 
             <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }

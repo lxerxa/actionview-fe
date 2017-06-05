@@ -13,9 +13,6 @@ const validate = (values, props) => {
   if (!values.name) {
     errors.name = '必填';
   } 
-  if (!values.principal) {
-    errors.principal = '必填';
-  } 
   if (!values.key) {
     errors.key = '必填';
   } else {
@@ -43,7 +40,7 @@ const asyncValidate = (values) => {
 
 @reduxForm({
   form: 'project',
-  fields: ['name', 'key', 'principal', 'description'],
+  fields: ['name', 'key', 'description'],
   asyncValidate,
   asyncBlurFields: [ 'key' ],
   validate
@@ -88,17 +85,6 @@ export default class CreateModal extends Component {
     close();
   }
 
-  async searchUsers(input) {
-    input = input.toLowerCase();
-    if (!input)
-    {
-      return { options: [] };
-    }
-    const api = new ApiClient;
-    const results = await api.request( { url: '/user/search?s=' + input } );
-    return { options: _.map(results.data, (val) => { val.name = val.name + '(' + val.email + ')'; return val; }) };
-  }
-
   render() {
     const { asyncValidating, fields: { name, key, principal, description }, handleSubmit, invalid, submitting } = this.props;
 
@@ -122,11 +108,6 @@ export default class CreateModal extends Component {
               { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
             </FormControl.Feedback>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
-          </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>责任人</ControlLabel>
-            <Select.Async simpleValue clearable={ false } disabled={ submitting } options={ [] } value={ principal.value } onChange={ (newValue) => { principal.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchUsers.bind(this) } placeholder='输入责任人'/>
-            { principal.touched && principal.error && <HelpBlock style={ { float: 'right' } }>{ principal.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

@@ -82,7 +82,7 @@ export default class CreateModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>姓名</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='项目名'/>
+            <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='姓名'/>
             { first_name.touched && first_name.error && <HelpBlock style={ { float: 'right' } }>{ first_name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>

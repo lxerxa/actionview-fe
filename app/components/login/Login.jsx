@@ -76,11 +76,15 @@ class Login extends Component {
       await actions.getSess();
       const { session } = this.props;
       if (session.ecode === 0 && session.user.id) {
-        projectActions.cleanSelectedProject();
-        if (session.user && session.user.latest_access_project) {
-          this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });
+        if (session.user.email === 'admin@action.view') {
+          this.context.router.push({ pathname: '/admin/scheme/type' });
         } else {
-          this.context.router.push({ pathname: '/myproject' });
+          projectActions.cleanSelectedProject();
+          if (session.user.latest_access_project) {
+            this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });
+          } else {
+            this.context.router.push({ pathname: '/myproject' });
+          }
         }  
       }
     }
@@ -114,11 +118,15 @@ class Login extends Component {
       if (query.request_url) {
         this.context.router.push({ pathname: decodeURI(query.request_url) });    
       } else {
-        projectActions.cleanSelectedProject();
-        if (session.user && session.user.latest_access_project) {
-          this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });    
+        if (session.user.email === 'admin@action.view') {
+          this.context.router.push({ pathname: '/admin/scheme/type' });
         } else {
-          this.context.router.push({ pathname: '/myproject' });    
+          projectActions.cleanSelectedProject();
+          if (session.user && session.user.latest_access_project) {
+            this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });    
+          } else {
+            this.context.router.push({ pathname: '/myproject' });    
+          }
         }
       }
     } else {
