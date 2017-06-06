@@ -55,7 +55,7 @@ export default class Container extends Component {
     return (
       <div className='doc-container'>
         <div>
-          { session.user.email !== 'admin@action.view' ? 
+          { session.user.email === 'admin@action.view' ? 
           <SysadminList 
             getUser={ this.getUser.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }

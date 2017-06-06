@@ -81,13 +81,12 @@ export default class List extends Component {
       )
     });
 
-    const data = accountItems;
     return (
       <div>
         <Nav bsStyle='pills' style={ { marginTop: '10px', float: 'left', lineHeight: '1.0' } } activeKey='account'>
           <NavItem eventKey='account' href='#'>账号资料</NavItem>
         </Nav>
-        <BootstrapTable data={ data } bordered={ false } hover trClassName='tr-top'>
+        <BootstrapTable data={ accountItems } bordered={ false } hover trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn width='260' dataField='title'/>
           <TableHeaderColumn width='200' dataField='contents'/>

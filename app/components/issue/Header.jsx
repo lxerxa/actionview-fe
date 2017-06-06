@@ -185,26 +185,18 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
-          { options.searchers && options.searchers.length > 0 ?
           <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
             <MenuItem eventKey='all'>全部问题</MenuItem>
             <MenuItem eventKey='todos'>分配给我的</MenuItem>
             <MenuItem eventKey='myreports'>我报告的</MenuItem>
-            <MenuItem divider/>
-            { _.map(options.searchers, (val) => 
+            { options.searchers && options.searchers.length > 0 && <MenuItem divider/> }
+            { _.map(options.searchers || [], (val) => 
               <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
             ) }
             <MenuItem divider/>
             <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
             <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
           </DropdownButton>
-          :
-          <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
-            <MenuItem eventKey='all'>全部问题</MenuItem>
-            <MenuItem divider/>
-            <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
-            <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
-          </DropdownButton> }
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherConfigShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
           <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }

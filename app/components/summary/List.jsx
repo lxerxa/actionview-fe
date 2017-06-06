@@ -34,8 +34,9 @@ export default class List extends Component {
           <span style={ { fontSize: '19px' } }>{ project.name || '-' }</span>
           <span style={ { marginLeft: '15px', fontSize: '14px' } }>键值：{ project.key || '-' }</span>
           <span style={ { marginLeft: '15px', fontSize: '14px' } }>负责人：{ project.principal && project.principal.name || '-' }</span>
+          <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
         </div>
-        <Panel header={ '一周动态：' + options.weekAgo + ' ~ 现在' }>
+        <Panel header={ '一周动态：' + (options.weekAgo || '') + ' ~ 现在' }>
           { data.new_issues && data.new_issues.total ?
           <Table responsive hover>
             <thead>
