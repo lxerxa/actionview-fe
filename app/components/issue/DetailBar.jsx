@@ -653,7 +653,11 @@ export default class DetailBar extends Component {
                   if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee') {
                     return;
                   }
-                  if (field.type !== 'File' && !data[field.key]) {
+                  if (field.type === 'File') {
+                    if (options.permissions && options.permissions.indexOf('edit_issue') === -1 && !data[field.key]) {
+                      return;
+                    }
+                  } else if (!data[field.key]) {
                     return;
                   }
 
