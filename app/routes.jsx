@@ -8,7 +8,6 @@ import Forgot from './components/login/Forgot';
 import Register from './components/login/Register';
 import Project from './components/project/Project';
 import Scheme from './components/scheme/Scheme';
-import Profile from './components/Profile';
 
 const SummaryContainer = require('./components/summary/Container');
 const IssueContainer = require('./components/issue/Container');

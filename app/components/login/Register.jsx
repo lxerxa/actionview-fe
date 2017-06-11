@@ -4,7 +4,9 @@ import { reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
+const brand = require('../../assets/images/brand.png');
 const img = require('../../assets/images/loading.gif');
 const $ = require('$');
 
@@ -75,6 +77,9 @@ class Register extends Component {
   async handleSubmit() {
     this.setState({ alertShow: false });
 
+    notify.show('试用版暂不支持此功能。', 'warning', 2000);
+    return;
+
     const { values, actions, user } = this.props;
     await actions.register(values);
     if (user.ecode === 0) {
@@ -90,7 +95,10 @@ class Register extends Component {
     return (
       <div className='login-panel'>
         <div className='login-form'>
-        { this.state.emailShow ?
+          <div className='brand'>
+            <img src={ brand } width={ 200 }/>
+          </div>
+          { this.state.emailShow ?
           <form onSubmit={ handleSubmit(this.handleSubmit) }>
             <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
               <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱'/>

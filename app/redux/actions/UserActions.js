@@ -28,6 +28,13 @@ export function create(values) {
   });
 }
 
+export function imports(values) {
+  return asyncFuncCreator({
+    constant: 'USER_IMPORTS',
+    promise: (client) => client.request({ url: '/user/imports', method: 'post', data: values })
+  });
+}
+
 export function update(id, values) {
   return asyncFuncCreator({
     constant: 'USER_UPDATE',

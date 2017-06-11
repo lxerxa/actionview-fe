@@ -27,8 +27,7 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
-    options: PropTypes.object.isRequired
+    del: PropTypes.func.isRequired
   }
 
   componentWillMount() {

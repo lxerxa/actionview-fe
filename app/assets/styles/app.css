@@ -158,7 +158,7 @@
   float: left;
 }
 
-.table-td-title .table-td-issue-title {
+.table-td-title, .table-td-issue-title {
   display: block;
   font-weight: bold;
   word-wrap: break-word;

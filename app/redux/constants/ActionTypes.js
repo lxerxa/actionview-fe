@@ -10,6 +10,7 @@ export default generateConstants([
 
   'USER_REGISTER(ASYNC)',
   'USER_CREATE(ASYNC)',
+  'USER_IMPORTS(ASYNC)',
   'USER_UPDATE(ASYNC)',
   'USER_PWD_RESET(ASYNC)',
   'USER_PWD_RENEW(ASYNC)',

@@ -140,26 +140,28 @@ class Login extends Component {
     return (
       <div className='login-panel'>
         <div className='login-form'>
-        <div className='brand'><img src={ brand } width={ 200 }/></div>
-        <form onSubmit={ handleSubmit(this.handleSubmit) }>
-          <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
-            <FormControl disabled={ submitting } type='text' { ...email } placeholder='用户名/邮箱'/>
-            { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
-          </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
-            <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
-            { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
-          </FormGroup>
-          <Button bsStyle='success' disabled={ submitting } type='submit'>登  录</Button>
-          <div style={ { textAlign: 'center', height: '40px' } }>
-            <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-            { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>登录失败，用户名或密码错误。</div> }
+          <div className='brand'>
+            <img src={ brand } width={ 200 }/>
           </div>
-          <div className='login-footer'>
-            <Link to='/forgot'>忘记密码</Link>
-            <span className='split'/>
-            <Link to='/register'>用户注册</Link>
-          </div>
+          <form onSubmit={ handleSubmit(this.handleSubmit) }>
+            <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
+              <FormControl disabled={ submitting } type='text' { ...email } placeholder='用户名/邮箱'/>
+              { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
+            </FormGroup>
+            <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
+              <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
+              { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
+            </FormGroup>
+            <Button bsStyle='success' disabled={ submitting } type='submit'>登  录</Button>
+            <div style={ { textAlign: 'center', height: '40px' } }>
+              <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
+              { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>登录失败，用户名或密码错误。</div> }
+            </div>
+            <div className='login-footer'>
+              <Link to='/forgot'>忘记密码</Link>
+              <span className='split'/>
+              <Link to='/register'>用户注册</Link>
+            </div>
           </form>
         </div>
       </div>

@@ -40,13 +40,19 @@ export default class Container extends Component {
   }
 
   async index(query) {
+    if (!query) { query = {} }
     if (!query.page) { query.page = 1; }
-    await this.props.actions.index(qs.stringify(query || {}));
+    await this.props.actions.index(qs.stringify(query));
     return this.props.user.ecode;
   }
 
   async create(values) {
     await this.props.actions.create(values);
+    return this.props.user.ecode;
+  }
+
+  async imports(values) {
+    await this.props.actions.imports(values);
     return this.props.user.ecode;
   }
 
@@ -89,6 +95,7 @@ export default class Container extends Component {
           entry={ this.entry.bind(this) } 
           refresh={ this.refresh.bind(this) } 
           create={ this.create.bind(this) } 
+          imports={ this.imports.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
           renew={ this.renewPwd.bind(this) } 

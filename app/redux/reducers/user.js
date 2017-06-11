@@ -39,6 +39,15 @@ export default function project(state = initialState, action) {
     case t.USER_CREATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
+    case t.USER_IMPORTS:
+      return { ...state, loading: true };
+
+    case t.USER_IMPORTS_SUCCESS:
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.USER_IMPORTS_FAIL:
+      return { ...state, loading: false, error: action.error };
+
     case t.USER_PWD_RESET:
       return { ...state, loading: true };
 

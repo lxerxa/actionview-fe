@@ -9,6 +9,7 @@ import { notify } from 'react-notify-toast';
 
 const $ = require('$');
 const PaginationList = require('../share/PaginationList');
+const ImportModal = require('./ImportModal');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const OperateNotify = require('./OperateNotify');
@@ -19,6 +20,7 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      importModalShow: false, 
       createModalShow: false, 
       editModalShow: false, 
       operateNotifyShow: false, 
@@ -30,6 +32,7 @@ export default class List extends Component {
       selectedIds: [],
       name: '' }; 
 
+    this.importModalClose = this.importModalClose.bind(this);
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
@@ -49,6 +52,7 @@ export default class List extends Component {
     refresh: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
+    imports: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     renew: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
@@ -65,6 +69,10 @@ export default class List extends Component {
       newQuery.name = this.state.name;
     }
     index(newQuery);
+  }
+
+  importModalClose() {
+    this.setState({ importModalShow: false });
   }
 
   createModalClose() {
@@ -178,7 +186,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, del, renew, multiDel, multiRenew, update, options, query } = this.props;
+    const { collection, selectedItem, loading, indexLoading, itemLoading, index, refresh, create, imports, del, renew, multiDel, multiRenew, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -243,8 +251,11 @@ export default class List extends Component {
                 {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
               </DropdownButton>
             </span> }
-            <span style={ { float: 'left', width: '20%' } }>
+            <span style={ { float: 'left', marginRight: '20px' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
+            </span>
+            <span style={ { float: 'left', width: '20%' } }>
+              <Button bsStyle='success' onClick={ () => { this.setState({ importModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-users'></i>&nbsp;批量导入</Button>
             </span>
           </FormGroup>
         </div>
@@ -259,6 +270,7 @@ export default class List extends Component {
           </BootstrapTable>
           { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
           { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+          { this.state.importModalShow && <ImportModal show close={ this.importModalClose } imports={ imports } loading={ loading } index={ index }/> }
           { this.state.operateNotifyShow && <OperateNotify show close={ this.operateNotifyClose } data={ selectedItem } operate={ this.state.operate } del={ del } renew={ renew }/> }
           { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiDel={ multiDel } multiRenew={ multiRenew } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
         </div>
