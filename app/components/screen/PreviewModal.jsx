@@ -25,8 +25,6 @@ export default class PreviewModal extends Component {
   render() {
     const { data, name } = this.props;
 
-    console.log(data);
-
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>

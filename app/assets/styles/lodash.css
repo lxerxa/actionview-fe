@@ -409,19 +409,8 @@ html.docs .doc-container {
 	overflow-y: auto;
 	padding: 0rem 1.2rem;
         margin-top: 50px;
+	width: 100%;
 	-webkit-overflow-scrolling: touch
-}
-
-html.docs .doc-container:after {
-	background: #d3d3d3;
-	content: "";
-	display: none;
-	height: 100%;
-	left: 0;
-	opacity: .5;
-	position: absolute;
-	top: 0;
-	width: 100%
 }
 
 html.docs .doc-container>div>div {
