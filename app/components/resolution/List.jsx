@@ -7,6 +7,7 @@ import { notify } from 'react-notify-toast';
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 const img = require('../../assets/images/loading.gif');
+const Err = require('../share/ErrMsg');
 
 export default class List extends Component {
   constructor(props) {
