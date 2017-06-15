@@ -1,8 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as ActivityActions from 'redux/actions/ActivityActions';
+import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
+import * as ActivityActions from 'redux/actions/ActivityActions';
 import * as IssueActions from 'redux/actions/IssueActions';
 import * as WorkflowActions from 'redux/actions/WorkflowActions';
 
@@ -190,6 +192,15 @@ export default class Container extends Component {
   }
 
   render() {
+    const { project } = this.props;
+
+    if (_.isEmpty(project.options)) {
+      return (<div/>);
+    } else if (!project.options.permissions || project.options.permissions.length <= 0) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
+    }
+
     return (
       <div>
         <Header getOptions={ this.getOptions.bind(this) } { ...this.props.activity }/>

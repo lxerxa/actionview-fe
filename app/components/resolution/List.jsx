@@ -29,9 +29,12 @@ export default class List extends Component {
     del: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const { index } = this.props;
-    index();
+    const ecode = await index();
+    if (ecode !== 0) {
+      notify.show(Err.getErrMsg(ecode), 'warning', 2000);
+    }
   }
 
   editModalClose() {

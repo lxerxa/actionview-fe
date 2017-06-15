@@ -311,8 +311,8 @@ class CreateModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : '编辑问题') : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ bodyStyles }>
-          <Form horizontal>
+        <Form horizontal>
+          <Modal.Body style={ bodyStyles }>
             { !isFromWorkflow &&
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>
@@ -332,7 +332,6 @@ class CreateModal extends Component {
                 <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
               </Col>
             </FormGroup> }
-            <div>
             { _.map(schema, (v, key) => {
 
               const title = (
@@ -525,9 +524,8 @@ class CreateModal extends Component {
                 </FormGroup> );
               }
             }) }
-            </div>
-          </Form>
-        </Modal.Body>
+          </Modal.Body>
+        </Form>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>

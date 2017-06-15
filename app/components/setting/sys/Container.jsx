@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as SyssettingActions from 'redux/actions/SyssettingActions';
+import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const List = require('./List');
 
@@ -11,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ syssetting }) => ({ syssetting }), mapDispatchToProps)
+@connect(({ session, syssetting }) => ({ session, syssetting }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +22,7 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     syssetting: PropTypes.object.isRequired
   }
 
@@ -44,6 +47,15 @@ export default class Container extends Component {
   }
 
   render() {
+    const { session } = this.props;
+
+    if (_.isEmpty(session.user)) {
+      return (<div/>);
+    } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
+    }
+
     return (
       <div className='doc-container'>
         <div>

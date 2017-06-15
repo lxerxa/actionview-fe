@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
+
 import * as RoleActions from 'redux/actions/RoleActions';
 
 const List = require('./List');
@@ -42,9 +44,16 @@ export default class Container extends Component {
   }
 
   render() {
-    if (this.props.role && this.props.project && this.props.project.options) {
-      _.assign(this.props.role.options, this.props.project.options);
+    const { project } = this.props;
+
+    if (_.isEmpty(project.options)) {
+      return (<div/>);
+    } else if (!project.options.permissions || project.options.permissions.length <= 0) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
     }
+
+    _.assign(this.props.role.options, project.options);
 
     return (
       <div>

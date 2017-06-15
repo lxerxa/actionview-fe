@@ -3,6 +3,8 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as VersionActions from 'redux/actions/VersionActions';
+import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 const Header = require('./Header');
 const List = require('./List');
@@ -55,6 +57,13 @@ export default class Container extends Component {
 
   render() {
     const { project: { options={} } } = this.props;
+
+    if (_.isEmpty(options)) {
+      return (<div/>);
+    } else if (!options.permissions || options.permissions.length <= 0) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
+    }
 
     return (
       <div>

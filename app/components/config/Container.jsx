@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 import * as ConfigActions from 'redux/actions/ConfigActions';
 const List = require('./List');
@@ -38,11 +40,20 @@ export default class Container extends Component {
   }
 
   render() {
+    const { project } = this.props;
+
+    if (_.isEmpty(project.options)) {
+      return (<div/>);
+    } else if (!project.options.permissions || project.options.permissions.length <= 0) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
+    }
+
     return (
       <div>
         <List 
           index={ this.index.bind(this) } 
-          project={ this.props.project.item }
+          project={ project.item }
           { ...this.props.config }/>
       </div>
     );

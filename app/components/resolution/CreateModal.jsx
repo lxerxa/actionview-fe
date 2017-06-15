@@ -4,6 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const Err = require('../share/ErrMsg');
 const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
@@ -82,7 +83,7 @@ export default class CreateModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && Err.getErrMsg(this.state.ecode) }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

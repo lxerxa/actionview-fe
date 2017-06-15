@@ -7,6 +7,7 @@ import _ from 'lodash';
 import Card from '../share/Card';
 import { notify } from 'react-notify-toast';
 
+const Err = require('../share/ErrMsg');
 const img = require('../../assets/images/loading.gif');
 const style = {
   width: '100%'
@@ -95,7 +96,7 @@ export default class SortCardsModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !sortLoading && Err.getErrMsg(this.state.ecode) }</span>
           <img src={ img } className={ sortLoading ? 'loading' : 'hide' }/>
           <Button disabled={ sortLoading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
           <Button bsStyle='link' disabled={ sortLoading } onClick={ this.cancel.bind(this) }>取消</Button>
