@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as ActivityActions from 'redux/actions/ActivityActions';
+import _ from 'lodash';
 
 import * as IssueActions from 'redux/actions/IssueActions';
 import * as WorkflowActions from 'redux/actions/WorkflowActions';
@@ -190,6 +191,10 @@ export default class Container extends Component {
   }
 
   render() {
+    if (this.props.project.options) {
+      _.assign(this.props.issue.options, this.props.project.options);
+    }
+
     return (
       <div>
         <Header getOptions={ this.getOptions.bind(this) } { ...this.props.activity }/>

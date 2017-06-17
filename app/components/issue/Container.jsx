@@ -210,7 +210,7 @@ export default class Container extends Component {
   }
 
   render() {
-    if (this.props.issue && this.props.project && this.props.project.options) {
+    if (this.props.project.options) {
       _.assign(this.props.issue.options, this.props.project.options);
     }
 

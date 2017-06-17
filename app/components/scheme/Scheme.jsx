@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 import * as SchemeActions from 'redux/actions/SchemeActions';
 
@@ -11,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ scheme }) => ({ scheme }), mapDispatchToProps)
+@connect(({ session, scheme }) => ({ session, scheme }), mapDispatchToProps)
 export default class Scheme extends Component {
   constructor(props) {
     super(props);
@@ -21,10 +23,20 @@ export default class Scheme extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired,
-    params: PropTypes.object.isRequired
+    session: PropTypes.object.isRequired,
+    scheme: PropTypes.object.isRequired
   }
 
   render() {
+    const { session } = this.props;
+
+    if (_.isEmpty(session.user)) {
+      return (<div/>);
+    } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
+    }
+
     return (
       <div className='doc-container'>
       { this.props.children }

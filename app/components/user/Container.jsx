@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 import * as UserActions from 'redux/actions/UserActions';
 
@@ -13,7 +15,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ user }) => ({ user }), mapDispatchToProps)
+@connect(({ session, user }) => ({ session, user }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +29,7 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired
   }
 
@@ -86,7 +89,14 @@ export default class Container extends Component {
   }
 
   render() {
-    const { location: { pathname, query={} } } = this.props;
+    const { session, location: { pathname, query={} } } = this.props;
+
+    if (_.isEmpty(session.user)) {
+      return (<div/>);
+    } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
+    }
 
     return (
       <div className='doc-container'>
