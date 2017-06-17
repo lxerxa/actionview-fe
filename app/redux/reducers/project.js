@@ -69,7 +69,7 @@ export default function project(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.PROJECT_SHOW:
-      return { ...state, loading: true };
+      return { ...state, loading: true, options: {} };
 
     case t.PROJECT_SHOW_SUCCESS:
       if (action.result.ecode === 0) {

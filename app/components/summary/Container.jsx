@@ -51,9 +51,9 @@ export default class Container extends Component {
   render() {
     const { project } = this.props;
 
-    if (_.isEmpty(project.options)) {
+    if (_.isEmpty(project.options) || _.isUndefined(project.options.permissions)) {
       return (<div/>);
-    } else if (!project.options.permissions || project.options.permissions.length <= 0) {
+    } else if (project.options.permissions.length <= 0) {
       notify.show('权限不足。', 'warning', 2000);
       return (<div/>);
     }

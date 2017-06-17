@@ -84,9 +84,9 @@ export default class Container extends Component {
         return (<div/>);
       }
     } else {
-      if (_.isEmpty(project.options)) {
+      if (_.isEmpty(project.options) || _.isUndefined(project.options.permissions)) {
         return (<div/>);
-      } else if (!project.options.permissions || project.options.permissions.indexOf('manage_project') === -1) {
+      } else if (project.options.permissions.indexOf('manage_project') === -1) {
         notify.show('权限不足。', 'warning', 2000);
         return (<div/>);
       }

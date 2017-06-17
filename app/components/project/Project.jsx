@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { notify } from 'react-notify-toast';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
 
@@ -11,7 +12,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ project }) => ({ project }), mapDispatchToProps)
+@connect(({ i18n, project }) => ({ i18n, project }), mapDispatchToProps)
 export default class Project extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,8 @@ export default class Project extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired
@@ -40,6 +43,11 @@ export default class Project extends Component {
   }
 
   render() {
+    const { project: { ecode }, i18n: { errMsg } } = this.props;
+    if (ecode !== 0) {
+      notify.show(errMsg[ecode], 'warning', 2000);
+    }
+
     return (
       <div className='doc-container'>
       { this.props.children }

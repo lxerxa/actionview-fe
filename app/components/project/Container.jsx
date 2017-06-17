@@ -118,7 +118,7 @@ export default class Container extends Component {
 
     if (_.isEmpty(session.user)) {
       return (<div/>);
-    } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
+    } else if ((!session.user.permissions || !session.user.permissions.sys_admin) && pathname.indexOf('admin') === 1) {
       notify.show('权限不足。', 'warning', 2000);
       return (<div/>);
     }

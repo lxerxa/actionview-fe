@@ -119,6 +119,7 @@ export default class Sidebar extends Component {
             <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
+          { session.user.permissions && session.user.permissions.sys_admin &&
           <div>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>管理员管理面板</h4>
             <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
@@ -142,7 +143,7 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.adminSysSettingShow && 'hide' }>
               <li><Link to='/admin/syssetting'>配置</Link></li>
             </ul>
-          </div>
+          </div> }
         </div>
       </div>);
     } else {

@@ -7,7 +7,6 @@ import { notify } from 'react-notify-toast';
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 const img = require('../../assets/images/loading.gif');
-const Err = require('../share/ErrMsg');
 
 export default class List extends Component {
   constructor(props) {
@@ -29,12 +28,9 @@ export default class List extends Component {
     del: PropTypes.func.isRequired
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const { index } = this.props;
-    const ecode = await index();
-    if (ecode !== 0) {
-      notify.show(Err.getErrMsg(ecode), 'warning', 2000);
-    }
+    index();
   }
 
   editModalClose() {

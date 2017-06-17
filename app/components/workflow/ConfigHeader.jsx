@@ -102,13 +102,12 @@ export default class ConfigHeader extends Component {
     return (
       <div>
         { newCollection2JSON !== collection2JSON && collection.length > 0 && 
-          <div style={ { marginTop: '20px', marginBottom: '10px', padding: '8px', backgroundColor: '#ffffbd' } }>
-            <span><i className='fa fa-exclamation-triangle'></i>&nbsp;&nbsp;配置已修改，需保存后才能生效。</span>
-            <Button onClick={ this.saveWorkflow.bind(this) } disabled={ newCollection2JSON === collection2JSON || collection.length <= 0 }><i className='fa fa-save'></i>&nbsp;保存</Button>
-            <span style={ { color: 'red', backgroundColor: '#ffffbd', marginLeft: '10px' } }>{ this.state.errMsg != '' ? this.state.errMsg : (ecode !== 0 ? '保存失败，请重试。' : '') }</span>
-            <img src={ img } className={ saveLoading ? 'loading' : 'hide' }/>
-          </div>
-        }
+        <div style={ { marginTop: '20px', marginBottom: '10px', padding: '8px', backgroundColor: '#ffffbd' } }>
+          <span><i className='fa fa-exclamation-triangle'></i>&nbsp;&nbsp;配置已修改，需保存后才能生效。</span>
+          <Button onClick={ this.saveWorkflow.bind(this) } disabled={ newCollection2JSON === collection2JSON || collection.length <= 0 }><i className='fa fa-save'></i>&nbsp;保存</Button>
+          <span style={ { color: 'red', backgroundColor: '#ffffbd', marginLeft: '10px' } }>{ this.state.errMsg != '' ? this.state.errMsg : (ecode !== 0 ? '保存失败，请重试。' : '') }</span>
+          <img src={ img } className={ saveLoading ? 'loading' : 'hide' }/>
+        </div> }
         <div style={ { marginTop: '5px' } }>
           <Link to={ pathname.substr(0, pathname.lastIndexOf('/')) }>
             <Button className='create-btn'><i className='fa fa-reply'></i>&nbsp;返回</Button>

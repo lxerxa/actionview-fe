@@ -14,7 +14,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ workflow }) => ({ workflow }), mapDispatchToProps)
+@connect(({ session, project, workflow }) => ({ session, project, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -88,9 +88,9 @@ export default class Container extends Component {
         return (<div/>);
       }
     } else {
-      if (_.isEmpty(project.options)) {
+      if (_.isEmpty(project.options) || _.isUndefined(project.options.permissions)) {
         return (<div/>);
-      } else if (!project.options.permissions || _.indexOf(project.options.permissions, 'manage_project') === -1) {
+      } else if (_.indexOf(project.options.permissions, 'manage_project') === -1) {
         notify.show('权限不足。', 'warning', 2000);
         return (<div/>);
       }

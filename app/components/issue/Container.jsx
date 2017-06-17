@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 import * as IssueActions from 'redux/actions/IssueActions';
 import * as WorkflowActions from 'redux/actions/WorkflowActions';
@@ -210,11 +211,16 @@ export default class Container extends Component {
   }
 
   render() {
-    if (this.props.project.options) {
-      _.assign(this.props.issue.options, this.props.project.options);
+    const { project, location: { query={} } } = this.props;
+
+    if (_.isEmpty(project.options) || _.isUndefined(project.options.permissions)) {
+      return (<div/>);
+    } else if (project.options.permissions.length <= 0) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
     }
 
-    const { location: { query={} } } = this.props;
+    _.assign(this.props.issue.options, this.props.project.options);
 
     return (
       <div>

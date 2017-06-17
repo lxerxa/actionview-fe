@@ -132,6 +132,7 @@ Err.enumItems = [
   { code: -14006, msg: '项目不存在。' },
   { code: -14007, msg: '没有选择对象。' },
   { code: -14008, msg: '没有指定状态。' },
+  { code: -14009, msg: '该项目已关闭。' },
 
   // mysetting error code
   { code: -15000, msg: '用户不存在。' },
