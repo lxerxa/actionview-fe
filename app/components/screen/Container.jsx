@@ -3,8 +3,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as ScreenActions from 'redux/actions/ScreenActions';
-import _ from 'lodash';
-import { notify } from 'react-notify-toast';
 
 const Header = require('./Header');
 const List = require('./List');
@@ -15,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ session, project, screen }) => ({ session, project, screen }), mapDispatchToProps)
+@connect(({ screen }) => ({ screen }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -26,8 +24,6 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    session: PropTypes.object.isRequired,
-    project: PropTypes.object.isRequired,
     screen: PropTypes.object.isRequired
   }
 
@@ -63,29 +59,11 @@ export default class Container extends Component {
   }
 
   render() {
-    const { session, project, location: { pathname='' } } = this.props;
-
-    const isSysConfig = /^\/admin\/scheme/.test(pathname);
-    if (isSysConfig) {
-      if (_.isEmpty(session.user)) {
-        return (<div/>);
-      } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
-        notify.show('权限不足。', 'warning', 2000);
-        return (<div/>);
-      }
-    } else {
-      if (_.isEmpty(project.options) || _.isUndefined(project.options.permissions)) {
-        return (<div/>);
-      } else if (_.indexOf(project.options.permissions, 'manage_project') === -1) {
-        notify.show('权限不足。', 'warning', 2000);
-        return (<div/>);
-      }
-    }
-
+    const { location: { pathname='' } } = this.props;
     return (
       <div>
         <Header 
-          isSysConfig={ isSysConfig }
+          isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           create={ this.create.bind(this) } 
           { ...this.props.screen }/>
         <List 

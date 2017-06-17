@@ -56,54 +56,26 @@ export default class Sidebar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const summaryModules = [ 'summary', 'issue', 'activity', 'module', 'version', 'team' ];
-    const configModules = [ 'config', 'type', 'workflow', 'field', 'screen', 'resolution', 'priority', 'state', 'role', 'events' ];
-    if (nextProps.pathname) {
-      const sections = nextProps.pathname.split('/');
-      if (sections.length > 1) {
-        sections.shift();
-      }
-      if (sections.length <= 0) {
-        return;
-      }
-
-      let appType = sections.shift(); 
-      if (appType === 'admin') {
-        this.state.adminPanelShow = true;
-        this.state.projectPanelShow = false;
-      } else {
-        this.state.adminPanelShow = false;
-        this.state.projectPanelShow = true;
-      }
-
-      if (this.state.projectPanelShow) {
-        let modulename = sections.pop();
-        if (summaryModules.indexOf(modulename) !== -1) {
-          this.state.projectSummaryShow = true;
-        } else if (configModules.indexOf(modulename) !== -1) {
-          this.state.projectConfigShow = true;
-        } else {
-          if (sections.length > 1) {
-            modulename = sections.pop();
-            if (modulename === 'workflow') {
-              this.state.projectConfigShow = true;
-            }
-          }else {
-            this.state.projectSummaryShow = true;
-          }
-        }
-      }
-
-      if (this.state.adminPanelShow) {
-        let modulename = sections.shift();
-        if (modulename === 'scheme') {
-          this.state.adminSchemeShow = true;
-        } else if (modulename === 'project' || modulename === 'user') {
-          this.state.adminSysManageShow = true;
-        } else if (modulename === 'syssetting') {
-          this.state.adminSysSettingShow = true;
-        }
-      }
+    if (/^\/project\/(\w+)(\/(summary|issue|activity|version|module|team|config))?$/.test(nextProps.pathname)) {
+      this.state.adminPanelShow = false;
+      this.state.projectPanelShow = true;
+      this.state.projectSummaryShow = true;
+    } else if (/^\/project\/(\w+)\/(type|workflow|field|screen|priority|state|resolution|role|events)(\/\w+)?$/.test(nextProps.pathname)){
+      this.state.adminPanelShow = false;
+      this.state.projectPanelShow = true;
+      this.state.projectConfigShow = true;
+    } else if (/^\/admin\/scheme/.test(nextProps.pathname)) {
+      this.state.adminPanelShow = true;
+      this.state.projectPanelShow = false;
+      this.state.adminSchemeShow = true;
+    } else if (/^\/admin\/(project|user)$/.test(nextProps.pathname)) {
+      this.state.adminPanelShow = true;
+      this.state.projectPanelShow = false;
+      this.state.adminSysManageShow = true;
+    } else if (/^\/admin\/syssetting$/.test(nextProps.pathname)) {
+      this.state.adminPanelShow = true;
+      this.state.projectPanelShow = false;
+      this.state.adminSysSettingShow = true;
     }
   }
 

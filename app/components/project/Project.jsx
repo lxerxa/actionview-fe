@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { notify } from 'react-notify-toast';
+import _ from 'lodash';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
 
@@ -24,6 +25,7 @@ export default class Project extends Component {
     project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired,
+    location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired
   }
 
@@ -43,9 +45,16 @@ export default class Project extends Component {
   }
 
   render() {
-    const { project: { ecode }, i18n: { errMsg } } = this.props;
+
+    const { project: { ecode, options }, location: { pathname }, i18n: { errMsg } } = this.props;
     if (ecode !== 0) {
       notify.show(errMsg[ecode], 'warning', 2000);
+      return (<div/>);
+    } else if (_.isEmpty(options) || _.isUndefined(options.permissions)) {
+      return (<div/>);
+    } else if ((/^\/project\/(\w+)(\/(summary|issue|activity|version|module|team|config))?$/.test(pathname) && options.permissions.length <= 0) || ((/^\/project\/(\w+)\/(type|workflow|field|screen|priority|state|resolution|role|events)(\/\w+)*$/).test(pathname) && options.permissions.indexOf('manage_project') === -1)) {
+      notify.show('权限不足。', 'warning', 2000);
+      return (<div/>);
     }
 
     return (

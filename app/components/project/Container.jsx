@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import _ from 'lodash';
-import { notify } from 'react-notify-toast';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
 
@@ -114,14 +112,7 @@ export default class Container extends Component {
   }
 
   render() {
-    const { session, location: { pathname, query={} } } = this.props;
-
-    if (_.isEmpty(session.user)) {
-      return (<div/>);
-    } else if ((!session.user.permissions || !session.user.permissions.sys_admin) && pathname.indexOf('admin') === 1) {
-      notify.show('权限不足。', 'warning', 2000);
-      return (<div/>);
-    }
+    const { location: { pathname, query={} } } = this.props;
 
     return (
       <div className='doc-container'>
@@ -155,7 +146,7 @@ export default class Container extends Component {
           stop={ this.close.bind(this) }
           reopen={ this.reopen.bind(this) }
           createIndex={ this.createIndex.bind(this) }
-          user={ session.user }
+          user={ this.props.session.user }
           { ...this.props.project }/> }
       </div>
     );
