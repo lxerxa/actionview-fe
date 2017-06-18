@@ -53,7 +53,7 @@ export default class Project extends Component {
     } else if (_.isEmpty(options) || _.isUndefined(options.permissions)) {
       return (<div/>);
     } else if ((/^\/project\/(\w+)(\/(summary|issue|activity|version|module|team|config))?$/.test(pathname) && options.permissions.length <= 0) || ((/^\/project\/(\w+)\/(type|workflow|field|screen|priority|state|resolution|role|events)(\/\w+)*$/).test(pathname) && options.permissions.indexOf('manage_project') === -1)) {
-      notify.show('权限不足。', 'warning', 2000);
+      notify.show(errMsg[-10002], 'warning', 2000);
       return (<div/>);
     }
 

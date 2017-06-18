@@ -13,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ session, syssetting }) => ({ session, syssetting }), mapDispatchToProps)
+@connect(({ i18n, session, syssetting }) => ({ i18n, session, syssetting }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +23,7 @@ export default class Container extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
+    i18n: PropTypes.object.isRequired,
     syssetting: PropTypes.object.isRequired
   }
 
@@ -47,12 +48,12 @@ export default class Container extends Component {
   }
 
   render() {
-    const { session } = this.props;
+    const { i18n: { errMsg }, session } = this.props;
 
     if (_.isEmpty(session.user)) {
       return (<div/>);
     } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
-      notify.show('权限不足。', 'warning', 2000);
+      notify.show(errMsg[-10002], 'warning', 2000);
       return (<div/>);
     }
 

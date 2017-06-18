@@ -13,6 +13,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     isSysConfig: PropTypes.bool,
     indexLoading: PropTypes.bool,
     collection: PropTypes.array,
@@ -25,7 +26,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { isSysConfig, create, indexLoading, collection, options } = this.props;
+    const { i18n, isSysConfig, create, indexLoading, collection, options } = this.props;
 
     return (
       <div>
@@ -38,7 +39,7 @@ export default class Header extends Component {
             <span>创建字段时键值必须唯一，且创建后键值不能改变。<br/>只能删除没有应用到界面{ isSysConfig && '（包括各项目自定义界面）' }中的字段。</span>
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } options={ options }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } options={ options } i18n={ i18n }/> }
       </div>
     );
   }

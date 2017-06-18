@@ -29,6 +29,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     options: PropTypes.object.isRequired,
@@ -84,7 +85,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { pkey, collection, selectedItem, loading, indexLoading, itemLoading, del, update, options } = this.props;
+    const { i18n, pkey, collection, selectedItem, loading, indexLoading, itemLoading, del, update, options } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -154,10 +155,10 @@ export default class List extends Component {
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options } i18n={ i18n }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ selectedItem } config={ update } loading={ loading }/> }
-        { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ selectedItem } config={ update } loading={ loading }/> }
+        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ selectedItem } config={ update } loading={ loading } i18n={ i18n }/> }
+        { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ selectedItem } config={ update } loading={ loading } i18n={ i18n }/> }
       </div>
     );
   }

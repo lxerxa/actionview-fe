@@ -29,6 +29,7 @@ export default class OptionValuesConfigModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     loading: PropTypes.bool,
     config: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
@@ -111,7 +112,7 @@ export default class OptionValuesConfigModal extends Component {
 
   render() {
     const { cards, strCards, enableAdd } = this.state;
-    const { loading } = this.props;
+    const { i18n: { errMsg }, loading } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -151,7 +152,7 @@ export default class OptionValuesConfigModal extends Component {
           }
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button className='ralign' disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
           <Button disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>

@@ -29,6 +29,7 @@ export default class EditModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     options: PropTypes.object,
@@ -69,7 +70,7 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { fields: { id, name, applyToTypes, description }, dirty, handleSubmit, invalid, submitting, data, options } = this.props;
+    const { i18n: { errMsg }, fields: { id, name, applyToTypes, description }, dirty, handleSubmit, invalid, submitting, data, options } = this.props;
 
     const typeOptions = _.map(options.types || [], (val) => { return { label: val.name, value: val.id } });
 
@@ -96,7 +97,7 @@ export default class EditModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

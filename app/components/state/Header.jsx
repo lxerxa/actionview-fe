@@ -13,6 +13,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     isSysConfig: PropTypes.bool.isRequired,
     create: PropTypes.func.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -24,7 +25,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { isSysConfig, create, indexLoading, collection } = this.props;
+    const { i18n, isSysConfig, create, indexLoading, collection } = this.props;
 
     return (
       <div>
@@ -36,7 +37,7 @@ export default class Header extends Component {
           <div className='info-content'><span>状态是指执行工作流过程中问题的状态，定义工作流时和某一步骤绑定。<br/>只能删除没有关联到工作流{ isSysConfig && '（包括各项目自定义工作流）' }和没有应用到项目问题中的状态。</span>
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } i18n={ i18n }/> }
       </div>
     );
   }

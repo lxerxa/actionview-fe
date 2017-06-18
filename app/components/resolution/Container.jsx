@@ -12,7 +12,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ resolution }) => ({ resolution }), mapDispatchToProps)
+@connect(({ i18n, resolution }) => ({ i18n, resolution }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +23,7 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    i18n: PropTypes.object.isRequired,
     resolution: PropTypes.object.isRequired
   }
 
@@ -74,6 +75,7 @@ export default class Container extends Component {
           setSort={ this.setSort.bind(this) } 
           setDefault={ this.setDefault.bind(this) } 
           create={ this.create.bind(this) } 
+          i18n={ this.props.i18n }
           { ...this.props.resolution }/>
         <List 
           pkey={ this.pid }
@@ -82,6 +84,7 @@ export default class Container extends Component {
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           delNotify={ this.props.actions.delNotify } 
+          i18n={ this.props.i18n }
           { ...this.props.resolution }/>
       </div>
     );

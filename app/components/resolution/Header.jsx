@@ -18,6 +18,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     setSort: PropTypes.func.isRequired,
     setDefault: PropTypes.func.isRequired,
@@ -48,7 +49,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, setSort, sortLoading, indexLoading, defaultLoading, collection } = this.props;
+    const { i18n, create, setSort, sortLoading, indexLoading, defaultLoading, collection } = this.props;
     const defaultIndex = _.findIndex(collection, { default: true });
 
     return (
@@ -83,8 +84,8 @@ export default class Header extends Component {
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>新建问题的解决结果初始值是未解决。<br/>只能删除没有应用到项目问题中的解决结果。</div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
-        { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } i18n={ i18n }/> }
+        { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading } i18n={ i18n }/> }
       </div>
     );
   }

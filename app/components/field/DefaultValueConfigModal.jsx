@@ -40,6 +40,7 @@ export default class DefaultValueConfigModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     optionValues: PropTypes.array,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -89,7 +90,7 @@ export default class DefaultValueConfigModal extends Component {
   }
 
   render() {
-    const { fields: { id, defaultValue }, dirty, handleSubmit, invalid, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { id, defaultValue }, dirty, handleSubmit, invalid, submitting, data } = this.props;
 
     let optionValues = [];
     let defaultComponent = {};
@@ -123,7 +124,7 @@ export default class DefaultValueConfigModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || !dirty || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
