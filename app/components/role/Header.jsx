@@ -13,6 +13,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     isSysConfig: PropTypes.bool.isRequired,
     create: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired
@@ -23,7 +24,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { isSysConfig, create, collection } = this.props;
+    const { i18n, isSysConfig, create, collection } = this.props;
     const styles = { display: 'inline-block', marginLeft: '15px' };
     const defaultIndex = _.findIndex(collection, { default: true }) || 0;
 
@@ -37,7 +38,7 @@ export default class Header extends Component {
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>只能删除在项目中未生效的角色。</div>
         </div> }
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } i18n={ i18n }/> }
       </div>
     );
   }

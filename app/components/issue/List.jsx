@@ -46,6 +46,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     wfCollection: PropTypes.array.isRequired,
     wfLoading: PropTypes.bool.isRequired,
@@ -251,6 +252,7 @@ export default class List extends Component {
 
   render() {
     const { 
+      i18n,
       collection, 
       itemData={}, 
       loading, 
@@ -414,6 +416,7 @@ export default class List extends Component {
         </BootstrapTable>
         { this.state.barShow &&
           <DetailBar 
+            i18n={ i18n }
             create={ create } 
             edit={ edit } 
             del={ del } 
@@ -481,13 +484,15 @@ export default class List extends Component {
             close={ this.delNotifyClose } 
             data={ selectedItem } 
             loading = { itemLoading }
-            del={ del }/> }
+            del={ del }
+            i18n={ i18n }/> }
         { this.state.addWorklogShow &&
           <AddWorklogModal show
             issue={ selectedItem }
             close={ () => { this.setState({ addWorklogShow: false }) } }
             loading = { worklogLoading }
-            add={ addWorklog }/> }
+            add={ addWorklog }
+            i18n={ i18n }/> }
         { this.state.editModalShow && 
           <CreateModal show 
             close={ () => { this.setState({ editModalShow: false }); } } 
@@ -496,7 +501,8 @@ export default class List extends Component {
             project={ project } 
             edit={ edit }
             isSubtask={ selectedItem.parent_id && true }
-            data={ selectedItem }/> }
+            data={ selectedItem }
+            i18n={ i18n }/> }
         { this.state.createSubtaskModalShow && 
           <CreateModal show 
             close={ () => { this.setState({ createSubtaskModalShow: false }); } } 
@@ -505,14 +511,16 @@ export default class List extends Component {
             loading={ loading } 
             project={ project } 
             parent_id={ selectedItem.id } 
-            isSubtask={ true }/> }
+            isSubtask={ true }
+            i18n={ i18n }/> }
         { this.state.convertTypeModalShow &&
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
             convert={ convert }
             loading={ loading }
-            issue={ selectedItem }/> }
+            issue={ selectedItem }
+            i18n={ i18n }/> }
         { this.state.convertType2ModalShow &&
           <ConvertType2Modal show
             close={ () => { this.setState({ convertType2ModalShow: false }); } }
@@ -520,7 +528,8 @@ export default class List extends Component {
             project={ project } 
             convert={ convert }
             loading={ loading }
-            issue={ selectedItem }/> }
+            issue={ selectedItem }
+            i18n={ i18n }/> }
         { this.state.moveModalShow &&
           <MoveModal show
             close={ () => { this.setState({ moveModalShow: false }); } }
@@ -528,13 +537,15 @@ export default class List extends Component {
             project={ project } 
             move={ move }
             loading={ loading }
-            issue={ selectedItem }/> }
+            issue={ selectedItem }
+            i18n={ i18n }/> }
         { this.state.assignModalShow &&
           <AssignModal show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             setAssignee={ setAssignee }
-            issue={ selectedItem }/> }
+            issue={ selectedItem }
+            i18n={ i18n }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show
             close={ () => { this.setState({ shareModalShow: false }); } }
@@ -545,13 +556,15 @@ export default class List extends Component {
             close={ () => { this.setState({ resetModalShow: false }); } }
             resetState={ resetState }
             loading={ itemLoading }
-            issue={ selectedItem }/> }
+            issue={ selectedItem }
+            i18n={ i18n }/> }
         { this.state.copyModalShow &&
           <CopyModal show
             close={ () => { this.setState({ copyModalShow: false }); } }
             loading={ loading }
             copy={ copy }
-            data={ selectedItem }/> }
+            data={ selectedItem }
+            i18n={ i18n }/> }
       </div>
     );
   }

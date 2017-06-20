@@ -12,7 +12,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ events }) => ({ events }), mapDispatchToProps)
+@connect(({ i18n, events }) => ({ i18n, events }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +23,7 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    i18n: PropTypes.object.isRequired,
     events: PropTypes.object.isRequired
   }
 
@@ -68,6 +69,7 @@ export default class Container extends Component {
       <div>
         <Header 
           create={ this.create.bind(this) } 
+          i18n={ this.props.i18n }
           { ...this.props.events }/>
         <List 
           pkey={ this.pid }
@@ -76,6 +78,7 @@ export default class Container extends Component {
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           reset={ this.reset.bind(this) } 
+          i18n={ this.props.i18n }
           { ...this.props.events }/>
       </div>
     );

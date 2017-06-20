@@ -28,6 +28,7 @@ export default class LayoutConfigModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     loading: PropTypes.bool,
     config: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
@@ -96,7 +97,7 @@ export default class LayoutConfigModal extends Component {
 
   render() {
     const { cards, strCards, enableAdd } = this.state;
-    const { loading, options } = this.props;
+    const { i18n: { errMsg }, loading, options } = this.props;
     //let optionFields = [];
     const allFields = _.map(options.fields || [], function(val) {
       return { label: val.name, value: val.id };
@@ -135,7 +136,7 @@ export default class LayoutConfigModal extends Component {
           }
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>

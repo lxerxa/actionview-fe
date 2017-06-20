@@ -18,6 +18,7 @@ export default class Worklog extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
     permissions: PropTypes.array.isRequired,
     issue: PropTypes.object.isRequired,
@@ -121,7 +122,7 @@ export default class Worklog extends Component {
   }
 
   render() {
-    const { permissions, currentUser, issue, indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
+    const { i18n, permissions, currentUser, issue, indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
 
     let leave_estimate_m = undefined;
     if (original_estimate) {
@@ -222,14 +223,16 @@ export default class Worklog extends Component {
             data={ this.state.selectedWorklog }
             loading = { loading }
             add={ addWorklog }
-            edit={ editWorklog }/> }
+            edit={ editWorklog }
+            i18n={ i18n }/> }
         { this.state.delWorklogShow &&
           <DelWorklogModal show
             issue={ issue }
             close={ () => { this.setState({ delWorklogShow: false }) } }
             data={ this.state.selectedWorklog }
             loading = { loading }
-            del={ delWorklog }/> }
+            del={ delWorklog }
+            i18n={ i18n }/> }
       </Form>
     );
   }

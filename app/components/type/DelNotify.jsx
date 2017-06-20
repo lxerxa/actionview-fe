@@ -13,6 +13,7 @@ export default class DelNotify extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
@@ -62,7 +63,7 @@ export default class DelNotify extends Component {
   }
 
   render() {
-    const { data, operation, loading } = this.props;
+    const { i18n: { errMsg }, data, operation, loading } = this.props;
 
     let opt = '';
     if (operation == 'disable') {
@@ -82,7 +83,7 @@ export default class DelNotify extends Component {
           确认要{ opt }此问题类型？
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

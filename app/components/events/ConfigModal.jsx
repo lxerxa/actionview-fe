@@ -33,6 +33,7 @@ export default class ConfigModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired,
@@ -79,7 +80,7 @@ export default class ConfigModal extends Component {
   }
 
   render() {
-    const { data, options, loading } = this.props;
+    const { i18n: { errMsg }, data, options, loading } = this.props;
 
     const roleOptions = options.roles || [];
     const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
@@ -159,7 +160,7 @@ export default class ConfigModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button onClick={ this.confirm } disabled={ !isChanged || loading }>确定</Button>
           <Button bsStyle='link' onClick={ this.cancel }>取消</Button>

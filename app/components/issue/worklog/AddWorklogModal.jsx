@@ -49,6 +49,7 @@ export default class AddWorklogModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     add: PropTypes.func,
@@ -170,7 +171,7 @@ export default class AddWorklogModal extends Component {
   }
 
   render() {
-    const { data={}, loading, issue } = this.props;
+    const { i18n: { errMsg }, data={}, loading, issue } = this.props;
     const styles = { display: 'inline-block', width: '40%' };
     const err_styles = { display: 'inline-block', width: '40%', borderColor: '#a94442' };
 
@@ -273,7 +274,7 @@ export default class AddWorklogModal extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ _.isEqual(this.state.oldValues, this.state.values) || loading || !_.isEmpty(this.state.errors) } onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

@@ -28,6 +28,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
@@ -126,7 +127,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { pkey, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { i18n, pkey, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
     const { willSetPermissionRoleIds, settingPermissionRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -216,7 +217,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='permissions'>权限集</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
       </div>
     );

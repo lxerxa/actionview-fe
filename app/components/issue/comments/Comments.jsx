@@ -19,6 +19,7 @@ export default class Comments extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
     permissions: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -114,7 +115,7 @@ export default class Comments extends Component {
   }
 
   render() {
-    const { permissions, currentUser, indexComments, collection, indexLoading, loading, itemLoading, delComments, editComments, users, issue_id } = this.props;
+    const { i18n, permissions, currentUser, indexComments, collection, indexLoading, loading, itemLoading, delComments, editComments, users, issue_id } = this.props;
 
     return (
       <Form horizontal>
@@ -202,21 +203,24 @@ export default class Comments extends Component {
             loading = { itemLoading }
             users ={ users }
             issue_id={ issue_id }
-            edit={ editComments }/> }
+            edit={ editComments }
+            i18n={ i18n }/> }
         { this.state.delReplyShow &&
           <DelReplyModal show
             close={ () => { this.setState({ delReplyShow: false }) } }
             data={ this.state.selectedComments }
             loading = { itemLoading }
             issue_id={ issue_id }
-            edit={ editComments }/> }
+            edit={ editComments }
+            i18n={ i18n }/> }
         { this.state.delCommentsShow &&
           <DelCommentsModal show
             close={ () => { this.setState({ delCommentsShow: false }) } }
             data={ this.state.selectedComments }
             loading = { itemLoading }
             issue_id={ issue_id }
-            del={ delComments }/> }
+            del={ delComments }
+            i18n={ i18n }/> }
       </Form>
     );
   }

@@ -32,6 +32,7 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -70,7 +71,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, defaultAssignee, principal, description }, options={}, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { name, defaultAssignee, principal, description }, options={}, handleSubmit, invalid, submitting } = this.props;
 
     const assigneeOptions = [ { value: 'projectPrincipal', label: '项目负责人' }, { value: 'modulePrincipal', label: '模块负责人' }, { value: 'none', label: '未分配' } ];
 
@@ -102,7 +103,7 @@ export default class CreateModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ project, module }) => ({ project, module }), mapDispatchToProps)
+@connect(({ i18n, project, module }) => ({ i18n, project, module }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +26,7 @@ export default class Container extends Component {
     project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    i18n: PropTypes.object.isRequired,
     module: PropTypes.object.isRequired
   }
 
@@ -64,6 +65,7 @@ export default class Container extends Component {
       <div>
         <Header 
           create={ this.create.bind(this) } 
+          i18n={ this.props.i18n }
           { ...this.props.module }/>
         <List 
           index={ this.index.bind(this) } 
@@ -71,6 +73,7 @@ export default class Container extends Component {
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           delNotify={ this.props.actions.delNotify } 
+          i18n={ this.props.i18n }
           { ...this.props.module }/>
       </div>
     );

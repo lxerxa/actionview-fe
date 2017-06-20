@@ -20,6 +20,7 @@ export default class LayoutFieldConfigModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     dirty: PropTypes.bool,
@@ -74,7 +75,7 @@ export default class LayoutFieldConfigModal extends Component {
 
   render() {
 
-    const { fields: { id, required_fields }, dirty, handleSubmit, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { id, required_fields }, dirty, handleSubmit, submitting, data } = this.props;
 
     const screenFields = _.map(data.fields || [], function(val) {
       return { label: val.name, value: val.id };
@@ -101,7 +102,7 @@ export default class LayoutFieldConfigModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || !dirty } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel.bind(this) }>取消</Button>

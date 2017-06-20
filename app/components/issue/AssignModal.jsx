@@ -29,6 +29,7 @@ export default class AssignModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
@@ -62,7 +63,7 @@ export default class AssignModal extends Component {
   }
 
   render() {
-    const { fields: { assignee }, handleSubmit, invalid, submitting, issue, options } = this.props;
+    const { i18n: { errMsg }, fields: { assignee }, handleSubmit, invalid, submitting, issue, options } = this.props;
 
     const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
 
@@ -80,7 +81,7 @@ export default class AssignModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

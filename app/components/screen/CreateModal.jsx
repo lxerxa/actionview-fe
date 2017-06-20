@@ -39,6 +39,7 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -130,7 +131,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, description, required_fields }, handleSubmit, invalid, submitting, options } = this.props;
+    const { i18n: { errMsg }, fields: { name, description, required_fields }, handleSubmit, invalid, submitting, options } = this.props;
 
     const { cards, enableAdd } = this.state;
     const allFields = _.map(options.fields || [], function(val) {
@@ -205,7 +206,7 @@ export default class CreateModal extends Component {
           </Tabs>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

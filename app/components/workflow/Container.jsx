@@ -12,7 +12,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ workflow }) => ({ workflow }), mapDispatchToProps)
+@connect(({ i18n, workflow }) => ({ i18n, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +23,7 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    i18n: PropTypes.object.isRequired,
     workflow: PropTypes.object.isRequired
   }
 
@@ -74,11 +75,13 @@ export default class Container extends Component {
 
   render() {
     const { location: { pathname='' } } = this.props;
+
     return (
       <div>
         <Header 
           isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           create={ this.create.bind(this) } 
+          i18n={ this.props.i18n }
           { ...this.props.workflow }/>
         <List 
           pkey={ this.pid }
@@ -90,6 +93,7 @@ export default class Container extends Component {
           preview={ this.preview.bind(this) } 
           goConfig={ this.goConfig.bind(this) } 
           delNotify={ this.props.actions.delNotify } 
+          i18n={ this.props.i18n }
           { ...this.props.workflow }/>
       </div>
     );

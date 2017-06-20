@@ -31,6 +31,7 @@ export default class ConvertType2Modal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     options: PropTypes.object,
     issue: PropTypes.object.isRequired,
@@ -88,7 +89,7 @@ export default class ConvertType2Modal extends Component {
   }
 
   render() {
-    const { fields: { parent_id, type }, handleSubmit, invalid, submitting, options, issue } = this.props;
+    const { i18n: { errMsg }, fields: { parent_id, type }, handleSubmit, invalid, submitting, options, issue } = this.props;
 
     const typeOptions = [];
     _.map(options.types || [], function(val) {
@@ -116,7 +117,7 @@ export default class ConvertType2Modal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

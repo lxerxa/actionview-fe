@@ -13,6 +13,7 @@ export default class DelLinkModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     delLink: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -37,7 +38,7 @@ export default class DelLinkModal extends Component {
   }
 
   render() {
-    const { data, loading } = this.props;
+    const { i18n: { errMsg }, data, loading } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -49,7 +50,7 @@ export default class DelLinkModal extends Component {
           确认要删除此链接？
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

@@ -13,6 +13,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     isSysConfig: PropTypes.bool.isRequired,
     create: PropTypes.func.isRequired
   }
@@ -22,7 +23,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { isSysConfig, create } = this.props;
+    const { i18n, isSysConfig, create } = this.props;
 
     return (
       <div>
@@ -33,7 +34,7 @@ export default class Header extends Component {
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>只能删除没有关联到问题类型{ isSysConfig && '（包括各项目自定义问题类型）' }的工作流。</div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } i18n={ i18n }/> }
       </div>
     );
   }

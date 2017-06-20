@@ -34,6 +34,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
@@ -100,7 +101,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { pkey, collection, selectedItem, options, loading, indexLoading, itemLoading, del, update, create } = this.props;
+    const { i18n, pkey, collection, selectedItem, options, loading, indexLoading, itemLoading, del, update, create } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -158,11 +159,11 @@ export default class List extends Component {
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } name={ selectedItem.name || '' } data={ selectedItem.schema || [] }/> }
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
-        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
+        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem } i18n={ i18n }/> }
         { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ selectedItem } config={ update } options= { options } loading={ loading }/> }
-        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ selectedItem } config={ update } loading={ loading }/> }
+        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ selectedItem } config={ update } options= { options } loading={ loading } i18n={ i18n }/> }
+        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ selectedItem } config={ update } loading={ loading } i18n={ i18n }/> }
       </div>
     );
   }

@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ session, issue, project, workflow }) => ({ session, issue, project, workflow }), mapDispatchToProps)
+@connect(({ i18n, session, issue, project, workflow }) => ({ i18n, session, issue, project, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +34,7 @@ export default class Container extends Component {
     wfActions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
+    i18n: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     workflow: PropTypes.object.isRequired,
@@ -214,7 +215,7 @@ export default class Container extends Component {
       _.assign(this.props.issue.options, this.props.project.options);
     }
 
-    const { location: { query={} } } = this.props;
+    const { i18n, location: { query={} } } = this.props;
 
     return (
       <div>
@@ -227,6 +228,7 @@ export default class Container extends Component {
           query={ query } 
           refresh={ this.refresh.bind(this) } 
           project={ this.props.project.item } 
+          i18n={ this.props.i18n }
           { ...this.props.issue }/>
         <List 
           index={ this.index.bind(this) } 
@@ -264,6 +266,7 @@ export default class Container extends Component {
           move={ this.move.bind(this) }
           convert={ this.convert.bind(this) }
           user={ this.props.session.user }
+          i18n={ this.props.i18n }
           { ...this.props.issue }/> 
       </div>
     );

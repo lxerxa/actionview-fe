@@ -31,6 +31,7 @@ export default class AddSearcherModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     query: PropTypes.object,
     sqlTxt: PropTypes.string,
     submitting: PropTypes.bool,
@@ -65,7 +66,7 @@ export default class AddSearcherModal extends Component {
   }
 
   render() {
-    const { fields: { name }, handleSubmit, invalid, submitting, sqlTxt='' } = this.props;
+    const { i18n: { errMsg }, fields: { name }, handleSubmit, invalid, submitting, sqlTxt='' } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -85,7 +86,7 @@ export default class AddSearcherModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

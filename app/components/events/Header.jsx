@@ -13,6 +13,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired
@@ -23,14 +24,14 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, indexLoading, collection } = this.props;
+    const { i18n, create, indexLoading, collection } = this.props;
 
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建事件</Button>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } i18n={ i18n }/> }
       </div>
     );
   }

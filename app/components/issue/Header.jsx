@@ -22,6 +22,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     addSearcher: PropTypes.func.isRequired,
     configSearcher: PropTypes.func.isRequired,
@@ -177,7 +178,19 @@ export default class Header extends Component {
   }
 
   render() {
-    const { create, addSearcher, configSearcher, indexLoading, optionsLoading, searcherLoading, options={}, refresh, query, loading, project } = this.props;
+    const { 
+      i18n, 
+      create, 
+      addSearcher, 
+      configSearcher, 
+      indexLoading, 
+      optionsLoading, 
+      searcherLoading, 
+      options={}, 
+      refresh, 
+      query, 
+      loading, 
+      project } = this.props;
 
     const standardTypes = _.reject(_.reject(options.types || [], { type: 'subtask' }) || [], { disabled: true }) || [];
     const sqlTxt = this.condsTxt();
@@ -217,10 +230,10 @@ export default class Header extends Component {
           <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } }><i className='fa fa-remove'></i></span>
           <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
         </div> }
-        { this.state.searcherConfigShow && <SearcherConfigModal show close={ this.searcherConfigModalClose } loading={ searcherLoading } config={ configSearcher } searchers={ options.searchers || [] }/> }
+        { this.state.searcherConfigShow && <SearcherConfigModal show close={ this.searcherConfigModalClose } loading={ searcherLoading } config={ configSearcher } searchers={ options.searchers || [] } i18n={ i18n }/> }
         <SearchList className={ !this.state.searchShow && 'hide' } query={ query } searchShow={ this.state.searchShow } indexLoading={ indexLoading } options={ options } refresh={ refresh } hide={ () => { this.setState({ searchShow: false }) } }/>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading } project={ project }/> }
-        { this.state.addSearcherShow && <AddSearcherModal show close={ this.addSearcherModalClose } searchers={ options.searchers || [] } create={ addSearcher } query={ query } loading={ searcherLoading } sqlTxt={ sqlTxt }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } options={ options } create={ create } loading={ loading } project={ project } i18n={ i18n }/> }
+        { this.state.addSearcherShow && <AddSearcherModal show close={ this.addSearcherModalClose } searchers={ options.searchers || [] } create={ addSearcher } query={ query } loading={ searcherLoading } sqlTxt={ sqlTxt } i18n={ i18n }/> }
       </div>
     );
   }

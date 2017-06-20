@@ -15,6 +15,7 @@ export default class EditCommentsModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     issue_id: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
@@ -24,7 +25,7 @@ export default class EditCommentsModal extends Component {
   }
 
   async confirm() {
-    const { issue_id, close, edit, users, data } = this.props;
+    const { i18n: { errMsg }, issue_id, close, edit, users, data } = this.props;
 
     const newAtWho = [];
     _.map(_.uniq(this.state.atWho), (val) => {
@@ -89,7 +90,7 @@ export default class EditCommentsModal extends Component {
   }
 
   render() {
-    const { data, loading } = this.props;
+    const { i18n: { errMsg }, data, loading } = this.props;
 
     let title = '';
     if (data.comments_id) {
@@ -118,7 +119,7 @@ export default class EditCommentsModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ this.state.oldContents === this.state.contents || loading } onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

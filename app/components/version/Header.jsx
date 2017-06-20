@@ -12,6 +12,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     collection: PropTypes.array,
@@ -23,7 +24,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { options={}, create, indexLoading, collection } = this.props;
+    const { i18n, options={}, create, indexLoading, collection } = this.props;
 
     return (
       <div>
@@ -36,7 +37,7 @@ export default class Header extends Component {
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>只能删除没有应用到项目问题中的版本。</div>
         </div> }
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } i18n={ i18n }/> }
       </div>
     );
   }

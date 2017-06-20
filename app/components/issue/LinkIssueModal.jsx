@@ -16,6 +16,7 @@ export default class LinkIssueModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     types: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -82,7 +83,7 @@ export default class LinkIssueModal extends Component {
   }
 
   render() {
-    const { loading } = this.props;
+    const { i18n: { errMsg }, loading } = this.props;
 
     const relationOptions = [ 
       { value: 'blocks', label: 'blocks' }, 
@@ -109,7 +110,7 @@ export default class LinkIssueModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading || !this.state.relation || !this.state.dest } onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

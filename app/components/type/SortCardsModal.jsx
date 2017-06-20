@@ -43,6 +43,7 @@ export default class SortCardsModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     cards: PropTypes.array,
     sortLoading: PropTypes.bool,
     setSort: PropTypes.func,
@@ -74,7 +75,8 @@ export default class SortCardsModal extends Component {
 
   render() {
     const { cards, strCards } = this.state;
-    const { sortLoading } = this.props;
+    const { i18n: { errMsg }, sortLoading } = this.props;
+
     return (
       <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
@@ -95,7 +97,7 @@ export default class SortCardsModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ sortLoading ? 'loading' : 'hide' }/>
           <Button disabled={ sortLoading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
           <Button bsStyle='link' disabled={ sortLoading } onClick={ this.cancel.bind(this) }>取消</Button>

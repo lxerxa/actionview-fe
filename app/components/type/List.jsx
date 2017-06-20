@@ -30,6 +30,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     isSysConfig: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
@@ -169,7 +170,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { isSysConfig, collection, selectedItem, options, indexLoading, loading, del, update } = this.props;
+    const { i18n, isSysConfig, collection, selectedItem, options, indexLoading, loading, del, update } = this.props;
     const { operateShow, hoverRowId, willSetScreenTypeIds, settingScreenTypeIds, willSetWorkflowTypeIds, settingWorkflowTypeIds } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -284,8 +285,8 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='status'>状态</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options } collection={ collection }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } loading={ loading } del={ del } update={ update } operation={ this.state.operation }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options } collection={ collection } i18n={ i18n }/> }
+        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } loading={ loading } del={ del } update={ update } operation={ this.state.operation } i18n={ i18n }/> }
       </div>
     );
   }

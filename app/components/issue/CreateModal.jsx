@@ -112,6 +112,7 @@ class CreateModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     data: PropTypes.object,
     project: PropTypes.object,
@@ -287,7 +288,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { options, close, loading, project, data={}, isSubtask=false, isFromWorkflow=false } = this.props;
+    const { i18n: { errMsg }, options, close, loading, project, data={}, isSubtask=false, isFromWorkflow=false } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(this.state.typeOptions, function(val) {
@@ -527,7 +528,7 @@ class CreateModal extends Component {
           </Modal.Body>
         </Form>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button type='submit' disabled={ (data.id && this.getChangedKeys().length <= 0) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' onClick={ this.handleCancel }>取消</Button>

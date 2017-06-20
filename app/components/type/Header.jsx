@@ -18,6 +18,7 @@ export default class Header extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     isSysConfig: PropTypes.bool.isRequired,
     create: PropTypes.func.isRequired,
     setSort: PropTypes.func.isRequired,
@@ -51,7 +52,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { isSysConfig, create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
+    const { i18n, isSysConfig, create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
     const defaultIndex = _.findIndex(collection, { default: true });
 
     const standardCollection = _.reject(_.reject(collection, { type: 'subtask' }) || [], { disabled: true }) || [];
@@ -89,8 +90,8 @@ export default class Header extends Component {
           <div className='info-content'><span>每一个问题类型都需要绑定自己的界面和工作流。</span>{ isSysConfig || <span><br/>只能删除没有应用到项目问题中的类型，如果将某一类型在创建或编辑问题时移除可使用禁用功能。</span> }{ isSysConfig || <span><br/>若要创建子任务类型问题，需指定有效的子任务类型的问题类型。</span> }
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options } collection={ collection }/> }
-        { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading }/> }
+        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options } collection={ collection } i18n={ i18n }/> }
+        { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading } i18n={ i18n }/> }
       </div>
     );
   }

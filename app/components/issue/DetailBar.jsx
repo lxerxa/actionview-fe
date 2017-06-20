@@ -62,6 +62,7 @@ export default class DetailBar extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
@@ -369,6 +370,7 @@ export default class DetailBar extends Component {
 
   render() {
     const { 
+      i18n,
       close, 
       data={}, 
       record, 
@@ -765,6 +767,7 @@ export default class DetailBar extends Component {
             </Tab>
             <Tab eventKey={ 2 } title='备注'>
               <Comments 
+                i18n={ i18n }
                 currentUser={ user }
                 permissions={ options.permissions || [] }
                 issue_id={ data.id }
@@ -787,6 +790,7 @@ export default class DetailBar extends Component {
             </Tab>
             <Tab eventKey={ 4 } title='工作日志'>
               <Worklog 
+                i18n={ i18n }
                 currentUser={ user }
                 permissions={ options.permissions || [] }
                 issue={ data }
@@ -807,7 +811,8 @@ export default class DetailBar extends Component {
             close={ this.delFileModalClose } 
             del={ delFile } 
             data={ selectedFile } 
-            loading={ fileLoading }/> }
+            loading={ fileLoading }
+            i18n={ i18n }/> }
         { this.state.editModalShow && 
           <CreateModal show 
             close={ this.editModalClose.bind(this) } 
@@ -816,7 +821,8 @@ export default class DetailBar extends Component {
             loading={ loading } 
             project={ project } 
             data={ data } 
-            isSubtask={ data.parent_id && true }/> }
+            isSubtask={ data.parent_id && true }
+            i18n={ i18n }/> }
         { this.state.workflowScreenShow &&
           <CreateModal show
             close={ this.workflowScreenModalClose.bind(this) }
@@ -842,7 +848,8 @@ export default class DetailBar extends Component {
             loading={ loading } 
             project={ project } 
             parent_id={ data.id } 
-            isSubtask={ true }/> }
+            isSubtask={ true }
+            i18n={ i18n }/> }
         { this.state.previewModalShow && 
           <PreviewModal show 
             close={ () => { this.setState({ previewModalShow: false }); } } 
@@ -855,20 +862,23 @@ export default class DetailBar extends Component {
             createLink={ createLink } 
             issue={ data } 
             types={ options.types } 
-            project={ project }/> }
+            project={ project }
+            i18n={ i18n }/> }
         { this.state.delLinkModalShow && 
           <DelLinkModal show 
             close={ () => { this.setState({ delLinkModalShow: false }); } } 
             loading={ linkLoading } 
             delLink={ delLink } 
-            data={ this.state.delLinkData }/> }
+            data={ this.state.delLinkData }
+            i18n={ i18n }/> }
         { this.state.convertTypeModalShow &&
           <ConvertTypeModal show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
             convert={ convert }
             loading={ loading }
-            issue={ data }/> }
+            issue={ data }
+            i18n={ i18n }/> }
         { this.state.convertType2ModalShow &&
           <ConvertType2Modal show
             close={ () => { this.setState({ convertType2ModalShow: false }); } }
@@ -876,7 +886,8 @@ export default class DetailBar extends Component {
             project={ project }
             convert={ convert }
             loading={ loading }
-            issue={ data }/> }
+            issue={ data }
+            i18n={ i18n }/> }
         { this.state.moveModalShow &&
           <MoveModal show
             close={ () => { this.setState({ moveModalShow: false }); } }
@@ -884,13 +895,15 @@ export default class DetailBar extends Component {
             project={ project }
             move={ move }
             loading={ loading }
-            issue={ data }/> }
+            issue={ data }
+            i18n={ i18n }/> }
         { this.state.assignModalShow &&
           <AssignModal show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             setAssignee={ setAssignee }
-            issue={ data }/> }
+            issue={ data }
+            i18n={ i18n }/> }
         { this.state.shareModalShow &&
           <ShareLinkModal show
             project={ project }
@@ -901,19 +914,22 @@ export default class DetailBar extends Component {
             close={ () => { this.setState({ resetModalShow: false }); } }
             resetState={ resetState }
             loading={ itemLoading }
-            issue={ data }/> }
+            issue={ data }
+            i18n={ i18n }/> }
         { this.state.delNotifyShow &&
           <DelNotify show
             close={ () => { this.setState({ delNotifyShow: false }) } }
             data={ data }
             del={ del }
-            detailClose={ close }/> }
+            detailClose={ close }
+            i18n={ i18n }/> }
         { this.state.copyModalShow &&
           <CopyModal show
             close={ () => { this.setState({ copyModalShow: false }); } }
             loading={ loading }
             copy={ copy }
-            data={ data }/> }
+            data={ data }
+            i18n={ i18n }/> }
       </div>
     );
   }
