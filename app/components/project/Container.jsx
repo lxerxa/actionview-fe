@@ -115,13 +115,13 @@ export default class Container extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, session, location: { pathname, query={} } } = this.props;
+    const { i18n, session, location: { pathname, query={} } } = this.props;
 
     if (pathname.indexOf('admin') === 1) {
       if (_.isEmpty(session.user)) {
         return (<div/>);
       } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
-        notify.show(errMsg[-10002], 'warning', 2000);
+        notify.show(i18n.errMsg[-10002], 'warning', 2000);
         return (<div/>);
       }
     }
@@ -145,6 +145,7 @@ export default class Container extends Component {
           multiCreateIndex={ this.multiCreateIndex.bind(this) }
           getOptions={ this.getOptions.bind(this) } 
           query={ query }
+          i18n={ i18n }
           { ...this.props.project }/>
         :
         <Mylist
@@ -159,6 +160,7 @@ export default class Container extends Component {
           reopen={ this.reopen.bind(this) }
           createIndex={ this.createIndex.bind(this) }
           user={ this.props.session.user }
+          i18n={ i18n }
           { ...this.props.project }/> }
       </div>
     );

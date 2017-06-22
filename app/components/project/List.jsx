@@ -43,6 +43,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     options: PropTypes.object,
     getOptions: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired,
@@ -294,7 +295,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, multiCreateIndex, update, options, query } = this.props;
+    const { i18n, collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, multiCreateIndex, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -431,10 +432,10 @@ export default class List extends Component {
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
-          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
+          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } i18n={ i18n }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
-          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
+          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading } i18n={ i18n }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

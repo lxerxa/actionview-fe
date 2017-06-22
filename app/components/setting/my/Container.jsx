@@ -12,7 +12,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ session, mysetting }) => ({ session, mysetting }), mapDispatchToProps)
+@connect(({ i18n, session, mysetting }) => ({ i18n, session, mysetting }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +21,7 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    i18n: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     mysetting: PropTypes.object.isRequired
   }
@@ -51,7 +52,8 @@ export default class Container extends Component {
   }
 
   render() {
-    const { session } = this.props;
+    const { i18n, session } = this.props;
+
     return (
       <div className='doc-container'>
         <div>
@@ -59,6 +61,7 @@ export default class Container extends Component {
           <SysadminList 
             getUser={ this.getUser.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }
+            i18n={ i18n }
             { ...this.props.mysetting }/>
           :
           <List 
@@ -67,6 +70,7 @@ export default class Container extends Component {
             resetPwd={ this.resetPwd.bind(this) }
             updNotify={ this.updNotify.bind(this) }
             updFavorite={ this.updFavorite.bind(this) }
+            i18n={ i18n }
             { ...this.props.mysetting }/> }
         </div>
       </div>

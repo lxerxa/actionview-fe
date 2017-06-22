@@ -20,6 +20,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     getUser: PropTypes.func.isRequired,
     resetPwd: PropTypes.func.isRequired,
     updAccount: PropTypes.func.isRequired,
@@ -118,7 +119,7 @@ export default class List extends Component {
     const startStyles = { color: '#54d09f', fontSize: '12px' };
     const closeStyles = { color: '#da4f4a', fontSize: '12px' };
 
-    const { accounts, accountLoading, notifyLoading, favoriteLoading, updAccount, resetPwd } = this.props;
+    const { i18n, accounts, accountLoading, notifyLoading, favoriteLoading, updAccount, resetPwd } = this.props;
     const { notifications, favorites } = this.state;
 
     const accountItems = [];
@@ -337,8 +338,8 @@ export default class List extends Component {
           <TableHeaderColumn width='200' dataField='contents'/>
           <TableHeaderColumn dataField='blank'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ updAccount } data={ accounts }/> }
-        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd }/> }
+        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ updAccount } data={ accounts } i18n={ i18n }/> }
+        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd } i18n={ i18n }/> }
       </div>
     );
   }

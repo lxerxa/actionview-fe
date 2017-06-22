@@ -35,6 +35,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
@@ -216,7 +217,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { user, collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, update, options={} } = this.props;
+    const { i18n, user, collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, update, options={} } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -339,8 +340,8 @@ export default class List extends Component {
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
-          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
+          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
+          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } i18n={ i18n }/> }
           { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
         </div>
         { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 

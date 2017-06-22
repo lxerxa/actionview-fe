@@ -35,6 +35,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     settings: PropTypes.object.isRequired,
     show: PropTypes.func.isRequired,
@@ -77,7 +78,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { update, resetPwd, sendTestMail, loading, settings: { properties={}, timetrack={}, smtp={}, sysroles={} } } = this.props;
+    const { i18n, update, resetPwd, sendTestMail, loading, settings: { properties={}, timetrack={}, smtp={}, sysroles={} } } = this.props;
 
     const styles = { marginTop: '10px', marginBottom: '10px' };
  
@@ -278,12 +279,12 @@ export default class List extends Component {
         <div style={ { width: '100%', marginTop: '20px' } }>
           <Button disabled={ loading } onClick={ () => { this.setState({ configActorModalShow: true }) } }>角色配置</Button>
         </div> }
-        { this.state.propertiesModalShow && <PropertiesModal show close={ this.propertiesModalClose } update={ update } data={ properties }/> }
-        { this.state.timeTrackModalShow && <TimeTrackModal show close={ this.timeTrackModalClose } update={ update } data={ timetrack }/> }
-        { this.state.smtpServerModalShow && <SmtpServerModal show close={ this.smtpServerModalClose } update={ update } data={ smtp }/> }
-        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd }/> }
-        { this.state.sendTestMailModalShow && <SendTestMailModal show close={ this.sendTestMailModalClose } sendMail={ sendTestMail }/> }
-        { this.state.configActorModalShow && <ConfigActorModal show close={ this.configActorModalClose } update={ update } data={ sysroles }/> }
+        { this.state.propertiesModalShow && <PropertiesModal show close={ this.propertiesModalClose } update={ update } data={ properties } i18n={ i18n }/> }
+        { this.state.timeTrackModalShow && <TimeTrackModal show close={ this.timeTrackModalClose } update={ update } data={ timetrack } i18n={ i18n }/> }
+        { this.state.smtpServerModalShow && <SmtpServerModal show close={ this.smtpServerModalClose } update={ update } data={ smtp } i18n={ i18n }/> }
+        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd } i18n={ i18n }/> }
+        { this.state.sendTestMailModalShow && <SendTestMailModal show close={ this.sendTestMailModalClose } sendMail={ sendTestMail } i18n={ i18n }/> }
+        { this.state.configActorModalShow && <ConfigActorModal show close={ this.configActorModalClose } update={ update } data={ sysroles } i18n={ i18n }/> }
       </div>
     );
   }

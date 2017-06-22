@@ -215,7 +215,7 @@ export default class Container extends Component {
       _.assign(this.props.issue.options, this.props.project.options);
     }
 
-    const { i18n, location: { query={} } } = this.props;
+    const { location: { query={} } } = this.props;
 
     return (
       <div>

@@ -21,6 +21,7 @@ export default class ConfigActorModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     values: PropTypes.object,
@@ -72,7 +73,7 @@ export default class ConfigActorModal extends Component {
   }
 
   render() {
-    const { fields: { sys_admin }, handleSubmit, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { sys_admin }, handleSubmit, submitting } = this.props;
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
@@ -96,7 +97,7 @@ export default class ConfigActorModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

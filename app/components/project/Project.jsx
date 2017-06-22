@@ -45,8 +45,8 @@ export default class Project extends Component {
   }
 
   render() {
-
     const { project: { ecode, options }, location: { pathname }, i18n: { errMsg } } = this.props;
+
     if (ecode !== 0) {
       notify.show(errMsg[ecode], 'warning', 2000);
       return (<div/>);

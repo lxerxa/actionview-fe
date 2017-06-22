@@ -13,6 +13,7 @@ export default class MultiOperateNotify extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     ids: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
     operate: PropTypes.string.isRequired,
@@ -61,7 +62,7 @@ export default class MultiOperateNotify extends Component {
   }
 
   render() {
-    const { operate, loading } = this.props;
+    const { i18n: { errMsg }, operate, loading } = this.props;
     const operateTitle = operate === 'reopen' ? '重新打开' : (operate === 'create_index' ? '重新索引' : '关闭');
 
     return (
@@ -73,7 +74,7 @@ export default class MultiOperateNotify extends Component {
           { '确认要 ' + operateTitle + ' 选中的项目？' }
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

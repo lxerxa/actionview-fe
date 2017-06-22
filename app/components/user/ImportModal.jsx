@@ -17,6 +17,7 @@ export default class ImportModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     imports: PropTypes.func.isRequired,
@@ -54,7 +55,7 @@ export default class ImportModal extends Component {
   }
 
   render() {
-    const { loading } = this.props;
+    const { i18n: { errMsg }, loading } = this.props;
 
     const componentConfig = {
       showFiletypeIcon: true,
@@ -92,7 +93,7 @@ export default class ImportModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading || !this.state.fid } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>

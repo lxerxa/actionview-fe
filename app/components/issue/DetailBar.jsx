@@ -833,7 +833,8 @@ export default class DetailBar extends Component {
             data={ data }
             action_id={ action_id  }
             doAction={ doAction }
-            isFromWorkflow={ true }/> }
+            isFromWorkflow={ true }
+            i18n={ i18n }/> }
         { this.state.workflowCommentsShow &&
           <WorkflowCommentsModal show
             close={ this.workflowCommentsModalClose.bind(this) }

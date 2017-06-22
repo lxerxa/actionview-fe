@@ -38,6 +38,7 @@ export default class ResetPwdModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -69,7 +70,7 @@ export default class ResetPwdModal extends Component {
   }
 
   render() {
-    const { fields: { id, password, new_password, new_password2 }, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { id, password, new_password, new_password2 }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -96,7 +97,7 @@ export default class ResetPwdModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

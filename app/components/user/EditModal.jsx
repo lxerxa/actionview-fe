@@ -40,6 +40,7 @@ export default class CreateModal extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     dirty: PropTypes.bool,
@@ -80,7 +81,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { id, first_name, email, phone }, dirty, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { id, first_name, email, phone }, dirty, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -107,7 +108,7 @@ export default class CreateModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && 'aaaa' }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>

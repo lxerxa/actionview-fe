@@ -41,6 +41,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     options: PropTypes.object,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
@@ -186,7 +187,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { collection, selectedItem, loading, indexLoading, itemLoading, index, refresh, create, imports, del, renew, multiDel, multiRenew, update, options, query } = this.props;
+    const { i18n, collection, selectedItem, loading, indexLoading, itemLoading, index, refresh, create, imports, del, renew, multiDel, multiRenew, update, options, query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -268,11 +269,11 @@ export default class List extends Component {
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem }/> }
-          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create }/> }
-          { this.state.importModalShow && <ImportModal show close={ this.importModalClose } imports={ imports } loading={ loading } index={ index }/> }
-          { this.state.operateNotifyShow && <OperateNotify show close={ this.operateNotifyClose } data={ selectedItem } operate={ this.state.operate } del={ del } renew={ renew }/> }
-          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiDel={ multiDel } multiRenew={ multiRenew } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading }/> }
+          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
+          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } i18n={ i18n }/> }
+          { this.state.importModalShow && <ImportModal show close={ this.importModalClose } imports={ imports } loading={ loading } index={ index } i18n={ i18n }/> }
+          { this.state.operateNotifyShow && <OperateNotify show close={ this.operateNotifyClose } data={ selectedItem } operate={ this.state.operate } del={ del } renew={ renew } i18n={ i18n }/> }
+          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiDel={ multiDel } multiRenew={ multiRenew } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading } i18n={ i18n }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

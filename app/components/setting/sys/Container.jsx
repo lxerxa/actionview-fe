@@ -48,12 +48,12 @@ export default class Container extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, session } = this.props;
+    const { i18n, session } = this.props;
 
     if (_.isEmpty(session.user)) {
       return (<div/>);
     } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
-      notify.show(errMsg[-10002], 'warning', 2000);
+      notify.show(i18n.errMsg[-10002], 'warning', 2000);
       return (<div/>);
     }
 
@@ -65,6 +65,7 @@ export default class Container extends Component {
             update={ this.update.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }
             sendTestMail={ this.sendTestMail.bind(this) }
+            i18n={ i18n }
             { ...this.props.syssetting }/>
         </div>
       </div>
