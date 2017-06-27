@@ -77,7 +77,7 @@ export default class List extends Component {
                 return (
                 <tr>
                   <td>{ options.users && options.users[key] || '' }</td>
-                  <td><Link to='#'><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>{ val['total'] || 0 }</Link></Link></td>
+                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>{ val['total'] || 0 }</Link></td>
                   { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&assignee=' + key }>{ val[v.id] || 0 }</Link></td>) }) }
                 </tr>) }) }
             </tbody>
@@ -100,8 +100,31 @@ export default class List extends Component {
                 return (
                 <tr>
                   <td>{ options.priorities && options.priorities[key] || '' }</td>
-                  <td><Link to='#'><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>{ val['total'] || 0 }</Link></Link></td>
+                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>{ val['total'] || 0 }</Link></td>
                   { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&priority=' + key }>{ val[v.id] || 0 }</Link></td>) }) }
+                </tr>) }) }
+            </tbody>
+          </Table>
+          :
+          <div>暂无信息</div> }
+        </Panel>
+        <Panel header='未解决问题：按模块'>
+          { data.module_unresolved_issues && !_.isEmpty(data.module_unresolved_issues) ?
+          <Table responsive hover>
+            <thead>
+              <tr>
+                <th>问题类型</th>
+                <th>全部</th>
+                { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
+              </tr>
+            </thead>
+            <tbody>
+              { _.map(data.module_unresolved_issues, (val, key) => {
+                return (
+                <tr>
+                  <td>{ options.modules && options.modules[key] || '' }</td>
+                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>{ val['total'] || 0 }</Link></td>
+                  { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&module=' + key }>{ val[v.id] || 0 }</Link></td>) }) }
                 </tr>) }) }
             </tbody>
           </Table>
