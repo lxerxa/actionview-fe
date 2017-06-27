@@ -89,11 +89,13 @@ export default function project(state = initialState, action) {
       return { ...state, loading: true };
     case t.PROJECT_CLOSE:
     case t.PROJECT_REOPEN:
+    case t.PROJECT_CREATEINDEX:
       return { ...state, itemLoading: true };
 
     case t.PROJECT_CLOSE_SUCCESS:
     case t.PROJECT_REOPEN_SUCCESS:
     case t.PROJECT_UPDATE_SUCCESS:
+    case t.PROJECT_CREATEINDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
@@ -103,6 +105,7 @@ export default function project(state = initialState, action) {
     case t.PROJECT_CLOSE_FAIL:
     case t.PROJECT_REOPEN_FAIL:
     case t.PROJECT_UPDATE_FAIL:
+    case t.PROJECT_CRAETEINDEX_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
     case t.PROJECT_MULTI_CLOSE:

@@ -83,7 +83,9 @@ export default class Container extends Component {
   }
 
   async createIndex(id) {
-    alert('aa');
+    const { actions } = this.props;
+    await actions.createIndex(id);
+    return this.props.project.ecode;
   }
 
   async multiClose(ids) {
@@ -99,7 +101,9 @@ export default class Container extends Component {
   }
 
   async multiCreateIndex(ids) {
-    alert('aa');
+    const { actions } = this.props;
+    await actions.multiCreateIndex(ids);
+    return this.props.project.ecode;
   }
 
   async show(id) {
