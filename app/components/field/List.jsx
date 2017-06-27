@@ -77,7 +77,9 @@ export default class List extends Component {
   }
 
   onRowMouseOver(rowData) {
-    this.setState({ operateShow: true, hoverRowId: rowData.id });
+    if (rowData.id !== this.state.hoverRowId) {
+      this.setState({ operateShow: true, hoverRowId: rowData.id });
+    }
   }
 
   onMouseLeave() {
