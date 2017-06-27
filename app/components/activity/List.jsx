@@ -259,6 +259,8 @@ export default class List extends Component {
             { collection[i].event_key == 'resolve_issue'   && <span>解决了</span> }
             { collection[i].event_key == 'close_issue'     && <span>关闭了</span> }
             { collection[i].event_key == 'reopen_issue'    && <span>重新打开</span> }
+            { collection[i].event_key == 'watched_issue'   && <span>关注了</span> }
+            { collection[i].event_key == 'unwatched_issue' && <span>取消关注了</span> }
             { collection[i].event_key.indexOf('_') === -1  && <span>将</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
             { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
