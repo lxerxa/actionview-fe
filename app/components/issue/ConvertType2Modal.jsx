@@ -46,7 +46,7 @@ export default class ConvertType2Modal extends Component {
 
   async handleSubmit() {
     const { values, convert, close, issue } = this.props;
-    const ecode = await convert(issue.id, values);
+    const ecode = await convert(issue.id, { ...values, parent_id: values.parent_id && values.parent_id.id || '' });
     this.setState({ ecode });
     if (ecode === 0) {
       close();
@@ -107,7 +107,7 @@ export default class ConvertType2Modal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>移动到父任务</ControlLabel>
-            <Select.Async simpleValue clearable={ false } disabled={ submitting } options={ [] } value={ parent_id.value } onChange={ (newValue) => { parent_id.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchIssue.bind(this) } placeholder='输入问题号或名称'/>
+            <Select.Async clearable={ false } disabled={ submitting } options={ [] } value={ parent_id.value } onChange={ (newValue) => { parent_id.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchIssue.bind(this) } placeholder='输入问题号或名称'/>
             { parent_id.touched && parent_id.error && <HelpBlock style={ { float: 'right' } }>{ parent_id.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>

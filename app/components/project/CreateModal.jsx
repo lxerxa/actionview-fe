@@ -70,7 +70,8 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
-    const ecode = await create(values);
+    console.log(values);
+    const ecode = await create({ ...values, principal: values.principal && values.principal.id || '' });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -126,7 +127,7 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>责任人</ControlLabel>
-            <Select.Async simpleValue clearable={ false } disabled={ submitting } options={ [] } value={ principal.value } onChange={ (newValue) => { principal.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchUsers.bind(this) } placeholder='输入责任人'/>
+            <Select.Async clearable={ false } disabled={ submitting } options={ [] } value={ principal.value } onChange={ (newValue) => { principal.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchUsers.bind(this) } placeholder='输入责任人'/>
             { principal.touched && principal.error && <HelpBlock style={ { float: 'right' } }>{ principal.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
