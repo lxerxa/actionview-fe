@@ -499,8 +499,8 @@ export default class DetailBar extends Component {
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
                       <MenuItem divider/>
-                      <MenuItem eventKey='share'>分享链接</MenuItem>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
+                      <MenuItem eventKey='share'>分享链接</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && _.intersection(options.permissions, ['create_issue', 'edit_issue']).length > 0 && <MenuItem divider/> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }

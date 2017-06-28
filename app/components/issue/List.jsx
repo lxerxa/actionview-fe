@@ -371,8 +371,8 @@ export default class List extends Component {
                 { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
                 { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
                 <MenuItem divider/>
-                <MenuItem eventKey='share'>分享链接</MenuItem>
                 <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
+                <MenuItem eventKey='share'>分享链接</MenuItem>
                 <MenuItem divider/>
                 <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
                 { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && _.intersection(options.permissions, ['create_issue', 'edit_issue']).length > 0 && <MenuItem divider/> }
