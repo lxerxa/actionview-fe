@@ -170,7 +170,7 @@ export default class Worklog extends Component {
               </thead>
               <tbody>
                 <tr>
-                  <td style={ { color: '#ffd700', fontWeight: 'bold' } }>{ original_estimate || '-' }</td>
+                  <td style={ { fontWeight: 'bold' } }>{ original_estimate || '-' }</td>
                   <td style={ { color: '#ff4500', fontWeight: 'bold' } }>{ spend_m > 0 ? this.m2t(spend_m) : '0' }</td>
                   <td style={ { color: '#32cd32', fontWeight: 'bold' } }>{ collection.length <= 0 ? (original_estimate || '-') : (last.leave_estimate_m === undefined ? '-' : this.m2t(last.leave_estimate_m)) }</td>
                 </tr>

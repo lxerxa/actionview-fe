@@ -444,6 +444,12 @@ export default class DetailBar extends Component {
       </Popover>
     );
 
+    const priorityInd = data.priority ? _.findIndex(options.priorities, { id: data.priority }) : -1;
+    const priorityStyle = { marginRight: '5px' };
+    if (priorityInd !== -1) {
+      _.extend(priorityStyle, { backgroundColor: options.priorities[priorityInd].color });
+    }
+
     return (
       <div className='animate-dialog'>
         <Button className='close' onClick={ close } title='关闭'>
@@ -523,7 +529,7 @@ export default class DetailBar extends Component {
                     类型 
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>{ type ? type.name : '-' }</div>
+                    <div style={ { marginTop: '7px' } }><span className='type-abb'>{ type ? type.abb : '-' }</span>{ type ? type.name : '-' }</div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     状态
@@ -541,7 +547,7 @@ export default class DetailBar extends Component {
                     优先级
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>{ _.find(options.priorities || [], { id: data.priority }) ? _.find(options.priorities, { id: data.priority }).name : '-' }</div>
+                    <div style={ { marginTop: '7px' } }><div className='circle' style={ priorityStyle }/>{ _.find(options.priorities || [], { id: data.priority }) ? _.find(options.priorities, { id: data.priority }).name : '-' }</div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     解决结果
