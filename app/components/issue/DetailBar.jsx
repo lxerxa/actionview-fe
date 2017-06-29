@@ -445,7 +445,7 @@ export default class DetailBar extends Component {
     );
 
     const priorityInd = data.priority ? _.findIndex(options.priorities, { id: data.priority }) : -1;
-    const priorityStyle = { marginRight: '5px' };
+    const priorityStyle = { marginLeft: '5px', marginRight: '10px' };
     if (priorityInd !== -1) {
       _.extend(priorityStyle, { backgroundColor: options.priorities[priorityInd].color });
     }

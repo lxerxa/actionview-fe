@@ -132,7 +132,7 @@ export default class List extends Component {
     }
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
-    opts.onMouseLeave = this.onMouseLeave.bind(this);
+    // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
       <div style={ { marginBottom: '30px' } }>
