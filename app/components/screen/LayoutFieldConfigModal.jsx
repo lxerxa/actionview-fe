@@ -77,7 +77,7 @@ export default class LayoutFieldConfigModal extends Component {
 
     const { i18n: { errMsg }, fields: { id, required_fields }, dirty, handleSubmit, submitting, data } = this.props;
 
-    const screenFields = _.map(data.fields || [], function(val) {
+    const screenFields = _.map(data.schema || [], function(val) {
       return { label: val.name, value: val.id };
     });
 
