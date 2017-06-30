@@ -17,6 +17,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     increaseCollection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -116,6 +117,7 @@ export default class List extends Component {
 
   render() {
     const { 
+      i18n,
       collection, 
       increaseCollection, 
       indexLoading, 
@@ -346,6 +348,7 @@ export default class List extends Component {
         </ButtonGroup> }
         { this.state.barShow &&
           <DetailBar
+            i18n={ i18n }
             edit={ edit }
             create={ create }
             del={ del }
