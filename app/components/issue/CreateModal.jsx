@@ -153,7 +153,7 @@ class CreateModal extends Component {
     if (!_.isEmpty(data) && data.id) {
       const diffKeys = this.getChangedKeys();
       submitData = diffKeys.length > 0 ? _.pick(this.state.values, diffKeys) : {};
-      diffKeys.indexOf('type') !== -1 && _.extend(submitData, { type: this.state.type });
+      // diffKeys.indexOf('type') !== -1 && _.extend(submitData, { type: this.state.type });
     } else {
       _.extend(submitData, this.state.values);
       submitData['type'] = this.state.type;
@@ -530,7 +530,7 @@ class CreateModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button type='submit' disabled={ (data.id && this.getChangedKeys().length <= 0) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
+          <Button type='submit' disabled={ (data.id && this.getChangedKeys().length <= 0 && isFromWorkflow === false) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>
