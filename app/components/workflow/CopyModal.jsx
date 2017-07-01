@@ -44,8 +44,9 @@ export default class CopyModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    _.extend(data, { name: '复制 - ' + data.name });
-    initializeForm(data);
+    const copyData = _.clone(data);
+    _.extend(copyData, { name: '复制 - ' + data.name });
+    initializeForm(copyData);
   }
 
   async handleSubmit() {
