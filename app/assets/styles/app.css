@@ -393,7 +393,7 @@ table tr:hover .remove-icon{
   position: absolute;
   boottom: 0px;
   left: auto;
-  right: 10px;
+  right: 15px;
   opacity: 0 !important;
 }
 
