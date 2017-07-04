@@ -1,4 +1,10 @@
 
+.react-bs-table {
+  border: 0px;
+  border-radius: 5px;
+  margin: 5px 0px 5px 0px;
+}
+
 .treeview .list-group-item {
   cursor: pointer;
 }

@@ -45,7 +45,6 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
-    config: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }

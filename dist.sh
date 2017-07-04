@@ -1,11 +1,11 @@
 #!/bin/bash
 
-rm /var/www/actionview/public/assets/*
+rm ../public/assets/*
 
-cp /var/www/ojc/dist/* /var/www/actionview/public/assets/
+cp ./dist/* ../public/assets/
 
-rm /var/www/actionview/public/app*
+rm ../public/app*
 
-mv /var/www/actionview/public/assets/app* /var/www/actionview/public/
+mv ../public/assets/app* ../public/
 
 echo '/var/www/actionview/public/index.html'

@@ -3,7 +3,6 @@ import { persistState } from 'redux-devtools';
 
 import thunkMiddleware from 'redux-thunk';
 import { routerMiddleware } from 'react-router-redux';
-import DevTools from '../utils/dev-tools';
 import createMiddleware from './clientMiddleware';
 import * as reducers from './reducers';
 
@@ -18,7 +17,6 @@ export default function(client, data, history) {
     middleware.push(routerMiddleware(history));
     finalCreateStore = compose(
       applyMiddleware(...middleware),
-      DevTools.instrument(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(createStore);
   } else {
