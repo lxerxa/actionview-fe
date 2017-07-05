@@ -1,6 +1,4 @@
-# Universal Redux Boilerplate
-
-> <s>Isomorphic</s> [Universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) app with [redux](https://github.com/gaearon/redux) as Flux library and [redux-devtools](https://github.com/gaearon/redux-devtools) hot-reload tools
+# ActionView front-end
 
 ### Libraries
 
