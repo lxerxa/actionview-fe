@@ -1,84 +1,19 @@
-# Universal Redux Boilerplate
+# ActionView front-end
 
-> <s>Isomorphic</s> [Universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) app with [redux](https://github.com/gaearon/redux) as Flux library and [redux-devtools](https://github.com/gaearon/redux-devtools) hot-reload tools
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
 
-### Libraries
+Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
-* [expressjs](http://expressjs.com/)
-* [reactjs ^0.14](https://facebook.github.io/react/)
-* [react-router 1.0.0-rc3](http://rackt.github.io/react-router/tags/v1.0.0-beta3.html)
-* [redux ^3.0.0](https://github.com/gaearon/redux)
-* [redux-devtools ^3.0.0-beta-3](https://github.com/gaearon/redux-devtools)
-* [react-redux ^4.0.0](https://github.com/rackt/react-redux)
-* [postcss](https://github.com/postcss/postcss)
-* [precss](https://github.com/jonathantneal/precss)
-* [webpack](http://webpack.github.io)
-* [babel](http://babeljs.io)
+## How to install
 
-## Documentation
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
 
-### Async data-fetching
+## Security Vulnerabilities
 
-[shared/redux-resolver.js](https://github.com/savemysmartphone/universal-redux-boilerplate/blob/master/shared/redux-resolver.js) is the magic thing about the boilerplate. It's our tool for resolving promises (data-fetching) before server side render.
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
 
-The resolver is available on the `store` instance through components context, use it to wrap your async actions in `componentWillMount` for data to be fetched before server side render:
+## License
 
-```javascript
-import { bindActionCreators } from 'redux';
-import * as Actions from 'redux/actions/Actions';
-[...]
-static propTypes = {
-  dispatch: PropTypes.func.isRequired
-}
+ActionView 遵从许可证 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl-3.0.html)
 
-static contextTypes = {
-  store: PropTypes.object.isRequired
-}
-
-componentWillMount() {
-  const { dispatch } = this.props;
-  const { resolver } = this.context.store;
-  this.actions = bindActionCreators(Actions, dispatch);
-
-  return resolver.resolve(this.actions.load, {id: 10});
-}
-```
-
-The action `this.actions.load` will be resolved instantly on browser. On the other hand, on server side a first render `React.renderToString` is called to collect promises, resolve them and re-render with the correct data.
-
-### How to / Installation
-
-* `$ git clone -o upstream https://github.com/savemysmartphone/universal-redux-boilerplate.git`
-* `$ cd universal-redux-boilerplate && npm install`
-* `$ npm run dev`
-
-(Don't forget to add your remote origin: `$ git remote add origin git@github.com:xxx/xxx.git`)
-
-### Update the boilerplate
-
-You can fetch the upstream branch and merge it into your master:
-
-* `$ git checkout master`
-* `$ git fetch upstream`
-* `$ git merge upstream/master`
-* `$ npm install`
-
-### Run in production
-
-* `$ npm run build`
-* `$ npm run prod`
-
-### Learn more
-
-* [Official ReactJS website](http://facebook.github.io/react/)
-* [Official ReactJS wiki](https://github.com/facebook/react/wiki)
-* [Official Flux website](http://facebook.github.io/flux/)
-* [ReactJS Conf 2015 links](https://gist.github.com/yannickcr/148110d3ca658ad96c2b)
-* [Learn ES6](https://babeljs.io/docs/learn-es6/)
-* [ES6 Features](https://github.com/lukehoban/es6features#readme)
-
-### Related projects
-
-* [gaeron/redux-devtools/examples](https://github.com/gaearon/redux-devtools/blob/master/examples%2Ftodomvc%2FREADME.md)
-* [iam4x/isomorphic-flux-boilerplate](https://github.com/iam4x/isomorphic-flux-boilerplate)
-* [erikas/react-redux-universal-hot-example](https://github.com/erikras/react-redux-universal-hot-example)
+The ActionView is open-sourced software licensed under the [GNU General Public License version 3](http://www.gnu.org/licenses/gpl-3.0.html).
