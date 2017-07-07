@@ -12,10 +12,9 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 > cd actionview-fe  
 > npm install  
 
-修改代码：
-> aa  
-> aa
-
+修改代码：  
+> react-image-lightbox.js: 830行去掉close class。  
+> react-dropzone.js: 576行改成：Click Here or Drop files here to upload。  
 
 ## Security Vulnerabilities
 
