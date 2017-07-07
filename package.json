@@ -1,7 +1,7 @@
 {
-  "name": "universal-redux-boilerplate",
+  "name": "actionview-frontend",
   "version": "0.0.1",
-  "description": "An universal (isomorphic) boilerplate for ReactJS using Redux as Flux library.",
+  "description": "ActionView front-end program for ReactJS using Redux.",
   "main": "index.js",
   "scripts": {
     "dev": "BABEL_ENV=browser babel-node ./webpack/dev-server",
@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/savemysmartphone/universal-redux-boilerplate.git"
+    "url": "https://github.com/lxerxa/actionview-fe.git"
   },
-  "homepage": "https://github.com/savemysmartphone/universal-redux-boilerplate",
-  "bugs": "https://github.com/savemysmartphone/universal-redux-boilerplate/issues",
-  "author": "iam4x",
-  "license": "MIT",
+  "homepage": "https://github.com/lxerxa/actionview-fe",
+  "bugs": "https://github.com/lxerxa/actionview-fe/issues",
+  "author": "lxerxa",
+  "license": "gplv3",
   "devDependencies": {
     "autoprefixer": "^6.0.3",
     "babel-core": "^5.8.22",
