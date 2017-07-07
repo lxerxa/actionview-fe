@@ -1,4 +1,4 @@
-# ActionView front-end
+## ActionView front-end
 
 ActoionView前端代码库，基于Reactjs＋Redux。
 
@@ -15,6 +15,14 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 修改代码：  
 > react-image-lightbox.js: 830行去掉close class。  
 > react-dropzone.js: 576行改成：Click Here or Drop files here to upload。  
+
+启动开发服务：  
+> npm run dev  
+> http://localhost:3002/  
+
+发布部署：  
+> npm run build  部署
+> ./deploy.sh
 
 ## Security Vulnerabilities
 
