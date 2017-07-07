@@ -8,8 +8,8 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 > 安装 node, npm  
 
 下载代码：  
-> git clone https://github.com/lxerxa/actionview-fe.git   
-> cd actionview-fe   
+> git clone https://github.com/lxerxa/actionview-fe.git  
+> cd actionview-fe  
 > npm install  
 
 修改代码：
