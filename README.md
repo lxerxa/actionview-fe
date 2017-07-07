@@ -17,12 +17,12 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 > react-dropzone.js: 576行改成：Click Here or Drop files here to upload。  
 
 启动开发服务：  
-> npm run dev  
-> http://localhost:3002/  
+> npm run dev  
+> http://localhost:3002/   
 
 发布部署：  
-> npm run build  部署
-> ./deploy.sh
+> npm run build  
+> ./deploy.sh  
 
 ## Security Vulnerabilities
 
