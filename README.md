@@ -16,7 +16,7 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 > react-image-lightbox.js: 830行去掉close class。  
 > react-dropzone.js: 576行改成：Click Here or Drop files here to upload。  
 
-启动开发服务：  
+运行Demo：  
 > npm run dev  
 > http://localhost:3002/   
 
@@ -26,7 +26,7 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+谢谢您能参与ActionView的开发当中。如果您对系统有一些疑惑，或发现了一些bug，或建议增加新的feature，或对系统有一些改进时，[issue board](https://github.com/lxerxa/actionview/issues)中讨论。如果发现有重大安全问题可发Email至：actionview@126.com。
 
 ## License
 
