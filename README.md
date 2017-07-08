@@ -14,7 +14,6 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 
 修改代码：  
 > react-image-lightbox.js: 830行去掉close class。  
-> react-dropzone.js: 576行改成：Click Here or Drop files here to upload。  
 
 运行Demo：  
 > npm run dev  
