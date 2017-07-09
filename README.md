@@ -1,16 +1,31 @@
-# ActionView front-end
+## ActionView front-end
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
-
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+ActoionView前端代码库，基于Reactjs＋Redux。
 
 ## How to install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+环境要求：
+> 安装 node, npm  
 
-## Security Vulnerabilities
+下载代码：  
+> git clone https://github.com/lxerxa/actionview-fe.git  
+> cd actionview-fe  
+> npm install  
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+修改代码：  
+> react-image-lightbox.js: 830行去掉close class。  
+
+运行Demo：  
+> npm run dev  
+> http://localhost:3002/   
+
+发布部署：  
+> npm run build  
+> ./deploy.sh  
+
+## Contributing
+
+谢谢您能参与ActionView的前端开发当中。如果您对系统有一些疑惑，或发现了一些bug，或建议增加新的feature，或对系统有一些改进时，欢迎在[issue board](https://github.com/lxerxa/actionview/issues)中讨论。如果发现有重大安全问题可发Email至：actionview@126.com。
 
 ## License
 
