@@ -4,8 +4,10 @@ rm ../public/assets/*
 
 cp ./dist/* ../public/assets/
 
-rm ../public/app*
+rm ../public/scripts/app*
 
-mv ../public/assets/app* ../public/
+mv ../public/assets/app*.js ../public/scripts/app.js
 
-echo '/var/www/actionview/public/index.html'
+mv ../public/assets/app*.js.map ../public/scripts/app.js.map
+
+echo 'deploy complete!'

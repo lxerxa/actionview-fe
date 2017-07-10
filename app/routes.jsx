@@ -35,6 +35,7 @@ const SyssettingContainer = require('./components/setting/sys/Container');
 
 export default (
   <Route path='/' component={ Layout }>
+    <IndexRoute component={ Login }/>
     <Route path='/login' component={ Login }/>
     <Route path='/forgot' component={ Forgot }/>
     <Route path='/register' component={ Register }/>
