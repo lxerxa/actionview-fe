@@ -246,7 +246,7 @@ export default class AddActionModal extends Component {
 
     const eventOptions = options.events || [];
     const stateOptions = options.states || [];
-    const permissionOptions = require('../share/Permissions.js');
+    const permissionOptions = _.reject(require('../share/Permissions.js'), { id: 'all' });
     const roleOptions = options.roles || [];
     const resolutionOptions = options.resolutions || [];
 

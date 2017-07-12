@@ -104,7 +104,7 @@ export default class List extends Component {
     this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
 
     const { update, collection } = this.props;
-    const ecode = await update({ permissions: _.map(this.state.permissions[roleId] || _.find(collection, { id: roleId }).permissions, _.iteratee('value')), id: roleId });
+    const ecode = await update({ permissions: _.map(this.state.permissions[roleId] || _.map(_.find(collection, { id: roleId }).permissions || [], (v) => { return { value: v } }), _.iteratee('value')), id: roleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
       this.state.willSetPermissionRoleIds.splice(willSetIndex, 1);
