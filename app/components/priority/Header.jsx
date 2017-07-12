@@ -63,7 +63,7 @@ export default class Header extends Component {
               <div className='default-set'>
                 <div className='edit-field-content'>
                   <FormControl componentClass='select' type='text' ref='defaultValue' disabled={ defaultLoading }>
-                    { collection.map( itemOption => <option value={ itemOption.key || itemOption.id } key={ itemOption.id } selected={ itemOption.default && true }>{ itemOption.name }</option>) }
+                    { collection.map( itemOption => <option value={ itemOption.id } key={ itemOption.id } selected={ itemOption.default && true }>{ itemOption.name }</option>) }
                   </FormControl>
                 </div>
                 <img src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>
