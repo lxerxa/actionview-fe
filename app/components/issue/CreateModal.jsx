@@ -50,7 +50,6 @@ class CreateModal extends Component {
         defaultIndex = _.findIndex(typeOkOptions, { id: data.type });
         schema = defaultIndex !== -1 ? typeOkOptions[defaultIndex].schema : [];
       }
-      type = data.type;
       _.map(schema, (v) => {
         if (!_.isUndefined(data[v.key])) {
           if (v.key == 'assignee' && data[v.key].id) {
@@ -71,6 +70,7 @@ class CreateModal extends Component {
           errors[v.key] = '必填';
         }
       });
+      _.extend(values, { type: data.type });
       _.extend(oldValues, { type: data.type });
     } else {
       _.map(typeTmpOptions || [], function(val) {
@@ -86,9 +86,11 @@ class CreateModal extends Component {
 
       if (!typeOkOptions[defaultIndex]) {
         schema = [];
+        values['type'] = ''; 
       } else {
         type = typeOkOptions[defaultIndex].id;
         schema = typeOkOptions[defaultIndex].schema;
+        values['type'] = type; 
       }
       _.map(schema || [], (v) => {
         if (v.defaultValue) {
@@ -101,9 +103,9 @@ class CreateModal extends Component {
     }
 
     if (isFromWorkflow) {
-      this.state = { ecode: 0, errors, touched: {}, type: data.type, schema, values, oldValues };
+      this.state = { ecode: 0, errors, touched: {}, schema, values, oldValues };
     } else {
-      this.state = { ecode: 0, errors, touched: {}, type, typeOptions: typeOkOptions, schema, values, oldValues };
+      this.state = { ecode: 0, errors, touched: {}, typeOptions: typeOkOptions, schema, values, oldValues };
     }
 
     this.getChangedKeys = this.getChangedKeys.bind(this);
@@ -129,16 +131,12 @@ class CreateModal extends Component {
 
   getChangedKeys() {
     const diffKeys = [];
-
-    if (this.state.type != this.state.oldValues.type) {
-      diffKeys.push('type');
-    }
     _.mapKeys(this.state.values, (val, key) => {
       if (val instanceof moment && this.state.oldValues[key] instanceof moment) {
         if (!val.isSame(this.state.oldValues[key])) {
           diffKeys.push(key);
         }
-      } else if (!_.isEqual(val, this.state.oldValues[key]) && !(_.isUndefined(this.state.oldValues[key]) && ((_.isArray(val) || _.isObject(val)) && _.isEmpty(val) || (_.isString(val) && val == '') || _.isNull(val)))) {
+      } else if (!_.isEqual(val, this.state.oldValues[key]) && !(_.isUndefined(this.state.oldValues[key]) && (((_.isArray(val) || _.isObject(val)) && _.isEmpty(val)) || (_.isString(val) && val == '') || _.isNull(val)))) {
         diffKeys.push(key);
       }
     });
@@ -147,16 +145,14 @@ class CreateModal extends Component {
 
   async handleSubmit() {
     const { create, edit, close, options, data={}, parent_id='', doAction=undefined, action_id='' } = this.props;
-    const schema = _.find(options.types, { id: this.state.type }).schema;
+    const schema = _.find(options.types, { id: this.state.values['type'] }).schema;
 
     let submitData = {};
     if (!_.isEmpty(data) && data.id) {
       const diffKeys = this.getChangedKeys();
       submitData = diffKeys.length > 0 ? _.pick(this.state.values, diffKeys) : {};
-      // diffKeys.indexOf('type') !== -1 && _.extend(submitData, { type: this.state.type });
     } else {
       _.extend(submitData, this.state.values);
-      submitData['type'] = this.state.type;
     }
 
     _.mapValues(submitData, (val, key) => {
@@ -230,7 +226,8 @@ class CreateModal extends Component {
       }
     });
 
-    this.setState({ type: typeValue, errors, touched: {}, schema, values });
+    values['type'] = typeValue;
+    this.setState({ errors, touched: {}, schema, values });
   }
 
   success(localfile, res) {
@@ -329,7 +326,7 @@ class CreateModal extends Component {
                 <span className='txt-impt'>*</span>类型
               </Col>
               <Col sm={ 7 }>
-                <Select options={ typeOptions } disabled={ loading } simpleValue searchable={ false } clearable={ false } value={ this.state.type } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
+                <Select options={ typeOptions } disabled={ loading } simpleValue searchable={ false } clearable={ false } value={ this.state.values['type'] } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
                 <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
               </Col>
             </FormGroup> }
