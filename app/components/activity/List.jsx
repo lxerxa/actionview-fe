@@ -205,7 +205,7 @@ export default class List extends Component {
                        { key : '1y', name : '1年前' },
                        { key : '2y', name : '2年前' } ];
 
-    const ltStyles = { textDecoration: 'line-through', marginRight: '5px' };
+    const ltStyles = { textDecoration: 'line-through', marginRight: '5px', overflow: 'hidden', textOverflow: 'ellipsis' };
 
     const activities = [];
     const activityNum = collection.length;
@@ -295,7 +295,7 @@ export default class List extends Component {
             { collection[i].event_key == 'del_comments'   && <span>删除了备注</span> }
             { comments &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              <li style={ collection[i].event_key == 'del_comments' ? ltStyles : {} } dangerouslySetInnerHTML={ { __html: comments } }/>
+              <li style={ collection[i].event_key == 'del_comments' ? ltStyles : { overflow: 'hidden', textOverflow: 'ellipsis' } } dangerouslySetInnerHTML={ { __html: comments } }/>
             </ul> }
 
             { collection[i].event_key == 'add_worklog'    && <span> 添加了工作日志</span> }
@@ -307,7 +307,7 @@ export default class List extends Component {
               { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
               { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
               { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }
-              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} } dangerouslySetInnerHTML={ { __html: '备注 : ' + collection[i].data.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
+              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { overflow: 'hidden', textOverflow: 'ellipsis' } } dangerouslySetInnerHTML={ { __html: '备注 : ' + collection[i].data.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
             </ul> }
             {/* (collection[i].event_key == 'create_version' || collection[i].event_key == 'edit_version') &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>

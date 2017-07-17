@@ -33,7 +33,7 @@ class CreateModal extends Component {
       }
     }
 
-    let type = '', defaultIndex = -1, schema = [], errors={}, values={}, oldValues={}, typeOkOptions=[];
+    let defaultIndex = -1, schema = [], errors={}, values={}, oldValues={}, typeOkOptions=[];
     if (!_.isEmpty(data) && data.id) {
       if (isFromWorkflow) {
         const action = _.find(data.wfactions, { id: action_id });
@@ -85,12 +85,11 @@ class CreateModal extends Component {
       }
 
       if (!typeOkOptions[defaultIndex]) {
-        schema = [];
         values['type'] = ''; 
+        schema = [];
       } else {
-        type = typeOkOptions[defaultIndex].id;
+        values['type'] = typeOkOptions[defaultIndex].id;
         schema = typeOkOptions[defaultIndex].schema;
-        values['type'] = type; 
       }
       _.map(schema || [], (v) => {
         if (v.defaultValue) {
