@@ -584,3 +584,8 @@ table tr:hover .remove-icon{
 .info-content {
   display: inline-block;
 }
+
+.attachment-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
