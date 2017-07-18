@@ -455,16 +455,16 @@ export default class DetailBar extends Component {
         <Button className='close' onClick={ close } title='关闭'>
           <i className='fa fa-close'></i>
         </Button>
-        <Button className='angle' onClick={ this.next.bind(this, curInd) } disabled={ curInd < 0 || curInd >= issueCollection.length - 1 } title='下一个'>
+        <Button className={ curInd < 0 || curInd >= issueCollection.length - 1 ? 'angle-disable' : 'angle' } onClick={ this.next.bind(this, curInd) } disabled={ curInd < 0 || curInd >= issueCollection.length - 1 } title='下一个'>
           <i className='fa fa-angle-down'></i>
         </Button>
-        <Button className='angle' onClick={ this.previous.bind(this, curInd) } disabled={ curInd <= 0 } title='上一个'>
+        <Button className={ curInd <= 0 ? 'angle-disable' : 'angle' } onClick={ this.previous.bind(this, curInd) } disabled={ curInd <= 0 } title='上一个'>
           <i className='fa fa-angle-up'></i>
         </Button>
-        <Button className='angle' onClick={ this.forward.bind(this, 1) } disabled={ visitedIndex < 0 || visitedIndex >= visitedCollection.length - 1 } title='前进'>
+        <Button className={ visitedIndex < 0 || visitedIndex >= visitedCollection.length - 1 ? 'angle-disable' : 'angle' } onClick={ this.forward.bind(this, 1) } disabled={ visitedIndex < 0 || visitedIndex >= visitedCollection.length - 1 } title='前进'>
           <i className='fa fa-angle-right'></i>
         </Button>
-        <Button className='angle' onClick={ this.forward.bind(this, -1) } disabled={ visitedIndex <= 0 } title='后退'>
+        <Button className={ visitedIndex <= 0 ? 'angle-disable' : 'angle' } onClick={ this.forward.bind(this, -1) } disabled={ visitedIndex <= 0 } title='后退'>
           <i className='fa fa-angle-left'></i>
         </Button>
         <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
