@@ -61,7 +61,7 @@ export default class Home extends Component {
 
     if (nextProps.session.invalid === true) {
       if (session.user.id) {
-        notify.show('回话过期，请重新登录。', 'warning', 2000);
+        notify.show('会话过期，请重新登录。', 'warning', 2000);
       }
       if (pathname) {
         this.context.router.push({ pathname: '/login', query: { request_url: encodeURI(pathname) } });
