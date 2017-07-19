@@ -561,7 +561,7 @@ html.docs .toc-container {
 	right: 0;
 	top: 0;
 	white-space: nowrap;
-	z-index: 20000;
+	z-index: 1000;
         background-color: #fafafa;
 	-webkit-overflow-scrolling: touch
 }
