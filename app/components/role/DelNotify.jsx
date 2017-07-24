@@ -18,7 +18,7 @@ export default class DelNotify extends Component {
   async confirm() {
     const { close, del, data } = this.props;
     close();
-    const ecode = del(data.id);
+    const ecode = await del(data.id);
     if (ecode === 0) {
       notify.show('删除完成。', 'success', 2000);    
     } else {
