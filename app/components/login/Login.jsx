@@ -116,7 +116,7 @@ class Login extends Component {
     const { session } = this.props;
     if (session.ecode === 0) {
       if (query.request_url) {
-        this.context.router.push({ pathname: decodeURI(query.request_url) });    
+        this.context.router.push({ pathname: decodeURI(query.request_url), query: query.query || {} });    
       } else {
         if (session.user.email === 'admin@action.view') {
           this.context.router.push({ pathname: '/admin/scheme/type' });
