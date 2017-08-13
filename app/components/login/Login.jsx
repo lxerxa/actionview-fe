@@ -8,6 +8,7 @@ import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-b
 const brand = require('../../assets/images/brand.png');
 const img = require('../../assets/images/loading.gif');
 const $ = require('$');
+const qs = require('qs');
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
 import * as SessionActions from 'redux/actions/SessionActions';
@@ -116,7 +117,13 @@ class Login extends Component {
     const { session } = this.props;
     if (session.ecode === 0) {
       if (query.request_url) {
-        this.context.router.push({ pathname: decodeURI(query.request_url), query: query.query || {} });    
+        let requests = decodeURI(query.request_url).split('?');
+        let pathname = requests.shift();
+        let query2 = {};
+        if (requests.length > 0) {
+          query2 = qs.parse(requests.shift());
+        }
+        this.context.router.push({ pathname, query: query2 });    
       } else {
         if (session.user.email === 'admin@action.view') {
           this.context.router.push({ pathname: '/admin/scheme/type' });

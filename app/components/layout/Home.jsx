@@ -4,9 +4,12 @@ import { connect } from 'react-redux';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { notify } from 'react-notify-toast';
+import _ from 'lodash';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
 import * as SessionActions from 'redux/actions/SessionActions';
+
+const qs = require('qs');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -64,7 +67,7 @@ export default class Home extends Component {
         notify.show('会话过期，请重新登录。', 'warning', 2000);
       }
       if (pathname) {
-        this.context.router.push({ pathname: '/login', query: { request_url: encodeURI(pathname), query: query } });
+        this.context.router.push({ pathname: '/login', query: { request_url: encodeURI(pathname + (!_.isEmpty(query) ? '?' + qs.stringify(query) : '')) } });
       } else {
         this.context.router.push({ pathname: '/login' });
       }
