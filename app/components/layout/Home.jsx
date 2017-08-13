@@ -57,14 +57,14 @@ export default class Home extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { session, location: { pathname='' } } = this.props;
+    const { session, location: { pathname='', query={} } } = this.props;
 
     if (nextProps.session.invalid === true) {
       if (session.user.id) {
         notify.show('会话过期，请重新登录。', 'warning', 2000);
       }
       if (pathname) {
-        this.context.router.push({ pathname: '/login', query: { request_url: encodeURI(pathname) } });
+        this.context.router.push({ pathname: '/login', query: { request_url: encodeURI(pathname), query: query } });
       } else {
         this.context.router.push({ pathname: '/login' });
       }
