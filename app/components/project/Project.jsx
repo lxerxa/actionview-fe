@@ -45,12 +45,12 @@ export default class Project extends Component {
   }
 
   render() {
-    const { project: { ecode, options }, location: { pathname }, i18n: { errMsg } } = this.props;
+    const { project: { ecode, item, options }, location: { pathname }, i18n: { errMsg } } = this.props;
 
     if (ecode !== 0) {
       notify.show(errMsg[ecode], 'warning', 2000);
       return (<div/>);
-    } else if (_.isEmpty(options) || _.isUndefined(options.permissions)) {
+    } else if (_.isEmpty(item) || pathname.indexOf('/project/' + item.key) === -1) {
       return (<div/>);
     } else if ((/^\/project\/(\w+)(\/(summary|issue|activity|version|module|team|config))?$/.test(pathname) && options.permissions.length <= 0) || ((/^\/project\/(\w+)\/(type|workflow|field|screen|priority|state|resolution|role|events)(\/\w+)*$/).test(pathname) && options.permissions.indexOf('manage_project') === -1)) {
       notify.show(errMsg[-10002], 'warning', 2000);
