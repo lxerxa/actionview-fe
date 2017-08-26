@@ -5,7 +5,7 @@ ActoionView前端代码库，基于Reactjs＋Redux。
 ## How to install
 
 环境要求：
-> 安装 node, npm  
+> 安装 node ~4.2.6, npm ~3.5.2
 
 下载代码：  
 > git clone https://github.com/lxerxa/actionview-fe.git  
