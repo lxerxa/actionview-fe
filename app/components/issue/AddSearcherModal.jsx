@@ -82,7 +82,7 @@ export default class AddSearcherModal extends Component {
           </FormGroup>
           <FormGroup>
             <ControlLabel>条件</ControlLabel>
-            <div><span style={ { marginLeft: '10px' } }>{ sqlTxt }</span></div>
+            <div><span>{ sqlTxt }</span></div>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
