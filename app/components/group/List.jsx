@@ -215,10 +215,10 @@ export default class List extends Component {
         id: collection[i].id,
         name: ( 
           <div>
-            <span className='table-td-title'>{ collection[i].name } }</span>
+            <span className='table-td-title'>{ collection[i].name || '-' }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
-        count: collection[i].users.length,
+        count: collection[i].users ? collection[i].users.length : 0,
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
@@ -276,10 +276,10 @@ export default class List extends Component {
           </FormGroup>
         </div>
         <div>
-          <BootstrapTable data={ users } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
+          <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
-            <TableHeaderColumn dataField='count'>个数</TableHeaderColumn>
+            <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }

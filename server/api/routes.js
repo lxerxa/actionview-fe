@@ -81,6 +81,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/group', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', name: '刘旭111', users:['aa', 'bb']}, {id: '111122', name: '刘旭111',  users:['aa', 'bb', 'cc']},  { id: '111111', name: '刘旭11331', description: '111111111111111111', users:['aa', 'bb', 'cc', 'dd']}, { id: '11133111', name: '刘旭111333' }], options: { total: 4 }};
+    return res.status(200).send(results);
+  });
+
   router.get('/myproject', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
