@@ -1,5 +1,6 @@
 export default [
   { id: 'all', name: '所有权限项' },
+  { id: 'watch_project', name: '查看项目' },
   { id: 'manage_project', name: '管理项目' },
   { id: 'assigned_issue', name: '被分配问题' },
   { id: 'assign_issue', name: '分配问题' },
