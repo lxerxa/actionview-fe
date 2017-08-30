@@ -391,6 +391,7 @@ export default class List extends Component {
               <FormControl
                 type='text'
                 id='pname'
+                style={ { height: '37px' } }
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '项目名、键值查询...' } />
