@@ -39,8 +39,8 @@ export default class Container extends Component {
     this.context.router.push({ pathname, query });
   }
 
-  entry(pathname) {
-    this.context.router.push({ pathname });
+  entry(pathname, query) {
+    this.context.router.push({ pathname, query });
   }
 
   async index(query) {

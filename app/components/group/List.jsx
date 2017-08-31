@@ -52,6 +52,7 @@ export default class List extends Component {
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    entry: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     multiDel: PropTypes.func.isRequired
   }
@@ -114,9 +115,12 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
+    const { entry } = this.props;
 
     if (eventKey === 'edit') {
       this.edit(hoverRowId);
+    } else if (eventKey === 'view') {
+      entry('/admin/user', { group: hoverRowId });
     } else {
       this.operateNotify(hoverRowId);
       this.setState({ operate: eventKey });
