@@ -65,6 +65,7 @@ export default class List extends Component {
   componentWillMount() {
     const { index, query={} } = this.props;
     if (query.name) this.state.name = query.name;
+    if (query.group) this.state.group = query.group;
 
     const newQuery = {};
     if (this.state.name) {
