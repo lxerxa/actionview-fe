@@ -61,7 +61,7 @@ export default class UsersConfigModal extends Component {
   }
 
   render() {
-    const { cards, strCards, enableAdd } = this.state;
+    const { users } = this.state;
     const { i18n: { errMsg }, loading, options } = this.props;
     //let optionFields = [];
     const allFields = _.map(options.fields || [], function(val) {
@@ -80,12 +80,12 @@ export default class UsersConfigModal extends Component {
                 <Select 
                   multi
                   simpleValue 
-                  options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } 
+                  options={ [] } 
                   clearable={ false } 
                   value={ this.state.addFieldIds } 
                   onChange={ this.handleChange.bind(this) } 
                   placeholder='选择用户(可多选)'/>
-                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加至界面列表 >> </Button>
+                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) }>添加至界面列表 >> </Button>
               </Col>
               <Col sm={ 6 }>
                 { users.length > 0 && <div style={ { marginBottom: '8px' } }>用户列表</div> }
@@ -95,7 +95,7 @@ export default class UsersConfigModal extends Component {
                       <div className='user-item'>
                         { op.name }
                         <span style={ { float: 'right', cursor: 'pointer' } } onClick={ this.deleteUser.bind(this, i) }>
-                          <i class="fa fa-remove"></i>
+                          <i className='fa fa-remove'></i>
                         </span>
                       </div>
                     );
