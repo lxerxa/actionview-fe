@@ -22,7 +22,7 @@ export default {
       ],
       loaders: [
         { test: /\.json$/, exclude: /node_modules/, loader: 'json' },
-        { test: JS_REGEX, exclude: /node_modules/, loader: 'babel' },
+        { test: JS_REGEX, exclude: /node_modules/, loaders: [ 'react-hot', 'babel' ] },
       ],
     },
     postcss: [
