@@ -13,6 +13,7 @@ const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const OperateNotify = require('./OperateNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
+const UsersConfigModal = require('./UsersConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {

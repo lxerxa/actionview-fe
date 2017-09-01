@@ -102,6 +102,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/recent', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5s46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54r676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5i46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54aa676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '54bgg6761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 }], options: { 'total': 8 } };
+    return res.status(200).send(results);
+  });
+
   router.get('/project', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
