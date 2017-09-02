@@ -83,7 +83,7 @@
     "intl": "1.1.0",
     "marked": "0.3.5",
     "morgan": "1.7.0",
-    "react": "15.1.0",
+    "react": "15.3.0",
     "react-dom": "15.1.0",
     "react-intl": "1.2.1",
     "react-redux": "4.4.8",
