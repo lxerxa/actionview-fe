@@ -24,7 +24,7 @@ if (BROWSER) {
   require('assets/styles/jquery.atwho.css');
   require('mermaid/dist/mermaid.css');
   require('react-dropzone-component/styles/filepicker.css');
-  require('react-dropzone-component/node_modules/dropzone/dist/dropzone.css');
+  require('dropzone/dist/dropzone.css');
 }
 
 (async function() {
