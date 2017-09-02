@@ -4,7 +4,7 @@
   "description": "ActionView front-end program for ReactJS using Redux.",
   "main": "index.js",
   "scripts": {
-    "dev": "BABEL_ENV=browser babel-node ./webpack/dev-server",
+    "dev": "babel-node ./webpack/dev-server",
     "prod": "babel-node ./server/index",
     "build": "rm -rf dist/* && babel-node ./node_modules/.bin/webpack --progress --stats --config ./webpack/prod.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
