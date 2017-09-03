@@ -50,23 +50,24 @@ export default class UsersConfigModal extends Component {
   }
 
   add() {
-    const { options } = this.props;
-    const fids = this.state.addFieldIds.split(',');
-    for (let i = 0; i < fids.length; i++)
-    {
-      const field = _.find(options.fields || [], function(o) { return o.id === fids[i]; });
-      this.state.cards.push({ id: field.id, text: field.name });
+    const { addUsers } = this.state;
+    _.map(addUsers, (v) => {
+      this.state.users.unshift({ id: v.value, name: v.label });
+    });
+    this.setState({ users: this.state.users, addUsers: [], enableAdd: false });
+  }
+
+  handleChange(users) {
+    if (users.length > 0) {
+      this.setState({ addUsers: users, enableAdd: true });
+    } else {
+      this.setState({ addUsrs: [], enableAdd: false });
     }
-    this.setState({ cards: this.state.cards, addFieldIds: '', enableAdd: false });
   }
 
   render() {
-    const { cards, strCards, enableAdd } = this.state;
+    const { users, enableAdd } = this.state;
     const { i18n: { errMsg }, loading, options } = this.props;
-    //let optionFields = [];
-    const allFields = _.map(options.fields || [], function(val) {
-      return { label: val.name, value: val.id };
-    });
 
     return (
       <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -79,23 +80,21 @@ export default class UsersConfigModal extends Component {
               <Col sm={ 6 }>
                 <Select 
                   multi
-                  simpleValue 
-                  options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } 
                   clearable={ false } 
-                  value={ this.state.addFieldIds } 
+                  value={ this.state.addUsers } 
                   onChange={ this.handleChange.bind(this) } 
                   placeholder='选择用户(可多选)'/>
-                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加至界面列表 >> </Button>
+                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加至用户列表 >> </Button>
               </Col>
               <Col sm={ 6 }>
                 { users.length > 0 && <div style={ { marginBottom: '8px' } }>用户列表</div> }
                 { users.length > 0 ?
                   users.map((op, i) => {
                     return (
-                      <div className='user-item'>
+                      <div className='user-item' key={ i }>
                         { op.name }
                         <span style={ { float: 'right', cursor: 'pointer' } } onClick={ this.deleteUser.bind(this, i) }>
-                          <i class="fa fa-remove"></i>
+                          <i className='fa fa-remove'></i>
                         </span>
                       </div>
                     );
