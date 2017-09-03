@@ -66,7 +66,7 @@ export default class UsersConfigModal extends Component {
   }
 
   render() {
-    const { users, enableAdd } = this.state;
+    const { users } = this.state;
     const { i18n: { errMsg }, loading, options } = this.props;
 
     return (
@@ -84,7 +84,7 @@ export default class UsersConfigModal extends Component {
                   value={ this.state.addUsers } 
                   onChange={ this.handleChange.bind(this) } 
                   placeholder='选择用户(可多选)'/>
-                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加至用户列表 >> </Button>
+                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) }>添加至界面列表 >> </Button>
               </Col>
               <Col sm={ 6 }>
                 { users.length > 0 && <div style={ { marginBottom: '8px' } }>用户列表</div> }
