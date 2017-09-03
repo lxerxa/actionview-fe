@@ -11,8 +11,10 @@ const $ = require('$');
 const PaginationList = require('../share/PaginationList');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
+const UsersConfigModal = require('./UsersConfigModal');
 const OperateNotify = require('./OperateNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
+
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -21,6 +23,7 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
+      usersConfigModalShow: false, 
       operateNotifyShow: false, 
       operate: '',
       operateShow: false, 
@@ -33,6 +36,7 @@ export default class List extends Component {
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
+    this.usersConfigModalClose = this.usersConfigModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.refresh = this.refresh.bind(this);
@@ -76,6 +80,10 @@ export default class List extends Component {
     this.setState({ editModalShow: false });
   }
 
+  usersConfigModalClose() {
+    this.setState({ usersConfigModalShow: false });
+  }
+
   operateNotifyClose() {
     this.setState({ operateNotifyShow: false });
   }
@@ -86,6 +94,12 @@ export default class List extends Component {
 
   edit(id) {
     this.setState({ editModalShow: true });
+    const { select } = this.props;
+    select(id);
+  }
+
+  config(id) {
+    this.setState({ usersConfigModalShow: true });
     const { select } = this.props;
     select(id);
   }
@@ -121,6 +135,8 @@ export default class List extends Component {
       this.edit(hoverRowId);
     } else if (eventKey === 'view') {
       entry('/admin/user', { group: hoverRowId });
+    } else if (eventKey === 'config') {
+      this.config(hoverRowId);
     } else {
       this.operateNotify(hoverRowId);
       this.setState({ operate: eventKey });
@@ -293,6 +309,13 @@ export default class List extends Component {
               show 
               close={ this.createModalClose } 
               create={ create } 
+              i18n={ i18n }/> }
+          { this.state.usersConfigModalShow &&
+            <UsersConfigModal
+              show
+              close={ this.usersConfigModalClose }
+              config={ update }
+              data={ selectedItem }
               i18n={ i18n }/> }
           { this.state.operateNotifyShow && 
             <OperateNotify 

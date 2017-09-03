@@ -64,17 +64,16 @@ export default class LayoutConfigModal extends Component {
 
   handleChange(fields) {
     if (fields !== '') {
-      this.setState ({ addFieldIds: fields, enableAdd: true });
+      this.setState({ addFieldIds: fields, enableAdd: true });
     } else {
-      this.setState ({ addFieldIds:'', enableAdd: false });
+      this.setState({ addFieldIds:'', enableAdd: false });
     }
   }
 
   add() {
     const { options } = this.props;
     const fids = this.state.addFieldIds.split(',');
-    for (let i = 0; i < fids.length; i++)
-    {
+    for (let i = 0; i < fids.length; i++) {
       const field = _.find(options.fields || [], function(o) { return o.id === fids[i]; });
       this.state.cards.push({ id: field.id, text: field.name });
     }
