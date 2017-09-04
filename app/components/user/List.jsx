@@ -273,6 +273,14 @@ export default class List extends Component {
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
             <span style={ { float: 'right', width: '22%' } }>
+              <Select
+                simpleValue
+                placeholder='所属组'
+                value={ this.state.group }
+                onChange={ this.groupChange.bind(this) }
+                options={ _.map(options.groups || [], (val) => { return { label: val.name, value: val.id } }) }/>
+            </span>
+            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
                 type='text'
                 id='uname'
@@ -280,14 +288,6 @@ export default class List extends Component {
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '用户姓名、邮箱查询...' } />
-            </span>
-            <span style={ { float: 'right', width: '190px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='所属组'
-                value={ this.state.group }
-                onChange={ this.groupChange.bind(this) }
-                options={ _.map(options.groups || [], (val) => { return { label: val.name, value: val.id } }) }/>
             </span>
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
