@@ -599,3 +599,7 @@ table tr:hover .remove-icon{
   background-color: white;
   opacity: 1;
 }
+
+.user-item:hover {
+  background-color: #eee;
+}
