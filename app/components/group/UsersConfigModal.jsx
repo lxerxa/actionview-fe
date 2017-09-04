@@ -5,13 +5,14 @@ import Card from '../share/Card';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import ApiClient from '../../../shared/api-client';
 
 const img = require('../../assets/images/loading.gif');
 
 export default class UsersConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { users: this.props.data.users || [], ecode: 0 };
+    this.state = { addUsers: [], users: this.props.data.users || [], ecode: 0 };
   }
 
   static propTypes = {
@@ -19,14 +20,13 @@ export default class UsersConfigModal extends Component {
     loading: PropTypes.bool,
     config: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
-    options: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired
   }
 
   async save() {
     const { close, config, data } = this.props;
     const values = { id: data.id, users: _.map(this.state.users, _.iteratee('id')) };
-    const ecode = await config(values);
+    const ecode = await config(values.id, values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -52,7 +52,10 @@ export default class UsersConfigModal extends Component {
   add() {
     const { addUsers } = this.state;
     _.map(addUsers, (v) => {
-      this.state.users.unshift({ id: v.value, name: v.label });
+      if (_.findIndex(this.state.users, { id: v.id }) > 0) {
+        return;
+      }
+      this.state.users.unshift({ id: v.id, name: v.nameAndEmail });
     });
     this.setState({ users: this.state.users, addUsers: [], enableAdd: false });
   }
@@ -65,12 +68,32 @@ export default class UsersConfigModal extends Component {
     }
   }
 
+  async searchUsers(input) {
+    input = input.toLowerCase();
+    if (!input) {
+      return { options: [] };
+    }
+    const api = new ApiClient;
+    const results = await api.request( { url: '/user/search?s=' + input } );
+    return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
+  }
+
+  handleUserSelectChange(value) {
+    this.setState({ addUsers: value });
+  }
+
   render() {
-    const { users } = this.state;
-    const { i18n: { errMsg }, loading, options } = this.props;
+    const { users, addUsers } = this.state;
+    const { i18n: { errMsg }, loading } = this.props;
+
+    _.map(users, (v, i) => {
+      if (!v.name) {
+        users[i].name = v.first_name + '(' + v.email + ')';
+      }
+    });
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal { ...this.props } onHide={ this.cancel.bind(this) } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '用户配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
@@ -78,16 +101,20 @@ export default class UsersConfigModal extends Component {
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
               <Col sm={ 6 }>
-                <Select 
+                <Select.Async
                   multi
-                  clearable={ false } 
-                  value={ this.state.addUsers } 
-                  onChange={ this.handleChange.bind(this) } 
-                  placeholder='选择用户(可多选)'/>
-                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) }>添加至界面列表 >> </Button>
+                  clearable={ false }
+                  options={ [] }
+                  value={ addUsers }
+                  onChange={ this.handleUserSelectChange.bind(this) }
+                  valueKey='id'
+                  labelKey='nameAndEmail'
+                  loadOptions={ this.searchUsers }
+                  placeholder='请输入用户'/>
+                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) }>添加至用户列表 >> </Button>
               </Col>
               <Col sm={ 6 }>
-                { users.length > 0 && <div style={ { marginBottom: '8px' } }>用户列表</div> }
+                { users.length > 0 && <div style={ { marginBottom: '8px' } }>用户列表 - { users.length }</div> }
                 { users.length > 0 ?
                   users.map((op, i) => {
                     return (

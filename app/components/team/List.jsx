@@ -126,7 +126,13 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].users && collection[i].users.length > 0 ?
                 <span>
-                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
+                { _.map(collection[i].users, function(v){ 
+                  return (
+                    <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
+                      <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>
+                        { v.name }
+                      </Label>
+                    </div> ) }) }
                 </span>
                 :
                 <span>
@@ -137,7 +143,17 @@ export default class List extends Component {
             </div> 
             :
             <div>
-              <Select.Async multi clearable={ false } disabled={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 && true } options={ [] } value={ this.state.users[collection[i].id] || collection[i].users } onChange={ this.handleUserSelectChange.bind(this, collection[i].id) } valueKey='id' labelKey='nameAndEmail' loadOptions={ this.searchUsers } placeholder='请输入用户'/>
+              <Select.Async 
+                multi 
+                clearable={ false } 
+                disabled={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 && true } 
+                options={ [] } 
+                value={ this.state.users[collection[i].id] || collection[i].users } 
+                onChange={ this.handleUserSelectChange.bind(this, collection[i].id) } 
+                valueKey='id' 
+                labelKey='nameAndEmail' 
+                loadOptions={ this.searchUsers } 
+                placeholder='请输入用户'/>
               <div className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setUsers.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetUsers.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
