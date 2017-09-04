@@ -293,7 +293,7 @@ export default class List extends Component {
         <div>
           <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
+            <TableHeaderColumn dataField='name'>用户组名</TableHeaderColumn>
             <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
