@@ -313,15 +313,7 @@ export default class List extends Component {
             <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
-            <span style={ { float: 'right', width: '22%' } }>
-              <FormControl
-                type='text'
-                id='pname'
-                value={ this.state.name }
-                onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '名称、键值查询...' } />
-            </span>
-            <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '90px' } }>
               <Select
                 simpleValue
                 clearable={ false }
@@ -329,6 +321,15 @@ export default class List extends Component {
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
+            </span>
+            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
+              <FormControl
+                type='text'
+                id='pname'
+                style={ { height: '36px' } }
+                value={ this.state.name }
+                onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                placeholder={ '名称、键值查询...' } />
             </span>
           </FormGroup>
         </div>
