@@ -284,7 +284,7 @@ export default class List extends Component {
               <FormControl
                 type='text'
                 id='uname'
-                style={ { height: '37px' } }
+                style={ { height: '36px' } }
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '用户姓名、邮箱查询...' } />

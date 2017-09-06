@@ -12,7 +12,10 @@ const img = require('../../assets/images/loading.gif');
 export default class UsersConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { addUsers: [], users: this.props.data.users || [], ecode: 0 };
+    this.state = { 
+      addUsers: [], 
+      users: this.props.data.users ? _.clone(this.props.data.users) : [], 
+      ecode: 0 };
   }
 
   static propTypes = {

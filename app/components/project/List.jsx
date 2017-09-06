@@ -387,16 +387,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '22%' } }>
-              <FormControl
-                type='text'
-                id='pname'
-                style={ { height: '37px' } }
-                value={ this.state.name }
-                onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '项目名、键值查询...' } />
-            </span>
-            <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '90px' } }>
               <Select
                 simpleValue
                 clearable={ false }
@@ -405,13 +396,22 @@ export default class List extends Component {
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
             </span>
-            <span style={ { float: 'right', width: '240px', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <Select
                 simpleValue
                 placeholder='责任人'
                 value={ this.state.principal_id }
                 onChange={ this.principalChange.bind(this) }
                 options={ _.map(options.principals, (v) => { return { value: v.id, label: v.name + '(' + v.email + ')' } } ) }/>
+            </span>
+            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
+              <FormControl
+                type='text'
+                id='pname'
+                style={ { height: '36px' } }
+                value={ this.state.name }
+                onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                placeholder={ '项目名、键值查询...' } />
             </span>
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
