@@ -35,6 +35,13 @@ export function setActor(key, values) {
   });
 }
 
+export function setGroupActor(key, values) {
+  return asyncFuncCreator({
+    constant: 'ROLE_SET_GROUP_ACTOR',
+    promise: (client) => client.request({ url: '/project/' + key + '/role/' + values.id + '/groupactor', method: 'post', data: values })
+  });
+}
+
 export function select(id) {
   return { type: 'ROLE_SELECT', id: id };
 }

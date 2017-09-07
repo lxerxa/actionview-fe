@@ -127,6 +127,7 @@ export default generateConstants([
   'ROLE_SELECT',
   'ROLE_UPDATE(ASYNC)',
   'ROLE_SET_ACTOR(ASYNC)',
+  'ROLE_SET_GROUP_ACTOR(ASYNC)',
   'ROLE_DELETE(ASYNC)',
 
   'ROLEACTOR_INDEX(ASYNC)',
