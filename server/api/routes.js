@@ -81,6 +81,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/group/search', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', name: '111' }, {id: '111122', name: '刘旭111'},  { id: '111111', name: '刘旭11331'}, { id: '11133111', name: '刘旭111333'} ] };
+    return res.status(200).send(results);
+  });
+
   router.get('/group', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
@@ -132,7 +139,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id:'xxx', name: '刘旭' }, creator: '刘旭', create_time: 144444 }, options: { permissions: [ 'manage_project' ] }};
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id:'xxx', name: '刘旭' }, creator: '刘旭', create_time: 144444 }, options: { permissions: [ 'manage_project', 'watch_project' ] }};
     return res.status(200).send(results);
   });
 
@@ -707,6 +714,13 @@ export default function(router) {
 
   /*******************permission*****************/
   router.get('/project/:key/role', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com' }, {id: '2222', name: 'lihui', email: 'lihui@aa.com'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com'}] }] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/team', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com' }, {id: '2222', name: 'lihui', email: 'lihui@aa.com'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com'}] }] };

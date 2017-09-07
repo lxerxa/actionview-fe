@@ -152,7 +152,7 @@ export default class List extends Component {
     }
     const api = new ApiClient;
     const results = await api.request( { url: '/group/search?s=' + input } );
-    return { options: results };
+    return { options: results.data || [] };
   }
 
   render() {
@@ -281,7 +281,7 @@ export default class List extends Component {
               </div>
             </div> 
           }
-          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 || _.indexOf(settingGroupRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingGroupRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ) 
       });
