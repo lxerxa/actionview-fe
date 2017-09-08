@@ -1,5 +1,6 @@
 export { default as i18n } from './i18n';
 export { default as user } from './user';
+export { default as group } from './group';
 export { default as session } from './session';
 export { default as project } from './project';
 export { default as summary } from './summary';

@@ -6,7 +6,19 @@ import _ from 'lodash';
 export default class SearchList extends Component {
   constructor(props) {
     super(props);
-    this.state = { type: '', assignee: '', reporter: '', watcher: '', state: '', priority: '', resolution: '', module: '', resolve_vesion: '', created_at: '', updated_at: '', title: '' };
+    this.state = { 
+      type: '', 
+      assignee: '', 
+      reporter: '', 
+      watcher: '', 
+      state: '', 
+      priority: '', 
+      resolution: '', 
+      module: '', 
+      resolve_vesion: '', 
+      created_at: '', 
+      updated_at: '', 
+      title: '' };
   }
 
   componentWillMount() {
