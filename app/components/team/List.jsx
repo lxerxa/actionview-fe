@@ -274,7 +274,7 @@ export default class List extends Component {
                 valueKey='id' 
                 labelKey='name' 
                 loadOptions={ this.searchGroups } 
-                placeholder='请输入用户'/>
+                placeholder='请输入用户组'/>
               <div className={ _.indexOf(settingGroupRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setGroups.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetGroups.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
