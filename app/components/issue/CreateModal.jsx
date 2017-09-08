@@ -463,7 +463,7 @@ class CreateModal extends Component {
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
-              } else if (v.type === 'File') {
+              } else if (v.type === 'File' && options.permissions && options.permissions.indexOf('upload_file') !== -1) {
                 const componentConfig = {
                   showFiletypeIcon: true,
                   postUrl: '/api/project/' + project.key + '/file'

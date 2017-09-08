@@ -1,5 +1,6 @@
 export default [
   { id: 'all', name: '所有权限项' },
+  { id: 'view_project', name: '查看项目' },
   { id: 'manage_project', name: '管理项目' },
   { id: 'assigned_issue', name: '被分配问题' },
   { id: 'assign_issue', name: '分配问题' },
@@ -13,6 +14,8 @@ export default [
   { id: 'close_issue', name: '关闭问题' },
   //{ id: 'view_workflow', name: '查看流程' },
   { id: 'exec_workflow', name: '执行流程' },
+  { id: 'upload_file', name: '上传附件（文件）' },
+  { id: 'remove_file', name: '删除附件（文件）' },
   //{ id: 'add_comments', name: '添加备注' },
   //{ id: 'edit_comments', name: '编辑备注' },
   //{ id: 'edit_self_comments', name: '编辑自己的备注' },

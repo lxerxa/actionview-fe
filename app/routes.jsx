@@ -29,6 +29,7 @@ const ActivityContainer = require('./components/activity/Container');
 //const MyprojectContainer = require('./components/myproject/Container');
 const ProjectContainer = require('./components/project/Container');
 const UserContainer = require('./components/user/Container');
+const GroupContainer = require('./components/group/Container');
 const SchemeContainer = require('./components/scheme/Container');
 const MysettingContainer = require('./components/setting/my/Container');
 const SyssettingContainer = require('./components/setting/sys/Container');
@@ -65,6 +66,7 @@ export default (
       </Route>
       <Route path='/admin/project' component={ ProjectContainer }/>
       <Route path='/admin/user' component={ UserContainer }/>
+      <Route path='/admin/group' component={ GroupContainer }/>
       <Route path='/admin/syssetting' component={ SyssettingContainer }/>
       <Route path='/admin/scheme' component={ Scheme }>
         <IndexRoute component={ TypeContainer }/>

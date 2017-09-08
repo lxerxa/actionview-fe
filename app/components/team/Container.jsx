@@ -36,6 +36,11 @@ export default class Container extends Component {
     return this.props.role.ecode;
   }
 
+  async setGroupActor(values) {
+    await this.props.actions.setGroupActor(this.pid, values);
+    return this.props.role.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -51,6 +56,7 @@ export default class Container extends Component {
         <List 
           index={ this.index.bind(this) } 
           setActor={ this.setActor.bind(this) } 
+          setGroupActor={ this.setGroupActor.bind(this) } 
           { ...this.props.role }/>
       </div>
     );

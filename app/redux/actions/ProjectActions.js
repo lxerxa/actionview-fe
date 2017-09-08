@@ -66,7 +66,7 @@ export function show(id) {
 export function recents() {
   return asyncFuncCreator({
     constant: 'PROJECT_RECENTS',
-    promise: (client) => client.request({ url: '/myproject' + '?status=active&limit=5' })
+    promise: (client) => client.request({ url: '/project/recent' })
   });
 }
 
