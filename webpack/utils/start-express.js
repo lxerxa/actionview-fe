@@ -11,7 +11,7 @@ let server;
 let serverReload;
 
 const PORT = parseInt(process.env.PORT, 10) + 2 || 3002;
-const HOST = `0.0.0.0:${parseInt(process.env.PORT, 10) || 3000}`;
+const HOST = `localhost:${parseInt(process.env.PORT, 10) || 3000}`;
 const SERVER = path.resolve(__dirname, '../../server/index');
 
 function startServer() {
