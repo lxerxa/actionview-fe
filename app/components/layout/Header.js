@@ -161,7 +161,7 @@ export default class Header extends Component {
         <span style={ { color: '#5f5f5f' } }>{ modulename }</span>
         <span className='toc-logo'><img src={ logo } width={ 120 }/></span>
         <span style={ { float: 'right', marginRight: '10px' } }>
-          <DropdownButton pullRight bsStyle='link' title={ avatar } style={ headerUser } onSelect={ this.userOperateSelect.bind(this) }>
+          <DropdownButton pullRight bsStyle='link' title={ avatar } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
