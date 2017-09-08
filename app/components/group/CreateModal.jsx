@@ -33,21 +33,18 @@ export default class CreateModal extends Component {
     invalid: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
-    data: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired,
-    configUsers: PropTypes.func.isRequired
+    create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, create, configUsers, close, data } = this.props;
+    const { values, create, close } = this.props;
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      const { data } = this.props;
-      configUsers(data.id);
+      notify.show('新建完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }

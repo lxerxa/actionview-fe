@@ -40,7 +40,6 @@ export default class List extends Component {
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.refresh = this.refresh.bind(this);
-    this.configUsers = this.configUsers.bind(this);
   }
 
   static propTypes = {
@@ -142,11 +141,6 @@ export default class List extends Component {
       this.operateNotify(hoverRowId);
       this.setState({ operate: eventKey });
     }
-  }
-
-  configUsers(gid) {
-    this.setState({ hoverRowId: gid });
-    this.config(gid);
   }
 
   multiOperateSelect(eventKey) {
@@ -314,8 +308,6 @@ export default class List extends Component {
             <CreateModal 
               show 
               close={ this.createModalClose } 
-              configUsers={ this.configUsers }
-              data={ _.head(collection) }
               create={ create } 
               i18n={ i18n }/> }
           { this.state.usersConfigModalShow &&
