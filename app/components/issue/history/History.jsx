@@ -45,9 +45,11 @@ export default class History extends Component {
                   { val.operation == 'modify' ?
                   <Table condensed hover responsive>
                     <thead>
-                      <th>字段</th>
-                      <th>原值</th>
-                      <th>新值</th>
+                      <tr>
+                        <th>字段</th>
+                        <th>原值</th>
+                        <th>新值</th>
+                      </tr>
                     </thead>
                     <tbody>
                     { _.map(val.data || [], (v) => 

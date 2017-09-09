@@ -35,10 +35,12 @@ export default function role(state = initialState, action) {
 
     case t.ROLE_UPDATE:
     case t.ROLE_SET_ACTOR:
+    case t.ROLE_SET_GROUP_ACTOR:
       return { ...state, loading: true };
 
     case t.ROLE_UPDATE_SUCCESS:
     case t.ROLE_SET_ACTOR_SUCCESS:
+    case t.ROLE_SET_GROUP_ACTOR_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
@@ -47,6 +49,7 @@ export default function role(state = initialState, action) {
 
     case t.ROLE_UPDATE_FAIL:
     case t.ROLE_SET_ACTOR_FAIL:
+    case t.ROLE_SET_GROUP_ACTOR_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.ROLE_SELECT:

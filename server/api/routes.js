@@ -70,7 +70,7 @@ export default function(router) {
   router.get('/user', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', name: '刘旭111', email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'}, {id: '111122', name: '刘旭111',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'},  { id: '111111', name: '刘旭11331',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'}, { id: '11133111', name: '刘旭111333', email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'closed'} ] };
+    const results = { ecode: 0, data: [{ id: '1111', name: '刘旭111', email: 'liuxu@chinamobile.com', phone: 13811450899, groups:['aa', 'bb'], status: 'active'}, {id: '111122', name: '刘旭111',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'},  { id: '111111', name: '刘旭11331',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'}, { id: '11133111', name: '刘旭111333', email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'closed'} ], options: { groups: [{id:'111', name:'111'}, {id:'222', name:'222'}] } };
     return res.status(200).send(results);
   });
 
@@ -81,10 +81,38 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/group/search', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', name: '111' }, {id: '111122', name: '刘旭111'},  { id: '111111', name: '刘旭11331'}, { id: '11133111', name: '刘旭111333'} ] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/group', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', name: '刘旭111', users:['aa', 'bb']}, {id: '111122', name: '刘旭111',  users:[ { id: 'aa', name : 'aa' } , { id: 'bb', name: 'bb'}, { id: 'cc', name: 'cc' } ]},  { id: '111111', name: '刘旭11331', description: '111111111111111111', users:['aa', 'bb', 'cc', 'dd']}, { id: '11133111', name: '刘旭111333' }], options: { total: 4 }};
+    return res.status(200).send(results);
+  });
+
+  router.delete('/group/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
   router.get('/myproject', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [{ id: '1111', name: '社交化项目管理系统', description: 'aaaabbbbccc测试测试测试测试测试测试测测试时测试测试测试测试测试测试', key: 'SPMS', creator: '卢红兵', create_time: 144444, principal: { id: 'zzz', nameAndEmail:'liuxu@aa.com', name: '刘旭' } },{ id: '2222', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444, principal: { id: 'zzz', name: '刘旭' } },{ id: '3333', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444, principal: { id: 'zzz', name: '刘旭' } },{ id: '4444', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444, principal: { id: 'zzz', name: '王世喜' }}] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/recent', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5s46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54r676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '5i46761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 },{ id: '54aa676i2', name: '企业安全网盘', key: 'WEBDISK', creator: '王仕喜', create_time: 144444 },{ id: '54bgg6761', name: '社交化项目管理系统', key: 'SPMS', creator: '卢红兵', create_time: 144444 }], options: { 'total': 8 } };
     return res.status(200).send(results);
   });
 
@@ -111,7 +139,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id:'xxx', name: '刘旭' }, creator: '刘旭', create_time: 144444 }, options: { permissions: [ 'manage_project' ] }};
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id:'xxx', name: '刘旭' }, creator: '刘旭', create_time: 144444 }, options: { permissions: [ 'manage_project', 'watch_project' ] }};
     return res.status(200).send(results);
   });
 
@@ -686,6 +714,13 @@ export default function(router) {
 
   /*******************permission*****************/
   router.get('/project/:key/role', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com' }, {id: '2222', name: 'lihui', email: 'lihui@aa.com'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com'}] }] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/team', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [{ id: '546761', name: '项目经理', description: '111aaa', permissions:[ 'create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com' }, {id: '2222', name: 'lihui', email: 'lihui@aa.com'}] }, { id: '546762', name: '产品经理', permissions:['create_issue', 'edit_issue'], users: [{id: '1111', name: 'liuxu', email: 'liuxu@aa.com'}] }] };

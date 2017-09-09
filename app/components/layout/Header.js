@@ -66,6 +66,8 @@ export default class Header extends Component {
       entry('/admin/project');
     } else if (eventKey === 'user') {
       entry('/admin/user');
+    } else if (eventKey === 'group') {
+      entry('/admin/group');
     } else if (eventKey === 'scheme') {
       entry('/admin/scheme/type');
     } else if (eventKey === 'setting') {
@@ -113,6 +115,7 @@ export default class Header extends Component {
     const patten7 = new RegExp('^/admin/scheme/workflow/(\\w+)$');
     const patten8 = new RegExp('^/admin/syssetting$');
     const patten9 = new RegExp('^/mysetting$');
+    const patten10 = new RegExp('^/admin/group$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -143,6 +146,8 @@ export default class Header extends Component {
       modulename = '项目列表';
     } else if (patten5.exec(pathname)) {
       modulename = '用户管理';
+    } else if (patten10.exec(pathname)) {
+      modulename = '用户组管理';
     } else if (patten8.exec(pathname)) {
       modulename = '系统设置';
     } else if (patten9.exec(pathname)) {
@@ -161,7 +166,7 @@ export default class Header extends Component {
         <span style={ { color: '#5f5f5f' } }>{ modulename }</span>
         <span className='toc-logo'><img src={ logo } width={ 120 }/></span>
         <span style={ { float: 'right', marginRight: '10px' } }>
-          <DropdownButton pullRight bsStyle='link' title={ avatar } style={ headerUser } onSelect={ this.userOperateSelect.bind(this) }>
+          <DropdownButton pullRight bsStyle='link' title={ avatar } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
@@ -173,7 +178,8 @@ export default class Header extends Component {
           <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.sysOperateSelect.bind(this) }>
             <MenuItem eventKey='scheme'>方案配置</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='user'>用户管理</MenuItem>
+            <MenuItem eventKey='user'>用户</MenuItem>
+            <MenuItem eventKey='group'>用户组</MenuItem>
             <MenuItem eventKey='project'>项目管理</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>系统设置</MenuItem>

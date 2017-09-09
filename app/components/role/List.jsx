@@ -167,7 +167,14 @@ export default class List extends Component {
             </div> 
             :
             <div>
-              <Select multi clearable={ false } searchable={ false } disabled={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 && true } options={ _.map(somePermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ this.state.permissions[collection[i].id] || collection[i].permissions } onChange={ this.handlePermissionSelectChange.bind(this, collection[i].id) } placeholder='请选择相应权限'/>
+              <Select 
+                multi 
+                clearable={ false } 
+                searchable={ false } 
+                disabled={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 && true } 
+                options={ _.map(somePermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ this.state.permissions[collection[i].id] || collection[i].permissions } 
+                onChange={ this.handlePermissionSelectChange.bind(this, collection[i].id) } 
+                placeholder='请选择相应权限'/>
               <div className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPermissions.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetPermissions.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>

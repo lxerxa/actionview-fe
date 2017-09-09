@@ -16,8 +16,12 @@ export default class List extends Component {
     this.state = { 
       willSetUserRoleIds: [], 
       settingUserRoleIds: [], 
-      users: {} };
+      users: {}, 
+      willSetGroupRoleIds: [],
+      settingGroupRoleIds: [],
+      groups: {} };
     this.searchUsers = this.searchUsers.bind(this);
+    this.searchGroups = this.searchGroups.bind(this);
   }
 
   static propTypes = {
@@ -26,7 +30,8 @@ export default class List extends Component {
     selectedItem: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    setActor: PropTypes.func.isRequired
+    setActor: PropTypes.func.isRequired,
+    setGroupActor: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -97,9 +102,62 @@ export default class List extends Component {
     return { options: _.map(results.data, (val) => { val.nameAndEmail = val.name + '(' + val.email + ')'; return val; }) };
   }
 
+  willSetGroups(roleId) {
+    this.state.willSetGroupRoleIds.push(roleId);
+    this.setState({ willSetGroupRoleIds: this.state.willSetGroupRoleIds });
+  }
+
+  cancelSetGroups(roleId) {
+    const index = _.indexOf(this.state.willSetGroupRoleIds, roleId);
+    this.state.willSetGroupRoleIds.splice(index, 1);
+    // clean permission in the state
+    this.state.groups[roleId] = undefined;
+
+    this.setState({ willSetGroupRoleIds: this.state.willSetGroupRoleIds });
+  }
+
+  async setGroups(roleId) {
+    this.state.settingGroupRoleIds.push(roleId);
+    this.setState({ settingGroupRoleIds: this.state.settingGroupRoleIds });
+
+    const { setGroupActor, collection } = this.props;
+    const ecode = await setGroupActor({ groups: _.map(this.state.groups[roleId] || _.find(collection, { id: roleId }).groups, _.iteratee('id')), id: roleId });
+    if (ecode === 0) {
+      const willSetIndex = this.state.willSetGroupRoleIds.indexOf(roleId);
+      this.state.willSetGroupRoleIds.splice(willSetIndex, 1);
+
+      const settingIndex = _.indexOf(this.state.settingGroupRoleIds, roleId);
+      this.state.settingGroupRoleIds.splice(settingIndex, 1);
+
+      this.setState({ willSetGroupRoleIds: this.state.willSetGroupRoleIds, settingGroupRoleIds: this.state.settingGroupRoleIds });
+      notify.show('配置完成。', 'success', 2000);
+    }else {
+      const settingIndex = _.indexOf(this.state.settingGroupRoleIds, roleId);
+      this.state.settingGroupRoleIds.splice(settingIndex, 1);
+      this.setState({ settingGroupRoleIds: this.state.settingGroupRoleIds });
+      notify.show('配置失败。', 'error', 2000);
+    }
+  }
+
+  handleGroupSelectChange(roleId, value) {
+    this.state.groups[roleId] = value;
+    this.setState({ groups: this.state.groups });
+  }
+
+  async searchGroups(input) {
+    input = input.toLowerCase();
+    if (!input)
+    {
+      return { options: [] };
+    }
+    const api = new ApiClient;
+    const results = await api.request( { url: '/group/search?s=' + input } );
+    return { options: results.data || [] };
+  }
+
   render() {
     const { options, collection, indexLoading, setActor } = this.props;
-    const { willSetUserRoleIds, settingUserRoleIds, hoverRowId } = this.state;
+    const { willSetUserRoleIds, settingUserRoleIds, willSetGroupRoleIds, settingGroupRoleIds, hoverRowId } = this.state;
 
     const roles = [];
     const roleNum = collection.length;
@@ -116,7 +174,13 @@ export default class List extends Component {
           options.permissions && options.permissions.indexOf('manage_project') === -1 ?
           <div>
             <span>
-              { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
+            { _.map(collection[i].users, function(v) { 
+              return ( 
+                <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
+                  <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>
+                    { v.name }
+                  </Label>
+                </div> ) }) }
             </span>
           </div>
           :
@@ -126,7 +190,13 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].users && collection[i].users.length > 0 ?
                 <span>
-                { _.map(collection[i].users, function(v){ return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label></div> }) }
+                { _.map(collection[i].users, function(v){ 
+                  return (
+                    <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
+                      <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>
+                        { v.name }
+                      </Label>
+                    </div> ) }) }
                 </span>
                 :
                 <span>
@@ -137,7 +207,17 @@ export default class List extends Component {
             </div> 
             :
             <div>
-              <Select.Async multi clearable={ false } disabled={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 && true } options={ [] } value={ this.state.users[collection[i].id] || collection[i].users } onChange={ this.handleUserSelectChange.bind(this, collection[i].id) } valueKey='id' labelKey='nameAndEmail' loadOptions={ this.searchUsers } placeholder='请输入用户'/>
+              <Select.Async 
+                multi 
+                clearable={ false } 
+                disabled={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 && true } 
+                options={ [] } 
+                value={ this.state.users[collection[i].id] || collection[i].users } 
+                onChange={ this.handleUserSelectChange.bind(this, collection[i].id) } 
+                valueKey='id' 
+                labelKey='nameAndEmail' 
+                loadOptions={ this.searchUsers } 
+                placeholder='请输入用户'/>
               <div className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setUsers.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetUsers.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -145,6 +225,63 @@ export default class List extends Component {
             </div> 
           }
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+          </div>
+        ), 
+        groups: (
+          options.permissions && options.permissions.indexOf('manage_project') === -1 ?
+          <div>
+            <span>
+            { _.map(collection[i].groups, function(v){ 
+              return (
+                <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
+                  <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>
+                    { v.name }
+                  </Label>
+                </div> ) }) }
+            </span>
+          </div>
+          :
+          <div>
+          { _.indexOf(willSetGroupRoleIds, collection[i].id) === -1 && _.indexOf(settingGroupRoleIds, collection[i].id) === -1 ?
+            <div className='editable-list-field'>
+              <div style={ { display: 'table', width: '100%' } }>
+              { collection[i].groups && collection[i].groups.length > 0 ?
+                <span>
+                { _.map(collection[i].groups, function(v){ 
+                  return (
+                    <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
+                      <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>
+                        { v.name }
+                      </Label>
+                    </div> ) }) }
+                </span>
+                :
+                <span>
+                  <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
+                </span> }
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetGroups.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+              </div>
+            </div> 
+            :
+            <div>
+              <Select.Async 
+                multi 
+                clearable={ false } 
+                disabled={ _.indexOf(settingGroupRoleIds, collection[i].id) !== -1 && true } 
+                options={ [] } 
+                value={ this.state.groups[collection[i].id] || collection[i].groups } 
+                onChange={ this.handleGroupSelectChange.bind(this, collection[i].id) } 
+                valueKey='id' 
+                labelKey='name' 
+                loadOptions={ this.searchGroups } 
+                placeholder='请输入用户组'/>
+              <div className={ _.indexOf(settingGroupRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
+                <Button className='edit-ok-button' onClick={ this.setGroups.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
+                <Button className='edit-ok-button' onClick={ this.cancelSetGroups.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
+              </div>
+            </div> 
+          }
+          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingGroupRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ) 
       });
@@ -166,6 +303,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
+          <TableHeaderColumn dataField='groups'>用户组</TableHeaderColumn>
         </BootstrapTable>
       </div>
     );
