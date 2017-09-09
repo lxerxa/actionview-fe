@@ -408,8 +408,10 @@ html.docs .doc-container {
 	overflow-x: hidden;
 	overflow-y: auto;
 	padding: 0rem 1.2rem;
+        display: 'inline-block';
+        float: left;
         margin-top: 50px;
-	width: 100%;
+	width: 82%;
 	-webkit-overflow-scrolling: touch
 }
 
@@ -433,7 +435,7 @@ html.docs .doc-main .head {
         background-color: #fafafa;
         width: 100%;
 	padding: 7px 0;
-        padding-left: 265px;
+        padding-left: 19%;
         font-size: 19px;
         height: 50px;
         line-height: 35px;
@@ -548,13 +550,14 @@ html.docs .search {
 
 html.docs .toc-container {
 	background-color: #fff;
-	display: none;
+	display: inline-block;
 	-webkit-box-flex: 0;
 	-webkit-flex: none;
 	-ms-flex: none;
 	flex: none;
+        float: left;
 	height: 100%;
-	width: 250px;
+	width: 18%;
 	overflow-y: auto;
 	padding: 0rem 2.4rem 2.4rem 1.8rem;
 	position: fixed;
