@@ -139,7 +139,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id:'xxx', name: '刘旭' }, creator: '刘旭', create_time: 144444 }, options: { permissions: [ 'manage_project', 'watch_project' ] }};
+    const results = { ecode: 0, data: { id: '546761', name: '播吧', key: 'BOBA', principal: { id:'xxx', name: '刘旭' }, creator: '刘旭', create_time: 144444 }, options: { permissions: [ 'manage_project', 'view_project' ] }};
     return res.status(200).send(results);
   });
 
