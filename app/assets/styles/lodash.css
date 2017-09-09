@@ -411,6 +411,7 @@ html.docs .doc-container {
         display: 'inline-block';
         margin-top: 50px;
         height: 100%;
+        width: auto;
 	-webkit-overflow-scrolling: touch
 }
 
@@ -508,7 +509,8 @@ html.docs .doc-main {
 	overflow: hidden;
 	position: relative;
 	height: 100%;
-	width: 100%
+	width: 100%;
+        display: inline-block;
 }
 
 html.docs .hidden {
