@@ -33,7 +33,6 @@ export default class Sidebar extends Component {
     $(document).click(function() {
       if ($('.toc-container').eq(0).css('position') === 'fixed') {
         $('.toc-container').animate({ left: '-20%' });
-        $('.doc-container').css({ width: '100%' });
       }
     });
   }
@@ -41,7 +40,6 @@ export default class Sidebar extends Component {
   hideBar() {
     //box-shadow: 0 0 .5rem #9da5ab;
     $('.toc-container').animate({ left: '-20%' });
-    $('.doc-container').css({ width: '100%' });
     $('.toc-container').css({ position: 'fixed' });
     $('.head').css({ paddingLeft: '15px' });
     $('.toc-logo').css({ left: '45%' });
@@ -50,7 +48,6 @@ export default class Sidebar extends Component {
 
   tackBar() {
     $('.head').css({ paddingLeft: '19%' });
-    $('.doc-container').css({ width: '82%' });
     $('.toc-logo').css({ left: '52%' });
     $('.toc-container').css({ position: 'relative', boxShadow: 'none', borderRight: 'solid 1px #e5e5e5' });
     $('#show-bar').hide();
