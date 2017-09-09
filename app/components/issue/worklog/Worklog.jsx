@@ -164,9 +164,11 @@ export default class Worklog extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' }>
             <Table condensed hover responsive style={ { width: '96%', marginLeft: '10px', marginTop: '5px' } }>
               <thead>
-                <th>原估时间</th>
-                <th>总耗费时间</th>
-                <th>剩余时间</th>
+                <tr>
+                  <th>原估时间</th>
+                  <th>总耗费时间</th>
+                  <th>剩余时间</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
@@ -197,9 +199,11 @@ export default class Worklog extends Component {
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
                   <Table condensed hover responsive>
                     <thead>
-                      <th>开始日期</th>
-                      <th>耗费时间</th>
-                      <th>剩余时间</th>
+                      <tr>
+                        <th>开始日期</th>
+                        <th>耗费时间</th>
+                        <th>剩余时间</th>
+                      </tr>
                     </thead>
                     <tbody>
                       <tr>

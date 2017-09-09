@@ -68,7 +68,7 @@ export default class Sidebar extends Component {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminSchemeShow = true;
-    } else if (/^\/admin\/(project|user)$/.test(nextProps.pathname)) {
+    } else if (/^\/admin\/(project|user|group)$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminSysManageShow = true;
@@ -108,7 +108,8 @@ export default class Sidebar extends Component {
             </ul>
             <h4><i className={ this.state.adminSysManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysManageShow: !this.state.adminSysManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统管理</h4>
             <ul className={ !this.state.adminSysManageShow && 'hide' }>
-              <li><Link to='/admin/user'>用户管理</Link></li>
+              <li><Link to='/admin/user'>用户</Link></li>
+              <li><Link to='/admin/group'>用户组</Link></li>
               <li><Link to='/admin/project'>项目管理</Link></li>
             </ul>
             <h4><i className={ this.state.adminSysSettingShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingShow: !this.state.adminSysSettingShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>

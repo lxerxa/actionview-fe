@@ -9,20 +9,21 @@ import { notify } from 'react-notify-toast';
 
 const $ = require('$');
 const PaginationList = require('../share/PaginationList');
-const ImportModal = require('./ImportModal');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
+const UsersConfigModal = require('./UsersConfigModal');
 const OperateNotify = require('./OperateNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
+
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      importModalShow: false, 
       createModalShow: false, 
       editModalShow: false, 
+      usersConfigModalShow: false, 
       operateNotifyShow: false, 
       operate: '',
       operateShow: false, 
@@ -33,9 +34,9 @@ export default class List extends Component {
       name: '', 
       group: '' }; 
 
-    this.importModalClose = this.importModalClose.bind(this);
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
+    this.usersConfigModalClose = this.usersConfigModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.refresh = this.refresh.bind(this);
@@ -54,28 +55,21 @@ export default class List extends Component {
     refresh: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
-    imports: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
-    renew: PropTypes.func.isRequired,
+    entry: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
-    multiRenew: PropTypes.func.isRequired,
     multiDel: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    const newQuery = {};
     const { index, query={} } = this.props;
-    if (query.name) {
-      newQuery.name = this.state.name = query.name;
-    }
-    if (query.group) {
-      newQuery.group = this.state.group = query.group;
+    if (query.name) this.state.name = query.name;
+
+    const newQuery = {};
+    if (this.state.name) {
+      newQuery.name = this.state.name;
     }
     index(newQuery);
-  }
-
-  importModalClose() {
-    this.setState({ importModalShow: false });
   }
 
   createModalClose() {
@@ -84,6 +78,10 @@ export default class List extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  usersConfigModalClose() {
+    this.setState({ usersConfigModalShow: false });
   }
 
   operateNotifyClose() {
@@ -100,9 +98,15 @@ export default class List extends Component {
     select(id);
   }
 
+  config(id) {
+    this.setState({ usersConfigModalShow: true });
+    const { select } = this.props;
+    select(id);
+  }
+
   componentDidMount() {
     const self = this;
-    $('#uname').bind('keypress',function(event) { 
+    $('#gname').bind('keypress',function(event) { 
       if(event.keyCode == '13') {
         self.refresh();
       }
@@ -125,9 +129,14 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
+    const { entry } = this.props;
 
     if (eventKey === 'edit') {
       this.edit(hoverRowId);
+    } else if (eventKey === 'view') {
+      entry('/admin/user', { group: hoverRowId });
+    } else if (eventKey === 'config') {
+      this.config(hoverRowId);
     } else {
       this.operateNotify(hoverRowId);
       this.setState({ operate: eventKey });
@@ -193,11 +202,6 @@ export default class List extends Component {
     this.setState({ selectedIds: [] });
   }
 
-  groupChange(newValue) {
-    this.state.group = newValue;
-    this.refresh();
-  }
-
   render() {
     const { 
       i18n, 
@@ -209,41 +213,35 @@ export default class List extends Component {
       index, 
       refresh, 
       create, 
-      imports, 
       del, 
-      renew, 
       multiDel, 
-      multiRenew, 
       update, 
       options, 
       query } = this.props;
 
-    const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const users = [];
-    const userNum = collection.length;
-    for (let i = 0; i < userNum; i++) {
-      users.push({
+    const groups = [];
+    const groupNum = collection.length;
+    for (let i = 0; i < groupNum; i++) {
+      groups.push({
         id: collection[i].id,
-        name: collection[i].first_name || '-',
-        email: collection[i].email || '-',
-        phone: collection[i].phone || '-',
-        groups: (
-          <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
-            { _.isEmpty(collection[i].groups) ? '-' : _.map(collection[i].groups, function(v, i) { return (<li key={ i }>{ v }</li>) }) }
-          </ul> 
-        ),
-        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>未激活</Label>,
+        name: ( 
+          <div>
+            <span className='table-td-title'>{ collection[i].name || '-' }</span>
+            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
+          </div> ),
+        count: collection[i].users ? collection[i].users.length : 0,
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='view'>查看人员</MenuItem>
+              <MenuItem eventKey='config'>配置人员</MenuItem>
               <MenuItem eventKey='edit'>编辑</MenuItem>
               <MenuItem eventKey='del'>删除</MenuItem>
-              <MenuItem eventKey='renew'>重置密码</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -273,45 +271,30 @@ export default class List extends Component {
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
             <span style={ { float: 'right', width: '22%' } }>
-              <Select
-                simpleValue
-                placeholder='所属组'
-                value={ this.state.group }
-                onChange={ this.groupChange.bind(this) }
-                options={ _.map(options.groups || [], (val) => { return { label: val.name, value: val.id } }) }/>
-            </span>
-            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
                 type='text'
-                id='uname'
-                style={ { height: '36px' } }
+                id='gname'
+                style={ { height: '37px' } }
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '用户姓名、邮箱查询...' } />
+                placeholder={ '组名查询...' } />
             </span>
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
                 <MenuItem eventKey='del'>删除</MenuItem>
-                {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', marginRight: '20px' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
-            </span>
-            <span style={ { float: 'left', width: '20%' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ importModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-users'></i>&nbsp;批量导入</Button>
+              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建组</Button>
             </span>
           </FormGroup>
         </div>
         <div>
-          <BootstrapTable data={ users } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
+          <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>姓名</TableHeaderColumn>
-            <TableHeaderColumn dataField='email'>邮箱</TableHeaderColumn>
-            <TableHeaderColumn dataField='phone'>手机号</TableHeaderColumn>
-            <TableHeaderColumn dataField='groups'>所属组</TableHeaderColumn>
-            <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
+            <TableHeaderColumn dataField='name'>用户组名</TableHeaderColumn>
+            <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && 
@@ -327,29 +310,26 @@ export default class List extends Component {
               close={ this.createModalClose } 
               create={ create } 
               i18n={ i18n }/> }
-          { this.state.importModalShow && 
-            <ImportModal 
-              show 
-              close={ this.importModalClose } 
-              imports={ imports } 
-              loading={ loading } 
-              index={ index } 
+          { this.state.usersConfigModalShow &&
+            <UsersConfigModal
+              show
+              close={ this.usersConfigModalClose }
+              config={ update }
+              data={ selectedItem }
               i18n={ i18n }/> }
           { this.state.operateNotifyShow && 
-             <OperateNotify 
-               show 
-               close={ this.operateNotifyClose } 
-               data={ selectedItem } 
-               operate={ this.state.operate } 
-               del={ del } 
-               renew={ renew } 
-               i18n={ i18n }/> }
+            <OperateNotify 
+              show 
+              close={ this.operateNotifyClose } 
+              data={ selectedItem } 
+              operate={ this.state.operate } 
+              del={ del } 
+              i18n={ i18n }/> }
           { this.state.multiOperateNotifyShow && 
             <MultiOperateNotify 
               show 
               close={ this.multiOperateNotifyClose } 
               multiDel={ multiDel } 
-              multiRenew={ multiRenew } 
               ids={ this.state.selectedIds } 
               cancelSelected={ this.cancelSelected.bind(this) } 
               operate={ this.state.multiOperate } 
