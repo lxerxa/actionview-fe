@@ -8,13 +8,23 @@ import _ from 'lodash';
 
 const no_avatar = require('../../../assets/images/no_avatar.png');
 const img = require('../../../assets/images/loading.gif');
+const AvatarEditModal = require('./AvatarEditModal');
 const EditModal = require('./EditModal');
 const ResetPwdModal = require('./ResetPwdModal');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { tabKey: 'account', editModalShow: false, resetPwdModalShow: false, accounts: {}, favorites: {}, notifications: {} };
+    this.state = { 
+      tabKey: 'account', 
+      editModalShow: false, 
+      avatarEditModalShow: false, 
+      resetPwdModalShow: false, 
+      accounts: {}, 
+      favorites: {}, 
+      notifications: {} };
+
+    this.avatarEditModalClose = this.avatarEditModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
   }
@@ -22,6 +32,8 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     getUser: PropTypes.func.isRequired,
+    setAvatar: PropTypes.func.isRequired,
+    avatarLoading: PropTypes.bool.isRequired,
     resetPwd: PropTypes.func.isRequired,
     updAccount: PropTypes.func.isRequired,
     updNotify: PropTypes.func.isRequired,
@@ -32,6 +44,10 @@ export default class List extends Component {
     notifications: PropTypes.object.isRequired,
     favoriteLoading: PropTypes.bool.isRequired,
     favorites: PropTypes.object.isRequired
+  }
+
+  avatarEditModalClose() {
+    this.setState({ avatarEditModalShow: false });
   }
 
   editModalClose() {
@@ -119,7 +135,7 @@ export default class List extends Component {
     const startStyles = { color: '#54d09f', fontSize: '12px' };
     const closeStyles = { color: '#da4f4a', fontSize: '12px' };
 
-    const { i18n, accounts, accountLoading, notifyLoading, favoriteLoading, updAccount, resetPwd } = this.props;
+    const { i18n, accounts, setAvatar, avatarLoading, accountLoading, notifyLoading, favoriteLoading, updAccount, resetPwd } = this.props;
     const { notifications, favorites } = this.state;
 
     const accountItems = [];
@@ -134,7 +150,7 @@ export default class List extends Component {
       contents: (
         <div style={ styles }>
           <img src={ no_avatar } className='big-no-avatar'/>
-          <Button style={ { marginLeft: '15px' } } onClick={ () => { notify.show('暂不支持此功能。', 'warning', 2000); } }>设置头像</Button>
+          <Button style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ avatarEditModalShow: true }) } }>设置头像</Button>
         </div>
       )
     });
@@ -338,6 +354,7 @@ export default class List extends Component {
           <TableHeaderColumn width='200' dataField='contents'/>
           <TableHeaderColumn dataField='blank'/>
         </BootstrapTable>
+        { this.state.avatarEditModalShow && <AvatarEditModal show close={ this.avatarEditModalClose } loading={ avatarLoading } setAvatar={ setAvatar } data={ accounts } i18n={ i18n }/> }
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ updAccount } data={ accounts } i18n={ i18n }/> }
         { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd } i18n={ i18n }/> }
       </div>
