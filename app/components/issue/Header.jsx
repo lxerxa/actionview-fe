@@ -188,6 +188,8 @@ export default class Header extends Component {
       refresh(query);
     } else if (eventKey == '2') {
       this.setState({ condShow : !this.state.condShow });
+    } else if (eventKey == '3') {
+      this.setState({ addSearcherShow : true });
     }
   }
 
@@ -255,6 +257,7 @@ export default class Header extends Component {
               <MenuItem eventKey='1'>刷新</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
+              <MenuItem eventKey='3'>保存当前检索</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='5'>导出</MenuItem>
               <MenuItem eventKey='6'>导入</MenuItem>
