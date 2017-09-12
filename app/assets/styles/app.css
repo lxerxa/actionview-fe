@@ -603,3 +603,52 @@ table tr:hover .remove-icon{
 .user-item:hover {
   background-color: #eee;
 }
+
+.avatar-edit-container {
+  height: 300px; 
+  width: 100%; 
+  border: 1px dashed rgb(102, 102, 102);
+}
+
+.preview-img {
+  overflow: hidden;
+  height: 300px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.upload-img {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  touch-action: manipulation;
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+
+.upload-img:hover {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+  text-decoration: none;
+}
+
+.upload-img input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+}
