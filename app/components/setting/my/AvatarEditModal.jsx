@@ -1,11 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
-import { RadioGroup, Radio } from 'react-radio-group';
-import DropzoneComponent from 'react-dropzone-component';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, Col, Form } from 'react-bootstrap';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const no_avatar = require('../../../assets/images/no_avatar.png');
 const img = require('../../../assets/images/loading.gif');
 
 export default class AvatarEditModal extends Component {
@@ -74,14 +73,27 @@ export default class AvatarEditModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>设置头像</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { height: '380px', overflow: 'auto' } }>
-          <FormGroup>
-            <DropzoneComponent 
-              style={ { height: '350px' } }
-              config={ componentConfig } 
-              eventHandlers={ eventHandlers } 
-              djsConfig={ djsConfig } />
-          </FormGroup>
+        <Modal.Body style={ { height: '400px', overflow: 'auto' } }>
+          <div style={ { marginBottom: '15px' } }>
+            <a className='upload-img'>
+              选择头像
+              <input type='file'/>
+            </a> 
+          </div>
+          <Form horizontal>
+            <FormGroup controlId='formControlsText'>
+              <Col sm={ 8 }>
+                <div className='avatar-edit-container'>
+                  <img style={ { opacity: 0 } }/>
+                </div>
+              </Col>
+              <Col sm={ 4 }>
+                <div className='preview-img'>
+                  <img src={ no_avatar } style={ { width: '120px' } }/>
+                </div>
+              </Col>
+            </FormGroup>
+          </Form>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
