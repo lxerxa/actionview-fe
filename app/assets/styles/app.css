@@ -605,16 +605,16 @@ table tr:hover .remove-icon{
 }
 
 .avatar-edit-container {
-  height: 300px; 
   width: 100%; 
   border: 1px dashed rgb(102, 102, 102);
 }
 
 .preview-img {
   overflow: hidden;
-  height: 300px;
-  display: table-cell;
+  height: 120px;
+  display: inline-block;
   vertical-align: middle;
+  border: 1px solid #ccc; 
 }
 
 .upload-img {

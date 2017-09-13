@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, Col, Form } from 'react-bootstrap';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import Cropper from 'react-cropper';
 
 const no_avatar = require('../../../assets/images/no_avatar.png');
 const img = require('../../../assets/images/loading.gif');
@@ -10,7 +11,7 @@ const img = require('../../../assets/images/loading.gif');
 export default class AvatarEditModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, src: '', cropResult: null };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -20,6 +21,21 @@ export default class AvatarEditModal extends Component {
     loading: PropTypes.bool.isRequired,
     setAvatar: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
+  }
+
+  onChange(e) {
+    e.preventDefault();
+    let files;
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files;
+    } else if (e.target) {
+      files = e.target.files;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({ src: reader.result });
+    };
+    reader.readAsDataURL(files[0]);
   }
 
   async handleSubmit() {
@@ -43,30 +59,13 @@ export default class AvatarEditModal extends Component {
     close();
   }
 
-  success(file, res) {
-    this.setState({ fid: res.data && res.data.fid || '' });
-  }
-
-  removedfile() {
-    this.setState({ fid: '' });
+  _crop() {
+    // image in dataUrl
+    console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
   }
 
   render() {
     const { i18n: { errMsg }, loading } = this.props;
-
-    const componentConfig = {
-      showFiletypeIcon: true,
-      postUrl: '/api/user/fileupload'
-    };
-    const djsConfig = {
-      addRemoveLinks: true,
-      maxFilesize: 20
-    };
-    const eventHandlers = {
-      init: dz => this.dropzone = dz,
-      success: this.success.bind(this),
-      removedfile: this.removedfile.bind(this)
-    }
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -77,13 +76,20 @@ export default class AvatarEditModal extends Component {
           <div style={ { marginBottom: '15px' } }>
             <a className='upload-img'>
               选择头像
-              <input type='file'/>
+              <input type='file' onChange={ this.onChange.bind(this) }/>
             </a> 
           </div>
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
               <Col sm={ 8 }>
                 <div className='avatar-edit-container'>
+                  <Cropper
+                    ref='cropper'
+                    style={ { height: 300, width: '100%' } }
+                    aspectRatio={ 16 / 16 }
+                    preview='.preview-img'
+                    guides={ false }
+                    src={ this.state.src } />
                   <img style={ { opacity: 0 } }/>
                 </div>
               </Col>
@@ -98,7 +104,7 @@ export default class AvatarEditModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || !this.state.fid } onClick={ this.handleSubmit }>确定</Button>
+          <Button onClick={ this._crop.bind(this) }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>

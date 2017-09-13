@@ -75,3 +75,10 @@ export function multiRenewPwd(ids) {
     promise: (client) => client.request({ url: '/user/batch/renewpwd', method: 'post', data: { ids } })
   });
 }
+
+export function setAvatar(id, data) {
+  return asyncFuncCreator({
+    constant: 'USER_SET_AVATAR',
+    promise: (client) => client.request({ url: '/user/' + id + '/avatar', method: 'post', data })
+  });
+}
