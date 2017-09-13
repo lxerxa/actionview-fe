@@ -34,3 +34,10 @@ export function updFavorite(values) {
     promise: (client) => client.request({ url: '/mysetting/favorite', method: 'post', data: values })
   });
 }
+
+export function setAvatar(data) {
+  return asyncFuncCreator({
+    constant: 'MYSETTING_SET_AVATAR',
+    promise: (client) => client.request({ url: '/mysetting/avatar', method: 'post', data })
+  });
+}

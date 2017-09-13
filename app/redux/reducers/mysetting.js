@@ -14,12 +14,15 @@ export default function mysetting(state = initialState, action) {
     case t.MYSETTING_USER_SHOW_FAIL:
       return { ...state, loading: false, error: action.error };
 
+    case t.MYSETTING_SET_AVATAR:
     case t.MYSETTING_ACCOUNT_UPDATE:
       return { ...state, accountLoading: true };
 
+    case t.MYSETTING_SET_AVATAR_SUCCESS:
     case t.MYSETTING_ACCOUNT_UPDATE_SUCCESS:
       return { ...state, accountLoading: false, ecode: action.result.ecode, accounts: action.result.data.accounts || {} };
 
+    case t.MYSETTING_SET_AVATAR_FAIL:
     case t.MYSETTING_ACCOUNT_UPDATE_FAIL:
       return { ...state, accountLoading: false, error: action.error };
 
