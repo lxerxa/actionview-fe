@@ -784,7 +784,7 @@ export default function(router) {
   router.post('/session', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { user: { id: 'nhy67ujm', email:'liuxuyjy@chinamobile.com', first_name: 'liuxu', avatar: 'http://tp1.sinaimg.cn/2214067364/180/5605327547/1', permissions: {sys_admin: true}, latest_access_url: '/project/boba/summary' }}};
+    const results = { ecode: 0, data: { user: { id: 'nhy67ujm', email:'liuxuyjy@chinamobile.com', first_name: 'liuxu', avatar: '', permissions: {sys_admin: true}, latest_access_url: '/project/boba/summary' }}};
     return res.status(200).send(results);
   });
 
