@@ -84,6 +84,7 @@ export default class AvatarEditModal extends Component {
               选择头像
               <input type='file' onChange={ this.onChange.bind(this) }/>
             </a> 
+            <span style={ { marginLeft: '20px', fontSize: '12px' } }>提示：不支持IE9及以下版本</span>
           </div>
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
