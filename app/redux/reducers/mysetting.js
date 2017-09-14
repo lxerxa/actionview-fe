@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, loading: false, accountLoading: false, accounts: {}, notifyLoading: false, notifications: {}, favoriteLoading: false, favorites: {} };
+const initialState = { ecode: 0, loading: false, avatarLoading: false, accountLoading: false, accounts: {}, notifyLoading: false, notifications: {}, favoriteLoading: false, favorites: {} };
 
 export default function mysetting(state = initialState, action) {
   switch (action.type) {
@@ -15,14 +15,18 @@ export default function mysetting(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.MYSETTING_SET_AVATAR:
+      return { ...state, avatarLoading: true };
+
     case t.MYSETTING_ACCOUNT_UPDATE:
       return { ...state, accountLoading: true };
 
     case t.MYSETTING_SET_AVATAR_SUCCESS:
     case t.MYSETTING_ACCOUNT_UPDATE_SUCCESS:
-      return { ...state, accountLoading: false, ecode: action.result.ecode, accounts: action.result.data.accounts || {} };
+      return { ...state, accountLoading: false, avatarLoading: false, ecode: action.result.ecode, accounts: action.result.data.accounts || {} };
 
     case t.MYSETTING_SET_AVATAR_FAIL:
+      return { ...state, avatarLoading: false, error: action.error };
+
     case t.MYSETTING_ACCOUNT_UPDATE_FAIL:
       return { ...state, accountLoading: false, error: action.error };
 

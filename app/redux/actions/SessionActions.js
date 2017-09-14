@@ -24,5 +24,9 @@ export function getSess() {
 }
 
 export function invalidate() {
-  return { type: SESSION_INVALIDATE };
+  return { type: 'SESSION_INVALIDATE' };
+}
+
+export function updAvatar(avatar) {
+  return { type: 'SESSION_UPD_AVATAR', avatar };
 }

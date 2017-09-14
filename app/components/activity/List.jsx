@@ -232,7 +232,7 @@ export default class List extends Component {
 
       activities.push({
         id: collection[i].id,
-        avatar: ( <img src={ no_avatar } className='no-avatar'/> ),
+        avatar: ( <img src={ collection[i].user.avatar ? '/api/getavatar?fid=' + collection[i].user.avatar : no_avatar } className='no-avatar'/> ),
         summary: (
           <div>
             <span style={ { marginRight: '5px' } }><b>{ collection[i].user.name }</b></span>

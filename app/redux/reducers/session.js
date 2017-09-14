@@ -1,4 +1,5 @@
 import * as t from '../constants/ActionTypes';
+import _ from 'lodash';
 
 const initialState = { ecode: 0, invalid: false, user: {} };
 
@@ -43,6 +44,9 @@ export default function session(state = initialState, action) {
 
     case t.SESSION_INVALIDATE:
       return { ...state, invalid: true };
+
+    case t.SESSION_UPD_AVATAR:
+      return { ...state, user: _.extend(state.user, { avatar: action.avatar }) };
 
     default:
       return state;
