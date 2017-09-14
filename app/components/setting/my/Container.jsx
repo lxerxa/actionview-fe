@@ -2,13 +2,15 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as MysettingActions from 'redux/actions/MysettingActions';
+import * as SessionActions from 'redux/actions/SessionActions';
 
 const List = require('./List');
 const SysadminList = require('./SysadminList');
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(MysettingActions, dispatch)
+    actions: bindActionCreators(MysettingActions, dispatch),
+    sessionActions: bindActionCreators(SessionActions, dispatch)
   };
 }
 
@@ -21,6 +23,7 @@ export default class Container extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    sessionActions: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     mysetting: PropTypes.object.isRequired
@@ -51,6 +54,15 @@ export default class Container extends Component {
     return this.props.mysetting.ecode;
   }
 
+  async setAvatar(data) {
+    await this.props.actions.setAvatar(data);
+    return this.props.mysetting.ecode;
+  }
+
+  updAvatar(avatar) {
+    this.props.sessionActions.updAvatar(avatar);
+  }
+
   render() {
     const { i18n, session } = this.props;
 
@@ -65,11 +77,13 @@ export default class Container extends Component {
             { ...this.props.mysetting }/>
           :
           <List 
+            setAvatar={ this.setAvatar.bind(this) }
             getUser={ this.getUser.bind(this) }
             updAccount={ this.updAccount.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }
             updNotify={ this.updNotify.bind(this) }
             updFavorite={ this.updFavorite.bind(this) }
+            updAvatar={ this.updAvatar.bind(this) }
             i18n={ i18n }
             { ...this.props.mysetting }/> }
         </div>

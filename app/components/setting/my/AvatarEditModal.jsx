@@ -18,8 +18,10 @@ export default class AvatarEditModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     setAvatar: PropTypes.func.isRequired,
+    updAvatar: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -39,12 +41,21 @@ export default class AvatarEditModal extends Component {
   }
 
   async handleSubmit() {
-    const { setAvatar, close } = this.props;
-    const ecode = await setAvatar();
+    const { setAvatar, updAvatar, close } = this.props;
+
+    const contents = this.refs.cropper.getCroppedCanvas().toDataURL() || '';
+    const header = contents.indexOf('base64') + 7;
+    const image = contents.substr(header); 
+
+    const ecode = await setAvatar({ data: image });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
       notify.show('设置完成。', 'success', 2000);
+      const { data } = this.props;
+      if (data && data.avatar) {
+        updAvatar(data.avatar);
+      }
     } else {
       this.setState({ ecode: ecode });
     }
@@ -59,11 +70,6 @@ export default class AvatarEditModal extends Component {
     close();
   }
 
-  _crop() {
-    // image in dataUrl
-    console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
-  }
-
   render() {
     const { i18n: { errMsg }, loading } = this.props;
 
@@ -72,7 +78,7 @@ export default class AvatarEditModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>设置头像</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { height: '400px', overflow: 'auto' } }>
+        <Modal.Body style={ { height: '420px', overflow: 'hidden' } }>
           <div style={ { marginBottom: '15px' } }>
             <a className='upload-img'>
               选择头像
@@ -104,7 +110,7 @@ export default class AvatarEditModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button onClick={ this._crop.bind(this) }>确定</Button>
+          <Button disabled={ loading } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>
