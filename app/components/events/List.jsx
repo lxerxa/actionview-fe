@@ -12,7 +12,13 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, configModalShow: false, delNotifyShow: false, resetNotifyShow: false, operateShow: false, hoverRowId: '' };
+    this.state = { 
+      editModalShow: false, 
+      configModalShow: false, 
+      delNotifyShow: false, 
+      resetNotifyShow: false, 
+      operateShow: false, 
+      hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.resetNotifyClose = this.resetNotifyClose.bind(this);
@@ -105,7 +111,18 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, pkey, collection, selectedItem, loading, indexLoading, itemLoading, del, update, reset, options } = this.props;
+    const { 
+      i18n, 
+      pkey, 
+      collection, 
+      selectedItem, 
+      loading, 
+      indexLoading, 
+      itemLoading, 
+      del, 
+      update, 
+      reset, 
+      options } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );

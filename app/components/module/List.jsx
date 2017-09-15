@@ -13,7 +13,17 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, operateShow: false, hoverRowId: '', willSetPrincipalModuleIds: [], settingPrincipalModuleIds: [], willSetDefalutAssigneeModuleIds: [], settingDefaultAssigneeModuleIds: [] , principal: {}, defaultAssignee: {} };
+    this.state = { 
+      editModalShow: false, 
+      delNotifyShow: false, 
+      operateShow: false, 
+      hoverRowId: '', 
+      willSetPrincipalModuleIds: [], 
+      settingPrincipalModuleIds: [], 
+      willSetDefalutAssigneeModuleIds: [], 
+      settingDefaultAssigneeModuleIds: [] , 
+      principal: {}, 
+      defaultAssignee: {} };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
   }
@@ -162,8 +172,23 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, collection, selectedItem, options, indexLoading, itemLoading, del, update } = this.props;
-    const { hoverRowId, operateShow, willSetPrincipalModuleIds, settingPrincipalModuleIds, willSetDefalutAssigneeModuleIds, settingDefaultAssigneeModuleIds } = this.state;
+    const { 
+      i18n, 
+      collection, 
+      selectedItem, 
+      options, 
+      indexLoading, 
+      itemLoading, 
+      del, 
+      update } = this.props;
+
+    const { 
+      hoverRowId, 
+      operateShow, 
+      willSetPrincipalModuleIds, 
+      settingPrincipalModuleIds, 
+      willSetDefalutAssigneeModuleIds, 
+      settingDefaultAssigneeModuleIds } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
@@ -207,7 +232,14 @@ export default class List extends Component {
             </div>
             :
             <div>
-              <Select simpleValue clearable={ false } disabled={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 && true } options={ userOptions } value={ this.state.principal[collection[i].id] || collection[i].principal.id } onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } placeholder='请选择用户'/>
+              <Select 
+                simpleValue 
+                clearable={ false } 
+                disabled={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 && true } 
+                options={ userOptions } 
+                value={ this.state.principal[collection[i].id] || collection[i].principal.id } 
+                onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } 
+                placeholder='请选择用户'/>
               <div className={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -244,7 +276,15 @@ export default class List extends Component {
             </div>
             :
             <div>
-              <Select simpleValue clearable={ false } searchable={ false } disabled={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 && true } options={ defaultAssigneeOptions } value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee } onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } placeholder='默认经办人(项目负责人)'/>
+              <Select 
+                simpleValue 
+                clearable={ false } 
+                searchable={ false } 
+                disabled={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 && true } 
+                options={ defaultAssigneeOptions } 
+                value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee } 
+                onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } 
+                placeholder='默认经办人(项目负责人)'/>
               <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-ok-button' onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -258,7 +298,14 @@ export default class List extends Component {
           options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton 
+              pullRight 
+              bsStyle='link' 
+              style={ { textDecoration: 'blink' ,color: '#000' } } 
+              key={ i } 
+              title={ node } 
+              id={ `dropdown-basic-${i}` } 
+              onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
             </DropdownButton> }
@@ -287,8 +334,21 @@ export default class List extends Component {
           <TableHeaderColumn dataField='defaultAssignee'>默认经办人</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options } collection={ collection } i18n={ i18n }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.editModalShow && 
+          <EditModal 
+            show 
+            close={ this.editModalClose } 
+            update={ update } 
+            data={ selectedItem } 
+            options={ options } 
+            collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.delNotifyShow && 
+          <DelNotify 
+            show 
+            close={ this.delNotifyClose } 
+            data={ selectedItem } 
+            del={ del }/> }
       </div>
     );
   }

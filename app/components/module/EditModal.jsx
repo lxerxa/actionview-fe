@@ -70,7 +70,14 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { id, name, description }, 
+      handleSubmit, 
+      invalid, 
+      dirty, 
+      submitting, 
+      data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

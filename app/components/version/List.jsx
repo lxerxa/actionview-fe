@@ -13,7 +13,11 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, operateShow: false, hoverRowId: '' };
+    this.state = { 
+      editModalShow: false, 
+      delNotifyShow: false, 
+      operateShow: false, 
+      hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
   }
@@ -76,7 +80,15 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, options={}, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { 
+      i18n, 
+      options={}, 
+      collection, 
+      selectedItem, 
+      indexLoading, 
+      itemLoading, 
+      del, 
+      update } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -114,7 +126,14 @@ export default class List extends Component {
           options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton 
+              pullRight 
+              bsStyle='link' 
+              style={ { textDecoration: 'blink' ,color: '#000' } } 
+              key={ i } 
+              title={ node } 
+              id={ `dropdown-basic-${i}` } 
+              onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
             </DropdownButton> }
@@ -143,8 +162,21 @@ export default class List extends Component {
           <TableHeaderColumn dataField='end_time'>结束时间</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } collection={ collection } i18n={ i18n }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del } i18n={ i18n }/> }
+        { this.state.editModalShow && 
+          <EditModal 
+            show 
+            close={ this.editModalClose } 
+            update={ update } 
+            data={ selectedItem } 
+            collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.delNotifyShow && 
+          <DelNotify 
+            show 
+            close={ this.delNotifyClose } 
+            data={ selectedItem } 
+            del={ del } 
+            i18n={ i18n }/> }
       </div>
     );
   }
