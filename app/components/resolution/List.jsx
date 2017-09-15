@@ -85,12 +85,24 @@ export default class List extends Component {
       const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
       resolutions.push({
         id: collection[i].id,
-        name: ( <span className='table-td-title'>{ collection[i].name }{ isGlobal && collection[i].project_key === '$_sys_$' && <span style={ { fontWeight: 'normal' } }> (全局)</span> }{ collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }</span> ),
+        name: ( 
+          <span className='table-td-title'>
+            { collection[i].name }
+            { isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }
+            { collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }
+          </span> ),
         description: collection[i].description ? collection[i].description : '-', 
         operation: !isGlobal ? (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton 
+              pullRight 
+              bsStyle='link' 
+              style={ { textDecoration: 'blink' ,color: '#000' } } 
+              key={ i } 
+              title={ node } 
+              id={ `dropdown-basic-${i}` } 
+              onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
             </DropdownButton> }
@@ -118,8 +130,20 @@ export default class List extends Component {
           <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } collection={ collection } i18n={ i18n }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
+        { this.state.editModalShow && 
+          <EditModal 
+            show 
+            close={ this.editModalClose } 
+            update={ update } 
+            data={ selectedItem } 
+            collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.delNotifyShow && 
+          <DelNotify 
+            show 
+            close={ this.delNotifyClose } 
+            data={ selectedItem } 
+            del={ del }/> }
       </div>
     );
   }

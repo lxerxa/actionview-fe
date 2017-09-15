@@ -166,7 +166,13 @@ export default class Header extends Component {
         <span style={ { color: '#5f5f5f' } }>{ modulename }</span>
         <span className='toc-logo'><img src={ logo } width={ 120 }/></span>
         <span style={ { float: 'right', marginRight: '10px' } }>
-          <DropdownButton pullRight bsStyle='link' title={ avatar } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.userOperateSelect.bind(this) }>
+          <DropdownButton 
+            pullRight 
+            bsStyle='link' 
+            title={ avatar } 
+            id='basic-nav-dropdown' 
+            style={ headerUser } 
+            onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
@@ -175,7 +181,13 @@ export default class Header extends Component {
         </span>
         { session.user && session.user.permissions && session.user.permissions.sys_admin &&
         <span style={ { float: 'right' } }>
-          <DropdownButton pullRight bsStyle='link' title={ sysTitle } id='basic-nav-dropdown' style={ headerUser } onSelect={ this.sysOperateSelect.bind(this) }>
+          <DropdownButton 
+            pullRight 
+            bsStyle='link' 
+            title={ sysTitle } 
+            id='basic-nav-dropdown'  
+            style={ headerUser }  
+            onSelect={ this.sysOperateSelect.bind(this) }>
             <MenuItem eventKey='scheme'>方案配置</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='user'>用户</MenuItem>
@@ -187,7 +199,13 @@ export default class Header extends Component {
         </span> }
         { session.user && session.user.email && session.user.email !== 'admin@action.view' &&
         <span style={ { float: 'right' } }>
-          <DropdownButton pullRight bsStyle='link' title='项目' id='basic-nav-dropdown' style={ headerUser } onSelect={ this.operateSelect.bind(this) }>
+          <DropdownButton 
+            pullRight 
+            bsStyle='link' 
+            title='项目' 
+            id='basic-nav-dropdown' 
+            style={ headerUser } 
+            onSelect={ this.operateSelect.bind(this) }>
             { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }
             { !_.isEmpty(curProject) && <MenuItem divider /> }
             { _.map(recentProjects, (v, i) => <MenuItem key={ i } eventKey={ v.key }>{ v.name }</MenuItem> ) }

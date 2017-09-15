@@ -106,7 +106,7 @@ export default class CreateModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值'/>
             <FormControl.Feedback>
-              { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
+            { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
             </FormControl.Feedback>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
           </FormGroup>

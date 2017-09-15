@@ -81,7 +81,10 @@ export default class CopyModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>复制界面</Modal.Title>
         </Modal.Header>
-        <form onSubmit={ handleSubmit(this.handleSubmit) } onEntered={ () => { $('input[name=name]').select(); } } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
+        <form 
+          onSubmit={ handleSubmit(this.handleSubmit) } 
+          onEntered={ () => { $('input[name=name]').select(); } } 
+          onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormControl type='hidden' { ...id }/>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>

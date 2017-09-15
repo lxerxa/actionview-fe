@@ -52,12 +52,24 @@ export default class List extends Component {
                 return (
                   <tr>
                     <td>
-                      <span className='table-td-title-nobold'>{ v.name || '' }({ v.abb || '' }){ v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }{ v.type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子任务)</span> }</span>
+                      <span className='table-td-title-nobold'>
+                        { v.name || '' }({ v.abb || '' })
+                        { v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }
+                        { v.type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子任务)</span> }
+                      </span>
                       <span className='table-td-desc'>{ v.description || '' }</span>
                     </td>
                     <td>{ v.type === 'subtask' ? '子任务' : '标准' }</td>
-                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ screenPreviewModalShow: true, screenSchema: v.screen && v.screen.schema || [], screenName: v.screen && v.screen.name || '' }); } }>{ v.screen && v.screen.name || '' }</a></td>
-                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ wfPreviewModalShow: true, wfSteps: v.workflow && v.workflow.contents && v.workflow.contents.steps || [], wfName: v.workflow && v.workflow.name || '' }); } }>{ v.workflow && v.workflow.name || '' }</a></td>
+                    <td>
+                      <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ screenPreviewModalShow: true, screenSchema: v.screen && v.screen.schema || [], screenName: v.screen && v.screen.name || '' }); } }>
+                        { v.screen && v.screen.name || '' }
+                      </a>
+                    </td>
+                    <td>
+                      <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ wfPreviewModalShow: true, wfSteps: v.workflow && v.workflow.contents && v.workflow.contents.steps || [], wfName: v.workflow && v.workflow.name || '' }); } }>
+                        { v.workflow && v.workflow.name || '' }
+                      </a>
+                    </td>
                   </tr>
                 );
               }) }

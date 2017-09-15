@@ -37,7 +37,13 @@ export default class Header extends Component {
             <span>界面是对字段的排列布局和属性定义，是创建问题、编辑问题或执行工作流过程时显示的页面。<br/>如果定义问题的创建或编辑页面，首先应将主题字段添加到页面中，且将其设置为必填字段。<br/>只能删除没有关联到问题类型{ isSysConfig && '（包括各项目自定义问题类型）' }和没有应用到工作流{ isSysConfig && '（包括各项目自定义工作流）' }的界面。</span>
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options } i18n={ i18n }/> }
+        { this.state.createModalShow && 
+          <CreateModal 
+            show 
+            close={ this.createModalClose } 
+            create={ create } 
+            options={ options } 
+            i18n={ i18n }/> }
       </div>
     );
   }

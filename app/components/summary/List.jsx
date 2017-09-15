@@ -48,14 +48,42 @@ export default class List extends Component {
             </thead>
             <tbody>
               <tr>
-                <td><Link to={ '/project/' + project.key + '/issue?created_at=1w' }>新建问题</Link></td>
-                <td><Link to={ '/project/' + project.key + '/issue?created_at=1w' }>{ data.new_issues && data.new_issues['total'] || 0 }</Link></td>
-                { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&created_at=1w' }>{ data.new_issues && data.new_issues[v.id] || 0 }</Link></td>) }) }
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
+                    新建问题
+                  </Link>
+                </td>
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
+                    { data.new_issues && data.new_issues['total'] || 0 }
+                  </Link>
+                </td>
+                { _.map(options.types || [], (v) => { 
+                  return (
+                    <td key={ v.id }>
+                      <Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&created_at=1w' }>
+                        { data.new_issues && data.new_issues[v.id] || 0 }
+                      </Link>
+                    </td>) }) }
               </tr>
               <tr>
-                <td><Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>关闭问题</Link></td>
-                <td><Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>{ data.closed_issues && data.closed_issues['total'] || 0 }</Link></td>
-                { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&updated_at=1w' }>{ data.closed_issues && data.closed_issues[v.id] || 0 }</Link></td>) }) }
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
+                    关闭问题
+                  </Link>
+                </td>
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
+                    { data.closed_issues && data.closed_issues['total'] || 0 }
+                  </Link>
+                </td>
+                { _.map(options.types || [], (v) => { 
+                  return (
+                    <td key={ v.id }>
+                      <Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&updated_at=1w' }>
+                        { data.closed_issues && data.closed_issues[v.id] || 0 }
+                      </Link>
+                    </td>) }) }
               </tr>
             </tbody>
           </Table>
@@ -76,9 +104,23 @@ export default class List extends Component {
               { _.map(data.assignee_unresolved_issues, (val, key) => {
                 return (
                 <tr>
-                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>{ options.users && options.users[key] || '' }</Link></td>
-                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>{ val['total'] || 0 }</Link></td>
-                  { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&assignee=' + key }>{ val[v.id] || 0 }</Link></td>) }) }
+                  <td>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
+                      { options.users && options.users[key] || '' }
+                    </Link>
+                  </td>
+                  <td>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
+                      { val['total'] || 0 }
+                    </Link>
+                  </td>
+                  { _.map(options.types || [], (v) => { 
+                    return (
+                      <td key={ v.id }>
+                        <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&assignee=' + key }>
+                          { val[v.id] || 0 }
+                        </Link>
+                      </td>) }) }
                 </tr>) }) }
             </tbody>
           </Table>
@@ -99,9 +141,23 @@ export default class List extends Component {
               { _.map(data.priority_unresolved_issues, (val, key) => {
                 return (
                 <tr>
-                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>{ options.priorities && options.priorities[key] || '' }</Link></td>
-                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>{ val['total'] || 0 }</Link></td>
-                  { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&priority=' + key }>{ val[v.id] || 0 }</Link></td>) }) }
+                  <td>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
+                      { options.priorities && options.priorities[key] || '' }
+                    </Link>
+                  </td>
+                  <td>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
+                      { val['total'] || 0 }
+                    </Link>
+                  </td>
+                  { _.map(options.types || [], (v) => { 
+                    return (
+                      <td key={ v.id }>
+                        <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&priority=' + key }>
+                          { val[v.id] || 0 }
+                        </Link>
+                      </td>) }) }
                 </tr>) }) }
             </tbody>
           </Table>
@@ -122,9 +178,23 @@ export default class List extends Component {
               { _.map(data.module_unresolved_issues, (val, key) => {
                 return (
                 <tr>
-                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>{ options.modules && options.modules[key] || '' }</Link></td>
-                  <td><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>{ val['total'] || 0 }</Link></td>
-                  { _.map(options.types || [], (v) => { return (<td key={ v.id }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&module=' + key }>{ val[v.id] || 0 }</Link></td>) }) }
+                  <td>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
+                      { options.modules && options.modules[key] || '' }
+                    </Link>
+                  </td>
+                  <td>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
+                      { val['total'] || 0 }
+                    </Link>
+                  </td>
+                  { _.map(options.types || [], (v) => { 
+                    return (
+                      <td key={ v.id }>
+                        <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&module=' + key }>
+                          { val[v.id] || 0 }
+                        </Link>
+                      </td>) }) }
                 </tr>) }) }
             </tbody>
           </Table>

@@ -119,15 +119,34 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>界面</ControlLabel>
-            <Select disabled={ submitting } options={ screenOptions } simpleValue clearable={ false } value={ screen_id.value } onChange={ newValue => { screen_id.onChange(newValue) } } placeholder='请选择一个界面'/>
+            <Select 
+              disabled={ submitting } 
+              options={ screenOptions } 
+              simpleValue 
+              clearable={ false } 
+              value={ screen_id.value } 
+              onChange={ newValue => { screen_id.onChange(newValue) } } 
+              placeholder='请选择一个界面'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>工作流</ControlLabel>
-            <Select disabled={ submitting } options={ workflowOptions } simpleValue clearable={ false } value={ workflow_id.value } onChange={ newValue => { workflow_id.onChange(newValue) } } placeholder='请选择一个工作流'/>
+            <Select 
+              disabled={ submitting } 
+              options={ workflowOptions } 
+              simpleValue clearable={ false } 
+              value={ workflow_id.value } 
+              onChange={ newValue => { workflow_id.onChange(newValue) } } 
+              placeholder='请选择一个工作流'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>类型</ControlLabel>
-            <Select disabled={ submitting } options={ typeOptions } simpleValue clearable={ false } value={ type.value || 'standard' } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择问题类型'/>
+            <Select 
+              disabled={ submitting } 
+              options={ typeOptions } 
+              simpleValue clearable={ false } 
+              value={ type.value || 'standard' } 
+              onChange={ newValue => { type.onChange(newValue) } } 
+              placeholder='请选择问题类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
