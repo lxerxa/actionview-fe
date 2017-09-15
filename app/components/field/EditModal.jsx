@@ -70,7 +70,15 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, applyToTypes, description }, dirty, handleSubmit, invalid, submitting, data, options } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { id, name, applyToTypes, description }, 
+      dirty, 
+      handleSubmit, 
+      invalid, 
+      submitting, 
+      data, 
+      options } = this.props;
 
     const typeOptions = _.map(options.types || [], (val) => { return { label: val.name, value: val.id } });
 
@@ -89,7 +97,14 @@ export default class EditModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>适用类型</ControlLabel>
-            <Select disabled={ submitting } multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
+            <Select 
+              disabled={ submitting } 
+              multi 
+              options={ typeOptions } 
+              simpleValue value={ applyToTypes.value } 
+              onChange={ newValue => { applyToTypes.onChange(newValue) } } 
+              placeholder='默认全部' 
+              clearable={ false }/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

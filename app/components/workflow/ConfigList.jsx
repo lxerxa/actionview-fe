@@ -163,10 +163,36 @@ export default class ConfigList extends Component {
           <TableHeaderColumn dataField='actions' width='260'>动作</TableHeaderColumn>
           <TableHeaderColumn width='300' dataField='operation'/>
         </BootstrapTable>
-        { this.state.addActionModalShow && <AddActionModal show close={ this.addActionModalClose } create={ addAction } edit={ editAction } stepData={ item } options={ options } steps={ collection } data={ actionItem } /> }
-        { this.state.delActionModalShow && <DelActionModal show close={ this.delActionModalClose } del={ delAction } stepData={ item }/> }
-        { this.state.editStepModalShow && <EditStepModal show close={ this.editStepModalClose } edit={ editStep } data={ item } collection={ collection } options={ options }/> }
-        { this.state.delStepNotifyShow && <DelStepNotify show close={ this.delStepNotifyClose } data={ item } del={ delStep }/> }
+        { this.state.addActionModalShow && 
+          <AddActionModal 
+            show 
+            close={ this.addActionModalClose } 
+            create={ addAction } 
+            edit={ editAction } 
+            stepData={ item } 
+            options={ options } 
+            steps={ collection } 
+            data={ actionItem } /> }
+        { this.state.delActionModalShow && 
+          <DelActionModal 
+            show 
+            close={ this.delActionModalClose } 
+            del={ delAction } 
+            stepData={ item }/> }
+        { this.state.editStepModalShow && 
+          <EditStepModal 
+            show 
+            close={ this.editStepModalClose } 
+            edit={ editStep } 
+            data={ item } 
+            collection={ collection } 
+            options={ options }/> }
+        { this.state.delStepNotifyShow && 
+          <DelStepNotify 
+            show 
+            close={ this.delStepNotifyClose } 
+            data={ item } 
+            del={ delStep }/> }
       </div>
     );
   }

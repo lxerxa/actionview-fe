@@ -81,6 +81,7 @@ export default class Container extends Component {
         <Header 
           isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           create={ this.create.bind(this) } 
+          goConfig={ this.goConfig.bind(this) } 
           i18n={ this.props.i18n }
           { ...this.props.workflow }/>
         <List 
