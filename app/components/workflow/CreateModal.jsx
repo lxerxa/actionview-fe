@@ -50,7 +50,7 @@ export default class CreateModal extends Component {
       close();
       notify.show('新建完成。', 'success', 2000);
       const { data, goConfig } = this.props;
-      if (!_.empty(data)) {
+      if (!_.isEmpty(data)) {
         goConfig(data.id);
       }
     } else {

@@ -91,11 +91,23 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>责任人</ControlLabel>
-            <Select disabled={ submitting } clearable={ false } value={ principal.value } onChange={ newValue => { principal.onChange(newValue) } } options={ userOptions } placeholder='选择责任人'/>
+            <Select 
+              disabled={ submitting } 
+              clearable={ false } 
+              value={ principal.value } 
+              onChange={ newValue => { principal.onChange(newValue) } } 
+              options={ userOptions } 
+              placeholder='选择责任人'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>默认经办人</ControlLabel>
-            <Select disabled={ submitting } options={ assigneeOptions } clearable={ false } value={ defaultAssignee.value } onChange={ newValue => { defaultAssignee.onChange(newValue) } } placeholder='默认经办人(项目负责人)'/>
+            <Select 
+              disabled={ submitting } 
+              options={ assigneeOptions } 
+              clearable={ false } 
+              value={ defaultAssignee.value } 
+              onChange={ newValue => { defaultAssignee.onChange(newValue) } } 
+              placeholder='默认经办人(项目负责人)'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

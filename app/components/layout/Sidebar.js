@@ -56,11 +56,11 @@ export default class Sidebar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (/^\/project\/(\w+)(\/(summary|issue|activity|version|module|team|config))?$/.test(nextProps.pathname)) {
+    if (/^\/project\/(\w+)(\/(summary|issue|activity|version|module|team))?$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = false;
       this.state.projectPanelShow = true;
       this.state.projectSummaryShow = true;
-    } else if (/^\/project\/(\w+)\/(type|workflow|field|screen|priority|state|resolution|role|events)(\/\w+)?$/.test(nextProps.pathname)){
+    } else if (/^\/project\/(\w+)\/(config|type|workflow|field|screen|priority|state|resolution|role|events)(\/\w+)?$/.test(nextProps.pathname)){
       this.state.adminPanelShow = false;
       this.state.projectPanelShow = true;
       this.state.projectConfigShow = true;
