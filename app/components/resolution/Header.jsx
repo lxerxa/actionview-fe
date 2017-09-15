@@ -55,8 +55,13 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建结果</Button>
-          { !indexLoading && <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button> }
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }>
+            <i className='fa fa-plus'></i>&nbsp;新建结果
+          </Button>
+          { !indexLoading && 
+            <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }>
+              <i className='fa fa-pencil'></i>&nbsp;编辑顺序
+            </Button> }
           <div className={ indexLoading ? 'hide' : 'div-default-set' }>
             <span className='default-set'>默认结果：</span>
             { this.state.defaultSetShow ? 
@@ -84,8 +89,21 @@ export default class Header extends Component {
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>新建问题的解决结果初始值是未解决。<br/>只能删除没有应用到项目问题中的解决结果。</div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } collection={ collection } i18n={ i18n }/> }
-        { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading } i18n={ i18n }/> }
+        { this.state.createModalShow && 
+          <CreateModal 
+            show 
+            close={ this.createModalClose } 
+            create={ create } 
+            collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.sortCardsModalShow && 
+          <SortCardsModal 
+            show 
+            close={ this.sortCardsModalClose } 
+            cards={ collection } 
+            setSort={ setSort } 
+            sortLoading={ sortLoading } 
+            i18n={ i18n }/> }
       </div>
     );
   }

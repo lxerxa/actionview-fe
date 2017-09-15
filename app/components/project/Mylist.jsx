@@ -219,7 +219,19 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, user, collection, increaseCollection, selectedItem, indexLoading, itemLoading, moreLoading, create, stop, update, options={} } = this.props;
+    const { 
+      i18n, 
+      user, 
+      collection, 
+      increaseCollection, 
+      selectedItem, 
+      indexLoading, 
+      itemLoading, 
+      moreLoading, 
+      create, 
+      stop, 
+      update, 
+      options={} } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -255,7 +267,9 @@ export default class List extends Component {
                 </span>
                 :
                 '-' }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }>
+                  <i className='fa fa-pencil'></i>
+                </span>
               </div>
             </div>
             :
@@ -271,8 +285,12 @@ export default class List extends Component {
                 loadOptions={ this.searchUsers } 
                 placeholder='请输入用户'/>
               <div className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
-                <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
+                <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }>
+                  <i className='fa fa-check'></i>
+                </Button>
+                <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }>
+                  <i className='fa fa-close'></i>
+                </Button>
               </div>
             </div>
           }
@@ -284,7 +302,14 @@ export default class List extends Component {
           collection[i].principal.id === user.id &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton 
+              pullRight 
+              bsStyle='link' 
+              style={ { textDecoration: 'blink' ,color: '#000' } } 
+              key={ i } 
+              title={ node } 
+              id={ `dropdown-basic-${i}` } 
+              onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
               <MenuItem eventKey='4'>重建索引</MenuItem>
@@ -343,9 +368,25 @@ export default class List extends Component {
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
-          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } i18n={ i18n }/> }
-          { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
+          { this.state.editModalShow && 
+            <EditModal 
+              show 
+              close={ this.editModalClose } 
+              update={ update } 
+              data={ selectedItem } 
+              i18n={ i18n }/> }
+          { this.state.createModalShow && 
+            <CreateModal 
+              show 
+              close={ this.createModalClose } 
+              create={ create } 
+              i18n={ i18n }/> }
+          { this.state.closeNotifyShow && 
+            <CloseNotify 
+              show 
+              close={ this.closeNotifyClose } 
+              data={ selectedItem } 
+              stop={ stop }/> }
         </div>
         { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
         <ButtonGroup vertical block>

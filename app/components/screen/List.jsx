@@ -126,7 +126,14 @@ export default class List extends Component {
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <DropdownButton 
+                pullRight 
+                bsStyle='link' 
+                style={ { textDecoration: 'blink' ,color: '#000' } } 
+                title={ node } 
+                key={ i } 
+                id={ `dropdown-basic-${i}` } 
+                onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='6'>预览</MenuItem>
                 { !isGlobal && <MenuItem eventKey='3'>界面配置</MenuItem> }
                 { !isGlobal && <MenuItem eventKey='4'>字段配置</MenuItem> }
@@ -159,12 +166,49 @@ export default class List extends Component {
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.previewModalShow && <PreviewModal show close={ this.previewModalClose } name={ selectedItem.name || '' } data={ selectedItem.schema || [] }/> }
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
-        { this.state.copyModalShow && <CopyModal show close={ this.copyModalClose } copy={ create } data={ selectedItem } i18n={ i18n }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.layoutConfigShow && <LayoutConfigModal show close={ this.layoutConfigClose } data={ selectedItem } config={ update } options= { options } loading={ loading } i18n={ i18n }/> }
-        { this.state.layoutFieldConfigShow && <LayoutFieldConfigModal show close={ this.layoutFieldConfigClose } data={ selectedItem } config={ update } loading={ loading } i18n={ i18n }/> }
+        { this.state.previewModalShow && 
+          <PreviewModal 
+            show 
+            close={ this.previewModalClose } 
+            name={ selectedItem.name || '' } 
+            data={ selectedItem.schema || [] }/> }
+        { this.state.editModalShow && 
+          <EditModal 
+            show 
+            close={ this.editModalClose } 
+            update={ update } 
+            data={ selectedItem } 
+            i18n={ i18n }/> }
+        { this.state.copyModalShow && 
+          <CopyModal 
+            show 
+            close={ this.copyModalClose } 
+            copy={ create } 
+            data={ selectedItem } 
+            i18n={ i18n }/> }
+        { this.state.delNotifyShow && 
+          <DelNotify 
+            show 
+            close={ this.delNotifyClose } 
+            data={ selectedItem } 
+            del={ del }/> }
+        { this.state.layoutConfigShow && 
+          <LayoutConfigModal 
+            show 
+            close={ this.layoutConfigClose } 
+            data={ selectedItem } 
+            config={ update } 
+            options= { options } 
+            loading={ loading } 
+            i18n={ i18n }/> }
+        { this.state.layoutFieldConfigShow && 
+          <LayoutFieldConfigModal 
+            show 
+            close={ this.layoutFieldConfigClose } 
+            data={ selectedItem } 
+            config={ update } 
+            loading={ loading } 
+            i18n={ i18n }/> }
       </div>
     );
   }

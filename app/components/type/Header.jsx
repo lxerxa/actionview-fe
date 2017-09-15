@@ -52,7 +52,16 @@ export default class Header extends Component {
   }
 
   render() {
-    const { i18n, isSysConfig, create, setSort, sortLoading, defaultLoading, indexLoading, collection, options } = this.props;
+    const { 
+      i18n, 
+      isSysConfig, 
+      create, 
+      setSort, 
+      sortLoading, 
+      defaultLoading, 
+      indexLoading,
+      collection, 
+      options } = this.props;
     const defaultIndex = _.findIndex(collection, { default: true });
 
     const standardCollection = _.reject(_.reject(collection, { type: 'subtask' }) || [], { disabled: true }) || [];
@@ -60,8 +69,13 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建类型</Button>
-          { !indexLoading && <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button> }
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }>
+            <i className='fa fa-plus'></i>&nbsp;新建类型
+          </Button>
+          { !indexLoading && 
+            <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }>
+              <i className='fa fa-pencil'></i>&nbsp;编辑顺序
+            </Button> }
           <div className={ indexLoading ? 'hide' : 'div-default-set' }>
             <span className='default-set'>默认类型：</span>
             { this.state.defaultSetShow ? 
@@ -73,25 +87,48 @@ export default class Header extends Component {
                 </div>
                 <img src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>
                 <div className={ defaultLoading ? 'hide' : 'edit-field-content' }>
-                  <Button className='edit-ok-button' onClick={ this.setDefaultValue }><i className='fa fa-check'></i></Button>
-                  <Button className='edit-ok-button' onClick={ () => { this.setState({ defaultSetShow: false }); } }><i className='fa fa-close'></i></Button>
+                  <Button className='edit-ok-button' onClick={ this.setDefaultValue }>
+                    <i className='fa fa-check'></i>
+                  </Button>
+                  <Button className='edit-ok-button' onClick={ () => { this.setState({ defaultSetShow: false }); } }>
+                    <i className='fa fa-close'></i>
+                  </Button>
                 </div>
               </div>
               :
               <span className='default-set editable-field'>
                 <span>{ collection[defaultIndex] ? collection[defaultIndex].name : '无' }</span>
-                <Button className='edit-icon' onClick={ () => { this.setState({ defaultSetShow: true }); } }><i className='fa fa-pencil'></i></Button>
+                <Button className='edit-icon' onClick={ () => { this.setState({ defaultSetShow: true }); } }>
+                  <i className='fa fa-pencil'></i>
+                </Button>
               </span>
             }
           </div>
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'><span>每一个问题类型都需要绑定自己的界面和工作流。</span>{ isSysConfig || <span><br/>只能删除没有应用到项目问题中的类型，如果将某一类型在创建或编辑问题时移除可使用禁用功能。</span> }{ isSysConfig || <span><br/>若要创建子任务类型问题，需指定有效的子任务类型的问题类型。</span> }
+          <div className='info-content'>
+            <span>每一个问题类型都需要绑定自己的界面和工作流。</span>
+            { isSysConfig || <span><br/>只能删除没有应用到项目问题中的类型，如果将某一类型在创建或编辑问题时移除可使用禁用功能。</span> }
+            { isSysConfig || <span><br/>若要创建子任务类型问题，需指定有效的子任务类型的问题类型。</span> }
           </div>
         </div>
-        { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } options={ options } collection={ collection } i18n={ i18n }/> }
-        { this.state.sortCardsModalShow && <SortCardsModal show close={ this.sortCardsModalClose } cards={ collection } setSort={ setSort } sortLoading={ sortLoading } i18n={ i18n }/> }
+        { this.state.createModalShow && 
+          <CreateModal 
+            show 
+            close={ this.createModalClose } 
+            create={ create } 
+            options={ options } 
+            collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.sortCardsModalShow && 
+          <SortCardsModal 
+            show 
+            close={ this.sortCardsModalClose } 
+            cards={ collection } 
+            setSort={ setSort } 
+            sortLoading={ sortLoading } 
+            i18n={ i18n }/> }
       </div>
     );
   }

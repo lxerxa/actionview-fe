@@ -121,13 +121,22 @@ export default class CreateModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值'/>
             <FormControl.Feedback>
-              { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
+            { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
             </FormControl.Feedback>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>责任人</ControlLabel>
-            <Select.Async clearable={ false } disabled={ submitting } options={ [] } value={ principal.value } onChange={ (newValue) => { principal.onChange(newValue) } } valueKey='id' labelKey='name' loadOptions={ this.searchUsers.bind(this) } placeholder='输入责任人'/>
+            <Select.Async 
+              clearable={ false } 
+              disabled={ submitting } 
+              options={ [] } 
+              value={ principal.value } 
+              onChange={ (newValue) => { principal.onChange(newValue) } } 
+              valueKey='id' 
+              labelKey='name' 
+              loadOptions={ this.searchUsers.bind(this) } 
+              placeholder='输入责任人'/>
             { principal.touched && principal.error && <HelpBlock style={ { float: 'right' } }>{ principal.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>

@@ -297,7 +297,22 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, collection, selectedItem, loading, indexLoading, itemLoading, refresh, create, stop, multiStop, multiReopen, multiCreateIndex, update, options, query } = this.props;
+    const { 
+      i18n, 
+      collection, 
+      selectedItem, 
+      loading, 
+      indexLoading, 
+      itemLoading, 
+      refresh, 
+      create, 
+      stop, 
+      multiStop, 
+      multiReopen, 
+      multiCreateIndex, 
+      update, 
+      options, 
+      query } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -327,7 +342,9 @@ export default class List extends Component {
                 </span>
                 :
                 '-' }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }>
+                  <i className='fa fa-pencil'></i>
+                </span>
               </div>
             </div>
             :
@@ -343,8 +360,12 @@ export default class List extends Component {
                 loadOptions={ this.searchUsers } 
                 placeholder='请输入用户'/>
               <div className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
-                <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
+                <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }>
+                  <i className='fa fa-check'></i>
+                </Button>
+                <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }> 
+                  <i className='fa fa-close'></i>
+                </Button>
               </div>
             </div>
           }
@@ -355,7 +376,14 @@ export default class List extends Component {
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton 
+              pullRight 
+              bsStyle='link' 
+              style={ { textDecoration: 'blink' ,color: '#000' } } 
+              key={ i } 
+              title={ node } 
+              id={ `dropdown-basic-${i}` } 
+              onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
               <MenuItem eventKey='4'>重建索引</MenuItem>
@@ -422,7 +450,9 @@ export default class List extends Component {
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', width: '20%' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
+              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }>
+                <i className='fa fa-plus'></i>&nbsp;新建项目
+              </Button>
             </span>
           </FormGroup>
         </div>
@@ -435,10 +465,37 @@ export default class List extends Component {
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } i18n={ i18n }/> }
-          { this.state.createModalShow && <CreateModal show close={ this.createModalClose } create={ create } i18n={ i18n }/> }
-          { this.state.closeNotifyShow && <CloseNotify show close={ this.closeNotifyClose } data={ selectedItem } stop={ stop }/> }
-          { this.state.multiOperateNotifyShow && <MultiOperateNotify show close={ this.multiOperateNotifyClose } multiReopen={ multiReopen } multiStop={ multiStop } multiCreateIndex={ multiCreateIndex } ids={ this.state.selectedIds } cancelSelected={ this.cancelSelected.bind(this) } operate={ this.state.multiOperate } loading={ loading } i18n={ i18n }/> }
+          { this.state.editModalShow && 
+            <EditModal 
+              show 
+              close={ this.editModalClose } 
+              update={ update } 
+              data={ selectedItem } 
+              i18n={ i18n }/> }
+          { this.state.createModalShow && 
+            <CreateModal 
+              show 
+              close={ this.createModalClose } 
+              create={ create } 
+              i18n={ i18n }/> }
+          { this.state.closeNotifyShow && 
+            <CloseNotify 
+              show 
+              close={ this.closeNotifyClose } 
+              data={ selectedItem } 
+              stop={ stop }/> }
+          { this.state.multiOperateNotifyShow && 
+            <MultiOperateNotify 
+              show 
+              close={ this.multiOperateNotifyClose } 
+              multiReopen={ multiReopen } 
+              multiStop={ multiStop } 
+              multiCreateIndex={ multiCreateIndex } 
+              ids={ this.state.selectedIds } 
+              cancelSelected={ this.cancelSelected.bind(this) } 
+              operate={ this.state.multiOperate } 
+              loading={ loading } 
+              i18n={ i18n }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

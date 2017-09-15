@@ -111,8 +111,19 @@ export default class LayoutConfigModal extends Component {
           <Form horizontal>
             <FormGroup controlId='formControlsText'>
               <Col sm={ 6 }>
-                <Select simpleValue options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } clearable={ false } value={ this.state.addFieldIds } onChange={ this.handleChange.bind(this) } placeholder='选择添加字段(可多选)' multi/>
-                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加至界面列表 >> </Button>
+                <Select 
+                  simpleValue 
+                  options={ _.reject(allFields, function(o) { return _.findIndex(cards, function(o2) { return o2.id === o.value; }) !== -1; }) } 
+                  clearable={ false } 
+                  value={ this.state.addFieldIds } 
+                  onChange={ this.handleChange.bind(this) } 
+                  placeholder='选择添加字段(可多选)' 
+                  multi/>
+                <Button 
+                  style={ { float: 'right', marginTop: '15px' } } 
+                  onClick={ this.add.bind(this) } 
+                  disabled={ !enableAdd }>添加至界面列表 >> 
+                </Button>
                 <div style={ { float: 'right', marginTop: '15px' } }>
                   注意：如果此页面将作为问题的创建或编辑页面，首先应将 "主题" 字段添加到列表，且将其设置为必填字段。
                 </div>

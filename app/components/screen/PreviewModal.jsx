@@ -33,7 +33,9 @@ export default class PreviewModal extends Component {
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <ListGroup>
             { _.map(data, (val, key) => 
-              <ListGroupItem header={ val.name || '' }>{ '键值:' + (val.key || '-') + ' - 类型:' + (_.find(fieldTypes, { value: val.type }) ? _.find(fieldTypes, { value: val.type }).label : '') + (val.required ? ' - 必填' : '') }</ListGroupItem> ) }
+              <ListGroupItem header={ val.name || '' }>
+              { '键值:' + (val.key || '-') + ' - 类型:' + (_.find(fieldTypes, { value: val.type }) ? _.find(fieldTypes, { value: val.type }).label : '') + (val.required ? ' - 必填' : '') }
+              </ListGroupItem> ) }
           </ListGroup>
         </Modal.Body>
         <Modal.Footer>
