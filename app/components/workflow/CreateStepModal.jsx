@@ -59,7 +59,13 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { fields: { name, state }, options, collection, handleSubmit, invalid, submitting } = this.props;
+    const { 
+      fields: { name, state }, 
+      options, 
+      collection, 
+      handleSubmit, 
+      invalid, 
+      submitting } = this.props;
 
     const stateOptions = _.map(_.filter(options.states || [], function(o){ return _.findIndex(collection, { state: o.id }) === -1 }), (val) => { return { label: val.name, value: val.id } });
 
@@ -71,13 +77,25 @@ export default class CreateModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>步骤名</ControlLabel>
+            <ControlLabel>
+              <span className='txt-impt'>*</span>步骤名
+            </ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='步骤名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel><span className='txt-impt'>*</span>链接状态</ControlLabel>
-            <Select disabled={ submitting } options={ stateOptions } simpleValue value={ state.value } onChange={ newValue => { state.onChange(newValue); if (!name.value) { name.onChange(_.find(stateOptions, { value: newValue }).label) } } } placeholder='请选择状态' clearable={ false } searchable={ false }/>
+            <ControlLabel>
+              <span className='txt-impt'>*</span>链接状态
+            </ControlLabel>
+            <Select 
+              disabled={ submitting } 
+              options={ stateOptions } 
+              simpleValue 
+              value={ state.value } 
+              onChange={ newValue => { state.onChange(newValue); if (!name.value) { name.onChange(_.find(stateOptions, { value: newValue }).label) } } } 
+              placeholder='请选择状态' 
+              clearable={ false } 
+              searchable={ false }/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

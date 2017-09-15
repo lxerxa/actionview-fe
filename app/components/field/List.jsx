@@ -157,10 +157,36 @@ export default class List extends Component {
           <TableHeaderColumn dataField='screen'>应用界面</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } options={ options } i18n={ i18n }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.optionValuesConfigShow && <OptionValuesConfigModal show close={ this.optionValuesConfigClose } data={ selectedItem } config={ update } loading={ loading } i18n={ i18n }/> }
-        { this.state.defaultValueConfigShow && <DefaultValueConfigModal show close={ this.defaultValueConfigClose } data={ selectedItem } config={ update } loading={ loading } i18n={ i18n }/> }
+        { this.state.editModalShow && 
+          <EditModal 
+            show 
+            close={ this.editModalClose } 
+            update={ update } 
+            data={ selectedItem } 
+            options={ options } 
+            i18n={ i18n }/> }
+        { this.state.delNotifyShow && 
+          <DelNotify 
+            show 
+            close={ this.delNotifyClose } 
+            data={ selectedItem } 
+            del={ del }/> }
+        { this.state.optionValuesConfigShow &&  
+          <OptionValuesConfigModal 
+            show 
+            close={ this.optionValuesConfigClose } 
+            data={ selectedItem } 
+            config={ update } 
+            loading={ loading } 
+            i18n={ i18n }/> }
+        { this.state.defaultValueConfigShow && 
+          <DefaultValueConfigModal 
+            show 
+            close={ this.defaultValueConfigClose } 
+            data={ selectedItem } 
+            config={ update } 
+            loading={ loading } 
+            i18n={ i18n }/> }
       </div>
     );
   }

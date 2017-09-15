@@ -48,7 +48,24 @@ export default class AddActionModal extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { activeKey: '1', conditions: [], postFunctions: [ 'setState', 'addComments', 'triggerEvent', 'updIssue' ], relation: '', someParam: '', userParam: '', stateParam: '', permissionParam: '', roleParam:'', resolutionParam: '', assigneeParam: '', assignedUserParam: '', eventParam: 'normal' };
+    this.state = { 
+      activeKey: '1', 
+      conditions: [], 
+      postFunctions: [ 
+        'setState', 
+        'addComments', 
+        'triggerEvent', 
+        'updIssue' ], 
+      relation: '', 
+      someParam: '', 
+      userParam: '', 
+      stateParam: '', 
+      permissionParam: '', 
+      roleParam:'', 
+      resolutionParam: '', 
+      assigneeParam: '', 
+      assignedUserParam: '', 
+      eventParam: 'normal' };
 
     const state = this.state;
     const { data } = props;

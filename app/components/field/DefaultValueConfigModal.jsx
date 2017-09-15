@@ -100,13 +100,35 @@ export default class DefaultValueConfigModal extends Component {
           return { label: val.name, value: val.id };
         });
       }
-      defaultComponent = ( <Select options={ optionValues } simpleValue multi={ data.type === 'CheckboxGroup' || data.type === 'MultiSelect' } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } } placeholder='设置默认值'/> ); 
+      defaultComponent = ( 
+        <Select 
+          options={ optionValues } 
+          simpleValue 
+          multi={ data.type === 'CheckboxGroup' || data.type === 'MultiSelect' } 
+          value={ defaultValue.value } 
+          onChange={ newValue => { defaultValue.onChange(newValue) } } 
+          placeholder='设置默认值'/> ); 
     } else if (data.type === 'TextArea') {
-      defaultComponent = ( <FormControl componentClass='textarea' { ...defaultValue } placeholder='输入默认值'/> );
+      defaultComponent = ( 
+        <FormControl 
+          componentClass='textarea' 
+          { ...defaultValue } 
+          placeholder='输入默认值'/> );
     } else if (data.type === 'DatePicker') {
-      defaultComponent = ( <DateTime mode='date' closeOnSelect dateFormat='YYYY/MM/DD' timeFormat= { false } value={ defaultValue.value } onChange={ newValue => { defaultValue.onChange(newValue) } }/> );
+      defaultComponent = ( 
+       <DateTime 
+         mode='date' 
+         closeOnSelect 
+         dateFormat='YYYY/MM/DD' 
+         timeFormat= { false } 
+         value={ defaultValue.value } 
+         onChange={ newValue => { defaultValue.onChange(newValue) } }/> );
     } else {
-      defaultComponent = ( <FormControl type='text' { ...defaultValue } placeholder='输入默认值'/> );
+      defaultComponent = ( 
+        <FormControl 
+          type='text' 
+          { ...defaultValue } 
+          placeholder='输入默认值'/> );
     }
 
     return (

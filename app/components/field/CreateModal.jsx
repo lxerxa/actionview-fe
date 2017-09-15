@@ -14,7 +14,27 @@ const validate = (values, props) => {
     errors.name = '必填';
   }
 
-  const usedKeys = [ 'id', 'type', 'state', 'assignee', 'priority', 'resolution', 'reporter', 'created_at', 'updated_at', 'no', 'schema', 'parent_id', 'parents', 'subtasks', 'links', 'entry_id', 'definition_id', 'page', 'orderBy' ];
+  const usedKeys = [ 
+    'id', 
+    'type', 
+    'state', 
+    'assignee', 
+    'priority', 
+    'resolution', 
+    'reporter', 
+    'created_at', 
+    'updated_at', 
+    'no', 
+    'schema', 
+    'parent_id', 
+    'parents', 
+    'subtasks', 
+    'links', 
+    'entry_id', 
+    'definition_id', 
+    'page', 
+    'orderBy' ];
+
   if (!values.key) {
     errors.key = '必填';
   } else if (_.findIndex(props.collection || [], { key: values.key }) !== -1 || _.indexOf(usedKeys, values.key) !== -1) {
@@ -75,7 +95,13 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { name, key, type, applyToTypes, description }, handleSubmit, invalid, options, submitting } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { name, key, type, applyToTypes, description }, 
+      handleSubmit, 
+      invalid, 
+      options, 
+      submitting } = this.props;
 
     const typeOptions = _.map(options.types || [], (val) => { return { label: val.name, value: val.id } });
 
@@ -98,12 +124,27 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsSelect' validationState={ type.touched && type.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
-            <Select disabled={ submitting } options={ fieldTypes } simpleValue value={ type.value } onChange={ newValue => { type.onChange(newValue) } } placeholder='请选择字段类型' clearable={ false }/>
+            <Select 
+              disabled={ submitting } 
+              options={ fieldTypes } 
+              simpleValue 
+              value={ type.value } 
+              onChange={ newValue => { type.onChange(newValue) } } 
+              placeholder='请选择字段类型' 
+              clearable={ false }/>
             { type.touched && type.error && <HelpBlock style={ { float: 'right' } }>{ type.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel>适用类型</ControlLabel>
-            <Select disabled={ submitting } multi options={ typeOptions } simpleValue value={ applyToTypes.value } onChange={ newValue => { applyToTypes.onChange(newValue) } } placeholder='默认全部' clearable={ false }/>
+            <Select 
+              disabled={ submitting } 
+              multi 
+              options={ typeOptions } 
+              simpleValue 
+              value={ applyToTypes.value } 
+              onChange={ newValue => { applyToTypes.onChange(newValue) } } 
+              placeholder='默认全部' 
+              clearable={ false }/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

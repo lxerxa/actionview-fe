@@ -75,7 +75,13 @@ export default class CopyModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, description }, handleSubmit, invalid, submitting, data } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { id, name, description }, 
+      handleSubmit, 
+      invalid, 
+      submitting, 
+      data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>

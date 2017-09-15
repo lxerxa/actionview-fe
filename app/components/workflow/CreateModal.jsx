@@ -35,8 +35,10 @@ export default class CreateModal extends Component {
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
+    data: PropTypes.object,
     close: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired
+    create: PropTypes.func.isRequired,
+    goConfig: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
@@ -47,6 +49,10 @@ export default class CreateModal extends Component {
       this.setState({ ecode: 0 });
       close();
       notify.show('新建完成。', 'success', 2000);
+      const { data, goConfig } = this.props;
+      if (!_.empty(data)) {
+        goConfig(data.id);
+      }
     } else {
       this.setState({ ecode: ecode });
     }
