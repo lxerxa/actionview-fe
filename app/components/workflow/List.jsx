@@ -125,7 +125,12 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
-        latest_modify: ( <span> { collection[i].latest_modified_time } <br/> { collection[i].latest_modifier && collection[i].latest_modifier.name } </span> ),
+        latest_modify: ( 
+          <span> 
+            { collection[i].latest_modified_time } 
+            <br/> 
+            { collection[i].latest_modifier && collection[i].latest_modifier.name } 
+          </span> ),
         step: collection[i].steps,
         operation: (
           <div>

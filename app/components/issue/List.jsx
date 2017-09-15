@@ -366,7 +366,14 @@ export default class List extends Component {
         operation: (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <DropdownButton 
+                pullRight 
+                bsStyle='link' 
+                style={ { textDecoration: 'blink' ,color: '#000' } } 
+                title={ node } 
+                key={ i } 
+                id={ `dropdown-basic-${i}` } 
+                onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='view'>查看</MenuItem>
                 { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
                 { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
@@ -407,13 +414,49 @@ export default class List extends Component {
       <div>
         <BootstrapTable data={ issues } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
-          <TableHeaderColumn width='50' dataField='type'><span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>类型{ mainOrder.field === 'type' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
+          <TableHeaderColumn width='50' dataField='type'> 
+            <span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>
+              类型
+              { mainOrder.field === 'type' && 
+                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+            </span>
+          </TableHeaderColumn>
           <TableHeaderColumn dataField='no' width='50'>NO</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'><span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>主题 { mainOrder.field === 'title' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='assignee'><span className='table-header' onClick={ this.orderBy.bind(this, 'assignee') }>经办人 { mainOrder.field === 'assignee' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
-          <TableHeaderColumn width='70' dataField='priority'><span className='table-header' onClick={ this.orderBy.bind(this, 'priority') }>优先级 { mainOrder.field === 'priority' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='state'><span className='table-header' onClick={ this.orderBy.bind(this, 'state') }>状态{ mainOrder.field === 'state' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='resolution'><span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>解决结果{ mainOrder.field === 'resolution' && (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }</span></TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>
+            <span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>
+              主题 
+              { mainOrder.field === 'title' && 
+                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+            </span>
+          </TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='assignee'>
+            <span className='table-header' onClick={ this.orderBy.bind(this, 'assignee') }>
+              经办人 
+              { mainOrder.field === 'assignee' && 
+                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+            </span>
+          </TableHeaderColumn>
+          <TableHeaderColumn width='70' dataField='priority'>
+            <span className='table-header' onClick={ this.orderBy.bind(this, 'priority') }>
+              优先级 
+              { mainOrder.field === 'priority' && 
+                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+            </span>
+          </TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='state'>
+            <span className='table-header' onClick={ this.orderBy.bind(this, 'state') }>
+              状态 
+              { mainOrder.field === 'state' && 
+                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+            </span>
+          </TableHeaderColumn>
+          <TableHeaderColumn width='100' dataField='resolution'>
+            <span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>
+              解决结果 
+              { mainOrder.field === 'resolution' && 
+                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+            </span>
+           </TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.barShow &&

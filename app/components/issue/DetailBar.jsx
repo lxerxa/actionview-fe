@@ -581,7 +581,14 @@ export default class DetailBar extends Component {
                     </div>
                     :
                     <div style={ { marginTop: '7px' } }>
-                      <Select simpleValue clearable={ false } disabled={ settingAssignee } options={ assigneeOptions } value={ newAssignee || data['assignee'].id } onChange={ this.handleAssigneeSelectChange.bind(this) } placeholder='选择经办人'/>
+                      <Select 
+                        simpleValue 
+                        clearable={ false } 
+                        disabled={ settingAssignee } 
+                        options={ assigneeOptions } 
+                        value={ newAssignee || data['assignee'].id } 
+                        onChange={ this.handleAssigneeSelectChange.bind(this) } 
+                        placeholder='选择经办人'/>
                       <div style={ { float: 'right' } }>
                         <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-ok-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
@@ -596,7 +603,15 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     { data.subtasks.length > 2 &&
-                    <div style={ { marginTop: '7px' } }>共{ data.subtasks.length }个子任务<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>{ this.state.subtaskShow ? '收起' : '展开' } <i className={ this.state.subtaskShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
+                    <div style={ { marginTop: '7px' } }>
+                      共{ data.subtasks.length }个子任务
+                      <span style={ { marginLeft: '5px' } }> 
+                        <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>
+                          { this.state.subtaskShow ? '收起' : '展开' } 
+                          <i className={ this.state.subtaskShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i>
+                        </a>
+                      </span>
+                    </div> }
                     <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
@@ -616,7 +631,15 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     { data.links.length > 2 &&
-                    <div style={ { marginTop: '7px' } }>共{ data.links.length }个问题<span style={ { marginLeft: '5px' } }> <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>{ this.state.linkShow ? '收起' : '展开' } <i className={ this.state.linkShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></a></span></div> }
+                    <div style={ { marginTop: '7px' } }>
+                      共{ data.links.length }个问题
+                      <span style={ { marginLeft: '5px' } }> 
+                        <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>
+                          { this.state.linkShow ? '收起' : '展开' } 
+                          <i className={ this.state.linkShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i>
+                        </a>
+                      </span>
+                    </div> }
                     <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.links, (val, key) => {

@@ -76,7 +76,14 @@ export default class AssignModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>分配给</ControlLabel>
-            <Select simpleValue clearable={ false } disabled={ submitting } options={ assigneeOptions } value={ assignee.value } onChange={ (newValue) => { assignee.onChange(newValue) } } placeholder='选择经办人'/>
+            <Select 
+              simpleValue 
+              clearable={ false } 
+              disabled={ submitting } 
+              options={ assigneeOptions } 
+              value={ assignee.value } 
+              onChange={ (newValue) => { assignee.onChange(newValue) } } 
+              placeholder='选择经办人'/>
             { assignee.touched && assignee.error && <HelpBlock style={ { float: 'right' } }>{ assignee.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>

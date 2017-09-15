@@ -87,7 +87,17 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, pkey, collection, selectedItem, loading, indexLoading, itemLoading, del, update, options } = this.props;
+    const { 
+      i18n, 
+      pkey, 
+      collection, 
+      selectedItem, 
+      loading, 
+      indexLoading, 
+      itemLoading, 
+      del, 
+      update, 
+      options } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -123,7 +133,14 @@ export default class List extends Component {
         operation: !isGlobal ? (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } title={ node } key={ i } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+              <DropdownButton 
+                pullRight 
+                bsStyle='link' 
+                style={ { textDecoration: 'blink' ,color: '#000' } } 
+                title={ node } 
+                key={ i } 
+                id={ `dropdown-basic-${i}` } 
+                onSelect={ this.operateSelect.bind(this) }>
                 { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RadioGroup' || collection[i].type === 'CheckboxGroup') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
                 { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
                 { collection[i].type !== 'File' && collection[i].type !== 'SingleVersion' && collection[i].type !== 'MultiVersion' && collection[i].type !== 'TimeTracking' && collection[i].type !== 'DateTimePicker' && <MenuItem eventKey='3'>默认值配置</MenuItem> }

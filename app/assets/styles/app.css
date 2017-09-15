@@ -535,8 +535,8 @@ table tr:hover .remove-icon{
 }
 
 .no-avatar {
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   text-decoration: 'blink';
   border-radius: 50%;
 }

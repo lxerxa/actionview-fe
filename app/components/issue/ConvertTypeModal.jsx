@@ -80,7 +80,14 @@ export default class ConvertTypeModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>标准问题类型</ControlLabel>
-            <Select disabled={ submitting } options={ typeOptions } simpleValue clearable={ false } value={ type.value } onChange={ newValue => { type.onChange(newValue) } } placeholder='选择问题类型'/>
+            <Select 
+              disabled={ submitting } 
+              options={ typeOptions } 
+              simpleValue 
+              clearable={ false } 
+              value={ type.value } 
+              onChange={ newValue => { type.onChange(newValue) } } 
+              placeholder='选择问题类型'/>
             { type.touched && type.error && <HelpBlock style={ { float: 'right' } }>{ type.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
