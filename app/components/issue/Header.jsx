@@ -294,7 +294,7 @@ export default class Header extends Component {
             create={ create } 
             loading={ loading } 
             project={ project } 
-           i18n={ i18n }/> }
+            i18n={ i18n }/> }
         { this.state.addSearcherShow && 
           <AddSearcherModal 
             show 
