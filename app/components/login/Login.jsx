@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
 const brand = require('../../assets/images/brand.png');
-const img = require('../../assets/images/loading.gif');
 const $ = require('$');
 const qs = require('qs');
 
@@ -159,9 +158,8 @@ class Login extends Component {
               <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>
-            <Button bsStyle='success' disabled={ submitting } type='submit'>登  录</Button>
+            <Button bsStyle='success' disabled={ submitting } type='submit'>{ submitting ? '登 录 中 ...' : '登 录' }</Button>
             <div style={ { textAlign: 'center', height: '40px' } }>
-              <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
               { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>登录失败，用户名或密码错误。</div> }
             </div>
             <div className='login-footer'>
