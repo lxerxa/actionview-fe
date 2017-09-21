@@ -285,7 +285,7 @@ export default class AddActionModal extends Component {
             <TabPane tab='基本' key='1'>
               <div style={ { paddingTop: '15px' } }>
                 <FormGroup controlId='formControlsText'>
-                  <ControlLabel>原步骤</ControlLabel>
+                  <ControlLabel>起始步骤</ControlLabel>
                   <FormControl type='text' value={ stepData.name } disabled={ true }/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
