@@ -11,6 +11,7 @@ import Scheme from './components/scheme/Scheme';
 
 const SummaryContainer = require('./components/summary/Container');
 const IssueContainer = require('./components/issue/Container');
+const KanbanContainer = require('./components/kanban/Container');
 const ModuleContainer = require('./components/module/Container');
 const VersionContainer = require('./components/version/Container');
 const TeamContainer = require('./components/team/Container');
@@ -63,6 +64,7 @@ export default (
         <Route path='role' component={ RoleContainer }/>
         <Route path='events' component={ EventsContainer }/>
         <Route path='activity' component={ ActivityContainer }/>
+        <Route path='kanban(/:id)' component={ KanbanContainer }/>
       </Route>
       <Route path='/admin/project' component={ ProjectContainer }/>
       <Route path='/admin/user' component={ UserContainer }/>
