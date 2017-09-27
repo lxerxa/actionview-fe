@@ -839,4 +839,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
   /******************Activity***************/
+
+  /******************kanban***************/
+  router.get('/project/:key/kanban/access', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ ecode: 0, data: { id: '1111' }, options: { kanbans: [{ id: '1111', name: '测试测试11', filters: [{name: '1111', query:{ assignees: 'me,ttt' }}, {name: '2222', query:{updated_at: '1w'}}, {name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', states: ['2222','1111']}, {name:'处理中', states: ['3333']}, {name:'关闭', states:[]}], query: { type: '111,222' } }, { id: '2222', name:'2222', filters: [{name: '1111', query:{ assignees: 'me,ttt' }}, {name: '2222', query:{updated_at: '1w'}}, {name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', states: ['2222','1111']}, {name:'处理中', states: ['3333']}, {name:'关闭', states:[]}], query: { type: '111,222' } }] } };
+    return res.status(200).send(results);
+  });
+  /******************kanban***************/
 }

@@ -56,7 +56,7 @@ export default class Sidebar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (/^\/project\/(\w+)(\/(summary|issue|activity|version|module|team))?$/.test(nextProps.pathname)) {
+    if (/^\/project\/(\w+)(\/(summary|issue|kanban|activity|version|module|team)(\/\w+)?)?$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = false;
       this.state.projectPanelShow = true;
       this.state.projectSummaryShow = true;
@@ -136,6 +136,7 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/summary' }>概要</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/issue' }>问题</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/kanban' }>看板</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/activity' }>活动</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/module' }>模块</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/version' }>版本</Link></li>

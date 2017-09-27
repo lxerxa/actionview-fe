@@ -19,6 +19,7 @@ export { default as module } from './module';
 export { default as version } from './version';
 export { default as events } from './events';
 export { default as activity } from './activity';
+export { default as kanban } from './kanban';
 export { default as mysetting } from './mysetting';
 export { default as syssetting } from './syssetting';
 export { reducer as form } from 'redux-form';
