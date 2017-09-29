@@ -90,6 +90,7 @@ export default class Header extends Component {
       { key: 'summary', name: '概要' }, 
       { key: 'issue', name: '问题' }, 
       { key: 'activity', name: '活动' },
+      { key: 'kanban', name: '看板' },
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
       { key: 'team', name: '项目成员' },
@@ -107,7 +108,7 @@ export default class Header extends Component {
 
     const patten0 = new RegExp('^/myproject$');
     const patten1 = new RegExp('^/project/(\\w+)$');
-    const patten2 = new RegExp('^/project/(\\w+)/(\\w+)$');
+    const patten2 = new RegExp('^/project/(\\w+)/(\\w+)(/\\w+)?$');
     const patten3 = new RegExp('^/project/(\\w+)/workflow/(\\w+)$');
     const patten4 = new RegExp('^/admin/project$');
     const patten5 = new RegExp('^/admin/user$');
@@ -122,16 +123,16 @@ export default class Header extends Component {
       modulename = '项目中心';
     } else if (patten1.exec(pathname)) {
       modulename = (curProject.key ? curProject.key + ' - ' : '') + '概要';
+    } else if (patten3.exec(pathname)) {
+      modulename = (curProject.key ? curProject.key + ' - ' : '') + '工作流配置';
     } else if (patten2.exec(pathname)) {
       const moduleKey = RegExp.$2;
       const module = _.find(Modules, { key: moduleKey }); 
       if (module) {
         modulename = (curProject.key ? curProject.key + ' - ' : '') + module.name;
       } else {
-        modulename = '其他';
+        modulename = (curProject.key ? curProject.key + ' - ' : '') + '其他';
       }
-    } else if (patten3.exec(pathname)) {
-      modulename = (curProject.key ? curProject.key + ' - ' : '') + '工作流配置';
     } else if (patten6.exec(pathname)) {
       const moduleKey = RegExp.$1;
       const module = _.find(Modules, { key: moduleKey });

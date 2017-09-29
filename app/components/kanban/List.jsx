@@ -18,6 +18,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    current_kanban: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     increaseCollection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -77,8 +78,8 @@ export default class List extends Component {
   }
 
   componentWillMount() {
-    const { index } = this.props;
-    index({ limit: this.state.limit });
+    //const { index } = this.props;
+    //index({ limit: this.state.limit });
   }
 
   refresh() {
@@ -104,6 +105,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n,
+      current_kanban,
       collection, 
       increaseCollection, 
       indexLoading, 
@@ -161,15 +163,26 @@ export default class List extends Component {
       user
     } = this.props;
 
+    const sortedCollection = _.sortByOrder(collection, [ 'rank' ]);
+
+    if (_.isEmpty(current_kanban)) {
+      return (<div/>);
+    }
+
+    if (indexLoading) {
+      return (
+        <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
+         <img src={ img } className='loading'/> 
+        </div>
+      );
+    }
 
     return (
       <div className='board-container'>
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-              <li className='board-column'>待处理（13）</li>
-              <li className='board-column'>进行中（10）</li>
-              <li className='board-column'>已完成（3）</li>
+            { _.map(current_kanban.columns, (v) => ( <li className='board-column'>{ v.name }（13）</li> ) ) }
             </ul>
           </div>
         </div>
