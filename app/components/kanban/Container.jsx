@@ -61,8 +61,8 @@ export default class Container extends Component {
   }
 
   async index(query) {
-    //await this.props.actions.index(this.pid, qs.stringify(query || {}));
-    //return this.props.activity.ecode;
+    await this.props.issueActions.index(this.pid, qs.stringify(query || {}));
+    return this.props.issue.ecode;
   }
 
   async create(values) {
@@ -215,13 +215,15 @@ export default class Container extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { params: { id } } = nextProps;
-    if (!id && this.kanban_id) {
-      this.goto(this.kanban_id);
-    }
-
-    if (id && id != this.kanban_id) {
-      this.kanban_id = id;
-      this.setAccess(id);
+    if (!id) {
+      if (this.kanban_id) {
+        this.goto(this.kanban_id);
+      }
+    } else {
+      if (id != this.kanban_id) {
+        this.kanban_id = id;
+        this.setAccess(id);
+      }
     }
   }
 
@@ -242,6 +244,7 @@ export default class Container extends Component {
           kanbans={ this.props.kanban.options.kanbans }
           loading={ this.props.kanban.loading }
           goto={ this.goto }
+          index={ this.index.bind(this) } 
           getOptions={ this.getOptions.bind(this) }/>
         <List 
           current_kanban={ current_kanban }
