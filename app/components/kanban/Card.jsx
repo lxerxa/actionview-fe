@@ -86,20 +86,21 @@ export default class Card extends Component {
     abb: PropTypes.string.isRequired,
     pkey: PropTypes.string.isRequired,
     no: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
-    const { title, abb, pkey, no, avatar, isDragging, connectDragSource, connectDropTarget } = this.props;
+    const { title, abb, pkey, no, color, avatar, isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
-    const styles = { float: 'right', cursor: 'pointer' };
+    const styles = { borderLeft: '5px solid ' + color };
 
     return connectDragSource(connectDropTarget(
-      <div className='board-issue' style={ { opacity } }>
+      <div className='board-issue' style={ { ...styles, opacity } }>
         <div className='board-issue-content'>
           <div style={ { float: 'right' } }>
-            <img style={ { width: '32px', height: '32px', borderRadius: '4px' } } src={ avatar }/>
+            <img className='board-avatar' src={ avatar }/>
           </div>
           <div>
             <span className='type-abb'>{ abb }</span>

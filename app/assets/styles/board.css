@@ -54,7 +54,7 @@
   line-height: 1.5;
   margin-top: -1px;
   position: relative;
-  border-left: 5px solid #008f00;
+  min-height: 100px;
 }
 
 .board-issue:hover {
@@ -72,4 +72,10 @@
   border-radius: 4px;
   padding: 0 5px;
   margin-right: 5px;
+}
+
+.board-avatar {
+  width: 32px; 
+  height: 32px; 
+  border-radius: 4px;
 }

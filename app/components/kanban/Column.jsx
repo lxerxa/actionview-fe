@@ -53,7 +53,8 @@ export default class Column extends Component {
             abb={ _.findIndex(options.types, { id: v.type }) !== -1 ? _.find(options.types, { id: v.type }).abb : '-' }
             pkey={ pkey }
             no={ v.no }
-            avatar={ no_avatar }
+            color={ _.findIndex(options.priorities, { id: v.priority }) !== -1 ? _.find(options.priorities, { id: v.priority }).color : '' }
+            avatar={ v.avatar || no_avatar }
             moveCard={ this.moveCard.bind(this) }/> ) } ) }
       </li> );
   }
