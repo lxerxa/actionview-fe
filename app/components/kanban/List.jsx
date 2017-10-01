@@ -2,14 +2,18 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem } from 'react-bootstrap';
-import Person from '../share/Person';
+import { DragDropContext } from 'react-dnd';
+import update from 'react/lib/update';
+import HTML5Backend from 'react-dnd-html5-backend';
 import _ from 'lodash';
 
 const moment = require('moment');
-const no_avatar = require('../../assets/images/no_avatar.png');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
+const Card = require('./Card');
+const Column = require('./Column');
 
+@DragDropContext(HTML5Backend)
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -102,6 +106,20 @@ export default class List extends Component {
     }
   }
 
+  moveCard(dragIndex, hoverIndex) {
+    const { cards } = this.state;
+    const dragCard = cards[dragIndex];
+
+    this.setState(update(this.state, {
+      cards: {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragCard]
+        ]
+      }
+    }));
+  }
+
   render() {
     const { 
       i18n,
@@ -163,8 +181,6 @@ export default class List extends Component {
       user
     } = this.props;
 
-    const sortedCollection = _.sortByOrder(collection, [ 'rank' ]);
-
     if (_.isEmpty(current_kanban)) {
       return (<div/>);
     }
@@ -177,14 +193,39 @@ export default class List extends Component {
       );
     }
 
+    const sortedCollection = _.sortByOrder(collection, [ 'rank' ]);
+    const columnIssues = [];
+    _.forEach(current_kanban.columns, (v, i) => {
+      columnIssues[i] = [];
+    });
+
+    _.forEach(current_kanban.columns, (v, i) => {
+      _.forEach(sortedCollection, (v2) => {
+        if (_.indexOf(v.states, v2.state) !== -1) {
+          columnIssues[i].push(v2);
+          return;
+        }
+      });
+    });
+
     return (
       <div className='board-container'>
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(current_kanban.columns, (v) => ( <li className='board-column'>{ v.name }（13）</li> ) ) }
+            { _.map(current_kanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）</li> ) ) }
             </ul>
           </div>
+        </div>
+        <div>
+          <ul className='board-columns'>
+          { _.map(current_kanban.columns, (v, i) => {
+            return (
+              <Column 
+                cards={ columnIssues[i] }
+                pkey={ project.key }
+                options={ options } /> ) } ) }
+          </ul>
         </div>
         { this.state.barShow &&
           <DetailBar
