@@ -2,18 +2,15 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem } from 'react-bootstrap';
-import { DragDropContext } from 'react-dnd';
-import update from 'react/lib/update';
-import HTML5Backend from 'react-dnd-html5-backend';
 import _ from 'lodash';
 
+const $ = require('$');
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
 const Card = require('./Card');
 const Column = require('./Column');
 
-@DragDropContext(HTML5Backend)
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +21,6 @@ export default class List extends Component {
     i18n: PropTypes.object.isRequired,
     current_kanban: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
-    increaseCollection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     wfCollection: PropTypes.array.isRequired,
@@ -78,7 +74,7 @@ export default class List extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
-    user: PropTypes.func.isRequired
+    user: PropTypes.object.isRequired
   }
 
   componentWillMount() {
@@ -106,18 +102,18 @@ export default class List extends Component {
     }
   }
 
-  moveCard(dragIndex, hoverIndex) {
-    const { cards } = this.state;
-    const dragCard = cards[dragIndex];
+  componentDidMount() {
+    const winHeight = $(window).height(); 
+    $('.board-container').css('height', winHeight - 170);
 
-    this.setState(update(this.state, {
-      cards: {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, dragCard]
-        ]
-      }
-    }));
+    $(window).resize(function() { 
+      const winHeight = $(window).height(); 
+      $('.board-container').css('height', winHeight - 170);
+    });
+
+    $('.board-container').scroll(function() {
+      $('.board-zone-overlay').css('top', $('.board-container').scrollTop() < 46 ? 46 : $('.board-container').scrollTop());
+    });
   }
 
   render() {
@@ -125,7 +121,6 @@ export default class List extends Component {
       i18n,
       current_kanban,
       collection, 
-      increaseCollection, 
       indexLoading, 
       wfCollection,
       wfLoading,
@@ -181,18 +176,6 @@ export default class List extends Component {
       user
     } = this.props;
 
-    if (_.isEmpty(current_kanban)) {
-      return (<div/>);
-    }
-
-    if (indexLoading) {
-      return (
-        <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
-         <img src={ img } className='loading'/> 
-        </div>
-      );
-    }
-
     const sortedCollection = _.sortByOrder(collection, [ 'rank' ]);
     const columnIssues = [];
     _.forEach(current_kanban.columns, (v, i) => {
@@ -210,23 +193,59 @@ export default class List extends Component {
 
     return (
       <div className='board-container'>
+      { !_.isEmpty(current_kanban) && indexLoading && 
+        <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
+         <img src={ img } className='loading'/> 
+        </div> }
+
+      { !_.isEmpty(current_kanban) && !indexLoading && 
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
             { _.map(current_kanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）</li> ) ) }
             </ul>
           </div>
-        </div>
-        <div>
           <ul className='board-columns'>
           { _.map(current_kanban.columns, (v, i) => {
             return (
               <Column 
+                key={ i }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
                 options={ options } /> ) } ) }
           </ul>
-        </div>
+          <div className='board-zone-overlay' style={ { top: '46px' } }>
+            <div className='board-zone-overlay-table'>
+              <div className='board-zone-overlay-column'>
+                <div className='board-zone-table'>
+                  <div className='board-zone-row'>
+                    <div className='board-zone-cell'>
+                      aa
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className='board-zone-overlay-column'>
+                <div className='board-zone-table'>
+                  <div className='board-zone-row'>
+                    <div className='board-zone-cell'>
+                      aa
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className='board-zone-overlay-column'>
+                <div className='board-zone-table'>
+                  <div className='board-zone-row'>
+                    <div className='board-zone-cell'>
+                      aa
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> }
         { this.state.barShow &&
           <DetailBar
             i18n={ i18n }

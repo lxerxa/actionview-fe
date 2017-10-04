@@ -238,7 +238,7 @@ export default class Container extends Component {
     }
 
     return (
-      <div>
+      <div style={ { overflowY: 'hidden', height: 'inherit' } }>
         <Header 
           current_kanban={ current_kanban }
           kanbans={ this.props.kanban.options.kanbans }

@@ -17,6 +17,9 @@ const cardSource = {
       id: props.id,
       index: props.index
     };
+  },
+  endDrag(props, monitor, component) {
+    alert(props.index)
   }
 };
 
@@ -85,7 +88,7 @@ export default class Card extends Component {
     title: PropTypes.string.isRequired,
     abb: PropTypes.string.isRequired,
     pkey: PropTypes.string.isRequired,
-    no: PropTypes.string.isRequired,
+    no: PropTypes.number.isRequired,
     color: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
     moveCard: PropTypes.func.isRequired
