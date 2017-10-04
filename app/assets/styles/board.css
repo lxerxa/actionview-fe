@@ -1,6 +1,6 @@
 
 .board-container {
-  display: table;
+  overflow-y: auto;
   table-layout: fixed;
   width: 100%;
 }
@@ -54,7 +54,7 @@
   line-height: 1.5;
   margin-top: -1px;
   position: relative;
-  min-height: 100px;
+  min-height: 90px;
 }
 
 .board-issue:hover {
@@ -78,4 +78,78 @@
   width: 32px; 
   height: 32px; 
   border-radius: 4px;
+}
+
+.board-zone-overlay {
+  position:absolute;
+}
+
+.board-zone-overlay-table {
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box;
+  border-spacing:10px 0;
+  display:table;
+  height:100%;
+  table-layout:fixed;
+  width:100%
+}
+
+.board-zone-overlay-column {
+  display:table-cell;
+  height:inherit;
+  vertical-align:top
+}
+
+.board-zone-overlay-column .board-empty {
+  pointer-events:none
+}
+
+.board-zone-table {
+  border-spacing:0;
+  display:table;
+  height:100%;
+  table-layout:fixed;
+  width:100%
+}
+
+.board-zone-row {
+  display:table-row
+}
+
+.board-zone-cell {
+  background:#ebf2f9;
+  border:2px dashed #3b73af;
+  border-top-color:transparent;
+  text-align: center;
+  -moz-transition:background 250ms ease-in-out;
+  -ms-transition:background 250ms ease-in-out;
+  -webkit-transition:background 250ms ease-in-out;
+  transition:background 250ms ease-in-out
+}
+
+.board-zone-row>:first-child {
+  border-top-color:#3b73af
+}
+
+.board-zone-row .board-target-hover .board-zone-cell {
+  background:#f3f9f4;
+  border-color:#14892c;
+  border-top-color:transparent
+}
+
+.board-zone-row .board-target-hover:first-child .board-zone-cell {
+  border-top-color:#14892c
+}
+
+.board-zone-cell h2 {
+  color:#3b73af;
+  font-size:14px;
+  margin-top:10px;
+  text-align:center;
+  width:100%
+}
+
+.board-zone-row .board-target-hover .board-zone-cell h2 {
+  color:#14892c
 }

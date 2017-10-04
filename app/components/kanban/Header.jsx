@@ -49,7 +49,7 @@ export default class Header extends Component {
 
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
-        <div style={ { height: '48px' } }>
+        <div style={ { height: '47px' } }>
           <div style={ { display: 'inline-block', fontSize: '19px', marginTop: '5px' } }>
             { loading && <img src={ img } className='loading'/> } 
             { !loading && !_.isEmpty(current_kanban) && current_kanban.name || '' } 
@@ -59,7 +59,7 @@ export default class Header extends Component {
           { kanbans.length > 0 &&
           <div style={ { float: 'right', display: 'inline-block' } }>
             <DropdownButton bsStyle='link' pullRight title='切换' onSelect={ this.changeKanban.bind(this) }>
-            { _.map(kanbans, (v) => ( <MenuItem eventKey={ v.id }>{ v.name }</MenuItem> ) ) }
+            { _.map(kanbans, (v, i) => ( <MenuItem key={ i } eventKey={ v.id }>{ v.name }</MenuItem> ) ) }
             </DropdownButton>
           </div> }
         </div>
@@ -69,7 +69,7 @@ export default class Header extends Component {
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>过滤器：</span>
           <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.filter } onSelect={ this.handleSelect.bind(this) }>
             <NavItem eventKey='all' href='#'>全部</NavItem>
-            { _.map(current_kanban.filters || [], (v, i) => (<NavItem eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
+            { _.map(current_kanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
           </Nav>
         </div> }
       </div>
