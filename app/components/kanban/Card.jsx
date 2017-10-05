@@ -3,23 +3,16 @@ import { findDOMNode } from 'react-dom';
 import ItemTypes from '../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 
-const style = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  backgroundColor: 'white',
-  cursor: 'move'
-};
-
 const cardSource = {
   beginDrag(props) {
+    props.getDraggableActions(props.id);
     return {
       id: props.id,
       index: props.index
     };
   },
   endDrag(props, monitor, component) {
-    alert(props.index)
+    //alert(props.index)
   }
 };
 

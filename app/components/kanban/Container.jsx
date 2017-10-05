@@ -202,6 +202,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async getDraggableActions(id) {
+    await this.props.actions.getDraggableActions(this.pid, id);
+    return this.props.kanban.ecode;
+  }
+
   async componentWillMount() {
     const { params: { key, id } } = this.props;
     this.pid = key;
@@ -232,22 +237,24 @@ export default class Container extends Component {
       _.assign(this.props.issue.options, this.props.project.options);
     }
 
-    let current_kanban = {};
+    let curKanban = {};
     if (this.kanban_id && this.props.kanban.options.kanbans) {
-      current_kanban = _.find(this.props.kanban.options.kanbans, { id: this.kanban_id }) || {};
+      curKanban = _.find(this.props.kanban.options.kanbans, { id: this.kanban_id }) || {};
     }
 
     return (
       <div style={ { overflowY: 'hidden', height: 'inherit' } }>
         <Header 
-          current_kanban={ current_kanban }
+          curKanban={ curKanban }
           kanbans={ this.props.kanban.options.kanbans }
           loading={ this.props.kanban.loading }
           goto={ this.goto }
           index={ this.index.bind(this) } 
           getOptions={ this.getOptions.bind(this) }/>
         <List 
-          current_kanban={ current_kanban }
+          curKanban={ curKanban }
+          draggableActions={ this.props.kanban.wfactions }
+          getDraggableActions={ this.getDraggableActions.bind(this) }
           index={ this.index.bind(this) } 
           show={ this.show.bind(this) }
           edit={ this.edit.bind(this) }

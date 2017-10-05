@@ -10,6 +10,7 @@ const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
 const Card = require('./Card');
 const Column = require('./Column');
+const OverlayColumn = require('./OverlayColumn');
 
 export default class List extends Component {
   constructor(props) {
@@ -19,7 +20,9 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    current_kanban: PropTypes.object.isRequired,
+    curKanban: PropTypes.object.isRequired,
+    draggableActions: PropTypes.array.isRequired,
+    getDraggableActions: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
@@ -112,14 +115,16 @@ export default class List extends Component {
     });
 
     $('.board-container').scroll(function() {
-      $('.board-zone-overlay').css('top', $('.board-container').scrollTop() < 46 ? 46 : $('.board-container').scrollTop());
+      $('.board-zone-overlay').css('top', _.max([ $('.board-container').scrollTop(), 46 ]));
     });
   }
 
   render() {
     const { 
       i18n,
-      current_kanban,
+      curKanban,
+      draggableActions,
+      getDraggableActions,
       collection, 
       indexLoading, 
       wfCollection,
@@ -178,11 +183,11 @@ export default class List extends Component {
 
     const sortedCollection = _.sortByOrder(collection, [ 'rank' ]);
     const columnIssues = [];
-    _.forEach(current_kanban.columns, (v, i) => {
+    _.forEach(curKanban.columns, (v, i) => {
       columnIssues[i] = [];
     });
 
-    _.forEach(current_kanban.columns, (v, i) => {
+    _.forEach(curKanban.columns, (v, i) => {
       _.forEach(sortedCollection, (v2) => {
         if (_.indexOf(v.states, v2.state) !== -1) {
           columnIssues[i].push(v2);
@@ -193,56 +198,36 @@ export default class List extends Component {
 
     return (
       <div className='board-container'>
-      { !_.isEmpty(current_kanban) && indexLoading && 
+      { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
          <img src={ img } className='loading'/> 
         </div> }
 
-      { !_.isEmpty(current_kanban) && !indexLoading && 
+      { !_.isEmpty(curKanban) && !indexLoading && 
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(current_kanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）</li> ) ) }
+            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）</li> ) ) }
             </ul>
           </div>
           <ul className='board-columns'>
-          { _.map(current_kanban.columns, (v, i) => {
+          { _.map(curKanban.columns, (v, i) => {
             return (
               <Column 
                 key={ i }
+                getDraggableActions={ getDraggableActions }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
                 options={ options } /> ) } ) }
           </ul>
           <div className='board-zone-overlay' style={ { top: '46px' } }>
             <div className='board-zone-overlay-table'>
-              <div className='board-zone-overlay-column'>
-                <div className='board-zone-table'>
-                  <div className='board-zone-row'>
-                    <div className='board-zone-cell'>
-                      aa
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className='board-zone-overlay-column'>
-                <div className='board-zone-table'>
-                  <div className='board-zone-row'>
-                    <div className='board-zone-cell'>
-                      aa
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className='board-zone-overlay-column'>
-                <div className='board-zone-table'>
-                  <div className='board-zone-row'>
-                    <div className='board-zone-cell'>
-                      aa
-                    </div>
-                  </div>
-                </div>
-              </div>
+            { _.map(curKanban.columns, (v, i) => {
+              return (
+                <OverlayColumn 
+                  key={ i }
+                  draggableActions={ draggableActions }
+                  index={ i } /> ) } ) }
             </div>
           </div>
         </div> }
