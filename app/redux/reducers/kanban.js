@@ -1,6 +1,6 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { ecode: 0, latest_access_id: '', options: {}, loading: false, wfactions: [], wfLoading: false };
+const initialState = { ecode: 0, latest_access_id: '', options: {}, loading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
 
 export default function activity(state = initialState, action) {
   switch (action.type) {
@@ -18,7 +18,7 @@ export default function activity(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.KANBAN_ISSUE_ACTIONS_GET:
-      return { ...state, wfLoading: true, wfactions: [] };
+      return { ...state, wfLoading: true, draggedIssue: action.id, wfactions: [] };
 
     case t.KANBAN_ISSUE_ACTIONS_GET_SUCCESS:
       if (action.result.ecode === 0) {
@@ -30,7 +30,7 @@ export default function activity(state = initialState, action) {
       return { ...state, wfLoading: false, error: action.error };
 
     case t.KANBAN_ISSUE_ACTIONS_CLEAN:
-      return { ...state, wfactions: [] };
+      return { ...state, draggedIssue: '', wfactions: [] };
 
     default:
       return state;

@@ -13,7 +13,9 @@ export default class OverlayColumn extends Component {
   }
 
   static propTypes = {
-    index: PropTypes.number.isRequired 
+    index: PropTypes.number.isRequired,
+    draggableActions: PropTypes.array.isRequired,
+    states: PropTypes.array.isRequired
   }
 
   componentDidMount() {
@@ -22,6 +24,13 @@ export default class OverlayColumn extends Component {
   }
 
   render() {
+    const { states, draggableActions } = this.props;
+
+    const columnStates = _.map(states, (v) => v.id || '');
+    const draggableStates = _.map(draggableActions, (v) => v.state || '');
+
+    console.log(_.intersection(columnStates, draggableStates));
+
     return (
       <div className='board-zone-overlay-column'>
         <div className='board-zone-table'>

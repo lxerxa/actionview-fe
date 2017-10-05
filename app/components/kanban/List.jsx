@@ -21,8 +21,10 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     curKanban: PropTypes.object.isRequired,
+    draggedIssue: PropTypes.string.isRequired,
     draggableActions: PropTypes.array.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
+    cleanDraggableActions: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
@@ -123,8 +125,10 @@ export default class List extends Component {
     const { 
       i18n,
       curKanban,
+      draggedIssue,
       draggableActions,
       getDraggableActions,
+      cleanDraggableActions,
       collection, 
       indexLoading, 
       wfCollection,
@@ -189,7 +193,7 @@ export default class List extends Component {
 
     _.forEach(curKanban.columns, (v, i) => {
       _.forEach(sortedCollection, (v2) => {
-        if (_.indexOf(v.states, v2.state) !== -1) {
+        if (_.findIndex(v.states, { id: v2.state }) !== -1) {
           columnIssues[i].push(v2);
           return;
         }
@@ -207,7 +211,7 @@ export default class List extends Component {
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）</li> ) ) }
+            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name } ({ columnIssues[i].length })</li> ) ) }
             </ul>
           </div>
           <ul className='board-columns'>
@@ -216,6 +220,7 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 getDraggableActions={ getDraggableActions }
+                cleanDraggableActions={ cleanDraggableActions }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
                 options={ options } /> ) } ) }
@@ -227,7 +232,8 @@ export default class List extends Component {
                 <OverlayColumn 
                   key={ i }
                   draggableActions={ draggableActions }
-                  index={ i } /> ) } ) }
+                  index={ i } 
+                  states={ v.states || [] }/> ) } ) }
             </div>
           </div>
         </div> }

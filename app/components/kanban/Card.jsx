@@ -12,6 +12,7 @@ const cardSource = {
     };
   },
   endDrag(props, monitor, component) {
+    props.cleanDraggableActions();
     //alert(props.index)
   }
 };
