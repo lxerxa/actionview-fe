@@ -22,7 +22,8 @@ export default class Column extends Component {
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
     cards: PropTypes.array.isRequired,
-    getDraggableActions: PropTypes.func.isRequired
+    getDraggableActions: PropTypes.func.isRequired,
+    cleanDraggableActions: PropTypes.func.isRequired
   }
 
   moveCard(dragIndex, hoverIndex) {
@@ -40,7 +41,7 @@ export default class Column extends Component {
   }
 
   render() {
-    const { getDraggableActions, options, pkey } = this.props;
+    const { getDraggableActions, cleanDraggableActions, options, pkey } = this.props;
     const { cards } = this.state;
 
     return (
@@ -57,6 +58,7 @@ export default class Column extends Component {
             color={ _.findIndex(options.priorities, { id: v.priority }) !== -1 ? _.find(options.priorities, { id: v.priority }).color : '' }
             avatar={ v.avatar || no_avatar }
             getDraggableActions={ getDraggableActions }
+            cleanDraggableActions={ cleanDraggableActions }
             moveCard={ this.moveCard.bind(this) }/> ) } ) }
       </li> );
   }

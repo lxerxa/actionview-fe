@@ -17,6 +17,7 @@ export function setAccess(key, id) {
 export function getDraggableActions(key, id) {
   return asyncFuncCreator({
     constant: 'KANBAN_ISSUE_ACTIONS_GET',
+    id,
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/wfactions' })
   });
 }
