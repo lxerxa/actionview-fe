@@ -17,13 +17,13 @@ export default class Header extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { index } = this.props;
-    if (this.props.current_kanban.id != nextProps.current_kanban.id) {
-      index(nextProps.current_kanban.query);
+    if (this.props.curKanban.id != nextProps.curKanban.id) {
+      index(nextProps.curKanban.query);
     }
   }
 
   static propTypes = {
-    current_kanban: PropTypes.object,
+    curKanban: PropTypes.object,
     kanbans: PropTypes.array,
     loading: PropTypes.bool,
     goto: PropTypes.func,
@@ -40,21 +40,21 @@ export default class Header extends Component {
   handleSelect(selectedKey) {
     this.setState({ filter: selectedKey });
 
-    const { index, current_kanban } = this.props;
-    index(_.extend(_.clone(current_kanban.query), selectedKey !== 'all' ? current_kanban.filters[selectedKey].query || {} : {}));
+    const { index, curKanban } = this.props;
+    index(_.extend(_.clone(curKanban.query), selectedKey !== 'all' ? curKanban.filters[selectedKey].query || {} : {}));
   }
 
   render() {
-    const { current_kanban, kanbans=[], loading } = this.props;
+    const { curKanban, kanbans=[], loading } = this.props;
 
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
         <div style={ { height: '47px' } }>
           <div style={ { display: 'inline-block', fontSize: '19px', marginTop: '5px' } }>
             { loading && <img src={ img } className='loading'/> } 
-            { !loading && !_.isEmpty(current_kanban) && current_kanban.name || '' } 
-            { !loading && _.isEmpty(current_kanban) && kanbans.length > 0 && '该看板不存在。' } 
-            { !loading && _.isEmpty(current_kanban) && kanbans.length <= 0 && '该项目未定义看板。' } 
+            { !loading && !_.isEmpty(curKanban) && curKanban.name || '' } 
+            { !loading && _.isEmpty(curKanban) && kanbans.length > 0 && '该看板不存在。' } 
+            { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && '该项目未定义看板。' } 
           </div>
           { kanbans.length > 0 &&
           <div style={ { float: 'right', display: 'inline-block' } }>
@@ -64,12 +64,12 @@ export default class Header extends Component {
           </div> }
         </div>
 
-        { !loading && !_.isEmpty(current_kanban) &&
+        { !loading && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5' } }>
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>过滤器：</span>
           <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.filter } onSelect={ this.handleSelect.bind(this) }>
             <NavItem eventKey='all' href='#'>全部</NavItem>
-            { _.map(current_kanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
+            { _.map(curKanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
           </Nav>
         </div> }
       </div>

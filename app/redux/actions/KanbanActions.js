@@ -14,3 +14,13 @@ export function setAccess(key, id) {
   });
 }
 
+export function getDraggableActions(key, id) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_ISSUE_ACTIONS_GET',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/wfactions' })
+  });
+}
+
+export function cleanDraggableActions() {
+  return { type: 'KANBAN_ISSUE_ACTIONS_CLEAN' };
+}

@@ -206,6 +206,13 @@ export default function(router) {
     return res.status(200).send(results);
   }); 
 
+  router.get('/project/:key/issue/:id/wfactions', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: 1001, name: 'aa', state: '546761' }, { id: 1002, name: 'bb', state: '546762' } ]};
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/issue/:id/worklog', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

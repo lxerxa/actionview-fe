@@ -21,7 +21,8 @@ export default class Column extends Component {
   static propTypes = {
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
-    cards: PropTypes.array.isRequired
+    cards: PropTypes.array.isRequired,
+    getDraggableActions: PropTypes.func.isRequired
   }
 
   moveCard(dragIndex, hoverIndex) {
@@ -39,7 +40,7 @@ export default class Column extends Component {
   }
 
   render() {
-    const { options, pkey } = this.props;
+    const { getDraggableActions, options, pkey } = this.props;
     const { cards } = this.state;
 
     return (
@@ -55,6 +56,7 @@ export default class Column extends Component {
             no={ v.no }
             color={ _.findIndex(options.priorities, { id: v.priority }) !== -1 ? _.find(options.priorities, { id: v.priority }).color : '' }
             avatar={ v.avatar || no_avatar }
+            getDraggableActions={ getDraggableActions }
             moveCard={ this.moveCard.bind(this) }/> ) } ) }
       </li> );
   }
