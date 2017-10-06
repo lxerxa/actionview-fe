@@ -208,8 +208,8 @@ export default function(router) {
 
   router.get('/project/:key/issue/:id/wfactions', function(req, res) {
     const startTime = new Date().getTime();
-    while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: 1001, name: 'aa', state: '546761' }, { id: 1002, name: 'bb', state: '546762' } ]};
+    while (new Date().getTime() < startTime + 200);
+    const results = { ecode: 0, data: [{ id: 1001, name: 'aa', state: { id: '546761', name: '11111' } }, { id: 1002, name: 'bb', state: { id: '546762', name: '22222' } } ]};
     return res.status(200).send(results);
   });
 

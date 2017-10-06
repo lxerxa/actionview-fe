@@ -231,8 +231,9 @@ export default class List extends Component {
               return (
                 <OverlayColumn 
                   key={ i }
+                  index={ i }
+                  isEmpty={ draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1 ? false : true }
                   draggableActions={ draggableActions }
-                  index={ i } 
                   states={ v.states || [] }/> ) } ) }
             </div>
           </div>
