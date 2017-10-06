@@ -9,7 +9,7 @@ export default class Bucket extends Component {
   }
 
   static propTypes = {
-    height: PropTypes.array.isRequired, 
+    height: PropTypes.number.isRequired, 
     acceptAction: PropTypes.object.isRequired 
   }
 
