@@ -3,6 +3,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
 import _ from 'lodash';
+import Bucket from './Bucket';
 
 const $ = require('$');
 
@@ -14,30 +15,34 @@ export default class OverlayColumn extends Component {
 
   static propTypes = {
     index: PropTypes.number.isRequired,
+    isEmpty: PropTypes.bool.isRequired,
     draggableActions: PropTypes.array.isRequired,
     states: PropTypes.array.isRequired
   }
 
-  componentDidMount() {
-    const winHeight = $(window).height();
-    //$('.board-zone-cell').css('height', _.min([ winHeight - 170 - 46 - 10, $('.board-columns').height() ]));
-  }
-
   render() {
-    const { states, draggableActions } = this.props;
+    const { isEmpty, states, draggableActions } = this.props;
 
-    const columnStates = _.map(states, (v) => v.id || '');
-    const draggableStates = _.map(draggableActions, (v) => v.state || '');
+    const buckets = [];
+    _.map(draggableActions, (v) => {
+      if (_.findIndex(states, { id: v.state && v.state.id || '' }) !== -1) {
+        buckets.push(v);
+      }
+    });
 
-    console.log(_.intersection(columnStates, draggableStates));
+    const winHeight = $(window).height();
+    const cellHeight = _.min([ winHeight - 170 - 46 - 10, $('.board-columns').height() ]) / buckets.length; 
 
     return (
       <div className='board-zone-overlay-column'>
         <div className='board-zone-table'>
           <div className='board-zone-row'>
-            <div className='board-zone-cell'>
-              aa
-            </div>
+            { !isEmpty && 
+              _.map(buckets, (v, i) =>
+                <Bucket 
+                  key={ i }
+                  acceptAction={ v }
+                  height={ cellHeight }/> ) }
           </div>
         </div>
       </div> );

@@ -2,8 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
-import Card from './Card';
 import _ from 'lodash';
+import Card from './Card';
 
 const no_avatar = require('../../assets/images/no_avatar.png');
 
