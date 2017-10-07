@@ -34,7 +34,7 @@ export default class OverlayColumn extends Component {
     const cellHeight = _.min([ winHeight - 170 - 10 - _.max([46 - $('.board-container').scrollTop(), 0]), $('.board-columns').height() ]) / _.max([ buckets.length, 1]); 
 
     return (
-      <div className='board-zone-overlay-column'>
+      <div className='board-zone-overlay-column' style={ { pointerEvents: isEmpty ? 'none' : 'auto' } }>
         <div className='board-zone-table'>
           <div className='board-zone-row'>
             { !isEmpty && 

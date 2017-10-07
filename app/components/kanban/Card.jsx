@@ -64,10 +64,10 @@ const cardTarget = {
   }
 };
 
-@DropTarget(ItemTypes.CARD, cardTarget, connect => ({
+@DropTarget(props => props.acceptTypes, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
-@DragSource(ItemTypes.CARD, cardSource, (connect, monitor) => ({
+@DragSource(props => props.type, cardSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
@@ -81,7 +81,9 @@ export default class Card extends Component {
     id: PropTypes.any.isRequired,
     title: PropTypes.string.isRequired,
     abb: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
     pkey: PropTypes.string.isRequired,
+    acceptTypes: PropTypes.array.isRequired,
     no: PropTypes.number.isRequired,
     color: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,

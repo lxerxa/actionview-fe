@@ -211,7 +211,7 @@ export default class List extends Component {
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name } ({ columnIssues[i].length })</li> ) ) }
+            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）</li> ) ) }
             </ul>
           </div>
           <ul className='board-columns'>
@@ -223,6 +223,7 @@ export default class List extends Component {
                 cleanDraggableActions={ cleanDraggableActions }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
+                acceptTypes={ _.map(v.states || [], (v) => v.id ) }
                 options={ options } /> ) } ) }
           </ul>
           <div className='board-zone-overlay' style={ { top: '46px' } }>
