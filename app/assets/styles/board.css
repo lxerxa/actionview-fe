@@ -82,6 +82,7 @@
 
 .board-zone-overlay {
   position:absolute;
+  pointer-events:none;
 }
 
 .board-zone-overlay-table {
@@ -132,24 +133,6 @@
   border-top-color:#3b73af
 }
 
-.board-zone-row .board-target-hover .board-zone-cell {
+.board-zone-cell:hover {
   background:#f3f9f4;
-  border-color:#14892c;
-  border-top-color:transparent
-}
-
-.board-zone-row .board-target-hover:first-child .board-zone-cell {
-  border-top-color:#14892c
-}
-
-.board-zone-cell h2 {
-  color:#3b73af;
-  font-size:14px;
-  margin-top:10px;
-  text-align:center;
-  width:100%
-}
-
-.board-zone-row .board-target-hover .board-zone-cell h2 {
-  color:#14892c
 }
