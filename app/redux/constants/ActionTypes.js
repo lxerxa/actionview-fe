@@ -184,6 +184,8 @@ export default generateConstants([
 
   'ISSUE_WATCHING(ASYNC)',
 
+  'ISSUE_KANBAN_RANK_SET(ASYNC)',
+
   'ACTIVITY_INDEX(ASYNC)',
   'ACTIVITY_MORE(ASYNC)',
 

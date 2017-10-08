@@ -6,14 +6,18 @@ import { DragSource, DropTarget } from 'react-dnd';
 const cardSource = {
   beginDrag(props) {
     props.getDraggableActions(props.id);
+    this.preIndex = props.index;
     return {
       id: props.id,
       index: props.index
     };
   },
+
   endDrag(props, monitor, component) {
     props.cleanDraggableActions();
-    //alert(props.index)
+    if (this.preIndex != props.index) {
+      props.setRank(props.id);
+    }
   }
 };
 

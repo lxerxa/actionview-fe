@@ -24,7 +24,8 @@ export default class Column extends Component {
     acceptTypes: PropTypes.array.isRequired,
     cards: PropTypes.array.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
-    cleanDraggableActions: PropTypes.func.isRequired
+    cleanDraggableActions: PropTypes.func.isRequired,
+    setRank: PropTypes.func.isRequired
   }
 
   moveCard(dragIndex, hoverIndex) {
@@ -39,6 +40,11 @@ export default class Column extends Component {
         ]
       }
     }));
+  }
+
+  setRank(id) {
+    const { setRank } = this.props;
+    setRank(id, { up: '111', down: '222' });
   }
 
   render() {
@@ -62,6 +68,7 @@ export default class Column extends Component {
             acceptTypes={ acceptTypes }
             getDraggableActions={ getDraggableActions }
             cleanDraggableActions={ cleanDraggableActions }
+            setRank={ this.setRank.bind(this) } 
             moveCard={ this.moveCard.bind(this) }/> ) } ) }
       </li> );
   }

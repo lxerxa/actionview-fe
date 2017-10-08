@@ -79,6 +79,7 @@ export default class List extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
+    setRank: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
   }
 
@@ -182,6 +183,7 @@ export default class List extends Component {
       resetState,
       del,
       doAction,
+      setRank,
       user
     } = this.props;
 
@@ -221,6 +223,7 @@ export default class List extends Component {
                 key={ i }
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
+                setRank={ setRank }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
                 acceptTypes={ _.map(v.states || [], (v) => v.id ) }

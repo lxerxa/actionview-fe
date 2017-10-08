@@ -219,3 +219,10 @@ export function copy(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/copy', method: 'post', data: values || {} })
   });
 }
+
+export function setRank(key, kid, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_KANBAN_RANK_SET',
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/issue/' + id, method: 'post', data: values || {} })
+  });
+}

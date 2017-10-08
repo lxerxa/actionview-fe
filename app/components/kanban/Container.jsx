@@ -207,6 +207,11 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
+  async setRank(id, values) {
+    await this.props.issueActions.setRank(this.pid, this.kanban_id, id, values);
+    return this.props.issue.ecode;
+  }
+
   async componentWillMount() {
     const { params: { key, id } } = this.props;
     this.pid = key;
@@ -289,6 +294,7 @@ export default class Container extends Component {
           convert={ this.convert.bind(this) }
           resetState={ this.resetState.bind(this) }
           del={ this.del.bind(this) }
+          setRank={ this.setRank.bind(this) }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
           { ...this.props.issue }/>
