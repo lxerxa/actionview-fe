@@ -42,9 +42,10 @@ export default class Column extends Component {
     }));
   }
 
-  setRank(id) {
+  setRank(id, index) {
     const { setRank } = this.props;
-    setRank(id, { up: '111', down: '222' });
+    const { cards } = this.state;
+    setRank(id, { up: index <= 0 ? '' : cards[index - 1].id, down: index >= cards.length - 1 ? '' : cards[index + 1].id });
   }
 
   render() {

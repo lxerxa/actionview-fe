@@ -16,7 +16,7 @@ const cardSource = {
   endDrag(props, monitor, component) {
     props.cleanDraggableActions();
     if (this.preIndex != props.index) {
-      props.setRank(props.id);
+      props.setRank(props.id, props.index);
     }
   }
 };
