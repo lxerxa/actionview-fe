@@ -1,13 +1,10 @@
 import React, { PropTypes, Component } from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
 import _ from 'lodash';
 import Card from './Card';
 
 const no_avatar = require('../../assets/images/no_avatar.png');
 
-@DragDropContext(HTML5Backend)
 export default class Column extends Component {
   constructor(props) {
     super(props);
@@ -21,8 +18,9 @@ export default class Column extends Component {
   static propTypes = {
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
-    acceptTypes: PropTypes.array.isRequired,
+    accepts: PropTypes.array.isRequired,
     cards: PropTypes.array.isRequired,
+    issueView: PropTypes.func.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired
@@ -49,7 +47,7 @@ export default class Column extends Component {
   }
 
   render() {
-    const { getDraggableActions, cleanDraggableActions, options, pkey, acceptTypes } = this.props;
+    const { issueView, getDraggableActions, cleanDraggableActions, options, pkey, accepts } = this.props;
     const { cards } = this.state;
 
     return (
@@ -59,6 +57,7 @@ export default class Column extends Component {
           <Card key={ v.id }
             index={ i }
             id={ v.id }
+            entry_id={ v.entry_id || '' }
             title={ v.title }
             abb={ _.findIndex(options.types, { id: v.type }) !== -1 ? _.find(options.types, { id: v.type }).abb : '-' }
             pkey={ pkey }
@@ -66,7 +65,8 @@ export default class Column extends Component {
             color={ _.findIndex(options.priorities, { id: v.priority }) !== -1 ? _.find(options.priorities, { id: v.priority }).color : '' }
             avatar={ v.avatar || no_avatar }
             type={ v.state }
-            acceptTypes={ acceptTypes }
+            accepts={ accepts }
+            issueView={ issueView }
             getDraggableActions={ getDraggableActions }
             cleanDraggableActions={ cleanDraggableActions }
             setRank={ this.setRank.bind(this) } 

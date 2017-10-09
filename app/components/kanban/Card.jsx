@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import ItemTypes from '../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 
 const cardSource = {
@@ -9,6 +8,7 @@ const cardSource = {
     this.preIndex = props.index;
     return {
       id: props.id,
+      entry_id: props.entry_id,
       index: props.index
     };
   },
@@ -68,7 +68,7 @@ const cardTarget = {
   }
 };
 
-@DropTarget(props => props.acceptTypes, cardTarget, connect => ({
+@DropTarget(props => props.accepts, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
 @DragSource(props => props.type, cardSource, (connect, monitor) => ({
@@ -83,11 +83,12 @@ export default class Card extends Component {
     index: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
+    entry_id: PropTypes.any.isRequired,
     title: PropTypes.string.isRequired,
     abb: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     pkey: PropTypes.string.isRequired,
-    acceptTypes: PropTypes.array.isRequired,
+    accepts: PropTypes.array.isRequired,
     no: PropTypes.number.isRequired,
     color: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,

@@ -354,10 +354,7 @@ export default class DetailBar extends Component {
     const { data, doAction } = this.props;
     const action = _.find(data.wfactions || {}, { id: eventKey });
     if (action && action.schema) {
-      if (action.screen == 'comments') {
-      } else {
-        this.setState({ workflowScreenShow: true, action_id: eventKey });
-      }
+      this.setState({ workflowScreenShow: true, action_id: eventKey });
     } else {
       const ecode = await doAction(data.id, data.entry_id, eventKey);
       if (ecode === 0) {
