@@ -1,13 +1,10 @@
 import React, { PropTypes, Component } from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
 import _ from 'lodash';
 import Bucket from './Bucket';
 
 const $ = require('$');
 
-@DragDropContext(HTML5Backend)
 export default class OverlayColumn extends Component {
   constructor(props) {
     super(props);
@@ -17,11 +14,14 @@ export default class OverlayColumn extends Component {
     index: PropTypes.number.isRequired,
     isEmpty: PropTypes.bool.isRequired,
     draggableActions: PropTypes.array.isRequired,
+    doAction: PropTypes.func.isRequired,
+    workflowScreenShow: PropTypes.func.isRequired,
+    options: PropTypes.object.isRequired,
     states: PropTypes.array.isRequired
   }
 
   render() {
-    const { isEmpty, states, draggableActions } = this.props;
+    const { isEmpty, states, draggableActions, options, doAction, workflowScreenShow } = this.props;
 
     const buckets = [];
     _.map(draggableActions, (v) => {
@@ -41,7 +41,10 @@ export default class OverlayColumn extends Component {
               _.map(buckets, (v, i) =>
                 <Bucket 
                   key={ i }
-                  acceptAction={ v }
+                  accepts={ _.map(options.states, (v) => v.id) }
+                  doAction={ doAction }
+                  workflowScreenShow={ workflowScreenShow }
+                  dragAction={ v }
                   height={ cellHeight }/> ) }
           </div>
         </div>

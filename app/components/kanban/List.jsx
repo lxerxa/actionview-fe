@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-// import { Link } from 'react-router';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem } from 'react-bootstrap';
 import _ from 'lodash';
@@ -8,14 +9,16 @@ const $ = require('$');
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
+const CreateModal = require('../issue/CreateModal');
 const Card = require('./Card');
 const Column = require('./Column');
 const OverlayColumn = require('./OverlayColumn');
 
+@DragDropContext(HTML5Backend)
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 30, category: 'all', barShow: false, hoverRowId: '' };
+    this.state = { limit: 30, category: 'all', barShow: false, workflowScreenShow: false, action_id: '' };
   }
 
   static propTypes = {
@@ -83,14 +86,12 @@ export default class List extends Component {
     user: PropTypes.object.isRequired
   }
 
-  componentWillMount() {
-    //const { index } = this.props;
-    //index({ limit: this.state.limit });
+  workflowScreenModalClose() {
+    this.setState({ workflowScreenShow: false });
   }
 
-  refresh() {
-    const { index } = this.props;
-    index({ category: this.state.category, limit: this.state.limit });
+  workflowScreenShow(action_id) {
+    this.setState({ workflowScreenShow: true, action_id });
   }
 
   closeDetail() {
@@ -221,12 +222,13 @@ export default class List extends Component {
             return (
               <Column 
                 key={ i }
+                issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
                 setRank={ setRank }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
-                acceptTypes={ _.map(v.states || [], (v) => v.id ) }
+                accepts={ _.map(v.states || [], (v) => v.id ) }
                 options={ options } /> ) } ) }
           </ul>
           <div className='board-zone-overlay' style={ { top: '46px' } }>
@@ -238,6 +240,9 @@ export default class List extends Component {
                   index={ i }
                   isEmpty={ draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1 ? false : true }
                   draggableActions={ draggableActions }
+                  doAction={ doAction }
+                  workflowScreenShow={ this.workflowScreenShow.bind(this) }
+                  options={ options }
                   states={ v.states || [] }/> ) } ) }
             </div>
           </div>
@@ -298,6 +303,18 @@ export default class List extends Component {
             resetState={ resetState }
             doAction={ doAction }
             user={ user }/> }
+        { this.state.workflowScreenShow &&
+          <CreateModal show
+            close={ this.workflowScreenModalClose.bind(this) }
+            options={ options }
+            edit={ edit }
+            loading={ loading }
+            project={ project }
+            data={ _.extend(_.find(collection, { id: draggedIssue }), { wfactions: draggableActions }) }
+            action_id={ this.state.action_id  }
+            doAction={ doAction }
+            isFromWorkflow={ true }
+            i18n={ i18n }/> }
       </div>
     );
   }

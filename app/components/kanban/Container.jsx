@@ -216,7 +216,7 @@ export default class Container extends Component {
     const { params: { key, id } } = this.props;
     this.pid = key;
 
-    const ecode = await this.getAccess();
+    await this.getAccess();
     if (!id) {
       const { latest_access_id } = this.props.kanban;
       this.goto(latest_access_id);

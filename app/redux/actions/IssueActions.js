@@ -223,6 +223,6 @@ export function copy(key, values) {
 export function setRank(key, kid, id, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_KANBAN_RANK_SET',
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/issue/' + id, method: 'post', data: values || {} })
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/issue/' + id + '/rank', method: 'post', data: values || {} })
   });
 }

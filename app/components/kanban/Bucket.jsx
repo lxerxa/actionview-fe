@@ -1,29 +1,63 @@
 import React, { PropTypes, Component } from 'react';
+import { DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
 const $ = require('$');
 
+const bucketTarget = {
+  drop(props, monitor) {
+    const { dragAction, doAction, workflowScreenShow } = props;
+    const card = monitor.getItem();
+    if (dragAction.screen) {
+      workflowScreenShow(dragAction.id);
+    } else {
+      doAction(card.id, card.entry_id, dragAction.id);
+    }
+  }
+}
+
+@DropTarget(props => props.accepts, bucketTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))
 export default class Bucket extends Component {
   constructor(props) {
     super(props);
   }
 
   static propTypes = {
+    connectDropTarget: PropTypes.func.isRequired,
+    isOver: PropTypes.bool.isRequired,
+    canDrop: PropTypes.bool.isRequired,
+    accepts: PropTypes.array.isRequired,
     height: PropTypes.number.isRequired, 
-    acceptAction: PropTypes.object.isRequired 
-  }
-
-  componentDidMount() {
-    const winHeight = $(window).height();
-    //$('.board-zone-cell').css('height', _.min([ winHeight - 170 - 46 - 10, $('.board-columns').height() ]));
+    doAction: PropTypes.func.isRequired,
+    workflowScreenShow: PropTypes.func.isRequired,
+    dragAction: PropTypes.object.isRequired 
   }
 
   render() {
-    const { acceptAction, height } = this.props;
+    const { 
+      accepts,
+      isOver,
+      canDrop,
+      connectDropTarget,
+      doAction,
+      workflowScreenShow,
+      dragAction, 
+      height } = this.props;
 
-    return (
-      <div className='board-zone-cell' style={ { height } }>
-        { acceptAction.state.name }
+    const isActive = isOver && canDrop
+
+    let backgroundColor = '#ebf2f9';
+    if (isActive) {
+      backgroundColor = 'darkseagreen';
+    }
+
+    return connectDropTarget (
+      <div className='board-zone-cell' style={ { height, backgroundColor } }>
+        { dragAction.state.name }
       </div>);
   }
 }
