@@ -27,7 +27,7 @@ export default class OverlayColumn extends Component {
     _.map(draggableActions, (v) => {
       if (_.indexOf(acceptStates, v.state) !== -1) {
         const state = _.find(options.states, { id: v.state });
-        buckets.push({ id: state.id, name: state.name });
+        buckets.push({ ...v, state });
       }
     });
 

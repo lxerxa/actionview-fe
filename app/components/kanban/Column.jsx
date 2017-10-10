@@ -46,6 +46,27 @@ export default class Column extends Component {
     setRank(id, { up: index <= 0 ? '' : cards[index - 1].id, down: index >= cards.length - 1 ? '' : cards[index + 1].id });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.cards.length === nextProps.cards.length) {
+      return;
+    }
+
+    const oldCardIds = _.map(this.state.cards, (v) => v.id );
+    const newCardIds = _.map(nextProps.cards, (v) => v.id );
+
+    const diff = _.difference(oldCardIds, newCardIds);
+    const diff2 = _.difference(newCardIds, oldCardIds);
+
+    if (diff.length > 0) {
+      const removedCardId = diff.pop();
+      this.state.cards = _.reject(this.state.cards, (v) => { return v.id === removedCardId });
+    } else {
+      const addedCard = _.find(nextProps.cards, { id: diff2.pop() });
+      this.state.cards.push(addedCard);
+      this.state.cards = _.sortByOrder(this.state.cards, [ 'rank' ]);
+    }
+  }
+
   render() {
     const { issueView, getDraggableActions, cleanDraggableActions, options, pkey, accepts } = this.props;
     const { cards } = this.state;

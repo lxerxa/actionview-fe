@@ -89,7 +89,7 @@
   -moz-box-sizing:border-box;
   -webkit-box-sizing:border-box;
   box-sizing:border-box;
-  border-spacing:10px 0;
+  border-spacing:8px 0;
   display:table;
   height:100%;
   table-layout:fixed;
