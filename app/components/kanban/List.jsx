@@ -196,7 +196,7 @@ export default class List extends Component {
 
     _.forEach(curKanban.columns, (v, i) => {
       _.forEach(sortedCollection, (v2) => {
-        if (_.findIndex(v.states, { id: v2.state }) !== -1) {
+        if (_.indexOf(v.states, v2.state) !== -1) {
           columnIssues[i].push(v2);
           return;
         }
