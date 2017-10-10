@@ -228,7 +228,7 @@ export default class List extends Component {
                 setRank={ setRank }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
-                accepts={ _.map(v.states || [], (v) => v.id ) }
+                accepts={ v.states }
                 options={ options } /> ) } ) }
           </ul>
           <div className='board-zone-overlay' style={ { top: '46px' } }>
@@ -243,7 +243,7 @@ export default class List extends Component {
                   doAction={ doAction }
                   workflowScreenShow={ this.workflowScreenShow.bind(this) }
                   options={ options }
-                  states={ v.states || [] }/> ) } ) }
+                  acceptStates={ v.states || [] }/> ) } ) }
             </div>
           </div>
         </div> }
