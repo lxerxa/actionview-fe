@@ -209,7 +209,7 @@ export default function(router) {
   router.get('/project/:key/issue/:id/wfactions', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 200);
-    const results = { ecode: 0, data: [{ id: 1001, name: 'aa', state: { id: '546761', name: '11111' } }, { id: 1002, name: 'bb', state: { id: '546762', name: '22222' } } ]};
+    const results = { ecode: 0, data: [{ id: 1001, name: 'aa', state: '546761' }, { id: 1002, name: 'bb', state: '546762' } ]};
     return res.status(200).send(results);
   });
 
@@ -851,7 +851,7 @@ export default function(router) {
   router.get('/project/:key/kanban/access', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ ecode: 0, data: { id: '1111' }, options: { kanbans: [{ id: '1111', name: '测试测试11', filters: [{name: '1111', query:{ assignees: 'me,ttt' }}, {name: '2222', query:{updated_at: '1w'}}, {name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', states: [{ id: '546761', name: 'aaaa' },{ id: '546762', name: 'bbbb' }]}, {name:'处理中', states: [{ id: '546763', name: 'cccc'}]}, {name:'关闭', states:[]}], query: { type: '111,333' } }, { id: '2222', name:'2222', filters: [{name: 'mmmmmmm', query:{ assignees: 'me,ttt' }}, {name: 'nnnnnnn', query:{updated_at: '1w'}}, {name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', states: [{ id: '546761', name: 'aaaa' }]}, {name:'处理中22', states: [{ id: '546762', name: 'bbbb' }]}, {name:'关闭22', states:[ { id: '546763', name: 'cccc'} ]}], query: { type: '111,222' } }] } };
+    const results={ ecode: 0, data: { id: '1111' }, options: { kanbans: [{ id: '1111', name: '测试测试11', filters: [{name: '1111', query:{ assignees: 'me,ttt' }}, {name: '2222', query:{updated_at: '1w'}}, {name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', states: ['546761','546762']}, {name:'处理中', states: [ '546763' ]}, {name:'关闭', states:[]}], query: { type: '111,333' } }, { id: '2222', name:'2222', filters: [{name: 'mmmmmmm', query:{ assignees: 'me,ttt' }}, {name: 'nnnnnnn', query:{updated_at: '1w'}}, {name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', states: [ '546761']}, {name:'处理中22', states: [ '546762' ]}, {name:'关闭22', states:[ '546763' ]}], query: { type: '111,222' } }] } };
     return res.status(200).send(results);
   });
   /******************kanban***************/

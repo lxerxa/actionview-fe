@@ -17,16 +17,17 @@ export default class OverlayColumn extends Component {
     doAction: PropTypes.func.isRequired,
     workflowScreenShow: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired,
-    states: PropTypes.array.isRequired
+    acceptStates: PropTypes.array.isRequired
   }
 
   render() {
-    const { isEmpty, states, draggableActions, options, doAction, workflowScreenShow } = this.props;
+    const { isEmpty, acceptStates, draggableActions, options, doAction, workflowScreenShow } = this.props;
 
     const buckets = [];
     _.map(draggableActions, (v) => {
-      if (_.findIndex(states, { id: v.state && v.state.id || '' }) !== -1) {
-        buckets.push(v);
+      if (_.indexOf(acceptStates, v.state) !== -1) {
+        const state = _.find(options.states, { id: v.state });
+        buckets.push({ id: state.id, name: state.name });
       }
     });
 
