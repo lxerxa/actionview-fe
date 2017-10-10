@@ -144,7 +144,8 @@ class CreateModal extends Component {
 
   async handleSubmit() {
     const { create, edit, close, options, data={}, parent_id='', doAction=undefined, action_id='' } = this.props;
-    const schema = _.find(options.types, { id: this.state.values['type'] }).schema;
+    //const schema = _.find(options.types, { id: this.state.values['type'] }).schema;
+    const { schema } = this.state;
 
     let submitData = {};
     if (!_.isEmpty(data) && data.id) {
