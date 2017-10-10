@@ -18,7 +18,7 @@ const OverlayColumn = require('./OverlayColumn');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 30, category: 'all', barShow: false, workflowScreenShow: false, action_id: '' };
+    this.state = { limit: 30, category: 'all', barShow: false, workflowScreenShow: false, drop_issue_id: '', action_id: '' };
   }
 
   static propTypes = {
@@ -90,8 +90,8 @@ export default class List extends Component {
     this.setState({ workflowScreenShow: false });
   }
 
-  workflowScreenShow(action_id) {
-    this.setState({ workflowScreenShow: true, action_id });
+  workflowScreenShow(drop_issue_id, action_id) {
+    this.setState({ workflowScreenShow: true, drop_issue_id, action_id });
   }
 
   closeDetail() {
@@ -310,7 +310,7 @@ export default class List extends Component {
             edit={ edit }
             loading={ loading }
             project={ project }
-            data={ _.extend(_.find(collection, { id: draggedIssue }), { wfactions: draggableActions }) }
+            data={ _.extend(_.find(collection, { id: this.state.drop_issue_id }), { wfactions: draggableActions }) }
             action_id={ this.state.action_id  }
             doAction={ doAction }
             isFromWorkflow={ true }
