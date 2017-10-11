@@ -58,10 +58,11 @@ export function delFile(key, issue_id, field_key, file_id) {
   });
 }
 
-export function show(key, id) {
+export function show(key, id, floatStyle) {
   return asyncFuncCreator({
     constant: 'ISSUE_SHOW',
     id,
+    floatStyle,
     promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id })
   });
 }

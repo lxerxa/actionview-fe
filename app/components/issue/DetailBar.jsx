@@ -72,6 +72,7 @@ export default class DetailBar extends Component {
     visitedCollection: PropTypes.array.isRequired,
     issueCollection: PropTypes.array.isRequired,
     show: PropTypes.func.isRequired,
+    detailFloatStyle: PropTypes.object,
     wfCollection: PropTypes.array.isRequired,
     wfLoading: PropTypes.bool.isRequired,
     viewWorkflow: PropTypes.func.isRequired,
@@ -369,6 +370,7 @@ export default class DetailBar extends Component {
     const { 
       i18n,
       close, 
+      detailFloatStyle={},
       data={}, 
       record, 
       visitedIndex, 
@@ -448,7 +450,7 @@ export default class DetailBar extends Component {
     }
 
     return (
-      <div className='animate-dialog'>
+      <div className='animate-dialog' style={ { ...detailFloatStyle } }>
         <Button className='close' onClick={ close } title='关闭'>
           <i className='fa fa-close'></i>
         </Button>

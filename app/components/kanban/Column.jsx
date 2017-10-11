@@ -16,6 +16,8 @@ export default class Column extends Component {
   }
 
   static propTypes = {
+    no: PropTypes.number.isRequired,
+    openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
     accepts: PropTypes.array.isRequired,
@@ -46,6 +48,11 @@ export default class Column extends Component {
     setRank(id, { up: index <= 0 ? '' : cards[index - 1].id, down: index >= cards.length - 1 ? '' : cards[index + 1].id });
   }
 
+  issueView(id) {
+    const { issueView, no } = this.props;
+    issueView(id, no);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.state.cards.length === nextProps.cards.length) {
       return;
@@ -68,7 +75,7 @@ export default class Column extends Component {
   }
 
   render() {
-    const { issueView, getDraggableActions, cleanDraggableActions, options, pkey, accepts } = this.props;
+    const { getDraggableActions, cleanDraggableActions, openedIssue, options, pkey, accepts } = this.props;
     const { cards } = this.state;
 
     return (
@@ -77,6 +84,7 @@ export default class Column extends Component {
         return (
           <Card key={ v.id }
             index={ i }
+            openedIssue={ openedIssue }
             id={ v.id }
             entry_id={ v.entry_id || '' }
             title={ v.title }
@@ -87,7 +95,7 @@ export default class Column extends Component {
             avatar={ v.avatar || no_avatar }
             type={ v.state }
             accepts={ accepts }
-            issueView={ issueView }
+            issueView={ this.issueView.bind(this) }
             getDraggableActions={ getDraggableActions }
             cleanDraggableActions={ cleanDraggableActions }
             setRank={ this.setRank.bind(this) } 

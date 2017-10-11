@@ -28,7 +28,8 @@ const initialState = {
   worklogIndexLoading: false, 
   worklogLoading: false, 
   worklogLoaded: false, 
-  linkLoading: false };
+  linkLoading: false,
+  detailFloatStyle: {} };
 
 export default function issue(state = initialState, action) {
   switch (action.type) {
@@ -129,7 +130,7 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
-      return { ...state, itemLoading: true, itemData: { id: action.id }, commentsLoaded: false, historyLoaded: false, worklogLoaded: false };
+      return { ...state, itemLoading: true, detailFloatStyle: action.floatStyle || {}, itemData: { id: action.id }, commentsLoaded: false, historyLoaded: false, worklogLoaded: false };
 
     case t.ISSUE_SHOW_SUCCESS:
       if (action.result.ecode === 0) {
@@ -366,7 +367,7 @@ export default function issue(state = initialState, action) {
       return { ...state, visitedIndex: _.add(state.visitedIndex, action.offset || 0) };
 
     case t.ISSUE_CLEAN_RECORD:
-      return { ...state, visitedIndex: -1, visitedCollection: [] };
+      return { ...state, visitedIndex: -1, visitedCollection: [], itemData: {} };
 
     case t.ISSUE_LINK_CREATE:
       return { ...state, linkLoading: true };

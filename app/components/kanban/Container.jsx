@@ -70,8 +70,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async show(id) {
-    await this.props.issueActions.show(this.pid, id);
+  async show(id, floatStyle) {
+    await this.props.issueActions.show(this.pid, id, floatStyle);
     return this.props.issue.ecode;
   }
 

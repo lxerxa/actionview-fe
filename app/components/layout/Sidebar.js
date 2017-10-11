@@ -38,21 +38,32 @@ export default class Sidebar extends Component {
   }
 
   hideBar() {
+    let detailLeftFloat = false;
+    if ($('.animate-dialog').length > 0 && $('.animate-dialog').offset().left == $('.doc-container').offset().left) {
+      detailLeftFloat = true;
+    }
+
     //box-shadow: 0 0 .5rem #9da5ab;
     $('.toc-container').animate({ left: '-20%' });
     $('.toc-container').css({ position: 'fixed' });
     $('.head').css({ paddingLeft: '15px' });
     $('.toc-logo').css({ left: '45%' });
     $('#show-bar').show();
+    detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
   }
 
   tackBar() {
+    let detailLeftFloat = false;
+    if ($('.animate-dialog').length > 0 && $('.animate-dialog').offset().left == $('.doc-container').offset().left) {
+      detailLeftFloat = true;
+    }
     $('.head').css({ paddingLeft: '19%' });
     $('.toc-logo').css({ left: '52%' });
     $('.toc-container').css({ position: 'relative', boxShadow: 'none', borderRight: 'solid 1px #e5e5e5' });
     $('#show-bar').hide();
     $('#tack-bar').hide();
     $('#hide-bar').show();
+    detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
   }
 
   componentWillReceiveProps(nextProps) {
