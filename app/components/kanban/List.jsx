@@ -12,13 +12,14 @@ const DetailBar = require('../issue/DetailBar');
 const CreateModal = require('../issue/CreateModal');
 const Card = require('./Card');
 const Column = require('./Column');
+const SelectVersionModal = require('./SelectVersionModal');
 const OverlayColumn = require('./OverlayColumn');
 
 @DragDropContext(HTML5Backend)
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 30, category: 'all', barShow: false, workflowScreenShow: false, drop_issue_id: '', action_id: '' };
+    this.state = { limit: 30, category: 'all', barShow: false, selectVersionShow: false, workflowScreenShow: false, drop_issue_id: '', action_id: '' };
   }
 
   static propTypes = {
@@ -84,7 +85,12 @@ export default class List extends Component {
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired,
+    release: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
+  }
+
+  selectVersionModalClose() {
+    this.setState({ selectVersionShow: false });
   }
 
   workflowScreenModalClose() {
@@ -129,10 +135,6 @@ export default class List extends Component {
     $('.board-container').scroll(function() {
       $('.board-zone-overlay').css('top', _.max([ $('.board-container').scrollTop(), 46 ]));
     });
-  }
-
-  release() {
-    alert('aa');
   }
 
   render() {
@@ -198,6 +200,7 @@ export default class List extends Component {
       del,
       doAction,
       setRank,
+      release,
       user
     } = this.props;
 
@@ -227,7 +230,7 @@ export default class List extends Component {
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）{ i == curKanban.columns.length - 1 && <a href='#' style={ { float: 'right' } } onClick={ (e) => { e.preventDefault(); this.release(); } }>发布</a> }</li> ) ) }
+            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）{ i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && <a href='#' style={ { float: 'right' } } onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>发布</a> }</li> ) ) }
             </ul>
           </div>
           <ul className='board-columns'>
@@ -330,6 +333,13 @@ export default class List extends Component {
             action_id={ this.state.action_id  }
             doAction={ doAction }
             isFromWorkflow={ true }
+            i18n={ i18n }/> }
+        { this.state.selectVersionShow &&
+          <SelectVersionModal show
+            options={ options }
+            close={ this.selectVersionModalClose.bind(this) }
+            release={ release } 
+            releasedIssues={ _.last(columnIssues) || [] } 
             i18n={ i18n }/> }
       </div>
     );

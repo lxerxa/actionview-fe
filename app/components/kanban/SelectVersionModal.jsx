@@ -9,18 +9,18 @@ const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
-  if (!values.assignee) {
-    errors.assignee = '必填';
+  if (!values.version) {
+    errors.version = '必填';
   }
   return errors;
 };
 
 @reduxForm({
-  form: 'assign',
-  fields: [ 'assignee' ],
+  form: 'selectversion',
+  fields: [ 'version' ],
   validate
 })
-export default class AssignModal extends Component {
+export default class SelectVersionModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -31,23 +31,23 @@ export default class AssignModal extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
-    issue: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    setAssignee: PropTypes.func.isRequired,
+    release: PropTypes.func.isRequired,
+    releasedIssues: PropTypes.array.isRequired,
     close: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, setAssignee, close, issue } = this.props;
-    const ecode = await setAssignee(issue.id, values, true);
+    const { release, releasedIssues, close } = this.props;
+    const ecode = await release(_.map(releasedIssues, (v) => v.id));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('已分配。', 'success', 2000);
+      notify.show('已发布。', 'success', 2000);
     } else { 
       this.setState({ ecode: ecode });
     }
@@ -63,28 +63,28 @@ export default class AssignModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { assignee }, handleSubmit, invalid, submitting, issue, options } = this.props;
+    const { i18n: { errMsg }, fields: { version }, handleSubmit, invalid, submitting, options } = this.props;
 
-    const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
+    const versionOptions = _.map(options.versions || [], (val) => { return { label: val.name, value: val.id } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '分配经办人 - ' + issue.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>发布问题</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ assignee.touched && assignee.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>分配给</ControlLabel>
+          <FormGroup controlId='formControlsText' validationState={ version.touched && version.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>选择版本</ControlLabel>
             <Select 
               simpleValue 
               clearable={ false } 
               disabled={ submitting } 
-              options={ assigneeOptions } 
-              value={ assignee.value } 
-              onChange={ (newValue) => { assignee.onChange(newValue) } } 
-              placeholder='选择经办人'/>
-            { assignee.touched && assignee.error && <HelpBlock style={ { float: 'right' } }>{ assignee.error }</HelpBlock> }
+              options={ versionOptions } 
+              value={ version.value } 
+              onChange={ (newValue) => { version.onChange(newValue) } } 
+              placeholder='选择版本'/>
+            { version.touched && version.error && <HelpBlock style={ { float: 'right' } }>{ version.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
