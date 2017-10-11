@@ -61,6 +61,7 @@ export default class List extends Component {
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     show: PropTypes.func.isRequired,
+    detailFloatStyle: PropTypes.object,
     del: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
@@ -100,10 +101,17 @@ export default class List extends Component {
     cleanRecord();
   }
 
-  async issueView(id) {
+  async issueView(id, no) {
     this.setState({ barShow: true });
-    const { show, record } = this.props;
-    const ecode = await show(id);
+
+    const { show, record, curKanban } = this.props;
+    const colNum = curKanban.columns.length;
+    let floatStyle = {};
+    if (no >= _.ceil(colNum / 2)) {
+      floatStyle = { left: $('.doc-container').offset().left };
+    }
+
+    const ecode = await show(id, floatStyle);
     if (ecode === 0) {
       record();
     }
@@ -121,6 +129,10 @@ export default class List extends Component {
     $('.board-container').scroll(function() {
       $('.board-zone-overlay').css('top', _.max([ $('.board-container').scrollTop(), 46 ]));
     });
+  }
+
+  release() {
+    alert('aa');
   }
 
   render() {
@@ -163,6 +175,7 @@ export default class List extends Component {
       loading,
       itemLoading,
       show,
+      detailFloatStyle,
       edit,
       create,
       setAssignee,
@@ -214,7 +227,7 @@ export default class List extends Component {
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）</li> ) ) }
+            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）{ i == curKanban.columns.length - 1 && <a href='#' style={ { float: 'right' } } onClick={ (e) => { e.preventDefault(); this.release(); } }>发布</a> }</li> ) ) }
             </ul>
           </div>
           <ul className='board-columns'>
@@ -222,6 +235,8 @@ export default class List extends Component {
             return (
               <Column 
                 key={ i }
+                no={ i }
+                openedIssue={ this.state.barShow ? itemData : {} }
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
@@ -263,6 +278,7 @@ export default class List extends Component {
             visitedCollection={ visitedCollection }
             issueCollection={ [] }
             show = { show }
+            detailFloatStyle={ detailFloatStyle }
             itemLoading={ itemLoading }
             loading={ loading }
             fileLoading={ fileLoading }

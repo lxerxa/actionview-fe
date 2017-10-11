@@ -80,9 +80,11 @@ export default class Card extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
+    issueView: PropTypes.func.isRequired,
+    openedIssue: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
-    id: PropTypes.any.isRequired,
+    id: PropTypes.string.isRequired,
     entry_id: PropTypes.any.isRequired,
     title: PropTypes.string.isRequired,
     abb: PropTypes.string.isRequired,
@@ -96,19 +98,24 @@ export default class Card extends Component {
   };
 
   render() {
-    const { title, abb, pkey, no, color, avatar, isDragging, connectDragSource, connectDropTarget } = this.props;
+    const { id, title, abb, pkey, no, color, avatar, issueView, openedIssue, isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
     const styles = { borderLeft: '5px solid ' + color };
 
+    let backgroundColor = '#fff';
+    if (id == openedIssue.id) {
+      backgroundColor = '#eee';
+    }
+
     return connectDragSource(connectDropTarget(
-      <div className='board-issue' style={ { ...styles, opacity } }>
+      <div className='board-issue' style={ { ...styles, opacity, backgroundColor } }>
         <div className='board-issue-content'>
           <div style={ { float: 'right' } }>
             <img className='board-avatar' src={ avatar }/>
           </div>
           <div>
             <span className='type-abb'>{ abb }</span>
-            <a href='#'>{ pkey } - { no }</a>
+            <a href='#' onClick={ (e) => { e.preventDefault(); issueView(id) } }>{ pkey } - { no }</a>
           </div>
           <div>
             { title }
