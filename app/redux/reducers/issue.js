@@ -428,6 +428,20 @@ export default function issue(state = initialState, action) {
       }
       return { ...state, ecode: action.result.ecode };
 
+    case t.ISSUE_KANBAN_RELEASE:
+      return { ...state, itemLoading: true };
+
+    case t.ISSUE_KANBAN_RELEASE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        _.map(action.result.data.ids || [], (val) => {
+          state.collection = _.reject(state.collection, { id: val });
+        });
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_KANBAN_RELEASE_FAIL:
+      return { ...state, itemLoading: false, error: action.error };
+
     default:
       return state;
   }

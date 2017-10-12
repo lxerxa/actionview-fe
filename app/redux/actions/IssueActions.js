@@ -227,3 +227,10 @@ export function setRank(key, kid, id, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/issue/' + id + '/rank', method: 'post', data: values || {} })
   });
 }
+
+export function release(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_KANBAN_RELEASE',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/release', method: 'post', data: values || {} })
+  });
+}
