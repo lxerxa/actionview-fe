@@ -240,15 +240,14 @@ export default class List extends Component {
           $(this).css('background-color', '');
         }
       });
-    } else {
-      $('.react-bs-container-body table tr').each(function(i) {
-        $(this).css('background-color', '');
-      });
     }
   }
 
   closeDetail() {
     this.setState({ barShow: false });
+    $('.react-bs-container-body table tr').each(function(i) {
+      $(this).css('background-color', '');
+    });
     const { cleanRecord } = this.props;
     cleanRecord();
   }

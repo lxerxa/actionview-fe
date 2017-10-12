@@ -42,8 +42,8 @@ export default class SelectVersionModal extends Component {
   }
 
   async handleSubmit() {
-    const { release, releasedIssues, close } = this.props;
-    const ecode = await release(_.map(releasedIssues, (v) => v.id));
+    const { release, releasedIssues, values, close } = this.props;
+    const ecode = await release({ ids: _.map(releasedIssues, (v) => v.id), version: values.version });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

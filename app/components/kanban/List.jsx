@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 const $ = require('$');
 const moment = require('moment');
-const img = require('../../assets/images/loading.gif');
+const loadingImg = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
 const CreateModal = require('../issue/CreateModal');
 const Card = require('./Card');
@@ -223,14 +223,14 @@ export default class List extends Component {
       <div className='board-container'>
       { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
-         <img src={ img } className='loading'/> 
+         <img src={ loadingImg } className='loading'/> 
         </div> }
 
       { !_.isEmpty(curKanban) && !indexLoading && 
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）{ i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && <a href='#' style={ { float: 'right' } } onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>发布</a> }</li> ) ) }
+            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）{ i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && <a href='#' style={ { float: 'right' } } onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>发布...</a> }</li> ) ) }
             </ul>
           </div>
           <ul className='board-columns'>
