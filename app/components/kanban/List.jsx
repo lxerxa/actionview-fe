@@ -221,12 +221,15 @@ export default class List extends Component {
 
     return (
       <div className='board-container'>
-      { !_.isEmpty(curKanban) && indexLoading && 
+        <div className='board-overlay-waiting' style={ { display: !this.state.barShow && itemLoading ? 'block' : 'none' } }>
+          <img src={ loadingImg } className='loading board-loading'/>
+        </div>
+        { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
          <img src={ loadingImg } className='loading'/> 
         </div> }
 
-      { !_.isEmpty(curKanban) && !indexLoading && 
+        { !_.isEmpty(curKanban) && !indexLoading && 
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
@@ -247,6 +250,7 @@ export default class List extends Component {
                 cards={ columnIssues[i] }
                 pkey={ project.key }
                 accepts={ v.states }
+                closeDetail={ this.closeDetail.bind(this) }
                 options={ options } /> ) } ) }
           </ul>
           <div className='board-zone-overlay' style={ { top: '46px' } }>

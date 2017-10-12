@@ -25,6 +25,7 @@ export default class Column extends Component {
     issueView: PropTypes.func.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
+    closeDetail: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired
   }
 
@@ -75,7 +76,7 @@ export default class Column extends Component {
   }
 
   render() {
-    const { getDraggableActions, cleanDraggableActions, openedIssue, options, pkey, accepts } = this.props;
+    const { getDraggableActions, cleanDraggableActions, closeDetail, openedIssue, options, pkey, accepts } = this.props;
     const { cards } = this.state;
 
     return (
@@ -95,6 +96,7 @@ export default class Column extends Component {
             avatar={ v.avatar || no_avatar }
             type={ v.state }
             accepts={ accepts }
+            closeDetail={ closeDetail }
             issueView={ this.issueView.bind(this) }
             getDraggableActions={ getDraggableActions }
             cleanDraggableActions={ cleanDraggableActions }
