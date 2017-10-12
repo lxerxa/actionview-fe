@@ -4,6 +4,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 
 const cardSource = {
   beginDrag(props) {
+    props.closeDetail();
     props.getDraggableActions(props.id);
     this.preIndex = props.index;
     return {

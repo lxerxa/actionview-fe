@@ -136,3 +136,21 @@
 .board-zone-cell:hover {
   background:#f3f9f4;
 }
+
+.board-overlay-waiting {
+  margin-top: 170px;
+  opacity: 0.8;
+  top: 0;
+  background-color: white;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  display: none;
+  z-index: 999;
+  text-align: center;
+}
+
+.board-loading {
+  margin-top: 80px;
+}

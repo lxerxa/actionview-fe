@@ -352,11 +352,11 @@
   position: absolute;
   display: none;
   z-index: 999;
+  text-align: center;
 }
 
 .detail-loading {
   margin-top: 48%;
-  margin-left: 48%;
 }
 
 #content {
