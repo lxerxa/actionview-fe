@@ -242,6 +242,7 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 no={ i }
+                subtaskShow={ curKanban.subtask }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
@@ -261,6 +262,7 @@ export default class List extends Component {
                   key={ i }
                   index={ i }
                   isEmpty={ draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1 ? false : true }
+                  draggedIssue={ _.find(columnIssues[i], { id: draggedIssue }) }
                   draggableActions={ draggableActions }
                   doAction={ doAction }
                   workflowScreenShow={ this.workflowScreenShow.bind(this) }

@@ -1,9 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import update from 'react/lib/update';
 import _ from 'lodash';
-import Card from './Card';
 
-const no_avatar = require('../../assets/images/no_avatar.png');
+import Card from './Card';
 
 export default class Column extends Component {
   constructor(props) {
@@ -16,6 +15,8 @@ export default class Column extends Component {
   }
 
   static propTypes = {
+    isSubtaskCol: PropTypes.bool,
+    subtaskShow: PropTypes.bool,
     no: PropTypes.number.isRequired,
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
@@ -55,53 +56,113 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.cards.length === nextProps.cards.length) {
-      return;
-    }
+    this.state.cards = nextProps.cards;
+    //if (this.state.cards.length === nextProps.cards.length) {
+    //  return;
+    //}
 
-    const oldCardIds = _.map(this.state.cards, (v) => v.id );
-    const newCardIds = _.map(nextProps.cards, (v) => v.id );
+    //const oldCardIds = _.map(this.state.cards, (v) => v.id );
+    //const newCardIds = _.map(nextProps.cards, (v) => v.id );
 
-    const diff = _.difference(oldCardIds, newCardIds);
-    const diff2 = _.difference(newCardIds, oldCardIds);
+    //const diff = _.difference(oldCardIds, newCardIds);
+    //const diff2 = _.difference(newCardIds, oldCardIds);
 
-    if (diff.length > 0) {
-      const removedCardId = diff.pop();
-      this.state.cards = _.reject(this.state.cards, (v) => { return v.id === removedCardId });
-    } else {
-      const addedCard = _.find(nextProps.cards, { id: diff2.pop() });
-      this.state.cards.push(addedCard);
-      this.state.cards = _.sortByOrder(this.state.cards, [ 'rank' ]);
-    }
+    //if (diff.length > 0) {
+    //  const removedCardId = diff.pop();
+    //  this.state.cards = _.reject(this.state.cards, (v) => { return v.id === removedCardId });
+    //} else {
+    //  const addedCard = _.find(nextProps.cards, { id: diff2.pop() });
+    //  this.state.cards.push(addedCard);
+    //  this.state.cards = _.sortByOrder(this.state.cards, [ 'rank' ]);
+    //}
   }
 
   render() {
-    const { getDraggableActions, cleanDraggableActions, closeDetail, openedIssue, options, pkey, accepts } = this.props;
+    const { 
+      no,
+      isSubtaskCol=false, 
+      subtaskShow=false,
+      getDraggableActions, 
+      cleanDraggableActions, 
+      setRank, 
+      closeDetail, 
+      openedIssue, 
+      options, 
+      pkey, 
+      accepts } = this.props;
     const { cards } = this.state;
 
+    let mainCards = [];
+    let classifiedSubtasks = {};
+    if (isSubtaskCol) {
+      mainCards = cards;
+    } else {
+      if (subtaskShow) {
+        _.map(cards, (v, i) => {
+          if (v.parent && v.parent.id) {
+            const index = _.findIndex(mainCards, { id: v.parent.id });
+            if (index === -1) {
+              mainCards.push(_.extend(v.parent, { mock: true }));
+            }
+            if (!classifiedSubtasks[v.parent.id]) {
+              classifiedSubtasks[v.parent.id] = [];
+            }
+            classifiedSubtasks[v.parent.id].push(v);
+          } else {
+            mainCards.push(v);
+          }
+        });
+      } else {
+        mainCards = _.filter(cards, (v) => { return !v.parent || !v.parent.id }); 
+      }
+    }
+
+    let display = {};
+    if (isSubtaskCol) {
+      display =  'block';
+    }
+
     return (
-      <li className='board-column'>
-      { _.map(cards, (v, i) => {
-        return (
-          <Card key={ v.id }
-            index={ i }
-            openedIssue={ openedIssue }
-            id={ v.id }
-            entry_id={ v.entry_id || '' }
-            title={ v.title }
-            abb={ _.findIndex(options.types, { id: v.type }) !== -1 ? _.find(options.types, { id: v.type }).abb : '-' }
-            pkey={ pkey }
-            no={ v.no }
-            color={ _.findIndex(options.priorities, { id: v.priority }) !== -1 ? _.find(options.priorities, { id: v.priority }).color : '' }
-            avatar={ v.avatar || no_avatar }
-            type={ v.state }
-            accepts={ accepts }
-            closeDetail={ closeDetail }
-            issueView={ this.issueView.bind(this) }
-            getDraggableActions={ getDraggableActions }
-            cleanDraggableActions={ cleanDraggableActions }
-            setRank={ this.setRank.bind(this) } 
-            moveCard={ this.moveCard.bind(this) }/> ) } ) }
+      <li className='board-column' style={ { display } }>
+      { _.map(mainCards, (v, i) => {
+        let card = {};
+        if (v.mock) {
+          card = ( <span style={ { maginLeft: '5px' } }>{ v.no } - { v.title }</span> );
+        } else {
+          card = (
+            <Card
+              openedIssue={ openedIssue }
+              index={ i }
+              issue={ v }
+              pkey={ pkey }
+              accepts={ accepts }
+              options={ options }
+              closeDetail={ closeDetail }
+              issueView={ this.issueView.bind(this) }
+              getDraggableActions={ getDraggableActions }
+              cleanDraggableActions={ cleanDraggableActions }
+              setRank={ this.setRank.bind(this) } 
+              moveCard={ this.moveCard.bind(this) }/> );
+        }
+        if (subtaskShow && classifiedSubtasks[v.id] && classifiedSubtasks[v.id].length > 0) {
+          const subCol = (
+            <Column
+              no={ no }
+              isSubtaskCol={ true }
+              openedIssue={ openedIssue }
+              issueView={ this.issueView.bind(this) }
+              getDraggableActions={ getDraggableActions }
+              cleanDraggableActions={ cleanDraggableActions }
+              setRank={ setRank }
+              cards={ classifiedSubtasks[v.id] }
+              pkey={ pkey }
+              accepts={ accepts }
+              closeDetail={ closeDetail }
+              options={ options } /> );
+          return ( <div key={ v.id }>{ card } { subCol }</div> );
+        } else {
+          return ( <div key={ v.id }>{ card }</div> );
+        } } ) }
       </li> );
   }
 }

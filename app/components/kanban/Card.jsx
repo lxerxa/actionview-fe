@@ -1,15 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
+import _ from 'lodash';
+
+const no_avatar = require('../../assets/images/no_avatar.png');
 
 const cardSource = {
   beginDrag(props) {
     props.closeDetail();
-    props.getDraggableActions(props.id);
+    props.getDraggableActions(props.issue.id);
     this.preIndex = props.index;
     return {
-      id: props.id,
-      entry_id: props.entry_id,
+      id: props.issue.id,
+      entry_id: props.issue.entry_id,
       index: props.index
     };
   },
@@ -17,7 +20,7 @@ const cardSource = {
   endDrag(props, monitor, component) {
     props.cleanDraggableActions();
     if (this.preIndex != props.index) {
-      props.setRank(props.id, props.index);
+      props.setRank(props.issue.id, props.index);
     }
   }
 };
@@ -69,57 +72,95 @@ const cardTarget = {
   }
 };
 
-@DropTarget(props => props.accepts, cardTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))
-@DragSource(props => props.type, cardSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))
+@DropTarget(
+  props => _.map(props.accepts, 
+    (v) => { 
+      if (props.issue.parent && props.issue.parent.id) {
+        return props.issue.parent.id + '-' + v;
+      } else {
+        return v;
+      }
+    }), 
+  cardTarget, 
+  connect => ({
+    connectDropTarget: connect.dropTarget()
+  })
+)
+@DragSource(
+  props => { 
+    if (props.issue.parent && props.issue.parent.id) {
+      return props.issue.parent.id + '-' + props.issue.state;
+    } else {
+      return props.issue.state;
+    }
+  }, 
+  cardSource, 
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  })
+)
 export default class Card extends Component {
 
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
+    getDraggableActions: PropTypes.func.isRequired,
+    cleanDraggableActions: PropTypes.func.isRequired,
+    setRank: PropTypes.func.isRequired,
+    closeDetail: PropTypes.func.isRequired,
     issueView: PropTypes.func.isRequired,
+    issue: PropTypes.object.isRequired,
     openedIssue: PropTypes.object.isRequired,
-    index: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
-    id: PropTypes.string.isRequired,
-    entry_id: PropTypes.any.isRequired,
-    title: PropTypes.string.isRequired,
-    abb: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
     pkey: PropTypes.string.isRequired,
     accepts: PropTypes.array.isRequired,
-    no: PropTypes.number.isRequired,
-    color: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired,
+    options: PropTypes.object.isRequired,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
-    const { id, title, abb, pkey, no, color, avatar, issueView, openedIssue, isDragging, connectDragSource, connectDropTarget } = this.props;
-    const opacity = isDragging ? 0 : 1;
-    const styles = { borderLeft: '5px solid ' + color };
+    const { 
+      issue, 
+      pkey, 
+      issueView, 
+      openedIssue, 
+      isDragging, 
+      connectDragSource, 
+      connectDropTarget, 
+      getDraggableActions,
+      cleanDraggableActions,
+      setRank,
+      closeDetail,
+      accepts,
+      options } = this.props;
 
-    let backgroundColor = '#fff';
-    if (id == openedIssue.id) {
+    const opacity = isDragging ? 0 : 1;
+    const styles = { borderLeft: '5px solid ' + (_.findIndex(options.priorities, { id: issue.priority }) !== -1 ? _.find(options.priorities, { id: issue.priority }).color : '') };
+
+    let backgroundColor = '';
+    if (issue.id == openedIssue.id) {
       backgroundColor = '#eee';
     }
 
+    let marginLeft = '';
+    if (issue.parent && issue.parent.id) {
+      marginLeft = '10px';
+    }
+
     return connectDragSource(connectDropTarget(
-      <div className='board-issue' style={ { ...styles, opacity, backgroundColor } }>
+      <div className='board-issue' style={ { ...styles, opacity, backgroundColor, marginLeft } }>
         <div className='board-issue-content'>
           <div style={ { float: 'right' } }>
-            <img className='board-avatar' src={ avatar }/>
+            <img className='board-avatar' src={ issue.avatar || no_avatar }/>
           </div>
           <div>
-            <span className='type-abb'>{ abb }</span>
-            <a href='#' onClick={ (e) => { e.preventDefault(); issueView(id) } }>{ pkey } - { no }</a>
+            <span className='type-abb'>{ _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).abb : '-' }</span>
+            <a href='#' onClick={ (e) => { e.preventDefault(); issueView(issue.id) } }>{ pkey } - { issue.no }</a>
           </div>
           <div>
-            { title }
+            { issue.title || '' }
           </div>
         </div>
       </div>
