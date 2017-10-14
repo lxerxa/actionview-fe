@@ -9,18 +9,28 @@ const bucketTarget = {
     const { dragAction, doAction, workflowScreenShow } = props;
     const card = monitor.getItem();
     if (dragAction.screen) {
-      workflowScreenShow(card.id, dragAction.id);
+      workflowScreenShow(card.issue.id, dragAction.id);
     } else {
-      doAction(card.id, card.entry_id, dragAction.id);
+      doAction(card.issue.id, card.issue.entry_id, dragAction.id);
     }
   }
 }
 
-@DropTarget(props => props.accepts, bucketTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
-}))
+@DropTarget(
+  props => {
+    if (props.draggedIssue && props.draggedIssue.parent && props.draggedIssue.parent.id) {
+      return _.map(props.accepts, (v) => props.draggedIssue.parent.id + '-' + v);
+    } else {
+      return props.accepts;
+    }
+  },
+  bucketTarget, 
+  (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop()
+  })
+)
 export default class Bucket extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +44,7 @@ export default class Bucket extends Component {
     height: PropTypes.number.isRequired, 
     doAction: PropTypes.func.isRequired,
     workflowScreenShow: PropTypes.func.isRequired,
+    draggedIssue: PropTypes.object, 
     dragAction: PropTypes.object.isRequired 
   }
 

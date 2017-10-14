@@ -16,12 +16,13 @@ export default class OverlayColumn extends Component {
     draggableActions: PropTypes.array.isRequired,
     doAction: PropTypes.func.isRequired,
     workflowScreenShow: PropTypes.func.isRequired,
+    draggedIssue: PropTypes.object,
     options: PropTypes.object.isRequired,
     acceptStates: PropTypes.array.isRequired
   }
 
   render() {
-    const { isEmpty, acceptStates, draggableActions, options, doAction, workflowScreenShow } = this.props;
+    const { isEmpty, acceptStates, draggedIssue, draggableActions, options, doAction, workflowScreenShow } = this.props;
 
     const buckets = [];
     _.map(draggableActions, (v) => {
@@ -42,6 +43,7 @@ export default class OverlayColumn extends Component {
               _.map(buckets, (v, i) =>
                 <Bucket 
                   key={ i }
+                  draggedIssue={ draggedIssue }
                   accepts={ _.map(options.states, (v) => v.id) }
                   doAction={ doAction }
                   workflowScreenShow={ workflowScreenShow }
