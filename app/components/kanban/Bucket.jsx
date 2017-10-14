@@ -9,9 +9,9 @@ const bucketTarget = {
     const { dragAction, doAction, workflowScreenShow } = props;
     const card = monitor.getItem();
     if (dragAction.screen) {
-      workflowScreenShow(card.issue.id, dragAction.id);
+      workflowScreenShow(card.id, dragAction.id);
     } else {
-      doAction(card.issue.id, card.issue.entry_id, dragAction.id);
+      doAction(card.id, card.entry_id, dragAction.id);
     }
   }
 }

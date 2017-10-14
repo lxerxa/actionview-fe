@@ -127,7 +127,7 @@ export default class Column extends Component {
       { _.map(mainCards, (v, i) => {
         let card = {};
         if (v.mock) {
-          card = ( <span style={ { maginLeft: '5px' } }>{ v.no } - { v.title }</span> );
+          card = ( <span style={ { marginLeft: '5px' } }>{ v.no } - { v.title }</span> );
         } else {
           card = (
             <Card
