@@ -25,7 +25,7 @@ export default class Container extends Component {
     super(props);
     this.pid = '';
     this.kanban_id = '';
-    this.getAccess = this.getAccess.bind(this);
+    this.getList = this.getList.bind(this);
     this.setAccess = this.setAccess.bind(this);
     this.goto = this.goto.bind(this);
   }
@@ -47,8 +47,8 @@ export default class Container extends Component {
     workflow: PropTypes.object.isRequired
   }
 
-  async getAccess() {
-    await this.props.actions.getAccess(this.pid);
+  async getList() {
+    await this.props.actions.getOptions(this.pid);
     return this.props.kanban.ecode;
   }
 
@@ -221,10 +221,10 @@ export default class Container extends Component {
     const { params: { key, id } } = this.props;
     this.pid = key;
 
-    await this.getAccess();
+    await this.getList();
     if (!id) {
-      const { latest_access_id } = this.props.kanban;
-      this.goto(latest_access_id);
+      const { list } = this.props.kanban;
+      list.length > 0 && this.goto(_.head(list).id);
     }
   }
 
@@ -248,15 +248,15 @@ export default class Container extends Component {
     }
 
     let curKanban = {};
-    if (this.kanban_id && this.props.kanban.options.kanbans) {
-      curKanban = _.find(this.props.kanban.options.kanbans, { id: this.kanban_id }) || {};
+    if (this.kanban_id && this.props.kanban.list) {
+      curKanban = _.find(this.props.kanban.list, { id: this.kanban_id }) || {};
     }
 
     return (
       <div style={ { overflowY: 'hidden', height: 'inherit' } }>
         <Header 
           curKanban={ curKanban }
-          kanbans={ this.props.kanban.options.kanbans }
+          kanbans={ this.props.kanban.list }
           loading={ this.props.kanban.loading }
           goto={ this.goto }
           index={ this.index.bind(this) } 

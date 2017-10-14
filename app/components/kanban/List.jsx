@@ -204,6 +204,10 @@ export default class List extends Component {
       user
     } = this.props;
 
+    _.forEach(collection, (v, i) => {
+      v.rank = _.add(v.no, v.created_at / Math.pow(10, 9));
+    });
+
     const sortedCollection = _.sortByOrder(collection, [ 'rank' ]);
     const columnIssues = [];
     _.forEach(curKanban.columns, (v, i) => {
