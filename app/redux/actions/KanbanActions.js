@@ -1,9 +1,9 @@
 import { asyncFuncCreator } from '../utils';
 
-export function getAccess(key) {
+export function getOptions(key) {
   return asyncFuncCreator({
-    constant: 'KANBAN_ACCESS_GET',
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/access' })
+    constant: 'KANBAN_LIST_GET',
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/list' })
   });
 }
 
@@ -24,4 +24,11 @@ export function getDraggableActions(key, id) {
 
 export function cleanDraggableActions() {
   return { type: 'KANBAN_ISSUE_ACTIONS_CLEAN' };
+}
+
+export function setRank(key, kid, id, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_ISSUE_RANK_SET',
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/issue/' + id + '/rank', method: 'post', data: values || {} })
+  });
 }

@@ -103,14 +103,12 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_COPY:
     case t.ISSUE_MOVE:
     case t.ISSUE_CONVERT:
-    case t.ISSUE_KANBAN_RANK_SET:
       return { ...state, loading: true, historyLoaded: false };
 
     case t.ISSUE_EDIT_SUCCESS:
     case t.ISSUE_COPY_SUCCESS:
     case t.ISSUE_MOVE_SUCCESS:
     case t.ISSUE_CONVERT_SUCCESS:
-    case t.ISSUE_KANBAN_RANK_SET_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         if (ind !== -1) {
@@ -126,7 +124,6 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_COPY_FAIL:
     case t.ISSUE_MOVE_FAIL:
     case t.ISSUE_CONVERT_FAIL:
-    case t.ISSUE_KANBAN_RANK_SET_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:

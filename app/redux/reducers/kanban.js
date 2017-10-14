@@ -1,20 +1,19 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { ecode: 0, latest_access_id: '', options: {}, loading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
+const initialState = { ecode: 0, latest_access_id: '', list: [], loading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
 
 export default function activity(state = initialState, action) {
   switch (action.type) {
-    case t.KANBAN_ACCESS_GET:
-      return { ...state, loading: true, latest_access_id: '', options: {} };
+    case t.KANBAN_LIST_GET:
+      return { ...state, loading: true, latest_access_id: '', list: [] };
 
-    case t.KANBAN_ACCESS_GET_SUCCESS:
+    case t.KANBAN_LIST_GET_SUCCESS:
       if (action.result.ecode === 0) {
-        state.latest_access_id = action.result.data.id || '';
-        state.options = action.result.options || {};
+        state.list = action.result.data || [];
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
-    case t.KANBAN_ACCESS_GET_FAIL:
+    case t.KANBAN_LIST_GET_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.KANBAN_ISSUE_ACTIONS_GET:
