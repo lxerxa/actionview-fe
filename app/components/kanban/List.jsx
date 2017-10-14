@@ -262,7 +262,7 @@ export default class List extends Component {
                   key={ i }
                   index={ i }
                   isEmpty={ draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1 ? false : true }
-                  draggedIssue={ _.find(columnIssues[i], { id: draggedIssue }) }
+                  draggedIssue={ _.find(collection, { id: draggedIssue }) }
                   draggableActions={ draggableActions }
                   doAction={ doAction }
                   workflowScreenShow={ this.workflowScreenShow.bind(this) }
