@@ -27,6 +27,7 @@ export default class Column extends Component {
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
+    rankable: PropTypes.bool.isRequired,
     setRank: PropTypes.func.isRequired
   }
 
@@ -84,7 +85,7 @@ export default class Column extends Component {
       subtaskShow=false,
       getDraggableActions, 
       cleanDraggableActions, 
-      setRank, 
+      rankable, 
       closeDetail, 
       openedIssue, 
       options, 
@@ -141,6 +142,7 @@ export default class Column extends Component {
               issueView={ this.issueView.bind(this) }
               getDraggableActions={ getDraggableActions }
               cleanDraggableActions={ cleanDraggableActions }
+              rankable={ rankable } 
               setRank={ this.setRank.bind(this) } 
               moveCard={ this.moveCard.bind(this) }/> );
         }
@@ -153,7 +155,8 @@ export default class Column extends Component {
               issueView={ this.issueView.bind(this) }
               getDraggableActions={ getDraggableActions }
               cleanDraggableActions={ cleanDraggableActions }
-              setRank={ setRank }
+              rankable={ rankable }
+              setRank={ this.setRank.bind(this) } 
               cards={ classifiedSubtasks[v.id] }
               pkey={ pkey }
               accepts={ accepts }

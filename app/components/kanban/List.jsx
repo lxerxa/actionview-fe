@@ -19,7 +19,7 @@ const OverlayColumn = require('./OverlayColumn');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 30, category: 'all', barShow: false, selectVersionShow: false, workflowScreenShow: false, drop_issue_id: '', action_id: '' };
+    this.state = { barShow: false, selectVersionShow: false, workflowScreenShow: false, drop_issue_id: '', action_id: '' };
   }
 
   static propTypes = {
@@ -84,6 +84,7 @@ export default class List extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
+    rankable: PropTypes.bool.isRequired,
     setRank: PropTypes.func.isRequired,
     release: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
@@ -199,6 +200,7 @@ export default class List extends Component {
       resetState,
       del,
       doAction,
+      rankable,
       setRank,
       release,
       user
@@ -230,7 +232,7 @@ export default class List extends Component {
         </div>
         { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
-         <img src={ loadingImg } className='loading'/> 
+          <img src={ loadingImg } className='loading'/> 
         </div> }
 
         { !_.isEmpty(curKanban) && !indexLoading && 
@@ -251,6 +253,7 @@ export default class List extends Component {
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
+                rankable={ rankable }
                 setRank={ setRank }
                 cards={ columnIssues[i] }
                 pkey={ project.key }

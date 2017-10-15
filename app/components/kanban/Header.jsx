@@ -26,21 +26,24 @@ export default class Header extends Component {
     curKanban: PropTypes.object,
     kanbans: PropTypes.array,
     loading: PropTypes.bool,
+    switchRank: PropTypes.func,
     goto: PropTypes.func,
     index: PropTypes.func,
     getOptions: PropTypes.func
   }
 
   changeKanban(eventKey) {
-    const { goto } = this.props;
+    const { goto, switchRank } = this.props;
     goto(eventKey);
     this.setState({ filter: 'all' });
+    switchRank(true);
   }
 
   handleSelect(selectedKey) {
     this.setState({ filter: selectedKey });
 
-    const { index, curKanban } = this.props;
+    const { index, curKanban, switchRank } = this.props;
+    switchRank(selectedKey === 'all');
     index(_.extend(_.clone(curKanban.query), selectedKey !== 'all' ? curKanban.filters[selectedKey].query || {} : {}));
   }
 

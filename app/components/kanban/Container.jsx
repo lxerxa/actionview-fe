@@ -259,10 +259,12 @@ export default class Container extends Component {
           kanbans={ this.props.kanban.list }
           loading={ this.props.kanban.loading }
           goto={ this.goto }
+          switchRank={ this.props.actions.switchRank }
           index={ this.index.bind(this) } 
           getOptions={ this.getOptions.bind(this) }/>
         <List 
           curKanban={ curKanban }
+          rankable={ this.props.kanban.rankable }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
           getDraggableActions={ this.getDraggableActions.bind(this) }
