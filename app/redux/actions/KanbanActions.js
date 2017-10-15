@@ -26,6 +26,10 @@ export function cleanDraggableActions() {
   return { type: 'KANBAN_ISSUE_ACTIONS_CLEAN' };
 }
 
+export function switchRank(flag) {
+  return { type: 'KANBAN_SWITCH_RANK', flag };
+}
+
 export function setRank(key, kid, id, values) {
   return asyncFuncCreator({
     constant: 'KANBAN_ISSUE_RANK_SET',

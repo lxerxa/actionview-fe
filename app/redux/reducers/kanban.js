@@ -1,6 +1,6 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { ecode: 0, latest_access_id: '', list: [], loading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
+const initialState = { ecode: 0, rankable: true, list: [], loading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
 
 export default function activity(state = initialState, action) {
   switch (action.type) {
@@ -30,6 +30,9 @@ export default function activity(state = initialState, action) {
 
     case t.KANBAN_ISSUE_ACTIONS_CLEAN:
       return { ...state, draggedIssue: '', wfactions: [] };
+
+    case t.KANBAN_SWITCH_RANK:
+      return { ...state, rankable: action.flag };
 
     default:
       return state;

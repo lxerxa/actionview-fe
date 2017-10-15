@@ -73,14 +73,18 @@ const cardTarget = {
 };
 
 @DropTarget(
-  props => _.map(props.accepts, 
-    (v) => { 
+  props => {
+    if (!props.rankable) {
+      return [];
+    }
+    return _.map(props.accepts, (v) => { 
       if (props.issue.parent && props.issue.parent.id) {
         return props.issue.parent.id + '-' + v;
       } else {
         return v;
       }
-    }), 
+    }) 
+  }, 
   cardTarget, 
   connect => ({
     connectDropTarget: connect.dropTarget()
@@ -107,6 +111,7 @@ export default class Card extends Component {
     connectDropTarget: PropTypes.func.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
+    rankable: PropTypes.bool.isRequired,
     setRank: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
     issueView: PropTypes.func.isRequired,
