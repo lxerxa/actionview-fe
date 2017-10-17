@@ -206,24 +206,38 @@ export default class List extends Component {
       user
     } = this.props;
 
-    _.forEach(collection, (v, i) => {
-      v.rank = _.add(v.no, v.created_at / Math.pow(10, 9));
-    });
-
-    const sortedCollection = _.sortByOrder(collection, [ 'rank' ]);
     const columnIssues = [];
-    _.forEach(curKanban.columns, (v, i) => {
-      columnIssues[i] = [];
-    });
-
-    _.forEach(curKanban.columns, (v, i) => {
-      _.forEach(sortedCollection, (v2) => {
-        if (_.indexOf(v.states, v2.state) !== -1) {
-          columnIssues[i].push(v2);
-          return;
+    if (!_.isEmpty(curKanban)) {
+      // add rank for every issue
+      const rankMap = curKanban.rank;
+      _.forEach(collection, (v, i) => {
+        if (v.parent && v.parent.id) {
+          const baseRank = rankMap[v.parent.id] || v.parent.no;
+          if (rankMap[v.id]) {
+            v.rank = _.add(baseRank, rankMap[v.id] / 1000); 
+          } else {
+            v.rank = _.add(baseRank, 0.999);
+          }
+        } else {
+          v.rank = rankMap[v.id] || v.no;
         }
       });
-    });
+
+      const sortedCollection = _.sortByOrder(collection, [ 'rank' ]); 
+
+      // classified issue as columns 
+      _.forEach(curKanban.columns, (v, i) => {
+        columnIssues[i] = [];
+      });
+      _.forEach(curKanban.columns, (v, i) => {
+        _.forEach(sortedCollection, (v2) => {
+          if (_.indexOf(v.states, v2.state) !== -1) {
+            columnIssues[i].push(v2);
+            return;
+          }
+        });
+      });
+    }
 
     return (
       <div className='board-container'>
@@ -239,7 +253,15 @@ export default class List extends Component {
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(curKanban.columns, (v, i) => ( <li key={ i } className='board-column'>{ v.name }（{ columnIssues[i].length }）{ i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && <a href='#' style={ { float: 'right' } } onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>发布...</a> }</li> ) ) }
+            { _.map(curKanban.columns, (v, i) => ( 
+              <li key={ i } className='board-column'>
+                { v.name }（{ columnIssues[i].length }）
+                { i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && 
+                <a href='#' style={ { float: 'right' } } 
+                  onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
+                  发布...
+                </a> }
+              </li> ) ) }
             </ul>
           </div>
           <ul className='board-columns'>

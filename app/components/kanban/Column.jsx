@@ -57,10 +57,10 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.state.cards = nextProps.cards;
     //if (this.state.cards.length === nextProps.cards.length) {
     //  return;
     //}
+    //this.state.cards = nextProps.cards;
 
     //const oldCardIds = _.map(this.state.cards, (v) => v.id );
     //const newCardIds = _.map(nextProps.cards, (v) => v.id );
@@ -81,7 +81,7 @@ export default class Column extends Component {
   render() {
     const { 
       no,
-      isSubtaskCol=false, 
+      isSubtaskCol=false,
       subtaskShow=false,
       getDraggableActions, 
       cleanDraggableActions, 
@@ -101,8 +101,7 @@ export default class Column extends Component {
       if (subtaskShow) {
         _.map(cards, (v, i) => {
           if (v.parent && v.parent.id) {
-            const index = _.findIndex(mainCards, { id: v.parent.id });
-            if (index === -1) {
+            if (_.findIndex(cards, { id: v.parent.id }) === -1) {
               mainCards.push(_.extend(v.parent, { mock: true }));
             }
             if (!classifiedSubtasks[v.parent.id]) {
@@ -114,58 +113,31 @@ export default class Column extends Component {
           }
         });
       } else {
-        mainCards = _.filter(cards, (v) => { return !v.parent || !v.parent.id }); 
+        mainCards = cards;
       }
     }
 
-    let display = {};
-    if (isSubtaskCol) {
-      display =  'block';
-    }
-
     return (
-      <li className='board-column' style={ { display } }>
-      { _.map(mainCards, (v, i) => {
-        let card = {};
-        if (v.mock) {
-          card = ( <span style={ { marginLeft: '5px' } }>{ v.no } - { v.title }</span> );
-        } else {
-          card = (
-            <Card
-              openedIssue={ openedIssue }
-              index={ i }
-              issue={ v }
-              pkey={ pkey }
-              accepts={ accepts }
-              options={ options }
-              closeDetail={ closeDetail }
-              issueView={ this.issueView.bind(this) }
-              getDraggableActions={ getDraggableActions }
-              cleanDraggableActions={ cleanDraggableActions }
-              rankable={ rankable } 
-              setRank={ this.setRank.bind(this) } 
-              moveCard={ this.moveCard.bind(this) }/> );
-        }
-        if (subtaskShow && classifiedSubtasks[v.id] && classifiedSubtasks[v.id].length > 0) {
-          const subCol = (
-            <Column
-              no={ no }
-              isSubtaskCol={ true }
-              openedIssue={ openedIssue }
-              issueView={ this.issueView.bind(this) }
-              getDraggableActions={ getDraggableActions }
-              cleanDraggableActions={ cleanDraggableActions }
-              rankable={ rankable }
-              setRank={ this.setRank.bind(this) } 
-              cards={ classifiedSubtasks[v.id] }
-              pkey={ pkey }
-              accepts={ accepts }
-              closeDetail={ closeDetail }
-              options={ options } /> );
-          return ( <div key={ v.id }>{ card } { subCol }</div> );
-        } else {
-          return ( <div key={ v.id }>{ card }</div> );
-        } } ) }
+      <li className='board-column'>
+      { _.map(mainCards, (v, i) =>
+        <Card
+          key={ i }
+          colNo={ no }
+          openedIssue={ openedIssue }
+          index={ i }
+          issue={ v }
+          pkey={ pkey }
+          subtasks={ classifiedSubtasks[v.id] || [] }
+          accepts={ accepts }
+          options={ options }
+          closeDetail={ closeDetail }
+          issueView={ this.issueView.bind(this) }
+          getDraggableActions={ getDraggableActions }
+          cleanDraggableActions={ cleanDraggableActions }
+          rankable={ rankable } 
+          setRank={ this.setRank.bind(this) } 
+          moveCard={ this.moveCard.bind(this) }/>
+        ) }
       </li> );
   }
 }

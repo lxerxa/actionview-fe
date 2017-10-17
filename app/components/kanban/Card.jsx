@@ -3,6 +3,8 @@ import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
+import Column from './Column';
+
 const no_avatar = require('../../assets/images/no_avatar.png');
 
 const cardSource = {
@@ -12,7 +14,7 @@ const cardSource = {
     this.preIndex = props.index;
     return {
       id: props.issue.id,
-      entry_id: props.issue.entry_id,
+      entry_id: props.issue.entry_id || '',
       index: props.index
     };
   },
@@ -120,13 +122,16 @@ export default class Card extends Component {
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
     pkey: PropTypes.string.isRequired,
+    subtasks: PropTypes.array,
     accepts: PropTypes.array.isRequired,
+    colNo: PropTypes.number.isRequired,
     options: PropTypes.object.isRequired,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
     const { 
+      index,
       issue, 
       pkey, 
       issueView, 
@@ -136,10 +141,54 @@ export default class Card extends Component {
       connectDropTarget, 
       getDraggableActions,
       cleanDraggableActions,
+      rankable,
       setRank,
       closeDetail,
+      subtasks=[],
       accepts,
+      colNo,
+      moveCard,
       options } = this.props;
+
+    if (subtasks.length > 0) {
+      return connectDropTarget( 
+        <div style={ { opacity } }>
+          { issue.mock ?
+            <span style={ { marginLeft: '5px' } }>
+              { issue.no } - { issue.title }
+            </span>
+            :
+            <Card
+              openedIssue={ openedIssue }
+              index={ index }
+              issue={ issue }
+              pkey={ pkey }
+              colNo={ colNo }
+              accepts={ accepts }
+              options={ options }
+              closeDetail={ closeDetail }
+              issueView={ issueView }
+              getDraggableActions={ getDraggableActions }
+              cleanDraggableActions={ cleanDraggableActions }
+              rankable={ rankable }
+              setRank={ setRank }
+              moveCard={ moveCard }/> }
+          <Column 
+            isSubtaskCol={ true }
+            no={ colNo } 
+            openedIssue={ openedIssue } 
+            issueView={ issueView } 
+            getDraggableActions={ getDraggableActions } 
+            cleanDraggableActions={ cleanDraggableActions } 
+            cards={ subtasks } 
+            rankable={ rankable } 
+            setRank={ setRank }
+            pkey={ pkey }
+            accepts={ accepts }
+            closeDetail={ closeDetail }
+            options={ options }/>
+        </div> );
+    }
 
     const opacity = isDragging ? 0 : 1;
     const styles = { borderLeft: '5px solid ' + (_.findIndex(options.priorities, { id: issue.priority }) !== -1 ? _.find(options.priorities, { id: issue.priority }).color : '') };
@@ -161,8 +210,12 @@ export default class Card extends Component {
             <img className='board-avatar' src={ issue.avatar || no_avatar }/>
           </div>
           <div>
-            <span className='type-abb'>{ _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).abb : '-' }</span>
-            <a href='#' onClick={ (e) => { e.preventDefault(); issueView(issue.id) } }>{ pkey } - { issue.no }</a>
+            <span className='type-abb'>
+              { _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).abb : '-' }
+            </span>
+            <a href='#' onClick={ (e) => { e.preventDefault(); issueView(issue.id) } }>
+              { pkey } - { issue.no }
+            </a>
           </div>
           <div>
             { issue.title || '' }
