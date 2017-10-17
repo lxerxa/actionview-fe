@@ -4,13 +4,14 @@ import { DragSource, DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
 import Column from './Column';
+import Card2 from './Card2';
 
 const no_avatar = require('../../assets/images/no_avatar.png');
 
 const cardSource = {
   beginDrag(props) {
-    props.closeDetail();
-    props.getDraggableActions(props.issue.id);
+    //props.closeDetail();
+    //props.getDraggableActions(props.issue.id);
     this.preIndex = props.index;
     return {
       id: props.issue.id,
@@ -20,10 +21,10 @@ const cardSource = {
   },
 
   endDrag(props, monitor, component) {
-    props.cleanDraggableActions();
-    if (this.preIndex != props.index) {
-      props.setRank(props.issue.id, props.index);
-    }
+    //props.cleanDraggableActions();
+    //if (this.preIndex != props.index) {
+    //  props.setRank(props.issue.id, props.index);
+    //}
   }
 };
 
@@ -76,9 +77,6 @@ const cardTarget = {
 
 @DropTarget(
   props => {
-    if (!props.rankable) {
-      return [];
-    }
     return _.map(props.accepts, (v) => { 
       if (props.issue.parent && props.issue.parent.id) {
         return props.issue.parent.id + '-' + v;

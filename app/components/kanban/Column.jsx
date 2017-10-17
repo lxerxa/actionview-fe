@@ -9,9 +9,29 @@ export default class Column extends Component {
     super(props);
 
     this.moveCard = this.moveCard.bind(this);
-    this.state = { cards: [] };
+    this.state = { mainCards: [], classifiedSubtasks: {} };
 
-    this.state.cards = props.cards;
+    if (props.isSubtaskCol) {
+      this.state.mainCards = props.cards;
+    } else {
+      if (props.subtaskShow) {
+        _.map(props.cards, (v, i) => {
+          if (v.parent && v.parent.id) {
+            if (_.findIndex(props.cards, { id: v.parent.id }) === -1) {
+              this.state.mainCards.push(_.extend(v.parent, { mock: true }));
+            }
+            if (!this.state.classifiedSubtasks[v.parent.id]) {
+              this.state.classifiedSubtasks[v.parent.id] = [];
+            }
+            this.state.classifiedSubtasks[v.parent.id].push(v);
+          } else {
+            this.state.mainCards.push(v);
+          }
+        });
+      } else {
+        this.state.mainCards = props.cards;
+      }
+    }
   }
 
   static propTypes = {
@@ -32,11 +52,11 @@ export default class Column extends Component {
   }
 
   moveCard(dragIndex, hoverIndex) {
-    const { cards } = this.state;
-    const dragCard = cards[dragIndex];
+    const { mainCards } = this.state;
+    const dragCard = mainCards[dragIndex];
 
     this.setState(update(this.state, {
-      cards: {
+      mainCards: {
         $splice: [
           [dragIndex, 1],
           [hoverIndex, 0, dragCard]
@@ -91,37 +111,13 @@ export default class Column extends Component {
       options, 
       pkey, 
       accepts } = this.props;
-    const { cards } = this.state;
-
-    let mainCards = [];
-    let classifiedSubtasks = {};
-    if (isSubtaskCol) {
-      mainCards = cards;
-    } else {
-      if (subtaskShow) {
-        _.map(cards, (v, i) => {
-          if (v.parent && v.parent.id) {
-            if (_.findIndex(cards, { id: v.parent.id }) === -1) {
-              mainCards.push(_.extend(v.parent, { mock: true }));
-            }
-            if (!classifiedSubtasks[v.parent.id]) {
-              classifiedSubtasks[v.parent.id] = [];
-            }
-            classifiedSubtasks[v.parent.id].push(v);
-          } else {
-            mainCards.push(v);
-          }
-        });
-      } else {
-        mainCards = cards;
-      }
-    }
+    const { mainCards, classifiedSubtasks } = this.state;
 
     return (
       <li className='board-column'>
       { _.map(mainCards, (v, i) =>
         <Card
-          key={ i }
+          key={ v.id }
           colNo={ no }
           openedIssue={ openedIssue }
           index={ i }
