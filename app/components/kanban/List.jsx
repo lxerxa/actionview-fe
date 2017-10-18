@@ -7,19 +7,25 @@ import _ from 'lodash';
 
 const $ = require('$');
 const moment = require('moment');
+
 const loadingImg = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
 const CreateModal = require('../issue/CreateModal');
 const Card = require('./Card');
 const Column = require('./Column');
-const SelectVersionModal = require('./SelectVersionModal');
 const OverlayColumn = require('./OverlayColumn');
+const SelectVersionModal = require('./SelectVersionModal');
 
 @DragDropContext(HTML5Backend)
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { barShow: false, selectVersionShow: false, workflowScreenShow: false, drop_issue_id: '', action_id: '' };
+    this.state = { 
+      barShow: false, 
+      selectVersionShow: false, 
+      workflowScreenShow: false, 
+      drop_issue_id: '', 
+      action_id: '' };
   }
 
   static propTypes = {
@@ -208,29 +214,12 @@ export default class List extends Component {
 
     const columnIssues = [];
     if (!_.isEmpty(curKanban)) {
-      // add rank for every issue
-      const rankMap = curKanban.rank;
-      _.forEach(collection, (v, i) => {
-        if (v.parent && v.parent.id) {
-          const baseRank = rankMap[v.parent.id] || v.parent.no;
-          if (rankMap[v.id]) {
-            v.rank = _.add(baseRank, rankMap[v.id] / 1000); 
-          } else {
-            v.rank = _.add(baseRank, 0.999);
-          }
-        } else {
-          v.rank = rankMap[v.id] || v.no;
-        }
-      });
-
-      const sortedCollection = _.sortByOrder(collection, [ 'rank' ]); 
-
       // classified issue as columns 
       _.forEach(curKanban.columns, (v, i) => {
         columnIssues[i] = [];
       });
       _.forEach(curKanban.columns, (v, i) => {
-        _.forEach(sortedCollection, (v2) => {
+        _.forEach(collection, (v2) => {
           if (_.indexOf(v.states, v2.state) !== -1) {
             columnIssues[i].push(v2);
             return;
@@ -264,12 +253,13 @@ export default class List extends Component {
               </li> ) ) }
             </ul>
           </div>
-          <ul className='board-columns'>
+          <div className='board-columns'>
           { _.map(curKanban.columns, (v, i) => {
             return (
               <Column 
                 key={ i }
                 no={ i }
+                rankMap={ curKanban.rank || {} }
                 subtaskShow={ curKanban.subtask }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 issueView={ this.issueView.bind(this) }
@@ -282,7 +272,7 @@ export default class List extends Component {
                 accepts={ v.states }
                 closeDetail={ this.closeDetail.bind(this) }
                 options={ options } /> ) } ) }
-          </ul>
+          </div>
           <div className='board-zone-overlay' style={ { top: '46px' } }>
             <div className='board-zone-overlay-table'>
             { _.map(curKanban.columns, (v, i) => {
