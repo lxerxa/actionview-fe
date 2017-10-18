@@ -76,6 +76,9 @@ const cardTarget = {
 
 @DropTarget(
   props => {
+    if (!props.rankable) {
+      return [];
+    }
     return _.map(props.accepts, (v) => { 
       if (props.issue.parent && props.issue.parent.id) {
         return props.issue.parent.id + '-' + v;
@@ -115,7 +118,7 @@ export default class Card extends Component {
     closeDetail: PropTypes.func.isRequired,
     issueView: PropTypes.func.isRequired,
     issue: PropTypes.object.isRequired,
-    rankMap: PropTypes.object.isRequired,
+    rankMap: PropTypes.array.isRequired,
     openedIssue: PropTypes.object.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,

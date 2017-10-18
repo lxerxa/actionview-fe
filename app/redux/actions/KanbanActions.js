@@ -30,9 +30,10 @@ export function switchRank(flag) {
   return { type: 'KANBAN_SWITCH_RANK', flag };
 }
 
-export function setRank(key, kid, id, values) {
+export function setRank(key, kid, values) {
   return asyncFuncCreator({
     constant: 'KANBAN_ISSUE_RANK_SET',
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/issue/' + id + '/rank', method: 'post', data: values || {} })
+    kid,
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/rank', method: 'post', data: values || {} })
   });
 }

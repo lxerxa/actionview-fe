@@ -10,7 +10,8 @@ export default class Column extends Component {
     this.moveCard = this.moveCard.bind(this);
     this.arrangeCard = this.arrangeCard.bind(this);
 
-    this.state = { mainCards: [], classifiedSubtasks: {} };
+    this.state = { cards: [], mainCards: [], classifiedSubtasks: {} };
+    this.state.cards = props.cards;
     this.arrangeCard();
   }
 
@@ -18,7 +19,7 @@ export default class Column extends Component {
     isSubtaskCol: PropTypes.bool,
     subtaskShow: PropTypes.bool,
     no: PropTypes.number.isRequired,
-    rankMap: PropTypes.object.isRequired,
+    rankMap: PropTypes.array.isRequired,
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
@@ -33,7 +34,8 @@ export default class Column extends Component {
   }
 
   arrangeCard() {
-    const { no, cards, isSubtaskCol, subtaskShow, rankMap } = this.props;
+    const { no, isSubtaskCol, subtaskShow, rankMap } = this.props;
+    const { cards } = this.state;
     let mainCards = [], classifiedSubtasks = {};
 
     if (isSubtaskCol) {
@@ -58,20 +60,18 @@ export default class Column extends Component {
       }
     }
 
-    let curColRank = [];
+    let curRankCol = {};
+    const sortedCards = []; 
     if (mainCards.length > 0) {
-      const parent = _.head(mainCards).no;
-      curColRank = _.find(rankMap, { col: no, parent }); 
+      const parent = _.head(mainCards).parent && _.head(mainCards).parent.no || '';
+      curRankCol = _.find(rankMap, { col: no, parent }) || {}; 
+      console.log(curRankCol);
+      _.forEach(curRankCol.rank || [], (v) => {
+        sortedCards.push(_.find(cards, { no: v }));
+      });
     }
 
-    const sortedCards = []; 
-    _.forEach(curColRank, (v) => {
-      sortedCards.push(_.find(cards, { no: v }));
-    });
-
-    _.union(sortedCards, _.filter(mainCards, (v) => { return _.findIndex(sortedCards, { no: v.no }) === -1 }));
-
-    this.state.mainCards = mainCards;
+    this.state.mainCards = _.union(sortedCards, _.filter(mainCards, (v) => { return _.findIndex(sortedCards, { no: v.no }) === -1 }));
     this.state.classifiedSubtasks = classifiedSubtasks;
   }
 
@@ -103,10 +103,12 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //if (this.state.cards.length === nextProps.cards.length) {
-    //  return;
-    //}
-    //this.state.cards = nextProps.cards;
+    if (this.state.cards.length === nextProps.cards.length) {
+      return;
+    }
+
+    this.state.cards = nextProps.cards;
+    this.arrangeCard();
 
     //const oldCardIds = _.map(this.state.cards, (v) => v.id );
     //const newCardIds = _.map(nextProps.cards, (v) => v.id );
