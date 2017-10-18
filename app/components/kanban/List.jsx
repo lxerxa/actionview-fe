@@ -259,7 +259,7 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 no={ i }
-                rankMap={ curKanban.rank || {} }
+                rankMap={ curKanban.ranks || [] }
                 subtaskShow={ curKanban.subtask }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 issueView={ this.issueView.bind(this) }

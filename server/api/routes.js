@@ -851,7 +851,13 @@ export default function(router) {
   router.get('/project/:key/kanban/list', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', subtask: true, filters: [{name: '1111', query:{ assignees: 'me,ttt' }}, {name: '2222', query:{updated_at: '1w'}}, {name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', states: ['546761','546762']}, {name:'处理中', states: [ '546763' ]}, {name:'关闭', states:[]}], query: { type: '111,333' }, rank: {}, last_access_time: 11111111 }, { id: '2222', name:'2222', subtask: true, filters: [{name: 'mmmmmmm', query:{ assignees: 'me,ttt' }}, {name: 'nnnnnnn', query:{updated_at: '1w'}}, {name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', states: [ '546761']}, {name:'处理中22', states: [ '546762' ]}, {name:'关闭22', states:[ '546763' ]}], query: { type: '111,222' }, rank: {} }] };
+    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', subtask: true, filters: [{name: '1111', query:{ assignees: 'me,ttt' }}, {name: '2222', query:{updated_at: '1w'}}, {name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', states: ['546761','546762']}, {name:'处理中', states: [ '546763' ]}, {name:'关闭', states:[]}], query: { type: '111,333' }, ranks: [{ col: 0, parent: '', rank: [9999, 1555]}], last_access_time: 11111111 }, { id: '2222', name:'2222', subtask: true, filters: [{name: 'mmmmmmm', query:{ assignees: 'me,ttt' }}, {name: 'nnnnnnn', query:{updated_at: '1w'}}, {name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', states: [ '546761']}, {name:'处理中22', states: [ '546762' ]}, {name:'关闭22', states:[ '546763' ]}], query: { type: '111,222' }, rank: {} }] };
+    return res.status(200).send(results);
+  });
+  router.post('/project/:key/kanban/:kid/rank', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ col: 0, parent: '', rank: [9999, 1555]}] };
     return res.status(200).send(results);
   });
   /******************kanban***************/

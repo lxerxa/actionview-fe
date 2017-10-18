@@ -1,6 +1,7 @@
 import * as t from '../constants/ActionTypes';
+import _ from 'lodash';
 
-const initialState = { ecode: 0, rankable: true, list: [], loading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
+const initialState = { ecode: 0, rankable: true, list: [], loading: false, rankLoading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
 
 export default function activity(state = initialState, action) {
   switch (action.type) {
@@ -33,6 +34,19 @@ export default function activity(state = initialState, action) {
 
     case t.KANBAN_SWITCH_RANK:
       return { ...state, rankable: action.flag };
+
+    case t.KANBAN_ISSUE_RANK_SET:
+      return { ...state, rankLoading: true };
+
+    case t.KANBAN_ISSUE_RANK_SET_SUCCESS:
+      if (action.result.ecode === 0) {
+        const curKanbanInd = _.findIndex(state.list, { id: action.kid });
+        state.list[curKanbanInd].ranks = action.result.data;
+      }
+      return { ...state, rankLoading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_ISSUE_RANK_SET_FAIL:
+      return { ...state, rankLoading: false, error: action.error };
 
     default:
       return state;
