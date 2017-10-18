@@ -4,14 +4,13 @@ import { DragSource, DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
 import Column from './Column';
-import Card2 from './Card2';
 
 const no_avatar = require('../../assets/images/no_avatar.png');
 
 const cardSource = {
   beginDrag(props) {
-    //props.closeDetail();
-    //props.getDraggableActions(props.issue.id);
+    props.closeDetail();
+    props.getDraggableActions(props.issue.id);
     this.preIndex = props.index;
     return {
       id: props.issue.id,
@@ -21,10 +20,10 @@ const cardSource = {
   },
 
   endDrag(props, monitor, component) {
-    //props.cleanDraggableActions();
-    //if (this.preIndex != props.index) {
-    //  props.setRank(props.issue.id, props.index);
-    //}
+    props.cleanDraggableActions();
+    if (this.preIndex != props.index) {
+      props.setRank(props.issue.id);
+    }
   }
 };
 
@@ -116,6 +115,7 @@ export default class Card extends Component {
     closeDetail: PropTypes.func.isRequired,
     issueView: PropTypes.func.isRequired,
     issue: PropTypes.object.isRequired,
+    rankMap: PropTypes.object.isRequired,
     openedIssue: PropTypes.object.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
@@ -133,6 +133,7 @@ export default class Card extends Component {
       issue, 
       pkey, 
       issueView, 
+      rankMap,
       openedIssue, 
       isDragging, 
       connectDragSource, 
@@ -168,12 +169,14 @@ export default class Card extends Component {
               issueView={ issueView }
               getDraggableActions={ getDraggableActions }
               cleanDraggableActions={ cleanDraggableActions }
+              rankMap={ rankMap }
               rankable={ rankable }
               setRank={ setRank }
               moveCard={ moveCard }/> }
           <Column 
             isSubtaskCol={ true }
             no={ colNo } 
+            rankMap={ rankMap }
             openedIssue={ openedIssue } 
             issueView={ issueView } 
             getDraggableActions={ getDraggableActions } 

@@ -7,37 +7,18 @@ import Card from './Card';
 export default class Column extends Component {
   constructor(props) {
     super(props);
-
     this.moveCard = this.moveCard.bind(this);
-    this.state = { mainCards: [], classifiedSubtasks: {} };
+    this.arrangeCard = this.arrangeCard.bind(this);
 
-    if (props.isSubtaskCol) {
-      this.state.mainCards = props.cards;
-    } else {
-      if (props.subtaskShow) {
-        _.map(props.cards, (v, i) => {
-          if (v.parent && v.parent.id) {
-            if (_.findIndex(props.cards, { id: v.parent.id }) === -1) {
-              this.state.mainCards.push(_.extend(v.parent, { mock: true }));
-            }
-            if (!this.state.classifiedSubtasks[v.parent.id]) {
-              this.state.classifiedSubtasks[v.parent.id] = [];
-            }
-            this.state.classifiedSubtasks[v.parent.id].push(v);
-          } else {
-            this.state.mainCards.push(v);
-          }
-        });
-      } else {
-        this.state.mainCards = props.cards;
-      }
-    }
+    this.state = { mainCards: [], classifiedSubtasks: {} };
+    this.arrangeCard();
   }
 
   static propTypes = {
     isSubtaskCol: PropTypes.bool,
     subtaskShow: PropTypes.bool,
     no: PropTypes.number.isRequired,
+    rankMap: PropTypes.object.isRequired,
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
@@ -49,6 +30,49 @@ export default class Column extends Component {
     closeDetail: PropTypes.func.isRequired,
     rankable: PropTypes.bool.isRequired,
     setRank: PropTypes.func.isRequired
+  }
+
+  arrangeCard() {
+    const { no, cards, isSubtaskCol, subtaskShow, rankMap } = this.props;
+    let mainCards = [], classifiedSubtasks = {};
+
+    if (isSubtaskCol) {
+      mainCards = cards;
+    } else {
+      if (subtaskShow) {
+        _.map(cards, (v, i) => {
+          if (v.parent && v.parent.id) {
+            if (_.findIndex(cards, { id: v.parent.id }) === -1) {
+              mainCards.push(_.extend(v.parent, { mock: true }));
+            }
+            if (!classifiedSubtasks[v.parent.id]) {
+              classifiedSubtasks[v.parent.id] = [];
+            }
+            classifiedSubtasks[v.parent.id].push(v);
+          } else {
+            mainCards.push(v);
+          }
+        });
+      } else {
+        mainCards = _.reject(cards, (v) => { return v.parent && v.parent.id && true });
+      }
+    }
+
+    let curColRank = [];
+    if (mainCards.length > 0) {
+      const parent = _.head(mainCards).no;
+      curColRank = _.find(rankMap, { col: no, parent }); 
+    }
+
+    const sortedCards = []; 
+    _.forEach(curColRank, (v) => {
+      sortedCards.push(_.find(cards, { no: v }));
+    });
+
+    _.union(sortedCards, _.filter(mainCards, (v) => { return _.findIndex(sortedCards, { no: v.no }) === -1 }));
+
+    this.state.mainCards = mainCards;
+    this.state.classifiedSubtasks = classifiedSubtasks;
   }
 
   moveCard(dragIndex, hoverIndex) {
@@ -65,10 +89,12 @@ export default class Column extends Component {
     }));
   }
 
-  setRank(id, index) {
-    const { setRank } = this.props;
-    const { cards } = this.state;
-    setRank(id, { up: index <= 0 ? '' : cards[index - 1].id, down: index >= cards.length - 1 ? '' : cards[index + 1].id });
+  setRank(id) {
+    const { no, setRank } = this.props;
+    const { mainCards } = this.state;
+
+    const draggedIssue = _.find(mainCards, { id });
+    setRank({ col: no, parent: draggedIssue.parent && draggedIssue.parent.id || '', rank: _.map(mainCards, (v) => v.no) });
   }
 
   issueView(id) {
@@ -107,18 +133,25 @@ export default class Column extends Component {
       cleanDraggableActions, 
       rankable, 
       closeDetail, 
+      rankMap,
       openedIssue, 
       options, 
       pkey, 
       accepts } = this.props;
     const { mainCards, classifiedSubtasks } = this.state;
 
+    let styles = {};
+    if (isSubtaskCol) {
+      styles = { display: 'block' };
+    }
+
     return (
-      <li className='board-column'>
+      <div className='board-column' style={ styles }>
       { _.map(mainCards, (v, i) =>
         <Card
           key={ v.id }
           colNo={ no }
+          rankMap={ rankMap }
           openedIssue={ openedIssue }
           index={ i }
           issue={ v }
@@ -134,6 +167,6 @@ export default class Column extends Component {
           setRank={ this.setRank.bind(this) } 
           moveCard={ this.moveCard.bind(this) }/>
         ) }
-      </li> );
+      </div> );
   }
 }
