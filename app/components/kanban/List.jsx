@@ -114,13 +114,13 @@ export default class List extends Component {
     cleanRecord();
   }
 
-  async issueView(id, no) {
+  async issueView(id, colNo) {
     this.setState({ barShow: true });
 
     const { show, record, curKanban } = this.props;
     const colNum = curKanban.columns.length;
     let floatStyle = {};
-    if (no >= _.ceil(colNum / 2)) {
+    if (colNo >= _.ceil(colNum / 2)) {
       floatStyle = { left: $('.doc-container').offset().left };
     }
 
@@ -258,7 +258,7 @@ export default class List extends Component {
             return (
               <Column 
                 key={ i }
-                no={ i }
+                colNo={ i }
                 rankMap={ curKanban.ranks || [] }
                 subtaskShow={ curKanban.subtask }
                 openedIssue={ this.state.barShow ? itemData : {} }
@@ -277,10 +277,10 @@ export default class List extends Component {
             <div className='board-zone-overlay-table'>
             { _.map(curKanban.columns, (v, i) => {
               return (
-                <OverlayColumn 
+                <OverlayColumn
                   key={ i }
                   index={ i }
-                  isEmpty={ draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1 ? false : true }
+                  isEmpty={ !(draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1) }
                   draggedIssue={ _.find(collection, { id: draggedIssue }) }
                   draggableActions={ draggableActions }
                   doAction={ doAction }
