@@ -18,7 +18,7 @@ export default class Column extends Component {
   static propTypes = {
     isSubtaskCol: PropTypes.bool,
     subtaskShow: PropTypes.bool,
-    no: PropTypes.number.isRequired,
+    colNo: PropTypes.number.isRequired,
     rankMap: PropTypes.array.isRequired,
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
@@ -34,7 +34,7 @@ export default class Column extends Component {
   }
 
   arrangeCard() {
-    const { no, isSubtaskCol, subtaskShow, rankMap } = this.props;
+    const { colNo, isSubtaskCol, subtaskShow, rankMap } = this.props;
     const { cards } = this.state;
     let mainCards = [], classifiedSubtasks = {};
 
@@ -64,8 +64,7 @@ export default class Column extends Component {
     const sortedCards = []; 
     if (mainCards.length > 0) {
       const parent = _.head(mainCards).parent && _.head(mainCards).parent.no || '';
-      curRankCol = _.find(rankMap, { col: no, parent }) || {}; 
-      console.log(curRankCol);
+      curRankCol = _.find(rankMap, { col_no: colNo, parent }) || {}; 
       _.forEach(curRankCol.rank || [], (v) => {
         sortedCards.push(_.find(cards, { no: v }));
       });
@@ -90,16 +89,16 @@ export default class Column extends Component {
   }
 
   setRank(id) {
-    const { no, setRank } = this.props;
+    const { colNo, setRank } = this.props;
     const { mainCards } = this.state;
 
     const draggedIssue = _.find(mainCards, { id });
-    setRank({ col: no, parent: draggedIssue.parent && draggedIssue.parent.id || '', rank: _.map(mainCards, (v) => v.no) });
+    setRank({ col_no: colNo, parent: draggedIssue.parent && draggedIssue.parent.id || '', rank: _.map(mainCards, (v) => v.no) });
   }
 
   issueView(id) {
-    const { issueView, no } = this.props;
-    issueView(id, no);
+    const { issueView, colNo } = this.props;
+    issueView(id, colNo);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -128,7 +127,7 @@ export default class Column extends Component {
 
   render() {
     const { 
-      no,
+      colNo,
       isSubtaskCol=false,
       subtaskShow=false,
       getDraggableActions, 
@@ -152,7 +151,7 @@ export default class Column extends Component {
       { _.map(mainCards, (v, i) =>
         <Card
           key={ v.id }
-          colNo={ no }
+          colNo={ colNo }
           rankMap={ rankMap }
           openedIssue={ openedIssue }
           index={ i }
