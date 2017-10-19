@@ -178,7 +178,7 @@ export default class Card extends Component {
               moveCard={ moveCard }/> }
           <Column 
             isSubtaskCol={ true }
-            no={ colNo } 
+            colNo={ colNo } 
             rankMap={ rankMap }
             openedIssue={ openedIssue } 
             issueView={ issueView } 
