@@ -245,7 +245,7 @@ export default class List extends Component {
         no: i + 1,
         name: ( 
           <div> 
-            <a herf='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
+            <a href='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         key: collection[i].key,
