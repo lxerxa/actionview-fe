@@ -415,9 +415,22 @@ export default class DetailBar extends Component {
       linkLoading, 
       doAction,
       user } = this.props;
-    const { previewShow, photoIndex, newAssignee, settingAssignee, editAssignee, delFileShow, selectedFile, action_id } = this.state;
 
-    const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
+    const { 
+      previewShow, 
+      photoIndex, 
+      newAssignee, 
+      settingAssignee, 
+      editAssignee, 
+      delFileShow, 
+      selectedFile, 
+      action_id } = this.state;
+
+    const panelStyle = { marginBottom: '0px', borderTop: '0px' };
+
+    const assigneeOptions = _.map(options.assignees || [], (val) => { 
+      return { label: val.name + '(' + val.email + ')', value: val.id } 
+    });
 
     const subtaskTypeOptions = [];
     _.map(options.types, (val) => {
@@ -471,7 +484,7 @@ export default class DetailBar extends Component {
             <i className='fa fa-eye'></i>
           </Button>
         </OverlayTrigger>
-        <div className='panel panel-default' style={ { marginBottom: '0px' } }>
+        <div className='panel panel-default' style={ panelStyle }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
