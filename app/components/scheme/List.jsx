@@ -89,7 +89,7 @@ export default class List extends Component {
     for (let i = 0; i < stateNum; i++) {
       states.push({
         id: collection[i].id,
-        name: ( <a herf='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].id); } }>{ collection[i].name }</a> ),
+        name: ( <a href='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].id); } }>{ collection[i].name }</a> ),
         description: collection[i].description ? collection[i].description : '-',
         operation: (
           <div>
