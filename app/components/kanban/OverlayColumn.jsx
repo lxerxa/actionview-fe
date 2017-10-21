@@ -24,10 +24,16 @@ export default class OverlayColumn extends Component {
   render() {
     const { isEmpty, acceptStates, draggedIssue, draggableActions, options, doAction, workflowScreenShow } = this.props;
 
+    // get action num of reaching the state
+    const actionNum = _.countBy(draggableActions, _.iteratee('state'));
+
     const buckets = [];
     _.map(draggableActions, (v) => {
       if (_.indexOf(acceptStates, v.state) !== -1) {
-        const state = _.find(options.states, { id: v.state });
+        const state = _.clone(_.find(options.states, { id: v.state }));
+        if (actionNum[v.state] > 1) {
+          state.name = state.name + ' - ' + v.name;
+        }
         buckets.push({ ...v, state });
       }
     });
