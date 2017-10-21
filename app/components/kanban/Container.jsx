@@ -26,7 +26,6 @@ export default class Container extends Component {
     this.pid = '';
     this.kanban_id = '';
     this.getList = this.getList.bind(this);
-    this.setAccess = this.setAccess.bind(this);
     this.goto = this.goto.bind(this);
   }
 
@@ -50,10 +49,6 @@ export default class Container extends Component {
   async getList() {
     await this.props.actions.getOptions(this.pid);
     return this.props.kanban.ecode;
-  }
-
-  setAccess(id) {
-    this.props.actions.setAccess(this.pid, id);
   }
 
   goto(id) {
@@ -237,7 +232,7 @@ export default class Container extends Component {
     } else {
       if (id != this.kanban_id) {
         this.kanban_id = id;
-        this.setAccess(id);
+        this.props.actions.getRank(this.pid, this.kanban_id);
       }
     }
   }

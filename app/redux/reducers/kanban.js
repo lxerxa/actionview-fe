@@ -35,9 +35,11 @@ export default function activity(state = initialState, action) {
     case t.KANBAN_SWITCH_RANK:
       return { ...state, rankable: action.flag };
 
+    case t.KANBAN_ISSUE_RANK_GET:
     case t.KANBAN_ISSUE_RANK_SET:
       return { ...state, rankLoading: true };
 
+    case t.KANBAN_ISSUE_RANK_GET_SUCCESS:
     case t.KANBAN_ISSUE_RANK_SET_SUCCESS:
       if (action.result.ecode === 0) {
         const curKanbanInd = _.findIndex(state.list, { id: action.kid });
@@ -45,6 +47,7 @@ export default function activity(state = initialState, action) {
       }
       return { ...state, rankLoading: false, ecode: action.result.ecode };
 
+    case t.KANBAN_ISSUE_RANK_GET_SUCCESS:
     case t.KANBAN_ISSUE_RANK_SET_FAIL:
       return { ...state, rankLoading: false, error: action.error };
 

@@ -7,12 +7,12 @@ export function getOptions(key) {
   });
 }
 
-export function setAccess(key, id) {
-  return asyncFuncCreator({
-    constant: 'KANBAN_ACCESS_SET',
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/access', method: 'post', data: { id } })
-  });
-}
+//export function setAccess(key, id) {
+//  return asyncFuncCreator({
+//    constant: 'KANBAN_ACCESS_SET',
+//    promise: (client) => client.request({ url: '/project/' + key + '/kanban/access', method: 'post', data: { id } })
+//  });
+//}
 
 export function getDraggableActions(key, id) {
   return asyncFuncCreator({
@@ -28,6 +28,14 @@ export function cleanDraggableActions() {
 
 export function switchRank(flag) {
   return { type: 'KANBAN_SWITCH_RANK', flag };
+}
+
+export function getRank(key, kid) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_ISSUE_RANK_GET',
+    kid,
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/rank' })
+  });
 }
 
 export function setRank(key, kid, values) {
