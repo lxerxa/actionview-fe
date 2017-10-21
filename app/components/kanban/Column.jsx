@@ -66,10 +66,14 @@ export default class Column extends Component {
       const parent = _.head(mainCards).parent && _.head(mainCards).parent.no || '';
       curRankCol = _.find(rankMap, { col_no: colNo, parent }) || {}; 
       _.forEach(curRankCol.rank || [], (v) => {
-        sortedCards.push(_.find(cards, { no: v }));
+        const ind = _.findIndex(cards, { no: v });
+        if (ind !== -1) {
+          sortedCards.push(cards[ind]);
+        }
       });
     }
 
+    console.log(sortedCards);
     this.state.mainCards = _.union(sortedCards, _.filter(mainCards, (v) => { return _.findIndex(sortedCards, { no: v.no }) === -1 }));
     this.state.classifiedSubtasks = classifiedSubtasks;
   }
