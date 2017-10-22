@@ -56,7 +56,7 @@ export default class Container extends Component {
   }
 
   async index(query) {
-    await this.props.issueActions.index(this.pid, qs.stringify(query || {}));
+    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban' })));
     return this.props.issue.ecode;
   }
 
