@@ -73,7 +73,6 @@ export default class Column extends Component {
       });
     }
 
-    console.log(sortedCards);
     this.state.mainCards = _.union(sortedCards, _.filter(mainCards, (v) => { return _.findIndex(sortedCards, { no: v.no }) === -1 }));
     this.state.classifiedSubtasks = classifiedSubtasks;
   }

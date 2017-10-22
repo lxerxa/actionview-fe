@@ -256,7 +256,11 @@ export default class Container extends Component {
           goto={ this.goto }
           switchRank={ this.props.actions.switchRank }
           index={ this.index.bind(this) } 
-          getOptions={ this.getOptions.bind(this) }/>
+          project={ this.props.project.item }
+          create={ this.create.bind(this) }
+          options={ this.props.issue.options }
+          getOptions={ this.getOptions.bind(this) }
+          i18n={ this.props.i18n }/>
         <List 
           curKanban={ curKanban }
           rankable={ this.props.kanban.rankable }
