@@ -220,6 +220,9 @@ export default class List extends Component {
       });
       _.forEach(curKanban.columns, (v, i) => {
         _.forEach(collection, (v2) => {
+          if (!curKanban.subtask && v2.parent && v2.parent.id) {
+            return;
+          }
           if (_.indexOf(v.states, v2.state) !== -1) {
             columnIssues[i].push(v2);
             return;
