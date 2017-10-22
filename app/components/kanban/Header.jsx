@@ -70,7 +70,7 @@ export default class Header extends Component {
             { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && '该项目未定义看板。' } 
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>
-            { options.permissions && options.permissions.indexOf('create_issue') === -1 &&
+            { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
             <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
             { kanbans.length > 0 &&
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
