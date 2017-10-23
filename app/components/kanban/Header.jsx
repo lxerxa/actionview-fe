@@ -69,6 +69,18 @@ export default class Header extends Component {
       }
     });
 
+    if (gq.created_at && fq.created_at) {
+      if (gq.created_at == '1w' || fq.created_at == '1w') {
+        newQuery['created_at'] = '1w';
+      } else if (gq.created_at == '2w' || fq.created_at == '2w') {
+        newQuery['created_at'] = '2w';
+      } else {
+        newQuery['created_at'] = '1m';
+      }
+    } else {
+      newQuery['created_at'] = gq.created_at || fq.created_at;
+    }
+
     return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
   }
 
