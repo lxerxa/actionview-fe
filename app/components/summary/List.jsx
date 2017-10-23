@@ -24,7 +24,7 @@ export default class List extends Component {
 
     return ( loading ?
       <div style={ { marginTop: '15px' } }>
-        <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none', marginLeft: '45%' } }>
+        <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }>
           <img src={ img } className='loading'/>
         </div>
       </div>
