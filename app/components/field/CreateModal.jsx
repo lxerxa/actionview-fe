@@ -33,7 +33,8 @@ const validate = (values, props) => {
     'entry_id', 
     'definition_id', 
     'page', 
-    'orderBy' ];
+    'orderBy',
+    'from' ];
 
   if (!values.key) {
     errors.key = '必填';
