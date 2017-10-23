@@ -10,6 +10,7 @@ export default class Header extends Component {
   constructor(props) {
     super(props);
     this.state = { filter: 'all', createModalShow: false };
+    this.getQuery = this.getQuery.bind(this);
   }
 
   componentWillMount() {
@@ -20,7 +21,7 @@ export default class Header extends Component {
   componentWillReceiveProps(nextProps) {
     const { index } = this.props;
     if (this.props.curKanban.id != nextProps.curKanban.id) {
-      index(nextProps.curKanban.query);
+      index(this.getQuery(nextProps.curKanban.query || {}));
     }
   }
 
@@ -49,12 +50,34 @@ export default class Header extends Component {
     switchRank(true);
   }
 
+  getQuery(globalQuery, filterQuery) {
+    const gq = globalQuery || {};
+    const fq = filterQuery || {};
+
+    const multiValFields = [ 'types', 'priorities', 'assignees', 'reporters', 'modules' ];
+    const newQuery = {};
+    _.forEach(multiValFields, (val) => {
+      if (fq[val] && fq[val].length > 0 && gq[val] && gq[val].length > 0) {
+        newQuery[val] = _.intersection(fq[val], gq[val])
+      } else {
+        if (gq[val] && gq[val].length > 0) {
+          newQuery[val] = gq[val];
+        }
+        if (fq[val] && fq[val].length > 0) {
+          newQuery[val] = fq[val];
+        }
+      }
+    });
+
+    return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
+  }
+
   handleSelect(selectedKey) {
     this.setState({ filter: selectedKey });
 
     const { index, curKanban, switchRank } = this.props;
     switchRank(selectedKey === 'all');
-    index(_.extend(_.clone(curKanban.query), selectedKey !== 'all' ? curKanban.filters[selectedKey].query || {} : {}));
+    index(this.getQuery(curKanban.query || {}, selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query || {}));
   }
 
   render() {
