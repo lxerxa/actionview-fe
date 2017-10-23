@@ -211,7 +211,7 @@ export default class Card extends Component {
       <div className='board-issue' style={ { ...styles, opacity, backgroundColor, marginLeft } }>
         <div className='board-issue-content'>
           <div style={ { float: 'right' } }>
-            <img className='board-avatar' src={ issue.avatar || no_avatar }/>
+            <img className='board-avatar' src={ issue.assignee && issue.assignee.avatar || no_avatar }/>
           </div>
           <div>
             <span className='type-abb'>
