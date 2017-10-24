@@ -25,6 +25,7 @@ export default class Container extends Component {
     super(props);
     this.pid = '';
     this.kanban_id = '';
+    this.getOptions = this.getOptions.bind(this);
     this.getList = this.getList.bind(this);
     this.goto = this.goto.bind(this);
   }
@@ -216,6 +217,7 @@ export default class Container extends Component {
     const { params: { key, id } } = this.props;
     this.pid = key;
 
+    this.getOptions();
     await this.getList();
     if (!id) {
       const { list } = this.props.kanban;
@@ -224,15 +226,16 @@ export default class Container extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { params: { id } } = nextProps;
+    const { params: { id }, kanban } = nextProps;
+
     if (!id) {
       if (this.kanban_id) {
         this.goto(this.kanban_id);
       }
     } else {
-      if (id != this.kanban_id) {
+      if (id != this.kanban_id && kanban.list.length > 0) {
         this.kanban_id = id;
-        this.props.actions.getRank(this.pid, this.kanban_id);
+        this.props.actions.getRank(this.pid, id);
       }
     }
   }
@@ -243,7 +246,7 @@ export default class Container extends Component {
     }
 
     let curKanban = {};
-    if (this.kanban_id && this.props.kanban.list) {
+    if (this.props.issue.options.types && this.kanban_id && this.props.kanban.list) {
       curKanban = _.find(this.props.kanban.list, { id: this.kanban_id }) || {};
     }
 
@@ -259,7 +262,6 @@ export default class Container extends Component {
           project={ this.props.project.item }
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
-          getOptions={ this.getOptions.bind(this) }
           i18n={ this.props.i18n }/>
         <List 
           curKanban={ curKanban }

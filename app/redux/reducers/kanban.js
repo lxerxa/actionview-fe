@@ -43,11 +43,13 @@ export default function activity(state = initialState, action) {
     case t.KANBAN_ISSUE_RANK_SET_SUCCESS:
       if (action.result.ecode === 0) {
         const curKanbanInd = _.findIndex(state.list, { id: action.kid });
-        state.list[curKanbanInd].ranks = action.result.data;
+        if (curKanbanInd !== -1) {
+          state.list[curKanbanInd].ranks = action.result.data;
+        }
       }
       return { ...state, rankLoading: false, ecode: action.result.ecode };
 
-    case t.KANBAN_ISSUE_RANK_GET_SUCCESS:
+    case t.KANBAN_ISSUE_RANK_GET_FAIL:
     case t.KANBAN_ISSUE_RANK_SET_FAIL:
       return { ...state, rankLoading: false, error: action.error };
 
