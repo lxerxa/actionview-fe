@@ -13,13 +13,8 @@ export default class Header extends Component {
     this.getQuery = this.getQuery.bind(this);
   }
 
-  componentWillMount() {
-    const { getOptions } = this.props;
-    getOptions();
-  }
-
   componentWillReceiveProps(nextProps) {
-    const { index } = this.props;
+    const { index } = nextProps;
     if (this.props.curKanban.id != nextProps.curKanban.id) {
       index(this.getQuery(nextProps.curKanban.query || {}));
     }
@@ -35,8 +30,7 @@ export default class Header extends Component {
     switchRank: PropTypes.func,
     goto: PropTypes.func,
     index: PropTypes.func,
-    options: PropTypes.object,
-    getOptions: PropTypes.func
+    options: PropTypes.object
   }
 
   createModalClose() {
@@ -54,7 +48,7 @@ export default class Header extends Component {
     const gq = globalQuery || {};
     const fq = filterQuery || {};
 
-    const multiValFields = [ 'types', 'priorities', 'assignees', 'reporters', 'modules' ];
+    const multiValFields = [ 'type', 'prioritie', 'assignee', 'reporter', 'module' ];
     const newQuery = {};
     _.forEach(multiValFields, (val) => {
       if (fq[val] && fq[val].length > 0 && gq[val] && gq[val].length > 0) {
@@ -68,6 +62,14 @@ export default class Header extends Component {
         }
       }
     });
+
+    if (newQuery.type && gq.subtask) {
+      const subtaskTypes = _.map(_.filter(this.props.options.types, { type: 'subtask' }), (v) => v.id);
+      console.log(subtaskTypes);
+      if (subtaskTypes.length > 0) {
+        newQuery.type = _.union(newQuery.type, subtaskTypes); 
+      }
+    }
 
     if (gq.created_at && fq.created_at) {
       if (gq.created_at == '1w' || fq.created_at == '1w') {
