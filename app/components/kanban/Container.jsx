@@ -57,7 +57,7 @@ export default class Container extends Component {
   }
 
   async index(query) {
-    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban' })));
+    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban', limit: 10000 })));
     return this.props.issue.ecode;
   }
 
@@ -213,27 +213,30 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const { params: { key, id } } = this.props;
     this.pid = key;
 
     this.getOptions();
-    await this.getList();
-    if (!id) {
-      const { list } = this.props.kanban;
-      list.length > 0 && this.goto(_.head(list).id);
-    }
+    this.getList();
   }
 
   componentWillReceiveProps(nextProps) {
     const { params: { id }, kanban } = nextProps;
 
+    if (kanban.list.length <= 0) {
+      return;
+    }
+
     if (!id) {
       if (this.kanban_id) {
         this.goto(this.kanban_id);
+      } else {
+        const { list } = kanban;
+        list.length > 0 && this.goto(_.head(list).id);
       }
     } else {
-      if (id != this.kanban_id && kanban.list.length > 0) {
+      if (id != this.kanban_id) {
         this.kanban_id = id;
         this.props.actions.getRank(this.pid, id);
       }
@@ -255,7 +258,7 @@ export default class Container extends Component {
         <Header 
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
-          loading={ this.props.kanban.loading }
+          loading={ this.props.kanban.loading || this.props.issue.optionLoading }
           goto={ this.goto }
           switchRank={ this.props.actions.switchRank }
           index={ this.index.bind(this) } 

@@ -48,7 +48,7 @@ export default class Header extends Component {
     const gq = globalQuery || {};
     const fq = filterQuery || {};
 
-    const multiValFields = [ 'type', 'prioritie', 'assignee', 'reporter', 'module' ];
+    const multiValFields = [ 'type', 'priority', 'state', 'resolution', 'assignee', 'reporter', 'module' ];
     const newQuery = {};
     _.forEach(multiValFields, (val) => {
       if (fq[val] && fq[val].length > 0 && gq[val] && gq[val].length > 0) {
@@ -81,6 +81,18 @@ export default class Header extends Component {
       }
     } else {
       newQuery['created_at'] = gq.created_at || fq.created_at;
+    }
+
+    if (gq.updated_at && fq.updated_at) {
+      if (gq.updated_at == '1w' || fq.updated_at == '1w') {
+        newQuery['updated_at'] = '1w';
+      } else if (gq.updated_at == '2w' || fq.updated_at == '2w') {
+        newQuery['updated_at'] = '2w';
+      } else {
+        newQuery['updated_at'] = '1m';
+      }
+    } else {
+      newQuery['updated_at'] = gq.updated_at || fq.updated_at;
     }
 
     return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
