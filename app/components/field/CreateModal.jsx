@@ -34,7 +34,8 @@ const validate = (values, props) => {
     'definition_id', 
     'page', 
     'orderBy',
-    'from' ];
+    'from',
+    'limit' ];
 
   if (!values.key) {
     errors.key = '必填';
