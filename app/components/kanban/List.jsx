@@ -220,7 +220,7 @@ export default class List extends Component {
       });
       _.forEach(curKanban.columns, (v, i) => {
         _.forEach(collection, (v2) => {
-          if (!curKanban.subtask && v2.parent && v2.parent.id) {
+          if (!(curKanban.query && curKanban.query.subtask) && v2.parent && v2.parent.id) {
             return;
           }
           if (_.indexOf(v.states, v2.state) !== -1) {
@@ -263,7 +263,7 @@ export default class List extends Component {
                 key={ i }
                 colNo={ i }
                 rankMap={ curKanban.ranks || [] }
-                subtaskShow={ curKanban.subtask }
+                subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }

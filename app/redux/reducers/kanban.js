@@ -6,7 +6,7 @@ const initialState = { ecode: 0, rankable: true, list: [], loading: false, rankL
 export default function activity(state = initialState, action) {
   switch (action.type) {
     case t.KANBAN_LIST_GET:
-      return { ...state, loading: true, latest_access_id: '', list: [] };
+      return { ...state, loading: true, rankable: true, list: [] };
 
     case t.KANBAN_LIST_GET_SUCCESS:
       if (action.result.ecode === 0) {
@@ -43,11 +43,13 @@ export default function activity(state = initialState, action) {
     case t.KANBAN_ISSUE_RANK_SET_SUCCESS:
       if (action.result.ecode === 0) {
         const curKanbanInd = _.findIndex(state.list, { id: action.kid });
-        state.list[curKanbanInd].ranks = action.result.data;
+        if (curKanbanInd !== -1) {
+          state.list[curKanbanInd].ranks = action.result.data;
+        }
       }
       return { ...state, rankLoading: false, ecode: action.result.ecode };
 
-    case t.KANBAN_ISSUE_RANK_GET_SUCCESS:
+    case t.KANBAN_ISSUE_RANK_GET_FAIL:
     case t.KANBAN_ISSUE_RANK_SET_FAIL:
       return { ...state, rankLoading: false, error: action.error };
 
