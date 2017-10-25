@@ -6,7 +6,7 @@ const initialState = { ecode: 0, rankable: true, list: [], loading: false, rankL
 export default function activity(state = initialState, action) {
   switch (action.type) {
     case t.KANBAN_LIST_GET:
-      return { ...state, loading: true, latest_access_id: '', list: [] };
+      return { ...state, loading: true, rankable: true, list: [] };
 
     case t.KANBAN_LIST_GET_SUCCESS:
       if (action.result.ecode === 0) {
