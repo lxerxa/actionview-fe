@@ -11,19 +11,10 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (props.data.name !== values.name && _.findIndex(props.collection || [], { name: values.name }) !== -1) {
-    errors.name = '该名称已存在';
   }
 
-  if (!values.abb) {
+  if (!values.type) {
     errors.abb = '必填';
-  } else {
-    const pattern = new RegExp(/^[a-zA-Z0-9]/);
-    if (!pattern.test(values.abb)) {
-      errors.abb = '格式有误';
-    } else if (props.data.abb !== values.abb && _.findIndex(props.collection || [], { abb: values.abb }) !== -1) {
-      errors.abb = '该缩码已存在';
-    }
   }
 
   return errors;
@@ -31,7 +22,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'type',
-  fields: ['id', 'name', 'abb', 'description'],
+  fields: ['id', 'name', 'type'],
   validate
 })
 export default class EditModal extends Component {
@@ -83,12 +74,9 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, abb, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { id, name, type, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
-    if (abb.value) {
-      abb.value = abb.value.toUpperCase();
-      abb.value = abb.value.substring(0, 1);
-    }
+    const typeOptions = [{ label: 'Srcum Board', value: 'scrum' }, { label: 'Kanban', value: 'kanban' }]; 
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -103,10 +91,15 @@ export default class EditModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题类型名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
-            { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>类型</ControlLabel>
+            <Select
+              disabled={ submitting }
+              options={ typeOptions }
+              simpleValue clearable={ false }
+              value={ type.value }
+              onChange={ newValue => { type.onChange(newValue) } }
+              placeholder='请选择看板类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

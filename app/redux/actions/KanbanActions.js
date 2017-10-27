@@ -1,5 +1,27 @@
 import { asyncFuncCreator } from '../utils';
 
+export function create(key, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_CREATE',
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban', method: 'post', data: values })
+  });
+}
+
+export function update(key, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_UPDATE',
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + values.id, method: 'put', data: values })
+  });
+}
+
+export function del(key, id) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_DELETE',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + id, method: 'delete' })
+  });
+}
+
 export function getOptions(key) {
   return asyncFuncCreator({
     constant: 'KANBAN_LIST_GET',

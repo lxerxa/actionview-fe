@@ -1,15 +1,17 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, DropdownButton, MenuItem, Nav, NavItem } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem, Nav, NavItem, ButtonGroup } from 'react-bootstrap';
 import _ from 'lodash';
  
-const CreateModal = require('../issue/CreateModal');
+const CreateIssueModal = require('../issue/CreateModal');
+const CreateKanbanModal = require('./CreateModal');
+const EditKanbanModal = require('./EditModal');
 
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { filter: 'all', createModalShow: false };
+    this.state = { filter: 'all', createIssueModalShow: false, createKanbanModalShow: false };
     this.getQuery = this.getQuery.bind(this);
   }
 
@@ -33,15 +35,23 @@ export default class Header extends Component {
     options: PropTypes.object
   }
 
-  createModalClose() {
-    this.setState({ createModalShow: false });
+  createIssueModalClose() {
+    this.setState({ createIssueModalShow: false });
+  }
+
+  createKanbanModalClose() {
+    this.setState({ createKanbanModalShow: false });
   }
 
   changeKanban(eventKey) {
-    const { goto, switchRank } = this.props;
-    goto(eventKey);
-    this.setState({ filter: 'all' });
-    switchRank(true);
+    if (eventKey === 'create') {
+      this.setState({ createKanbanModalShow: true });
+    } else {
+      const { goto, switchRank } = this.props;
+      goto(eventKey);
+      this.setState({ filter: 'all' });
+      switchRank(true);
+    }
   }
 
   getQuery(globalQuery, filterQuery) {
@@ -120,10 +130,19 @@ export default class Header extends Component {
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>
             { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
-            <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
+            <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
+            { !_.isEmpty(curKanban) &&
+            <ButtonGroup style={ { marginRight: '10px' } }>
+              { curKanban.type == 'kanban' && <Button>看板</Button> }
+              { curKanban.type == 'scrum' && <Button>历史</Button> }
+              { curKanban.type == 'scrum' && <Button>活动Sprint</Button> }
+              <Button>配置</Button>
+            </ButtonGroup> }
             { kanbans.length > 0 &&
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
             { _.map(kanbans, (v, i) => ( <MenuItem key={ i } eventKey={ v.id }>{ v.name }</MenuItem> ) ) }
+            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
+            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='create'>创建看板</MenuItem> }
             </DropdownButton> }
           </div>
         </div>
@@ -136,10 +155,16 @@ export default class Header extends Component {
             { _.map(curKanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
           </Nav>
         </div> }
-        { this.state.createModalShow &&
-          <CreateModal
+        { this.state.createKanbanModalShow &&
+          <CreateKanbanModal
             show
-            close={ this.createModalClose.bind(this) }
+            close={ this.createKanbanModalClose.bind(this) }
+            create={ create }
+            i18n={ i18n }/> }
+        { this.state.createIssueModalShow &&
+          <CreateIssueModal
+            show
+            close={ this.createIssueModalClose.bind(this) }
             options={ options }
             create={ create }
             loading={ loading }
