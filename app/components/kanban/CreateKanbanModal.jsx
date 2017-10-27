@@ -11,30 +11,21 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (props.data.name !== values.name && _.findIndex(props.collection || [], { name: values.name }) !== -1) {
-    errors.name = '该名称已存在';
   }
 
-  if (!values.abb) {
-    errors.abb = '必填';
-  } else {
-    const pattern = new RegExp(/^[a-zA-Z0-9]/);
-    if (!pattern.test(values.abb)) {
-      errors.abb = '格式有误';
-    } else if (props.data.abb !== values.abb && _.findIndex(props.collection || [], { abb: values.abb }) !== -1) {
-      errors.abb = '该缩码已存在';
-    }
+  if (!values.type) {
+    errors.type = '必填';
   }
 
   return errors;
 };
 
 @reduxForm({
-  form: 'type',
-  fields: ['id', 'name', 'abb', 'description'],
+  form: 'kanban',
+  fields: ['name', 'type', 'description'],
   validate
 })
-export default class EditModal extends Component {
+export default class CreateModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -46,28 +37,22 @@ export default class EditModal extends Component {
     i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
-    dirty: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
-    initializeForm: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
-  }
-
-  componentWillMount() {
-    const { initializeForm, data } = this.props;
-    initializeForm({ ...data });
+    options: PropTypes.object.isRequired,
+    resetForm: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, update, close } = this.props;
-    const ecode = await update(values);
+    const { values, create, close } = this.props;
+    const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('更新完成。', 'success', 2000);
+      notify.show('新建完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -83,30 +68,32 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, abb, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { name, type, description }, options = {}, handleSubmit, invalid, submitting } = this.props;
+    const { screens = [], workflows = [] } = options;
 
-    if (abb.value) {
-      abb.value = abb.value.toUpperCase();
-      abb.value = abb.value.substring(0, 1);
-    }
+    const typeOptions = [{ label: 'Srcum Board', value: 'scrum' }, { label: 'Kanban', value: 'kanban' }]; 
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '编辑问题类型 - ' + data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>创建看板</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl type='hidden' { ...id }/>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题类型名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题类型名'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
-            { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }
+          <FormGroup controlId='formControlsSelect'>
+            <ControlLabel>类型</ControlLabel>
+            <Select 
+              disabled={ submitting } 
+              options={ typeOptions } 
+              simpleValue clearable={ false } 
+              value={ type.value || 'standard' } 
+              onChange={ newValue => { type.onChange(newValue) } } 
+              placeholder='请选择问题类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
@@ -116,7 +103,7 @@ export default class EditModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
+          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>

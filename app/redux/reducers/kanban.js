@@ -17,6 +17,43 @@ export default function activity(state = initialState, action) {
     case t.KANBAN_LIST_GET_FAIL:
       return { ...state, loading: false, error: action.error };
 
+    case t.KANBAN_CREATE:
+      return { ...state, loading: true };
+
+    case t.KANBAN_CREATE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.list.push(action.result.data);
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_CREATE_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case t.KANBAN_UPDATE:
+      return { ...state, loading: true };
+
+    case t.KANBAN_UPDATE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.list, { id: action.result.data.id });
+        state.list[ind] = action.result.data;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_UPDATE_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case t.KANBAN_DELETE:
+      return { ...state, loading: true };
+
+    case t.KANBAN_DELETE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.list = _.reject(state.list, { id: action.id });
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.TYPE_DELETE_FAIL:
+      return { ...state, loading: false, error: action.error };
+
     case t.KANBAN_ISSUE_ACTIONS_GET:
       return { ...state, wfLoading: true, draggedIssue: action.id, wfactions: [] };
 
