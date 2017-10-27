@@ -25,7 +25,7 @@ export function del(key, id) {
 export function getOptions(key) {
   return asyncFuncCreator({
     constant: 'KANBAN_LIST_GET',
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/list' })
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban' })
   });
 }
 

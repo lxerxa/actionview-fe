@@ -25,12 +25,13 @@ export default class Header extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
+    createKanban: PropTypes.func.isRequired,
     project: PropTypes.object,
     curKanban: PropTypes.object,
     kanbans: PropTypes.array,
     loading: PropTypes.bool,
-    switchRank: PropTypes.func,
     goto: PropTypes.func,
+    switchRank: PropTypes.func,
     index: PropTypes.func,
     options: PropTypes.object
   }
@@ -117,7 +118,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { i18n, curKanban, kanbans=[], loading, project, create, options } = this.props;
+    const { i18n, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
 
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
@@ -136,7 +137,7 @@ export default class Header extends Component {
               { curKanban.type == 'kanban' && <Button>看板</Button> }
               { curKanban.type == 'scrum' && <Button>历史</Button> }
               { curKanban.type == 'scrum' && <Button>活动Sprint</Button> }
-              <Button>配置</Button>
+              <Button onClick={ () => { goto(curKanban.id, 'config') } }>配置</Button>
             </ButtonGroup> }
             { kanbans.length > 0 &&
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>

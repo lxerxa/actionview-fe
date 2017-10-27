@@ -52,13 +52,18 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
-  goto(id) {
-    this.context.router.push({ pathname: '/project/' + this.pid + '/kanban/' + id });
+  goto(id, subpath) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/kanban/' + id + (subpath ? '/' + subpath : '') });
   }
 
   async index(query) {
     await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban', limit: 10000 })));
     return this.props.issue.ecode;
+  }
+
+  async createKanban(values) {
+    await this.props.actions.create(this.pid, values);
+    return this.props.kanban.ecode;
   }
 
   async create(values) {
@@ -263,6 +268,7 @@ export default class Container extends Component {
           switchRank={ this.props.actions.switchRank }
           index={ this.index.bind(this) } 
           project={ this.props.project.item }
+          createKanban={ this.createKanban.bind(this) }
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
