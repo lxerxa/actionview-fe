@@ -80,11 +80,11 @@ export default class CreateModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题类型名'/ >
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='看板名'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>类型</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ typeOptions } 
