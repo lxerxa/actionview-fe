@@ -65,7 +65,19 @@ export default class SearchList extends Component {
   }
 
   clean() {
-    this.setState({ type: '', assignee: '', reporter: '', watcher: '', state: '', priority: '', resolution: '', module: '', resolve_version: '', created_at: '', updated_at: '', title: '' });
+    this.setState({ 
+      type: '', 
+      assignee: '', 
+      reporter: '', 
+      watcher: '', 
+      state: '', 
+      priority: '', 
+      resolution: '', 
+      module: '', 
+      resolve_version: '', 
+      created_at: '', 
+      updated_at: '', 
+      title: '' });
   }
 
   search() {

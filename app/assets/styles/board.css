@@ -154,3 +154,11 @@
 .board-loading {
   margin-top: 80px;
 }
+
+.kanban-table-td-title {
+  margin-top: 12px;
+  display: block;
+  font-weight: bold;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}

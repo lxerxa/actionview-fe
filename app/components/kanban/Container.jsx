@@ -10,6 +10,7 @@ import * as WorkflowActions from 'redux/actions/WorkflowActions';
 const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
+const Config = require('./Config');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -23,6 +24,7 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
+    this.state = { model: 'issue' };
     this.pid = '';
     this.kanban_id = '';
     this.getOptions = this.getOptions.bind(this);
@@ -52,8 +54,8 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
-  goto(id, subpath) {
-    this.context.router.push({ pathname: '/project/' + this.pid + '/kanban/' + id + (subpath ? '/' + subpath : '') });
+  goto(id) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/kanban/' + id });
   }
 
   async index(query) {
@@ -63,6 +65,11 @@ export default class Container extends Component {
 
   async createKanban(values) {
     await this.props.actions.create(this.pid, values);
+    return this.props.kanban.ecode;
+  }
+
+  async editKanban(values) {
+    await this.props.actions.edit(this.pid, values.id, values);
     return this.props.kanban.ecode;
   }
 
@@ -261,6 +268,8 @@ export default class Container extends Component {
     return (
       <div style={ { overflowY: 'hidden', height: 'inherit' } }>
         <Header 
+          changeModel={ (model) => { this.setState({ model }) } }
+          model={ this.state.model }
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
           loading={ this.props.kanban.loading || this.props.issue.optionLoading }
@@ -272,6 +281,7 @@ export default class Container extends Component {
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
+        { this.state.model == 'issue' &&
         <List 
           curKanban={ curKanban }
           rankable={ this.props.kanban.rankable }
@@ -315,7 +325,13 @@ export default class Container extends Component {
           release={ this.release.bind(this) }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
-          { ...this.props.issue }/>
+          { ...this.props.issue }/> }
+        { this.state.model == 'config' &&
+        <Config
+          config={ curKanban }
+          edit={ this.editKanban.bind(this) }
+          options={ this.props.issue.options }
+          i18n={ this.props.i18n } /> }
       </div>
     );
   }

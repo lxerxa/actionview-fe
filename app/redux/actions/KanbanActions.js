@@ -7,10 +7,10 @@ export function create(key, values) {
   });
 }
 
-export function update(key, values) {
+export function edit(key, id, values) {
   return asyncFuncCreator({
     constant: 'KANBAN_UPDATE',
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + values.id, method: 'put', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + id, method: 'put', data: values })
   });
 }
 
