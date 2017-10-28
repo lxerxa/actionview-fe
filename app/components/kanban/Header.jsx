@@ -24,6 +24,8 @@ export default class Header extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    changeModel: PropTypes.func.isRequired,
+    model: PropTypes.string.isRequired,
     create: PropTypes.func.isRequired,
     createKanban: PropTypes.func.isRequired,
     project: PropTypes.object,
@@ -76,7 +78,6 @@ export default class Header extends Component {
 
     if (newQuery.type && gq.subtask) {
       const subtaskTypes = _.map(_.filter(this.props.options.types, { type: 'subtask' }), (v) => v.id);
-      console.log(subtaskTypes);
       if (subtaskTypes.length > 0) {
         newQuery.type = _.union(newQuery.type, subtaskTypes); 
       }
@@ -118,7 +119,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { i18n, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
+    const { i18n, changeModel, model, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
 
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
@@ -134,10 +135,10 @@ export default class Header extends Component {
             <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
             { !_.isEmpty(curKanban) &&
             <ButtonGroup style={ { marginRight: '10px' } }>
-              { curKanban.type == 'kanban' && <Button>看板</Button> }
-              { curKanban.type == 'scrum' && <Button>历史</Button> }
-              { curKanban.type == 'scrum' && <Button>活动Sprint</Button> }
-              <Button onClick={ () => { goto(curKanban.id, 'config') } }>配置</Button>
+              { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { changeModel('issue') } }>看板</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { changeModel('history') } }>历史</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { changeModel('issue') } }>活动Sprint</Button> }
+              <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { changeModel('config') } }>配置</Button>
             </ButtonGroup> }
             { kanbans.length > 0 &&
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
@@ -148,7 +149,7 @@ export default class Header extends Component {
           </div>
         </div>
 
-        { !loading && !_.isEmpty(curKanban) &&
+        { model === 'issue' && !loading && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5' } }>
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>过滤器：</span>
           <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.filter } onSelect={ this.handleSelect.bind(this) }>
