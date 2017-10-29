@@ -15,11 +15,13 @@ export default class Config extends Component {
       editModalShow: false, 
       globalFilterModalShow: false,
       quickFilterModalShow: false,
+      filterNo: -1,
       notifications: {} };
 
     this.editModalClose = this.editModalClose.bind(this);
     this.globalFilterModalClose = this.globalFilterModalClose.bind(this);
     this.quickFilterModalClose = this.quickFilterModalClose.bind(this);
+    this.condsTxt = this.condsTxt.bind(this);
   }
 
   static propTypes = {
@@ -27,6 +29,120 @@ export default class Config extends Component {
     config: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     edit: PropTypes.func.isRequired
+  }
+
+  condsTxt(query) {
+    const { options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
+    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
+
+    const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
+    const queryConds = [];
+    let index = -1;
+
+    if (query.type) { 
+      const typeQuery = query.type;
+      const typeQueryNames = [];
+      for (let i = 0; i < typeQuery.length; i++) {
+        if ((index = _.findIndex(types, { id: typeQuery[i] })) !== -1) {
+          typeQueryNames.push(types[index].name);
+        } else {
+          return '类型' + errorMsg;
+        }
+      }
+      queryConds.push('类型：' + typeQueryNames.join('，'));
+    }
+    if (query.assignee) {
+      const assigneeQuery = query.assignee;
+      const assigneeQueryNames = [];
+      for (let i = 0; i < assigneeQuery.length; i++) {
+        if (assigneeQuery[i] == 'me') {
+          assigneeQueryNames.push('当前用户');
+        } else if ((index = _.findIndex(users, { id: assigneeQuery[i] })) !== -1) {
+          assigneeQueryNames.push(users[index].name);
+        } else {
+          return '经办人' + errorMsg;
+        }
+      }
+      queryConds.push('经办人：' + assigneeQueryNames.join('，'));
+    }
+    if (query.reporter) {
+      const reporterQuery = query.reporter;
+      const reporterQueryNames = [];
+      for (let i = 0; i < reporterQuery.length; i++) {
+        if (reporterQuery[i] == 'me') {
+          reporterQueryNames.push('当前用户');
+        } else if ((index = _.findIndex(users, { id: reporterQuery[i] })) !== -1) {
+          reporterQueryNames.push(users[index].name);
+        } else {
+          return '报告人' + errorMsg;
+        }
+      }
+      queryConds.push('报告人：' + reporterQueryNames.join('，'));
+    }
+    if (query.watcher) {
+      const watcherQuery = query.watcher;
+      const watcherQueryNames = [];
+      for (let i = 0; i < watcherQuery.length; i++) {
+        if (watcherQuery[i] == 'me') {
+          watcherQueryNames.push('当前用户');
+        }
+      }
+      queryConds.push('关注者：' + watcherQueryNames.join('，'));
+    }
+    if (query.state) {
+      const stateQuery = query.state;
+      const stateQueryNames = [];
+      for (let i = 0; i < stateQuery.length; i++) {
+        if ((index = _.findIndex(states, { id: stateQuery[i] })) !== -1) {
+          stateQueryNames.push(states[index].name);
+        } else {
+          return '状态' + errorMsg;
+        }
+      }
+      queryConds.push('状态：' + stateQueryNames.join('，'));
+    }
+    if (query.resolution) {
+      const resolutionQuery = query.resolution;
+      const resolutionQueryNames = [];
+      for (let i = 0; i < resolutionQuery.length; i++) {
+        if ((index = _.findIndex(resolutions, { id: resolutionQuery[i] })) !== -1) {
+          resolutionQueryNames.push(resolutions[index].name);
+        } else {
+          return '解决结果' + errorMsg;
+        }
+      }
+      queryConds.push('解决结果：' + resolutionQueryNames.join('，'));
+    }
+    if (query.priority) {
+      const priorityQuery = query.priority;
+      const priorityQueryNames = [];
+      for (let i = 0; i < priorityQuery.length; i++) {
+        if ((index = _.findIndex(priorities, { id: priorityQuery[i] })) !== -1) {
+          priorityQueryNames.push(priorities[index].name);
+        } else {
+          return '优先级' + errorMsg;
+        }
+      }
+      queryConds.push('优先级：' + priorityQueryNames.join('，'));
+    }
+    if (query.module) {
+      const moduleQuery = query.module;
+      const moduleQueryNames = [];
+      for (let i = 0; i < moduleQuery.length; i++) {
+        if ((index = _.findIndex(modules, { id: moduleQuery[i] })) !== -1) {
+          moduleQueryNames.push(modules[index].name);
+        } else {
+          return '模块' + errorMsg;
+        }
+      }
+      queryConds.push('模块：' + moduleQueryNames.join('，'));
+    }
+    if (query.created_at) { queryConds.push('创建时间：' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
+    if (query.updated_at) { queryConds.push('更新时间：' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
+
+    if (queryConds.length <= 0) { return '全部问题'; }
+
+    return queryConds.join(' | ');
   }
 
   editModalClose() {
@@ -38,7 +154,7 @@ export default class Config extends Component {
   }
 
   quickFilterModalClose() {
-    this.setState({ quickFilterShow: false });
+    this.setState({ quickFilterModalShow: false });
   }
 
   render() {
@@ -79,9 +195,14 @@ export default class Config extends Component {
       ),
       contents: (
         <div style={ styles }>
+          { _.isEmpty(config.query) ?
           <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
             <li>全部</li>
           </ul>
+          :
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+            <li>{ this.condsTxt(config.query) }</li>
+          </ul> }
           <Button onClick={ () => { this.setState({ globalFilterModalShow: true }) } }>设置</Button>
         </div>
       )
@@ -90,15 +211,22 @@ export default class Config extends Component {
       id: 'filters',
       title: (
         <div>
-          <span className='kanban-table-td-title'>自定义过滤器</span>
+          <span className='kanban-table-td-title'>快速过滤器</span>
         </div>
       ),
       contents: (
         <div style={ styles }>
+          { (!config.filters || config.filters.length <= 0) ?
           <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
-            <li>全部</li>
+            <li>未定义</li>
           </ul>
-          <Button onClick={ () => { this.setState({ editModalShow: true }) } }>添加</Button>
+          :
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+            { _.map(config.filters, (v, i) => 
+              <li key={ i }>{ this.condsTxt(v.query || {}) }</li>
+            ) }
+          </ul> }
+          <Button onClick={ () => { this.setState({ quickFilterModalShow: true, filterNo: -1 }) } }>添加</Button>
         </div>
       )
     });
@@ -150,6 +278,17 @@ export default class Config extends Component {
             show
             model='global'
             close={ this.globalFilterModalClose }
+            update={ edit }
+            loading={ false }
+            data={ config }
+            options={ options }
+            i18n={ i18n }/> }
+        { this.state.quickFilterModalShow &&
+          <FilterConfigModal
+            show
+            model='filter'
+            filterNo={ this.state.filterNo }
+            close={ this.quickFilterModalClose }
             update={ edit }
             loading={ false }
             data={ config }

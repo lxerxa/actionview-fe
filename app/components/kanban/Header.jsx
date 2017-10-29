@@ -137,6 +137,7 @@ export default class Header extends Component {
             <ButtonGroup style={ { marginRight: '10px' } }>
               { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { changeModel('issue') } }>看板</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { changeModel('history') } }>历史</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'backlog' && '#eee' } } onClick={ () => { changeModel('backlog') } }>Backlog</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { changeModel('issue') } }>活动Sprint</Button> }
               <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { changeModel('config') } }>配置</Button>
             </ButtonGroup> }
