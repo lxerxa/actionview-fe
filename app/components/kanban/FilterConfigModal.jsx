@@ -10,13 +10,13 @@ export default class FilterConfigModal extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      type: '', 
-      assignee: '', 
-      reporter: '', 
-      state: '', 
-      priority: '', 
-      resolution: '', 
-      module: '', 
+      type: [], 
+      assignee: [], 
+      reporter: [], 
+      state: [], 
+      priority: [], 
+      resolution: [], 
+      module: [], 
       created_at: '', 
       updated_at: '' };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,7 +36,7 @@ export default class FilterConfigModal extends Component {
       this.state.created_at = query.created_at || ''; 
       this.state.updated_at = query.updated_at || ''; 
     } else if (model == 'filter' && filterNo) {
-      if (filters[filterNo]) {
+      if (!filters[filterNo]) {
         return;
       }
       this.state.type = filters[filterNo].type && filters[filterNo].type.join(',') || '';
@@ -60,19 +60,6 @@ export default class FilterConfigModal extends Component {
     close: PropTypes.func.isRequired,
     options: PropTypes.object,
     data: PropTypes.object
-  }
-
-  clean() {
-    this.setState({ 
-      type: '', 
-      assignee: '', 
-      reporter: '', 
-      state: '', 
-      priority: '', 
-      resolution: '', 
-      module: '', 
-      created_at: '', 
-      updated_at: '' });
   }
 
   async handleSubmit() {
@@ -133,7 +120,7 @@ export default class FilterConfigModal extends Component {
     const stateOptions = _.map(states, (val) => { return { label: val.name, value: val.id } });
     const priorityOptions = _.map(priorities, (val) => { return { label: val.name, value: val.id } });
     const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });
-    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
+    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }];
     const moduleOptions = _.map(modules, (val) => { return { label: val.name, value: val.id } });
 
     return (
