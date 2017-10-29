@@ -92,7 +92,7 @@ export default class Card extends Component {
     const styles = { float: 'right', cursor: 'pointer' };
 
     return connectDragSource(connectDropTarget(
-      <div style={ { ...style, opacity } }>
+      <div style={ { ...style, opacity } } className='dragcard'>
         { text }
         { !!deleteCard && <span style={ styles } onClick={ deleteCard } title='删除'><i className='fa fa-remove'></i></span> }
       </div>

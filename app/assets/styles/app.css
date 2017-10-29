@@ -652,3 +652,11 @@ table tr:hover .remove-icon{
   top: 0;
   opacity: 0;
 }
+
+.dragcard span {
+  display: none;
+}
+
+.dragcard:hover span {
+  display: inline-block;
+}
