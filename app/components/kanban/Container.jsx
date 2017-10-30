@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import _ from 'lodash';
 
 import * as KanbanActions from 'redux/actions/KanbanActions';
@@ -20,6 +22,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+@DragDropContext(HTML5Backend)
 @connect(({ i18n, session, kanban, project, issue, workflow }) => ({ i18n, session, kanban, project, issue, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {

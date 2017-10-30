@@ -653,10 +653,28 @@ table tr:hover .remove-icon{
   opacity: 0;
 }
 
-.dragcard span {
-  display: none;
+.dragcard {
+  border: 1px dashed gray;
+  padding: 0.5rem 1rem;
+  margin-bottom: .5rem;
+  backgroundColor: white;
+  cursor: move;
+  opacity: 1;
 }
 
-.dragcard:hover span {
+.dragcard .edit-icon,.dragcard .rm-icon {
+  display: none;
+  margin-right: 5px;
+}
+
+.dragcard:hover .edit-icon,.dragcard:hover .rm-icon {
   display: inline-block;
+}
+
+.dragcard:hover {
+  background-color: #eee;
+}
+
+.filter-dragcard:hover {
+  background-color: #fff;
 }
