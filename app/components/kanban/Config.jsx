@@ -7,6 +7,7 @@ import _ from 'lodash';
 const img = require('../../assets/images/loading.gif');
 const EditModal = require('./EditModal');
 const FilterConfigModal = require('./FilterConfigModal');
+const FilterList = require('./FilterList');
 
 export default class Config extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ export default class Config extends Component {
     const { options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
 
-    const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
+    const errorMsg = ' 检索值解析失败，条件无法正常显示。建议删除，或重新编辑保存。';
     const queryConds = [];
     let index = -1;
 
@@ -157,6 +158,14 @@ export default class Config extends Component {
     this.setState({ quickFilterModalShow: false });
   }
 
+  editFilter(no) {
+    this.setState({ quickFilterModalShow: true, filterNo: no });
+  }
+
+  delFilter() {
+    alert('bb');
+  }
+
   render() {
 
     const styles = { marginLeft: '20px', marginTop: '10px', marginBottom: '10px' };
@@ -177,7 +186,7 @@ export default class Config extends Component {
       ),
       contents: (
         <div style={ styles }>
-          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0, marginBottom: '10px' } }>
             <li>名称：{ config.name || '-' }</li>
             <li>类型：{ config.type || '-' }</li>
             <li>描述：{ config.description || '-' }</li>
@@ -191,16 +200,17 @@ export default class Config extends Component {
       title: (
         <div>
           <span className='kanban-table-td-title'>全局过滤</span>
+          <span className='table-td-desc'>用来过滤整个看板的问题，默认显示全部。</span>
         </div>
       ),
       contents: (
         <div style={ styles }>
           { _.isEmpty(config.query) ?
-          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0, marginBottom: '10px' } }>
             <li>全部</li>
           </ul>
           :
-          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0, marginBottom: '10px' } }>
             <li>{ this.condsTxt(config.query) }</li>
           </ul> }
           <Button onClick={ () => { this.setState({ globalFilterModalShow: true }) } }>设置</Button>
@@ -212,6 +222,7 @@ export default class Config extends Component {
       title: (
         <div>
           <span className='kanban-table-td-title'>快速过滤器</span>
+          <span className='table-td-desc'>可上下拖拽调整过滤器位置</span>
         </div>
       ),
       contents: (
@@ -221,11 +232,11 @@ export default class Config extends Component {
             <li>未定义</li>
           </ul>
           :
-          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
-            { _.map(config.filters, (v, i) => 
-              <li key={ i }>{ this.condsTxt(v.query || {}) }</li>
-            ) }
-          </ul> }
+          <FilterList
+            editFilter={ this.editFilter.bind(this) }
+            delFilter={ this.delFilter.bind(this) }
+            filters={ config.filters }
+            condsTxt={ this.condsTxt } /> }
           <Button onClick={ () => { this.setState({ quickFilterModalShow: true, filterNo: -1 }) } }>添加</Button>
         </div>
       )
@@ -247,20 +258,22 @@ export default class Config extends Component {
       id: 'columns',
       title: (
         <div>
-          <span className='kanban-table-td-title'>列</span>
+          <span className='kanban-table-td-title'>显示列</span>
+          <span className='table-td-desc'>可左右拖拽调整列位置</span>
         </div>
       ),  
       contents: (
-        <div style={ styles }>
-          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
-            <li>全部</li>
-          </ul>
+        <div style={ { ...styles, tableLayout: 'fixed', display: 'table', width: '100%', borderSpacing: '8px 0' } }>
+          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
+          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
+          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
+          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
         </div>
       )     
     }); 
 
     return (
-      <div style={ { overflowY: 'auto', height: '100%' } }>
+      <div style={ { overflowY: 'auto', height: '100%', paddingBottom: '80px' } }>
         <BootstrapTable data={ items } bordered={ false } hover trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn width='200' dataField='title'/>

@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem } from 'react-bootstrap';
 import _ from 'lodash';
@@ -16,7 +14,6 @@ const Column = require('./Column');
 const OverlayColumn = require('./OverlayColumn');
 const SelectVersionModal = require('./SelectVersionModal');
 
-@DragDropContext(HTML5Backend)
 export default class List extends Component {
   constructor(props) {
     super(props);

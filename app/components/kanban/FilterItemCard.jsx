@@ -81,20 +81,24 @@ export default class FilterItemCard extends Component {
     index: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
-    text: PropTypes.string.isRequired,
-    deleteCard: PropTypes.func,
+    name: PropTypes.string.isRequired,
+    condsTxt: PropTypes.string.isRequired,
+    editFilter: PropTypes.func,
+    delFilter: PropTypes.func,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
-    const { text, isDragging, connectDragSource, connectDropTarget, deleteCard } = this.props;
+    const { id, name, condsTxt, isDragging, connectDragSource, connectDropTarget, editFilter, delFilter } = this.props;
     const opacity = isDragging ? 0 : 1;
     const styles = { float: 'right', cursor: 'pointer' };
 
     return connectDragSource(connectDropTarget(
-      <div style={ { ...style, opacity } }>
-        { text }
-        { !!deleteCard && <span style={ styles } onClick={ deleteCard } title='删除'><i className='fa fa-remove'></i></span> }
+      <div style={ { opacity } } className='filter-dragcard dragcard'>
+        <span style={ { fontWeight: 600 } }>{ name }</span> -- <span>{ condsTxt }</span>
+        { !!delFilter && <span style={ styles } onClick={ delFilter } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
+        { !!editFilter && <span style={ styles } onClick={ () => { editFilter(id) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
+
       </div>
     ));
   }

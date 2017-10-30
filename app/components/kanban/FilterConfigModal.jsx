@@ -10,13 +10,13 @@ export default class FilterConfigModal extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      type: [], 
-      assignee: [], 
-      reporter: [], 
-      state: [], 
-      priority: [], 
-      resolution: [], 
-      module: [], 
+      type: '', 
+      assignee: '', 
+      reporter: '', 
+      state: '', 
+      priority: '', 
+      resolution: '', 
+      module: '', 
       created_at: '', 
       updated_at: '' };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,18 +36,20 @@ export default class FilterConfigModal extends Component {
       this.state.created_at = query.created_at || ''; 
       this.state.updated_at = query.updated_at || ''; 
     } else if (model == 'filter' && filterNo) {
-      if (!filters[filterNo]) {
+      if (!filters[filterNo] || _.isEmpty(filters[filterNo].query)) {
         return;
       }
-      this.state.type = filters[filterNo].type && filters[filterNo].type.join(',') || '';
-      this.state.assignee = filters[filterNo].assignee && filters[filterNo].assignee.join(',') || '';
-      this.state.reporter = filters[filterNo].reporter && filters[filterNo].reporter.join(',') || '';
-      this.state.state = filters[filterNo].state && filters[filterNo].state.join(',') || '';
-      this.state.resolution = filters[filterNo].resolution && filters[filterNo].resolution.join(',') || '';
-      this.state.priority = filters[filterNo].priority && filters[filterNo].priority.join(',') || '';
-      this.state.module = filters[filterNo].module && filters[filterNo].module.join(',') || '';
-      this.state.created_at = filters[filterNo].created_at || '';
-      this.state.updated_at = filters[filterNo].updated_at || '';
+      const filterQuery = filters[filterNo].query; 
+      this.state.type = filterQuery.type && filterQuery.type.join(',') || '';
+      this.state.assignee = filterQuery.assignee && filterQuery.assignee.join(',') || '';
+      this.state.reporter = filterQuery.reporter && filterQuery.reporter.join(',') || '';
+      this.state.state = filterQuery.state && filterQuery.state.join(',') || '';
+      this.state.resolution = filterQuery.resolution && filterQuery.resolution.join(',') || '';
+      this.state.priority = filterQuery.priority && filterQuery.priority.join(',') || '';
+      this.state.module = filterQuery.module && filterQuery.module.join(',') || '';
+      this.state.created_at = filterQuery.created_at || '';
+      this.state.updated_at = filterQuery.updated_at || '';
+      console.log(this.state);
     }
   }
 
@@ -83,11 +85,11 @@ export default class FilterConfigModal extends Component {
       const filters = _.clone(data.filters) || [];
       if (filterNo >= 0) {
         const index = _.findIndex(data.filters, { no: filterNo });
-        filters[index] = submitData;
+        filters[index].query = submitData;
       } else {
         let no = 0;
         if (filters.length > 0) {
-          no = _.max(_.map(filters, (v) => v.no));
+          no = _.max(_.map(filters, (v) => v.no)) + 1;
         }
         filters.push({ ...submitData, no });
       }
@@ -130,11 +132,23 @@ export default class FilterConfigModal extends Component {
         </Modal.Header>
         <Form horizontal onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
+          <FormGroup controlId='formControlsLabel' style={ { height: '50px', borderBottom: '1px solid #ddd' } }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
+             <span className='txt-impt'>*</span>过滤器名称 
+            </Col>
+            <Col sm={ 10 }>
+              <FormControl
+                type='text'
+                value={ this.state.title }
+                onChange={ (e) => { this.setState({ title: e.target.value }) } }
+                placeholder={ '输入名称' } />
+            </Col>
+          </FormGroup>
           <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               类型 
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 multi
@@ -143,10 +157,10 @@ export default class FilterConfigModal extends Component {
                 onChange={ (newValue) => { this.setState({ type: newValue }); } }
                 options={ typeOptions }/>
             </Col>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               优先级 
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 multi
@@ -157,10 +171,10 @@ export default class FilterConfigModal extends Component {
             </Col>
           </FormGroup>
           <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               状态
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 multi
@@ -169,10 +183,10 @@ export default class FilterConfigModal extends Component {
                 onChange={ (newValue) => { this.setState({ state: newValue }); } }
                 options={ stateOptions }/>
             </Col>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               解决结果 
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 multi
@@ -183,10 +197,10 @@ export default class FilterConfigModal extends Component {
             </Col>
           </FormGroup>
           <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               报告人 
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 multi
@@ -195,10 +209,10 @@ export default class FilterConfigModal extends Component {
                 onChange={ (newValue) => { this.setState({ reporter: newValue }); } }
                 options={ userOptions }/>
             </Col>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               经办人
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 multi
@@ -209,10 +223,10 @@ export default class FilterConfigModal extends Component {
             </Col>
           </FormGroup>
           <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               创建时间
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 placeholder='选择时间段'
@@ -220,10 +234,10 @@ export default class FilterConfigModal extends Component {
                 onChange={ (newValue) => { this.setState({ created_at: newValue }); } }
                 options={ dateOptions }/>
             </Col>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               更新时间
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 placeholder='选择时间段'
@@ -233,10 +247,10 @@ export default class FilterConfigModal extends Component {
             </Col>
           </FormGroup>
           <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               模块 
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 4 }>
               <Select
                 simpleValue
                 multi

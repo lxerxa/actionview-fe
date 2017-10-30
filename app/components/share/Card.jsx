@@ -3,14 +3,6 @@ import { findDOMNode } from 'react-dom';
 import ItemTypes from '../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 
-const style = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  backgroundColor: 'white',
-  cursor: 'move'
-};
-
 const cardSource = {
   beginDrag(props) {
     return {
@@ -92,9 +84,9 @@ export default class Card extends Component {
     const styles = { float: 'right', cursor: 'pointer' };
 
     return connectDragSource(connectDropTarget(
-      <div style={ { ...style, opacity } } className='dragcard'>
+      <div style={ { opacity } } className='dragcard'>
         { text }
-        { !!deleteCard && <span style={ styles } onClick={ deleteCard } title='删除'><i className='fa fa-remove'></i></span> }
+        { !!deleteCard && <span style={ styles } onClick={ deleteCard } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
       </div>
     ));
   }
