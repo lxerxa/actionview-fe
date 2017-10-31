@@ -8,6 +8,7 @@ const img = require('../../assets/images/loading.gif');
 const EditModal = require('./EditModal');
 const FilterConfigModal = require('./FilterConfigModal');
 const FilterList = require('./FilterList');
+const ConfigColumnList = require('./ConfigColumnList');
 
 export default class Config extends Component {
   constructor(props) {
@@ -166,6 +167,14 @@ export default class Config extends Component {
     alert('bb');
   }
 
+  editColumn(no) {
+    alert('aa');
+  }
+
+  delColumn() {
+    alert('bb');
+  }
+
   render() {
 
     const styles = { marginLeft: '20px', marginTop: '10px', marginBottom: '10px' };
@@ -233,9 +242,10 @@ export default class Config extends Component {
           </ul>
           :
           <FilterList
+            kid={ config.id }
             editFilter={ this.editFilter.bind(this) }
             delFilter={ this.delFilter.bind(this) }
-            filters={ config.filters }
+            filters={ config.filters || [] }
             condsTxt={ this.condsTxt } /> }
           <Button onClick={ () => { this.setState({ quickFilterModalShow: true, filterNo: -1 }) } }>添加</Button>
         </div>
@@ -263,11 +273,13 @@ export default class Config extends Component {
         </div>
       ),  
       contents: (
-        <div style={ { ...styles, tableLayout: 'fixed', display: 'table', width: '100%', borderSpacing: '8px 0' } }>
-          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
-          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
-          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
-          <div style={ { display: 'table-cell', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', marginLeft: '10px' } }>aa</div>
+        <div style={ { ...styles, marginLeft: '10px' } } className='config-columns'>
+          <ConfigColumnList
+            kid={ config.id }
+            editColumn={ this.editColumn.bind(this) }
+            delColumn={ this.delColumn.bind(this) }
+            options={ options }
+            columns={ config.columns || [] } />
         </div>
       )     
     }); 

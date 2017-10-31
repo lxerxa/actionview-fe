@@ -2,11 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import ItemTypes from '../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
+import _ from 'lodash';
 
 const cardSource = {
   beginDrag(props) {
     return {
-      id: props.id,
+      id: props.column.no,
       index: props.index
     };
   }
@@ -26,25 +27,25 @@ const cardTarget = {
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
 
     // Get vertical middle
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
 
     // Determine mouse position
     const clientOffset = monitor.getClientOffset();
 
     // Get pixels to the top
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+    const hoverClientX = clientOffset.x - hoverBoundingRect.left;
 
     // Only perform the move when the mouse has crossed half of the items height
     // When dragging downwards, only move when the cursor is below 50%
     // When dragging upwards, only move when the cursor is above 50%
 
     // Dragging downwards
-    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+    if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {
       return;
     }
 
     // Dragging upwards
-    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+    if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
       return;
     }
 
@@ -59,38 +60,44 @@ const cardTarget = {
   }
 };
 
-@DropTarget(ItemTypes.KANBAN_FILTER, cardTarget, connect => ({
+@DropTarget(ItemTypes.KANBAN_COLUMN, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
-@DragSource(ItemTypes.KANBAN_FILTER, cardSource, (connect, monitor) => ({
+@DragSource(ItemTypes.KANBAN_COLUMN, cardSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-export default class FilterItemCard extends Component {
+export default class ColumnItemCard extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
-    id: PropTypes.any.isRequired,
-    name: PropTypes.string.isRequired,
-    condsTxt: PropTypes.string.isRequired,
-    editFilter: PropTypes.func,
-    delFilter: PropTypes.func,
+    column: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
+    editColumn: PropTypes.func,
+    delColumn: PropTypes.func,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
-    const { id, name, condsTxt, isDragging, connectDragSource, connectDropTarget, editFilter, delFilter } = this.props;
+    const { column, options, isDragging, connectDragSource, connectDropTarget, editColumn, delColumn } = this.props;
     const opacity = isDragging ? 0 : 1;
     const styles = { float: 'right', cursor: 'pointer' };
 
     return connectDragSource(connectDropTarget(
-      <div style={ { opacity } } className='filter-dragcard dragcard'>
-        <span style={ { fontWeight: 600 } }>{ name }</span> -- <span>{ condsTxt }</span>
-        { !!delFilter && <span style={ styles } onClick={ delFilter } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
-        { !!editFilter && <span style={ styles } onClick={ () => { editFilter(id) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
-
+      <div style={ { opacity } } className='config-column'>
+        <div style={ { fontWeight: 600, paddingBottom: '10px', borderBottom: '1px solid #ccc' } }>
+          { column.name }
+          { !!delColumn && <span style={ styles } onClick={ delColumn } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
+          { !!editColumn && <span style={ styles } onClick={ () => { editColumn(column.no) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
+        </div>
+        <div>
+        { _.map(column.states, (v, i) => 
+          <div key={ i } className='config-column-card'>
+            { _.findIndex(options.states, { id: v }) !== -1 ? _.find(options.states, { id : v }).name : '' }
+          </div>) }
+        </div>
       </div>
     ));
   }
