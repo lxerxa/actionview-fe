@@ -2,27 +2,28 @@ import React, { PropTypes, Component } from 'react';
 import update from 'react/lib/update';
 import _ from 'lodash';
 
-import FilterItemCard from './FilterItemCard';
+import ColumnItemCard from './ColumnItemCard';
 
-export default class FilterList extends Component {
+export default class ConfigColumnList extends Component {
   constructor(props) {
     super(props);
     this.state = { cards: [], ecode: 0 };
+    this.state.cards = props.columns;
 
-    this.state.cards = props.filters;
+    this.kid = props.kid;
   }
 
   static propTypes = {
     kid: PropTypes.string.isRequired,
-    editFilter: PropTypes.func.isRequired,
-    delFilter: PropTypes.func.isRequired,
-    condsTxt: PropTypes.func.isRequired,
-    filters: PropTypes.array.isRequired
+    editColumn: PropTypes.func.isRequired,
+    delColumn: PropTypes.func.isRequired,
+    options: PropTypes.object.isRequired,
+    columns: PropTypes.array.isRequired
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.kid !== nextProps.kid) {
-      this.state.cards = nextProps.filters;
+      this.state.cards = nextProps.columns;
     }
   }
 
@@ -41,20 +42,19 @@ export default class FilterList extends Component {
   }
 
   render() {
-    const { condsTxt, editFilter, delFilter } = this.props;
+    const { editColumn, delColumn, options } = this.props;
     const { cards } = this.state;
 
     return (
-      <div style={ { marginBottom: '10px' } }>
+      <div className='config-columns' style={ { height: '300px',marginBottom: '10px' } }>
       { _.map(cards, (v, i) =>
-        <FilterItemCard
+        <ColumnItemCard
           key={ v.no }
           index={ i }
-          id={ v.no }
-          name={ v.name }
-          condsTxt={ condsTxt(v.query) }
-          editFilter={ editFilter }
-          delFilter={ delFilter }
+          column={ v }
+          options={ options }
+          editColumn={ editColumn }
+          delColumn={ delColumn }
           moveCard={ this.moveCard.bind(this) }/>
         ) }
       </div> );

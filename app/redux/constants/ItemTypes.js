@@ -1,3 +1,5 @@
 export default {
-  CARD: 'card'
+  CARD: 'card',
+  KANBAN_COLUMN: 'kanban_column',
+  KANBAN_FILTER: 'kanban_filter'
 };

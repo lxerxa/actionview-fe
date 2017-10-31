@@ -9,7 +9,8 @@ const img = require('../../assets/images/loading.gif');
 export default class FilterConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
+      name: '', 
       type: '', 
       assignee: '', 
       reporter: '', 
@@ -18,7 +19,9 @@ export default class FilterConfigModal extends Component {
       resolution: '', 
       module: '', 
       created_at: '', 
-      updated_at: '' };
+      updated_at: '',
+      touched: {},
+      errors: {} };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -36,10 +39,12 @@ export default class FilterConfigModal extends Component {
       this.state.created_at = query.created_at || ''; 
       this.state.updated_at = query.updated_at || ''; 
     } else if (model == 'filter' && filterNo) {
-      if (!filters[filterNo] || _.isEmpty(filters[filterNo].query)) {
+      const filter = _.find(filters, { no: filterNo });
+      if (!filter) {
         return;
       }
-      const filterQuery = filters[filterNo].query; 
+      const filterQuery = filter.query; 
+      this.state.name = filter.name;
       this.state.type = filterQuery.type && filterQuery.type.join(',') || '';
       this.state.assignee = filterQuery.assignee && filterQuery.assignee.join(',') || '';
       this.state.reporter = filterQuery.reporter && filterQuery.reporter.join(',') || '';
@@ -49,14 +54,13 @@ export default class FilterConfigModal extends Component {
       this.state.module = filterQuery.module && filterQuery.module.join(',') || '';
       this.state.created_at = filterQuery.created_at || '';
       this.state.updated_at = filterQuery.updated_at || '';
-      console.log(this.state);
     }
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     model: PropTypes.string.isRequired,
-    filterNo: PropTypes.string,
+    filterNo: PropTypes.number,
     loading: PropTypes.bool.isRequired,
     update: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
@@ -86,12 +90,13 @@ export default class FilterConfigModal extends Component {
       if (filterNo >= 0) {
         const index = _.findIndex(data.filters, { no: filterNo });
         filters[index].query = submitData;
+        filters[index].name = this.state.name;
       } else {
         let no = 0;
         if (filters.length > 0) {
           no = _.max(_.map(filters, (v) => v.no)) + 1;
         }
-        filters.push({ ...submitData, no });
+        filters.push({ ...submitData, name: this.state.name, no });
       }
       ecode = await update(_.extend({ filters }, { id: data.id }));
     }
@@ -114,7 +119,7 @@ export default class FilterConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
+    const { i18n: { errMsg }, model, filterNo, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -128,22 +133,27 @@ export default class FilterConfigModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>过滤器</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ model == 'global' ? '全局过滤器' : ( filterNo === -1 ? '添加快速过滤器' : '编辑快速过滤器' ) }</Modal.Title>
         </Modal.Header>
         <Form horizontal onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsLabel' style={ { height: '50px', borderBottom: '1px solid #ddd' } }>
+          { model === 'filter' &&
+          <FormGroup controlId='formControlsLabel' style={ { height: '50px', borderBottom: '1px solid #ddd' } } validationState={ this.state.touched.name && this.state.errors.name && 'error' || '' }>
             <Col sm={ 2 } componentClass={ ControlLabel }>
              <span className='txt-impt'>*</span>过滤器名称 
             </Col>
-            <Col sm={ 10 }>
+            <Col sm={ 8 }>
               <FormControl
                 type='text'
-                value={ this.state.title }
-                onChange={ (e) => { this.setState({ title: e.target.value }) } }
+                value={ this.state.name }
+                onChange={ (e) => { this.setState({ name: e.target.value }); if (!e.target.value) { this.state.errors.name = '必填'; this.setState({ errors: this.state.errors }); } else { this.setState({ errors: {} }); } } }
+                onBlur={ (e) => { this.state.touched.name = true; this.setState({ touched: this.state.touched }); } }
                 placeholder={ '输入名称' } />
             </Col>
-          </FormGroup>
+            <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+              { this.state.touched.name && (this.state.errors.name || '') }
+            </Col>
+          </FormGroup> }
           <FormGroup controlId='formControlsLabel'>
             <Col sm={ 2 } componentClass={ ControlLabel }>
               类型 
@@ -264,7 +274,7 @@ export default class FilterConfigModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.handleSubmit }>确定</Button>
+          <Button disabled={ (model === 'filter' && !this.state.name) || loading } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </Form>

@@ -162,3 +162,39 @@
   word-wrap: break-word;
   white-space: pre-wrap;
 }
+
+.config-columns {
+  border-collapse: separate; 
+  border-spacing: 10px 0; 
+  display: table; 
+  table-layout: fixed; 
+  width: 100%
+}
+
+.config-column {
+  display: table-cell; 
+  padding: 10px; 
+  border-left: 1px solid #ccc; 
+  border-right: 1px solid #ccc;
+  cursor: move;
+  opacity: 1;
+}
+
+.config-column .edit-icon,.config-column .rm-icon {
+  display: none;
+  margin-right: 5px;
+}
+
+.config-column:hover .edit-icon,.config-column:hover .rm-icon {
+  display: inline-block;
+}
+
+.config-column:hover {
+  background-color: #fff;
+}
+
+.config-column-card {
+  border: 1px dashed gray;
+  margin-top: 10px;
+  padding: 5px;
+}
