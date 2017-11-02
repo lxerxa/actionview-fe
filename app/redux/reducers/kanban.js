@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, rankable: true, list: [], loading: false, rankLoading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
+const initialState = { ecode: 0, rankable: true, list: [], loading: false, rankLoading: false, configLoading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
 
 export default function activity(state = initialState, action) {
   switch (action.type) {
@@ -30,17 +30,17 @@ export default function activity(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.KANBAN_UPDATE:
-      return { ...state, loading: true };
+      return { ...state, configLoading: true };
 
     case t.KANBAN_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.list, { id: action.result.data.id });
         state.list[ind] = action.result.data;
       }
-      return { ...state, loading: false, ecode: action.result.ecode };
+      return { ...state, configLoading: false, ecode: action.result.ecode };
 
     case t.KANBAN_UPDATE_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, configLoading: false, error: action.error };
 
     case t.KANBAN_DELETE:
       return { ...state, loading: true };

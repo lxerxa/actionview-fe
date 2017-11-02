@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import ItemTypes from '../../redux/constants/ItemTypes';
+import ItemTypes from '../../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 
 const cardSource = {
@@ -88,7 +88,7 @@ export default class FilterItemCard extends Component {
     return connectDragSource(connectDropTarget(
       <div style={ { opacity } } className='filter-dragcard dragcard'>
         <span style={ { fontWeight: 600 } }>{ name }</span> -- <span>{ condsTxt }</span>
-        { !!delFilter && <span style={ styles } onClick={ delFilter } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
+        { !!delFilter && <span style={ styles } onClick={ () => { delFilter(id) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
         { !!editFilter && <span style={ styles } onClick={ () => { editFilter(id) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
 
       </div>

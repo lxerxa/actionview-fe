@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import ItemTypes from '../../redux/constants/ItemTypes';
+import ItemTypes from '../../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
@@ -89,7 +89,7 @@ export default class ColumnItemCard extends Component {
       <div style={ { opacity } } className='config-column'>
         <div style={ { fontWeight: 600, paddingBottom: '10px', borderBottom: '1px solid #ccc' } }>
           { column.name }
-          { !!delColumn && <span style={ styles } onClick={ delColumn } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
+          { !!delColumn && <span style={ styles } onClick={ () => { delColumn(column.no) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
           { !!editColumn && <span style={ styles } onClick={ () => { editColumn(column.no) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
         </div>
         <div>
