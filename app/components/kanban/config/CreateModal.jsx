@@ -5,7 +5,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
-const img = require('../../assets/images/loading.gif');
+const img = require('../../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
@@ -14,18 +14,18 @@ const validate = (values, props) => {
   }
 
   if (!values.type) {
-    errors.abb = '必填';
+    errors.type = '必填';
   }
 
   return errors;
 };
 
 @reduxForm({
-  form: 'type',
-  fields: ['id', 'name', 'type'],
+  form: 'kanban',
+  fields: ['name', 'type', 'description'],
   validate
 })
-export default class EditModal extends Component {
+export default class CreateModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -37,28 +37,21 @@ export default class EditModal extends Component {
     i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
-    dirty: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
-    initializeForm: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
-  }
-
-  componentWillMount() {
-    const { initializeForm, data } = this.props;
-    initializeForm({ ...data });
+    resetForm: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, update, close } = this.props;
-    const ecode = await update(values);
+    const { values, create, close } = this.props;
+    const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('更新完成。', 'success', 2000);
+      notify.show('新建完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -74,31 +67,30 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, type, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { name, type, description }, handleSubmit, invalid, submitting } = this.props;
 
     const typeOptions = [{ label: 'Srcum Board', value: 'scrum' }, { label: 'Kanban', value: 'kanban' }]; 
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '编辑看板 - ' + data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>创建看板</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl type='hidden' { ...id }/>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='看板名'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='看板名'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
-            <Select
-              disabled={ submitting }
-              options={ typeOptions }
-              simpleValue clearable={ false }
-              value={ type.value }
-              onChange={ newValue => { type.onChange(newValue) } }
+            <Select 
+              disabled={ submitting } 
+              options={ typeOptions } 
+              simpleValue clearable={ false } 
+              value={ type.value } 
+              onChange={ newValue => { type.onChange(newValue) } } 
               placeholder='请选择看板类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
@@ -109,7 +101,7 @@ export default class EditModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
+          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>

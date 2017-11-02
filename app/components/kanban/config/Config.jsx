@@ -4,11 +4,13 @@ import { Button, Label } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
-const img = require('../../assets/images/loading.gif');
+const img = require('../../../assets/images/loading.gif');
 const EditModal = require('./EditModal');
-const FilterConfigModal = require('./FilterConfigModal');
 const FilterList = require('./FilterList');
-const ConfigColumnList = require('./ConfigColumnList');
+const FilterConfigModal = require('./FilterConfigModal');
+const ColumnList = require('./ColumnList');
+const ColumnConfigModal = require('./ColumnConfigModal');
+const DelNotify = require('./DelNotify');
 
 export default class Config extends Component {
   constructor(props) {
@@ -17,17 +19,24 @@ export default class Config extends Component {
       editModalShow: false, 
       globalFilterModalShow: false,
       quickFilterModalShow: false,
+      delFilterNotifyShow: false,
+      columnModalShow: false,
+      delColumnNotifyShow: false,
       filterNo: -1,
-      notifications: {} };
+      columnNo: -1 };
 
     this.editModalClose = this.editModalClose.bind(this);
     this.globalFilterModalClose = this.globalFilterModalClose.bind(this);
     this.quickFilterModalClose = this.quickFilterModalClose.bind(this);
+    this.delFilterNotifyClose = this.delFilterNotifyClose.bind(this);
+    this.columnModalClose = this.columnModalClose.bind(this);
+    this.delColumnNotifyClose = this.delColumnNotifyClose.bind(this);
     this.condsTxt = this.condsTxt.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
     config: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     edit: PropTypes.func.isRequired
@@ -159,20 +168,32 @@ export default class Config extends Component {
     this.setState({ quickFilterModalShow: false });
   }
 
+  columnModalClose() {
+    this.setState({ columnModalShow: false });
+  }
+
+  delFilterNotifyClose() {
+    this.setState({ delFilterNotifyShow: false });
+  }
+
+  delColumnNotifyClose() {
+    this.setState({ delColumnNotifyShow: false });
+  }
+
   editFilter(no) {
     this.setState({ quickFilterModalShow: true, filterNo: no });
   }
 
-  delFilter() {
-    alert('bb');
+  delFilter(no) {
+    this.setState({ delFilterNotifyShow: true, filterNo: no });
   }
 
   editColumn(no) {
-    alert('aa');
+    this.setState({ columnModalShow: true, columnNo: no });
   }
 
-  delColumn() {
-    alert('bb');
+  delColumn(no) {
+    this.setState({ delColumnNotifyShow: true, columnNo: no });
   }
 
   render() {
@@ -182,6 +203,7 @@ export default class Config extends Component {
     const { 
       i18n, 
       options,
+      loading,
       edit,
       config } = this.props;
 
@@ -274,7 +296,7 @@ export default class Config extends Component {
       ),  
       contents: (
         <div style={ { ...styles, marginLeft: '10px' } } className='config-columns'>
-          <ConfigColumnList
+          <ColumnList
             kid={ config.id }
             editColumn={ this.editColumn.bind(this) }
             delColumn={ this.delColumn.bind(this) }
@@ -304,7 +326,7 @@ export default class Config extends Component {
             model='global'
             close={ this.globalFilterModalClose }
             update={ edit }
-            loading={ false }
+            loading={ loading }
             data={ config }
             options={ options }
             i18n={ i18n }/> }
@@ -312,12 +334,41 @@ export default class Config extends Component {
           <FilterConfigModal
             show
             model='filter'
-            filterNo={ this.state.filterNo }
+            no={ this.state.filterNo }
             close={ this.quickFilterModalClose }
             update={ edit }
-            loading={ false }
+            loading={ loading }
             data={ config }
             options={ options }
+            i18n={ i18n }/> }
+        { this.state.delFilterNotifyShow &&
+          <DelNotify
+            show
+            model='filter' 
+            no={ this.state.filterNo }
+            close={ this.delFilterNotifyClose }
+            update={ edit }
+            loading={ loading }
+            config={ config }
+            i18n={ i18n }/> }
+        { this.state.columnModalShow &&
+          <ColumnConfigModal
+            show
+            no={ this.state.columnNo }
+            close={ this.columnModalClose }
+            update={ edit }
+            config={ config }
+            options={ options }
+            i18n={ i18n }/> }
+        { this.state.delColumnNotifyShow &&
+          <DelNotify
+            show
+            model='column'
+            no={ this.state.columnNo }
+            close={ this.delColumnNotifyClose }
+            update={ edit }
+            loading={ loading }
+            config={ config }
             i18n={ i18n }/> }
       </div>
     );

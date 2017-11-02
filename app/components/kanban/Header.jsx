@@ -3,8 +3,8 @@ import { Button, DropdownButton, MenuItem, Nav, NavItem, ButtonGroup } from 'rea
 import _ from 'lodash';
  
 const CreateIssueModal = require('../issue/CreateModal');
-const CreateKanbanModal = require('./CreateModal');
-const EditKanbanModal = require('./EditModal');
+const CreateKanbanModal = require('./config/CreateModal');
+const EditKanbanModal = require('./config/EditModal');
 
 const img = require('../../assets/images/loading.gif');
 

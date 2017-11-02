@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
-const img = require('../../assets/images/loading.gif');
+const img = require('../../../assets/images/loading.gif');
 
 export default class FilterConfigModal extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ export default class FilterConfigModal extends Component {
   }
 
   componentWillMount() {
-    const { data: { query={}, filters=[] }, model, filterNo=-1 } = this.props;
+    const { data: { query={}, filters=[] }, model, no=-1 } = this.props;
     if (model == 'global') {
       this.state.type = query.type && query.type.join(',') || ''; 
       this.state.assignee = query.assignee && query.assignee.join(',') || ''; 
@@ -38,8 +38,8 @@ export default class FilterConfigModal extends Component {
       this.state.module = query.module && query.module.join(',') || ''; 
       this.state.created_at = query.created_at || ''; 
       this.state.updated_at = query.updated_at || ''; 
-    } else if (model == 'filter' && filterNo) {
-      const filter = _.find(filters, { no: filterNo });
+    } else if (model == 'filter' && no) {
+      const filter = _.find(filters, { no: no });
       if (!filter) {
         return;
       }
@@ -60,7 +60,7 @@ export default class FilterConfigModal extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     model: PropTypes.string.isRequired,
-    filterNo: PropTypes.number,
+    no: PropTypes.number,
     loading: PropTypes.bool.isRequired,
     update: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
@@ -69,7 +69,7 @@ export default class FilterConfigModal extends Component {
   }
 
   async handleSubmit() {
-    const { update, close, data, model, filterNo } = this.props;
+    const { update, close, data, model, no } = this.props;
 
     const submitData = {};
     if (this.state.type) { submitData.type = this.state.type.split(','); } 
@@ -87,8 +87,8 @@ export default class FilterConfigModal extends Component {
       ecode = await update(_.extend({ query: submitData }, { id: data.id }));
     } else if (model == 'filter') {
       const filters = _.clone(data.filters) || [];
-      if (filterNo >= 0) {
-        const index = _.findIndex(data.filters, { no: filterNo });
+      if (no >= 0) {
+        const index = _.findIndex(data.filters, { no: no });
         filters[index].query = submitData;
         filters[index].name = this.state.name;
       } else {
@@ -96,7 +96,7 @@ export default class FilterConfigModal extends Component {
         if (filters.length > 0) {
           no = _.max(_.map(filters, (v) => v.no)) + 1;
         }
-        filters.push({ ...submitData, name: this.state.name, no });
+        filters.push({ query: submitData, name: this.state.name, no });
       }
       ecode = await update(_.extend({ filters }, { id: data.id }));
     }
@@ -119,7 +119,7 @@ export default class FilterConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, model, filterNo, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
+    const { i18n: { errMsg }, model, no, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -133,7 +133,7 @@ export default class FilterConfigModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ model == 'global' ? '全局过滤器' : ( filterNo === -1 ? '添加快速过滤器' : '编辑快速过滤器' ) }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ model == 'global' ? '全局过滤器' : ( no === -1 ? '添加快速过滤器' : '编辑快速过滤器' ) }</Modal.Title>
         </Modal.Header>
         <Form horizontal onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>

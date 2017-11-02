@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import ColumnItemCard from './ColumnItemCard';
 
-export default class ConfigColumnList extends Component {
+export default class ColumnList extends Component {
   constructor(props) {
     super(props);
     this.state = { cards: [], ecode: 0 };

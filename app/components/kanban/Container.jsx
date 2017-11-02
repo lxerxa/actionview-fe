@@ -12,7 +12,7 @@ import * as WorkflowActions from 'redux/actions/WorkflowActions';
 const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
-const Config = require('./Config');
+const Config = require('./config/Config');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -332,6 +332,7 @@ export default class Container extends Component {
         { this.state.model == 'config' &&
         <Config
           config={ curKanban }
+          loading={ this.props.kanban.configLoading }
           edit={ this.editKanban.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n } /> }
