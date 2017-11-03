@@ -24,7 +24,7 @@ export default class FilterList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.kid !== nextProps.kid) {
+    if (this.kid !== nextProps.kid || !_.isEqual(this.state.cards, nextProps.filters)) {
       this.state.cards = nextProps.filters;
     }
   }
