@@ -18,16 +18,16 @@ export default function activity(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.KANBAN_CREATE:
-      return { ...state, loading: true };
+      return { ...state, configLoading: true };
 
     case t.KANBAN_CREATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.list.push(action.result.data);
       }
-      return { ...state, loading: false, ecode: action.result.ecode };
+      return { ...state, configLoading: false, ecode: action.result.ecode };
 
     case t.KANBAN_CREATE_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, configLoading: false, error: action.error };
 
     case t.KANBAN_UPDATE:
       return { ...state, configLoading: true };

@@ -75,7 +75,7 @@ export default class List extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
-    user: PropTypes.func.isRequired
+    user: PropTypes.object.isRequired
   }
 
   componentWillMount() {
@@ -308,8 +308,8 @@ export default class List extends Component {
             { collection[i].event_key == 'edit_issue' && <span>的 { collection[i].data.length } 个字段</span> }
             { collection[i].event_key == 'edit_issue' &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-            { _.map(collection[i].data, (v) => {
-              return (<li dangerouslySetInnerHTML={ { __html: v.field + ': ' + v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') } }/>);
+            { _.map(collection[i].data, (v, i) => {
+              return (<li key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') } }/>);
             }) }
             </ul> }
             { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && collection[i].data.new_user.name || '' }</span> }

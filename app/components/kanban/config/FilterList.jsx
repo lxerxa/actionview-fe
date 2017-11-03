@@ -8,14 +8,17 @@ export default class FilterList extends Component {
   constructor(props) {
     super(props);
     this.state = { cards: [], ecode: 0 };
-
     this.state.cards = props.filters;
+    this.kid = props.kid;
+    this.setRank = this.setRank.bind(this);
   }
 
   static propTypes = {
+    isAllowedEdit: PropTypes.bool.isRequired,
     kid: PropTypes.string.isRequired,
     editFilter: PropTypes.func.isRequired,
     delFilter: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     condsTxt: PropTypes.func.isRequired,
     filters: PropTypes.array.isRequired
   }
@@ -40,14 +43,20 @@ export default class FilterList extends Component {
     }));
   }
 
+  setRank() {
+    const { update } = this.props;
+    update({ id: this.kid, filters: this.state.cards });
+  }
+
   render() {
-    const { condsTxt, editFilter, delFilter } = this.props;
+    const { isAllowedEdit, condsTxt, editFilter, delFilter } = this.props;
     const { cards } = this.state;
 
     return (
       <div style={ { marginBottom: '10px' } }>
       { _.map(cards, (v, i) =>
         <FilterItemCard
+          isAllowedEdit={ isAllowedEdit }
           key={ v.no }
           index={ i }
           id={ v.no }
@@ -55,6 +64,7 @@ export default class FilterList extends Component {
           condsTxt={ condsTxt(v.query) }
           editFilter={ editFilter }
           delFilter={ delFilter }
+          setRank={ this.setRank }
           moveCard={ this.moveCard.bind(this) }/>
         ) }
       </div> );

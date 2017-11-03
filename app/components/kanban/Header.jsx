@@ -144,7 +144,7 @@ export default class Header extends Component {
             { kanbans.length > 0 &&
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
             { _.map(kanbans, (v, i) => ( <MenuItem key={ i } eventKey={ v.id }>{ v.name }</MenuItem> ) ) }
-            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
+            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && kanbans.length > 0 && <MenuItem divider/> }
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='create'>创建看板</MenuItem> }
             </DropdownButton> }
           </div>
