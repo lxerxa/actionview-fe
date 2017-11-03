@@ -24,7 +24,7 @@ export default class ColumnList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.kid !== nextProps.kid) {
+    if (this.kid !== nextProps.kid || !_.isEqual(this.state.cards, nextProps.columns)) {
       this.state.cards = nextProps.columns;
     }
   }
