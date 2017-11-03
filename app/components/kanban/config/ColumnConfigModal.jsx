@@ -120,8 +120,8 @@ export default class ColumnConfigModal extends Component {
             <Select 
               multi
               simpleValue 
-              clearable={ false } 
               disabled={ submitting } 
+              clearable={ false }
               options={ stateOptions } 
               value={ states.value } 
               onChange={ (newValue) => { states.onChange(newValue) } } 

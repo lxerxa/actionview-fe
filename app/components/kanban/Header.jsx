@@ -162,7 +162,9 @@ export default class Header extends Component {
           <CreateKanbanModal
             show
             close={ this.createKanbanModalClose.bind(this) }
-            create={ create }
+            create={ createKanban }
+            goto={ goto }
+            kanbans={ kanbans }
             i18n={ i18n }/> }
         { this.state.createIssueModalShow &&
           <CreateIssueModal

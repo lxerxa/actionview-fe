@@ -94,9 +94,10 @@ export default class EditModal extends Component {
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
             <Select
+              simpleValue 
               disabled={ submitting }
               options={ typeOptions }
-              simpleValue clearable={ false }
+              clearable={ false }
               value={ type.value }
               onChange={ newValue => { type.onChange(newValue) } }
               placeholder='请选择看板类型'/>
