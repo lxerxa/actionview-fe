@@ -16,8 +16,10 @@ export default class Header extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { index } = nextProps;
-    if (this.props.curKanban.id != nextProps.curKanban.id) {
+    const { index, switchRank } = nextProps;
+    if (this.props.curKanban.id != nextProps.curKanban.id || this.props.curKanban.filters != nextProps.curKanban.filters || this.props.curKanban.query != nextProps.curKanban.query) {
+      this.setState({ filter: 'all' });
+      switchRank(true);
       index(this.getQuery(nextProps.curKanban.query || {}));
     }
   }
@@ -52,8 +54,6 @@ export default class Header extends Component {
     } else {
       const { goto, switchRank } = this.props;
       goto(eventKey);
-      this.setState({ filter: 'all' });
-      switchRank(true);
     }
   }
 
