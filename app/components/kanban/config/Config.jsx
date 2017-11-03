@@ -207,6 +207,12 @@ export default class Config extends Component {
       edit,
       config } = this.props;
 
+    let usedStates = [];
+    _.forEach(config.columns || [], (v) => {
+      usedStates = _.union(usedStates, v.states);
+    });
+    const unUsedStates = _.filter(options.states || [], (v) => { return _.indexOf(usedStates, v.id) === -1 });
+
     const items = [];
     items.push({
       id: 'basic',
@@ -292,16 +298,25 @@ export default class Config extends Component {
         <div>
           <span className='kanban-table-td-title'>显示列</span>
           <span className='table-td-desc'>可左右拖拽调整列位置</span>
+          <div className='table-td-desc' style={ { marginTop: '10px' } }>以下未分配状态：</div>
+          { _.map(unUsedStates, (v, i) => { 
+            return <div className='config-column-card' key = { i }> { v.name } </div> }) }
         </div>
       ),  
       contents: (
         <div style={ { ...styles, marginLeft: '10px' } } className='config-columns'>
+          { (!config.columns || config.columns.length <= 0) ?
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+            <li>未定义</li>
+          </ul>
+          :
           <ColumnList
             kid={ config.id }
             editColumn={ this.editColumn.bind(this) }
             delColumn={ this.delColumn.bind(this) }
             options={ options }
-            columns={ config.columns || [] } />
+            columns={ config.columns || [] } /> }
+          <Button style={ { marginLeft: '10px' } } onClick={ () => { this.setState({ columnModalShow: true, columnNo: -1 }) } }>添加</Button>
         </div>
       )     
     }); 

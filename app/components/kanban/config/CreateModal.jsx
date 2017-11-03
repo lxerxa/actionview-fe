@@ -42,16 +42,20 @@ export default class CreateModal extends Component {
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
+    goto: PropTypes.func.isRequired,
+    kanbans: PropTypes.array.isRequired,
     create: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, create, close } = this.props;
+    const { values, create, close, goto } = this.props;
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
       notify.show('新建完成。', 'success', 2000);
+      const { kanbans } = this.props;
+      goto(_.last(kanbans).id);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -86,9 +90,10 @@ export default class CreateModal extends Component {
           <FormGroup controlId='formControlsSelect'>
             <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
             <Select 
+              simpleValue 
               disabled={ submitting } 
               options={ typeOptions } 
-              simpleValue clearable={ false } 
+              clearable={ false } 
               value={ type.value } 
               onChange={ newValue => { type.onChange(newValue) } } 
               placeholder='请选择看板类型'/>
