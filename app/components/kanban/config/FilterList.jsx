@@ -61,7 +61,7 @@ export default class FilterList extends Component {
           index={ i }
           id={ v.no }
           name={ v.name }
-          condsTxt={ condsTxt(v.query) }
+          condsTxt={ condsTxt(v.query || {}) }
           editFilter={ editFilter }
           delFilter={ delFilter }
           setRank={ this.setRank }
