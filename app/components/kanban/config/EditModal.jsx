@@ -22,7 +22,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'type',
-  fields: ['id', 'name', 'type'],
+  fields: ['id', 'name', 'type', 'description'],
   validate
 })
 export default class EditModal extends Component {
