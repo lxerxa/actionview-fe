@@ -5,10 +5,16 @@ import { DragSource, DropTarget } from 'react-dnd';
 
 const cardSource = {
   beginDrag(props) {
+    this.preIndex = props.index;
     return {
       id: props.id,
       index: props.index
     };
+  },
+  endDrag(props, monitor, component) {
+    if (this.preIndex != props.index) {
+      props.setRank();
+    }
   }
 };
 
@@ -62,10 +68,19 @@ const cardTarget = {
 @DropTarget(ItemTypes.KANBAN_FILTER, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
-@DragSource(ItemTypes.KANBAN_FILTER, cardSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))
+@DragSource(
+  props => {
+    if (!props.isAllowedEdit) {
+      return '';
+    } else {
+      return ItemTypes.KANBAN_FILTER;
+    }
+  },
+  cardSource, 
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging() })
+)
 export default class FilterItemCard extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
@@ -75,21 +90,23 @@ export default class FilterItemCard extends Component {
     id: PropTypes.any.isRequired,
     name: PropTypes.string.isRequired,
     condsTxt: PropTypes.string.isRequired,
+    isAllowedEdit: PropTypes.bool.isRequired,
     editFilter: PropTypes.func,
     delFilter: PropTypes.func,
+    setRank: PropTypes.func.isRequired,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
-    const { id, name, condsTxt, isDragging, connectDragSource, connectDropTarget, editFilter, delFilter } = this.props;
+    const { id, name, condsTxt, isAllowedEdit, isDragging, connectDragSource, connectDropTarget, editFilter, delFilter } = this.props;
     const opacity = isDragging ? 0 : 1;
     const styles = { float: 'right', cursor: 'pointer' };
 
     return connectDragSource(connectDropTarget(
       <div style={ { opacity } } className='filter-dragcard dragcard'>
         <span style={ { fontWeight: 600 } }>{ name }</span> -- <span>{ condsTxt }</span>
-        { !!delFilter && <span style={ styles } onClick={ () => { delFilter(id) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
-        { !!editFilter && <span style={ styles } onClick={ () => { editFilter(id) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
+        { isAllowedEdit && !!delFilter && <span style={ styles } onClick={ () => { delFilter(id) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
+        { isAllowedEdit && !!editFilter && <span style={ styles } onClick={ () => { editFilter(id) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
 
       </div>
     ));

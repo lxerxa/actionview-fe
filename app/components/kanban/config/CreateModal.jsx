@@ -55,7 +55,7 @@ export default class CreateModal extends Component {
       close();
       notify.show('新建完成。', 'success', 2000);
       const { kanbans } = this.props;
-      goto(_.last(kanbans).id);
+      goto(_.last(kanbans).id, 'config');
     } else {
       this.setState({ ecode: ecode });
     }
@@ -73,7 +73,7 @@ export default class CreateModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { name, type, description }, handleSubmit, invalid, submitting } = this.props;
 
-    const typeOptions = [{ label: 'Srcum Board', value: 'scrum' }, { label: 'Kanban', value: 'kanban' }]; 
+    const typeOptions = [{ label: 'Srcum Board(暂不支持)', value: 'scrum' }, { label: 'Kanban', value: 'kanban' }]; 
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

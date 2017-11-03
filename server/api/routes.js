@@ -858,7 +858,7 @@ export default function(router) {
   router.post('/project/:key/kanban', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ ecode: 0, data: { id: '333', name: '测试测试33', type: 'kanban', filters: [{name: '1111', query:{ assignee: [ 'me', 'ttt' ] }}, {name: '2222', query:{updated_at: '1w'}}, {name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', no: 1, states: ['546761','546762']}, {name:'处理中', no: 2, states: [ '546763' ]}, {name:'关闭', no: 3, states:[]}], query: { subtask: false, type: [ '111', '333' ] }, ranks: [{ col: 0, parent: '', rank: [9999, 1555]}], last_access_time: 11111111 } };
+    const results={ ecode: 0, data: { id: '333', name: '测试测试33', type: 'kanban' } };
     return res.status(200).send(results);
   });
 

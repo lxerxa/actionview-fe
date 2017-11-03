@@ -6,10 +6,16 @@ import _ from 'lodash';
 
 const cardSource = {
   beginDrag(props) {
+    this.preIndex = props.index;
     return {
       id: props.column.no,
       index: props.index
     };
+  },
+  endDrag(props, monitor, component) {
+    if (this.preIndex != props.index) {
+      props.setRank();
+    }
   }
 };
 
@@ -63,10 +69,19 @@ const cardTarget = {
 @DropTarget(ItemTypes.KANBAN_COLUMN, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
-@DragSource(ItemTypes.KANBAN_COLUMN, cardSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))
+@DragSource(
+  props => {
+    if (!props.isAllowedEdit) {
+      return '';
+    } else {
+      return ItemTypes.KANBAN_COLUMN;
+    }
+  },
+  cardSource, 
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging() })
+)
 export default class ColumnItemCard extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
@@ -77,11 +92,13 @@ export default class ColumnItemCard extends Component {
     options: PropTypes.object.isRequired,
     editColumn: PropTypes.func,
     delColumn: PropTypes.func,
+    setRank: PropTypes.func.isRequired,
+    isAllowedEdit: PropTypes.bool.isRequired,
     moveCard: PropTypes.func.isRequired
   };
 
   render() {
-    const { column, options, isDragging, connectDragSource, connectDropTarget, editColumn, delColumn } = this.props;
+    const { column, options, isAllowedEdit, isDragging, connectDragSource, connectDropTarget, editColumn, delColumn } = this.props;
     const opacity = isDragging ? 0 : 1;
     const styles = { float: 'right', cursor: 'pointer' };
 
@@ -89,8 +106,8 @@ export default class ColumnItemCard extends Component {
       <div style={ { opacity } } className='config-column'>
         <div style={ { fontWeight: 600, paddingBottom: '10px', borderBottom: '1px solid #ccc' } }>
           { column.name }
-          { !!delColumn && <span style={ styles } onClick={ () => { delColumn(column.no) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
-          { !!editColumn && <span style={ styles } onClick={ () => { editColumn(column.no) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
+          { isAllowedEdit && !!delColumn && <span style={ styles } onClick={ () => { delColumn(column.no) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
+          { isAllowedEdit && !!editColumn && <span style={ styles } onClick={ () => { editColumn(column.no) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
         </div>
         <div>
         { _.map(column.states, (v, i) => 

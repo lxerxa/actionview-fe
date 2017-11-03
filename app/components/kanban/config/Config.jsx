@@ -207,6 +207,8 @@ export default class Config extends Component {
       edit,
       config } = this.props;
 
+    const isAllowedEdit = options.permissions && options.permissions.indexOf('manage_project') !== -1;
+
     let usedStates = [];
     _.forEach(config.columns || [], (v) => {
       usedStates = _.union(usedStates, v.states);
@@ -228,7 +230,8 @@ export default class Config extends Component {
             <li>类型：{ config.type || '-' }</li>
             <li>描述：{ config.description || '-' }</li>
           </ul>
-          <Button onClick={ () => { this.setState({ editModalShow: true }) } }>编辑</Button>
+          { isAllowedEdit &&
+          <Button onClick={ () => { this.setState({ editModalShow: true }) } }>编辑</Button> }
         </div>
       )
     });
@@ -250,7 +253,8 @@ export default class Config extends Component {
           <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0, marginBottom: '10px' } }>
             <li>{ this.condsTxt(config.query) }</li>
           </ul> }
-          <Button onClick={ () => { this.setState({ globalFilterModalShow: true }) } }>设置</Button>
+          { isAllowedEdit &&
+          <Button onClick={ () => { this.setState({ globalFilterModalShow: true }) } }>设置</Button> }
         </div>
       )
     });
@@ -270,12 +274,15 @@ export default class Config extends Component {
           </ul>
           :
           <FilterList
+            isAllowedEdit={ isAllowedEdit } 
             kid={ config.id }
             editFilter={ this.editFilter.bind(this) }
             delFilter={ this.delFilter.bind(this) }
             filters={ config.filters || [] }
+            update={ edit }
             condsTxt={ this.condsTxt } /> }
-          <Button onClick={ () => { this.setState({ quickFilterModalShow: true, filterNo: -1 }) } }>添加</Button>
+          { isAllowedEdit &&
+          <Button onClick={ () => { this.setState({ quickFilterModalShow: true, filterNo: -1 }) } }>添加</Button> }
         </div>
       )
     });
@@ -295,10 +302,10 @@ export default class Config extends Component {
     items.push({
       id: 'columns',
       title: (
-        <div>
+        <div style={ { minHeight: '300px' } }>
           <span className='kanban-table-td-title'>显示列</span>
           <span className='table-td-desc'>可左右拖拽调整列位置</span>
-          <div className='table-td-desc' style={ { marginTop: '10px' } }>以下未分配状态：</div>
+          { unUsedStates.length > 0 && <div className='table-td-desc' style={ { marginTop: '10px' } }>以下未分配状态：</div> }
           { _.map(unUsedStates, (v, i) => { 
             return <div className='config-column-card' key = { i }> { v.name } </div> }) }
         </div>
@@ -311,12 +318,15 @@ export default class Config extends Component {
           </ul>
           :
           <ColumnList
+            isAllowedEdit={ isAllowedEdit }
             kid={ config.id }
             editColumn={ this.editColumn.bind(this) }
             delColumn={ this.delColumn.bind(this) }
             options={ options }
+            update={ edit }
             columns={ config.columns || [] } /> }
-          <Button style={ { marginLeft: '10px' } } onClick={ () => { this.setState({ columnModalShow: true, columnNo: -1 }) } }>添加</Button>
+          { isAllowedEdit &&
+          <Button style={ { marginLeft: '10px' } } onClick={ () => { this.setState({ columnModalShow: true, columnNo: -1 }) } }>添加</Button> }
         </div>
       )     
     }); 

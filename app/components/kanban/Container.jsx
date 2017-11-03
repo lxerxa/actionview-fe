@@ -57,8 +57,11 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
-  goto(id) {
+  goto(id, model) {
     this.context.router.push({ pathname: '/project/' + this.pid + '/kanban/' + id });
+    if (model) {
+      this.setState({ model });
+    }
   }
 
   async index(query) {
