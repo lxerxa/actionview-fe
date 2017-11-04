@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, DropdownButton, MenuItem, Nav, NavItem, ButtonGroup } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem, Nav, NavItem, ButtonGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 import _ from 'lodash';
  
 const CreateIssueModal = require('../issue/CreateModal');
@@ -124,6 +124,11 @@ export default class Header extends Component {
   render() {
     const { i18n, changeModel, model, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
 
+    const popoverClickRootClose = (
+      <Popover id='popover-trigger-click-root-close'>
+        <span>只有过滤器选择“全部”时，才可拖拽改变问题的排序。</span>
+      </Popover>);
+
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
         <div style={ { height: '47px' } }>
@@ -155,7 +160,13 @@ export default class Header extends Component {
 
         { model === 'issue' && !loading && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5' } }>
-          <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>过滤器：</span>
+          <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>
+            过滤器
+            <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
+              <span style={ { marginLeft: '5px', cursor: 'pointer' } }><i className='fa fa-info-circle'></i></span>
+            </OverlayTrigger>
+            ：
+          </span>
           <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.filter } onSelect={ this.handleSelect.bind(this) }>
             <NavItem eventKey='all' href='#'>全部</NavItem>
             { _.map(curKanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
