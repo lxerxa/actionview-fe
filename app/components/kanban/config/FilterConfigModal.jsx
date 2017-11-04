@@ -38,7 +38,7 @@ export default class FilterConfigModal extends Component {
       this.state.module = query.module && query.module.join(',') || ''; 
       this.state.created_at = query.created_at || ''; 
       this.state.updated_at = query.updated_at || ''; 
-    } else if (model == 'filter' && no) {
+    } else if (model == 'filter' && no >= 0) {
       const filter = _.find(filters, { no: no });
       if (!filter) {
         return;
@@ -69,7 +69,7 @@ export default class FilterConfigModal extends Component {
   }
 
   async handleSubmit() {
-    const { update, close, data, model, no } = this.props;
+    const { update, close, data:{ id, filters=[] }, model, no } = this.props;
 
     const submitData = {};
     if (this.state.type) { submitData.type = this.state.type.split(','); } 
@@ -84,11 +84,10 @@ export default class FilterConfigModal extends Component {
 
     let ecode = 0;
     if (model == 'global') {
-      ecode = await update(_.extend({ query: submitData }, { id: data.id }));
+      ecode = await update(_.extend({ query: submitData }, { id }));
     } else if (model == 'filter') {
-      const filters = _.clone(data.filters) || [];
       if (no >= 0) {
-        const index = _.findIndex(data.filters, { no: no });
+        const index = _.findIndex(filters, { no: no });
         filters[index].query = submitData;
         filters[index].name = this.state.name;
       } else {
@@ -98,7 +97,7 @@ export default class FilterConfigModal extends Component {
         }
         filters.push({ query: submitData, name: this.state.name, no });
       }
-      ecode = await update(_.extend({ filters }, { id: data.id }));
+      ecode = await update(_.extend({ filters }, { id }));
     }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
