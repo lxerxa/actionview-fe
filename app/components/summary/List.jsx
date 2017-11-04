@@ -80,7 +80,7 @@ export default class List extends Component {
                 { _.map(options.types || [], (v) => { 
                   return (
                     <td key={ v.id }>
-                      <Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&updated_at=1w' }>
+                      <Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&state=Closed&updated_at=1w' }>
                         { data.closed_issues && data.closed_issues[v.id] || 0 }
                       </Link>
                     </td>) }) }

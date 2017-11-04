@@ -267,8 +267,8 @@ export default class Header extends Component {
         { this.state.condShow &&
         <div className='cond-bar'>
           <span>{ sqlTxt }</span>
-          <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } }><i className='fa fa-remove'></i></span>
-          <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } }><i className='fa fa-save'></i></span>
+          <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } } title='关闭'><i className='fa fa-remove'></i></span>
+          <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } } title='保存'><i className='fa fa-save'></i></span>
         </div> }
         { this.state.searcherConfigShow && 
           <SearcherConfigModal 
