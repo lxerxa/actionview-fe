@@ -214,7 +214,7 @@ export default class Card extends Component {
             <img className='board-avatar' src={ issue.assignee && issue.assignee.avatar ? '/api/getavatar?fid=' + issue.assignee.avatar : no_avatar }/>
           </div>
           <div>
-            <span className='type-abb'>
+            <span className='type-abb' title={ _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).name : '' }>
               { _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).abb : '-' }
             </span>
             <a href='#' onClick={ (e) => { e.preventDefault(); issueView(issue.id) } }>
