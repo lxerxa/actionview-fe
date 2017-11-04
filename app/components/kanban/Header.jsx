@@ -17,8 +17,7 @@ export default class Header extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { index, switchRank, curKanban } = nextProps;
-    if (this.props.curKanban.id != curKanban.id 
-         || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
+    if (this.props.curKanban.id != curKanban.id || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
       this.setState({ filter: 'all' });
       switchRank(true);
       index(this.getQuery(curKanban.query || {}));
@@ -66,7 +65,10 @@ export default class Header extends Component {
     const newQuery = {};
     _.forEach(multiValFields, (val) => {
       if (fq[val] && fq[val].length > 0 && gq[val] && gq[val].length > 0) {
-        newQuery[val] = _.intersection(fq[val], gq[val])
+        newQuery[val] = _.intersection(fq[val], gq[val]);
+        if (newQuery[val].length <= 0) {
+          newQuery[val] = [ 'notexists' ];
+        }
       } else {
         if (gq[val] && gq[val].length > 0) {
           newQuery[val] = gq[val];
@@ -77,7 +79,7 @@ export default class Header extends Component {
       }
     });
 
-    if (newQuery.type && gq.subtask) {
+    if (newQuery.type && _.head(newQuery.type) !== 'notexists' && gq.subtask) {
       const subtaskTypes = _.map(_.filter(this.props.options.types, { type: 'subtask' }), (v) => v.id);
       if (subtaskTypes.length > 0) {
         newQuery.type = _.union(newQuery.type, subtaskTypes); 

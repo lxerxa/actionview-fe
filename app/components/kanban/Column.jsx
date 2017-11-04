@@ -66,9 +66,9 @@ export default class Column extends Component {
       const parent = _.head(mainCards).parent && _.head(mainCards).parent.no || '';
       curRankCol = _.find(rankMap, { col_no: colNo, parent }) || {}; 
       _.forEach(curRankCol.rank || [], (v) => {
-        const ind = _.findIndex(cards, { no: v });
+        const ind = _.findIndex(mainCards, { no: v });
         if (ind !== -1) {
-          sortedCards.push(cards[ind]);
+          sortedCards.push(mainCards[ind]);
         }
       });
     }
