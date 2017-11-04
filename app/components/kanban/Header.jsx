@@ -16,11 +16,12 @@ export default class Header extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { index, switchRank } = nextProps;
-    if (this.props.curKanban.id != nextProps.curKanban.id || this.props.curKanban.filters != nextProps.curKanban.filters || this.props.curKanban.query != nextProps.curKanban.query) {
+    const { index, switchRank, curKanban } = nextProps;
+    if (this.props.curKanban.id != curKanban.id 
+         || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
       this.setState({ filter: 'all' });
       switchRank(true);
-      index(this.getQuery(nextProps.curKanban.query || {}));
+      index(this.getQuery(curKanban.query || {}));
     }
   }
 
@@ -131,7 +132,7 @@ export default class Header extends Component {
             { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && '该项目未定义看板。' } 
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>
-            { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) &&
+            { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) && model === 'issue' &&
             <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
             { !_.isEmpty(curKanban) &&
             <ButtonGroup style={ { marginRight: '10px' } }>

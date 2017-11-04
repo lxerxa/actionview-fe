@@ -24,7 +24,7 @@ export default class FilterList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.kid !== nextProps.kid || !_.isEqual(this.state.cards, nextProps.filters)) {
+    if (this.kid !== nextProps.kid || !_.isEqual(_.sortByOrder(this.state.cards || [], ['no']), _.sortByOrder(nextProps.filters || [], ['no']))) {
       this.state.cards = nextProps.filters;
     }
   }

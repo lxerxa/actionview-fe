@@ -24,7 +24,7 @@ export default class ColumnList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.kid !== nextProps.kid || !_.isEqual(this.state.cards, nextProps.columns)) {
+    if (this.kid !== nextProps.kid || !_.isEqual(_.sortByOrder(this.state.cards || [], ['no']), _.sortByOrder(nextProps.columns || [], ['no']))) {
       this.state.cards = nextProps.columns;
     }
   }
