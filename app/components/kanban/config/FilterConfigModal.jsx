@@ -120,7 +120,7 @@ export default class FilterConfigModal extends Component {
   render() {
     const { i18n: { errMsg }, model, no, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
 
-    const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
+    const typeOptions = _.map(_.filter(types, (v) => { return v.type === 'standard' }), (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
     userOptions.unshift({ value: 'me', label: '当前用户' });
     const stateOptions = _.map(states, (val) => { return { label: val.name, value: val.id } });
