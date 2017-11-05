@@ -22,7 +22,7 @@ const cardSource = {
   endDrag(props, monitor, component) {
     props.cleanDraggableActions();
     if (this.preIndex != props.index) {
-      props.setRank(props.issue.id);
+      props.issueRank(props.issue.id);
     }
   }
 };
@@ -114,6 +114,7 @@ export default class Card extends Component {
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
     rankable: PropTypes.bool.isRequired,
+    issueRank: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
     issueView: PropTypes.func.isRequired,
@@ -144,6 +145,7 @@ export default class Card extends Component {
       getDraggableActions,
       cleanDraggableActions,
       rankable,
+      issueRank,
       setRank,
       closeDetail,
       subtasks=[],
@@ -174,6 +176,7 @@ export default class Card extends Component {
               cleanDraggableActions={ cleanDraggableActions }
               rankMap={ rankMap }
               rankable={ rankable }
+              issueRank={ issueRank }
               setRank={ setRank }
               moveCard={ moveCard }/> }
           <Column 
