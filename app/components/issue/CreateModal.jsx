@@ -7,6 +7,7 @@ import DateTime from 'react-datetime';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { findDOMNode } from 'react-dom';
 
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -110,6 +111,14 @@ class CreateModal extends Component {
     this.getChangedKeys = this.getChangedKeys.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+  }
+
+  componentDidMount(){
+    const dom = findDOMNode(this.refs['createModal']);
+    const rect = dom.getBoundingClientRect();
+    if (rect.height < 580) {
+      dom.style.overflow = 'visible';
+    }
   }
 
   static propTypes = {
@@ -301,7 +310,7 @@ class CreateModal extends Component {
 
     let bodyStyles = { height: '580px', overflow: 'auto' };
     if (isFromWorkflow) {
-      bodyStyles = { maxHeight: '500px', overflow: 'auto' };
+      bodyStyles = { maxHeight: '580px', overflow: 'auto' };
     }
 
     return (
@@ -310,7 +319,7 @@ class CreateModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : '编辑问题') : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
         <Form horizontal>
-          <Modal.Body style={ bodyStyles }>
+          <Modal.Body style={ bodyStyles } ref='createModal'>
             { !isFromWorkflow &&
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>

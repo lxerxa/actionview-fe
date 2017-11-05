@@ -63,7 +63,7 @@ export default class Column extends Component {
     let curRankCol = {};
     const sortedCards = []; 
     if (mainCards.length > 0) {
-      const parent = _.head(mainCards).parent && _.head(mainCards).parent.no || '';
+      const parent = _.head(mainCards).parent && _.head(mainCards).parent.id || '';
       curRankCol = _.find(rankMap, { col_no: colNo, parent }) || {}; 
       _.forEach(curRankCol.rank || [], (v) => {
         const ind = _.findIndex(mainCards, { no: v });
@@ -91,7 +91,7 @@ export default class Column extends Component {
     }));
   }
 
-  setRank(id) {
+  issueRank(id) {
     const { colNo, setRank } = this.props;
     const { mainCards } = this.state;
 
@@ -136,6 +136,7 @@ export default class Column extends Component {
       getDraggableActions, 
       cleanDraggableActions, 
       rankable, 
+      setRank,
       closeDetail, 
       rankMap,
       openedIssue, 
@@ -168,7 +169,8 @@ export default class Column extends Component {
           getDraggableActions={ getDraggableActions }
           cleanDraggableActions={ cleanDraggableActions }
           rankable={ rankable } 
-          setRank={ this.setRank.bind(this) } 
+          setRank={ setRank } 
+          issueRank={ this.issueRank.bind(this) } 
           moveCard={ this.moveCard.bind(this) }/>
         ) }
       </div> );
