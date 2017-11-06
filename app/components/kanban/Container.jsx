@@ -267,7 +267,7 @@ export default class Container extends Component {
     }
 
     let curKanban = {};
-    if (this.props.issue.options.types && this.kanban_id && this.props.kanban.list) {
+    if (this.props.issue.options.types && this.kanban_id && this.props.kanban.list.length > 0) {
       curKanban = _.find(this.props.kanban.list, { id: this.kanban_id }) || {};
     }
 
@@ -278,7 +278,7 @@ export default class Container extends Component {
           model={ this.state.model }
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
-          loading={ this.props.kanban.loading || this.props.issue.optionLoading }
+          loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
           goto={ this.goto }
           switchRank={ this.props.actions.switchRank }
           index={ this.index.bind(this) } 
