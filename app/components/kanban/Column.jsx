@@ -105,12 +105,10 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.cards.length === nextProps.cards.length) {
-      return;
+    if (this.state.cards.length !== nextProps.cards.length || (this.props.rankMap.length <=0 && nextProps.rankMap.length > 0)) {
+      this.state.cards = nextProps.cards;
+      this.arrangeCard();
     }
-
-    this.state.cards = nextProps.cards;
-    this.arrangeCard();
 
     //const oldCardIds = _.map(this.state.cards, (v) => v.id );
     //const newCardIds = _.map(nextProps.cards, (v) => v.id );
