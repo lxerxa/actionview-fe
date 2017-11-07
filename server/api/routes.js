@@ -862,6 +862,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.put('/project/:key/kanban/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ ecode: 0, data: { id: '2222', name:'2222', type: 'scrum', filters: [{ no: 1, name: 'mmmmmmm', query:{ assignee: [ 'me','ttt' ] } }, {no: 2, name: 'nnnnnnn', query:{updated_at: '1w'}}, {no: 4, name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', no: 0, states: [ '546761']}, {name:'处理中22', no: 2, states: [ '546762' ]}], query: { subtask: true, type: [ '1111', '2222' ] }, rank: {} } };
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/kanban/:kid/rank', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
