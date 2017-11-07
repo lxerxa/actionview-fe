@@ -105,7 +105,7 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.cards.length !== nextProps.cards.length || (this.props.rankMap.length <=0 && nextProps.rankMap.length > 0)) {
+    if (this.state.cards.length !== nextProps.cards.length) {
       this.state.cards = nextProps.cards;
       this.arrangeCard();
     }

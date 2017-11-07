@@ -290,6 +290,7 @@ export default class Container extends Component {
         { this.state.model == 'issue' &&
         <List 
           curKanban={ curKanban }
+          rankLoading={ this.props.kanban.rankLoading }
           rankable={ this.props.kanban.rankable }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
