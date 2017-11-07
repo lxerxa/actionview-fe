@@ -8,8 +8,7 @@ const img = require('../../../assets/images/loading.gif');
 export default class DelNotify extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, data: {} };
-    this.state.data = _.clone(this.props.config);
+    this.state = { ecode: 0 };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -25,19 +24,17 @@ export default class DelNotify extends Component {
   }
 
   async confirm() {
-    const { close, update, no, model } = this.props;
-    const { data: { id, columns={}, filters={} } } = this.state;
+    const { close, update, no, model, config: { id, columns={}, filters={} } } = this.props;
     let ecode = 0;
     if (model === 'column') {
-      const ind = _.findIndex(columns, { no });
-      columns.splice(ind, 1);
-      ecode = await update({ id, columns });
+      const newColumns = _.filter(columns, (v) => { return v.no != no });
+      ecode = await update({ id, columns: newColumns });
     } else if (model === 'filter') {
-      const ind = _.findIndex(filters, { no });
-      filters.splice(ind, 1);
-      ecode = await update({ id, filters });
+      const newFilters = _.filter(filters, (v) => { return v.no != no });
+      ecode = await update({ id, filters: newFilters });
     }
-    this.setState({ ecode: ecode });
+    alert(ecode);
+    this.setState({ ecode });
     if (ecode === 0) {
       close();
       if (model === 'column') {
@@ -54,13 +51,15 @@ export default class DelNotify extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, model, no, loading } = this.props;
-    const { data } = this.state;
+    const { i18n: { errMsg }, model, no, loading, config } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ model === 'column' && ('删除列 - ' + _.find(data.columns, { no }).name) } { model === 'filter' && ('删除过滤器 - ' +  _.find(data.filters, { no }).name) }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>
+            { model === 'column' && ('删除列 - ' + (_.find(config.columns, { no }) && _.find(config.columns, { no }).name || '')) } 
+            { model === 'filter' && ('删除过滤器 - ' +  (_.find(config.filters, { no }) && _.find(config.filters, { no }).name || '')) }
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           确认要删除此{ model === 'column' && '列' }{ model === 'filter' && '过滤器' }? <br/>
