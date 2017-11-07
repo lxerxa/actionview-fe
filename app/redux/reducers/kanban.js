@@ -73,7 +73,7 @@ export default function activity(state = initialState, action) {
       return { ...state, rankable: action.flag };
 
     case t.KANBAN_ISSUE_RANK_GET:
-    case t.KANBAN_ISSUE_RANK_SET:
+    //case t.KANBAN_ISSUE_RANK_SET:
       return { ...state, rankLoading: true };
 
     case t.KANBAN_ISSUE_RANK_GET_SUCCESS:
