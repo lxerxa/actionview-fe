@@ -33,7 +33,6 @@ export default class DelNotify extends Component {
       const newFilters = _.filter(filters, (v) => { return v.no != no });
       ecode = await update({ id, filters: newFilters });
     }
-    alert(ecode);
     this.setState({ ecode });
     if (ecode === 0) {
       close();
