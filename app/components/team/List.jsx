@@ -298,7 +298,7 @@ export default class List extends Component {
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
-      <div style={ { marginBottom: '30px' } }>
+      <div style={ { marginBottom: '30px', marginTop: '15px' } }>
         <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
