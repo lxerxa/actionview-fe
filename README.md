@@ -2,6 +2,10 @@
 
 ActoionView前端代码库，基于Reactjs＋Redux。
 
+# Demo
+
+http://www.actionview.cn  
+
 ## How to install
 
 环境要求：
