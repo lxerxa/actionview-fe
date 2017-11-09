@@ -25,12 +25,12 @@ export default class Column extends Component {
     pkey: PropTypes.string.isRequired,
     accepts: PropTypes.array.isRequired,
     cards: PropTypes.array.isRequired,
+    issueLoading: PropTypes.bool.isRequired,
     issueView: PropTypes.func.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
     rankable: PropTypes.bool.isRequired,
-    rankLoading: PropTypes.bool.isRequired,
     setRank: PropTypes.func.isRequired
   }
 
@@ -110,7 +110,7 @@ export default class Column extends Component {
 
   componentWillReceiveProps(nextProps) {
     //if (this.state.cards.length !== nextProps.cards.length) {
-    if (!nextProps.rankLoading) {
+    if (this.props.issueLoading && !nextProps.issueLoading) {
       this.state.cards = nextProps.cards;
       this.arrangeCard();
     }
@@ -142,6 +142,7 @@ export default class Column extends Component {
       setRank,
       closeDetail, 
       rankMap,
+      issueLoading,
       openedIssue, 
       options, 
       pkey, 
@@ -168,6 +169,7 @@ export default class Column extends Component {
           accepts={ accepts }
           options={ options }
           closeDetail={ closeDetail }
+          issueLoading={ issueLoading }
           issueView={ this.issueView.bind(this) }
           getDraggableActions={ getDraggableActions }
           cleanDraggableActions={ cleanDraggableActions }

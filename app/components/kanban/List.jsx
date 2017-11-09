@@ -264,11 +264,11 @@ export default class List extends Component {
                 rankMap={ curKanban.ranks || [] }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
+                issueLoading={ loading || itemLoading }
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
                 rankable={ rankable }
-                rankLoading={ rankLoading }
                 setRank={ setRank }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
