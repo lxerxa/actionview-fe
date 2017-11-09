@@ -268,6 +268,7 @@ export default class List extends Component {
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
                 rankable={ rankable }
+                rankLoading={ rankLoading }
                 setRank={ setRank }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
