@@ -117,6 +117,7 @@ export default class Card extends Component {
     issueRank: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
+    issueLoading: PropTypes.bool.isRequired,
     issueView: PropTypes.func.isRequired,
     issue: PropTypes.object.isRequired,
     rankMap: PropTypes.array.isRequired,
@@ -136,6 +137,7 @@ export default class Card extends Component {
       index,
       issue, 
       pkey, 
+      issueLoading, 
       issueView, 
       rankMap,
       openedIssue, 
@@ -171,6 +173,7 @@ export default class Card extends Component {
               accepts={ accepts }
               options={ options }
               closeDetail={ closeDetail }
+              issueLoading={ issueLoading }
               issueView={ issueView }
               getDraggableActions={ getDraggableActions }
               cleanDraggableActions={ cleanDraggableActions }
@@ -184,6 +187,7 @@ export default class Card extends Component {
             colNo={ colNo } 
             rankMap={ rankMap }
             openedIssue={ openedIssue } 
+            issueLoading={ issueLoading }
             issueView={ issueView } 
             getDraggableActions={ getDraggableActions } 
             cleanDraggableActions={ cleanDraggableActions } 
