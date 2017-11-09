@@ -30,6 +30,7 @@ export default class Column extends Component {
     cleanDraggableActions: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
     rankable: PropTypes.bool.isRequired,
+    rankLoading: PropTypes.bool.isRequired,
     setRank: PropTypes.func.isRequired
   }
 
@@ -96,7 +97,10 @@ export default class Column extends Component {
     const { mainCards } = this.state;
 
     const draggedIssue = _.find(mainCards, { id });
-    setRank({ col_no: colNo, parent: draggedIssue.parent && draggedIssue.parent.id || '', rank: _.map(mainCards, (v) => v.no) });
+    setRank({ 
+      col_no: colNo, 
+      parent: draggedIssue.parent && draggedIssue.parent.id || '', 
+      rank: _.map(mainCards, (v) => v.no) });
   }
 
   issueView(id) {
@@ -105,7 +109,8 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.cards.length !== nextProps.cards.length) {
+    //if (this.state.cards.length !== nextProps.cards.length) {
+    if (!nextProps.rankLoading) {
       this.state.cards = nextProps.cards;
       this.arrangeCard();
     }
