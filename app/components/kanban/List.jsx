@@ -264,7 +264,7 @@ export default class List extends Component {
                 rankMap={ curKanban.ranks || [] }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
-                issueLoading={ loading || itemLoading }
+                draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
@@ -284,7 +284,7 @@ export default class List extends Component {
                   key={ i }
                   index={ i }
                   isEmpty={ !(draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1) }
-                  draggedIssue={ _.find(collection, { id: draggedIssue }) }
+                  draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
                   draggableActions={ draggableActions }
                   doAction={ doAction }
                   workflowScreenShow={ this.workflowScreenShow.bind(this) }

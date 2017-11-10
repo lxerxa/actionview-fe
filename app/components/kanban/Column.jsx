@@ -12,7 +12,7 @@ export default class Column extends Component {
 
     this.state = { cards: [], mainCards: [], classifiedSubtasks: {} };
     this.state.cards = props.cards;
-    this.arrangeCard();
+    this.arrangeCard(props);
   }
 
   static propTypes = {
@@ -25,7 +25,7 @@ export default class Column extends Component {
     pkey: PropTypes.string.isRequired,
     accepts: PropTypes.array.isRequired,
     cards: PropTypes.array.isRequired,
-    issueLoading: PropTypes.bool.isRequired,
+    draggedIssue: PropTypes.object.isRequired,
     issueView: PropTypes.func.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
@@ -34,8 +34,8 @@ export default class Column extends Component {
     setRank: PropTypes.func.isRequired
   }
 
-  arrangeCard() {
-    const { colNo, isSubtaskCol, subtaskShow, rankMap } = this.props;
+  arrangeCard(props) {
+    const { colNo, isSubtaskCol, subtaskShow, rankMap } = props;
     const { cards } = this.state;
     let mainCards = [], classifiedSubtasks = {};
 
@@ -110,9 +110,9 @@ export default class Column extends Component {
 
   componentWillReceiveProps(nextProps) {
     //if (this.state.cards.length !== nextProps.cards.length) {
-    if (this.props.issueLoading && !nextProps.issueLoading) {
+    if (_.isEmpty(this.props.draggedIssue) && _.isEmpty(nextProps.draggedIssue)) {
       this.state.cards = nextProps.cards;
-      this.arrangeCard();
+      this.arrangeCard(nextProps);
     }
 
     //const oldCardIds = _.map(this.state.cards, (v) => v.id );
@@ -142,7 +142,7 @@ export default class Column extends Component {
       setRank,
       closeDetail, 
       rankMap,
-      issueLoading,
+      draggedIssue,
       openedIssue, 
       options, 
       pkey, 
@@ -169,7 +169,7 @@ export default class Column extends Component {
           accepts={ accepts }
           options={ options }
           closeDetail={ closeDetail }
-          issueLoading={ issueLoading }
+          draggedIssue={ draggedIssue }
           issueView={ this.issueView.bind(this) }
           getDraggableActions={ getDraggableActions }
           cleanDraggableActions={ cleanDraggableActions }
