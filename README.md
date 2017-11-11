@@ -1,6 +1,6 @@
 ## ActionView front-end
 
-ActoionView前端代码库，基于Reactjs＋Redux。
+ActoionView前端代码库，基于Reactjs＋Redux。后端代码库：[actionview](https://github.com/lxerxa/actionview)。
 
 # Demo
 
