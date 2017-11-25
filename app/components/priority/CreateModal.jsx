@@ -72,7 +72,7 @@ export default class CreateModal extends Component {
     close();
   }
 
-  handlerHideColorPicker(e) {
+  handlerHideColorPicker() {
     if (!this.state.displayColorPicker) return;
     this.setState({ displayColorPicker: false });
   }
