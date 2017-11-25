@@ -4,6 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { SketchPicker } from 'react-color';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -34,7 +35,7 @@ const validate = (values, props) => {
 export default class EditModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, displayColorPicker: false };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -79,6 +80,17 @@ export default class EditModal extends Component {
     close();
   }
 
+  handlerHideColorPicker() {
+    if (!this.state.displayColorPicker) return;
+    this.setState({ displayColorPicker: false });
+  }
+
+  handlerShowColorPicker(e) {
+    e.stopPropagation();
+    if (this.state.displayColorPicker) return;
+    this.setState({ displayColorPicker: true });
+  }
+
   render() {
     const { i18n: { errMsg }, fields: { id, name, color, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
@@ -90,11 +102,11 @@ export default class EditModal extends Component {
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton onClick={ this.handlerHideColorPicker.bind(this) } style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '编辑优先级 - ' + data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body>
+        <Modal.Body onClick={ this.handlerHideColorPicker.bind(this) }>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='hidden' { ...id }/>
@@ -103,18 +115,26 @@ export default class EditModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
             <ControlLabel>图案颜色</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...color } placeholder='#cccccc'/>
+            <FormControl disabled={ submitting } onClick={ this.handlerShowColorPicker.bind(this) } type='text' { ...color } placeholder='#cccccc'/>
             <FormControl.Feedback>
               <span className='circle' style={ colorStyle }/>
             </FormControl.Feedback>
             { color.touched && color.error && <HelpBlock style={ { float: 'right' } }>{ color.error }</HelpBlock> }
+            { this.state.displayColorPicker &&
+              <div
+                onClick={ (e)=>{ e.stopPropagation(); } }
+                style={ { display: 'inline-block' } } >
+                <SketchPicker
+                  color={ color.value || '#cccccc' }
+                  onChange={ (pickedColor) => { color.onChange(pickedColor.hex) } } />
+              </div> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer onClick={ this.handlerHideColorPicker.bind(this) }>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
