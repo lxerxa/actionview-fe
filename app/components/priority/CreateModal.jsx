@@ -106,7 +106,7 @@ export default class CreateModal extends Component {
               <span className='circle' style={ colorStyle }/>
             </FormControl.Feedback>
             { color.touched && color.error && <HelpBlock style={ { float: 'right' } }>{ color.error }</HelpBlock> }
-            { this.state.displayColorPicker && <div onClick={ (e)=>{ e.stopPropagation(); } } style={ { display: 'inline-block' } } ><SketchPicker color={ this.state.pickedColorValue } onChangeComplete={ (pickedColor)=>{ this.setState({ pickedColorValue: pickedColor.hex }); } } /></div> }
+            { this.state.displayColorPicker && <div onClick={ (e)=>{ e.stopPropagation(); } } style={ { display: 'inline-block' } } ><SketchPicker color={ this.state.pickedColorValue } onChange={ (pickedColor)=>{ this.setState({ pickedColorValue: pickedColor.hex }); } } /></div> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
