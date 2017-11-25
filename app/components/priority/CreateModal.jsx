@@ -34,7 +34,7 @@ const validate = (values, props) => {
 export default class CreateModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, displayColorPicker: false, pickedColorValue: '' };
+    this.state = { ecode: 0, displayColorPicker: false };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -76,6 +76,7 @@ export default class CreateModal extends Component {
     if (!this.state.displayColorPicker) return;
     this.setState({ displayColorPicker: false });
   }
+
   handlerShowColorPicker(e) {
     e.stopPropagation();
     if (this.state.displayColorPicker) return;
@@ -85,7 +86,7 @@ export default class CreateModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { name, color, description }, handleSubmit, invalid, submitting } = this.props;
     
-    let colorStyle = { backgroundColor: this.state.pickedColorValue || color.value || '#cccccc', marginTop: '10px', marginRight: '8px' };
+    let colorStyle = { backgroundColor: color.value || '#cccccc', marginTop: '10px', marginRight: '8px' };
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -101,12 +102,19 @@ export default class CreateModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
             <ControlLabel>图案颜色</ControlLabel>
-            <FormControl disabled={ submitting } onClick={ this.handlerShowColorPicker.bind(this) } type='text' { ...color } value={ this.state.pickedColorValue || color.value } placeholder='#cccccc'/>
+            <FormControl disabled={ submitting } onClick={ this.handlerShowColorPicker.bind(this) } type='text' { ...color } value={ color.value } placeholder='#cccccc'/>
             <FormControl.Feedback>
               <span className='circle' style={ colorStyle }/>
             </FormControl.Feedback>
             { color.touched && color.error && <HelpBlock style={ { float: 'right' } }>{ color.error }</HelpBlock> }
-            { this.state.displayColorPicker && <div onClick={ (e)=>{ e.stopPropagation(); } } style={ { display: 'inline-block' } } ><SketchPicker color={ this.state.pickedColorValue } onChange={ (pickedColor)=>{ this.setState({ pickedColorValue: pickedColor.hex }); } } /></div> }
+            { this.state.displayColorPicker && 
+              <div 
+                onClick={ (e)=>{ e.stopPropagation(); } } 
+                style={ { display: 'inline-block' } } >
+                <SketchPicker 
+                  color={ color.value || '#cccccc' } 
+                  onChange={ (pickedColor) => { color.onChange(pickedColor.hex) } } />
+              </div> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
