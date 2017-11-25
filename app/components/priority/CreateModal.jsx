@@ -3,6 +3,7 @@ import { reduxForm, getValues } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { SketchPicker } from 'react-color';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -33,7 +34,7 @@ const validate = (values, props) => {
 export default class CreateModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, displayColorPicker: false, pickedColorValue: '' };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -71,14 +72,21 @@ export default class CreateModal extends Component {
     close();
   }
 
+  handlerHideColorPicker() {
+    this.setState({ displayColorPicker: false })
+  }
+  handlerShowColorPicker() {
+    this.setState({ displayColorPicker: true })
+  }
+  
+  handleColorPickChangeComplete(pickedColor) {
+    this.setState({ pickedColorValue: pickedColor.hex })
+  }
+
   render() {
     const { i18n: { errMsg }, fields: { name, color, description }, handleSubmit, invalid, submitting } = this.props;
     
-    let colorStyle = { backgroundColor: '#cccccc', marginTop: '10px', marginRight: '8px' };
-    if (color.value)
-    {
-      colorStyle = { backgroundColor: color.value, marginTop: '10px', marginRight: '8px' };
-    }
+    let colorStyle = { backgroundColor: this.state.pickedColorValue || color.value || '#cccccc', marginTop: '10px', marginRight: '8px' };
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -89,20 +97,21 @@ export default class CreateModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='优先级名'/>
+            <FormControl disabled={ submitting } onClick={ this.handlerHideColorPicker.bind(this) } type='text' { ...name } placeholder='优先级名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
             <ControlLabel>图案颜色</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...color } placeholder='#cccccc'/>
+            <FormControl disabled={ submitting } onClick={ this.handlerShowColorPicker.bind(this) } type='text' { ...color } value={ this.state.pickedColorValue || color.value } placeholder='#cccccc'/>
             <FormControl.Feedback>
               <span className='circle' style={ colorStyle }/>
             </FormControl.Feedback>
             { color.touched && color.error && <HelpBlock style={ { float: 'right' } }>{ color.error }</HelpBlock> }
+            { this.state.displayColorPicker && <SketchPicker color={ this.state.pickedColorValue } onChangeComplete={ this.handleColorPickChangeComplete.bind(this) } /> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
+            <FormControl disabled={ submitting } onClick={ this.handlerHideColorPicker.bind(this) } type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
