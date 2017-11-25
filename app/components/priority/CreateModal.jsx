@@ -73,14 +73,15 @@ export default class CreateModal extends Component {
   }
 
   handlerHideColorPicker() {
-    this.setState({ displayColorPicker: false })
+    this.setState({ displayColorPicker: false });
   }
+
   handlerShowColorPicker() {
-    this.setState({ displayColorPicker: true })
+    this.setState({ displayColorPicker: true });
   }
   
   handleColorPickChangeComplete(pickedColor) {
-    this.setState({ pickedColorValue: pickedColor.hex })
+    this.setState({ pickedColorValue: pickedColor.hex });
   }
 
   render() {
