@@ -33,12 +33,14 @@ export default class Header extends Component {
 
     return (
       <div>
-        { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+        { options.permissions && options.permissions.indexOf('manage_project') !== -1 ? 
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ createModalShow: true }); } }>
             <i className='fa fa-plus'></i>&nbsp;新建版本
           </Button>
-        </div> }
+        </div>
+        :
+        <div style={ { marginTop: '15px' } }/> }
         { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
