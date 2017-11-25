@@ -90,6 +90,7 @@
     "qs": "6.2.1",
     "rc-tabs": "5.9.2",
     "react": "15.3.0",
+    "react-color": "^2.13.8",
     "react-cropper": "1.0.0",
     "react-datetime": "2.6.0",
     "react-dnd": "2.1.4",
