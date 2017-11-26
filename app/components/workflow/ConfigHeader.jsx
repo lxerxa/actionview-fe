@@ -132,6 +132,14 @@ export default class ConfigHeader extends Component {
           <span style={ { float: 'right', marginTop: '20px', marginRight: '10px', fontWeight: 'bold' } }>{ workflowName }</span>
           <span style={ { float: 'right', marginTop: '20px' } }>工作流名称：</span>
         </div>
+        <div className='info-col'>
+          <div className='info-icon'>
+            <i className='fa fa-info-circle'></i>
+          </div>
+          <div className='info-content'>
+            配置工作流时应先新建工作流步骤，然后再添加相关的动作。<br/>每一步骤相关联的状态在状态模块中定义。
+          </div>
+        </div>
         { this.state.createStepModalShow && 
           <CreateStepModal 
             show 
