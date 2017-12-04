@@ -26,6 +26,7 @@ export default class List extends Component {
       settingPrincipalPids: [],
       principal: {},
       name: '', 
+      mode: 'list',
       status: 'active' };
 
     this.createModalClose = this.createModalClose.bind(this);
@@ -208,6 +209,17 @@ export default class List extends Component {
     }
   }
 
+  modeChange(newValue) {
+    this.setState({ mode: newValue }); 
+
+    // const { index } = this.props;
+    // if (_.trim(this.state.name)) {
+    //   index({ status: newValue, name: _.trim(this.state.name) });
+    // } else {
+    //   index({ status: newValue });
+    // }
+  }
+
   onRowMouseOver(rowData) {
     if (rowData.id !== this.state.hoverRowId) {
       this.setState({ operateShow: true, hoverRowId: rowData.id });
@@ -347,6 +359,15 @@ export default class List extends Component {
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
             </span>
+            <span style={ { float: 'right', width: '90px', marginRight: '10px'  } }>
+              <Select
+                simpleValue
+                clearable={ false }
+                placeholder='展示模式'
+                value={ this.state.mode }
+                onChange={ this.modeChange.bind(this) }
+                options={ [{ value: 'list', label: '列表' }, { value: 'card', label: '卡片' } ] }/>
+            </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
                 type='text'
@@ -359,6 +380,7 @@ export default class List extends Component {
           </FormGroup>
         </div>
         <div>
+          { this.state.mode === 'list' &&
           <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
@@ -367,7 +389,22 @@ export default class List extends Component {
             <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
-          </BootstrapTable>
+            </BootstrapTable> }
+          { this.state.mode === 'card' &&
+          collection.map((model) => {
+            return (
+              <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 card'>
+                <a href='#' className='title'>
+                  <span>{ model.name }</span>
+                </a>
+                <div className='detail'>
+                  <span>负责人: { model.principal.name }</span>
+                  <span>状态: { model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</span>
+                  <p>description: { model.description }</p>
+                </div>
+              </div>
+            )
+          }) }
           { this.state.editModalShow && 
             <EditModal 
               show 
