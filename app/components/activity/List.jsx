@@ -13,7 +13,7 @@ const DetailBar = require('../issue/DetailBar');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 30, category: 'all', barShow: false, hoverRowId: '' };
+    this.state = { limit: 50, category: 'all', barShow: false, hoverRowId: '' };
   }
 
   static propTypes = {

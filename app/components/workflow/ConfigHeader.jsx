@@ -76,7 +76,7 @@ export default class ConfigHeader extends Component {
     this.dfsVisit(stepTree, 1, visitedSteps);
 
     if (_.xor(allSteps, visitedSteps).length > 0) {
-      this.setState({ errMsg: '格式错误, 请预览查看' });
+      this.setState({ errMsg: '格式错误，请预览查看。可能存在无法到达的结点，删除该结点或添加动作将其关联。' });
       return;
     }
 
