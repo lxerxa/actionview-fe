@@ -53,7 +53,7 @@ export default class CreateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('新建完成，请配置流程。', 'success', 2000);
+      notify.show('新建完成。', 'success', 2000);
       const { kanbans } = this.props;
       goto(_.last(kanbans).id, 'config');
     } else {
