@@ -761,7 +761,7 @@ export default class DetailBar extends Component {
                                    <img src={  '/api/project/' + project.key + '/file/' + f.id + '?flag=s' }/>
                                  </div>
                                  <div className='attachment-title-container'>
-                                    <div className='attachment-title'>{ f.name }</div>
+                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>
                                     { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
                                  </div>
                                </div>
