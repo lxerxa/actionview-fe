@@ -728,6 +728,7 @@ export default class DetailBar extends Component {
                       postUrl: '/api/project/' + project.key + '/file?issue_id=' + data.id 
                     };
                     const djsConfig = {
+                      parallelUploads: 1,
                       addRemoveLinks: false,
                       paramName: field.key,
                       maxFilesize: 20
