@@ -79,6 +79,14 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
+  async delKanban(id) {
+    await this.props.actions.del(this.pid, id);
+    if (this.props.kanban.ecode === 0) {
+      this.context.router.push({ pathname: '/project/' + this.pid + '/kanban' });
+    }
+    return this.props.kanban.ecode;
+  }
+
   async create(values) {
     await this.props.issueActions.create(this.pid, values);
     return this.props.issue.ecode;
@@ -338,6 +346,7 @@ export default class Container extends Component {
           config={ curKanban }
           loading={ this.props.kanban.configLoading }
           edit={ this.editKanban.bind(this) }
+          del={ this.delKanban.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n } /> }
       </div>

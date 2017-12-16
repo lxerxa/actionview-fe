@@ -43,16 +43,16 @@ export default function activity(state = initialState, action) {
       return { ...state, configLoading: false, error: action.error };
 
     case t.KANBAN_DELETE:
-      return { ...state, loading: true };
+      return { ...state, configLoading: true };
 
     case t.KANBAN_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.list = _.reject(state.list, { id: action.id });
       }
-      return { ...state, loading: false, ecode: action.result.ecode };
+      return { ...state, configLoading: false, ecode: action.result.ecode };
 
     case t.TYPE_DELETE_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, configLoading: false, error: action.error };
 
     case t.KANBAN_ISSUE_ACTIONS_GET:
       return { ...state, wfLoading: true, draggedIssue: action.id, wfactions: [] };
