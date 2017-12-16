@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 const img = require('../../../assets/images/loading.gif');
 const EditModal = require('./EditModal');
+const DelKanbanNotify = require('./DelKanbanNotify');
 const FilterList = require('./FilterList');
 const FilterConfigModal = require('./FilterConfigModal');
 const ColumnList = require('./ColumnList');
@@ -17,6 +18,7 @@ export default class Config extends Component {
     super(props);
     this.state = { 
       editModalShow: false, 
+      delNotifyShow: false,
       globalFilterModalShow: false,
       quickFilterModalShow: false,
       delFilterNotifyShow: false,
@@ -26,6 +28,7 @@ export default class Config extends Component {
       columnNo: -1 };
 
     this.editModalClose = this.editModalClose.bind(this);
+    this.delNotifyClose = this.delNotifyClose.bind(this);
     this.globalFilterModalClose = this.globalFilterModalClose.bind(this);
     this.quickFilterModalClose = this.quickFilterModalClose.bind(this);
     this.delFilterNotifyClose = this.delFilterNotifyClose.bind(this);
@@ -39,7 +42,8 @@ export default class Config extends Component {
     loading: PropTypes.bool.isRequired,
     config: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
-    edit: PropTypes.func.isRequired
+    edit: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired
   }
 
   condsTxt(query) {
@@ -160,6 +164,10 @@ export default class Config extends Component {
     this.setState({ editModalShow: false });
   }
 
+  delNotifyClose() {
+    this.setState({ delNotifyShow: false });
+  }
+
   globalFilterModalClose() {
     this.setState({ globalFilterModalShow: false });
   }
@@ -205,6 +213,7 @@ export default class Config extends Component {
       options,
       loading,
       edit,
+      del,
       config } = this.props;
 
     const isAllowedEdit = options.permissions && options.permissions.indexOf('manage_project') !== -1;
@@ -232,6 +241,8 @@ export default class Config extends Component {
           </ul>
           { isAllowedEdit &&
           <Button onClick={ () => { this.setState({ editModalShow: true }) } }>编辑</Button> }
+          { isAllowedEdit &&
+          <Button style={ { marginLeft: '20px' } } bsStyle='link' onClick={ () => { this.setState({ delNotifyShow: true }) } }>删除</Button> }
         </div>
       )
     });
@@ -343,6 +354,14 @@ export default class Config extends Component {
             show 
             close={ this.editModalClose } 
             update={ edit } 
+            data={ config } 
+            i18n={ i18n }/> }
+        { this.state.delNotifyShow &&
+          <DelKanbanNotify
+            show
+            close={ this.delNotifyClose }
+            del={ del }
+            loading={ loading }
             data={ config } 
             i18n={ i18n }/> }
         { this.state.globalFilterModalShow &&
