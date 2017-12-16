@@ -82,6 +82,7 @@ export default class Container extends Component {
   async delKanban(id) {
     await this.props.actions.del(this.pid, id);
     if (this.props.kanban.ecode === 0) {
+      this.kanban_id = '';
       this.context.router.push({ pathname: '/project/' + this.pid + '/kanban' });
     }
     return this.props.kanban.ecode;
@@ -259,7 +260,7 @@ export default class Container extends Component {
         this.goto(this.kanban_id);
       } else {
         const { list } = kanban;
-        list.length > 0 && this.goto(_.head(list).id);
+        list.length > 0 && this.goto(_.head(list).id, 'issue');
       }
     } else {
       if (id != this.kanban_id) {
