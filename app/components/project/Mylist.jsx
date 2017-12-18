@@ -11,7 +11,12 @@ const $ = require('$');
 const CreateModal = require('../project/CreateModal2');
 const EditModal = require('../project/EditModal');
 const CloseNotify = require('../project/CloseNotify');
-const img = require('../../assets/images/loading.gif');
+const loadingImg = require('../../assets/images/loading.gif');
+
+const editImg = require('../../assets/images/project/edit.png');
+const closeImg = require('../../assets/images/project/close.png');
+const rebuildImg = require('../../assets/images/project/rebuild.png');
+const reopenImg = require('../../assets/images/project/reopen.png');
 
 export default class List extends Component {
   constructor(props) {
@@ -306,7 +311,7 @@ export default class List extends Component {
               </div>
             </div>
           }
-          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+          <img src={ loadingImg } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
         status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
@@ -326,7 +331,7 @@ export default class List extends Component {
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
               <MenuItem eventKey='4'>重建索引</MenuItem>
             </DropdownButton> }
-            <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            <img src={ loadingImg } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -334,7 +339,7 @@ export default class List extends Component {
 
     const opts = {};
     if (indexLoading) {
-      opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
+      opts.noDataText = ( <div><img src={ loadingImg } className='loading'/></div> );
     } else {
       opts.noDataText = '暂无数据显示。'; 
     } 
@@ -379,7 +384,7 @@ export default class List extends Component {
             </span>
           </FormGroup>
         </div>
-        <div>
+        <div className='clearfix' style={ { marginLeft: '-15px' } }>
           { this.state.mode === 'list' &&
           <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
@@ -393,14 +398,26 @@ export default class List extends Component {
           { this.state.mode === 'card' &&
           collection.map((model) => {
             return (
-              <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 card'>
-                <a href='#' className='title'>
-                  <span>{ model.name }</span>
-                </a>
-                <div className='detail'>
-                  <span>负责人: { model.principal.name }</span>
-                  <span>状态: { model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</span>
-                  <p>description: { model.description }</p>
+              <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer'>
+                <div className='card'>
+                  <div className='status'>{ model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</div>
+                  <div className='content'>
+                    <a href='#' className='title'>
+                      <p className='name'>{ model.name }</p>
+                      <p className='key'>{ model.key }</p>
+                    </a>
+                  </div>
+                  <div className='leader'>
+                    <span>负责人: { model.principal.name }</span>
+                  </div>
+                  { model.status !== 'active' && <div className='btns'>
+                    <img className='btnIcon' title='编辑' style={ { width: '16px' } } src={ editImg } />
+                    <img className='btnIcon' title='重建索引' style={ { width: '16px' } } src={ rebuildImg } />
+                    <img className='btnIcon' title='关闭' style={ { width: '16px' } } src={ closeImg } />
+                  </div> }
+                  { model.status == 'active' && <div className='btns'>
+                    <img className='btnIcon' title='重新打开' style={ { width: '16px' } } src={ reopenImg } />
+                  </div> }
                 </div>
               </div>
             )
@@ -426,8 +443,8 @@ export default class List extends Component {
               stop={ stop }/> }
         </div>
         { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
-        <ButtonGroup vertical block>
-          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
+        <ButtonGroup vertical block style={ { marginTop: '15px' } }>
+          <Button onClick={ this.more.bind(this) }>{ <div><img src={ loadingImg } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
         </ButtonGroup> }
       </div>
     );
