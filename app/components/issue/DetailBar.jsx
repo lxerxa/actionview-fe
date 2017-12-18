@@ -481,7 +481,7 @@ export default class DetailBar extends Component {
         </Button>
         <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
           <Button className='angle' title='查看关注者'>
-            <i className='fa fa-eye'></i>
+            <i className='fa fa-eye' style={ { color: data.watching ? '#FF9900' : '#000000' } }></i>
           </Button>
         </OverlayTrigger>
         <div className='panel panel-default' style={ panelStyle }>
