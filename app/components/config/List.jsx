@@ -84,7 +84,7 @@ export default class List extends Component {
             <thead>
               <tr>
                 <th>名称</th>
-                <th>图形</th>
+                <th>图案</th>
                 <th>描述</th>
               </tr>
             </thead>

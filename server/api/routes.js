@@ -862,6 +862,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.delete('/project/:key/kanban/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ ecode: 0, data: { id: '333' } };
+    return res.status(200).send(results);
+  });
+
   router.put('/project/:key/kanban/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

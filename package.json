@@ -75,7 +75,7 @@
     "classnames": "2.2.3",
     "compression": "1.6.2",
     "debug": "2.2.0",
-    "ejs": "2.4.1",
+    "ejs": "2.5.5",
     "express": "4.13.4",
     "font-awesome": "4.5.0",
     "fs-promise": "0.3.1",

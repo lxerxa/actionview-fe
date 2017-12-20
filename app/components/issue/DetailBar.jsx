@@ -481,7 +481,7 @@ export default class DetailBar extends Component {
         </Button>
         <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
           <Button className='angle' title='查看关注者'>
-            <i className='fa fa-eye'></i>
+            <i className='fa fa-eye' style={ { color: data.watching ? '#FF9900' : '#000000' } }></i>
           </Button>
         </OverlayTrigger>
         <div className='panel panel-default' style={ panelStyle }>
@@ -728,6 +728,7 @@ export default class DetailBar extends Component {
                       postUrl: '/api/project/' + project.key + '/file?issue_id=' + data.id 
                     };
                     const djsConfig = {
+                      parallelUploads: 1,
                       addRemoveLinks: false,
                       paramName: field.key,
                       maxFilesize: 20
@@ -761,7 +762,7 @@ export default class DetailBar extends Component {
                                    <img src={  '/api/project/' + project.key + '/file/' + f.id + '?flag=s' }/>
                                  </div>
                                  <div className='attachment-title-container'>
-                                    <div className='attachment-title'>{ f.name }</div>
+                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>
                                     { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
                                  </div>
                                </div>

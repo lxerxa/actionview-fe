@@ -355,6 +355,8 @@ export default class List extends Component {
             <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } } style={ { whiteSpace: 'pre-wrap' } }>
               { collection[i].title ? collection[i].title : '-' }
             </a>
+            { collection[i].watching &&
+            <span title='已关注' style={ { marginLeft: '8px', color: '#FF9900' } }><i className='fa fa-eye'></i></span> }
             { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }</span> }
             
           </div>

@@ -25,7 +25,7 @@ http://www.actionview.cn
 
 发布部署：  
 > npm run build  
-> ./deploy.sh  
+> sh ./deploy.sh  
 
 ## Contributing
 

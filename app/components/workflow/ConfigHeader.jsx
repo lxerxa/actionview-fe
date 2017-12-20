@@ -76,7 +76,7 @@ export default class ConfigHeader extends Component {
     this.dfsVisit(stepTree, 1, visitedSteps);
 
     if (_.xor(allSteps, visitedSteps).length > 0) {
-      this.setState({ errMsg: '格式错误, 请预览查看' });
+      this.setState({ errMsg: '格式错误，请预览查看。可能存在无法到达的结点，删除该结点或添加动作将其关联。' });
       return;
     }
 
@@ -131,6 +131,14 @@ export default class ConfigHeader extends Component {
           </Button>
           <span style={ { float: 'right', marginTop: '20px', marginRight: '10px', fontWeight: 'bold' } }>{ workflowName }</span>
           <span style={ { float: 'right', marginTop: '20px' } }>工作流名称：</span>
+        </div>
+        <div className='info-col'>
+          <div className='info-icon'>
+            <i className='fa fa-info-circle'></i>
+          </div>
+          <div className='info-content'>
+            配置工作流时应先新建工作流步骤，然后再添加相关的动作。<br/>每一步骤相关联的状态在状态模块中定义。
+          </div>
         </div>
         { this.state.createStepModalShow && 
           <CreateStepModal 

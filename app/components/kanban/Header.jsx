@@ -52,8 +52,8 @@ export default class Header extends Component {
     if (eventKey === 'create') {
       this.setState({ createKanbanModalShow: true });
     } else {
-      const { goto, switchRank } = this.props;
-      goto(eventKey);
+      const { goto } = this.props;
+      goto(eventKey, 'issue');
     }
   }
 
