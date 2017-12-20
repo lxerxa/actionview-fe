@@ -753,3 +753,15 @@ table tr:hover .remove-icon{
   cursor: pointer;
   margin: 0 3px;
 }
+
+.mode {
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 6px 20px;
+  border-radius: 3px;
+  color: #666;
+  cursor: pointer;
+}
+.mode.active {
+  color: lightblue;
+}

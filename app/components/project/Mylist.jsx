@@ -355,6 +355,12 @@ export default class List extends Component {
             <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
+            <span style={ { float: 'right', borderLeft: 0 } } title='卡片模式'
+              className={ 'mode mode-card ' + (this.state.mode === 'card' ? ' active' : '') } 
+              onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th-large fa-lg'></i></span>
+            <span style={ { float: 'right',  marginLeft: '10px' } } title='列表模式'
+              className={ 'mode mode-card ' + (this.state.mode === 'list' ? ' active' : '') } 
+              onClick={ ()=>{ this.setState({ mode: 'list' }) } }><i className='fa fa-bars fa-lg'></i></span>
             <span style={ { float: 'right', width: '90px' } }>
               <Select
                 simpleValue
@@ -363,15 +369,6 @@ export default class List extends Component {
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
                 options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
-            </span>
-            <span style={ { float: 'right', width: '90px', marginRight: '10px'  } }>
-              <Select
-                simpleValue
-                clearable={ false }
-                placeholder='展示模式'
-                value={ this.state.mode }
-                onChange={ this.modeChange.bind(this) }
-                options={ [{ value: 'list', label: '列表' }, { value: 'card', label: '卡片' } ] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
@@ -384,7 +381,7 @@ export default class List extends Component {
             </span>
           </FormGroup>
         </div>
-        <div className='clearfix' style={ { marginLeft: '-15px' } }>
+        <div className='clearfix' style={ { marginLeft: this.state.mode === 'card' ? '-15px' : 0 } }>
           { this.state.mode === 'list' &&
           <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
