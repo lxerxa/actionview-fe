@@ -214,17 +214,6 @@ export default class List extends Component {
     }
   }
 
-  modeChange(newValue) {
-    this.setState({ mode: newValue }); 
-
-    // const { index } = this.props;
-    // if (_.trim(this.state.name)) {
-    //   index({ status: newValue, name: _.trim(this.state.name) });
-    // } else {
-    //   index({ status: newValue });
-    // }
-  }
-
   onRowMouseOver(rowData) {
     if (rowData.id !== this.state.hoverRowId) {
       this.setState({ operateShow: true, hoverRowId: rowData.id });
@@ -345,7 +334,6 @@ export default class List extends Component {
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
-    // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
       <div>
@@ -407,12 +395,12 @@ export default class List extends Component {
                   <div className='leader'>
                     <span>负责人: { model.principal.name }</span>
                   </div>
-                  { model.status !== 'active' && <div className='btns'>
+                  { model.status === 'active' && <div className='btns'>
                     <img className='btnIcon' title='编辑' style={ { width: '16px' } } src={ editImg } />
                     <img className='btnIcon' title='重建索引' style={ { width: '16px' } } src={ rebuildImg } />
                     <img className='btnIcon' title='关闭' style={ { width: '16px' } } src={ closeImg } />
                   </div> }
-                  { model.status == 'active' && <div className='btns'>
+                  { model.status !== 'active' && <div className='btns'>
                     <img className='btnIcon' title='重新打开' style={ { width: '16px' } } src={ reopenImg } />
                   </div> }
                 </div>
