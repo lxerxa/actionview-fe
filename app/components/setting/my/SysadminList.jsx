@@ -17,6 +17,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     accounts: PropTypes.object.isRequired,
     getUser: PropTypes.func.isRequired,
     resetPwd: PropTypes.func.isRequired
@@ -34,7 +35,7 @@ export default class List extends Component {
   render() {
 
     const styles = { marginLeft: '20px', marginTop: '10px', marginBottom: '10px' };
-    const { accounts, resetPwd } = this.props;
+    const { i18n, accounts, resetPwd } = this.props;
 
     const accountItems = [];
     accountItems.push({
@@ -92,7 +93,12 @@ export default class List extends Component {
           <TableHeaderColumn width='200' dataField='contents'/>
           <TableHeaderColumn dataField='blank'/>
         </BootstrapTable>
-        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd }/> }
+        { this.state.resetPwdModalShow && 
+          <ResetPwdModal 
+            show 
+            close={ this.resetPwdModalClose } 
+            resetPwd={ resetPwd }
+            i18n={ i18n } /> }
       </div>
     );
   }
