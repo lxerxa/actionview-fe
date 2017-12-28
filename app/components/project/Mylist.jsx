@@ -133,7 +133,7 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-
+    console.log(this.state)
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
@@ -395,13 +395,13 @@ export default class List extends Component {
                   <div className='leader'>
                     <span>负责人: { model.principal.name }</span>
                   </div>
-                  { model.status === 'active' && <div className='btns'>
-                    <img className='btnIcon' title='编辑' style={ { width: '16px' } } src={ editImg } />
-                    <img className='btnIcon' title='重建索引' style={ { width: '16px' } } src={ rebuildImg } />
-                    <img className='btnIcon' title='关闭' style={ { width: '16px' } } src={ closeImg } />
-                  </div> }
-                  { model.status !== 'active' && <div className='btns'>
-                    <img className='btnIcon' title='重新打开' style={ { width: '16px' } } src={ reopenImg } />
+                  { model.principal.id === user.id && 
+                  <div className='btns'>
+                    <img className='btnIcon' title='编辑' onClick={ this.edit.bind(this, model.id) } style={ { width: '16px' } } src={ editImg } />
+                    { model.status === 'active' 
+                    ? <img className='btnIcon' title='重建索引' onClick={ this.createIndex.bind(this, model.id) }  style={ { width: '16px' } } src={ rebuildImg } />
+                    : <img className='btnIcon' title='重新打开' onClick={ this.reopen.bind(this, model.id) }  style={ { width: '16px' } } src={ reopenImg } /> }
+                    <img className='btnIcon' title='关闭' onClick={ this.closeNotify.bind(this, model.id) }  style={ { width: '16px' } } src={ closeImg } />
                   </div> }
                 </div>
               </div>
