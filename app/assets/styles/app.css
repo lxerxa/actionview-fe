@@ -687,21 +687,22 @@ table tr:hover .remove-icon{
 .card {
   position: relative;
   height: 200px;
-  border: 1px solid #ccc;
+  border: 1px solid #f1f5fa;
 }
 .card:hover {
-  background-color: #eee;
+  border: 1px solid #90c3fd;
 }
 .card:hover .content {
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #90c3fd; */
 }
 .card a {
   text-decoration: none;
 }
 .card .content {
   position: relative;
-  height: 80%;
-  border-bottom: 1px solid #eee;
+  height: 83%;
+  background-color: #f1f5fa;
+  border-bottom: 1px solid #f1f5fa;
 }
 .card .title {
   position: absolute;
@@ -763,5 +764,5 @@ table tr:hover .remove-icon{
   cursor: pointer;
 }
 .mode.active {
-  color: lightblue;
+  color: #00c8df;
 }

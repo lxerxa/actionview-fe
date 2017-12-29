@@ -31,7 +31,7 @@ export default class List extends Component {
       settingPrincipalPids: [],
       principal: {},
       name: '', 
-      mode: 'list',
+      mode: 'card',
       status: 'active' };
 
     this.createModalClose = this.createModalClose.bind(this);
@@ -387,7 +387,7 @@ export default class List extends Component {
                 <div className='card'>
                   <div className='status'>{ model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</div>
                   <div className='content'>
-                    <a href='#' className='title'>
+                    <a href='#' className='title' onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>
                       <p className='name'>{ model.name }</p>
                       <p className='key'>{ model.key }</p>
                     </a>
