@@ -13,11 +13,6 @@ const EditModal = require('../project/EditModal');
 const CloseNotify = require('../project/CloseNotify');
 const loadingImg = require('../../assets/images/loading.gif');
 
-const editImg = require('../../assets/images/project/edit.png');
-const closeImg = require('../../assets/images/project/close.png');
-const rebuildImg = require('../../assets/images/project/rebuild.png');
-const reopenImg = require('../../assets/images/project/reopen.png');
-
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -397,11 +392,11 @@ export default class List extends Component {
                   </div>
                   { model.principal.id === user.id && 
                   <div className='btns'>
-                    <img className='btnIcon' title='编辑' onClick={ this.edit.bind(this, model.id) } style={ { width: '16px' } } src={ editImg } />
+                    <span style={ { cursor: 'pointer', padding: '0 3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } ><i className='fa fa-pencil' aria-hidden='true'></i></span>
                     { model.status === 'active' 
-                    ? <img className='btnIcon' title='重建索引' onClick={ this.createIndex.bind(this, model.id) }  style={ { width: '16px' } } src={ rebuildImg } />
-                    : <img className='btnIcon' title='重新打开' onClick={ this.reopen.bind(this, model.id) }  style={ { width: '16px' } } src={ reopenImg } /> }
-                    <img className='btnIcon' title='关闭' onClick={ this.closeNotify.bind(this, model.id) }  style={ { width: '16px' } } src={ closeImg } />
+                    ? <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='重建索引' onClick={ this.createIndex.bind(this, model.id) }  ><i className='fa fa-repeat' aria-hidden='true'></i></span>
+                    : <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='重新打开' onClick={ this.reopen.bind(this, model.id) }  ><i className='fa fa-check' aria-hidden='true'></i></span> }
+                    <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='关闭' onClick={ this.closeNotify.bind(this, model.id) } ><i className='fa fa-times' aria-hidden='true'></i></span>
                   </div> }
                 </div>
               </div>
