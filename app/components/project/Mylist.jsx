@@ -240,7 +240,7 @@ export default class List extends Component {
 
     const projects = [];
     const projectNum = collection.length;
-    for (let i = 0; i < projectNum; i++) {
+    for (let i = 0; this.state.mode == 'list' && i < projectNum; i++) {
       projects.push({
         id: collection[i].id,
         no: i + 1,
@@ -262,7 +262,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].principal ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '4px' } }> 
                     { collection[i].principal.name || '-' }
                   </div>
                 </span>
@@ -311,9 +311,9 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
+              { collection[i].status == 'active' && <MenuItem eventKey='1'>编辑</MenuItem> }
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
-              <MenuItem eventKey='4'>重建索引</MenuItem>
+              { collection[i].status == 'active' && <MenuItem eventKey='4'>重建索引</MenuItem> }
             </DropdownButton> }
             <img src={ loadingImg } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -328,7 +328,6 @@ export default class List extends Component {
       opts.noDataText = '暂无数据显示。'; 
     } 
 
-    console.log(collection);
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
 
     return (
@@ -374,7 +373,13 @@ export default class List extends Component {
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
             </BootstrapTable> }
-          { this.state.mode === 'card' &&
+          { this.state.mode === 'card' && indexLoading &&
+            <div style={ { marginTop: '50px', marginBottom: '50px', textAlign: 'center' } }>
+              <img src={ loadingImg } className='loading'/>
+            </div> }
+          { this.state.mode === 'card' && !indexLoading && collection.length <= 0 &&
+            <div style={ { marginTop: '50px', marginBottom: '50px', textAlign: 'center' } }>暂无数据显示。</div> }
+          { this.state.mode === 'card' && !indexLoading && collection.length > 0 &&
           collection.map((model) => {
             return (
               <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer'>
@@ -382,7 +387,9 @@ export default class List extends Component {
                   <div className='status'>{ model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</div>
                   <div className='content'>
                     <span className='title'>
-                      <p className='name'><a href='#' onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.name }</a></p>
+                      { model.status == 'active'
+                      ? <p className='name'><a href='#' onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.name }</a></p>
+                      : <p className='name'>{ model.name }</p> }
                       <p className='key'>{ model.key }</p>
                     </span>
                   </div>
@@ -391,8 +398,10 @@ export default class List extends Component {
                   </div>
                   { model.principal.id === user.id && 
                   <div className='btns'>
-                    <span style={ { marginLeft: '3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span>
-                    <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-repeat' aria-hidden='true'></i></span>
+                    { model.status == 'active' && 
+                      <span style={ { marginLeft: '3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span> }
+                    { model.status == 'active' && 
+                      <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-repeat' aria-hidden='true'></i></span> }
                     { model.status === 'active' 
                     ? <span style={ { marginLeft: '3px' } } title='关闭' onClick={ this.closeNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-close' aria-hidden='true'></i></span>
                     : <span style={ { marginLeft: '3px' } } title='重新打开' onClick={ this.reopen.bind(this, model.id) } className='comments-button'><i className='fa fa-check' aria-hidden='true'></i></span> }

@@ -731,4 +731,8 @@ table tr:hover .remove-icon{
   position: absolute;
   bottom: 5px;
   right: 5px;
+  display: none;
+}
+.card:hover .btns {
+  display: block;
 }
