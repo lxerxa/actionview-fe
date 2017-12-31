@@ -130,11 +130,19 @@ export default class List extends Component {
 
   componentDidMount() {
     const winHeight = $(window).height(); 
-    $('.board-container').css('height', winHeight - 170);
+    if ($('#main-header').css('display') == 'none') {
+      $('.board-container').css('height', winHeight - 40 - 50);
+    } else {
+      $('.board-container').css('height', winHeight - 120 - 50);
+    }
 
     $(window).resize(function() { 
       const winHeight = $(window).height(); 
-      $('.board-container').css('height', winHeight - 170);
+      if ($('#main-header').css('display') == 'none') {
+        $('.board-container').css('height', winHeight - 40 - 50);
+      } else {
+        $('.board-container').css('height', winHeight - 120 - 50);
+      }
     });
 
     $('.board-container').scroll(function() {

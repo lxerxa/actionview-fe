@@ -11,7 +11,7 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { filter: 'all', createIssueModalShow: false, createKanbanModalShow: false };
+    this.state = { filter: 'all', hideHeader: false, createIssueModalShow: false, createKanbanModalShow: false };
     this.getQuery = this.getQuery.bind(this);
   }
 
@@ -128,10 +128,15 @@ export default class Header extends Component {
       <Popover id='popover-trigger-click-root-close'>
         <span>只有过滤器选择“全部”时，才可拖拽改变问题的排序。</span>
       </Popover>);
-
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
-        <div style={ { height: '47px' } }>
+        <div style={ { height: '20px', display: this.state.hideHeader ? 'block' : 'none' } }>
+          <span>{ curKanban.name }</span>
+          <span style={ { float: 'right' } } title='展示看板头'>
+            <Button onClick={ () => { this.setState({ hideHeader: false }) } } style={ { marginTop: '-10px' } }><i className='fa fa-angle-double-down' aria-hidden='true'></i></Button>
+          </span>
+        </div>
+        <div id='main-header' style={ { height: '47px', display: this.state.hideHeader ? 'none': 'block' } }>
           <div style={ { display: 'inline-block', fontSize: '19px', marginTop: '5px' } }>
             { loading && <img src={ img } className='loading'/> } 
             { !loading && !_.isEmpty(curKanban) && curKanban.name || '' } 
@@ -159,7 +164,7 @@ export default class Header extends Component {
         </div>
 
         { model === 'issue' && !loading && !_.isEmpty(curKanban) &&
-        <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5' } }>
+        <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>
             过滤器
             <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
@@ -171,6 +176,9 @@ export default class Header extends Component {
             <NavItem eventKey='all' href='#'>全部</NavItem>
             { _.map(curKanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
           </Nav>
+          <span style={ { float: 'right' } } title='隐藏看板头'>
+            <Button onClick={ () => { this.setState({ hideHeader: true }) } }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
+          </span>
         </div> }
         { this.state.createKanbanModalShow &&
           <CreateKanbanModal
