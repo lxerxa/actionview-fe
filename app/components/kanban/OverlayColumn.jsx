@@ -40,7 +40,7 @@ export default class OverlayColumn extends Component {
 
     let headerHeight = 120 + 50;
     if ($('#main-header').css('display') == 'none') {
-      headerHeight = 48 + 50; 
+      headerHeight = 28 + 50; 
     }
     const winHeight = $(window).height();
     const cellHeight = _.min([ winHeight - headerHeight - 10 - _.max([46 - $('.board-container').scrollTop(), 0]), $('.board-columns').height() ]) / _.max([ buckets.length, 1]); 

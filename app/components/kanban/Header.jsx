@@ -6,6 +6,7 @@ const CreateIssueModal = require('../issue/CreateModal');
 const CreateKanbanModal = require('./config/CreateModal');
 const EditKanbanModal = require('./config/EditModal');
 
+const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
@@ -121,6 +122,18 @@ export default class Header extends Component {
     index(this.getQuery(curKanban.query || {}, selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query || {}));
   }
 
+  showHeader() {
+    this.setState({ hideHeader: false });
+    const winHeight = $(window).height();
+    $('.board-container').css('height', winHeight - 120 - 50);
+  }
+
+  hideHeader() {
+    this.setState({ hideHeader: true });
+    const winHeight = $(window).height();
+    $('.board-container').css('height', winHeight - 20 - 50);
+  }
+
   render() {
     const { i18n, changeModel, model, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
 
@@ -130,10 +143,9 @@ export default class Header extends Component {
       </Popover>);
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
-        <div style={ { height: '20px', display: this.state.hideHeader ? 'block' : 'none' } }>
-          <span>{ curKanban.name }</span>
-          <span style={ { float: 'right' } } title='展示看板头'>
-            <Button onClick={ () => { this.setState({ hideHeader: false }) } } style={ { marginTop: '-10px' } }><i className='fa fa-angle-double-down' aria-hidden='true'></i></Button>
+        <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'center' } }>
+          <span title='展示看板头'>
+            <Button onClick={ this.showHeader.bind(this) } style={ { marginTop: '-37px' } }><i className='fa fa-angle-double-down' aria-hidden='true'></i></Button>
           </span>
         </div>
         <div id='main-header' style={ { height: '47px', display: this.state.hideHeader ? 'none': 'block' } }>
@@ -177,7 +189,7 @@ export default class Header extends Component {
             { _.map(curKanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
           </Nav>
           <span style={ { float: 'right' } } title='隐藏看板头'>
-            <Button onClick={ () => { this.setState({ hideHeader: true }) } }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
+            <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
         </div> }
         { this.state.createKanbanModalShow &&

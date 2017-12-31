@@ -131,7 +131,7 @@ export default class List extends Component {
   componentDidMount() {
     const winHeight = $(window).height(); 
     if ($('#main-header').css('display') == 'none') {
-      $('.board-container').css('height', winHeight - 40 - 50);
+      $('.board-container').css('height', winHeight - 20 - 50);
     } else {
       $('.board-container').css('height', winHeight - 120 - 50);
     }
@@ -139,7 +139,7 @@ export default class List extends Component {
     $(window).resize(function() { 
       const winHeight = $(window).height(); 
       if ($('#main-header').css('display') == 'none') {
-        $('.board-container').css('height', winHeight - 40 - 50);
+        $('.board-container').css('height', winHeight - 20 - 50);
       } else {
         $('.board-container').css('height', winHeight - 120 - 50);
       }
