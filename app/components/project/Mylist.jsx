@@ -246,7 +246,7 @@ export default class List extends Component {
         no: i + 1,
         name: ( 
           <div> 
-            <a href='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         key: collection[i].key,
@@ -328,6 +328,7 @@ export default class List extends Component {
       opts.noDataText = '暂无数据显示。'; 
     } 
 
+    console.log(collection);
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
 
     return (
@@ -338,12 +339,10 @@ export default class List extends Component {
             <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
-            <span style={ { float: 'right', borderLeft: 0 } } title='卡片模式'
-              className={ 'mode mode-card ' + (this.state.mode === 'card' ? ' active' : '') } 
-              onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th-large fa-lg'></i></span>
-            <span style={ { float: 'right',  marginLeft: '10px' } } title='列表模式'
-              className={ 'mode mode-card ' + (this.state.mode === 'list' ? ' active' : '') } 
-              onClick={ ()=>{ this.setState({ mode: 'list' }) } }><i className='fa fa-bars fa-lg'></i></span>
+            <ButtonGroup style={ { float: 'right', marginLeft: '10px' } }>
+              <Button title='卡片模式' style={ { backgroundColor: this.state.mode == 'card' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th-large fa-lg'></i></Button>
+              <Button title='列表模式' style={ { backgroundColor: this.state.mode == 'list' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'list' }) } }><i className='fa fa-bars fa-lg'></i></Button>
+            </ButtonGroup>
             <span style={ { float: 'right', width: '90px' } }>
               <Select
                 simpleValue
@@ -382,21 +381,21 @@ export default class List extends Component {
                 <div className='card'>
                   <div className='status'>{ model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</div>
                   <div className='content'>
-                    <a href='#' className='title' onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>
-                      <p className='name'>{ model.name }</p>
+                    <span className='title'>
+                      <p className='name'><a href='#' onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.name }</a></p>
                       <p className='key'>{ model.key }</p>
-                    </a>
+                    </span>
                   </div>
                   <div className='leader'>
                     <span>负责人: { model.principal.name }</span>
                   </div>
                   { model.principal.id === user.id && 
                   <div className='btns'>
-                    <span style={ { cursor: 'pointer', padding: '0 3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } ><i className='fa fa-pencil' aria-hidden='true'></i></span>
+                    <span style={ { marginLeft: '3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span>
+                    <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-repeat' aria-hidden='true'></i></span>
                     { model.status === 'active' 
-                    ? <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='重建索引' onClick={ this.createIndex.bind(this, model.id) }  ><i className='fa fa-repeat' aria-hidden='true'></i></span>
-                    : <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='重新打开' onClick={ this.reopen.bind(this, model.id) }  ><i className='fa fa-check' aria-hidden='true'></i></span> }
-                    <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='关闭' onClick={ this.closeNotify.bind(this, model.id) } ><i className='fa fa-times' aria-hidden='true'></i></span>
+                    ? <span style={ { marginLeft: '3px' } } title='关闭' onClick={ this.closeNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-close' aria-hidden='true'></i></span>
+                    : <span style={ { marginLeft: '3px' } } title='重新打开' onClick={ this.reopen.bind(this, model.id) } className='comments-button'><i className='fa fa-check' aria-hidden='true'></i></span> }
                   </div> }
                 </div>
               </div>
