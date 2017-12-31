@@ -58,7 +58,7 @@ export default class Sidebar extends Component {
       detailLeftFloat = true;
     }
     $('.head').css({ paddingLeft: '19%' });
-    $('.toc-logo').css({ left: '52%' });
+    $('.toc-logo').css({ left: '54%' });
     $('.toc-container').css({ position: 'relative', boxShadow: 'none', borderRight: 'solid 1px #e5e5e5' });
     $('#show-bar').hide();
     $('#tack-bar').hide();
