@@ -131,7 +131,7 @@ export default class Header extends Component {
   hideHeader() {
     this.setState({ hideHeader: true });
     const winHeight = $(window).height();
-    $('.board-container').css('height', winHeight - 20 - 50);
+    $('.board-container').css('height', winHeight - 28 - 50);
   }
 
   render() {
