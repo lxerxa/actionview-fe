@@ -678,3 +678,91 @@ table tr:hover .remove-icon{
 .filter-dragcard:hover {
   background-color: #fff;
 }
+
+/* project */
+.cardContainer {
+  padding: 0 0 0 15px;
+  margin-top: 15px;
+}
+.card {
+  position: relative;
+  height: 200px;
+  border: 1px solid #f1f5fa;
+}
+.card:hover {
+  border: 1px solid #90c3fd;
+}
+.card:hover .content {
+  /* border-bottom: 1px solid #90c3fd; */
+}
+.card a {
+  text-decoration: none;
+}
+.card .content {
+  position: relative;
+  height: 83%;
+  background-color: #f1f5fa;
+  border-bottom: 1px solid #f1f5fa;
+}
+.card .title {
+  position: absolute;
+  top: 50px;  
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  color: #000;
+  box-sizing: border-box;
+  text-align: center;
+}
+.card .title .name {
+  font-size: 24px;
+  margin: 0;
+}
+.card .title .key {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+.card .detail {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 20%;
+  bottom: 0;
+  margin: 0 10px 0 10px;
+  background-color: lightcoral;
+}
+
+.card .status {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 10;
+}
+.card .leader {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  color: #666;
+}
+.card .btns {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+.card .btns .btnIcon {
+  cursor: pointer;
+  margin: 0 3px;
+}
+
+.mode {
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 6px 20px;
+  border-radius: 3px;
+  color: #666;
+  cursor: pointer;
+}
+.mode.active {
+  color: #00c8df;
+}

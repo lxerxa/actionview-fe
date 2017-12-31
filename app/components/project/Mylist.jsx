@@ -11,7 +11,7 @@ const $ = require('$');
 const CreateModal = require('../project/CreateModal2');
 const EditModal = require('../project/EditModal');
 const CloseNotify = require('../project/CloseNotify');
-const img = require('../../assets/images/loading.gif');
+const loadingImg = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
@@ -26,6 +26,7 @@ export default class List extends Component {
       settingPrincipalPids: [],
       principal: {},
       name: '', 
+      mode: 'card',
       status: 'active' };
 
     this.createModalClose = this.createModalClose.bind(this);
@@ -127,7 +128,7 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-
+    console.log(this.state)
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
@@ -294,7 +295,7 @@ export default class List extends Component {
               </div>
             </div>
           }
-          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
+          <img src={ loadingImg } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
         status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
@@ -314,7 +315,7 @@ export default class List extends Component {
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
               <MenuItem eventKey='4'>重建索引</MenuItem>
             </DropdownButton> }
-            <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            <img src={ loadingImg } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -322,13 +323,12 @@ export default class List extends Component {
 
     const opts = {};
     if (indexLoading) {
-      opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
+      opts.noDataText = ( <div><img src={ loadingImg } className='loading'/></div> );
     } else {
       opts.noDataText = '暂无数据显示。'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
-    // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
       <div>
@@ -338,6 +338,12 @@ export default class List extends Component {
             <span style={ { float: 'left', width: '20%' } }>
               <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
+            <span style={ { float: 'right', borderLeft: 0 } } title='卡片模式'
+              className={ 'mode mode-card ' + (this.state.mode === 'card' ? ' active' : '') } 
+              onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th-large fa-lg'></i></span>
+            <span style={ { float: 'right',  marginLeft: '10px' } } title='列表模式'
+              className={ 'mode mode-card ' + (this.state.mode === 'list' ? ' active' : '') } 
+              onClick={ ()=>{ this.setState({ mode: 'list' }) } }><i className='fa fa-bars fa-lg'></i></span>
             <span style={ { float: 'right', width: '90px' } }>
               <Select
                 simpleValue
@@ -358,7 +364,8 @@ export default class List extends Component {
             </span>
           </FormGroup>
         </div>
-        <div>
+        <div className='clearfix' style={ { marginLeft: this.state.mode === 'card' ? '-15px' : 0 } }>
+          { this.state.mode === 'list' &&
           <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
@@ -367,7 +374,34 @@ export default class List extends Component {
             <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
             <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
-          </BootstrapTable>
+            </BootstrapTable> }
+          { this.state.mode === 'card' &&
+          collection.map((model) => {
+            return (
+              <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer'>
+                <div className='card'>
+                  <div className='status'>{ model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</div>
+                  <div className='content'>
+                    <a href='#' className='title' onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>
+                      <p className='name'>{ model.name }</p>
+                      <p className='key'>{ model.key }</p>
+                    </a>
+                  </div>
+                  <div className='leader'>
+                    <span>负责人: { model.principal.name }</span>
+                  </div>
+                  { model.principal.id === user.id && 
+                  <div className='btns'>
+                    <span style={ { cursor: 'pointer', padding: '0 3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } ><i className='fa fa-pencil' aria-hidden='true'></i></span>
+                    { model.status === 'active' 
+                    ? <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='重建索引' onClick={ this.createIndex.bind(this, model.id) }  ><i className='fa fa-repeat' aria-hidden='true'></i></span>
+                    : <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='重新打开' onClick={ this.reopen.bind(this, model.id) }  ><i className='fa fa-check' aria-hidden='true'></i></span> }
+                    <span style={ { cursor: 'pointer', padding: '0 3px' } }  title='关闭' onClick={ this.closeNotify.bind(this, model.id) } ><i className='fa fa-times' aria-hidden='true'></i></span>
+                  </div> }
+                </div>
+              </div>
+            )
+          }) }
           { this.state.editModalShow && 
             <EditModal 
               show 
@@ -389,8 +423,8 @@ export default class List extends Component {
               stop={ stop }/> }
         </div>
         { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
-        <ButtonGroup vertical block>
-          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
+        <ButtonGroup vertical block style={ { marginTop: '15px' } }>
+          <Button onClick={ this.more.bind(this) }>{ <div><img src={ loadingImg } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
         </ButtonGroup> }
       </div>
     );
