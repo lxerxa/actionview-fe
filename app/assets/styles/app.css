@@ -696,6 +696,7 @@ table tr:hover .remove-icon{
   position: relative;
   height: 83%;
   background-color: #fafafa;
+  border-bottom: 1px solid #eee;
 }
 .card .title {
   position: absolute;
