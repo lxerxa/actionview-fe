@@ -78,7 +78,7 @@ export default class ImportModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>选择上传导入用户文件（CSV）</ControlLabel>
+            <ControlLabel>选择上传导入用户文件（CSV）<a href='/api/downloadusertpl' style={ { fontWeight: 200 } } download='import-user-template.csv'>模版下载</a></ControlLabel>
             <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
           </FormGroup>
           <FormGroup>
