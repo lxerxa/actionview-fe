@@ -1,5 +1,7 @@
 ## ActionView front-end
 
+![](https://img.shields.io/badge/framework-reactjs+redux-brightgreen.svg) ![](https://img.shields.io/badge/license-apache2.0-brightgreen.svg)  
+
 ActoionView前端代码库，基于Reactjs＋Redux。后端代码库：[actionview](https://github.com/lxerxa/actionview)。
 
 # Demo
