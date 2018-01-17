@@ -21,6 +21,13 @@ export function update(key, values) {
   });
 }
 
+export function setNotify(key, values) {
+  return asyncFuncCreator({
+    constant: 'EVENTS_SET_NOTIFY',
+    promise: (client) => client.request({ url: '/project/' + key + '/events/' + values.id + '/notify', method: 'put', data: values })
+  });
+}
+
 export function select(id) {
   return { type: 'EVENTS_SELECT', id: id };
 }

@@ -42,6 +42,11 @@ export default class Container extends Component {
     return this.props.events.ecode;
   }
 
+  async setNotify(values) {
+    await this.props.actions.notify(this.pid, values);
+    return this.props.events.ecode;
+  }
+
   async del(id) {
     const { actions } = this.props;
     await actions.del(this.pid, id);
@@ -76,6 +81,7 @@ export default class Container extends Component {
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
+          setNotify={ this.setNotify.bind(this) } 
           del={ this.del.bind(this) } 
           reset={ this.reset.bind(this) } 
           i18n={ this.props.i18n }

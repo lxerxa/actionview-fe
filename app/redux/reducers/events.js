@@ -31,9 +31,11 @@ export default function resolution(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.EVENTS_UPDATE:
+    case t.EVENTS_SET_NOTIFY:
       return { ...state, loading: true };
 
     case t.EVENTS_UPDATE_SUCCESS:
+    case t.EVENTS_SET_NOTIFY_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
@@ -41,6 +43,7 @@ export default function resolution(state = initialState, action) {
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.EVENTS_UPDATE_FAIL:
+    case t.EVENTS_SET_NOTIFY_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.EVENTS_SELECT:

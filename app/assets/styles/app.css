@@ -34,7 +34,8 @@
 }
 
 .modal-content .ralign {
-  margin-right: 20px
+  margin-right: 20px;
+  color: red;
 }
 
 .sidebar-header {

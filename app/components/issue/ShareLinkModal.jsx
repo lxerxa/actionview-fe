@@ -40,7 +40,7 @@ export default class ShareLinkModal extends Component {
             value={ this.state.url } />
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign' style={ { fontSize: '12px' } }>若当前浏览器不支持此复制功能，可手动复制以上链接。</span>
+          <span style={ { marginRight: '20px', fontSize: '12px' } }>若当前浏览器不支持此复制功能，可手动复制以上链接。</span>
           <Button onClick={ this.copy.bind(this) }>复制</Button>
           <Button bsStyle='link' onClick={ close }>关闭</Button>
         </Modal.Footer>
