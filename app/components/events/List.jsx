@@ -37,6 +37,7 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    setNotify: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -121,6 +122,7 @@ export default class List extends Component {
       itemLoading, 
       del, 
       update, 
+      setNotify,
       reset, 
       options } = this.props;
     const { hoverRowId, operateShow } = this.state;
@@ -204,10 +206,34 @@ export default class List extends Component {
           <TableHeaderColumn dataField='notifications'>通知设置</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } collection={ collection } i18n={ i18n }/> }
-        { this.state.delNotifyShow && <DelNotify show close={ this.delNotifyClose } data={ selectedItem } del={ del }/> }
-        { this.state.resetNotifyShow && <DelNotify show close={ this.resetNotifyClose } data={ selectedItem } reset={ reset }/> }
-        { this.state.configModalShow && <ConfigModal show loading={ loading } close={ this.configModalClose } data={ selectedItem } update={ update } options={ options } i18n={ i18n }/> }
+        { this.state.editModalShow && 
+        <EditModal 
+          show close={ this.editModalClose } 
+          update={ update } 
+          data={ selectedItem } 
+          collection={ collection } 
+          i18n={ i18n }/> }
+        { this.state.delNotifyShow && 
+        <DelNotify 
+          show 
+          close={ this.delNotifyClose } 
+          data={ selectedItem } 
+          del={ del }/> }
+        { this.state.resetNotifyShow && 
+        <DelNotify 
+          show 
+          close={ this.resetNotifyClose } 
+          data={ selectedItem } 
+          reset={ reset }/> }
+        { this.state.configModalShow && 
+        <ConfigModal 
+          show 
+          loading={ loading } 
+          close={ this.configModalClose } 
+          data={ selectedItem } 
+          setNotify={ setNotify } 
+          options={ options } 
+          i18n={ i18n }/> }
       </div>
     );
   }

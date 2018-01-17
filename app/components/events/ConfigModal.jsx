@@ -35,14 +35,14 @@ export default class ConfigModal extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired,
+    setNotify: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, update, data, options } = this.props;
+    const { close, setNotify, data, options } = this.props;
     const notifications = [];
     _.map(this.state.notifications, (v) => {
       if (v == 'user') {
@@ -59,7 +59,7 @@ export default class ConfigModal extends Component {
       }
     });
 
-    const ecode = await update({ id: data.id, notifications });
+    const ecode = await setNotify({ id: data.id, notifications });
     if (ecode === 0) {
       close();
       notify.show('配置完成。', 'success', 2000);
