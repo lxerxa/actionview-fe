@@ -114,7 +114,7 @@ class Login extends Component {
     const { values, actions, projectActions } = this.props;
     await actions.create(values);
     const { session } = this.props;
-    if (session.ecode === 0) {
+    if (session.ecode === 0 && session.user && session.user.id) {
       if (query.request_url) {
         let requests = decodeURI(query.request_url).split('?');
         let pathname = requests.shift();
@@ -141,7 +141,7 @@ class Login extends Component {
   }
 
   render() {
-    const { fields: { email, password }, handleSubmit, invalid, submitting } = this.props;
+    const { fields: { email, password }, handleSubmit, invalid, submitting, session } = this.props;
 
     return (
       <div className='login-panel'>
@@ -160,7 +160,7 @@ class Login extends Component {
             </FormGroup>
             <Button bsStyle='success' disabled={ submitting } type='submit'>{ submitting ? '登 录 中 ...' : '登 录' }</Button>
             <div style={ { textAlign: 'center', height: '40px' } }>
-              { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>登录失败，用户名或密码错误。</div> }
+              { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>{ session.ecode === -10000 ? '登录失败，用户名或密码错误。' : '系统错误。' }</div> }
             </div>
             <div className='login-footer'>
               <Link to='/forgot'>忘记密码</Link>
