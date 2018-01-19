@@ -34,11 +34,13 @@ export default function role(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ROLE_UPDATE:
+    case t.ROLE_SET_PERMISSIONS:
     case t.ROLE_SET_ACTOR:
     case t.ROLE_SET_GROUP_ACTOR:
       return { ...state, loading: true };
 
     case t.ROLE_UPDATE_SUCCESS:
+    case t.ROLE_SET_PERMISSIONS_SUCCESS:
     case t.ROLE_SET_ACTOR_SUCCESS:
     case t.ROLE_SET_GROUP_ACTOR_SUCCESS:
       if ( action.result.ecode === 0 ) {
@@ -48,6 +50,7 @@ export default function role(state = initialState, action) {
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.ROLE_UPDATE_FAIL:
+    case t.ROLE_SET_PERMISSIONS_FAIL:
     case t.ROLE_SET_ACTOR_FAIL:
     case t.ROLE_SET_GROUP_ACTOR_FAIL:
       return { ...state, loading: false, error: action.error };
@@ -55,6 +58,19 @@ export default function role(state = initialState, action) {
     case t.ROLE_SELECT:
       const el = _.find(state.collection, { id: action.id });
       return { ...state, itemLoading: false, selectedItem: el };
+
+    case t.ROLE_RESET:
+      return { ...state, itemLoading: true };
+
+    case t.ROLE_RESET_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.collection, { id: action.id });
+        state.collection[ind] = action.result.data;
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
+
+    case t.ROLE_RESET_FAIL:
+      return { ...state, itemLoading: false, error: action.error };
 
     case t.ROLE_DELETE:
       return { ...state, itemLoading: true };

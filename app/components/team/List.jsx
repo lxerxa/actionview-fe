@@ -301,7 +301,7 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px', marginTop: '15px' } }>
         <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
+          <TableHeaderColumn dataField='name' width='300'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
           <TableHeaderColumn dataField='groups'>用户组</TableHeaderColumn>
         </BootstrapTable>

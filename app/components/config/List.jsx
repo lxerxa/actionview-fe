@@ -108,7 +108,7 @@ export default class List extends Component {
           <Table responsive hover>
             <thead>
               <tr>
-                <th>名称</th>
+                <th style={ { width: '300px' } }>名称</th>
                 <th>权限</th>
               </tr>
             </thead>

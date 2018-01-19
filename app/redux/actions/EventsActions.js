@@ -24,7 +24,7 @@ export function update(key, values) {
 export function setNotify(key, values) {
   return asyncFuncCreator({
     constant: 'EVENTS_SET_NOTIFY',
-    promise: (client) => client.request({ url: '/project/' + key + '/events/' + values.id + '/notify', method: 'put', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/events/' + values.id + '/notify', method: 'post', data: values })
   });
 }
 

@@ -60,8 +60,8 @@ class CreateModal extends Component {
             values[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
             oldValues[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
           } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
-            values[v.key] = moment.unix(data[v.key]);
-            oldValues[v.key] = moment.unix(data[v.key]);
+            values[v.key] = data[v.key] && moment.unix(data[v.key]);
+            oldValues[v.key] = data[v.key] && moment.unix(data[v.key]);
           } else {
             values[v.key] = data[v.key];
             oldValues[v.key] = data[v.key];

@@ -42,6 +42,17 @@ export default class Container extends Component {
     return this.props.role.ecode;
   }
 
+  async setPermission(values) {
+    await this.props.actions.setPermission(this.pid, values);
+    return this.props.role.ecode;
+  }
+
+  async reset(id) {
+    const { actions } = this.props;
+    await actions.reset(this.pid, id);
+    return this.props.role.ecode;
+  }
+
   async del(id) {
     const { actions } = this.props;
     await actions.del(this.pid, id);
@@ -73,6 +84,8 @@ export default class Container extends Component {
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
+          setPermission={ this.setPermission.bind(this) } 
+          reset={ this.reset.bind(this) } 
           del={ this.del.bind(this) } 
           delNotify={ this.props.actions.delNotify } 
           i18n={ this.props.i18n }

@@ -22,12 +22,15 @@ export default class Header extends Component {
     pathname: PropTypes.string
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const { recents, session, getSess } = this.props;
     if (!session.user.id) {
-      getSess();
+      await getSess();
     }
-    recents();
+    
+    if (this.props.session.session.user.id) {
+      recents();
+    }
   }
 
   showBar(e) {

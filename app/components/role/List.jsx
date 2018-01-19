@@ -18,6 +18,7 @@ export default class List extends Component {
     this.state = { 
       editModalShow: false, 
       delNotifyShow: false, 
+      resetNotifyShow: false,
       willSetPermissionRoleIds: [], 
       settingPermissionRoleIds: [], 
       permissions: {}, 
@@ -37,6 +38,8 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    setPermission: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -65,6 +68,12 @@ export default class List extends Component {
     select(id);
   }
 
+  resetNotify(id) {
+    this.setState({ resetNotifyShow: true });
+    const { select } = this.props;
+    select(id);
+  }
+
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
 
@@ -72,6 +81,8 @@ export default class List extends Component {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId);
+    } else if (eventKey === '3') {
+      this.resetNotify(hoverRowId);
     }
   }
 
@@ -103,8 +114,8 @@ export default class List extends Component {
     this.state.settingPermissionRoleIds.push(roleId);
     this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
 
-    const { update, collection } = this.props;
-    const ecode = await update({ permissions: _.map(this.state.permissions[roleId] || _.map(_.find(collection, { id: roleId }).permissions || [], (v) => { return { value: v } }), _.iteratee('value')), id: roleId });
+    const { setPermission, collection } = this.props;
+    const ecode = await setPermission({ permissions: _.map(this.state.permissions[roleId] || _.map(_.find(collection, { id: roleId }).permissions || [], (v) => { return { value: v } }), _.iteratee('value')), id: roleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
       this.state.willSetPermissionRoleIds.splice(willSetIndex, 1);
@@ -129,7 +140,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, pkey, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { i18n, pkey, collection, selectedItem, indexLoading, itemLoading, del, reset, update } = this.props;
     const { willSetPermissionRoleIds, settingPermissionRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -151,7 +162,7 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
-        permissions: !isGlobal ? (
+        permissions: (
           <div>
           { _.indexOf(willSetPermissionRoleIds, collection[i].id) === -1 && _.indexOf(settingPermissionRoleIds, collection[i].id) === -1 ?
             <div className='editable-list-field'>
@@ -191,23 +202,8 @@ export default class List extends Component {
           }
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
-        ) : (
-          <div>
-            <div style={ { display: 'table', width: '100%' } }>
-            { permissions.length > 0 ?
-              <span>
-              { _.map(permissions, function(v) { 
-                return ( 
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
-                    <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label>
-                  </div> ) }) }
-              </span>
-              :
-              '-' }
-            </div>
-          </div>
         ), 
-        operation: !isGlobal ? (
+        operation:(
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
@@ -218,12 +214,13 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
-              { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              { isGlobal && <MenuItem eventKey='3'>重置权限</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
-        ) : ( <div>&nbsp;</div> )
+        )
       });
     }
 
@@ -241,7 +238,7 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>角色</TableHeaderColumn>
+          <TableHeaderColumn dataField='name' width='300'>角色</TableHeaderColumn>
           <TableHeaderColumn dataField='permissions'>权限集</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
@@ -258,6 +255,12 @@ export default class List extends Component {
             close={ this.delNotifyClose } 
             data={ selectedItem } 
             del={ del }/> }
+        { this.state.resetNotifyShow &&
+          <DelNotify
+            show
+            close={ this.delNotifyClose }
+            data={ selectedItem }
+            reset={ reset }/> }
       </div>
     );
   }

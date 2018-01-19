@@ -11,18 +11,29 @@ export default class DelNotify extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
+    reset: PropTypes.func,
+    del: PropTypes.func,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, del, data } = this.props;
+    const { close, del=null, reset=null, data } = this.props;
+    let ecode = 0;
     close();
-    const ecode = await del(data.id);
-    if (ecode === 0) {
-      notify.show('删除完成。', 'success', 2000);    
+    if (reset) {
+      ecode = await reset(data.id);
+      if (ecode === 0) {
+        notify.show('重置完成。', 'success', 2000);    
+      } else {
+        notify.show('重置失败。', 'error', 2000);    
+      }
     } else {
-      notify.show('删除失败。', 'error', 2000);    
+      ecode = await del(data.id);
+      if (ecode === 0) {
+        notify.show('删除完成。', 'success', 2000);    
+      } else {
+        notify.show('删除失败。', 'error', 2000);    
+      }
     }
   }
 
@@ -32,12 +43,12 @@ export default class DelNotify extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { reset=null, del=null, data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除问题状态 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ reset ? '重置' : '删除' }角色 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           确认要删除此角色？

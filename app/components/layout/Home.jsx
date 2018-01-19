@@ -44,6 +44,10 @@ export default class Home extends Component {
 
   async getSess() {
     await this.props.sessionActions.getSess();
+    const { session } = this.props;
+    if (!session.user.id) {
+      this.context.router.push({ pathname: '/login' });
+    }
     return this.props.session.ecode;
   }
 

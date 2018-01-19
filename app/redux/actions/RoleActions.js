@@ -28,6 +28,13 @@ export function update(key, values) {
   });
 }
 
+export function setPermission(key, values) {
+  return asyncFuncCreator({
+    constant: 'ROLE_SET_PERMISSIONS',
+    promise: (client) => client.request({ url: '/project/' + key + '/role/' + values.id + '/permissions', method: 'post', data: values })
+  });
+}
+
 export function setActor(key, values) {
   return asyncFuncCreator({
     constant: 'ROLE_SET_ACTOR',
@@ -51,5 +58,13 @@ export function del(key, id) {
     constant: 'ROLE_DELETE',
     id,
     promise: (client) => client.request({ url: '/project/' + key + '/role/' + id, method: 'delete' })
+  });
+}
+
+export function reset(key, id) {
+  return asyncFuncCreator({
+    constant: 'ROLE_RESET',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/role/' + id + '/reset' })
   });
 }
