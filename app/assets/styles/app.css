@@ -738,3 +738,9 @@ table tr:hover .remove-icon{
 .card:hover .btns {
   display: block;
 }
+
+.menu-active {
+  font-style: italic;
+  font-weight: 600;
+  cursor: default;
+}
