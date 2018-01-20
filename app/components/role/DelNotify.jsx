@@ -51,7 +51,7 @@ export default class DelNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>{ reset ? '重置' : '删除' }角色 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此角色？
+          { reset ? '确认要重置此角色的权限？' : '确认要删除此角色？' }
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={ this.confirm }>确定</Button>
