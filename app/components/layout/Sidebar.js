@@ -68,15 +68,20 @@ export default class Sidebar extends Component {
 
   componentDidUpdate() {
     const { pathname } = this.props;
-    if (/^\/project\/(\w+)\/(kanban)(\/\w+)?$/.test(pathname)) {
+    if (/^\/project\/(\w+)\/kanban(\/\w+)?$/.test(pathname)) {
       $('#kanban').addClass('menu-active');
     } else {
       $('#kanban').removeClass('menu-active');
     }
-    if (/^\/project\/(\w+)\/(workflow)(\/\w+)?$/.test(pathname)) {
+    if (/^\/project\/(\w+)\/workflow(\/\w+)?$/.test(pathname)) {
       $('#workflow').addClass('menu-active');
     } else {
       $('#workflow').removeClass('menu-active');
+    }
+    if (/^\/admin\/scheme\/workflow(\/\w+)?$/.test(pathname)) {
+      $('#admin-workflow').addClass('menu-active');
+    } else {
+      $('#admin-workflow').removeClass('menu-active');
     }
   }
 
