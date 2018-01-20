@@ -66,6 +66,20 @@ export default class Sidebar extends Component {
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
   }
 
+  componentDidUpdate() {
+    const { pathname } = this.props;
+    if (/^\/project\/(\w+)\/(kanban)(\/\w+)?$/.test(pathname)) {
+      $('#kanban').addClass('menu-active');
+    } else {
+      $('#kanban').removeClass('menu-active');
+    }
+    if (/^\/project\/(\w+)\/(workflow)(\/\w+)?$/.test(pathname)) {
+      $('#workflow').addClass('menu-active');
+    } else {
+      $('#workflow').removeClass('menu-active');
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (/^\/project\/(\w+)(\/(summary|issue|kanban|activity|version|module|team)(\/\w+)?)?$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = false;
@@ -108,7 +122,7 @@ export default class Sidebar extends Component {
             <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
             <ul className={ !this.state.adminSchemeShow && 'hide' }>
               <li><Link to='/admin/scheme/type' activeClassName='menu-active'>问题类型</Link></li>
-              <li><Link to='/admin/scheme/workflow' activeClassName='menu-active'>工作流</Link></li>
+              <li><Link to='/admin/scheme/workflow' activeClassName='menu-active' id='admin-workflow'>工作流</Link></li>
               <li><Link to='/admin/scheme/field' activeClassName='menu-active'>字段</Link></li>
               <li><Link to='/admin/scheme/screen' activeClassName='menu-active'>界面</Link></li>
               <li><Link to='/admin/scheme/state' activeClassName='menu-active'>状态</Link></li>
@@ -147,7 +161,7 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active'>概要</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/issue' } activeClassName='menu-active'>问题</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active'>看板</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active' id='kanban'>看板</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/activity' } activeClassName='menu-active'>活动</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/module' } activeClassName='menu-active'>模块</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/version' } activeClassName='menu-active'>版本</Link></li>
@@ -158,7 +172,7 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.projectConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/type' } activeClassName='menu-active'>问题类型</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/workflow' } activeClassName='menu-active'>工作流</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/workflow' } activeClassName='menu-active' id='workflow'>工作流</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/field' } activeClassName='menu-active'>字段</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/screen' } activeClassName='menu-active'>界面</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/state' } activeClassName='menu-active'>状态</Link></li>
