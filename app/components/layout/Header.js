@@ -28,7 +28,7 @@ export default class Header extends Component {
       await getSess();
     }
     
-    if (this.props.session.session.user.id) {
+    if (this.props.session.user.id) {
       recents();
     }
   }

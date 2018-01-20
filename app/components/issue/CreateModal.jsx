@@ -167,14 +167,18 @@ class CreateModal extends Component {
     _.mapValues(submitData, (val, key) => {
       const index = _.findIndex(schema, { key });
       const field = index === -1 ? {} : schema[index];
-      if (field.type === 'DatePicker') {
-        submitData[key] = parseInt(moment(val).startOf('day').format('X')); 
-      } else if (field.type === 'DateTimePicker') {
-        submitData[key] = parseInt(moment(val).format('X')); 
-      } else if (field.type === 'Number') {
-        submitData[key] = parseInt(val);
+      if (val) {
+        if (field.type === 'DatePicker') {
+          submitData[key] = parseInt(moment(val).startOf('day').format('X')); 
+        } else if (field.type === 'DateTimePicker') {
+          submitData[key] = parseInt(moment(val).format('X')); 
+        } else if (field.type === 'Number') {
+          submitData[key] = parseInt(val);
+        } else {
+          submitData[key] = val;
+        }
       } else {
-        submitData[key] = val || ''; 
+        submitData[key] = ''; 
       }
     });
 
