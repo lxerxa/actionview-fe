@@ -26,6 +26,7 @@ export default class List extends Component {
       hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.resetNotifyClose = this.resetNotifyClose.bind(this);
   }
 
   static propTypes = {
@@ -54,6 +55,10 @@ export default class List extends Component {
 
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
+  }
+
+  resetNotifyClose() {
+    this.setState({ resetNotifyShow: false });
   }
 
   edit(id) {
@@ -258,7 +263,7 @@ export default class List extends Component {
         { this.state.resetNotifyShow &&
           <DelNotify
             show
-            close={ this.delNotifyClose }
+            close={ this.resetNotifyClose }
             data={ selectedItem }
             reset={ reset }/> }
       </div>
