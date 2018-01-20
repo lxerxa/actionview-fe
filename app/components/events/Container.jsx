@@ -43,7 +43,7 @@ export default class Container extends Component {
   }
 
   async setNotify(values) {
-    await this.props.actions.notify(this.pid, values);
+    await this.props.actions.setNotify(this.pid, values);
     return this.props.events.ecode;
   }
 
