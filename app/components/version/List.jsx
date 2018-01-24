@@ -166,7 +166,7 @@ export default class List extends Component {
           <EditModal 
             show 
             close={ this.editModalClose } 
-            update={ update } 
+            edit={ update } 
             data={ selectedItem } 
             collection={ collection } 
             i18n={ i18n }/> }
