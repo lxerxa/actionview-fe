@@ -68,7 +68,7 @@ export default class Sidebar extends Component {
 
   componentDidUpdate() {
     const { pathname } = this.props;
-    if (/^\/project\/(\w+)(\/)?$/.test(pathname)) {
+    if (/^\/project\/(\w+)(\/summary)?$/.test(pathname)) {
       $('#summary').addClass('menu-active');
     } else {
       $('#summary').removeClass('menu-active');
