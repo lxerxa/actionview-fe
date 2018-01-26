@@ -68,6 +68,11 @@ export default class Sidebar extends Component {
 
   componentDidUpdate() {
     const { pathname } = this.props;
+    if (/^\/project\/(\w+)(\/)?$/.test(pathname)) {
+      $('#summary').addClass('menu-active');
+    } else {
+      $('#summary').removeClass('menu-active');
+    }
     if (/^\/project\/(\w+)\/kanban(\/\w+)?$/.test(pathname)) {
       $('#kanban').addClass('menu-active');
     } else {
@@ -164,7 +169,7 @@ export default class Sidebar extends Component {
             <h4><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSummaryShow: !this.state.projectSummaryShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目概述</h4>
             { project.options.permissions && project.options.permissions.length > 0 &&
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
-              <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active'>概要</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active' id='summary'>概要</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/issue' } activeClassName='menu-active'>问题</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active' id='kanban'>看板</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/activity' } activeClassName='menu-active'>活动</Link></li>
