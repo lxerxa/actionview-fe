@@ -64,7 +64,14 @@ export default class DelActionModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>工作流动作</ControlLabel>
-            <Select options={ actionOptions } value={ actions.value } onChange={ newValue => { actions.onChange(newValue) } } placeholder='请选择要删除动作' clearable={ false } searchable={ false } multi/>
+            <Select 
+              options={ actionOptions } 
+              value={ actions.value } 
+              onChange={ newValue => { actions.onChange(newValue) } } 
+              placeholder='请选择要删除动作' 
+              clearable={ false } 
+              searchable={ false } 
+              multi/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
