@@ -62,6 +62,7 @@ export default class ConfigContainer extends Component {
         <Header 
           createStep={ this.props.actions.createStep } 
           save={ this.save.bind(this) } 
+          cancel={ this.props.actions.cancel } 
           pathname={ pathname }
           { ...this.props.wfconfig }/>
         <List 

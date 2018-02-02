@@ -38,3 +38,7 @@ export function delAction(stepId, values) {
   return { type: 'WFCONFIG_ACTION_DELETE', stepId, values };
 }
 
+export function cancel() {
+  return { type: 'WFCONFIG_CANCEL' };
+}
+

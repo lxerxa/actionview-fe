@@ -73,6 +73,10 @@ export default function wfconfig(state = initialState, action) {
       collection[sInd].actions = _.filter(collection[sInd].actions, function(v) { return _.indexOf(action.values, v.id) === -1 });
       return { ...state, collection };
 
+    case t.WFCONFIG_CANCEL:
+      state.collection = JSON.parse(state.collection2JSON);
+      return { ...state };
+
     default:
       return state;
   }

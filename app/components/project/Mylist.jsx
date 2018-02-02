@@ -325,7 +325,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ loadingImg } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = ( <div>暂无数据显示<br/><br/>您可创建项目 或 联系其他项目管理员将您添加到项目成员中</div> ); 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -378,7 +378,10 @@ export default class List extends Component {
               <img src={ loadingImg } className='loading'/>
             </div> }
           { this.state.mode === 'card' && !indexLoading && collection.length <= 0 &&
-            <div style={ { marginTop: '50px', marginBottom: '50px', textAlign: 'center' } }>暂无数据显示。</div> }
+            <div style={ { marginTop: '50px', marginBottom: '50px', textAlign: 'center' } }>
+              暂无数据显示<br/><br/>
+              您可创建项目 或 联系其他项目管理员将您添加到项目成员中
+            </div> }
           { this.state.mode === 'card' && !indexLoading && collection.length > 0 &&
           collection.map((model) => {
             return (

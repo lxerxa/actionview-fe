@@ -36,6 +36,15 @@ export default class List extends Component {
           <span style={ { marginLeft: '15px', fontSize: '14px' } }>负责人：{ project.principal && project.principal.name || '-' }</span>
           <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
         </div>
+        <div style={ { paddingLeft: '5px', marginBottom: '30px' } }>
+          <Link to={ '/project/' + project.key + '/issue' }><span style={ { marginRight: '50px' } }>全部问题</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }><span style={ { marginRight: '50px' } }>未解决的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?assignee=me' }><span style={ { marginRight: '50px' } }>分配给我的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?reporter=me' }><span style={ { marginRight: '50px' } }>我报告的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?watcher=me' }><span style={ { marginRight: '50px' } }>我关注的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?created_at=2w' }><span style={ { marginRight: '50px' } }>最近增加的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?updated_at=2w' }><span style={ { marginRight: '50px' } }>最近更新的</span></Link>
+        </div>
         <Panel header={ '一周动态：' + (options.weekAgo || '') + ' ~ 现在' }>
           { data.new_issues && data.new_issues.total ?
           <Table responsive hover>

@@ -5,15 +5,20 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const CreateStepModal = require('./CreateStepModal');
+const ConfigNotify = require('./ConfigNotify');
 const PreviewModal = require('./PreviewModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class ConfigHeader extends Component {
   constructor(props) {
     super(props);
-    this.state = { createStepModalShow: false, previewModalShow: false, errMsg: '' };
+    this.state = { createStepModalShow: false, saveNotify: false, previewModalShow: false, errMsg: '' };
     this.createStepModalClose = this.createStepModalClose.bind(this);
+    this.saveNotifyClose = this.saveNotifyClose.bind(this);
+    this.cancelNotifyClose = this.cancelNotifyClose.bind(this);
     this.previewModalClose = this.previewModalClose.bind(this);
+    this.save = this.save.bind(this);
+    this.cancel = this.cancel.bind(this);
   }
 
   static propTypes = {
@@ -25,11 +30,20 @@ export default class ConfigHeader extends Component {
     saveLoading: PropTypes.bool.isRequired,
     options: PropTypes.object.isRequired,
     save: PropTypes.func.isRequired,
+    cancel: PropTypes.func.isRequired,
     createStep: PropTypes.func.isRequired
   }
 
   createStepModalClose() {
     this.setState({ createStepModalShow: false });
+  }
+
+  saveNotifyClose() {
+    this.setState({ saveNotifyShow: false });
+  }
+
+  cancelNotifyClose() {
+    this.setState({ cancelNotifyShow: false });
   }
 
   previewModalClose() {
@@ -50,8 +64,8 @@ export default class ConfigHeader extends Component {
     }
   }
 
-  async saveWorkflow() {
-    const { save, collection, workflowName } = this.props;
+  saveConfig() {
+    const { collection } = this.props;
 
     const allSteps = [];
     const stepTree = {}; 
@@ -76,9 +90,15 @@ export default class ConfigHeader extends Component {
     this.dfsVisit(stepTree, 1, visitedSteps);
 
     if (_.xor(allSteps, visitedSteps).length > 0) {
-      this.setState({ errMsg: '格式错误，请预览查看。可能存在无法到达的结点，删除该结点或添加动作将其关联。' });
+      this.setState({ saveNotifyShow: true });
       return;
+    } else {
+      this.save();
     }
+  }
+
+  async save() {
+    const { save, collection } = this.props;
 
     const initialActions = { id : 0, name: 'initial_action', results: [{ step: collection[0].id, status: 'Underway' }] };
 
@@ -86,8 +106,17 @@ export default class ConfigHeader extends Component {
     if (ecode === 0) {
       notify.show('保存成功。', 'success', 2000);
     } else {
-      notify.show('保存失败。', 'error', 2000);
+      notify.show('保存失败，请重试。', 'error', 2000);
     }
+  }
+
+  cancelConfig() {
+    this.setState({ cancelNotifyShow: true });
+  }
+
+  cancel() {
+    const { cancel } = this.props;
+    cancel();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,16 +131,18 @@ export default class ConfigHeader extends Component {
     return (
       <div>
         { newCollection2JSON !== collection2JSON && collection.length > 0 && 
-        <div style={ { marginTop: '20px', marginBottom: '10px', padding: '8px', backgroundColor: '#ffffbd' } }>
+        <div style={ { marginTop: '20px', marginBottom: '10px', padding: '8px', backgroundColor: '#ffffbd', border: '1px solid #ccc' } }>
           <span><i className='fa fa-exclamation-triangle'></i>&nbsp;&nbsp;配置已修改，需保存后才能生效。</span>
           <Button 
-            onClick={ this.saveWorkflow.bind(this) } 
-            disabled={ newCollection2JSON === collection2JSON || collection.length <= 0 }>
+            onClick={ this.saveConfig.bind(this) } 
+            disabled={ saveLoading }>
             <i className='fa fa-save'></i>&nbsp;保存
           </Button>
-          <span style={ { color: 'red', backgroundColor: '#ffffbd', marginLeft: '10px' } }>
-            { this.state.errMsg != '' ? this.state.errMsg : (ecode !== 0 ? '保存失败，请重试。' : '') }
-          </span>
+          <Button
+            bsStyle='link'
+            onClick={ this.cancelConfig.bind(this) } >
+            取消修改 
+          </Button>
           <img src={ img } className={ saveLoading ? 'loading' : 'hide' }/>
         </div> }
         <div style={ { marginTop: '5px' } }>
@@ -147,6 +178,16 @@ export default class ConfigHeader extends Component {
             create={ createStep } 
             options={ options } 
             collection={ collection }/> }
+        { this.state.saveNotifyShow &&
+          <ConfigNotify
+            show
+            close={ this.saveNotifyClose }
+            save={ this.save } /> }
+        { this.state.cancelNotifyShow &&
+          <ConfigNotify
+            show
+            close={ this.cancelNotifyClose }
+            cancel={ this.cancel } /> }
         { this.state.previewModalShow && 
           <PreviewModal 
             show 
