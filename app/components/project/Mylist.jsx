@@ -387,7 +387,8 @@ export default class List extends Component {
             return (
               <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer'>
                 <div className='card'>
-                  <div className='status'>{ model.status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label> }</div>
+                  { model.status !== 'active' &&
+                  <div className='status'><Label>已关闭</Label></div> }
                   <div className='content'>
                     <span className='title'>
                       { model.status == 'active'

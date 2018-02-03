@@ -3,6 +3,8 @@ import { Button, Form, FormControl, FormGroup, ControlLabel, Col } from 'react-b
 import Select from 'react-select';
 import _ from 'lodash';
 
+const $ = require('$');
+
 export default class SearchList extends Component {
   constructor(props) {
     super(props);
@@ -19,22 +21,16 @@ export default class SearchList extends Component {
       created_at: '', 
       updated_at: '', 
       title: '' };
+    this.search = this.search.bind(this);
   }
 
-  componentWillMount() {
-    const { query={} } = this.props;
-    this.state.title = query.title || ''; 
-    this.state.type = query.type || ''; 
-    this.state.assignee = query.assignee || ''; 
-    this.state.reporter = query.reporter || ''; 
-    this.state.watcher = query.watcher || ''; 
-    this.state.state = query.state || ''; 
-    this.state.resolution = query.resolution || ''; 
-    this.state.priority = query.priority || ''; 
-    this.state.module = query.module || ''; 
-    this.state.resolve_version = query.resolve_version || ''; 
-    this.state.created_at = query.created_at || ''; 
-    this.state.updated_at = query.updated_at || ''; 
+  static propTypes = {
+    refresh: PropTypes.func.isRequired,
+    hide: PropTypes.func.isRequired,
+    query: PropTypes.object,
+    searchShow: PropTypes.bool,
+    options: PropTypes.object,
+    indexLoading: PropTypes.bool.isRequired
   }
 
   componentWillReceiveProps(nextProps) {
@@ -50,34 +46,18 @@ export default class SearchList extends Component {
       priority: newQuery.priority ? newQuery.priority : '',
       module: newQuery.module ? newQuery.module : '',
       resolve_version: newQuery.resolve_version ? newQuery.resolve_version : '',
-      created_at: newQuery.created_at ? newQuery.created_at : '',
-      updated_at: newQuery.updated_at ? newQuery.updated_at : ''
+      created_at: newQuery.created_at ? newQuery.created_at : null,
+      updated_at: newQuery.updated_at ? newQuery.updated_at : null
     });
   }
 
-  static propTypes = {
-    refresh: PropTypes.func.isRequired,
-    hide: PropTypes.func.isRequired,
-    query: PropTypes.object,
-    searchShow: PropTypes.bool,
-    options: PropTypes.object,
-    indexLoading: PropTypes.bool.isRequired
-  }
-
-  clean() {
-    this.setState({ 
-      type: '', 
-      assignee: '', 
-      reporter: '', 
-      watcher: '', 
-      state: '', 
-      priority: '', 
-      resolution: '', 
-      module: '', 
-      resolve_version: '', 
-      created_at: '', 
-      updated_at: '', 
-      title: '' });
+  componentDidMount() {
+    const self = this;
+    $('#title').bind('keypress',function(event){
+      if(event.keyCode == '13') {
+        self.search();
+      }
+    });
   }
 
   search() {
@@ -116,13 +96,14 @@ export default class SearchList extends Component {
     const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });
 
     return (
-      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '10px', backgroundColor: '#f5f5f5' } } className={ !searchShow && 'hide' }>
+      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5' } } className={ !searchShow && 'hide' }>
         <FormGroup controlId='formControlsLabel'>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             主题/NO
           </Col>
           <Col sm={ 3 }>
             <FormControl
+              id='title'
               type='text'
               value={ this.state.title }
               onChange={ (e) => { this.setState({ title: e.target.value }) } }
@@ -137,7 +118,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择类型'
               value={ this.state.type }
-              onChange={ (newValue) => { this.setState({ type: newValue }); } }
+              onChange={ (newValue) => { this.state.type = newValue; this.search(); } }
               options={ typeOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -149,7 +130,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择状态'
               value={ this.state.state }
-              onChange={ (newValue) => { this.setState({ state: newValue }); } }
+              onChange={ (newValue) => { this.state.state = newValue; this.search(); } }
               options={ stateOptions }/>
           </Col>
         </FormGroup>
@@ -163,7 +144,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择经办人'
               value={ this.state.assignee }
-              onChange={ (newValue) => { this.setState({ assignee: newValue }) } }
+              onChange={ (newValue) => { this.state.assignee = newValue; this.search(); } }
               options={ userOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -175,7 +156,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择优先级'
               value={ this.state.priority }
-              onChange={ (newValue) => { this.setState({ priority: newValue }); } }
+              onChange={ (newValue) => { this.state.priority = newValue; this.search(); } }
               options={ priorityOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -187,7 +168,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择解决结果'
               value={ this.state.resolution }
-              onChange={ (newValue) => { this.setState({ resolution: newValue }); } }
+              onChange={ (newValue) => { this.state.resolution = newValue; this.search(); } }
               options={ resolutionOptions }/>
           </Col>
         </FormGroup>
@@ -201,7 +182,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择报告人'
               value={ this.state.reporter }
-              onChange={ (newValue) => { this.setState({ reporter: newValue }); } }
+              onChange={ (newValue) => { this.state.reporter = newValue; this.search(); } }
               options={ userOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -213,7 +194,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择模块'
               value={ this.state.module }
-              onChange={ (newValue) => { this.setState({ module: newValue }); } }
+              onChange={ (newValue) => { this.state.module = newValue; this.search(); } }
               options={ moduleOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -225,7 +206,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择解决版本'
               value={ this.state.resolve_version }
-              onChange={ (newValue) => { this.setState({ resolve_version: newValue }); } }
+              onChange={ (newValue) => { this.state.resolve_version = newValue; this.search(); } }
               options={ versionOptions }/>
           </Col>
         </FormGroup>
@@ -239,7 +220,7 @@ export default class SearchList extends Component {
               multi
               placeholder='选择关注者'
               value={ this.state.watcher }
-              onChange={ (newValue) => { this.setState({ watcher: newValue }); } }
+              onChange={ (newValue) => { this.state.watcher = newValue; this.search(); } }
               options={ [ { value: 'me', label: '当前用户' } ] }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -250,7 +231,7 @@ export default class SearchList extends Component {
               simpleValue
               placeholder='选择时间段'
               value={ this.state.created_at }
-              onChange={ (newValue) => { this.setState({ created_at: newValue }); } }
+              onChange={ (newValue) => { this.state.created_at = newValue; this.search(); } }
               options={ dateOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -261,15 +242,8 @@ export default class SearchList extends Component {
               simpleValue
               placeholder='选择时间段'
               value={ this.state.updated_at }
-              onChange={ (newValue) => { this.setState({ updated_at: newValue }); } }
+              onChange={ (newValue) => { this.state.updated_at = newValue; this.search(); } }
               options={ dateOptions }/>
-          </Col>
-        </FormGroup>
-        <FormGroup controlId='formControlsLabel' style={ { marginBottom: '0px' } }>
-          <Col sm={ 12 }>
-            <Button style={ { float: 'right', marginTop: '0px', marginRight: '0px' } } className='create-btn' onClick={ this.clean.bind(this) }>清空 <i className='fa fa-undo'></i></Button>
-            <Button style={ { float: 'right', marginTop: '0px' } } className='create-btn' disabled={ indexLoading } onClick={ this.search.bind(this) }>搜索 <i className='fa fa-search'></i></Button>
-            <Button style={ { float: 'right', marginTop: '0px', marginRight: '40px' } } className='create-btn' onClick={ hide }>收起 <i className='fa fa-angle-double-up'></i></Button>
           </Col>
         </FormGroup>
       </Form>

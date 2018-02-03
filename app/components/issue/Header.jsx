@@ -253,7 +253,7 @@ export default class Header extends Component {
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
             <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
           <div style={ { marginTop: '8px', float: 'right' } }>
-            <DropdownButton pullRight bsStyle='link' style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>刷新</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
