@@ -23,13 +23,13 @@ export default class List extends Component {
     const { project, data, options, loading } = this.props;
 
     return ( loading ?
-      <div style={ { marginTop: '15px' } }>
+      <div style={ { marginTop: '20px' } }>
         <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }>
           <img src={ img } className='loading'/>
         </div>
       </div>
       :
-      <div style={ { marginTop: '15px', marginBottom: '30px' } }>
+      <div style={ { marginTop: '20px', marginBottom: '30px' } }>
         <div style={ { marginBottom: '15px' } }>
           <span style={ { fontSize: '19px' } }>{ project.name || '-' }</span>
           <span style={ { marginLeft: '15px', fontSize: '14px' } }>键值：{ project.key || '-' }</span>
