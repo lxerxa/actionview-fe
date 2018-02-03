@@ -743,3 +743,23 @@ table tr:hover .remove-icon{
   font-weight: 600;
   cursor: default;
 }
+
+.color-bar {
+  border-top: 13px solid #3c78b5;
+  height: 0;
+  overflow: hidden;
+}
+
+.exchange-icon {
+  color: #5f5f5f;
+  cursor: pointer;
+  float: right;
+  margin-right: 5px;
+}
+
+.exchange-icon:hover {
+  color: #000;
+  cursor: pointer;
+  float: right;
+  margin-right: 5px;
+}

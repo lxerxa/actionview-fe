@@ -9,6 +9,7 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
+    this.state = { assigneeShowModel: 'percentage', priorityShowModel: 'percentage', moduleShowModel: 'percentage' };
   }
 
   static propTypes = {
@@ -21,6 +22,8 @@ export default class List extends Component {
 
   render() {
     const { project, data, options, loading } = this.props;
+
+    const filterStyle = { marginRight: '50px' };
 
     return ( loading ?
       <div style={ { marginTop: '20px' } }>
@@ -37,13 +40,13 @@ export default class List extends Component {
           <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
         </div>
         <div style={ { paddingLeft: '5px', marginBottom: '20px' } }>
-          <Link to={ '/project/' + project.key + '/issue' }><span style={ { marginRight: '50px' } }>全部问题</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }><span style={ { marginRight: '50px' } }>未解决的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?assignee=me' }><span style={ { marginRight: '50px' } }>分配给我的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?reporter=me' }><span style={ { marginRight: '50px' } }>我报告的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?watcher=me' }><span style={ { marginRight: '50px' } }>我关注的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?created_at=2w' }><span style={ { marginRight: '50px' } }>最近增加的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?updated_at=2w' }><span style={ { marginRight: '50px' } }>最近更新的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue' }><span style={ filterStyle }>全部问题</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }><span style={ filterStyle }>未解决的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?assignee=me' }><span style={ filterStyle }>分配给我的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?reporter=me' }><span style={ filterStyle }>我报告的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?watcher=me' }><span style={ filterStyle }>我关注的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?created_at=2w' }><span style={ filterStyle }>最近增加的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?updated_at=2w' }><span style={ filterStyle }>最近更新的</span></Link>
         </div>
         <Panel header={ '一周动态：' + (options.weekAgo || '') + ' ~ 现在' }>
           { data.new_issues && data.new_issues.total ?
@@ -99,26 +102,41 @@ export default class List extends Component {
           :
           <div>暂无信息</div> }
         </Panel>
-        <Panel header='未解决问题：按经办人'>
+        <Panel 
+          header={ 
+            <div>
+              <span>未解决问题：按经办人</span>
+              <span className='exchange-icon' onClick={ () => this.setState({ assigneeShowModel: this.state.assigneeShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+            </div> }>
           { data.assignee_unresolved_issues && !_.isEmpty(data.assignee_unresolved_issues) ?
           <Table responsive hover>
+            { this.state.assigneeShowModel == 'detail' && 
             <thead>
               <tr>
-                <th>问题类型</th>
-                <th>全部</th>
+                <th>经办人</th>
+                <th>问题</th>
                 { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
               </tr>
-            </thead>
+            </thead> }
+            { this.state.assigneeShowModel == 'percentage' &&
+            <thead>
+              <tr>
+                <th>经办人</th>
+                <th>问题</th>
+                <th>百分比</th>
+              </tr>
+            </thead> }
+            { this.state.assigneeShowModel == 'detail' && 
             <tbody>
               { _.map(data.assignee_unresolved_issues, (val, key) => {
                 return (
                 <tr>
-                  <td>
+                  <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
                       { options.users && options.users[key] || '' }
                     </Link>
                   </td>
-                  <td>
+                  <td style={ { width: '10%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
                       { val['total'] || 0 }
                     </Link>
@@ -131,31 +149,75 @@ export default class List extends Component {
                         </Link>
                       </td>) }) }
                 </tr>) }) }
-            </tbody>
+            </tbody> }
+            { this.state.assigneeShowModel == 'percentage' && 
+            <tbody>
+              { _.map(data.assignee_unresolved_issues, (val, key) => {
+                return (
+                <tr>
+                  <td style={ { width: '20%' } }>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
+                      { options.users && options.users[key] || '' }
+                    </Link>
+                  </td>
+                  <td style={ { width: '10%' } }>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
+                      { val['total'] || 0 }
+                    </Link>
+                  </td>
+                  <td>
+                    <table style={ { width: '100%' } }>
+                      <tr>
+                        <td style={ { width: val.percent + '%' } }>
+                          <div className='color-bar'/> 
+                        </td>
+                        <td style={ { width: (100 - val.percent) + '%', paddingLeft: '10px' } }>
+                          { val.percent + '%' } 
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>) }) }
+            </tbody> }
           </Table>
           :
           <div>暂无信息</div> }
         </Panel>
-        <Panel header='未解决问题：按优先级'>
+        <Panel 
+          header={ 
+            <div>
+              <span>未解决问题：按优先级</span>
+              <span className='exchange-icon' onClick={ () => this.setState({ priorityShowModel: this.state.priorityShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+            </div> }>
           { data.priority_unresolved_issues && !_.isEmpty(data.priority_unresolved_issues) ?
           <Table responsive hover>
+            { this.state.priorityShowModel == 'detail' &&
             <thead>
               <tr>
-                <th>问题类型</th>
-                <th>全部</th>
+                <th>优先级</th>
+                <th>问题</th>
                 { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
               </tr>
-            </thead>
+            </thead> }
+            { this.state.priorityShowModel == 'percentage' &&
+            <thead>
+              <tr>
+                <th>优先级</th>
+                <th>问题</th>
+                <th>百分比</th>
+              </tr>
+            </thead> }
+            { this.state.priorityShowModel == 'detail' &&
             <tbody>
               { _.map(data.priority_unresolved_issues, (val, key) => {
                 return (
                 <tr>
-                  <td>
+                  <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
                       { options.priorities && options.priorities[key] || '' }
                     </Link>
                   </td>
-                  <td>
+                  <td style={ { width: '10%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
                       { val['total'] || 0 }
                     </Link>
@@ -168,31 +230,75 @@ export default class List extends Component {
                         </Link>
                       </td>) }) }
                 </tr>) }) }
-            </tbody>
+            </tbody> }
+            { this.state.priorityShowModel == 'percentage' &&
+            <tbody>
+              { _.map(data.priority_unresolved_issues, (val, key) => {
+                return (
+                <tr>
+                  <td style={ { width: '20%' } }>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
+                      { options.priorities && options.priorities[key] || '' }
+                    </Link>
+                  </td>
+                  <td style={ { width: '10%' } }>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
+                      { val['total'] || 0 }
+                    </Link>
+                  </td>
+                  <td>
+                    <table style={ { width: '100%' } }>
+                      <tr>
+                        <td style={ { width: val.percent + '%' } }>
+                          <div className='color-bar'/>
+                        </td>
+                        <td style={ { width: (100 - val.percent) + '%', paddingLeft: '10px' } }>
+                          { val.percent + '%' }
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>) }) }
+            </tbody> }
           </Table>
           :
           <div>暂无信息</div> }
         </Panel>
-        <Panel header='未解决问题：按模块'>
+        <Panel
+          header={ 
+            <div>
+              <span>未解决问题：按模块</span>
+              <span className='exchange-icon' onClick={ () => this.setState({ moduleShowModel: this.state.moduleShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+            </div> }>
           { data.module_unresolved_issues && !_.isEmpty(data.module_unresolved_issues) ?
           <Table responsive hover>
+            { this.state.moduleShowModel == 'detail' &&
             <thead>
               <tr>
-                <th>问题类型</th>
-                <th>全部</th>
+                <th>模块</th>
+                <th>问题</th>
                 { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
               </tr>
-            </thead>
+            </thead> }
+            { this.state.moduleShowModel == 'percentage' &&
+            <thead>
+              <tr>
+                <th>模块</th>
+                <th>问题</th>
+                <th>百分比</th>
+              </tr>
+            </thead> }
+            { this.state.moduleShowModel == 'detail' &&
             <tbody>
               { _.map(data.module_unresolved_issues, (val, key) => {
                 return (
                 <tr>
-                  <td>
+                  <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
                       { options.modules && options.modules[key] || '' }
                     </Link>
                   </td>
-                  <td>
+                  <td style={ { width: '10%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
                       { val['total'] || 0 }
                     </Link>
@@ -205,7 +311,36 @@ export default class List extends Component {
                         </Link>
                       </td>) }) }
                 </tr>) }) }
-            </tbody>
+            </tbody> }
+            { this.state.moduleShowModel == 'percentage' &&
+            <tbody>
+              { _.map(data.module_unresolved_issues, (val, key) => {
+                return (
+                <tr>
+                  <td style={ { width: '20%' } }>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
+                      { options.modules && options.modules[key] || '' }
+                    </Link>
+                  </td>
+                  <td style={ { width: '10%' } }>
+                    <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
+                      { val['total'] || 0 }
+                    </Link>
+                  </td>
+                  <td>
+                    <table style={ { width: '100%' } }>
+                      <tr>
+                        <td style={ { width: val.percent + '%' } }>
+                          <div className='color-bar'/>
+                        </td>
+                        <td style={ { width: (100 - val.percent) + '%', paddingLeft: '10px' } }>
+                          { val.percent + '%' }
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>) }) }
+            </tbody> }
           </Table>
           :
           <div>暂无信息</div> }
