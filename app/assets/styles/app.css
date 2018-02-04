@@ -750,6 +750,18 @@ table tr:hover .remove-icon{
   overflow: hidden;
 }
 
+.red-bar {
+  border-top: 13px solid #d73a49;
+  height: 0;
+  overflow: hidden;
+}
+
+.green-bar {
+  border-top: 13px solid #28a745;
+  height: 0;
+  overflow: hidden;
+}
+
 .exchange-icon {
   color: #5f5f5f;
   cursor: pointer;
