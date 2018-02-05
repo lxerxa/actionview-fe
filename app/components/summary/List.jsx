@@ -121,7 +121,7 @@ export default class List extends Component {
                   </Link>
                 </td>
                 <td>
-                  <table style={ { width: '100%' } }>
+                  <table style={ { width: '90%' } }>
                     <tr>
                       <td style={ { width: data.new_issues.percent + '%' } }>
                         <div className='green-bar'/>
@@ -142,12 +142,12 @@ export default class List extends Component {
                   </Link>
                 </td>
                 <td>
-                  <table style={ { width: '100%' } }>
+                  <table style={ { width: '90%' } }>
                     <tr>
                       <td style={ { width: data.closed_issues.percent + '%' } }>
                         <div className='red-bar'/>
                       </td>
-                      <td style={ { width: (100 - data.closed_issues.percent) + '%', paddingLeft: '10px' } }>
+                      <td style={ { width: (100 - data.closed_issues.percent) + '%', paddingLeft: data.closed_issues.percent ? '10px' : '0px' } }>
                         <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
                           { data.closed_issues && data.closed_issues['total'] || 0 }
                         </Link>
@@ -273,7 +273,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
-                      { options.priorities && options.priorities[key] || '' }
+                      { options.priorities && options.priorities[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
@@ -297,7 +297,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
-                      { options.priorities && options.priorities[key] || '' }
+                      { options.priorities && options.priorities[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
@@ -354,7 +354,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
-                      { options.modules && options.modules[key] || '' }
+                      { options.modules && options.modules[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
@@ -378,7 +378,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
-                      { options.modules && options.modules[key] || '' }
+                      { options.modules && options.modules[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
