@@ -18,8 +18,8 @@ export default class FilterConfigModal extends Component {
       priority: '', 
       resolution: '', 
       module: '', 
-      created_at: '', 
-      updated_at: '',
+      created_at: null, 
+      updated_at: null,
       touched: {},
       errors: {} };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,8 +36,8 @@ export default class FilterConfigModal extends Component {
       this.state.resolution = query.resolution && query.resolution.join(',') || ''; 
       this.state.priority = query.priority && query.priority.join(',') || ''; 
       this.state.module = query.module && query.module.join(',') || ''; 
-      this.state.created_at = query.created_at || ''; 
-      this.state.updated_at = query.updated_at || ''; 
+      this.state.created_at = query.created_at || null; 
+      this.state.updated_at = query.updated_at || null; 
     } else if (model == 'filter' && no >= 0) {
       const filter = _.find(filters, { no: no });
       if (!filter) {
@@ -52,8 +52,8 @@ export default class FilterConfigModal extends Component {
       this.state.resolution = filterQuery.resolution && filterQuery.resolution.join(',') || '';
       this.state.priority = filterQuery.priority && filterQuery.priority.join(',') || '';
       this.state.module = filterQuery.module && filterQuery.module.join(',') || '';
-      this.state.created_at = filterQuery.created_at || '';
-      this.state.updated_at = filterQuery.updated_at || '';
+      this.state.created_at = filterQuery.created_at || null;
+      this.state.updated_at = filterQuery.updated_at || null;
     }
   }
 

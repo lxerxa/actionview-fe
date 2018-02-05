@@ -12,12 +12,21 @@ const validate = (values, props) => {
   if (!values.name) {
     errors.name = '必填';
   }
+
+  if (values.max && !(/(^[1-9]\d*$)/.test(values.max))) {
+    errors.max = '必须输入正整数';
+  }
+
+  if (values.min && !(/(^[1-9]\d*$)/.test(values.min))) {
+    errors.min = '必须输入正整数';
+  }
+
   return errors;
 };
 
 @reduxForm({
   form: 'column',
-  fields: [ 'name', 'states' ],
+  fields: [ 'name', 'states', 'max', 'min' ],
   validate
 })
 export default class ColumnConfigModal extends Component {
@@ -49,13 +58,13 @@ export default class ColumnConfigModal extends Component {
     const columns = _.clone(config.columns || []);
     if (no >= 0) {
       const ind = _.findIndex(columns, { no });
-      columns[ind] = { no, name: values.name, states: values.states ? values.states.split(',') : [] };
+      columns[ind] = { no, name: values.name, states: values.states ? values.states.split(',') : [], max: values.max || '', min: values.min || '' };
     } else {
       let no = 0;
       if (columns.length > 0) {
         no = _.max(_.map(columns, (v) => v.no)) + 1;
       }
-      columns.push({ name: values.name, no, states: values.states ? values.states.split(',') : [] });
+      columns.push({ name: values.name, no, states: values.states ? values.states.split(',') : [], max: values.max || '', min: values.min || '' });
     }
 
     const ecode = await update({ id: config.id, columns });
@@ -72,7 +81,7 @@ export default class ColumnConfigModal extends Component {
     const { initializeForm, config, no } = this.props;
     if (no >= 0) {
       const column = _.find(config.columns, { no });
-      initializeForm({ name: column.name, states: (column.states || []).join(',') });
+      initializeForm({ name: column.name, states: (column.states || []).join(','), max: column.max || '', min: column.min || '' });
     }
   }
 
@@ -86,7 +95,7 @@ export default class ColumnConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { name, states }, handleSubmit, invalid, submitting, config, no, options } = this.props;
+    const { i18n: { errMsg }, fields: { name, states, max, min }, handleSubmit, invalid, submitting, config, no, options } = this.props;
 
     let otherStates = [];
     _.forEach(config.columns, (v) => {
@@ -126,6 +135,26 @@ export default class ColumnConfigModal extends Component {
               value={ states.value } 
               onChange={ (newValue) => { states.onChange(newValue) } } 
               placeholder='选择状态'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ max.touched && max.error ? 'error' : '' }>
+            <ControlLabel>最大问题数（Max）</ControlLabel>
+            <FormControl 
+              disabled={ submitting } 
+              type='text' 
+              { ...max } 
+              placeholder='输入正整数'/ >
+            { max.touched && max.error &&
+              <HelpBlock style={ { float: 'right' } }>{ max.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ min.touched && min.error ? 'error' : '' }>
+            <ControlLabel>最小问题数（Min）</ControlLabel>
+            <FormControl 
+              disabled={ submitting } 
+              type='text' 
+              { ...min } 
+              placeholder='输入正整数'/ >
+            { min.touched && min.error &&
+              <HelpBlock style={ { float: 'right' } }>{ min.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

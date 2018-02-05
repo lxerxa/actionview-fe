@@ -253,8 +253,13 @@ export default class List extends Component {
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
             { _.map(curKanban.columns, (v, i) => ( 
-              <li key={ i } className='board-column'>
-                { v.name }（{ columnIssues[i].length }）
+              <li 
+                key={ i } 
+                className='board-column' 
+                style={ { background: v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '') } }>
+                <span style={ { fontWeight: 600 } }>{ v.name }</span>（{ columnIssues[i].length }）
+                { v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
+                { v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
                 { i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && 
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
