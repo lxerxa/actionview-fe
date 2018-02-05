@@ -59,7 +59,7 @@ export default class List extends Component {
             { this.state.pulseShowModel == 'detail' &&
             <thead>
               <tr>
-                <th>活动</th>
+                <th>类别</th>
                 <th>问题</th>
                 { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
               </tr>
@@ -67,7 +67,7 @@ export default class List extends Component {
             { this.state.pulseShowModel == 'percentage' &&
             <thead>
               <tr>
-                <th>活动</th>
+                <th>类别</th>
                 <th>问题</th>
               </tr>
             </thead> }
