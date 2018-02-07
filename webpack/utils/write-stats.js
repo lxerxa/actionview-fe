@@ -21,6 +21,7 @@ export default function(stats) {
       .map(chunk => `${publicPath}${chunk}`); // add public path to it
   };
 
+  const commonjs = getChunks('common', /js/);
   const script = getChunks('app', /js/);
   const style = getChunks('app', /css/);
 
@@ -37,7 +38,7 @@ export default function(stats) {
       };
     });
 
-  const content = { script, style, images };
+  const content = { commonjs, script, style, images };
 
   fs.writeFileSync(filepath, JSON.stringify(content));
   debug('dev')('`webpack-stats.json` updated');
