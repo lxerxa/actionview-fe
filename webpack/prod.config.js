@@ -34,6 +34,10 @@ export default {
       }
     }),
 
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['common'],
+      filename: 'common.js' }),
+
     // optimizations
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),

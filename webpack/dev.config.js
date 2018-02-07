@@ -7,9 +7,9 @@ import startExpress from './utils/start-express';
 import { baseConfig } from './base.config';
 
 const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
-//const LOCAL_IP = require('dev-ip')();
-//const HOST = isArray(LOCAL_IP) && LOCAL_IP[0] || LOCAL_IP || 'localhost';
-const HOST = 'localhost';
+const LOCAL_IP = require('dev-ip')();
+const HOST = isArray(LOCAL_IP) && LOCAL_IP[0] || LOCAL_IP || 'localhost';
+//const HOST = 'localhost';
 const PUBLIC_PATH = `http://${HOST}:${PORT}/assets/`;
 
 export default {
@@ -36,7 +36,8 @@ export default {
       app: [
         `webpack-hot-middleware/client?path=http://${HOST}:${PORT}/__webpack_hmr`,
         './app/index.js'
-      ]
+      ],
+      common: ['react', 'react-dom', 'redux', 'react-redux', 'react-router', 'react-router-redux']
     },
     output: {
       ...baseConfig.output,
@@ -73,6 +74,10 @@ export default {
 
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
+
+      new webpack.optimize.CommonsChunkPlugin({
+        names: ['common'],
+        filename: 'common.js' }),
 
       function() { this.plugin('done', writeStats); },
       function() { this.plugin('done', startExpress); }
