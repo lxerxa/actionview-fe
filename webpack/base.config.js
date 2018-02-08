@@ -11,7 +11,7 @@ export default {
       app: [
         './app/index.js'
       ],
-      common: ['react', 'react-dom', 'redux', 'react-redux', 'react-router', 'react-router-redux']
+      common: ['react', 'react-dom', 'redux', 'react-redux', 'react-router', 'react-router-redux', 'react-bootstrap', 'react-bootstrap-table']
     },
     output: {
       path: path.resolve(__dirname, '../dist'),
