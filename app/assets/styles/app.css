@@ -775,3 +775,21 @@ table tr:hover .remove-icon{
   float: right;
   margin-right: 5px;
 }
+
+::-webkit-scrollbar {
+	-webkit-appearance: none
+}
+
+::-webkit-scrollbar:horizontal {
+	height: 11px
+}
+
+::-webkit-scrollbar:vertical {
+	width: 11px
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,.33);
+	border: 2px solid #fff;
+	border-radius: 8px
+}
