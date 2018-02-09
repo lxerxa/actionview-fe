@@ -150,11 +150,11 @@ class Login extends Component {
             <img src={ brand } width={ 200 }/>
           </div>
           <form onSubmit={ handleSubmit(this.handleSubmit) }>
-            <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
+            <FormGroup controlId='formControlsName' validationState={ email.touched && email.error ? 'error' : '' }>
               <FormControl disabled={ submitting } type='text' { ...email } placeholder='用户名/邮箱'/>
               { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
             </FormGroup>
-            <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
+            <FormGroup controlId='formControlsPwd' validationState={ password.touched && password.error ? 'error' : '' }>
               <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>
