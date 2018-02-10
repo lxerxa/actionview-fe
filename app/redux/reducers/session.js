@@ -1,16 +1,20 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, invalid: false, user: {} };
+const initialState = { ecode: 0, emsg: '', invalid: false, user: {} };
 
 export default function session(state = initialState, action) {
   switch (action.type) {
     case t.SESSION_CREATE:
-      return { ...state, loading: true, invalid: false };
+      return { ...state, loading: true, ecode: 0, emsg: '', invalid: false };
 
     case t.SESSION_CREATE_SUCCESS:
       if (action.result.ecode === 0) {
         state.user = action.result.data && action.result.data.user;
+      }
+      // for sentinel throttle
+      if (action.result.emsg) {
+        state.emsg = action.result.msg
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

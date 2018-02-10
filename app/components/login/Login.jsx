@@ -160,7 +160,12 @@ class Login extends Component {
             </FormGroup>
             <Button bsStyle='success' disabled={ submitting } type='submit'>{ submitting ? '登 录 中 ...' : '登 录' }</Button>
             <div style={ { textAlign: 'center', height: '40px' } }>
-              { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>{ session.ecode === -10000 ? '登录失败，用户名或密码错误。' : '系统错误。' }</div> }
+              { this.state.alertShow && !submitting && 
+                <div style={ { marginTop: '10px', color: '#a94442' } }>
+                  { session.ecode === -10000 && '登录失败，用户名或密码错误。' }   
+                  { (session.ecode === -10004 || session.ecode === -10005) && session.msg }   
+                  { session.ecode === -99999 && '系统错误。' }
+                </div> }
             </div>
             <div className='login-footer'>
               <Link to='/forgot'>忘记密码</Link>
