@@ -106,6 +106,10 @@ export default class ColumnItemCard extends Component {
       <div style={ { opacity } } className='config-column'>
         <div style={ { fontWeight: 600, paddingBottom: '10px', borderBottom: '1px solid #ccc' } }>
           { column.name }
+          { column.max &&
+          <span className='config-wip'>{ 'Max-' + column.max }</span> }
+          { column.min &&
+          <span className='config-wip'>{ 'Min-' + column.min }</span> }
           { isAllowedEdit && !!delColumn && <span style={ styles } onClick={ () => { delColumn(column.no) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
           { isAllowedEdit && !!editColumn && <span style={ styles } onClick={ () => { editColumn(column.no) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
         </div>

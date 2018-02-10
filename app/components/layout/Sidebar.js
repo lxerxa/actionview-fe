@@ -132,12 +132,12 @@ export default class Sidebar extends Component {
             <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
             <ul className={ !this.state.adminSchemeShow && 'hide' }>
               <li><Link to='/admin/scheme/type' activeClassName='menu-active'>问题类型</Link></li>
+              <li><Link to='/admin/scheme/state' activeClassName='menu-active'>状态</Link></li>
               <li><Link to='/admin/scheme/workflow' activeClassName='menu-active' id='admin-workflow'>工作流</Link></li>
               <li><Link to='/admin/scheme/field' activeClassName='menu-active'>字段</Link></li>
               <li><Link to='/admin/scheme/screen' activeClassName='menu-active'>界面</Link></li>
-              <li><Link to='/admin/scheme/state' activeClassName='menu-active'>状态</Link></li>
-              <li><Link to='/admin/scheme/resolution' activeClassName='menu-active'>解决结果</Link></li>
               <li><Link to='/admin/scheme/priority' activeClassName='menu-active'>优先级</Link></li>
+              <li><Link to='/admin/scheme/resolution' activeClassName='menu-active'>解决结果</Link></li>
               <li><Link to='/admin/scheme/role' activeClassName='menu-active'>角色权限</Link></li>
               <li><Link to='/admin/scheme/events' activeClassName='menu-active'>通知事件</Link></li>
             </ul>
@@ -182,12 +182,12 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.projectConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/type' } activeClassName='menu-active'>问题类型</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/state' } activeClassName='menu-active'>状态</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/workflow' } activeClassName='menu-active' id='workflow'>工作流</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/field' } activeClassName='menu-active'>字段</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/screen' } activeClassName='menu-active'>界面</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/state' } activeClassName='menu-active'>状态</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/resolution' } activeClassName='menu-active'>解决结果</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/priority' } activeClassName='menu-active'>优先级</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/resolution' } activeClassName='menu-active'>解决结果</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/role' } activeClassName='menu-active'>角色权限</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/events' } activeClassName='menu-active'>通知事件</Link></li>
             </ul> }

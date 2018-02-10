@@ -750,6 +750,18 @@ table tr:hover .remove-icon{
   overflow: hidden;
 }
 
+.red-bar {
+  border-top: 13px solid #d73a49;
+  height: 0;
+  overflow: hidden;
+}
+
+.green-bar {
+  border-top: 13px solid #28a745;
+  height: 0;
+  overflow: hidden;
+}
+
 .exchange-icon {
   color: #5f5f5f;
   cursor: pointer;
@@ -762,4 +774,22 @@ table tr:hover .remove-icon{
   cursor: pointer;
   float: right;
   margin-right: 5px;
+}
+
+::-webkit-scrollbar {
+	-webkit-appearance: none
+}
+
+::-webkit-scrollbar:horizontal {
+	height: 11px
+}
+
+::-webkit-scrollbar:vertical {
+	width: 11px
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,.33);
+	border: 2px solid #fff;
+	border-radius: 8px
 }

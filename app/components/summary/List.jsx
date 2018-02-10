@@ -9,7 +9,7 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { assigneeShowModel: 'percentage', priorityShowModel: 'percentage', moduleShowModel: 'percentage' };
+    this.state = { pulseShowModel: 'percentage', assigneeShowModel: 'percentage', priorityShowModel: 'percentage', moduleShowModel: 'percentage' };
   }
 
   static propTypes = {
@@ -48,24 +48,38 @@ export default class List extends Component {
           <Link to={ '/project/' + project.key + '/issue?created_at=2w' }><span style={ filterStyle }>最近增加的</span></Link>
           <Link to={ '/project/' + project.key + '/issue?updated_at=2w' }><span style={ filterStyle }>最近更新的</span></Link>
         </div>
-        <Panel header={ '一周动态：' + (options.weekAgo || '') + ' ~ 现在' }>
+        <Panel
+          header={ 
+            <div>
+              <span>{ '一周动态：' + (options.weekAgo || '') + ' ~ 现在' }</span>
+              <span className='exchange-icon' onClick={ () => this.setState({ pulseShowModel: this.state.pulseShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+            </div> }>
           { data.new_issues && data.new_issues.total ?
           <Table responsive hover>
+            { this.state.pulseShowModel == 'detail' &&
             <thead>
               <tr>
-                <th>问题类型</th>
-                <th>全部</th>
+                <th>类别</th>
+                <th>问题</th>
                 { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
               </tr>
-            </thead>
+            </thead> }
+            { this.state.pulseShowModel == 'percentage' &&
+            <thead>
+              <tr>
+                <th>类别</th>
+                <th>问题</th>
+              </tr>
+            </thead> }
+            { this.state.pulseShowModel == 'detail' &&
             <tbody>
               <tr>
-                <td>
+                <td style={ { width: '20%' } }>
                   <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
                     新建问题
                   </Link>
                 </td>
-                <td>
+                <td style={ { width: '10%' } }>
                   <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
                     { data.new_issues && data.new_issues['total'] || 0 }
                   </Link>
@@ -97,7 +111,52 @@ export default class List extends Component {
                       </Link>
                     </td>) }) }
               </tr>
-            </tbody>
+            </tbody> }
+            { this.state.pulseShowModel == 'percentage' &&
+            <tbody>
+              <tr>
+                <td style={ { width: '20%' } }>
+                  <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
+                    新建问题
+                  </Link>
+                </td>
+                <td>
+                  <table style={ { width: '90%' } }>
+                    <tr>
+                      <td style={ { width: data.new_issues.percent + '%' } }>
+                        <div className='green-bar'/>
+                      </td>
+                      <td style={ { width: (100 - data.new_issues.percent) + '%', paddingLeft: '10px' } }>
+                        <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
+                          { data.new_issues && data.new_issues['total'] || 0 }
+                        </Link>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
+                    关闭问题
+                  </Link>
+                </td>
+                <td>
+                  <table style={ { width: '90%' } }>
+                    <tr>
+                      <td style={ { width: data.closed_issues.percent + '%' } }>
+                        <div className='red-bar'/>
+                      </td>
+                      <td style={ { width: (100 - data.closed_issues.percent) + '%', paddingLeft: data.closed_issues.percent ? '10px' : '0px' } }>
+                        <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
+                          { data.closed_issues && data.closed_issues['total'] || 0 }
+                        </Link>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </tbody> }
           </Table>
           :
           <div>暂无信息</div> }
@@ -214,7 +273,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
-                      { options.priorities && options.priorities[key] || '' }
+                      { options.priorities && options.priorities[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
@@ -238,7 +297,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
-                      { options.priorities && options.priorities[key] || '' }
+                      { options.priorities && options.priorities[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
@@ -295,7 +354,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
-                      { options.modules && options.modules[key] || '' }
+                      { options.modules && options.modules[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
@@ -319,7 +378,7 @@ export default class List extends Component {
                 <tr>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
-                      { options.modules && options.modules[key] || '' }
+                      { options.modules && options.modules[key] || '其他' }
                     </Link>
                   </td>
                   <td style={ { width: '10%' } }>
