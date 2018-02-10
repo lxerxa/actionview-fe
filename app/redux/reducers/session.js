@@ -14,7 +14,7 @@ export default function session(state = initialState, action) {
       }
       // for sentinel throttle
       if (action.result.emsg) {
-        state.emsg = action.result.msg
+        state.emsg = action.result.emsg
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

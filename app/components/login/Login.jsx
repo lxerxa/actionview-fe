@@ -163,7 +163,8 @@ class Login extends Component {
               { this.state.alertShow && !submitting && 
                 <div style={ { marginTop: '10px', color: '#a94442' } }>
                   { session.ecode === -10000 && '登录失败，用户名或密码错误。' }   
-                  { (session.ecode === -10004 || session.ecode === -10005) && session.msg }   
+                  { session.ecode === -10004 && session.emsg }   
+                  { session.ecode === -10005 && '用户未激活。' }   
                   { session.ecode === -99999 && '系统错误。' }
                 </div> }
             </div>
