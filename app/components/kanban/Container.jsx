@@ -65,7 +65,7 @@ export default class Container extends Component {
   }
 
   async index(query) {
-    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban', limit: 10000 })));
+    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban', from_kanban_id: this.kanban_id, limit: 10000 })));
     return this.props.issue.ecode;
   }
 
@@ -289,7 +289,7 @@ export default class Container extends Component {
           kanbans={ this.props.kanban.list }
           loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
           goto={ this.goto }
-          switchRank={ this.props.actions.switchRank }
+          selectFilter={ this.props.actions.selectFilter }
           index={ this.index.bind(this) } 
           project={ this.props.project.item }
           createKanban={ this.createKanban.bind(this) }
@@ -300,7 +300,6 @@ export default class Container extends Component {
         <List 
           curKanban={ curKanban }
           rankLoading={ this.props.kanban.rankLoading }
-          rankable={ this.props.kanban.rankable }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
           getDraggableActions={ this.getDraggableActions.bind(this) }

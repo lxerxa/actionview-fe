@@ -76,9 +76,6 @@ const cardTarget = {
 
 @DropTarget(
   props => {
-    if (!props.rankable) {
-      return [];
-    }
     return _.map(props.accepts, (v) => { 
       if (props.issue.parent && props.issue.parent.id) {
         return props.issue.parent.id + '-' + v;
@@ -113,14 +110,12 @@ export default class Card extends Component {
     connectDropTarget: PropTypes.func.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
-    rankable: PropTypes.bool.isRequired,
     issueRank: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
     draggedIssue: PropTypes.object.isRequired,
     issueView: PropTypes.func.isRequired,
     issue: PropTypes.object.isRequired,
-    rankMap: PropTypes.array.isRequired,
     openedIssue: PropTypes.object.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
@@ -139,14 +134,12 @@ export default class Card extends Component {
       pkey, 
       draggedIssue, 
       issueView, 
-      rankMap,
       openedIssue, 
       isDragging, 
       connectDragSource, 
       connectDropTarget, 
       getDraggableActions,
       cleanDraggableActions,
-      rankable,
       issueRank,
       setRank,
       closeDetail,
@@ -177,22 +170,18 @@ export default class Card extends Component {
               issueView={ issueView }
               getDraggableActions={ getDraggableActions }
               cleanDraggableActions={ cleanDraggableActions }
-              rankMap={ rankMap }
-              rankable={ rankable }
               issueRank={ issueRank }
               setRank={ setRank }
               moveCard={ moveCard }/> }
           <Column 
             isSubtaskCol={ true }
             colNo={ colNo } 
-            rankMap={ rankMap }
             openedIssue={ openedIssue } 
             draggedIssue={ draggedIssue }
             issueView={ issueView } 
             getDraggableActions={ getDraggableActions } 
             cleanDraggableActions={ cleanDraggableActions } 
             cards={ subtasks } 
-            rankable={ rankable } 
             setRank={ setRank }
             pkey={ pkey }
             accepts={ accepts }

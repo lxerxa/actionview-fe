@@ -24,7 +24,7 @@ export default class Project extends Component {
     i18n: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    children: PropTypes.element.isRequired,
+    children: PropTypes.element,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired
   }

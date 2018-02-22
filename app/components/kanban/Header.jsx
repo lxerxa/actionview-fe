@@ -17,10 +17,10 @@ export default class Header extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { index, switchRank, curKanban } = nextProps;
+    const { index, selectFilter, curKanban } = nextProps;
     if (this.props.curKanban.id != curKanban.id || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
       this.setState({ filter: 'all' });
-      switchRank(true);
+      selectFilter('all');
       index(this.getQuery(curKanban.query || {}));
     }
   }
@@ -36,7 +36,7 @@ export default class Header extends Component {
     kanbans: PropTypes.array,
     loading: PropTypes.bool,
     goto: PropTypes.func,
-    switchRank: PropTypes.func,
+    selectFilter: PropTypes.func,
     index: PropTypes.func,
     options: PropTypes.object
   }
@@ -117,8 +117,8 @@ export default class Header extends Component {
   handleSelect(selectedKey) {
     this.setState({ filter: selectedKey });
 
-    const { index, curKanban, switchRank } = this.props;
-    switchRank(selectedKey === 'all');
+    const { index, curKanban, selectFilter } = this.props;
+    selectFilter(selectedKey);
     index(this.getQuery(curKanban.query || {}, selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query || {}));
   }
 
@@ -137,10 +137,6 @@ export default class Header extends Component {
   render() {
     const { i18n, changeModel, model, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
 
-    const popoverClickRootClose = (
-      <Popover id='popover-trigger-click-root-close'>
-        <span>只有过滤器选择“全部”时，才可拖拽改变问题的排序。</span>
-      </Popover>);
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
         <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'center' } }>
@@ -178,11 +174,7 @@ export default class Header extends Component {
         { model === 'issue' && !loading && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>
-            过滤器
-            <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
-              <span style={ { marginLeft: '5px', cursor: 'pointer' } }><i className='fa fa-info-circle'></i></span>
-            </OverlayTrigger>
-            ：
+            过滤器：
           </span>
           <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.filter } onSelect={ this.handleSelect.bind(this) }>
             <NavItem eventKey='all' href='#'>全部</NavItem>

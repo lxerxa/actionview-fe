@@ -1,7 +1,16 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, rankable: true, list: [], loading: false, rankLoading: false, configLoading: false, wfactions: [], wfLoading: false, draggedIssue: '' };
+const initialState = { 
+  ecode: 0, 
+  selectedFilter: 'all', 
+  list: [], 
+  loading: false, 
+  rankLoading: false, 
+  configLoading: false, 
+  wfactions: [], 
+  wfLoading: false, 
+  draggedIssue: '' };
 
 export default function activity(state = initialState, action) {
   switch (action.type) {
@@ -69,8 +78,8 @@ export default function activity(state = initialState, action) {
     case t.KANBAN_ISSUE_ACTIONS_CLEAN:
       return { ...state, draggedIssue: '', wfactions: [] };
 
-    case t.KANBAN_SWITCH_RANK:
-      return { ...state, rankable: action.flag };
+    case t.KANBAN_SELECT_FILTER:
+      return { ...state, selectedFilter: action.filter };
 
     case t.KANBAN_ISSUE_RANK_GET:
     //case t.KANBAN_ISSUE_RANK_SET:

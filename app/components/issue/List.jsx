@@ -384,9 +384,9 @@ export default class List extends Component {
                 <MenuItem eventKey='share'>分享链接</MenuItem>
                 <MenuItem divider/>
                 <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && _.intersection(options.permissions, ['create_issue', 'edit_issue']).length > 0 && <MenuItem divider/> }
+                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('edit_issue') !== -1 && !collection[i].hasSubtasks)) && <MenuItem divider/> }
                 { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+                { !collection[i].hasSubtasks && !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
                 { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
                 { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                 { options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('move_issue') !== -1 && collection[i].parent_id)) && <MenuItem divider/> }

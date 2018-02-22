@@ -48,8 +48,8 @@ export function cleanDraggableActions() {
   return { type: 'KANBAN_ISSUE_ACTIONS_CLEAN' };
 }
 
-export function switchRank(flag) {
-  return { type: 'KANBAN_SWITCH_RANK', flag };
+export function selectFilter(key) {
+  return { type: 'KANBAN_SELECT_FILTER', key };
 }
 
 export function getRank(key, kid) {

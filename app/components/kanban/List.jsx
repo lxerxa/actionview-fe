@@ -85,7 +85,7 @@ export default class List extends Component {
     linkLoading: PropTypes.bool.isRequired,
     doAction: PropTypes.func.isRequired,
     watch: PropTypes.func.isRequired,
-    rankable: PropTypes.bool.isRequired,
+    selectedFilter: PropTypes.string.isRequired,
     setRank: PropTypes.func.isRequired,
     release: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
@@ -210,7 +210,7 @@ export default class List extends Component {
       resetState,
       del,
       doAction,
-      rankable,
+      selectedFilter,
       setRank,
       release,
       user
@@ -253,7 +253,7 @@ export default class List extends Component {
               <li 
                 key={ i } 
                 className='board-column' 
-                style={ { background: v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '') } }>
+                style={ { background: selectedFilter === 'all' ? (v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '')) : '' } }>
                 <span style={ { fontWeight: 600 } }>{ v.name }</span>（{ columnIssues[i].length }）
                 { v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
                 { v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
@@ -271,14 +271,12 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 colNo={ i }
-                rankMap={ curKanban.ranks || [] }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
-                rankable={ rankable }
                 setRank={ setRank }
                 cards={ columnIssues[i] }
                 pkey={ project.key }

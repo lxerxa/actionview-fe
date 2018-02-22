@@ -19,7 +19,6 @@ export default class Column extends Component {
     isSubtaskCol: PropTypes.bool,
     subtaskShow: PropTypes.bool,
     colNo: PropTypes.number.isRequired,
-    rankMap: PropTypes.array.isRequired,
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
@@ -30,12 +29,11 @@ export default class Column extends Component {
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
-    rankable: PropTypes.bool.isRequired,
     setRank: PropTypes.func.isRequired
   }
 
   arrangeCard(props) {
-    const { colNo, isSubtaskCol, subtaskShow, rankMap } = props;
+    const { isSubtaskCol, subtaskShow } = props;
     const { cards } = this.state;
     let mainCards = [], classifiedSubtasks = {};
 
@@ -44,37 +42,24 @@ export default class Column extends Component {
     } else {
       if (subtaskShow) {
         _.map(cards, (v, i) => {
-          if (v.parent && v.parent.id) {
-            if (_.findIndex(cards, { id: v.parent.id }) === -1) {
+          if (v.parent && v.parent.no) {
+            if (_.findIndex(cards, { no: v.parent.no }) === -1) {
               mainCards.push(_.extend(v.parent, { mock: true }));
             }
-            if (!classifiedSubtasks[v.parent.id]) {
-              classifiedSubtasks[v.parent.id] = [];
+            if (!classifiedSubtasks[v.parent.no]) {
+              classifiedSubtasks[v.parent.no] = [];
             }
-            classifiedSubtasks[v.parent.id].push(v);
+            classifiedSubtasks[v.parent.no].push(v);
           } else {
             mainCards.push(v);
           }
         });
       } else {
-        mainCards = _.reject(cards, (v) => { return v.parent && v.parent.id && true });
+        mainCards = _.reject(cards, (v) => { return v.parent && v.parent.no && true });
       }
     }
 
-    let curRankCol = {};
-    const sortedCards = []; 
-    if (mainCards.length > 0) {
-      const parent = _.head(mainCards).parent && _.head(mainCards).parent.id || '';
-      curRankCol = _.find(rankMap, { col_no: colNo, parent }) || {}; 
-      _.forEach(curRankCol.rank || [], (v) => {
-        const ind = _.findIndex(mainCards, { no: v });
-        if (ind !== -1) {
-          sortedCards.push(mainCards[ind]);
-        }
-      });
-    }
-
-    this.state.mainCards = _.union(sortedCards, _.filter(mainCards, (v) => { return _.findIndex(sortedCards, { no: v.no }) === -1 }));
+    this.state.mainCards = mainCards;
     this.state.classifiedSubtasks = classifiedSubtasks;
   }
 
@@ -93,14 +78,17 @@ export default class Column extends Component {
   }
 
   issueRank(id) {
-    const { colNo, setRank } = this.props;
+    const { setRank } = this.props;
     const { mainCards } = this.state;
 
-    const draggedIssue = _.find(mainCards, { id });
+    const draggedIndex = _.findIndex(mainCards, { id });
+    const beforeIssueNo = draggedIndex > 0 ? mainCards[draggedIndex - 1].no : -1;
+    const afterIssueNo = draggedIndex < mainCards.length -1 ? mainCards[draggedIndex + 1].no : -1;
+    const draggedIssue = mainCards[draggedIndex];
+
     setRank({ 
-      col_no: colNo, 
       parent: draggedIssue.parent && draggedIssue.parent.id || '', 
-      rank: _.map(mainCards, (v) => v.no) });
+      issue: { no: draggedIssue.no, before: beforeIssueNo, after: afterIssueNo } });
   }
 
   issueView(id) {
@@ -109,26 +97,10 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //if (this.state.cards.length !== nextProps.cards.length) {
     if (_.isEmpty(this.props.draggedIssue) && _.isEmpty(nextProps.draggedIssue)) {
       this.state.cards = nextProps.cards;
       this.arrangeCard(nextProps);
     }
-
-    //const oldCardIds = _.map(this.state.cards, (v) => v.id );
-    //const newCardIds = _.map(nextProps.cards, (v) => v.id );
-
-    //const diff = _.difference(oldCardIds, newCardIds);
-    //const diff2 = _.difference(newCardIds, oldCardIds);
-
-    //if (diff.length > 0) {
-    //  const removedCardId = diff.pop();
-    //  this.state.cards = _.reject(this.state.cards, (v) => { return v.id === removedCardId });
-    //} else {
-    //  const addedCard = _.find(nextProps.cards, { id: diff2.pop() });
-    //  this.state.cards.push(addedCard);
-    //  this.state.cards = _.sortByOrder(this.state.cards, [ 'rank' ]);
-    //}
   }
 
   render() {
@@ -138,10 +110,8 @@ export default class Column extends Component {
       subtaskShow=false,
       getDraggableActions, 
       cleanDraggableActions, 
-      rankable, 
       setRank,
       closeDetail, 
-      rankMap,
       draggedIssue,
       openedIssue, 
       options, 
@@ -160,12 +130,11 @@ export default class Column extends Component {
         <Card
           key={ v.id }
           colNo={ colNo }
-          rankMap={ rankMap }
           openedIssue={ openedIssue }
           index={ i }
           issue={ v }
           pkey={ pkey }
-          subtasks={ classifiedSubtasks[v.id] || [] }
+          subtasks={ classifiedSubtasks[v.no] || [] }
           accepts={ accepts }
           options={ options }
           closeDetail={ closeDetail }
@@ -173,7 +142,6 @@ export default class Column extends Component {
           issueView={ this.issueView.bind(this) }
           getDraggableActions={ getDraggableActions }
           cleanDraggableActions={ cleanDraggableActions }
-          rankable={ rankable } 
           setRank={ setRank } 
           issueRank={ this.issueRank.bind(this) } 
           moveCard={ this.moveCard.bind(this) }/>
