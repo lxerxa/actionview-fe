@@ -99,12 +99,10 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.state.cards = nextProps.cards;
-    this.arrangeCard(nextProps);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return _.isEmpty(this.props.draggedIssue) && _.isEmpty(nextProps.draggedIssue);
+    if (_.isEmpty(this.props.draggedIssue) && _.isEmpty(nextProps.draggedIssue)) {
+      this.state.cards = nextProps.cards;
+      this.arrangeCard(nextProps);
+    }
   }
 
   render() {
