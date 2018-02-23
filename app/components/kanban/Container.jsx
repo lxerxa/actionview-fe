@@ -299,6 +299,7 @@ export default class Container extends Component {
         { this.state.model == 'issue' &&
         <List 
           curKanban={ curKanban }
+          selectedFilter={ this.props.kanban.selectedFilter }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
           getDraggableActions={ this.getDraggableActions.bind(this) }
