@@ -6,14 +6,14 @@ import { baseConfig } from './base.config';
 
 export default {
   ...baseConfig,
+  entry: {
+    app: [
+      './app/index.js'
+    ],
+    common: ['react', 'react-dom', 'redux', 'react-redux', 'react-router', 'react-router-redux', 'react-bootstrap', 'react-bootstrap-table']
+  },
   module: {
     ...baseConfig.module,
-    entry: {
-      app: [
-        './app/index.js'
-      ],
-      common: ['react', 'react-dom', 'redux', 'react-redux', 'react-router', 'react-router-redux', 'react-bootstrap', 'react-bootstrap-table']
-    },
     loaders: [
       ...baseConfig.module.loaders,
         {

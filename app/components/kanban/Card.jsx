@@ -20,10 +20,10 @@ const cardSource = {
   },
 
   endDrag(props, monitor, component) {
-    props.cleanDraggableActions();
     if (this.preIndex != props.index) {
       props.issueRank(props.issue.id);
     }
+    props.cleanDraggableActions();
   }
 };
 
