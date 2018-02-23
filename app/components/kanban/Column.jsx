@@ -83,11 +83,11 @@ export default class Column extends Component {
     const { mainCards } = this.state;
 
     const draggedIndex = _.findIndex(mainCards, { id });
-    const beforeIssueNo = draggedIndex > 0 ? mainCards[draggedIndex - 1].no : -1;
-    const afterIssueNo = draggedIndex < mainCards.length -1 ? mainCards[draggedIndex + 1].no : -1;
+    const up = draggedIndex > 0 ? mainCards[draggedIndex - 1].no : -1;
+    const down = draggedIndex < mainCards.length -1 ? mainCards[draggedIndex + 1].no : -1;
     const draggedIssue = mainCards[draggedIndex];
 
-    const ecode = await setRank({ current: draggedIssue.no, before: beforeIssueNo, after: afterIssueNo });
+    const ecode = await setRank({ current: draggedIssue.no, up, down });
     if (ecode !== 0) {
       notify.show('问题排序调整失败。', 'error', 2000);
     }
@@ -99,10 +99,12 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.isEmpty(this.props.draggedIssue) && _.isEmpty(nextProps.draggedIssue)) {
-      this.state.cards = nextProps.cards;
-      this.arrangeCard(nextProps);
-    }
+    this.state.cards = nextProps.cards;
+    this.arrangeCard(nextProps);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return _.isEmpty(this.props.draggedIssue) && _.isEmpty(nextProps.draggedIssue);
   }
 
   render() {
