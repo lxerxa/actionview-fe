@@ -35,6 +35,8 @@ const validate = (values, props) => {
     'page', 
     'orderBy',
     'from',
+    'from_kanban_id',
+    'filter',
     'limit' ];
 
   if (!values.key) {

@@ -52,11 +52,10 @@ export function selectFilter(key) {
   return { type: 'KANBAN_SELECT_FILTER', key };
 }
 
-export function getRank(key, kid) {
+export function recordAccess(key, kid) {
   return asyncFuncCreator({
-    constant: 'KANBAN_ISSUE_RANK_GET',
-    kid,
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/rank' })
+    constant: 'KANBAN_ACCESS_RECORD',
+    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/access' })
   });
 }
 

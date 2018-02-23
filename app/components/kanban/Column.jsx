@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import update from 'react/lib/update';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 
 import Card from './Card';
 
@@ -77,7 +78,7 @@ export default class Column extends Component {
     }));
   }
 
-  issueRank(id) {
+  async issueRank(id) {
     const { setRank } = this.props;
     const { mainCards } = this.state;
 
@@ -86,9 +87,10 @@ export default class Column extends Component {
     const afterIssueNo = draggedIndex < mainCards.length -1 ? mainCards[draggedIndex + 1].no : -1;
     const draggedIssue = mainCards[draggedIndex];
 
-    setRank({ 
-      parent: draggedIssue.parent && draggedIssue.parent.id || '', 
-      issue: { no: draggedIssue.no, before: beforeIssueNo, after: afterIssueNo } });
+    const ecode = await setRank({ current: draggedIssue.no, before: beforeIssueNo, after: afterIssueNo });
+    if (ecode !== 0) {
+      notify.show('问题排序调整失败。', 'error', 2000);
+    }
   }
 
   issueView(id) {

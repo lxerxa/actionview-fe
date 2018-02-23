@@ -65,7 +65,7 @@ export default class Container extends Component {
   }
 
   async index(query) {
-    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban', from_kanban_id: this.kanban_id, limit: 10000 })));
+    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban', from_kanban_id: this.kanban_id, filter: this.props.kanban.selectedFilter, limit: 10000 })));
     return this.props.issue.ecode;
   }
 
@@ -265,7 +265,7 @@ export default class Container extends Component {
     } else {
       if (id != this.kanban_id) {
         this.kanban_id = id;
-        this.props.actions.getRank(this.pid, id);
+        this.props.actions.recordAccess(this.pid, id);
       }
     }
   }
@@ -299,7 +299,6 @@ export default class Container extends Component {
         { this.state.model == 'issue' &&
         <List 
           curKanban={ curKanban }
-          rankLoading={ this.props.kanban.rankLoading }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
           getDraggableActions={ this.getDraggableActions.bind(this) }

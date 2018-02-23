@@ -25,7 +25,6 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     curKanban: PropTypes.object.isRequired,
-    rankLoading: PropTypes.bool.isRequired,
     draggedIssue: PropTypes.string.isRequired,
     draggableActions: PropTypes.array.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
@@ -151,7 +150,6 @@ export default class List extends Component {
     const { 
       i18n,
       curKanban,
-      rankLoading,
       draggedIssue,
       draggableActions,
       getDraggableActions,
@@ -240,12 +238,12 @@ export default class List extends Component {
         <div className='board-overlay-waiting' style={ { display: !this.state.barShow && itemLoading ? 'block' : 'none' } }>
           <img src={ loadingImg } className='loading board-loading'/>
         </div>
-        { !_.isEmpty(curKanban) && (rankLoading || indexLoading) && 
+        { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
           <img src={ loadingImg } className='loading'/> 
         </div> }
 
-        { !_.isEmpty(curKanban) && !indexLoading && !rankLoading && 
+        { !_.isEmpty(curKanban) && !indexLoading && 
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
