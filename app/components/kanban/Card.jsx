@@ -112,6 +112,7 @@ export default class Card extends Component {
     cleanDraggableActions: PropTypes.func.isRequired,
     issueRank: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired,
+    rankLoading: PropTypes.bool.isRequired,
     closeDetail: PropTypes.func.isRequired,
     draggedIssue: PropTypes.object.isRequired,
     issueView: PropTypes.func.isRequired,
@@ -142,6 +143,7 @@ export default class Card extends Component {
       cleanDraggableActions,
       issueRank,
       setRank,
+      rankLoading,
       closeDetail,
       subtasks=[],
       accepts,
@@ -172,6 +174,7 @@ export default class Card extends Component {
               cleanDraggableActions={ cleanDraggableActions }
               issueRank={ issueRank }
               setRank={ setRank }
+              rankLoading={ rankLoading }
               moveCard={ moveCard }/> }
           <Column 
             isSubtaskCol={ true }
@@ -183,6 +186,7 @@ export default class Card extends Component {
             cleanDraggableActions={ cleanDraggableActions } 
             cards={ subtasks } 
             setRank={ setRank }
+            rankLoading={ rankLoading }
             pkey={ pkey }
             accepts={ accepts }
             closeDetail={ closeDetail }

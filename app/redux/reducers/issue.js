@@ -29,6 +29,7 @@ const initialState = {
   worklogLoading: false, 
   worklogLoaded: false, 
   linkLoading: false,
+  rankLoading: false,
   detailFloatStyle: {} };
 
 export default function issue(state = initialState, action) {
@@ -426,7 +427,7 @@ export default function issue(state = initialState, action) {
       return { ...state, ecode: action.result.ecode };
 
     case t.ISSUE_KANBAN_RANK_SET:
-      return { ...state };
+      return { ...state, rankLoading: true };
 
     case t.ISSUE_KANBAN_RANK_SET_SUCCESS:
       if (action.result.ecode === 0 && action.result.data.rank && action.result.data.rank.length > 0) {
@@ -437,12 +438,12 @@ export default function issue(state = initialState, action) {
             newCollection.push(issue);
           }
         });
-        return { ...state, collection: newCollection };
+        return { ...state, collection: newCollection, rankLoading: false };
       }
-      return { ...state };
+      return { ...state, rankLoading: false };
 
     case t.ISSUE_KANBAN_RANK_SET_FAIL:
-      return { ...state, error: action.error };
+      return { ...state, rankLoading: false, error: action.error };
 
     case t.ISSUE_KANBAN_RELEASE:
       return { ...state, itemLoading: true };

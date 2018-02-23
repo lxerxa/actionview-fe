@@ -86,6 +86,7 @@ export default class List extends Component {
     watch: PropTypes.func.isRequired,
     selectedFilter: PropTypes.string.isRequired,
     setRank: PropTypes.func.isRequired,
+    rankLoading: PropTypes.bool.isRequired,
     release: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
   }
@@ -210,6 +211,7 @@ export default class List extends Component {
       doAction,
       selectedFilter,
       setRank,
+      rankLoading,
       release,
       user
     } = this.props;
@@ -276,6 +278,7 @@ export default class List extends Component {
                 getDraggableActions={ getDraggableActions }
                 cleanDraggableActions={ cleanDraggableActions }
                 setRank={ setRank }
+                rankLoading={ rankLoading }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
                 accepts={ v.states }

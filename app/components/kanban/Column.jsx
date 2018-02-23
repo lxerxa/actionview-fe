@@ -30,7 +30,8 @@ export default class Column extends Component {
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
-    setRank: PropTypes.func.isRequired
+    setRank: PropTypes.func.isRequired,
+    rankLoading: PropTypes.bool.isRequired
   }
 
   arrangeCard(props) {
@@ -99,7 +100,7 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.isEmpty(this.props.draggedIssue) && _.isEmpty(nextProps.draggedIssue)) {
+    if (!nextProps.rankLoading) {
       this.state.cards = nextProps.cards;
       this.arrangeCard(nextProps);
     }
@@ -113,6 +114,7 @@ export default class Column extends Component {
       getDraggableActions, 
       cleanDraggableActions, 
       setRank,
+      rankLoading,
       closeDetail, 
       draggedIssue,
       openedIssue, 
@@ -145,6 +147,7 @@ export default class Column extends Component {
           getDraggableActions={ getDraggableActions }
           cleanDraggableActions={ cleanDraggableActions }
           setRank={ setRank } 
+          rankLoading={ rankLoading }
           issueRank={ this.issueRank.bind(this) } 
           moveCard={ this.moveCard.bind(this) }/>
         ) }
