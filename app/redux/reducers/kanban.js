@@ -79,7 +79,7 @@ export default function kanban(state = initialState, action) {
       return { ...state, draggedIssue: '', wfactions: [] };
 
     case t.KANBAN_SELECT_FILTER:
-      return { ...state, selectedFilter: action.filter };
+      return { ...state, selectedFilter: action.key };
 
     case t.KANBAN_ISSUE_RANK_SET:
       return { ...state, rankLoading: true };

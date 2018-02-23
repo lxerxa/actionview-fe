@@ -425,6 +425,25 @@ export default function issue(state = initialState, action) {
       }
       return { ...state, ecode: action.result.ecode };
 
+    case t.ISSUE_KANBAN_RANK_SET:
+      return { ...state };
+
+    case t.ISSUE_KANBAN_RANK_SET_SUCCESS:
+      if (action.result.ecode === 0 && action.result.data.rank && action.result.data.rank.length > 0) {
+        const newCollection = [];
+        _.map(action.result.data.rank, (no) => {
+          const issue = _.find(state.collection, { no });
+          if (issue) {
+            newCollection.push(issue);
+          }
+        });
+        return { ...state, collection: newCollection };
+      }
+      return { ...state };
+
+    case t.ISSUE_KANBAN_RANK_SET_FAIL:
+      return { ...state, error: action.error };
+
     case t.ISSUE_KANBAN_RELEASE:
       return { ...state, itemLoading: true };
 

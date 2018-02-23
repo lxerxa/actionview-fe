@@ -58,11 +58,3 @@ export function recordAccess(key, kid) {
     promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/access' })
   });
 }
-
-export function setRank(key, kid, values) {
-  return asyncFuncCreator({
-    constant: 'KANBAN_ISSUE_RANK_SET',
-    kid,
-    promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/rank', method: 'post', data: values || {} })
-  });
-}
