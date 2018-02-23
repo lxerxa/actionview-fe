@@ -231,8 +231,8 @@ export default class Container extends Component {
   }
 
   async setRank(values) {
-    await this.props.actions.setRank(this.pid, this.kanban_id, values);
-    return this.props.kanban.ecode;
+    await this.props.issueActions.setRank(this.pid, this.kanban_id, values);
+    return this.props.issue.ecode;
   }
 
   async release(ids) {
