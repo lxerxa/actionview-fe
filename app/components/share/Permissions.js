@@ -15,6 +15,7 @@ export default [
   //{ id: 'view_workflow', name: '查看流程' },
   { id: 'exec_workflow', name: '执行流程' },
   { id: 'upload_file', name: '上传附件（文件）' },
+  { id: 'download_file', name: '下载附件（文件）' },
   { id: 'remove_file', name: '删除附件（文件）' },
   //{ id: 'add_comments', name: '添加备注' },
   //{ id: 'edit_comments', name: '编辑备注' },

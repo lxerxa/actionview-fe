@@ -152,7 +152,12 @@ export default class DetailBar extends Component {
   }
 
   openPreview(index) {
-    this.setState({ previewShow: true, photoIndex: index });
+    const { options } = this.props;
+    if (options.permissions && options.permissions.indexOf('download_file') !== -1) {
+      this.setState({ previewShow: true, photoIndex: index });
+    } else {
+      notify.show('权限不足。', 'error', 2000);
+    }
   }
 
   async viewWorkflow(e) {
@@ -746,8 +751,18 @@ export default class DetailBar extends Component {
                           <tbody>
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
-                                <td><i className={ this.getFileIconCss(f.name) }></i> <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a></td>
-                                { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <td width='2%'><span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></span></td> }
+                                <td>
+                                  <span style={ { marginRight: '5px' } }><i className={ this.getFileIconCss(f.name) }></i></span> 
+                                  { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
+                                    <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a> :
+                                    <span>{ f.name }</span> }
+                                </td>
+                                { options.permissions && options.permissions.indexOf('remove_file') !== -1 && 
+                                  <td width='2%'>
+                                    <span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }>
+                                      <i className='fa fa-trash'></i>
+                                    </span>
+                                  </td> }
                               </tr> ) }
                           </tbody>
                         </Table> }
