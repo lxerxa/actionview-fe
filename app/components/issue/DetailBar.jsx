@@ -512,7 +512,7 @@ export default class DetailBar extends Component {
                       </DropdownButton>
                     </div> ) }
                   <div style={ { float: 'right' } }>
-                    <DropdownButton pullRight bsStyle='link' title='更多' onSelect={ this.operateSelect.bind(this) }>
+                    <DropdownButton pullRight title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
                       <MenuItem divider/>
@@ -774,7 +774,7 @@ export default class DetailBar extends Component {
                              <Col sm={ 6 } key={ i }>
                                <div className='attachment-content'>
                                  <div className='attachment-thumb' onClick={ this.openPreview.bind(this, i) }>
-                                   <img src={  '/api/project/' + project.key + '/file/' + f.id + '?flag=s' }/>
+                                   <img src={  '/api/project/' + project.key + '/file/' + f.id + '/thumbnail' }/>
                                  </div>
                                  <div className='attachment-title-container'>
                                     <div className='attachment-title' title={ f.name }>{ f.name }</div>

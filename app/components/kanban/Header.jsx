@@ -114,11 +114,11 @@ export default class Header extends Component {
     return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
   }
 
-  handleSelect(selectedKey) {
+  async handleSelect(selectedKey) {
     this.setState({ filter: selectedKey });
 
     const { index, curKanban, selectFilter } = this.props;
-    selectFilter(selectedKey);
+    await selectFilter(selectedKey);
     index(this.getQuery(curKanban.query || {}, selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query || {}));
   }
 

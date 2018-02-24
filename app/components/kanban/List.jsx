@@ -257,7 +257,7 @@ export default class List extends Component {
                 <span style={ { fontWeight: 600 } }>{ v.name }</span>（{ columnIssues[i].length }）
                 { v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
                 { v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
-                { i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && 
+                { i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
                   发布...
