@@ -100,7 +100,7 @@ export default class Column extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.rankLoading) {
+    if (!nextProps.rankLoading && _.isEmpty(nextProps.draggedIssue)) {
       this.state.cards = nextProps.cards;
       this.arrangeCard(nextProps);
     }
