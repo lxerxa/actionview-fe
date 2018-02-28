@@ -44,6 +44,10 @@ export function getDraggableActions(key, id) {
   });
 }
 
+export function dragBacklogIssue(id) {
+  return { type: 'KANBAN_BACKLOG_ISSUE_DRAG', id };
+}
+
 export function cleanDraggableActions() {
   return { type: 'KANBAN_ISSUE_ACTIONS_CLEAN' };
 }
@@ -56,5 +60,12 @@ export function recordAccess(key, kid) {
   return asyncFuncCreator({
     constant: 'KANBAN_ACCESS_RECORD',
     promise: (client) => client.request({ url: '/project/' + key + '/kanban/' + kid + '/access' })
+  });
+}
+
+export function moveSprintIssue(key, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_BACKLOG_ISSUE_MOVE',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint/issue', data: values, method: 'post' })
   });
 }

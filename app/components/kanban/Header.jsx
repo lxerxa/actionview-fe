@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, DropdownButton, MenuItem, Nav, NavItem, ButtonGroup, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, DropdownButton, ControlLabel, MenuItem, Nav, NavItem, ButtonGroup, OverlayTrigger, Popover, Grid, Row, Col } from 'react-bootstrap';
 import _ from 'lodash';
  
 const CreateIssueModal = require('../issue/CreateModal');
@@ -137,6 +137,34 @@ export default class Header extends Component {
   render() {
     const { i18n, changeModel, model, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
 
+    let popoverSprint = '';
+    if (curKanban.type == 'scrum' && model == 'issue') {
+      const activeSprint = _.find(curKanban.sprints || [], { status: 'active' });
+      popoverSprint = (
+        <Popover id='popover-trigger-click'>
+          <Grid>
+            <Row>
+              <Col sm={ 6 } componentClass={ ControlLabel }>名称</Col>
+              <Col sm={ 6 }>Sprint 10</Col>
+            </Row>
+            <Row>
+              <Col sm={ 6 } componentClass={ ControlLabel }>开始时间</Col>
+              <Col sm={ 6 }>2016/12/12</Col>
+            </Row>
+            <Row>
+              <Col sm={ 6 } componentClass={ ControlLabel }>结束时间</Col>
+              <Col sm={ 6 }>2016/12/31</Col>
+            </Row>
+            <Row>
+              <Col sm={ 6 }/>
+              <Col sm={ 6 }>
+                <Button>完成Sprint</Button>
+              </Col>
+            </Row>
+          </Grid>
+        </Popover>);
+    }
+
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
         <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'center' } }>
@@ -173,6 +201,12 @@ export default class Header extends Component {
 
         { model === 'issue' && !loading && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
+          {  curKanban.type == 'scrum' &&
+          <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverSprint }>
+            <div style={ { float: 'left', marginTop: '7px', marginRight: '20px', cursor: 'pointer' } }>
+              Sprint 10 <i className='fa fa-caret-down' aria-hidden='true'></i>
+            </div> 
+          </OverlayTrigger> }
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>
             过滤器：
           </span>
@@ -184,6 +218,8 @@ export default class Header extends Component {
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
         </div> }
+        { model === 'backlog' && !_.isEmpty(curKanban) &&
+          <Button bsStyle='primary'><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button> }
         { this.state.createKanbanModalShow &&
           <CreateKanbanModal
             show

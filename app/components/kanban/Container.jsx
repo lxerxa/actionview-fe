@@ -173,6 +173,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async moveSprintIssue(id, destSprint) {
+    await this.props.actions.moveSprintIssue(this.pid, { issue: id, destSprint });
+    return this.props.kanban.ecode;
+  }
+
   watch(issue_id, flag) {
     this.props.issueActions.watch(this.pid, issue_id, flag);
     return this.props.issue.ecode;
@@ -226,8 +231,12 @@ export default class Container extends Component {
   }
 
   async getDraggableActions(id) {
-    await this.props.actions.getDraggableActions(this.pid, id);
-    return this.props.kanban.ecode;
+    if (this.state.model == 'backlog') {
+      this.props.actions.dragBacklogIssue(id);
+    } else {
+      await this.props.actions.getDraggableActions(this.pid, id);
+      return this.props.kanban.ecode;
+    }
   }
 
   async setRank(values) {
@@ -296,7 +305,7 @@ export default class Container extends Component {
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
-        { this.state.model == 'issue' &&
+        { (this.state.model == 'issue' || this.state.model == 'backlog') &&
         <List 
           curKanban={ curKanban }
           selectedFilter={ this.props.kanban.selectedFilter }
@@ -338,8 +347,10 @@ export default class Container extends Component {
           del={ this.del.bind(this) }
           setRank={ this.setRank.bind(this) }
           release={ this.release.bind(this) }
+          moveSprintIssue={ this.moveSprintIssue.bind(this) }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
+          model={ this.state.model }
           { ...this.props.issue }/> }
         { this.state.model == 'config' &&
         <Config

@@ -6,13 +6,9 @@ const $ = require('$');
 
 const bucketTarget = {
   drop(props, monitor) {
-    const { dragAction, doAction, workflowScreenShow } = props;
+    const { sprintNo, moveSprintIssue } = props;
     const card = monitor.getItem();
-    if (dragAction.screen) {
-      workflowScreenShow(card.id, dragAction.id);
-    } else {
-      doAction(card.id, card.entry_id, dragAction.id);
-    }
+    moveSprintIssue(card.id, sprintNo);
   }
 }
 
@@ -42,12 +38,11 @@ export default class Bucket extends Component {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     canDrop: PropTypes.bool.isRequired,
-    columns: PropTypes.array.isRequired,
+    sprintNo: PropTypes.number.isRequired, 
+    columns: PropTypes.array.isRequired, 
     height: PropTypes.number.isRequired, 
-    doAction: PropTypes.func.isRequired,
-    workflowScreenShow: PropTypes.func.isRequired,
-    draggedIssue: PropTypes.object, 
-    dragAction: PropTypes.object.isRequired 
+    moveSprintIssue: PropTypes.func.isRequired,
+    draggedIssue: PropTypes.object
   }
 
   render() {

@@ -11,7 +11,7 @@ export default class OverlayColumn extends Component {
   }
 
   static propTypes = {
-    index: PropTypes.number.isRequired,
+    columns: PropTypes.array.isRequired,
     isEmpty: PropTypes.bool.isRequired,
     draggableActions: PropTypes.array.isRequired,
     doAction: PropTypes.func.isRequired,
@@ -22,7 +22,7 @@ export default class OverlayColumn extends Component {
   }
 
   render() {
-    const { isEmpty, acceptStates, draggedIssue, draggableActions, options, doAction, workflowScreenShow } = this.props;
+    const { isEmpty, acceptStates, draggedIssue, draggableActions, columns, options, doAction, workflowScreenShow } = this.props;
 
     // get action num of reaching the state
     const actionNum = _.countBy(draggableActions, _.iteratee('state'));
@@ -53,8 +53,8 @@ export default class OverlayColumn extends Component {
               _.map(buckets, (v, i) =>
                 <Bucket 
                   key={ i }
+                  columns={ columns }
                   draggedIssue={ draggedIssue }
-                  accepts={ _.map(options.states, (v) => v.id) }
                   doAction={ doAction }
                   workflowScreenShow={ workflowScreenShow }
                   dragAction={ v }

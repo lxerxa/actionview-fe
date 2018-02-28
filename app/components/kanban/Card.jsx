@@ -76,13 +76,11 @@ const cardTarget = {
 
 @DropTarget(
   props => {
-    return _.map(props.accepts, (v) => { 
-      if (props.issue.parent && props.issue.parent.id) {
-        return props.issue.parent.id + '-' + v;
-      } else {
-        return v;
-      }
-    }) 
+    if (props.issue.parent && props.issue.parent.id) {
+      return props.issue.parent.id + '-' + props.colNo;
+    } else {
+      return props.colNo + '';;
+    }
   }, 
   cardTarget, 
   connect => ({
@@ -90,13 +88,7 @@ const cardTarget = {
   })
 )
 @DragSource(
-  props => { 
-    if (props.issue.parent && props.issue.parent.id) {
-      return props.issue.parent.id + '-' + props.issue.state;
-    } else {
-      return props.issue.state;
-    }
-  }, 
+  props => props.colNo + '', 
   cardSource, 
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
@@ -122,7 +114,6 @@ export default class Card extends Component {
     index: PropTypes.number.isRequired,
     pkey: PropTypes.string.isRequired,
     subtasks: PropTypes.array,
-    accepts: PropTypes.array.isRequired,
     colNo: PropTypes.number.isRequired,
     options: PropTypes.object.isRequired,
     moveCard: PropTypes.func.isRequired
@@ -146,7 +137,6 @@ export default class Card extends Component {
       rankLoading,
       closeDetail,
       subtasks=[],
-      accepts,
       colNo,
       moveCard,
       options } = this.props;
@@ -165,7 +155,6 @@ export default class Card extends Component {
               issue={ issue }
               pkey={ pkey }
               colNo={ colNo }
-              accepts={ accepts }
               options={ options }
               closeDetail={ closeDetail }
               draggedIssue={ draggedIssue }
@@ -188,7 +177,6 @@ export default class Card extends Component {
             setRank={ setRank }
             rankLoading={ rankLoading }
             pkey={ pkey }
-            accepts={ accepts }
             closeDetail={ closeDetail }
             options={ options }/>
         </div> );

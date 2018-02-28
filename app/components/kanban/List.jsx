@@ -9,6 +9,7 @@ const DetailBar = require('../issue/DetailBar');
 const CreateModal = require('../issue/CreateModal');
 const Column = require('./Column');
 const OverlayColumn = require('./OverlayColumn');
+const BacklogOverlayColumn = require('./BacklogOverlayColumn');
 const SelectVersionModal = require('./SelectVersionModal');
 
 export default class List extends Component {
@@ -25,6 +26,7 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     curKanban: PropTypes.object.isRequired,
+    model: PropTypes.string.isRequired,
     draggedIssue: PropTypes.string.isRequired,
     draggableActions: PropTypes.array.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
@@ -88,6 +90,7 @@ export default class List extends Component {
     setRank: PropTypes.func.isRequired,
     rankLoading: PropTypes.bool.isRequired,
     release: PropTypes.func.isRequired,
+    moveSprintIssue: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
   }
 
@@ -151,6 +154,7 @@ export default class List extends Component {
     const { 
       i18n,
       curKanban,
+      model,
       draggedIssue,
       draggableActions,
       getDraggableActions,
@@ -213,26 +217,60 @@ export default class List extends Component {
       setRank,
       rankLoading,
       release,
+      moveSprintIssue,
       user
     } = this.props;
 
+    let columns = [];
     const columnIssues = [];
     if (!_.isEmpty(curKanban)) {
-      // classified issue as columns 
-      _.forEach(curKanban.columns, (v, i) => {
-        columnIssues[i] = [];
-      });
-      _.forEach(curKanban.columns, (v, i) => {
-        _.forEach(collection, (v2) => {
-          if (!(curKanban.query && curKanban.query.subtask) && v2.parent && v2.parent.id) {
+      if (model == 'backlog') {
+        columns = curKanban.sprints || [];
+        columns.unshift({ no: 0, name: 'Backlog' });
+
+        columnIssues[0] = [];
+        // classified issue as columns
+        _.forEach(curKanban.sprints, (v, i) => {
+          columnIssues[i+1] = [];
+        });
+        const sprintIssues = [];
+        _.forEach(curKanban.sprints, (v, i) => {
+          _.forEach(collection, (v2) => {
+            if (!(curKanban.query && curKanban.query.subtask) && v2.parent && v2.parent.id) {
+              return;
+            }
+            if (_.indexOf(v.issues, v2.no) !== -1) {
+              columnIssues[i+1].push(v2);
+              sprintIssues.push(v2.no);
+            }
+          });
+        });
+        _.forEach(collection, (v) => {
+          if (!(curKanban.query && curKanban.query.subtask) && v.parent && v.parent.id) {
             return;
           }
-          if (_.indexOf(v.states, v2.state) !== -1) {
-            columnIssues[i].push(v2);
-            return;
+          if (_.indexOf(sprintIssues, v.no) === -1) {
+            columnIssues[0].push(v.no);
           }
         });
-      });
+      } else {
+        columns = curKanban.columns || [];
+        // classified issue as columns 
+        _.forEach(curKanban.columns, (v, i) => {
+          columnIssues[i] = [];
+        });
+        _.forEach(curKanban.columns, (v, i) => {
+          _.forEach(collection, (v2) => {
+            if (!(curKanban.query && curKanban.query.subtask) && v2.parent && v2.parent.id) {
+              return;
+            }
+            if (_.indexOf(v.states, v2.state) !== -1) {
+              columnIssues[i].push(v2);
+              return;
+            }
+          });
+        });
+      }
     }
 
     return (
@@ -249,11 +287,11 @@ export default class List extends Component {
         <div className='board-pool'>
           <div className='board-column-header-group'>
             <ul className='board-column-header'>
-            { _.map(curKanban.columns, (v, i) => ( 
+            { _.map(columns, (v, i) => ( 
               <li 
                 key={ i } 
                 className='board-column' 
-                style={ { background: selectedFilter === 'all' ? (v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '')) : '' } }>
+                style={ { background: model == 'issue' && selectedFilter === 'all' ? (v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '')) : '' } }>
                 <span style={ { fontWeight: 600 } }>{ v.name }</span>（{ columnIssues[i].length }）
                 { v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
                 { v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
@@ -266,7 +304,7 @@ export default class List extends Component {
             </ul>
           </div>
           <div className='board-columns'>
-          { _.map(curKanban.columns, (v, i) => {
+          { _.map(columns, (v, i) => {
             return (
               <Column 
                 key={ i }
@@ -281,17 +319,17 @@ export default class List extends Component {
                 rankLoading={ rankLoading }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
-                accepts={ v.states }
                 closeDetail={ this.closeDetail.bind(this) }
                 options={ options } /> ) } ) }
           </div>
+          { model == 'issue' &&
           <div className='board-zone-overlay' style={ { top: '46px' } }>
             <div className='board-zone-overlay-table'>
-            { _.map(curKanban.columns, (v, i) => {
+            { _.map(columns, (v, i) => {
               return (
                 <OverlayColumn
                   key={ i }
-                  index={ i }
+                  columns={ columns }
                   isEmpty={ !(draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1) }
                   draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
                   draggableActions={ draggableActions }
@@ -300,7 +338,22 @@ export default class List extends Component {
                   options={ options }
                   acceptStates={ v.states || [] }/> ) } ) }
             </div>
-          </div>
+          </div> }
+          { model == 'backlog' &&
+          <div className='board-zone-overlay' style={ { top: '46px' } }>
+            <div className='board-zone-overlay-table'>
+            { _.map(columns, (v, i) => {
+              return (
+                <BacklogOverlayColumn
+                  key={ i }
+                  sprintNo={ v.no }
+                  columns={ columns }
+                  isEmpty={ !(draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1) }
+                  draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
+                  moveSprintIssue={ moveSprintIssue }
+                  options={ options }/> ) } ) }
+            </div>
+          </div> }
         </div> }
         { this.state.barShow &&
           <DetailBar

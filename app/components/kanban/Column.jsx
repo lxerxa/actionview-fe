@@ -23,7 +23,6 @@ export default class Column extends Component {
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     pkey: PropTypes.string.isRequired,
-    accepts: PropTypes.array.isRequired,
     cards: PropTypes.array.isRequired,
     draggedIssue: PropTypes.object.isRequired,
     issueView: PropTypes.func.isRequired,
@@ -119,8 +118,7 @@ export default class Column extends Component {
       draggedIssue,
       openedIssue, 
       options, 
-      pkey, 
-      accepts } = this.props;
+      pkey } = this.props;
     const { mainCards, classifiedSubtasks } = this.state;
 
     let styles = {};
@@ -139,7 +137,6 @@ export default class Column extends Component {
           issue={ v }
           pkey={ pkey }
           subtasks={ classifiedSubtasks[v.no] || [] }
-          accepts={ accepts }
           options={ options }
           closeDetail={ closeDetail }
           draggedIssue={ draggedIssue }

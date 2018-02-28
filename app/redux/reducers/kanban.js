@@ -63,6 +63,9 @@ export default function kanban(state = initialState, action) {
     case t.TYPE_DELETE_FAIL:
       return { ...state, configLoading: false, error: action.error };
 
+    case t.KANBAN_BACKLOG_ISSUE_DRAG:
+      return { ...state, draggedIssue: action.id };
+
     case t.KANBAN_ISSUE_ACTIONS_GET:
       return { ...state, wfLoading: true, draggedIssue: action.id, wfactions: [] };
 
