@@ -50,7 +50,7 @@ export default class Bucket extends Component {
       isOver,
       canDrop,
       connectDropTarget,
-      dragAction, 
+      sprintNo, 
       height } = this.props;
 
     const isActive = isOver && canDrop
@@ -62,7 +62,7 @@ export default class Bucket extends Component {
 
     return connectDropTarget (
       <div className='board-zone-cell' style={ { height, backgroundColor } }>
-        { dragAction.state.name }
+        { sprintNo == 0 ? 'Backlog' : 'Sprint ' + sprintNo }
       </div>);
   }
 }

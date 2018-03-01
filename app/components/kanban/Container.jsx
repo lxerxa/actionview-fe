@@ -249,6 +249,21 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async publishSprint(values, sprintNo) {
+    await this.props.actions.publishSprint(this.pid, sprintNo, values);
+    return this.props.kanban.ecode;
+  }
+
+  async completeSprint(values, sprintNo) {
+    await this.props.actions.completeSprint(this.pid, sprintNo, values);
+    return this.props.kanban.ecode;
+  }
+
+  async deleteSprint(sprintNo) {
+    await this.props.actions.deleteSprint(sprintNo);
+    return this.props.kanban.ecode;
+  }
+
   componentWillMount() {
     const { params: { key, id } } = this.props;
     this.pid = key;
@@ -296,6 +311,7 @@ export default class Container extends Component {
           model={ this.state.model }
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
+          sprints={ this.props.kanban.sprints }
           loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
           goto={ this.goto }
           selectFilter={ this.props.actions.selectFilter }
@@ -308,6 +324,7 @@ export default class Container extends Component {
         { (this.state.model == 'issue' || this.state.model == 'backlog') &&
         <List 
           curKanban={ curKanban }
+          sprints={ this.props.kanban.sprints }
           selectedFilter={ this.props.kanban.selectedFilter }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
@@ -348,6 +365,9 @@ export default class Container extends Component {
           setRank={ this.setRank.bind(this) }
           release={ this.release.bind(this) }
           moveSprintIssue={ this.moveSprintIssue.bind(this) }
+          publishSprint={ this.publishSprint.bind(this) }
+          completeSprint={ this.completeSprint.bind(this) }
+          deleteSprint={ this.release.bind(this) }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
           model={ this.state.model }

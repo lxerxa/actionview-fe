@@ -69,3 +69,31 @@ export function moveSprintIssue(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/sprint/issue', data: values, method: 'post' })
   });
 }
+
+export function createSprint(key) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_SPRINT_CREATE',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint', data: {}, method: 'post' })
+  });
+}
+
+export function publishSprint(key, no, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_SPRINT_PUBLISH',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + no + '/publish', data: values, method: 'post' })
+  });
+}
+
+export function completeSprint(key, no, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_SPRINT_COMPLETE',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + no + '/complete', data: values, method: 'post' })
+  });
+}
+
+export function deleteSprint(key, no) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_SPRINT_DELETE',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + no, method: 'delete' })
+  });
+}

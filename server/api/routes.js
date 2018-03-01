@@ -851,7 +851,21 @@ export default function(router) {
   router.get('/project/:key/kanban', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', type: 'kanban', filters: [{no: 2, name: '1111', query:{ assignee: [ 'me', 'ttt' ] }}, {no: 3, name: '2222', query:{updated_at: '1w'}}, {no: 1, name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', no: 1, states: ['546761','546762'], max: 4, min: 2}, {name:'处理中', no: 0, states: [ '546763' ], max: 4}, {name:'关闭', no: 2, states:[], min: 1}], query: { subtask: false, type: [ '1111', '3333' ] }, ranks: [{ col: 0, parent: '', rank: [9999, 1555]}], last_access_time: 11111111 }, { id: '2222', name:'2222', type: 'scrum', filters: [{ no: 1, name: 'mmmmmmm', query:{ assignee: [ 'me','ttt' ] } }, {no: 2, name: 'nnnnnnn', query:{updated_at: '1w'}}, {no: 4, name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', no: 0, states: [ '546761']}, {name:'处理中22', no: 2, states: [ '546762' ]}, {name:'关闭22', no: 5, states:[ '546763' ]}], query: { subtask: true, type: [ '1111', '2222' ] }, rank: {} }] };
+    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', type: 'kanban', filters: [{no: 2, name: '1111', query:{ assignee: [ 'me', 'ttt' ] }}, {no: 3, name: '2222', query:{updated_at: '1w'}}, {no: 1, name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', no: 1, states: ['546761','546762'], max: 4, min: 2}, {name:'处理中', no: 0, states: [ '546763' ], max: 4}, {name:'关闭', no: 2, states:[], min: 1}], query: { subtask: false, type: [ '1111', '3333' ] }, last_access_time: 11111111 }, { id: '2222', name:'2222', type: 'scrum', filters: [{ no: 1, name: 'mmmmmmm', query:{ assignee: [ 'me','ttt' ] } }, {no: 2, name: 'nnnnnnn', query:{updated_at: '1w'}}, {no: 4, name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', no: 0, states: [ '546761']}, {name:'处理中22', no: 2, states: [ '546762' ]}, {name:'关闭22', no: 5, states:[ '546763' ]}], query: { subtask: true, type: [ '1111', '2222' ] } }], options: { sprints: [{no: 3, start_time:1474642399, complete_time:1474642399, status: 'waiting', issues:[1,2]}, {no: 4, status: 'waiting', issues: [3,4]}] } };
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/sprint/:sid/publish', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{no: 3, start_time:1474642399, complete_time:1474642399, status: 'active', issues:[1,2]}, {no: 4, status: 'waiting', issues: [3,4]}]};
+    return res.status(200).send(results);
+  });
+
+  router.delete('/project/:key/sprint/:sid', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{no: 3, start_time:1474642399, complete_time:1474642399, status: 'active', issues:[1,2]}]};
     return res.status(200).send(results);
   });
 

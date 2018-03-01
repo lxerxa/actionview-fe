@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
 
 const $ = require('$');
@@ -11,6 +12,7 @@ const Column = require('./Column');
 const OverlayColumn = require('./OverlayColumn');
 const BacklogOverlayColumn = require('./BacklogOverlayColumn');
 const SelectVersionModal = require('./SelectVersionModal');
+const PublishSprintModal = require('./PublishSprintModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -18,7 +20,10 @@ export default class List extends Component {
     this.state = { 
       barShow: false, 
       selectVersionShow: false, 
+      publishSprintShow: false,
+      completeSprintShow: false,
       workflowScreenShow: false, 
+      curSprintNo: 0,
       drop_issue_id: '', 
       action_id: '' };
   }
@@ -26,6 +31,7 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     curKanban: PropTypes.object.isRequired,
+    sprints: PropTypes.object.isRequired,
     model: PropTypes.string.isRequired,
     draggedIssue: PropTypes.string.isRequired,
     draggableActions: PropTypes.array.isRequired,
@@ -90,12 +96,19 @@ export default class List extends Component {
     setRank: PropTypes.func.isRequired,
     rankLoading: PropTypes.bool.isRequired,
     release: PropTypes.func.isRequired,
+    publishSprint: PropTypes.func.isRequired,
+    completeSprint: PropTypes.func.isRequired,
+    deleteSprint: PropTypes.func.isRequired,
     moveSprintIssue: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
   }
 
   selectVersionModalClose() {
     this.setState({ selectVersionShow: false });
+  }
+
+  publishSprintModalClose() {
+    this.setState({ publishSprintShow: false });
   }
 
   workflowScreenModalClose() {
@@ -154,6 +167,7 @@ export default class List extends Component {
     const { 
       i18n,
       curKanban,
+      sprints,
       model,
       draggedIssue,
       draggableActions,
@@ -218,6 +232,9 @@ export default class List extends Component {
       rankLoading,
       release,
       moveSprintIssue,
+      publishSprint,
+      completeSprint,
+      deleteSprint,
       user
     } = this.props;
 
@@ -225,16 +242,16 @@ export default class List extends Component {
     const columnIssues = [];
     if (!_.isEmpty(curKanban)) {
       if (model == 'backlog') {
-        columns = curKanban.sprints || [];
+        columns = _.clone(sprints || []);
         columns.unshift({ no: 0, name: 'Backlog' });
 
         columnIssues[0] = [];
         // classified issue as columns
-        _.forEach(curKanban.sprints, (v, i) => {
+        _.forEach(sprints, (v, i) => {
           columnIssues[i+1] = [];
         });
         const sprintIssues = [];
-        _.forEach(curKanban.sprints, (v, i) => {
+        _.forEach(sprints, (v, i) => {
           _.forEach(collection, (v2) => {
             if (!(curKanban.query && curKanban.query.subtask) && v2.parent && v2.parent.id) {
               return;
@@ -250,7 +267,7 @@ export default class List extends Component {
             return;
           }
           if (_.indexOf(sprintIssues, v.no) === -1) {
-            columnIssues[0].push(v.no);
+            columnIssues[0].push(v);
           }
         });
       } else {
@@ -292,14 +309,30 @@ export default class List extends Component {
                 key={ i } 
                 className='board-column' 
                 style={ { background: model == 'issue' && selectedFilter === 'all' ? (v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '')) : '' } }>
-                <span style={ { fontWeight: 600 } }>{ v.name }</span>（{ columnIssues[i].length }）
-                { v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
-                { v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
-                { i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                <span style={ { fontWeight: 600 } }>
+                  { model == 'backlog' ? (v.no == 0 ? 'Backlog' : 'Sprint ' + v.no) : v.name }
+                </span>（{ columnIssues[i].length }）
+                { model == 'issue' && v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
+                { model == 'issue' && v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
+                { model == 'issue' && curKanban.type == 'kanban' && i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
                   发布...
                 </a> }
+                { model == 'issue' && curKanban.type == 'scrum' && i == curKanban.columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                <a href='#' style={ { float: 'right' } } 
+                  onClick={ (e) => { e.preventDefault(); this.setState({ completeSprintShow: true }); } }>
+                  完成...
+                </a> }
+                { model == 'backlog' && v.status == 'active' && <span style={ { float: 'right' } }>活动中</span> }
+                { model == 'backlog' && v.status == 'waiting' && 
+                  <span style={ { marginLeft: '10px', float: 'right' } }>
+                    <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ deleteSprintShow: true, curSprintNo: v.no }); } }>删除</a>
+                  </span> }
+                { model == 'backlog' && i == 1 && v.status == 'waiting' && 
+                  <span style={ { float: 'right' } }>
+                    <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ publishSprintShow: true, curSprintNo: v.no }); } }>发布</a>
+                  </span> }
               </li> ) ) }
             </ul>
           </div>
@@ -430,6 +463,20 @@ export default class List extends Component {
             close={ this.selectVersionModalClose.bind(this) }
             release={ release } 
             releasedIssues={ _.last(columnIssues) || [] } 
+            i18n={ i18n }/> }
+        { this.state.publishSprintShow &&
+          <PublishSprintModal show
+            close={ this.publishSprintModalClose.bind(this) }
+            sprintNo={ this.state.curSprintNo }
+            publish={ publishSprint }
+            publishedIssues={ _.last(columnIssues) || [] }
+            i18n={ i18n }/> }
+        { this.state.completeSprintShow &&
+          <PublishSprintModal show
+            close={ this.publishSprintModalClose.bind(this) }
+            sprintNo={ this.state.curSprintNo }
+            publish={ publishSprint }
+            publishedIssues={ _.last(columnIssues) || [] }
             i18n={ i18n }/> }
       </div>
     );

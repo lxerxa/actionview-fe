@@ -7,6 +7,7 @@ const CreateKanbanModal = require('./config/CreateModal');
 const EditKanbanModal = require('./config/EditModal');
 
 const $ = require('$');
+const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
@@ -34,6 +35,7 @@ export default class Header extends Component {
     project: PropTypes.object,
     curKanban: PropTypes.object,
     kanbans: PropTypes.array,
+    sprints: PropTypes.array,
     loading: PropTypes.bool,
     goto: PropTypes.func,
     selectFilter: PropTypes.func,
@@ -135,34 +137,43 @@ export default class Header extends Component {
   }
 
   render() {
-    const { i18n, changeModel, model, createKanban, curKanban, kanbans=[], loading, project, create, goto, options } = this.props;
+    const { 
+      i18n, 
+      changeModel, 
+      model, 
+      createKanban, 
+      curKanban, 
+      kanbans=[], 
+      sprints=[],
+      loading, 
+      project, 
+      create, 
+      goto, 
+      options } = this.props;
 
     let popoverSprint = '';
+    let activeSprint = {};
     if (curKanban.type == 'scrum' && model == 'issue') {
-      const activeSprint = _.find(curKanban.sprints || [], { status: 'active' });
-      popoverSprint = (
-        <Popover id='popover-trigger-click'>
-          <Grid>
-            <Row>
-              <Col sm={ 6 } componentClass={ ControlLabel }>名称</Col>
-              <Col sm={ 6 }>Sprint 10</Col>
-            </Row>
-            <Row>
-              <Col sm={ 6 } componentClass={ ControlLabel }>开始时间</Col>
-              <Col sm={ 6 }>2016/12/12</Col>
-            </Row>
-            <Row>
-              <Col sm={ 6 } componentClass={ ControlLabel }>结束时间</Col>
-              <Col sm={ 6 }>2016/12/31</Col>
-            </Row>
-            <Row>
-              <Col sm={ 6 }/>
-              <Col sm={ 6 }>
-                <Button>完成Sprint</Button>
-              </Col>
-            </Row>
-          </Grid>
-        </Popover>);
+      activeSprint = _.find(sprints || [], { status: 'active' });
+      if (activeSprint) {
+        popoverSprint = (
+          <Popover id='popover-trigger-click'>
+            <Grid>
+              <Row>
+                <Col sm={ 6 } componentClass={ ControlLabel }>名称</Col>
+                <Col sm={ 6 }>Sprint { activeSprint.no || '' }</Col>
+              </Row>
+              <Row>
+                <Col sm={ 6 } componentClass={ ControlLabel }>开始时间</Col>
+                <Col sm={ 6 }>{ moment.unix(activeSprint.start_time).format('YYYY/MM/DD') }</Col>
+              </Row>
+              <Row>
+                <Col sm={ 6 } componentClass={ ControlLabel }>结束时间</Col>
+                <Col sm={ 6 }>{ moment.unix(activeSprint.complete_time).format('YYYY/MM/DD') }</Col>
+              </Row>
+            </Grid>
+          </Popover>);
+      }
     }
 
     return (
@@ -180,7 +191,7 @@ export default class Header extends Component {
             { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && '该项目未定义看板。' } 
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>
-            { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) && model === 'issue' &&
+            { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) && (model === 'issue' || model === 'backlog') &&
             <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
             { !_.isEmpty(curKanban) &&
             <ButtonGroup style={ { marginRight: '10px' } }>
@@ -201,10 +212,10 @@ export default class Header extends Component {
 
         { model === 'issue' && !loading && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
-          {  curKanban.type == 'scrum' &&
+          { curKanban.type == 'scrum' && !_.isEmpty(activeSprint) &&
           <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverSprint }>
             <div style={ { float: 'left', marginTop: '7px', marginRight: '20px', cursor: 'pointer' } }>
-              Sprint 10 <i className='fa fa-caret-down' aria-hidden='true'></i>
+              Sprint { activeSprint.no || '' } <i className='fa fa-caret-down' aria-hidden='true'></i>
             </div> 
           </OverlayTrigger> }
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>

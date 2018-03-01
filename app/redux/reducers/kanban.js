@@ -5,6 +5,7 @@ const initialState = {
   ecode: 0, 
   selectedFilter: 'all', 
   list: [], 
+  sprints: [],
   loading: false, 
   rankLoading: false, 
   configLoading: false, 
@@ -15,11 +16,12 @@ const initialState = {
 export default function kanban(state = initialState, action) {
   switch (action.type) {
     case t.KANBAN_LIST_GET:
-      return { ...state, loading: true, rankable: true, list: [] };
+      return { ...state, loading: true, rankable: true, list: [], sprints: [] };
 
     case t.KANBAN_LIST_GET_SUCCESS:
       if (action.result.ecode === 0) {
         state.list = action.result.data || [];
+        state.sprints = action.result.options && action.result.options.sprints || [];
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
