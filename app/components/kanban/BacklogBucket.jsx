@@ -2,13 +2,22 @@ import React, { PropTypes, Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
+const MoveIssueNotify = require('./MoveIssueNotify');
 const $ = require('$');
 
 const bucketTarget = {
   drop(props, monitor) {
-    const { sprintNo, moveSprintIssue } = props;
+    const { sprintNo, moveSprintIssue, columns } = props;
     const card = monitor.getItem();
-    moveSprintIssue(card.id, sprintNo);
+
+    const src_sprint = columns[card.src_col_no];
+    const dest_sprint = _.find(columns, { no: sprintNo });
+    if (_.isEmpty(src_sprint) || _.isEmpty(dest_sprint)) {
+      return;
+    }
+
+    const values = { issue_id: card.id, dest_sprint, src_sprint };
+    moveSprintIssue(values);
   }
 }
 
@@ -32,6 +41,7 @@ const bucketTarget = {
 export default class Bucket extends Component {
   constructor(props) {
     super(props);
+    this.state = { moveNotify: false };
   }
 
   static propTypes = {

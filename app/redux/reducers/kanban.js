@@ -3,10 +3,10 @@ import _ from 'lodash';
 
 const initialState = { 
   ecode: 0, 
-  selectedFilter: 'all', 
   list: [], 
   sprints: [],
   loading: false, 
+  sprintLoading: false, 
   rankLoading: false, 
   configLoading: false, 
   wfactions: [], 
@@ -83,9 +83,6 @@ export default function kanban(state = initialState, action) {
     case t.KANBAN_ISSUE_ACTIONS_CLEAN:
       return { ...state, draggedIssue: '', wfactions: [] };
 
-    case t.KANBAN_SELECT_FILTER:
-      return { ...state, selectedFilter: action.key };
-
     case t.KANBAN_ISSUE_RANK_SET:
       return { ...state, rankLoading: true };
 
@@ -94,6 +91,27 @@ export default function kanban(state = initialState, action) {
 
     case t.KANBAN_ISSUE_RANK_SET_FAIL:
       return { ...state, rankLoading: false, error: action.error };
+ 
+    case t.KANBAN_SPRINT_CREATE:
+    case t.KANBAN_SPRINT_COMPLETE:
+    case t.KANBAN_SPRINT_PUBLISH:
+    case t.KANBAN_SPRINT_DELETE:
+      return { ...state, sprintLoading: true };
+
+    case t.KANBAN_SPRINT_CREATE_SUCCESS:
+    case t.KANBAN_SPRINT_COMPLETE_SUCCESS:
+    case t.KANBAN_SPRINT_PUBLISH_SUCCESS:
+    case t.KANBAN_SPRINT_DELETE_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.sprints = action.result.data;
+      }
+      return { ...state, sprintLoading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_SPRINT_CREATE_FAIL:
+    case t.KANBAN_SPRINT_COMPLETE_FAIL:
+    case t.KANBAN_SPRINT_PUBLISH_FAIL:
+    case t.KANBAN_SPRINT_DELETE_FAIL:
+      return { ...state, sprintLoading: false, error: action.error };
 
     default:
       return state;

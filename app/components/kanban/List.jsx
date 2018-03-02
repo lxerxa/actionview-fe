@@ -13,6 +13,9 @@ const OverlayColumn = require('./OverlayColumn');
 const BacklogOverlayColumn = require('./BacklogOverlayColumn');
 const SelectVersionModal = require('./SelectVersionModal');
 const PublishSprintModal = require('./PublishSprintModal');
+const DelSprintNotify = require('./DelSprintNotify');
+const CompleteSprintNotify = require('./CompleteSprintNotify');
+const MoveIssueNotify = require('./MoveIssueNotify');
 
 export default class List extends Component {
   constructor(props) {
@@ -22,7 +25,10 @@ export default class List extends Component {
       selectVersionShow: false, 
       publishSprintShow: false,
       completeSprintShow: false,
+      deleteSprintShow: false,
+      moveIssueShow: false,
       workflowScreenShow: false, 
+      movedData: {},
       curSprintNo: 0,
       drop_issue_id: '', 
       action_id: '' };
@@ -32,6 +38,7 @@ export default class List extends Component {
     i18n: PropTypes.object.isRequired,
     curKanban: PropTypes.object.isRequired,
     sprints: PropTypes.object.isRequired,
+    sprintLoading: PropTypes.bool.isRequired,
     model: PropTypes.string.isRequired,
     draggedIssue: PropTypes.string.isRequired,
     draggableActions: PropTypes.array.isRequired,
@@ -111,12 +118,36 @@ export default class List extends Component {
     this.setState({ publishSprintShow: false });
   }
 
+  deleteSprintModalClose() {
+    this.setState({ deleteSprintShow: false });
+  }
+
+  completeSprintModalClose() {
+    this.setState({ completeSprintShow: false });
+  }
+
+  moveIssueModalClose() {
+    this.setState({ moveIssueShow: false });
+  }
+
   workflowScreenModalClose() {
     this.setState({ workflowScreenShow: false });
   }
 
   workflowScreenShow(drop_issue_id, action_id) {
     this.setState({ workflowScreenShow: true, drop_issue_id, action_id });
+  }
+
+  moveSprintIssue(values) {
+    const { collection, moveSprintIssue } = this.props;
+    const issue = _.find(this.props.issue.collection, { id: values.issue_id });
+    const new_values = { issue_no: issue.no, src_sprint_no: src_sprint.no, dest_sprint_no: dest_sprint.no }
+
+    if ((src_sprint && src_sprint.status == 'active') || (dest_sprint && dest_sprint.status == 'active')) {
+      this.setState({ moveIssueShow: true, movedData: new_values });
+    } else {
+      moveSprintIssue(new_values);
+    }
   }
 
   closeDetail() {
@@ -168,6 +199,7 @@ export default class List extends Component {
       i18n,
       curKanban,
       sprints,
+      sprintLoading,
       model,
       draggedIssue,
       draggableActions,
@@ -231,7 +263,6 @@ export default class List extends Component {
       setRank,
       rankLoading,
       release,
-      moveSprintIssue,
       publishSprint,
       completeSprint,
       deleteSprint,
@@ -383,7 +414,7 @@ export default class List extends Component {
                   columns={ columns }
                   isEmpty={ !(draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1) }
                   draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
-                  moveSprintIssue={ moveSprintIssue }
+                  moveSprintIssue={ this.moveSprintIssue.bind(this) }
                   options={ options }/> ) } ) }
             </div>
           </div> }
@@ -469,14 +500,28 @@ export default class List extends Component {
             close={ this.publishSprintModalClose.bind(this) }
             sprintNo={ this.state.curSprintNo }
             publish={ publishSprint }
-            publishedIssues={ _.last(columnIssues) || [] }
+            i18n={ i18n }/> }
+        { this.state.deleteSprintShow &&
+          <DelSprintNotify show
+            close={ this.deleteSprintModalClose.bind(this) }
+            sprintNo={ this.state.curSprintNo }
+            del={ deleteSprint }
+            loading={ sprintLoading }
             i18n={ i18n }/> }
         { this.state.completeSprintShow &&
-          <PublishSprintModal show
-            close={ this.publishSprintModalClose.bind(this) }
-            sprintNo={ this.state.curSprintNo }
-            publish={ publishSprint }
-            publishedIssues={ _.last(columnIssues) || [] }
+          <CompleteSprintNotify show
+            close={ this.completeSprintModalClose.bind(this) }
+            loading={ sprintLoading }
+            sprintNo={ _.find(sprints, { status: 'active' }) ? _.find(sprints, { status: 'active' }).no : 0 }
+            total={ collection.length }
+            complete={ completeSprint }
+            completedIssues={ _.last(columnIssues) || [] }
+            i18n={ i18n }/> }
+        { this.state.moveIssueShow &&
+          <MoveIssueNotify show
+            close={ this.moveIssueModalClose.bind(this) }
+            move={ moveSprintIssue }
+            values={ this.state.movedData }
             i18n={ i18n }/> }
       </div>
     );

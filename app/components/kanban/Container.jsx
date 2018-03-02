@@ -27,7 +27,7 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
-    this.state = { model: 'issue' };
+    this.state = { model: 'issue', selectedFilter: 'all' };
     this.pid = '';
     this.kanban_id = '';
     this.getOptions = this.getOptions.bind(this);
@@ -65,7 +65,36 @@ export default class Container extends Component {
   }
 
   async index(query) {
-    await this.props.issueActions.index(this.pid, qs.stringify(_.extend(query || {}, { from: 'kanban', from_kanban_id: this.kanban_id, filter: this.props.kanban.selectedFilter, limit: 10000 })));
+
+    if (!this.props.kanban.list || this.props.kanban.list.length <= 0 || !this.kanban_id) {
+      return;
+    }
+
+    _.extend(query || {}, {});
+
+    const curKanban = _.find(this.props.kanban.list, { id: this.kanban_id }) || {};
+    if (curKanban.type === 'kanban') {
+      _.extend(query, { from: 'kanban' });
+    } else {
+      //const lastColumn = _.last(curKanban.columns) || {};
+      //if (!_.isEmpty(lastColumn)) {
+      //  _.extend(query, { not_in_states: (lastColumn.states || []).join(',') });
+      //}
+      if (this.state.model === 'issue') {
+        _.extend(query, { from: 'scrum' });
+      } else if (this.state.model === 'backlog') {
+        _.extend(query, { from: 'backlog' });
+      }
+    }
+
+    _.extend(query, { from_kanban_id: this.kanban_id });
+    if (this.state.model === 'issue') {
+      _.extend(query, { filter: this.state.filter });
+    }
+    _.extend(query, { limit: 10000 });
+
+    await this.props.issueActions.index(this.pid, qs.stringify(query));
+
     return this.props.issue.ecode;
   }
 
@@ -173,8 +202,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async moveSprintIssue(id, destSprint) {
-    await this.props.actions.moveSprintIssue(this.pid, { issue: id, destSprint });
+  async moveSprintIssue(values) {
+    await this.props.actions.moveSprintIssue(this.pid, values);
     return this.props.kanban.ecode;
   }
 
@@ -249,8 +278,16 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async createSprint() {
+    await this.props.actions.createSprint(this.pid);
+    return this.props.kanban.ecode;
+  }
+
   async publishSprint(values, sprintNo) {
     await this.props.actions.publishSprint(this.pid, sprintNo, values);
+    if (this.props.kanban.ecode === 0) {
+      this.setState({ model: 'issue' });
+    }
     return this.props.kanban.ecode;
   }
 
@@ -260,8 +297,12 @@ export default class Container extends Component {
   }
 
   async deleteSprint(sprintNo) {
-    await this.props.actions.deleteSprint(sprintNo);
+    await this.props.actions.deleteSprint(this.pid, sprintNo);
     return this.props.kanban.ecode;
+  }
+
+  changeModel(model) {
+    this.setState({ model });
   }
 
   componentWillMount() {
@@ -314,10 +355,12 @@ export default class Container extends Component {
           sprints={ this.props.kanban.sprints }
           loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
           goto={ this.goto }
-          selectFilter={ this.props.actions.selectFilter }
+          selectedFilter={ this.state.filter }
+          selectFilter={ (filter) => { this.setState({ filter }) } }
           index={ this.index.bind(this) } 
           project={ this.props.project.item }
           createKanban={ this.createKanban.bind(this) }
+          createSprint={ this.createSprint.bind(this) }
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
@@ -325,6 +368,7 @@ export default class Container extends Component {
         <List 
           curKanban={ curKanban }
           sprints={ this.props.kanban.sprints }
+          sprintLoading={ this.props.kanban.sprintLoading }
           selectedFilter={ this.props.kanban.selectedFilter }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
@@ -367,7 +411,7 @@ export default class Container extends Component {
           moveSprintIssue={ this.moveSprintIssue.bind(this) }
           publishSprint={ this.publishSprint.bind(this) }
           completeSprint={ this.completeSprint.bind(this) }
-          deleteSprint={ this.release.bind(this) }
+          deleteSprint={ this.deleteSprint.bind(this) }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
           model={ this.state.model }

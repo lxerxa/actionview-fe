@@ -15,7 +15,8 @@ const cardSource = {
     return {
       id: props.issue.id,
       entry_id: props.issue.entry_id || '',
-      index: props.index
+      index: props.index,
+      src_col_no: props.colNo
     };
   },
 

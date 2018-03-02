@@ -73,12 +73,11 @@ export default class PublishModal extends Component {
     }
 
     const ecode = await publish(values, sprintNo);
+    this.setState({ ecode: ecode });
+
     if (ecode === 0) {
-      this.setState({ ecode: 0 });
       notify.show('发布完成。', 'success', 2000);
       close();
-    } else {
-      this.setState({ ecode: ecode });
     }
   }
 

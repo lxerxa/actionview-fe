@@ -13,15 +13,15 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { filter: 'all', hideHeader: false, createIssueModalShow: false, createKanbanModalShow: false };
+    this.state = { hideHeader: false, createIssueModalShow: false, createKanbanModalShow: false };
     this.getQuery = this.getQuery.bind(this);
+    this.changeModel = this.changeModel.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
     const { index, selectFilter, curKanban } = nextProps;
     if (this.props.curKanban.id != curKanban.id || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
-      this.setState({ filter: 'all' });
-      selectFilter('all');
+      await selectFilter('all');
       index(this.getQuery(curKanban.query || {}));
     }
   }
@@ -30,8 +30,10 @@ export default class Header extends Component {
     i18n: PropTypes.object.isRequired,
     changeModel: PropTypes.func.isRequired,
     model: PropTypes.string.isRequired,
+    selectedFilter: PropTypes.string.isRequired,
     create: PropTypes.func.isRequired,
     createKanban: PropTypes.func.isRequired,
+    createSprint: PropTypes.func.isRequired,
     project: PropTypes.object,
     curKanban: PropTypes.object,
     kanbans: PropTypes.array,
@@ -117,8 +119,6 @@ export default class Header extends Component {
   }
 
   async handleSelect(selectedKey) {
-    this.setState({ filter: selectedKey });
-
     const { index, curKanban, selectFilter } = this.props;
     await selectFilter(selectedKey);
     index(this.getQuery(curKanban.query || {}, selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query || {}));
@@ -136,14 +136,25 @@ export default class Header extends Component {
     $('.board-container').css('height', winHeight - 28 - 50);
   }
 
+  async changeModel(model) {
+    const { changeModel, selectFilter, index, curKanban } = this.props;
+    changeModel(model);
+    if (model !== 'config') {
+      await selectFilter('all');
+      index(this.getQuery(curKanban.query || {}, {}));
+    }
+  }
+
   render() {
     const { 
       i18n, 
       changeModel, 
       model, 
+      selectedFilter,
       createKanban, 
       curKanban, 
       kanbans=[], 
+      createSprint, 
       sprints=[],
       loading, 
       project, 
@@ -195,11 +206,11 @@ export default class Header extends Component {
             <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
             { !_.isEmpty(curKanban) &&
             <ButtonGroup style={ { marginRight: '10px' } }>
-              { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { changeModel('issue') } }>看板</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { changeModel('history') } }>历史</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'backlog' && '#eee' } } onClick={ () => { changeModel('backlog') } }>Backlog</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { changeModel('issue') } }>活动Sprint</Button> }
-              <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { changeModel('config') } }>配置</Button>
+              { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>看板</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>历史</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'backlog' && '#eee' } } onClick={ () => { this.changeModel('backlog') } }>Backlog</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
+              <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
             </ButtonGroup> }
             { (kanbans.length > 0 || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) && 
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
@@ -221,7 +232,7 @@ export default class Header extends Component {
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>
             过滤器：
           </span>
-          <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.filter } onSelect={ this.handleSelect.bind(this) }>
+          <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ selectedFilter } onSelect={ this.handleSelect.bind(this) }>
             <NavItem eventKey='all' href='#'>全部</NavItem>
             { _.map(curKanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
           </Nav>
@@ -230,7 +241,7 @@ export default class Header extends Component {
           </span>
         </div> }
         { model === 'backlog' && !_.isEmpty(curKanban) &&
-          <Button bsStyle='primary'><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button> }
+          <Button bsStyle='primary' onClick={ createSprint }><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button> }
         { this.state.createKanbanModalShow &&
           <CreateKanbanModal
             show
