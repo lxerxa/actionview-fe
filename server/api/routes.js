@@ -862,6 +862,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.post('/project/:key/sprint/:sid/complete', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{no: 4, status: 'waiting', issues: [3,4]}]};
+    return res.status(200).send(results);
+  });
+
   router.delete('/project/:key/sprint/:sid', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
