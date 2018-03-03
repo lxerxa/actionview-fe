@@ -78,9 +78,9 @@ const cardTarget = {
 @DropTarget(
   props => {
     if (props.issue.parent && props.issue.parent.id) {
-      return props.issue.parent.id + '-' + props.colNo;
+      return [ props.issue.parent.id + '-' + props.colNo ];
     } else {
-      return props.colNo + '';;
+      return [ props.colNo + '' ];
     }
   }, 
   cardTarget, 
@@ -89,7 +89,13 @@ const cardTarget = {
   })
 )
 @DragSource(
-  props => props.colNo + '', 
+  props => {
+    if (props.issue.parent && props.issue.parent.id) {
+      return props.issue.parent.id + '-' + props.colNo;
+    } else {
+      return props.colNo + '';
+    }
+  },
   cardSource, 
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),

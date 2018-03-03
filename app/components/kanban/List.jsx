@@ -142,7 +142,7 @@ export default class List extends Component {
     const { collection, moveSprintIssue } = this.props;
     const { issue_id, src_sprint, dest_sprint } = values;
     const issue = _.find(collection, { id: issue_id });
-    const new_values = { issue_no: issue.no, src_sprint_no: src_sprint.no, est_sprint_no: dest_sprint.no }
+    const new_values = { issue_no: issue.no, src_sprint_no: src_sprint.no, dest_sprint_no: dest_sprint.no }
 
     if ((src_sprint && src_sprint.status == 'active') || (dest_sprint && dest_sprint.status == 'active')) {
       this.setState({ moveIssueShow: true, movedData: new_values });
@@ -334,11 +334,6 @@ export default class List extends Component {
           <img src={ loadingImg } className='loading'/> 
         </div> }
 
-        { !_.isEmpty(curKanban) && !indexLoading && model == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 &&
-        <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
-          <span>暂无活动的Sprint</span>
-        </div> }
-  
         { !_.isEmpty(curKanban) && !indexLoading && 
         <div className='board-pool'>
           <div className='board-column-header-group'>
@@ -426,6 +421,10 @@ export default class List extends Component {
                   options={ options }/> ) } ) }
             </div>
           </div> }
+        </div> }
+        { !_.isEmpty(curKanban) && !indexLoading && model == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 &&
+        <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
+          <span>暂无活动的Sprint</span>
         </div> }
         { this.state.barShow &&
           <DetailBar

@@ -91,13 +91,15 @@ export default function kanban(state = initialState, action) {
 
     case t.KANBAN_ISSUE_RANK_SET_FAIL:
       return { ...state, rankLoading: false, error: action.error };
- 
+
+    case t.KANBAN_BACKLOG_ISSUE_MOVE: 
     case t.KANBAN_SPRINT_CREATE:
     case t.KANBAN_SPRINT_COMPLETE:
     case t.KANBAN_SPRINT_PUBLISH:
     case t.KANBAN_SPRINT_DELETE:
       return { ...state, sprintLoading: true };
 
+    case t.KANBAN_BACKLOG_ISSUE_MOVE_SUCCESS: 
     case t.KANBAN_SPRINT_CREATE_SUCCESS:
     case t.KANBAN_SPRINT_COMPLETE_SUCCESS:
     case t.KANBAN_SPRINT_PUBLISH_SUCCESS:
@@ -107,6 +109,7 @@ export default function kanban(state = initialState, action) {
       }
       return { ...state, sprintLoading: false, ecode: action.result.ecode };
 
+    case t.KANBAN_BACKLOG_ISSUE_MOVE_FAIL: 
     case t.KANBAN_SPRINT_CREATE_FAIL:
     case t.KANBAN_SPRINT_COMPLETE_FAIL:
     case t.KANBAN_SPRINT_PUBLISH_FAIL:
