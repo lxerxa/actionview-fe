@@ -140,8 +140,9 @@ export default class List extends Component {
 
   moveSprintIssue(values) {
     const { collection, moveSprintIssue } = this.props;
-    const issue = _.find(this.props.issue.collection, { id: values.issue_id });
-    const new_values = { issue_no: issue.no, src_sprint_no: src_sprint.no, dest_sprint_no: dest_sprint.no }
+    const { issue_id, src_sprint, dest_sprint } = values;
+    const issue = _.find(collection, { id: issue_id });
+    const new_values = { issue_no: issue.no, src_sprint_no: src_sprint.no, est_sprint_no: dest_sprint.no }
 
     if ((src_sprint && src_sprint.status == 'active') || (dest_sprint && dest_sprint.status == 'active')) {
       this.setState({ moveIssueShow: true, movedData: new_values });
@@ -266,6 +267,7 @@ export default class List extends Component {
       publishSprint,
       completeSprint,
       deleteSprint,
+      moveSprintIssue,
       user
     } = this.props;
 
@@ -345,12 +347,12 @@ export default class List extends Component {
                 </span>（{ columnIssues[i].length }）
                 { model == 'issue' && v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
                 { model == 'issue' && v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
-                { model == 'issue' && curKanban.type == 'kanban' && i == curKanban.columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                { model == 'issue' && curKanban.type == 'kanban' && i == columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
                   发布...
                 </a> }
-                { model == 'issue' && curKanban.type == 'scrum' && i == curKanban.columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                { model == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.setState({ completeSprintShow: true }); } }>
                   完成...
@@ -360,9 +362,9 @@ export default class List extends Component {
                   <span style={ { marginLeft: '10px', float: 'right' } }>
                     <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ deleteSprintShow: true, curSprintNo: v.no }); } }>删除</a>
                   </span> }
-                { model == 'backlog' && i == 1 && v.status == 'waiting' && 
+                { model == 'backlog' && i == 1 && v.status == 'waiting' && columnIssues[i].length > 0 && 
                   <span style={ { float: 'right' } }>
-                    <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ publishSprintShow: true, curSprintNo: v.no }); } }>发布</a>
+                    <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ publishSprintShow: true, curSprintNo: v.no }); } }>启动</a>
                   </span> }
               </li> ) ) }
             </ul>
@@ -520,6 +522,7 @@ export default class List extends Component {
         { this.state.moveIssueShow &&
           <MoveIssueNotify show
             close={ this.moveIssueModalClose.bind(this) }
+            loading={ sprintLoading }
             move={ moveSprintIssue }
             values={ this.state.movedData }
             i18n={ i18n }/> }

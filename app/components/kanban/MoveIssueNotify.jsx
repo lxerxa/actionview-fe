@@ -45,7 +45,7 @@ export default class MoveIssueNotify extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Sprint 范围将受到影响，是否继续移动问题? <br/>
+          移动此问题Sprint 范围将受到影响，是否继续移动? <br/>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

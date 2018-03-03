@@ -241,7 +241,11 @@ export default class Header extends Component {
           </span>
         </div> }
         { model === 'backlog' && !_.isEmpty(curKanban) &&
-          <Button bsStyle='primary' onClick={ createSprint }><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button> }
+        <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
+          <Button bsStyle='primary' style={ { float: 'left', marginTop: '0px' } } onClick={ createSprint }>
+            <i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint
+          </Button> 
+        </div> }
         { this.state.createKanbanModalShow &&
           <CreateKanbanModal
             show

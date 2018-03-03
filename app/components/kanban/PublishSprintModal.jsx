@@ -76,7 +76,7 @@ export default class PublishModal extends Component {
     this.setState({ ecode: ecode });
 
     if (ecode === 0) {
-      notify.show('发布完成。', 'success', 2000);
+      notify.show('启动完成。', 'success', 2000);
       close();
     }
   }

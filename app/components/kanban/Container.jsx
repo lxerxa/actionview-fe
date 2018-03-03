@@ -286,7 +286,8 @@ export default class Container extends Component {
   async publishSprint(values, sprintNo) {
     await this.props.actions.publishSprint(this.pid, sprintNo, values);
     if (this.props.kanban.ecode === 0) {
-      this.setState({ model: 'issue' });
+      this.refs.header.changeModel('issue');
+      //this.setState({ model: 'issue', selectedFilter: 'all' });
     }
     return this.props.kanban.ecode;
   }
@@ -347,7 +348,7 @@ export default class Container extends Component {
 
     return (
       <div style={ { overflowY: 'hidden', height: 'inherit' } }>
-        <Header 
+        <Header ref='header' 
           changeModel={ (model) => { this.setState({ model }) } }
           model={ this.state.model }
           curKanban={ curKanban }
@@ -369,7 +370,7 @@ export default class Container extends Component {
           curKanban={ curKanban }
           sprints={ this.props.kanban.sprints }
           sprintLoading={ this.props.kanban.sprintLoading }
-          selectedFilter={ this.props.kanban.selectedFilter }
+          selectedFilter={ this.state.selectedFilter }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
           getDraggableActions={ this.getDraggableActions.bind(this) }
