@@ -328,11 +328,17 @@ export default class List extends Component {
         <div className='board-overlay-waiting' style={ { display: !this.state.barShow && itemLoading ? 'block' : 'none' } }>
           <img src={ loadingImg } className='loading board-loading'/>
         </div>
+
         { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
           <img src={ loadingImg } className='loading'/> 
         </div> }
 
+        { !_.isEmpty(curKanban) && !indexLoading && model == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 &&
+        <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
+          <span>暂无活动的Sprint</span>
+        </div> }
+  
         { !_.isEmpty(curKanban) && !indexLoading && 
         <div className='board-pool'>
           <div className='board-column-header-group'>
