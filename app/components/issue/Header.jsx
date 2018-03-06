@@ -51,7 +51,7 @@ export default class Header extends Component {
   }
 
   condsTxt() {
-    const { options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], users=[] }, query } = this.props;
+    const { options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], users=[] }, query } = this.props;
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
 
     const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
@@ -169,6 +169,30 @@ export default class Header extends Component {
         }
       }
       queryConds.push('解决版本：' + versionQueryNames.join('，'));
+    }
+    if (query.epic) {
+      const epicQuery = query.epic.split(',');
+      const epicQueryNames = [];
+      for (let i = 0; i < epicQuery.length; i++) {
+        if ((index = _.findIndex(epics, { id: epicQuery[i] })) !== -1) {
+          epicQueryNames.push(epics[index].name);
+        } else {
+          return 'Epic' + errorMsg;
+        }
+      }
+      queryConds.push('Epic：' + epicQueryNames.join('，'));
+    }
+    if (query.sprint) {
+      const sprintQuery = query.sprint.split(',');
+      const sprintQueryNames = [];
+      for (let i = 0; i < sprintQuery.length; i++) {
+        if ((index = sprints.indexOf(sprintQuery[i])) !== -1) {
+          sprintQueryNames.push(sprints[index]);
+        } else {
+          return 'Sprint' + errorMsg;
+        }
+      }
+      queryConds.push('Sprint：Sprint ' + sprintQueryNames.join('，'));
     }
     if (query.created_at) { queryConds.push('创建时间：' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
     if (query.updated_at) { queryConds.push('更新时间：' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }

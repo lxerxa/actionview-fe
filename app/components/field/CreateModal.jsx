@@ -38,6 +38,7 @@ const validate = (values, props) => {
     'from_kanban_id',
     'epic',
     'sprint',
+    'sprints',
     'filter',
     'limit' ];
 

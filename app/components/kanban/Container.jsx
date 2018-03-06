@@ -12,6 +12,7 @@ import * as WorkflowActions from 'redux/actions/WorkflowActions';
 const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
+const EpicList = require('./epic/List');
 const Config = require('./config/Config');
 
 function mapDispatchToProps(dispatch) {
@@ -27,12 +28,14 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
-    this.state = { model: 'issue', selectedFilter: 'all' };
+    this.state = { model: 'issue', filter: 'all' };
     this.pid = '';
     this.kanban_id = '';
     this.getOptions = this.getOptions.bind(this);
     this.getList = this.getList.bind(this);
     this.goto = this.goto.bind(this);
+    this.gotoBacklog = this.gotoBacklog.bind(this);
+    this.gotoIssueList = this.gotoIssueList.bind(this);
   }
 
   static contextTypes = {
@@ -64,6 +67,15 @@ export default class Container extends Component {
     }
   }
 
+  gotoBacklog(epic) {
+    this.setState({ model: 'backlog' });
+    this.refs.header.handleSelectEpic(epic);
+  }
+
+  gotoIssueList(epic) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/issue', query: { epic } });
+  }
+
   async index(query) {
 
     if (!this.props.kanban.list || this.props.kanban.list.length <= 0 || !this.kanban_id) {
@@ -88,8 +100,8 @@ export default class Container extends Component {
     }
 
     _.extend(query, { from_kanban_id: this.kanban_id });
-    if (this.state.model === 'issue') {
-      _.extend(query, { filter: this.state.filter });
+    if (this.state.filter == 'all') {
+      _.extend(query, { filter: 'all' });
     }
     _.extend(query, { limit: 10000 });
 
@@ -287,7 +299,6 @@ export default class Container extends Component {
     await this.props.actions.publishSprint(this.pid, sprintNo, values);
     if (this.props.kanban.ecode === 0) {
       this.refs.header.changeModel('issue');
-      //this.setState({ model: 'issue', selectedFilter: 'all' });
     }
     return this.props.kanban.ecode;
   }
@@ -299,6 +310,26 @@ export default class Container extends Component {
 
   async deleteSprint(sprintNo) {
     await this.props.actions.deleteSprint(this.pid, sprintNo);
+    return this.props.kanban.ecode;
+  }
+
+  async indexEpic() {
+    await this.props.actions.indexEpic(this.pid, this.kanban_id);
+    return this.props.kanban.ecode;
+  }
+
+  async createEpic(values) {
+    await this.props.actions.createEpic(this.pid, values);
+    return this.props.kanban.ecode;
+  }
+
+  async editEpic(values) {
+    await this.props.actions.editEpic(this.pid, values);
+    return this.props.kanban.ecode;
+  }
+
+  async delEpic(eid) {
+    await this.props.actions.delEpic(this.pid, eid);
     return this.props.kanban.ecode;
   }
 
@@ -354,6 +385,7 @@ export default class Container extends Component {
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
           sprints={ this.props.kanban.sprints }
+          epics={ this.props.kanban.epics }
           loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
           goto={ this.goto }
           selectedFilter={ this.state.filter }
@@ -362,6 +394,7 @@ export default class Container extends Component {
           project={ this.props.project.item }
           createKanban={ this.createKanban.bind(this) }
           createSprint={ this.createSprint.bind(this) }
+          createEpic={ this.createEpic.bind(this) }
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
@@ -370,7 +403,7 @@ export default class Container extends Component {
           curKanban={ curKanban }
           sprints={ this.props.kanban.sprints }
           sprintLoading={ this.props.kanban.sprintLoading }
-          selectedFilter={ this.state.selectedFilter }
+          selectedFilter={ this.state.filter }
           draggedIssue={ this.props.kanban.draggedIssue }
           draggableActions={ this.props.kanban.wfactions }
           getDraggableActions={ this.getDraggableActions.bind(this) }
@@ -424,6 +457,20 @@ export default class Container extends Component {
           edit={ this.editKanban.bind(this) }
           del={ this.delKanban.bind(this) }
           options={ this.props.issue.options }
+          i18n={ this.props.i18n } /> }
+        { this.state.model == 'epic' &&
+        <EpicList
+          indexLoading={ this.props.kanban.indexEpicLoading }
+          itemLoading={ this.props.kanban.epicLoading }
+          collection={ this.props.kanban.epics }
+          selectedItem={ this.props.kanban.selectedEpicItem }
+          gotoBacklog={ this.gotoBacklog.bind(this) }
+          gotoIssueList={ this.gotoIssueList.bind(this) }
+          select={ this.props.actions.selectEpic }
+          index={ this.indexEpic.bind(this) }
+          create={ this.createEpic.bind(this) }
+          update={ this.editEpic.bind(this) }
+          del={ this.delEpic.bind(this) }
           i18n={ this.props.i18n } /> }
       </div>
     );

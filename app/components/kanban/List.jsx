@@ -37,7 +37,7 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     curKanban: PropTypes.object.isRequired,
-    sprints: PropTypes.object.isRequired,
+    sprints: PropTypes.array.isRequired,
     sprintLoading: PropTypes.bool.isRequired,
     model: PropTypes.string.isRequired,
     draggedIssue: PropTypes.string.isRequired,

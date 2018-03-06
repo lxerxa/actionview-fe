@@ -1,10 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import { Button, DropdownButton, ControlLabel, MenuItem, Nav, NavItem, ButtonGroup, OverlayTrigger, Popover, Grid, Row, Col } from 'react-bootstrap';
+import Select from 'react-select';
 import _ from 'lodash';
  
 const CreateIssueModal = require('../issue/CreateModal');
 const CreateKanbanModal = require('./config/CreateModal');
 const EditKanbanModal = require('./config/EditModal');
+const CreateEpicModal = require('./epic/CreateModal');
 
 const $ = require('$');
 const moment = require('moment');
@@ -13,7 +15,7 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { hideHeader: false, createIssueModalShow: false, createKanbanModalShow: false };
+    this.state = { hideHeader: false, createIssueModalShow: false, createKanbanModalShow: false, createEpicModalShow: false };
     this.getQuery = this.getQuery.bind(this);
     this.changeModel = this.changeModel.bind(this);
   }
@@ -34,10 +36,12 @@ export default class Header extends Component {
     create: PropTypes.func.isRequired,
     createKanban: PropTypes.func.isRequired,
     createSprint: PropTypes.func.isRequired,
+    createEpic: PropTypes.func.isRequired,
     project: PropTypes.object,
     curKanban: PropTypes.object,
     kanbans: PropTypes.array,
     sprints: PropTypes.array,
+    epics: PropTypes.array,
     loading: PropTypes.bool,
     goto: PropTypes.func,
     selectFilter: PropTypes.func,
@@ -51,6 +55,10 @@ export default class Header extends Component {
 
   createKanbanModalClose() {
     this.setState({ createKanbanModalShow: false });
+  }
+
+  createEpicModalClose() {
+    this.setState({ createEpicModalShow: false });
   }
 
   changeKanban(eventKey) {
@@ -115,6 +123,10 @@ export default class Header extends Component {
       newQuery['updated_at'] = gq.updated_at || fq.updated_at;
     }
 
+    if (fq.epic) {
+      newQuery['epic'] = fq.epic;
+    }
+
     return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
   }
 
@@ -139,10 +151,16 @@ export default class Header extends Component {
   async changeModel(model) {
     const { changeModel, selectFilter, index, curKanban } = this.props;
     changeModel(model);
-    if (model !== 'config') {
+    if (model == 'issue' || model == 'backlog') {
       await selectFilter('all');
       index(this.getQuery(curKanban.query || {}, {}));
     }
+  }
+
+  async handleSelectEpic(key) {
+    const { index, curKanban, selectFilter } = this.props;
+    await selectFilter(key || 'all');
+    index(this.getQuery(curKanban.query || {}, key ? { epic: key } : {}));
   }
 
   render() {
@@ -156,11 +174,15 @@ export default class Header extends Component {
       kanbans=[], 
       createSprint, 
       sprints=[],
+      createEpic, 
+      epics=[],
       loading, 
       project, 
       create, 
       goto, 
       options } = this.props;
+
+    const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });
 
     let popoverSprint = '';
     let activeSprint = {};
@@ -207,7 +229,8 @@ export default class Header extends Component {
             { !_.isEmpty(curKanban) &&
             <ButtonGroup style={ { marginRight: '10px' } }>
               { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>看板</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>历史</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'epic' && '#eee' } } onClick={ () => { this.changeModel('epic') } }>Epic</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'backlog' && '#eee' } } onClick={ () => { this.changeModel('backlog') } }>Backlog</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
               <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
@@ -242,10 +265,32 @@ export default class Header extends Component {
         </div> }
         { model === 'backlog' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
-          <Button bsStyle='primary' style={ { float: 'left', marginTop: '0px' } } onClick={ createSprint }>
-            <i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint
-          </Button> 
+          <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>Epic过滤：</span>
+          <div style={ { display: 'inline-block', float: 'left', width: '28%' } }>
+            <Select
+              simpleValue
+              options={ epicOptions }
+              value={ selectedFilter == 'all' ? null : selectedFilter }
+              onChange={ (newValue) => { this.handleSelectEpic(newValue) } }
+              placeholder='选择Epic'/>
+          </div>
+          <span style={ { float: 'right' } } title='隐藏看板头'>
+            <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
+          </span>
+          <div style={ { display: 'inline-block', float: 'right', marginRight: '15px' } }>
+            <Button bsStyle='primary' onClick={ createSprint }><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button>
+          </div>
         </div> }
+        { model === 'epic' && !_.isEmpty(curKanban) &&
+        <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
+          <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
+            <Button onClick={ () => { this.setState({ createEpicModalShow: true }) } }><i className='fa fa-plus' aria-hidden='true'></i> 新建Epic</Button>
+          </div>
+          <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
+            <Button onClick={ createSprint }><i className='fa fa-pencil' aria-hidden='true'></i> 编辑顺序</Button>
+          </div>
+        </div> }
+     
         { this.state.createKanbanModalShow &&
           <CreateKanbanModal
             show
@@ -262,6 +307,13 @@ export default class Header extends Component {
             create={ create }
             loading={ loading }
             project={ project }
+            i18n={ i18n }/> }
+        { this.state.createEpicModalShow &&
+          <CreateEpicModal
+            show
+            close={ this.createEpicModalClose.bind(this) }
+            create={ createEpic }
+            collection={ epics }
             i18n={ i18n }/> }
       </div>
     );

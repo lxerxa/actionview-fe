@@ -4,9 +4,13 @@ import _ from 'lodash';
 const initialState = { 
   ecode: 0, 
   list: [], 
-  sprints: [],
-  loading: false, 
   sprintLoading: false, 
+  sprints: [],
+  indexEpicLoading: false,
+  epicLoading: false,
+  selectedEpicItem: {},
+  epics: [],
+  loading: false, 
   rankLoading: false, 
   configLoading: false, 
   wfactions: [], 
@@ -22,6 +26,7 @@ export default function kanban(state = initialState, action) {
       if (action.result.ecode === 0) {
         state.list = action.result.data || [];
         state.sprints = action.result.options && action.result.options.sprints || [];
+        state.epics = action.result.options && action.result.options.epics || [];
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
@@ -115,6 +120,49 @@ export default function kanban(state = initialState, action) {
     case t.KANBAN_SPRINT_PUBLISH_FAIL:
     case t.KANBAN_SPRINT_DELETE_FAIL:
       return { ...state, sprintLoading: false, error: action.error };
+
+    case t.KANBAN_EPIC_INDEX:
+      return { ...state, epics: [], indexEpicLoading: true };
+    case t.KANBAN_EPIC_INDEX_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.epics = action.result.data;
+      }
+      return { ...state, indexEpicLoading: false, ecode: action.result.ecode };
+    case t.KANBAN_EPIC_INDEX_FAIL:
+      return { ...state, indexEpicLoading: false, error: action.error };
+
+    case t.KANBAN_EPIC_CREATE:
+    case t.KANBAN_EPIC_EDIT:
+    case t.KANBAN_EPIC_DELETE:
+      return { ...state, epicLoading: true };
+
+    case t.KANBAN_EPIC_CREATE_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.epics.push(action.result.data);
+      }
+      return { ...state, epicLoading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_EPIC_EDIT_SUCCESS:
+      if (action.result.ecode === 0) {
+        const ind = _.findIndex(state.epics, { id: action.result.data.id });
+        state.epics[ind] = action.result.data;
+      }
+      return { ...state, epicLoading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_EPIC_DELETE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.epics = _.reject(state.epics, { id: action.id });
+      }
+      return { ...state, epicLoading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_EPIC_CREATE_FAIL:
+    case t.KANBAN_EPIC_EDIT_FAIL:
+    case t.KANBAN_EPIC_DELETE_FAIL:
+      return { ...state, epicLoading: false, error: action.error };
+
+    case t.KANBAN_EPIC_SELECT:
+      const el = _.find(state.epics, { id: action.id });
+      return { ...state, epicLoading: false, selectedEpicItem: el };
 
     default:
       return state;

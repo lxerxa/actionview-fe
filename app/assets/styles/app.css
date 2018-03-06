@@ -793,3 +793,12 @@ table tr:hover .remove-icon{
 	border: 2px solid #fff;
 	border-radius: 8px
 }
+
+.epic-label {
+  width: 40px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}

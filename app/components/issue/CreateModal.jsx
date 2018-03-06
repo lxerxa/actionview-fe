@@ -339,7 +339,15 @@ class CreateModal extends Component {
                 <span className='txt-impt'>*</span>类型
               </Col>
               <Col sm={ 7 }>
-                <Select options={ typeOptions } disabled={ loading } simpleValue searchable={ false } clearable={ false } value={ this.state.values['type'] } onChange={ this.typeChange.bind(this) } placeholder='请选择问题类型'/>
+                <Select 
+                  options={ typeOptions } 
+                  disabled={ loading } 
+                  simpleValue 
+                  searchable={ false } 
+                  clearable={ false } 
+                  value={ this.state.values['type'] } 
+                  onChange={ this.typeChange.bind(this) } 
+                  placeholder='请选择问题类型'/>
                 <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
               </Col>
             </FormGroup> }

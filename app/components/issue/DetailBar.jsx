@@ -538,7 +538,13 @@ export default class DetailBar extends Component {
                     主题/NO 
                   </Col>
                   <Col sm={ 9 }>
-                    <div style={ { marginTop: '7px' } }>{ data.parent && <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>{ data.parent.no + '-' + data.parent.title }</a> }{ data.parent && ' / ' }{ data.no + '-' + data.title }</div>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.parent && 
+                        <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>
+                          { data.parent.no + '-' + data.parent.title }
+                        </a> }
+                      { data.parent && ' / ' }{ data.no + '-' + data.title }
+                    </div>
                   </Col>
                 </FormGroup>
                 <FormGroup controlId='formControlsLabel'>
@@ -546,7 +552,12 @@ export default class DetailBar extends Component {
                     类型 
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }><span className='type-abb'>{ type ? type.abb : '-' }</span>{ type ? type.name : '-' }</div>
+                    <div style={ { marginTop: '7px' } }>
+                      <span className='type-abb'>
+                        { type ? type.abb : '-' }
+                      </span>
+                      { type ? type.name : '-' }
+                    </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     状态
@@ -564,13 +575,18 @@ export default class DetailBar extends Component {
                     优先级
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }><div className='circle' style={ priorityStyle }/>{ _.find(options.priorities || [], { id: data.priority }) ? _.find(options.priorities, { id: data.priority }).name : '-' }</div>
+                    <div style={ { marginTop: '7px' } }>
+                      <div className='circle' style={ priorityStyle }/>
+                        { _.find(options.priorities || [], { id: data.priority }) ? _.find(options.priorities, { id: data.priority }).name : '-' }
+                      </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     解决结果
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>{ _.find(options.resolutions || [], { id: data.resolution }) ? _.find(options.resolutions, { id: data.resolution }).name : '-' }</div>
+                    <div style={ { marginTop: '7px' } }>
+                      { _.find(options.resolutions || [], { id: data.resolution }) ? _.find(options.resolutions, { id: data.resolution }).name : '-' }
+                    </div>
                   </Col>
                 </FormGroup>
                 <FormGroup controlId='formControlsLabel'>
@@ -613,6 +629,26 @@ export default class DetailBar extends Component {
                     </div> }
                   </Col>
                 </FormGroup>
+                { data.epic &&
+                <FormGroup controlId='formControlsLabel'>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    Epic
+                  </Col>
+                  <Col sm={ 7 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { _.find(options.epics || [], { id: data.epic }) ? _.find(options.epics, { id: data.epic }).name : '-' }
+                    </div>
+                  </Col>
+                </FormGroup> }
+                { data.sprints && data.sprints.length > 0 &&
+                <FormGroup controlId='formControlsLabel'>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    Sprint
+                  </Col>
+                  <Col sm={ 7 }>
+                    Sprint { data.sprints.join(', ') }
+                  </Col>
+                </FormGroup> }
                 { data.subtasks && data.subtasks.length > 0 &&
                 <FormGroup controlId='formControlsLabel'>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -698,11 +734,11 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee') {
+                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic') {
                     return;
                   }
                   if (field.type === 'File') {
-                    if (options.permissions && options.permissions.indexOf('edit_issue') === -1 && !data[field.key]) {
+                    if (options.permissions && options.permissions.indexOf('upload_file') === -1 && !data[field.key]) {
                       return;
                     }
                   } else if (!data[field.key]) {

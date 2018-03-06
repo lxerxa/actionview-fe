@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
-import Select from 'react-select';
 import _ from 'lodash';
 import DateTime from 'react-datetime';
 import { notify } from 'react-notify-toast';

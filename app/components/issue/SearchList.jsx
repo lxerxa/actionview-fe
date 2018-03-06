@@ -18,6 +18,8 @@ export default class SearchList extends Component {
       resolution: '', 
       module: '', 
       resolve_vesion: '', 
+      epic: '', 
+      sprint: '', 
       created_at: '', 
       updated_at: '', 
       title: '' };
@@ -46,6 +48,8 @@ export default class SearchList extends Component {
       priority: newQuery.priority ? newQuery.priority : '',
       module: newQuery.module ? newQuery.module : '',
       resolve_version: newQuery.resolve_version ? newQuery.resolve_version : '',
+      epic: newQuery.epic ? newQuery.epic : '',
+      sprint: newQuery.sprint ? newQuery.sprint : '',
       created_at: newQuery.created_at ? newQuery.created_at : null,
       updated_at: newQuery.updated_at ? newQuery.updated_at : null
     });
@@ -73,6 +77,8 @@ export default class SearchList extends Component {
     if (this.state.priority) { newQuery.priority = this.state.priority; }
     if (this.state.module) { newQuery.module = this.state.module; }
     if (this.state.resolve_version) { newQuery.resolve_version = this.state.resolve_version; }
+    if (this.state.epic) { newQuery.epic = this.state.epic; }
+    if (this.state.sprint) { newQuery.sprint = this.state.sprint; }
     if (this.state.created_at) { newQuery.created_at = this.state.created_at; }
     if (this.state.updated_at) { newQuery.updated_at = this.state.updated_at; }
     if (this.state.title) { newQuery.title = this.state.title; }
@@ -83,7 +89,11 @@ export default class SearchList extends Component {
   }
 
   render() {
-    const { indexLoading, searchShow=false, hide, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], users=[] } } = this.props;
+    const { 
+      indexLoading, 
+      searchShow=false, 
+      hide, 
+      options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -94,6 +104,8 @@ export default class SearchList extends Component {
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
     const moduleOptions = _.map(modules, (val) => { return { label: val.name, value: val.id } });
     const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });
+    const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });
+    const sprintOptions = _.map(sprints, (val) => { return { label: 'Sprint ' + val, value: val } });
 
     return (
       <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5' } } className={ !searchShow && 'hide' }>
@@ -244,6 +256,32 @@ export default class SearchList extends Component {
               value={ this.state.updated_at }
               onChange={ (newValue) => { this.state.updated_at = newValue; this.search(); } }
               options={ dateOptions }/>
+          </Col>
+        </FormGroup>
+        <FormGroup controlId='formControlsLabel'>
+          <Col sm={ 1 } componentClass={ ControlLabel }>
+            Epic 
+          </Col>
+          <Col sm={ 3 }>
+            <Select
+              simpleValue
+              multi
+              placeholder='选择Epic'
+              value={ this.state.epic }
+              onChange={ (newValue) => { this.state.epic = newValue; this.search(); } }
+              options={ epicOptions }/>
+          </Col>
+          <Col sm={ 1 } componentClass={ ControlLabel }>
+            Sprint
+          </Col>
+          <Col sm={ 3 }>
+            <Select
+              simpleValue
+              multi
+              placeholder='选择Sprint'
+              value={ this.state.sprint }
+              onChange={ (newValue) => { this.state.sprint = newValue; this.search(); } }
+              options={ sprintOptions }/>
           </Col>
         </FormGroup>
       </Form>

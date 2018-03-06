@@ -93,3 +93,38 @@ export function deleteSprint(key, no) {
     promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + no, method: 'delete' })
   });
 }
+
+export function indexEpic(key, kanban_id) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_EPIC_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/epic?kanban_id=' + kanban_id })
+  });
+}
+
+export function createEpic(key, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_EPIC_CREATE',
+    promise: (client) => client.request({ url: '/project/' + key + '/epic', data: values, method: 'post' })
+  });
+}
+
+export function editEpic(key, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_EPIC_EDIT',
+    promise: (client) => client.request({ url: '/project/' + key + '/epic/' + values.id, data: values, method: 'put' })
+  });
+}
+
+export function delEpic(key, id) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_EPIC_DELETE',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/epic/' + id, method: 'delete' })
+  });
+}
+
+export function selectEpic(id) {
+  return { type: 'KANBAN_EPIC_SELECT', id: id };
+}
+
+
