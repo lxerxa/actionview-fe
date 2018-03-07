@@ -5,6 +5,8 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const stateCategories = require('../share/StateCategories.js');
+
 const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
@@ -15,12 +17,16 @@ const validate = (values, props) => {
     errors.name = '该名称已存在';
   }
 
+  if (!values.category) {
+    errors.category = '必选';
+  }
+
   return errors;
 };
 
 @reduxForm({
   form: 'state',
-  fields: ['id', 'name', 'description'],
+  fields: ['id', 'name', 'category', 'description'],
   validate
 })
 export default class EditModal extends Component {
@@ -72,7 +78,14 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { id, name, category, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+
+    const categoryOptions = _.map(stateCategories, (v) => {
+      return {
+        value: v.id,
+        label: v.name
+      }
+    });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -86,6 +99,18 @@ export default class EditModal extends Component {
             <FormControl type='hidden' { ...id }/>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题状态名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel><span className='txt-impt'>*</span>类别</ControlLabel>
+            <Select
+              disabled={ submitting }
+              options={ categoryOptions }
+              simpleValue
+              clearable={ false }
+              searchable={ false }
+              value={ category.value || 'new' }
+              onChange={ newValue => { category.onChange(newValue) } }
+              placeholder='请选择问题类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

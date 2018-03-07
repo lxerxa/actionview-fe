@@ -376,6 +376,7 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 colNo={ i }
+                epicShow={ model == 'backlog' && true }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }

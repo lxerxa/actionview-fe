@@ -71,6 +71,8 @@ export default class Container extends Component {
         <div>
           { session.user.email === 'admin@action.view' ? 
           <SysadminList 
+            setAvatar={ this.setAvatar.bind(this) }
+            updAvatar={ this.updAvatar.bind(this) }
             getUser={ this.getUser.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }
             i18n={ i18n }

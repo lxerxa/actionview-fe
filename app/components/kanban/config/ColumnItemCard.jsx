@@ -116,7 +116,7 @@ export default class ColumnItemCard extends Component {
         <div>
         { _.map(column.states, (v, i) => 
           <div key={ i } className='config-column-card'>
-            { _.findIndex(options.states, { id: v }) !== -1 ? _.find(options.states, { id : v }).name : '' }
+            { _.findIndex(options.states, { id: v }) !== -1 ? <span className={ 'state-' + _.find(options.states, { id : v }).category + '-label' }>{ _.find(options.states, { id : v }).name }</span> : '' }
           </div>) }
         </div>
       </div>

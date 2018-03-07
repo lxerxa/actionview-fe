@@ -7,20 +7,28 @@ import _ from 'lodash';
 
 const no_avatar = require('../../../assets/images/no_avatar.png');
 const img = require('../../../assets/images/loading.gif');
+const AvatarEditModal = require('./AvatarEditModal');
 const ResetPwdModal = require('./ResetPwdModal');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { resetPwdModalShow: false };
+    this.state = { avatarEditModalShow: false, resetPwdModalShow: false };
     this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    setAvatar: PropTypes.func.isRequired,
+    updAvatar: PropTypes.func.isRequired,
+    avatarLoading: PropTypes.bool.isRequired,
     accounts: PropTypes.object.isRequired,
     getUser: PropTypes.func.isRequired,
     resetPwd: PropTypes.func.isRequired
+  }
+
+  avatarEditModalClose() {
+    this.setState({ avatarEditModalShow: false });
   }
 
   resetPwdModalClose() {
@@ -35,7 +43,7 @@ export default class List extends Component {
   render() {
 
     const styles = { marginLeft: '20px', marginTop: '10px', marginBottom: '10px' };
-    const { i18n, accounts, resetPwd } = this.props;
+    const { i18n, accounts, setAvatar, updAvatar, avatarLoading, resetPwd } = this.props;
 
     const accountItems = [];
     accountItems.push({
@@ -48,7 +56,7 @@ export default class List extends Component {
       contents: (
         <div style={ styles }>
           <img src={ no_avatar } className='big-no-avatar'/>
-          <Button style={ { marginLeft: '15px' } } onClick={ () => { notify.show('暂不支持此功能。', 'warning', 2000); } }>设置头像</Button>
+          <Button style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ avatarEditModalShow: true }) } }>设置头像</Button>
         </div>
       )
     });
@@ -93,6 +101,15 @@ export default class List extends Component {
           <TableHeaderColumn width='200' dataField='contents'/>
           <TableHeaderColumn dataField='blank'/>
         </BootstrapTable>
+        { this.state.avatarEditModalShow &&
+          <AvatarEditModal
+            show
+            close={ this.avatarEditModalClose }
+            loading={ avatarLoading }
+            setAvatar={ setAvatar }
+            updAvatar={ updAvatar }
+            data={ accounts }
+            i18n={ i18n }/> }
         { this.state.resetPwdModalShow && 
           <ResetPwdModal 
             show 

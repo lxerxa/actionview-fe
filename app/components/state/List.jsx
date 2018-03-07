@@ -80,6 +80,8 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
+    const categoryMap = { new: '新建', inprogess: '进行中', completed: '完成' };
+
     const states = [];
     const stateNum = collection.length;
     for (let i = 0; i < stateNum; i++) {
@@ -89,12 +91,13 @@ export default class List extends Component {
         name: ( 
           <div>
             <span className='table-td-title'>
-              { collection[i].name }
+              <span className={ 'state-' + collection[i].category + '-label' }>{ collection[i].name }</span>
               { isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }
             </span> 
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
+        category: categoryMap[collection[i].category] ? categoryMap[collection[i].category] : '-',
         workflow: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             { _.isEmpty(collection[i].workflows) ? '-' : _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }
@@ -134,6 +137,7 @@ export default class List extends Component {
         <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='category'>类别</TableHeaderColumn>
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>

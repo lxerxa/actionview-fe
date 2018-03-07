@@ -120,6 +120,7 @@ export default class Card extends Component {
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
     pkey: PropTypes.string.isRequired,
+    epicShow: PropTypes.bool,
     subtasks: PropTypes.array,
     colNo: PropTypes.number.isRequired,
     options: PropTypes.object.isRequired,
@@ -144,6 +145,7 @@ export default class Card extends Component {
       rankLoading,
       closeDetail,
       subtasks=[],
+      epicShow,
       colNo,
       moveCard,
       options } = this.props;
@@ -202,6 +204,11 @@ export default class Card extends Component {
       marginLeft = '10px';
     }
 
+    let selectedEpic = {};
+    if (issue.epic) {
+      selectedEpic = _.find(options.epics, { id: issue.epic });
+    }
+
     return connectDragSource(connectDropTarget(
       <div className='board-issue' style={ { ...styles, opacity, backgroundColor, marginLeft } }>
         <div className='board-issue-content'>
@@ -219,6 +226,10 @@ export default class Card extends Component {
           <div>
             { issue.title || '' }
           </div>
+          { epicShow && !_.isEmpty(selectedEpic) && 
+            <div className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor } } title={ selectedEpic.name || '-' }>
+              { selectedEpic.name || '-' }
+            </div> }
         </div>
       </div>
     ));

@@ -370,6 +370,7 @@ export default class Container extends Component {
   render() {
     if (this.props.project.options) {
       _.assign(this.props.issue.options, this.props.project.options);
+      _.assign(this.props.issue.options, { epics: this.props.kanban.epics });
     }
 
     let curKanban = {};

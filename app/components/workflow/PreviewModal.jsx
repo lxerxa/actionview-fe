@@ -41,12 +41,14 @@ export default class PreviewModal extends Component {
       });
     }
     
-    if (state) {
-      const current_step = _.find(collection, { state });
-      if (current_step) {
-        graphTxt += ' style ' + current_step.name + ' fill:#ffffbd;';
-      }
-    }
+    //if (state) {
+    //  const current_step = _.find(collection, { state });
+    //  if (current_step) {
+    //    graphTxt += ' style ' + current_step.name + ' fill:#ffffbd;';
+    //  }
+    //}
+
+    graphTxt += ' style step1 fill:#ffd351,color:#14892c';
 
     mermaidAPI.render('div', graphTxt, null, document.getElementById('chart'));
   }

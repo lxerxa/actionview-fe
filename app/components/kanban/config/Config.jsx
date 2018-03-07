@@ -318,7 +318,7 @@ export default class Config extends Component {
           <span className='table-td-desc'>可左右拖拽调整列位置</span>
           { unUsedStates.length > 0 && <div className='table-td-desc' style={ { marginTop: '10px' } }>以下未分配状态：</div> }
           { _.map(unUsedStates, (v, i) => { 
-            return <div className='config-column-card' key = { i }> { v.name } </div> }) }
+            return <div className='config-column-card' key = { i }> <span className={ 'state-' + v.category + '-label' } >{ v.name }</span></div> }) }
         </div>
       ),  
       contents: (

@@ -92,15 +92,15 @@ export default class List extends Component {
       epics.push({
         id: collection[i].id,
         name: ( 
-          <span className='table-td-title'>
+          <span className='epic-title' title={ collection[i].name } style={ { backgroundColor: collection[i].bgColor, borderColor: collection[i].bgColor, maxWith: '10em' } }>
             { collection[i].name }
           </span> ),
         bgColor: ( <div className='epic-label' style={ { backgroundColor: collection[i].bgColor || '#ccc' } } /> ),
         issues: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
-            <li>已完成 - { collection[i].issues && collection[i].issues.completed || 0 }</li>
-            <li>未完成 - { collection[i].issues && collection[i].issues.incompleted || 0 }</li>
-            <li>不明确 - { collection[i].issues && collection[i].issues.inestimable || 0 }</li>
+            <li>已完成 - <strong>{ collection[i].issues && collection[i].issues.completed || 0 }</strong></li>
+            <li>未完成 - <strong>{ collection[i].issues && collection[i].issues.incompleted || 0 }</strong></li>
+            <li>不明确 - <strong>{ collection[i].issues && collection[i].issues.inestimable || 0 }</strong></li>
           </ul>
         ),
         operation: (
@@ -141,7 +141,6 @@ export default class List extends Component {
         <BootstrapTable data={ epics } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn width='200' dataField='bgColor'>背景色</TableHeaderColumn>
           <TableHeaderColumn dataField='issues'>问题完成情况</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>

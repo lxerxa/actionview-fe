@@ -111,6 +111,8 @@ export default class ConfigList extends Component {
     }
 
     for (let i = 0; i < stepNum; i++) {
+      const curState = _.find(options.states, { id: collection[i].state });
+
       steps.push({
         id: collection[i].id,
         step:  (
@@ -120,7 +122,7 @@ export default class ConfigList extends Component {
         ),
         state:  (
           <div>
-            { _.find(options.states, { id: collection[i].state }) ? _.find(options.states, { id: collection[i].state }).name : '-' }
+            { !_.isEmpty(curState) ? <span className={ 'state-' + curState.category + '-label' }>{ curState.name }</span> : '-' }
           </div>
         ),
         actions:  (

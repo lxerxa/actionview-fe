@@ -339,6 +339,12 @@ export default class List extends Component {
         _.extend(priorityStyle, { backgroundColor: options.priorities[priorityInd].color });
       }
 
+      const stateInd = collection[i].state ? _.findIndex(options.states, { id: collection[i].state }) : -1;
+      let stateClassName = '';
+      if (stateInd !== -1) {
+        stateClassName = 'state-' + (options.states[stateInd].category || '') + '-label';
+      }
+
       issues.push({
         id: collection[i].id,
         type: (
@@ -363,7 +369,7 @@ export default class List extends Component {
         ), 
         assignee: !_.isEmpty(collection[i].assignee) ? collection[i].assignee.name : '-',
         priority: priorityInd !== -1 ? <div className='circle' style={ priorityStyle } title={ options.priorities[priorityInd].name }/> : <div style={ priorityStyle }>-</div>,
-        state: _.findIndex(options.states, { id: collection[i].state }) !== -1 ? _.find(options.states, { id: collection[i].state }).name : '-', 
+        state: stateInd !== -1 ? <span className={ stateClassName }>{ options.states[stateInd].name || '-' }</span> : '-', 
         resolution: _.findIndex(options.resolutions, { id: collection[i].resolution }) !== -1 ? _.find(options.resolutions, { id: collection[i].resolution }).name : '-', 
         operation: (
           <div>

@@ -1,10 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
+const stateCategories = require('../share/StateCategories.js');
 
 const validate = (values, props) => {
   const errors = {};
@@ -14,12 +16,16 @@ const validate = (values, props) => {
     errors.name = '该名称已存在';
   }
 
+  if (!values.category) {
+    errors.category = '必选';
+  }
+
   return errors;
 };
 
 @reduxForm({
   form: 'state',
-  fields: ['name', 'description'],
+  fields: ['name', 'category', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -63,7 +69,14 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { name, description }, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { name, category, description }, handleSubmit, invalid, submitting } = this.props;
+
+    const categoryOptions = _.map(stateCategories, (v) => { 
+      return {
+        value: v.id,
+        label: v.name 
+      }
+    });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -76,6 +89,18 @@ export default class CreateModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题状态名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel><span className='txt-impt'>*</span>类别</ControlLabel>
+            <Select
+              disabled={ submitting }
+              options={ categoryOptions }
+              simpleValue 
+              clearable={ false }
+              searchable={ false }
+              value={ category.value || 'new' }
+              onChange={ newValue => { category.onChange(newValue) } }
+              placeholder='请选择问题类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

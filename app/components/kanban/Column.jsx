@@ -19,6 +19,7 @@ export default class Column extends Component {
   static propTypes = {
     isSubtaskCol: PropTypes.bool,
     subtaskShow: PropTypes.bool,
+    epicShow: PropTypes.bool,
     colNo: PropTypes.number.isRequired,
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
@@ -110,6 +111,7 @@ export default class Column extends Component {
       colNo,
       isSubtaskCol=false,
       subtaskShow=false,
+      epicShow=false,
       getDraggableActions, 
       cleanDraggableActions, 
       setRank,
@@ -137,6 +139,7 @@ export default class Column extends Component {
           issue={ v }
           pkey={ pkey }
           subtasks={ classifiedSubtasks[v.no] || [] }
+          epicShow={ epicShow }
           options={ options }
           closeDetail={ closeDetail }
           draggedIssue={ draggedIssue }
