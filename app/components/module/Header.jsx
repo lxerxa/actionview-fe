@@ -2,19 +2,22 @@ import React, { PropTypes, Component } from 'react';
 import { Button, FormControl } from 'react-bootstrap';
 
 const CreateModal = require('./CreateModal');
+const SortCardsModal = require('../share/SortCardsModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false };
+    this.state = { createModalShow: false, sortCardsModalShow: false };
     this.createModalClose = this.createModalClose.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
+    setSort: PropTypes.func.isRequired,
     collection: PropTypes.array,
+    loading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     options: PropTypes.object.isRequired
   }
@@ -23,11 +26,17 @@ export default class Header extends Component {
     this.setState({ createModalShow: false });
   }
 
+  sortCardsModalClose() {
+    this.setState({ sortCardsModalShow: false });
+  }
+
   render() {
 
     const { 
       i18n, 
       create, 
+      setSort,
+      loading,
       indexLoading, 
       collection, 
       options={} } = this.props;
@@ -42,6 +51,12 @@ export default class Header extends Component {
             onClick={ () => { this.setState({ createModalShow: true }); } }>
             <i className='fa fa-plus'></i>&nbsp;新建模块
           </Button>
+          { !indexLoading && 
+          <Button 
+            className='create-btn' 
+            onClick={ () => { this.setState({ sortCardsModalShow: true }); } }>
+            <i className='fa fa-pencil'></i>&nbsp;编辑顺序
+          </Button> }
         </div>
         :
         <div style={ { marginTop: '15px' } }/> }
@@ -57,6 +72,15 @@ export default class Header extends Component {
             create={ create } 
             collection={ collection } 
             options={ options } 
+            i18n={ i18n }/> }
+        { this.state.sortCardsModalShow &&
+          <SortCardsModal
+            show
+            model='模块'
+            close={ this.sortCardsModalClose.bind(this) }
+            cards={ collection }
+            setSort={ setSort }
+            sortLoading={ loading }
             i18n={ i18n }/> }
       </div>
     );

@@ -32,3 +32,10 @@ export function del(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/state/' + id, method: 'delete' })
   });
 }
+
+export function setSort(key, values) {
+  return asyncFuncCreator({
+    constant: 'STATE_SET_SORT',
+    promise: (client) => client.request({ url: '/project/' + key + '/state/batch', method: 'post', data: values })
+  });
+}

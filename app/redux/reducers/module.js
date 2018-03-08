@@ -59,6 +59,25 @@ export default function module(state = initialState, action) {
     case t.MODULE_DELETE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
+    case t.MODULE_SET_SORT:
+      return { ...state, loading: true };
+
+    case t.MODULE_SET_SORT_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const newCollection = [];
+        _.map(action.result.data, (v) => {
+          const index = _.findIndex(state.collection, { id: v });
+          if (index !== -1) {
+            newCollection.push(state.collection[index]);
+          }
+        });
+        state.collection = newCollection;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.MODULE_SET_SORT_FAIL:
+      return { ...state, loading: false, error: action.error };
+
     default:
       return state;
   }

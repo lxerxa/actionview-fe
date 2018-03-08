@@ -48,6 +48,11 @@ export default class Container extends Component {
     return this.props.state.ecode;
   }
 
+  async setSort(values) {
+    await this.props.actions.setSort(this.pid, values);
+    return this.props.state.ecode;
+  }
+
   componentWillMount() {
     const { location: { pathname='' } } = this.props;
     if (/^\/admin\/scheme/.test(pathname)) {
@@ -66,6 +71,7 @@ export default class Container extends Component {
         <Header 
           isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           create={ this.create.bind(this) } 
+          setSort={ this.setSort.bind(this) } 
           i18n={ this.props.i18n }
           { ...this.props.state }/>
         <List 

@@ -58,6 +58,18 @@ export default function state(state = initialState, action) {
     case t.STATE_DELETE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
+    case t.STATE_SET_SORT:
+      return { ...state, loading: true };
+
+    case t.STATE_SET_SORT_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.collection = action.result.data;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.STATE_SET_SORT_FAIL:
+      return { ...state, loading: false, error: action.error };
+
     default:
       return state;
   }

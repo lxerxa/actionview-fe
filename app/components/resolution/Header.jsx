@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const CreateModal = require('./CreateModal');
-const SortCardsModal = require('./SortCardsModal');
+const SortCardsModal = require('../share/SortCardsModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
@@ -99,6 +99,7 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow && 
           <SortCardsModal 
             show 
+            mode='解决结果'
             close={ this.sortCardsModalClose } 
             cards={ collection } 
             setSort={ setSort } 

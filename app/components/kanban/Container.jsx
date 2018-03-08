@@ -333,6 +333,11 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
+  async setEpicSort(values) {
+    await this.props.actions.setEpicSort(this.pid, values);
+    return this.props.kanban.ecode;
+  }
+
   changeModel(model) {
     this.setState({ model });
   }
@@ -387,6 +392,8 @@ export default class Container extends Component {
           kanbans={ this.props.kanban.list }
           sprints={ this.props.kanban.sprints }
           epics={ this.props.kanban.epics }
+          epicLoding={ this.props.kanban.epicLoading }
+          indexEpicLoading={ this.props.kanban.indexEpicLoading }
           loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
           goto={ this.goto }
           selectedFilter={ this.state.filter }
@@ -396,6 +403,7 @@ export default class Container extends Component {
           createKanban={ this.createKanban.bind(this) }
           createSprint={ this.createSprint.bind(this) }
           createEpic={ this.createEpic.bind(this) }
+          setEpicSort={ this.setEpicSort.bind(this) }
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>

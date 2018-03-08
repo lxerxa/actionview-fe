@@ -3,12 +3,13 @@ import { Button, FormControl } from 'react-bootstrap';
 import _ from 'lodash';
 
 const CreateModal = require('./CreateModal');
+const SortCardsModal = require('../share/SortCardsModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false };
+    this.state = { createModalShow: false, sortCardsModalShow: false };
     this.createModalClose = this.createModalClose.bind(this);
   }
 
@@ -16,6 +17,8 @@ export default class Header extends Component {
     i18n: PropTypes.object.isRequired,
     isSysConfig: PropTypes.bool.isRequired,
     create: PropTypes.func.isRequired,
+    setSort: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired
   }
@@ -24,8 +27,12 @@ export default class Header extends Component {
     this.setState({ createModalShow: false });
   }
 
+  sortCardsModalClose() {
+    this.setState({ sortCardsModalShow: false });
+  }
+
   render() {
-    const { i18n, isSysConfig, create, indexLoading, collection } = this.props;
+    const { i18n, isSysConfig, create, setSort, loading, indexLoading, collection } = this.props;
 
     return (
       <div>
@@ -33,6 +40,12 @@ export default class Header extends Component {
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }>
             <i className='fa fa-plus'></i>&nbsp;新建状态
           </Button>
+          { !indexLoading &&
+          <Button
+            className='create-btn'
+            onClick={ () => { this.setState({ sortCardsModalShow: true }); } }>
+            <i className='fa fa-pencil'></i>&nbsp;编辑顺序
+          </Button> }
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
@@ -46,6 +59,15 @@ export default class Header extends Component {
             close={ this.createModalClose } 
             create={ create } 
             collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.sortCardsModalShow &&
+          <SortCardsModal
+            show
+            model='状态'
+            close={ this.sortCardsModalClose.bind(this) }
+            cards={ collection }
+            setSort={ setSort }
+            sortLoading={ loading }
             i18n={ i18n }/> }
       </div>
     );

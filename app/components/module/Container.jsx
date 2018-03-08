@@ -51,6 +51,11 @@ export default class Container extends Component {
     return this.props.module.ecode;
   }
 
+  async setSort(values) {
+    await this.props.actions.setSort(this.pid, values);
+    return this.props.module.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -65,6 +70,7 @@ export default class Container extends Component {
       <div>
         <Header 
           create={ this.create.bind(this) } 
+          setSort={ this.setSort.bind(this) } 
           i18n={ this.props.i18n }
           { ...this.props.module }/>
         <List 

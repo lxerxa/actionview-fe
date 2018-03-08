@@ -164,6 +164,25 @@ export default function kanban(state = initialState, action) {
       const el = _.find(state.epics, { id: action.id });
       return { ...state, epicLoading: false, selectedEpicItem: el };
 
+    case t.KANBAN_EPIC_SET_SORT:
+      return { ...state, epicLoading: true };
+
+    case t.KANBAN_EPIC_SET_SORT_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const newCollection = [];
+        _.map(action.result.data, (v) => {
+          const index = _.findIndex(state.collection, { id: v });
+          if (index !== -1) {
+            newCollection.push(state.collection[index]);
+          }
+        });
+        state.collection = newCollection;
+      }
+      return { ...state, epicLoading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_EPIC_SET_SORT_FAIL:
+      return { ...state, epicLoading: false, error: action.error };
+
     default:
       return state;
   }

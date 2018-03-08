@@ -123,6 +123,13 @@ export function delEpic(key, id) {
   });
 }
 
+export function setSort(key, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_EPIC_SET_SORT',
+    promise: (client) => client.request({ url: '/project/' + key + '/epic/batch', method: 'post', data: values })
+  });
+}
+
 export function selectEpic(id) {
   return { type: 'KANBAN_EPIC_SELECT', id: id };
 }
