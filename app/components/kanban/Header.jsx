@@ -241,7 +241,7 @@ export default class Header extends Component {
             <ButtonGroup style={ { marginRight: '10px' } }>
               { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>看板</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'epic' && '#eee' } } onClick={ () => { this.changeModel('epic') } }>Epic</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
+              { curKanban.type == 'scrum2' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'backlog' && '#eee' } } onClick={ () => { this.changeModel('backlog') } }>Backlog</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
               <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
@@ -288,18 +288,19 @@ export default class Header extends Component {
           <span style={ { float: 'right' } } title='隐藏看板头'>
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
-          <div style={ { display: 'inline-block', float: 'right', marginRight: '15px' } }>
+          { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          <div style={ { display: 'inline-block', float: 'right', marginRight: '15px' } }> 
             <Button bsStyle='primary' onClick={ createSprint }><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button>
-          </div>
+          </div> }
         </div> }
-        { model === 'epic' && !_.isEmpty(curKanban) &&
-        <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
+        { model === 'epic' && !_.isEmpty(curKanban) && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
+        <div style={ { height: '45px', display: this.state.hideHeader ? 'none': 'block' } }>
           <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
             <Button disabled={ indexEpicLoading } onClick={ () => { this.setState({ createEpicModalShow: true }) } }>
               <i className='fa fa-plus' aria-hidden='true'></i> 新建Epic
             </Button>
           </div>
-          { !indexEpicLoading && 
+          { !indexEpicLoading &&  
           <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
             <Button onClick={ () => { this.setState({ sortCardsModalShow: true }) } }>
               <i className='fa fa-pencil' aria-hidden='true'></i> 编辑顺序

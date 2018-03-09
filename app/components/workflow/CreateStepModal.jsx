@@ -69,7 +69,14 @@ export default class CreateModal extends Component {
       invalid, 
       submitting } = this.props;
 
-    const stateOptions = _.map(_.filter(options.states || [], function(o){ return _.findIndex(collection, { state: o.id }) === -1 }), (val) => { return { label: val.name, value: val.id } });
+    const stateOptions = _.map(_.filter(options.states || [], function(o){ return _.findIndex(collection, { state: o.id }) === -1 }), (val) => { 
+      return { 
+        label:  (
+          <span className={ 'state-' + val.category + '-label' }>
+            { val.name }
+          </span>),
+        label2: val.name,
+        value: val.id } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -94,7 +101,7 @@ export default class CreateModal extends Component {
               options={ stateOptions } 
               simpleValue 
               value={ state.value } 
-              onChange={ newValue => { state.onChange(newValue); if (!name.value) { name.onChange(_.find(stateOptions, { value: newValue }).label) } } } 
+              onChange={ newValue => { state.onChange(newValue); if (!name.value) { name.onChange(_.find(stateOptions, { value: newValue }).label2) } } } 
               placeholder='请选择状态' 
               clearable={ false } 
               searchable={ false }/>

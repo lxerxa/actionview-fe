@@ -123,7 +123,7 @@ export default class FilterConfigModal extends Component {
     const typeOptions = _.map(_.filter(types, (v) => { return v.type === 'standard' }), (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
     userOptions.unshift({ value: 'me', label: '当前用户' });
-    const stateOptions = _.map(states, (val) => { return { label: val.name, value: val.id } });
+    const stateOptions = _.map(states, (val) => { return { label: <span className={ 'state-' + val.category + '-label' }>{ val.name }</span>, value: val.id } });
     const priorityOptions = _.map(priorities, (val) => { return { label: val.name, value: val.id } });
     const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }];

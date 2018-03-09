@@ -827,6 +827,15 @@ table tr:hover .remove-icon{
   -webkit-border-radius: 4px;
 }
 
+.workflow-config-notice {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #ffffbd;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .epic-label {
   width: 40px;
   height: 20px;
@@ -837,7 +846,7 @@ table tr:hover .remove-icon{
 }
 
 .epic-title {
-  padding: 2px 5px;
+  padding: 1px 5px;
   margin-top: 5px;
   border-radius: 4px;
   border: 1px solid #ccc;

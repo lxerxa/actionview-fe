@@ -107,7 +107,7 @@ export default class ColumnConfigModal extends Component {
     const stateOptions = [];
     _.forEach(options.states || [], (v) => {
       if (_.indexOf(otherStates, v.id) === -1) {
-        stateOptions.push({ label: v.name, value: v.id });
+        stateOptions.push({ label: <span className={ 'state-' + v.category + '-label' }>{ v.name }</span>, value: v.id });
       }
     });
     

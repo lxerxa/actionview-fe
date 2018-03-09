@@ -18,6 +18,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -81,7 +82,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { i18n, options, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -104,6 +105,7 @@ export default class List extends Component {
           </ul>
         ),
         operation: (
+          options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
@@ -137,7 +139,7 @@ export default class List extends Component {
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
-      <div style={ { marginBottom: '30px' } }>
+      <div style={ { marginBottom: '30px', marginLeft: '10px', marginTop: '-10px' } }>
         <BootstrapTable data={ epics } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>

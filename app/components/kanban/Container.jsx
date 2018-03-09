@@ -480,6 +480,7 @@ export default class Container extends Component {
           create={ this.createEpic.bind(this) }
           update={ this.editEpic.bind(this) }
           del={ this.delEpic.bind(this) }
+          options={ this.props.issue.options }
           i18n={ this.props.i18n } /> }
       </div>
     );

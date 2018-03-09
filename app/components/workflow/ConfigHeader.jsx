@@ -131,7 +131,7 @@ export default class ConfigHeader extends Component {
     return (
       <div>
         { newCollection2JSON !== collection2JSON && collection.length > 0 && 
-        <div style={ { marginTop: '20px', marginBottom: '10px', padding: '8px', backgroundColor: '#ffffbd', border: '1px solid #ccc' } }>
+        <div className='workflow-config-notice'>
           <span><i className='fa fa-exclamation-triangle'></i>&nbsp;&nbsp;配置已修改，需保存后才能生效。</span>
           <Button 
             onClick={ this.saveConfig.bind(this) } 

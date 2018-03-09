@@ -344,7 +344,7 @@ export default class Config extends Component {
 
     return (
       <div style={ { overflowY: 'auto', height: '100%', paddingBottom: '80px' } }>
-        <BootstrapTable data={ items } bordered={ false } hover trClassName='tr-top'>
+        <BootstrapTable data={ items } headerStyle={ { display: 'none' } } bordered={ false } hover trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn width='200' dataField='title'/>
           <TableHeaderColumn dataField='contents'/>
