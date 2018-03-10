@@ -305,6 +305,9 @@ export default class Container extends Component {
 
   async completeSprint(values, sprintNo) {
     await this.props.actions.completeSprint(this.pid, sprintNo, values);
+    if (this.props.kanban.ecode === 0) {
+      this.refs.header.changeModel('backlog');
+    }
     return this.props.kanban.ecode;
   }
 

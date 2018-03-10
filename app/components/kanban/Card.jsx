@@ -77,6 +77,9 @@ const cardTarget = {
 
 @DropTarget(
   props => {
+    if (!props.options.permissions || props.options.permissions.indexOf('manage_project') === -1) {
+      return [];
+    }
     if (props.issue.parent && props.issue.parent.id) {
       return [ props.issue.parent.id + '-' + props.colNo ];
     } else {

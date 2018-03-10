@@ -77,7 +77,7 @@ class Register extends Component {
   async handleSubmit() {
     this.setState({ alertShow: false });
 
-    notify.show('试用版暂不支持此功能。', 'warning', 2000);
+    notify.show('企业用户一般是系统管理员通过后台用户管理模块统一维护，用户注册功能试用版暂不支持。', 'warning', 5000);
     return;
 
     const { values, actions, user } = this.props;

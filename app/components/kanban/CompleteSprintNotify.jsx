@@ -28,7 +28,7 @@ export default class CompleteNotify extends Component {
     const ecode = await complete({ completed_issues: _.map(completedIssues, (v) => v.no) }, sprintNo);
     if (ecode === 0) {
       close();
-      notify.show('Sprint已完成。', 'success', 2000);
+      notify.show('Sprint ' + sprintNo + ' 已置完成。', 'success', 2000);
     }
   }
 

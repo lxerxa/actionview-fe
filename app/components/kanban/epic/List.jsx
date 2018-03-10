@@ -105,7 +105,6 @@ export default class List extends Component {
           </ul>
         ),
         operation: (
-          options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
@@ -116,9 +115,9 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
-              { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
-              <MenuItem divider/>
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
               <MenuItem eventKey='3'>问题列表</MenuItem>
               <MenuItem eventKey='4'>Backlog列表</MenuItem>
             </DropdownButton> }

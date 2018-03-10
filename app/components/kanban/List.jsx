@@ -359,11 +359,11 @@ export default class List extends Component {
                   完成...
                 </a> }
                 { model == 'backlog' && v.status == 'active' && <span style={ { float: 'right' } }>活动中</span> }
-                { model == 'backlog' && v.status == 'waiting' && 
+                { model == 'backlog' && v.status == 'waiting' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
                   <span style={ { marginLeft: '10px', float: 'right' } }>
                     <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ deleteSprintShow: true, curSprintNo: v.no }); } }>删除</a>
                   </span> }
-                { model == 'backlog' && i == 1 && v.status == 'waiting' && columnIssues[i].length > 0 && 
+                { model == 'backlog' && i == 1 && v.status == 'waiting' && columnIssues[i].length > 0 && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
                   <span style={ { float: 'right' } }>
                     <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ publishSprintShow: true, curSprintNo: v.no }); } }>启动</a>
                   </span> }
@@ -416,14 +416,14 @@ export default class List extends Component {
                   key={ i }
                   sprintNo={ v.no }
                   columns={ columns }
-                  isEmpty={ !(draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1) }
+                  isEmpty={ !(draggedIssue && _.findIndex(columnIssues[i], { id: draggedIssue }) === -1 && options.permissions && options.permissions.indexOf('manage_project') !== -1) }
                   draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
                   moveSprintIssue={ this.moveSprintIssue.bind(this) }
                   options={ options }/> ) } ) }
             </div>
           </div> }
         </div> }
-        { !_.isEmpty(curKanban) && !indexLoading && model == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 &&
+        { !_.isEmpty(curKanban) && !indexLoading && model == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 && collection.length <= 0 &&
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
           <span>暂无活动的Sprint</span>
         </div> }
