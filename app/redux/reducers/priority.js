@@ -35,7 +35,7 @@ export default function priority(state = initialState, action) {
     case t.PRIORITY_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind] = action.result.data;
+        _.extend(state.collection[ind], action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

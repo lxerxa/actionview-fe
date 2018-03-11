@@ -36,7 +36,7 @@ const validate = (values, props) => {
     'orderBy',
     'from',
     'from_kanban_id',
-    'epic',
+    'epicxxx',
     'sprint',
     'sprints',
     'filter',

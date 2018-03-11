@@ -36,7 +36,7 @@ export default function screen(state = initialState, action) {
     case t.SCREEN_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind] = _.assign(state.collection[ind], action.result.data);
+        _.extend(state.collection[ind], action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

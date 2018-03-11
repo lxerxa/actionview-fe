@@ -35,7 +35,7 @@ export default function resolution(state = initialState, action) {
     case t.RESOLUTION_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind] = action.result.data;
+        _.extend(state.collection[ind], action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

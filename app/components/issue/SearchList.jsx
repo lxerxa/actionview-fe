@@ -49,7 +49,7 @@ export default class SearchList extends Component {
       module: newQuery.module ? newQuery.module : '',
       resolve_version: newQuery.resolve_version ? newQuery.resolve_version : '',
       epic: newQuery.epic ? newQuery.epic : '',
-      sprint: newQuery.sprint ? newQuery.sprint : '',
+      sprint: newQuery.sprint ? newQuery.sprint : null,
       created_at: newQuery.created_at ? newQuery.created_at : null,
       updated_at: newQuery.updated_at ? newQuery.updated_at : null
     });
@@ -277,7 +277,6 @@ export default class SearchList extends Component {
           <Col sm={ 3 }>
             <Select
               simpleValue
-              multi
               placeholder='选择Sprint'
               value={ this.state.sprint }
               onChange={ (newValue) => { this.state.sprint = newValue; this.search(); } }

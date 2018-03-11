@@ -651,7 +651,9 @@ export default class DetailBar extends Component {
                     Sprint
                   </Col>
                   <Col sm={ 7 }>
-                    Sprint { data.sprints.join(', ') }
+                    <div style={ { marginTop: '7px' } }>
+                      Sprint { data.sprints.join(', ') }
+                    </div>
                   </Col>
                 </FormGroup> }
                 { data.subtasks && data.subtasks.length > 0 &&

@@ -80,7 +80,7 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const categoryMap = { new: '新建', inprogess: '进行中', completed: '完成' };
+    const categoryMap = { new: '新建', inprogress: '进行中', completed: '完成' };
 
     const states = [];
     const stateNum = collection.length;

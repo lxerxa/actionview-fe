@@ -160,8 +160,8 @@ export default class List extends Component {
   async issueView(id, colNo) {
     this.setState({ barShow: true });
 
-    const { show, record, curKanban } = this.props;
-    const colNum = curKanban.columns.length;
+    const { model, show, record, curKanban, sprints } = this.props;
+    const colNum = model == 'backlog' ? (sprints.length + 1) :  curKanban.columns.length;
     let floatStyle = {};
     if (colNo >= _.ceil(colNum / 2)) {
       floatStyle = { left: $('.doc-container').offset().left };
@@ -353,7 +353,7 @@ export default class List extends Component {
                   onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
                   发布...
                 </a> }
-                { model == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                { model == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && _.findIndex(sprints, { status: 'active' }) !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.setState({ completeSprintShow: true }); } }>
                   完成...

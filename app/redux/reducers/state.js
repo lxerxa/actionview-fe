@@ -35,7 +35,7 @@ export default function state(state = initialState, action) {
     case t.STATE_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind] = action.result.data;
+        _.extend(state.collection[ind], action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
@@ -44,7 +44,7 @@ export default function state(state = initialState, action) {
 
     case t.STATE_SELECT:
       const el = _.find(state.collection, { id: action.id });
-      return { ...state, itemLoading: false, selectedItem: { id: el.id, name: el.name, description: el.description } };
+      return { ...state, itemLoading: false, selectedItem: el };
 
     case t.STATE_DELETE:
       return { ...state, itemLoading: true };
