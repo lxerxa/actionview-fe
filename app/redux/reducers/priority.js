@@ -63,7 +63,16 @@ export default function priority(state = initialState, action) {
 
     case t.PRIORITY_SET_SORT_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection = action.result.data;
+        if (action.result.data.sequence) {
+          const newCollection = [];
+          _.map(action.result.data.sequence, (v) => {
+            const index = _.findIndex(state.collection, { id: v });
+            if (index !== -1) {
+              newCollection.push(state.collection[index]);
+            }
+          });
+          state.collection = newCollection;
+        }
       }
       return { ...state, sortLoading: false, ecode: action.result.ecode };
 
@@ -74,7 +83,18 @@ export default function priority(state = initialState, action) {
       return { ...state, defaultLoading: true };
 
     case t.PRIORITY_SET_DEFAULT_SUCCESS:
-      return { ...state, defaultLoading: false, ecode: action.result.ecode, collection: action.result.data };
+      if ( action.result.ecode === 0 ) {
+        if (action.result.data.default) {
+          _.map(state.collection, (v) => {
+            if (v.id === action.result.data.default) {
+              v.default = true;
+            } else if (v.default) {
+              v.default = false;
+            }
+          });
+        }
+      } 
+      return { ...state, defaultLoading: false, ecode: action.result.ecode };
 
     case t.PRIORITY_SET_DEFAULT_FAIL:
       return { ...state, defaultLoading: false, error: action.error };

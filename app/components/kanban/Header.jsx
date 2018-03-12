@@ -16,14 +16,20 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { hideHeader: false, createIssueModalShow: false, createKanbanModalShow: false, createEpicModalShow: false, sortCardsModalShow: false };
+    this.state = { 
+      hideHeader: false, 
+      createIssueModalShow: false, 
+      createKanbanModalShow: false, 
+      createEpicModalShow: false, 
+      sortCardsModalShow: false };
     this.getQuery = this.getQuery.bind(this);
     this.changeModel = this.changeModel.bind(this);
   }
 
   async componentWillReceiveProps(nextProps) {
-    const { index, selectFilter, curKanban } = nextProps;
+    const { index, changeModel, selectFilter, curKanban } = nextProps;
     if (this.props.curKanban.id != curKanban.id || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
+      await changeModel('issue');
       await selectFilter('all');
       index(this.getQuery(curKanban.query || {}));
     }
@@ -74,7 +80,7 @@ export default class Header extends Component {
       this.setState({ createKanbanModalShow: true });
     } else {
       const { goto } = this.props;
-      goto(eventKey, 'issue');
+      goto(eventKey);
     }
   }
 
@@ -158,7 +164,7 @@ export default class Header extends Component {
 
   async changeModel(model) {
     const { changeModel, selectFilter, index, curKanban } = this.props;
-    changeModel(model);
+    await changeModel(model);
     if (model == 'issue' || model == 'backlog') {
       await selectFilter('all');
       index(this.getQuery(curKanban.query || {}, {}));

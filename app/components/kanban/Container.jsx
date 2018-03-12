@@ -96,6 +96,8 @@ export default class Container extends Component {
         _.extend(query, { from: 'scrum' });
       } else if (this.state.model === 'backlog') {
         _.extend(query, { from: 'backlog' });
+      } else {
+        return;
       }
     }
 

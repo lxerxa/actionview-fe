@@ -99,9 +99,9 @@ export default class List extends Component {
         bgColor: ( <div className='epic-label' style={ { backgroundColor: collection[i].bgColor || '#ccc' } } /> ),
         issues: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
-            <li>已完成 - <strong>{ collection[i].issues && collection[i].issues.completed || 0 }</strong></li>
-            <li>未完成 - <strong>{ collection[i].issues && collection[i].issues.incompleted || 0 }</strong></li>
-            <li>不明确 - <strong>{ collection[i].issues && collection[i].issues.inestimable || 0 }</strong></li>
+            <li>已完成 - <strong>{ collection[i].completed || 0 }</strong></li>
+            <li>未完成 - <strong>{ collection[i].incompleted || 0 }</strong></li>
+            <li>不明确 - <strong>{ collection[i].inestimable || 0 }</strong></li>
           </ul>
         ),
         operation: (

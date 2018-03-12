@@ -13,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ session, scheme }) => ({ session, scheme }), mapDispatchToProps)
+@connect(({ session }) => ({ session }), mapDispatchToProps)
 export default class Scheme extends Component {
   constructor(props) {
     super(props);
@@ -23,8 +23,7 @@ export default class Scheme extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired,
-    session: PropTypes.object.isRequired,
-    scheme: PropTypes.object.isRequired
+    session: PropTypes.object.isRequired
   }
 
   render() {

@@ -63,7 +63,16 @@ export default function state(state = initialState, action) {
 
     case t.STATE_SET_SORT_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection = action.result.data;
+        if (action.result.data.sequence) {
+          const newCollection = [];
+          _.map(action.result.data.sequence, (v) => {
+            const index = _.findIndex(state.collection, { id: v });
+            if (index !== -1) {
+              newCollection.push(state.collection[index]);
+            }
+          });
+          state.collection = newCollection;
+        }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

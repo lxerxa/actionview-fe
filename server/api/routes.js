@@ -685,6 +685,11 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.post('/project/:key/priority/batch', function(req, res) {
+    const results = { ecode: 0, data: { sequence: null, default: "546761" } };
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/priority/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

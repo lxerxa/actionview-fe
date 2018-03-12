@@ -14,6 +14,7 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { avatarEditModalShow: false, resetPwdModalShow: false };
+    this.avatarEditModalClose = this.avatarEditModalClose.bind(this);
     this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
   }
 
@@ -55,7 +56,7 @@ export default class List extends Component {
       ),
       contents: (
         <div style={ styles }>
-          <img src={ no_avatar } className='big-no-avatar'/>
+          <img src={ accounts.avatar ? '/api/getavatar?fid=' + accounts.avatar : no_avatar } className='big-no-avatar'/>
           <Button style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ avatarEditModalShow: true }) } }>设置头像</Button>
         </div>
       )

@@ -145,7 +145,7 @@ export default function kanban(state = initialState, action) {
     case t.KANBAN_EPIC_EDIT_SUCCESS:
       if (action.result.ecode === 0) {
         const ind = _.findIndex(state.epics, { id: action.result.data.id });
-        state.epics[ind] = action.result.data;
+        _.extend(state.epics[ind], action.result.data);
       }
       return { ...state, epicLoading: false, ecode: action.result.ecode };
 
@@ -169,14 +169,16 @@ export default function kanban(state = initialState, action) {
 
     case t.KANBAN_EPIC_SET_SORT_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        const newCollection = [];
-        _.map(action.result.data, (v) => {
-          const index = _.findIndex(state.collection, { id: v });
-          if (index !== -1) {
-            newCollection.push(state.collection[index]);
-          }
-        });
-        state.collection = newCollection;
+        if (action.result.data.sequence) {
+          const newEpics = [];
+          _.map(action.result.data.sequence, (v) => {
+            const index = _.findIndex(state.epics, { id: v });
+            if (index !== -1) {
+              newEpics.push(state.epics[index]);
+            }
+          });
+          state.epics = newEpics;
+        }
       }
       return { ...state, epicLoading: false, ecode: action.result.ecode };
 
