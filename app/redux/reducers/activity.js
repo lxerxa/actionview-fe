@@ -26,6 +26,7 @@ export default function activity(state = initialState, action) {
       if (action.result.ecode === 0) {
         state.collection = state.collection.concat(action.result.data);
         state.increaseCollection = action.result.data;
+        state.current_time = action.result.options.current_time;
       }
       return { ...state, moreLoading: false, ecode: action.result.ecode };
 
