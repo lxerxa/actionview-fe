@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], increaseCollection: [], indexLoading: false, moreLoading: false };
+const initialState = { ecode: 0, current_time: 1, collection: [], increaseCollection: [], indexLoading: false, moreLoading: false };
 
 export default function activity(state = initialState, action) {
   switch (action.type) {
@@ -12,6 +12,7 @@ export default function activity(state = initialState, action) {
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
         state.increaseCollection = action.result.data;
+        state.current_time = action.result.options.current_time;
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
 

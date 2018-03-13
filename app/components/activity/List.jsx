@@ -14,10 +14,12 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { limit: 50, category: 'all', barShow: false, hoverRowId: '' };
+    this.getAgoAt = this.getAgoAt.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    current_time: PropTypes.number.isRequired,
     collection: PropTypes.array.isRequired,
     increaseCollection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -115,6 +117,31 @@ export default class List extends Component {
     }
   }
 
+  getAgoAt(stamptime) {
+    const { current_time } = this.props;
+
+    const points = [
+      { value: 365 * 24 * 60 * 60, suffix: '年前', max: 2 },
+      { value: 30 * 24 * 60 * 60, suffix: '个月前', max: 11 }, 
+      { value: 7 * 24 * 60 * 60, suffix: '周前', max: 4 }, 
+      { value: 24 * 60 * 60, suffix: '天前', max: 6 }, 
+      { value: 60 * 60, suffix: '小时前', max: 23 },             
+      { value: 10 * 60, suffix: '0分钟前', max: 5 }
+    ];
+
+    let agoAt = '刚刚';
+    const diff = current_time - stamptime;
+
+    for (let i = 0; i < 6; i++) {
+      const mode = _.floor(diff / points[i].value);
+      if (mode >= 1) {
+        agoAt = _.max([ mode, points[i].max ]) + points[i].suffix;
+        break;
+      }
+    }
+    return agoAt;
+  }
+
   render() {
     const { 
       i18n,
@@ -178,33 +205,6 @@ export default class List extends Component {
 
     const { hoverRowId } = this.state;
 
-    const timeAgos = [ { key : 'just', name : '刚刚' },
-                       { key : '15m', name : '15分钟前' },
-                       { key : '30m', name : '30分钟前' },
-                       { key : '1h', name : '1小时前' },
-                       { key : '3h', name : '3小时前' },
-                       { key : '5h', name : '5小时前' },
-                       { key : '7h', name : '7小时前' },
-                       { key : '9h', name : '9小时前' },
-                       { key : '1d', name : '1天前' },
-                       { key : '2d', name : '2天前' },
-                       { key : '3d', name : '3天前' },
-                       { key : '4d', name : '4天前' },
-                       { key : '5d', name : '5天前' },
-                       { key : '6d', name : '6天前' },
-                       { key : '1w', name : '1周前' },
-                       { key : '2w', name : '2周前' },
-                       { key : '3w', name : '3周前' },
-                       { key : '4w', name : '4周前' },
-                       { key : '1m', name : '1月前' },
-                       { key : '3m', name : '3月前' },
-                       { key : '5m', name : '5月前' },
-                       { key : '7m', name : '7月前' },
-                       { key : '9m', name : '9月前' },
-                       { key : '11m', name : '11月前' },
-                       { key : '1y', name : '1年前' },
-                       { key : '2y', name : '2年前' } ];
-
     const ltStyles = { textDecoration: 'line-through', marginRight: '5px', overflow: 'hidden', textOverflow: 'ellipsis' };
 
     const activities = [];
@@ -212,6 +212,7 @@ export default class List extends Component {
     for (let i = 0; i < activityNum; i++) {
 
       const user = <Person data={ collection[i].user } />;
+      const agoAt = this.getAgoAt(collection[i].created_at);
 
       const wfEventFlag =
          collection[i].event_key === 'close_issue' 
@@ -230,12 +231,6 @@ export default class List extends Component {
         });
         comments = comments.replace(/(\r\n)|(\n)/g, '<br/>');
       } 
-
-      let agoName = '';
-      let agoIndex = _.findIndex(timeAgos, { key: collection[i].ago_key });
-      if (agoIndex !== -1) {
-        agoName = timeAgos[agoIndex].name;
-      }
 
       activities.push({
         id: collection[i].id,
@@ -344,7 +339,7 @@ export default class List extends Component {
             </ul> */}
           </div>
         ),
-        time: agoName 
+        time: agoAt 
       });
     }
 
