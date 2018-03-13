@@ -138,8 +138,14 @@ export default class List extends Component {
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
     return (
-      <div style={ { paddingBottom: '200px', marginLeft: '10px', marginTop: '-15px', overflowY: 'auto', height: '100%' } }>
-        <BootstrapTable data={ epics } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+      <div style={ { marginLeft: '10px', marginTop: '-15px', overflowY: 'auto', height: '100%' } }>
+        <BootstrapTable 
+          hover
+          data={ epics } 
+          bordered={ false } 
+          tableStyle={ { marginBottom: '200px' } } 
+          options={ opts } 
+          trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='issues'>问题完成情况</TableHeaderColumn>
