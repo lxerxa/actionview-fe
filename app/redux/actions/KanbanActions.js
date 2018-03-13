@@ -123,7 +123,7 @@ export function delEpic(key, id) {
   });
 }
 
-export function setSort(key, values) {
+export function setEpicSort(key, values) {
   return asyncFuncCreator({
     constant: 'KANBAN_EPIC_SET_SORT',
     promise: (client) => client.request({ url: '/project/' + key + '/epic/batch', method: 'post', data: values })
