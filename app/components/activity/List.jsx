@@ -135,7 +135,7 @@ export default class List extends Component {
     for (let i = 0; i < 6; i++) {
       const mode = _.floor(diff / points[i].value);
       if (mode >= 1) {
-        agoAt = _.max([ mode, points[i].max ]) + points[i].suffix;
+        agoAt = _.min([ mode, points[i].max ]) + points[i].suffix;
         break;
       }
     }
