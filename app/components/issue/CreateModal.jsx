@@ -425,7 +425,7 @@ class CreateModal extends Component {
                       disabled={ loading }
                       multi={ v.type === 'MultiSelect' || v.type === 'MultiVersion' }
                       clearable={ !v.required } 
-                      value={ this.state.values[v.key] } 
+                      value={ this.state.values[v.key] || null } 
                       options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } } ) } 
                       onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } } 
                       className={ this.state.touched[v.key] && this.state.errors[v.key] && 'select-error' }
