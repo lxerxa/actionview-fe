@@ -147,7 +147,7 @@ class CreateModal extends Component {
         if (!val.isSame(this.state.oldValues[key])) {
           diffKeys.push(key);
         }
-      } else if (!_.isEqual(val, this.state.oldValues[key]) {
+      } else if (!_.isEqual(val, this.state.oldValues[key])) {
         diffKeys.push(key);
       }
     });
