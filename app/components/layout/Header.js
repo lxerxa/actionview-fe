@@ -85,7 +85,6 @@ export default class Header extends Component {
     let recentProjects = project.recents;
     if (/^\/project/.test(pathname)) {
       curProject = project.item;
-      recentProjects = _.reject(recentProjects, { key: curProject.key });
     }
 
     const Modules = [
@@ -210,11 +209,20 @@ export default class Header extends Component {
             id='basic-nav-dropdown' 
             style={ headerUser } 
             onSelect={ this.operateSelect.bind(this) }>
-            { !_.isEmpty(curProject) && <MenuItem disabled>{ curProject.name }</MenuItem> }
-            { !_.isEmpty(curProject) && <MenuItem divider /> }
-            { _.map(recentProjects, (v, i) => <MenuItem key={ i } eventKey={ v.key }>{ v.name }</MenuItem> ) }
+            { _.map(recentProjects, (v, i) => 
+              <MenuItem key={ i } eventKey={ v.key }>
+                { !_.isEmpty(curProject) &&
+                <div style={ { display: 'inline-block', width: '20px', textAlign: 'left' } }>
+                  { curProject.key === v.key && <span><i className='fa fa-check'></i></span> }
+                </div> }
+                <span>{ v.name }</span>
+              </MenuItem> ) }
             { recentProjects.length > 0 && <MenuItem divider /> }
-            <MenuItem eventKey='myproject'>项目中心</MenuItem>
+            <MenuItem eventKey='myproject'>
+              { !_.isEmpty(curProject) && 
+              <div style={ { display: 'inline-block', width: '20px' } }/> }
+              <span>项目中心</span>
+            </MenuItem>
           </DropdownButton>
         </span> }
       </div>

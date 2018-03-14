@@ -76,9 +76,10 @@ export default function project(state = initialState, action) {
         state.item = action.result.data;
         state.options = action.result.options;
 
-        const newRecents = _.reject(state.recents, { key: action.result.data.key });
-        newRecents.unshift(action.result.data);
-        state.recents = newRecents;
+        const curInd = _.findIndex(state.recents, { key: action.result.data.key }); 
+        if (curInd === -1) {
+          state.recents.unshift(action.result.data);
+        }   
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

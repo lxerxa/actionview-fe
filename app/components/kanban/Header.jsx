@@ -254,9 +254,19 @@ export default class Header extends Component {
             </ButtonGroup> }
             { (kanbans.length > 0 || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) && 
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
-            { _.map(kanbans, (v, i) => ( <MenuItem key={ i } eventKey={ v.id }>{ v.name }</MenuItem> ) ) }
+            { _.map(kanbans, (v, i) => ( 
+              <MenuItem key={ i } eventKey={ v.id }>
+                <div style={ { display: 'inline-block', width: '20px', textAlign: 'left' } }>
+                  { curKanban.id === v.id && <i className='fa fa-check'></i> }
+                </div>
+                <span>{ v.name }</span>
+              </MenuItem> ) ) }
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 && kanbans.length > 0 && <MenuItem divider/> }
-            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='create'>创建看板</MenuItem> }
+            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
+              <MenuItem eventKey='create'>
+                { kanbans.length > 0 && <div style={ { display: 'inline-block', width: '20px' } }/> }
+                <span>创建看板</span>
+              </MenuItem> }
             </DropdownButton> } 
           </div>
         </div>
