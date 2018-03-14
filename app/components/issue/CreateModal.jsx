@@ -140,11 +140,14 @@ class CreateModal extends Component {
   getChangedKeys() {
     const diffKeys = [];
     _.mapKeys(this.state.values, (val, key) => {
+      if ((_.isUndefined(this.state.oldValues[key]) || this.state.oldValues[key] === '') && (((_.isArray(val) || _.isObject(val)) && _.isEmpty(val)) || (_.isString(val) && val == '') || _.isNull(val))) {
+        return;
+      }
       if (val instanceof moment && this.state.oldValues[key] instanceof moment) {
         if (!val.isSame(this.state.oldValues[key])) {
           diffKeys.push(key);
         }
-      } else if (!_.isEqual(val, this.state.oldValues[key]) && !(_.isUndefined(this.state.oldValues[key]) && (((_.isArray(val) || _.isObject(val)) && _.isEmpty(val)) || (_.isString(val) && val == '') || _.isNull(val)))) {
+      } else if (!_.isEqual(val, this.state.oldValues[key]) {
         diffKeys.push(key);
       }
     });
