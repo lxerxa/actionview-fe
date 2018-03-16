@@ -35,11 +35,11 @@ export default class Header extends Component {
             <i className='fa fa-plus'></i>&nbsp;新建角色
           </Button>
         </div>
-        { isSysConfig && 
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'>只能删除在项目中未生效的角色。</div>
-        </div> }
+          { isSysConfig && <div className='info-content'>只能删除在项目中未生效的角色。</div> }
+          { !isSysConfig && <div className='info-content'>若权限配置修改后，用户权限没有生效，请刷新页面。</div> }
+        </div>
         { this.state.createModalShow && 
           <CreateModal 
             show 
