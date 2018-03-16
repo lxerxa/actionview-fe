@@ -752,6 +752,10 @@ export default class DetailBar extends Component {
                     if (isNaN(data[field.key]) || data[field.key] === '') {
                       return;
                     }
+                  } else if (field.type === 'DateTimePicker' || field.type === 'DatePicker') {
+                    if (!data[field.key]) {
+                      return;
+                    }
                   } else if (_.isEmpty(data[field.key])) {
                     return;
                   }
