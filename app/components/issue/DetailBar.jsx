@@ -748,15 +748,7 @@ export default class DetailBar extends Component {
                     if (options.permissions && options.permissions.indexOf('upload_file') === -1 && !data[field.key]) {
                       return;
                     }
-                  } else if (field.type === 'Number') {
-                    if (isNaN(data[field.key]) || data[field.key] === '') {
-                      return;
-                    }
-                  } else if (field.type === 'DateTimePicker' || field.type === 'DatePicker') {
-                    if (!data[field.key]) {
-                      return;
-                    }
-                  } else if (_.isEmpty(data[field.key])) {
+                  } else if (_.isEmpty(data[field.key]) && !_.isNumber(data[field.key])) {
                     return;
                   }
 
