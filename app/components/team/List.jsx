@@ -299,6 +299,10 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px', marginTop: '15px' } }>
+        <div className='info-col'>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'>若成员配置修改后，用户权限没有生效，请刷新页面。</div>
+        </div>
         <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' width='300'>角色</TableHeaderColumn>

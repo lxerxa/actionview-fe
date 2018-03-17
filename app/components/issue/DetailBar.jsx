@@ -748,7 +748,7 @@ export default class DetailBar extends Component {
                     if (options.permissions && options.permissions.indexOf('upload_file') === -1 && !data[field.key]) {
                       return;
                     }
-                  } else if (!data[field.key]) {
+                  } else if (_.isEmpty(data[field.key]) && !_.isNumber(data[field.key])) {
                     return;
                   }
 

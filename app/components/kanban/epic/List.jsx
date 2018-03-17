@@ -139,6 +139,10 @@ export default class List extends Component {
 
     return (
       <div style={ { marginLeft: '10px', marginTop: '-15px', overflowY: 'auto', height: '100%' } }>
+        <div className='info-col'>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'>Epic信息修改后，创建、编辑问题页面Epic内容没及时更新的话，请刷新页面。</div>
+        </div>
         <BootstrapTable 
           hover
           data={ epics } 
