@@ -31,7 +31,7 @@ export default class List extends Component {
       hoverRowId: '', 
       selectedIds: [],
       name: '', 
-      group: '' }; 
+      group: null }; 
 
     this.importModalClose = this.importModalClose.bind(this);
     this.createModalClose = this.createModalClose.bind(this);
@@ -115,6 +115,9 @@ export default class List extends Component {
     if (!_.isEqual(newQuery, query)) {
       index(newQuery);
     }
+
+    this.state.name = query.name || '';
+    this.state.group = query.group || null;
   }
 
   operateNotify(id) {

@@ -30,7 +30,7 @@ export default class List extends Component {
       willSetPrincipalPids: [], 
       settingPrincipalPids: [],
       principal: {},
-      principal_id: '',
+      principal_id: null,
       name: '', 
       status: 'active' };
 
@@ -68,22 +68,16 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index, getOptions, query={} } = this.props;
-    if (query.status) this.state.status = query.status;
-    if (query.principal_id) this.state.principal_id = query.principal_id;
-    if (query.name) this.state.name = query.name;
-
     const newQuery = {};
-    if (this.state.status) {
-      newQuery.status = this.state.status;
+    newQuery.status = this.state.status = query.status || 'active';
+    if (query.name) {
+      newQuery.name = this.state.name = query.name;
     }
-    if (this.state.principal_id) {
-      newQuery.principal_id = this.state.principal_id;
+    if (query.principal_id) {
+      newQuery.principal_id = this.state.principal_id = query.principal_id;
     }
-    if (this.state.name) {
-      newQuery.name = this.state.name;
-    }
-    index(newQuery);
 
+    index(newQuery);
     getOptions();
   }
 
@@ -129,6 +123,10 @@ export default class List extends Component {
     if (!_.isEqual(newQuery, query)) {
       index(newQuery);
     }
+
+    this.state.status = newQuery.status || 'active';
+    this.state.name = newQuery.name || '';
+    this.state.principal_id = newQuery.principal_id || null;
   }
 
   closeNotify(id) {

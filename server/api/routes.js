@@ -70,7 +70,7 @@ export default function(router) {
   router.get('/user', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', name: '刘旭111', email: 'liuxu@chinamobile.com', phone: 13811450899, groups:['aa', 'bb'], status: 'active'}, {id: '111122', name: '刘旭111',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'},  { id: '111111', name: '刘旭11331',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'}, { id: '11133111', name: '刘旭111333', email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'closed'} ], options: { groups: [{id:'111', name:'111'}, {id:'222', name:'222'}] } };
+    const results = { ecode: 0, data: [{ id: '1111', first_name: '刘旭111', email: 'liuxu@chinamobile.com', phone: 13811450899, groups:['aa', 'bb'], status: 'active'}, {id: '111122', first_name: '刘旭111',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'},  { id: '111111', first_name: '刘旭11331',email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'active'}, { id: '11133111', first_name: '刘旭111333', email: 'liuxu@chinamobile.com', phone: 13811450899, status: 'closed'} ], options: { groups: [{id:'111', name:'111'}, {id:'222', name:'222'}] } };
     return res.status(200).send(results);
   });
 

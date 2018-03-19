@@ -119,6 +119,8 @@ export default class List extends Component {
     if (!_.isEqual(newQuery, query)) {
       index(newQuery);
     }
+
+    this.state.name = query.name || '';
   }
 
   operateNotify(id) {
