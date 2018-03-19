@@ -25,6 +25,7 @@ const ResetStateModal = require('./ResetStateModal');
 const WorkflowCommentsModal = require('./WorkflowCommentsModal');
 const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
+const WatcherListModal = require('./WatcherListModal');
 
 export default class DetailBar extends Component {
   constructor(props) {
@@ -55,10 +56,12 @@ export default class DetailBar extends Component {
       workflowCommentsShow: false, 
       delNotifyShow: false,
       copyModalShow: false,
+      watchersModalShow: false,
       action_id: '' };
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
+    this.watch = this.watch.bind(this);
   }
 
   static propTypes = {
@@ -305,22 +308,29 @@ export default class DetailBar extends Component {
       this.setState({ resetModalShow: true });
     } else if (eventKey == 'watch') {
       const watching = data.watching;
-      ecode = await watch(data.id, !watching);
-      if (ecode === 0) {
-        if (!watching) {
-          notify.show('关注成功。', 'success', 2000);
-        } else {
-          notify.show('已取消关注。', 'success', 2000);
-        }
-      } else {
-        if (!watching) {
-          notify.show('关注失败。', 'error', 2000);
-        } else {
-          notify.show('取消失败。', 'error', 2000);
-        }
-      }
+      this.watch(data.id, !watching);
+    } else if (eventKey == 'watchers') {
+      this.setState({ watchersModalShow : true });
     } else if (eventKey == 'del') {
       this.setState({ delNotifyShow : true });
+    }
+  }
+
+  async watch(id, flag) {
+    const { watch } = this.props;
+    const ecode = await watch(id, flag);
+    if (ecode === 0) {
+      if (flag) {
+        notify.show('关注成功。', 'success', 2000);
+      } else {
+        notify.show('已取消关注。', 'success', 2000);
+      }
+    } else {
+      if (flag) {
+        notify.show('关注失败。', 'error', 2000);
+      } else {
+        notify.show('取消失败。', 'error', 2000);
+      }
     }
   }
 
@@ -449,18 +459,6 @@ export default class DetailBar extends Component {
 
     const curInd = _.findIndex(issueCollection, { id: data.id });
 
-    const popoverClickRootClose = (
-      <Popover id='popover-trigger-click-root-close'>
-        { data.watchers && data.watchers.length > 0 ?
-          <ListGroup>
-            { _.map(data.watchers, (v) => {
-              return (<ListGroupItem><b>{ v.name }</b><br/>({ v.email })</ListGroupItem>) }) }
-          </ListGroup>
-          :
-          <span>暂无关注人</span> }
-      </Popover>
-    );
-
     const priorityInd = data.priority ? _.findIndex(options.priorities, { id: data.priority }) : -1;
     const priorityStyle = { marginLeft: '5px', marginRight: '10px' };
     if (priorityInd !== -1) {
@@ -490,11 +488,9 @@ export default class DetailBar extends Component {
         <Button className={ visitedIndex <= 0 ? 'angle-disable' : 'angle' } onClick={ this.forward.bind(this, -1) } disabled={ visitedIndex <= 0 } title='后退'>
           <i className='fa fa-angle-left'></i>
         </Button>
-        <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverClickRootClose }>
-          <Button className='angle' title='查看关注者'>
-            <i className='fa fa-eye' style={ { color: data.watching ? '#FF9900' : '#000000' } }></i>
-          </Button>
-        </OverlayTrigger>
+        <Button className='angle' title={ data.watching ? '已关注' : '未关注' } onClick={ () => { this.watch(data.id, !data.watching) } }>
+          <i className='fa fa-eye' style={ { color: data.watching ? '#FF9900' : '#000000' } }></i>
+        </Button>
         <div className='panel panel-default' style={ panelStyle }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
@@ -523,6 +519,7 @@ export default class DetailBar extends Component {
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
+                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && ((options.permissions.indexOf('edit_issue') !== -1 && !data.hasSubtasks) || options.permissions.indexOf('create_issue') !== -1) && <MenuItem divider/> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
@@ -1030,6 +1027,12 @@ export default class DetailBar extends Component {
             loading={ loading }
             copy={ copy }
             data={ data }
+            i18n={ i18n }/> }
+        { this.state.watchersModalShow &&
+          <WatcherListModal show
+            close={ () => { this.setState({ watchersModalShow: false }); } }
+            issue_no={ data.no }
+            watchers={ data.watchers || [] }
             i18n={ i18n }/> }
       </div>
     );

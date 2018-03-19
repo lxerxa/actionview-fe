@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
-import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
 const fieldTypes = require('../share/FieldTypes.js');
