@@ -432,7 +432,7 @@ class CreateModal extends Component {
                     <Select 
                       simpleValue
                       disabled={ loading }
-                      multi={ v.type === 'MultiSelect' || v.type === 'MultiVersion' }
+                      multi={ v.type === 'MultiSelect' || v.type === 'MultiVersion' || v.type === 'MultiUser' }
                       clearable={ !v.required } 
                       value={ this.state.values[v.key] || null } 
                       options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } } ) } 

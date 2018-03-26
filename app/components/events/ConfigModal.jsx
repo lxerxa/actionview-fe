@@ -108,52 +108,89 @@ export default class ConfigModal extends Component {
             <CheckboxGroup name='notifications' value={ this.state.notifications } onChange={ this.notificationsChanged.bind(this) }>
               <ui className='list-unstyled clearfix cond-list'>
                 <li>
-                  <Checkbox disabled={ loading } value='current_user'/>
-                  <span>当前用户</span>
+                  <strong>请选择以下通知对象：</strong>
                 </li>
                 <li>
-                  <Checkbox disabled={ loading } value='assignee'/>
-                  <span>当前经办人</span>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='current_user'/>
+                    <span>当前用户</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='assignee'/>
+                    <span>当前经办人</span>
+                  </div>
                 </li>
                 <li>
-                  <Checkbox disabled={ loading } value='reporter'/>
-                  <span>报告者</span>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='reporter'/>
+                    <span>报告者</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='watchers'/>
+                    <span>所有关注者</span>
+                  </div>
                 </li>
                 <li>
-                  <Checkbox disabled={ loading } value='project_principal'/>
-                  <span>项目负责人</span>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='project_principal'/>
+                    <span>项目负责人</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='module_principal'/>
+                    <span>模块负责人</span>
+                  </div>
                 </li>
                 <li>
-                  <Checkbox disabled={ loading } value='module_principal'/>
-                  <span>模块负责人</span>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='user'/>
+                    <span>单一用户</span>
+                    <select
+                      value={ this.state.userParam }
+                      onChange={ (e) => this.setState({ userParam: e.target.value }) }
+                      disabled={ (_.indexOf(this.state.notifications, 'user') !== -1 && !loading) ? false : true }
+                      style={ _.indexOf(this.state.notifications, 'user') !== -1 ? selectEnableStyles : selectDisabledStyles }>
+                      <option value='' key=''>请选择用户</option>
+                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name + '(' + userOption.email + ')' }</option> ) }
+                    </select>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='role'/>
+                    <span>项目角色</span>
+                    <select
+                      value={ this.state.roleParam }
+                      onChange={ (e) => this.setState({ roleParam: e.target.value }) }
+                      disabled={ (_.indexOf(this.state.notifications, 'role') !== -1 && !loading) ? false : true }
+                      style={ _.indexOf(this.state.notifications, 'role') !== -1 ? selectEnableStyles : selectDisabledStyles }>
+                      <option value='' key=''>请选择角色</option>
+                      { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
+                    </select>
+                  </div>
                 </li>
                 <li>
-                  <Checkbox disabled={ loading } value='watchers'/>
-                  <span>所有关注者</span>
-                </li>
-                <li>
-                  <Checkbox disabled={ loading } value='user'/>
-                  <span>单一用户</span>
-                  <select
-                    value={ this.state.userParam }
-                    onChange={ (e) => this.setState({ userParam: e.target.value }) }
-                    disabled={ (_.indexOf(this.state.notifications, 'user') !== -1 && !loading) ? false : true }
-                    style={ _.indexOf(this.state.notifications, 'user') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                    <option value='' key=''>请选择用户</option>
-                    { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name + '(' + userOption.email + ')' }</option> ) }
-                  </select>
-                </li>
-                <li>
-                  <Checkbox disabled={ loading } value='role'/>
-                  <span>项目角色</span>
-                  <select
-                    value={ this.state.roleParam }
-                    onChange={ (e) => this.setState({ roleParam: e.target.value }) }
-                    disabled={ (_.indexOf(this.state.notifications, 'role') !== -1 && !loading) ? false : true }
-                    style={ _.indexOf(this.state.notifications, 'role') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                    <option value='' key=''>请选择角色</option>
-                    { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
-                  </select>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='single_user_field'/>
+                    <span>单一用户字段</span>
+                    <select
+                      value={ this.state.userParam }
+                      onChange={ (e) => this.setState({ userParam: e.target.value }) }
+                      disabled={ (_.indexOf(this.state.notifications, 'user') !== -1 && !loading) ? false : true }
+                      style={ _.indexOf(this.state.notifications, 'user') !== -1 ? selectEnableStyles : selectDisabledStyles }>
+                      <option value='' key=''>请选择用户</option>
+                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name + '(' + userOption.email + ')' }</option> ) }
+                    </select>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox disabled={ loading } value='multi_user_field'/>
+                    <span>多用户字段</span>
+                    <select
+                      value={ this.state.roleParam }
+                      onChange={ (e) => this.setState({ roleParam: e.target.value }) }
+                      disabled={ (_.indexOf(this.state.notifications, 'role') !== -1 && !loading) ? false : true }
+                      style={ _.indexOf(this.state.notifications, 'role') !== -1 ? selectEnableStyles : selectDisabledStyles }>
+                      <option value='' key=''>请选择角色</option>
+                      { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
+                    </select>
+                  </div>
                 </li>
               </ui>
             </CheckboxGroup>
