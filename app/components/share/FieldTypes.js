@@ -12,5 +12,7 @@ export default [
   { value: 'File', label: '文件' },
   { value: 'SingleVersion', label: '单一版本选择' },
   { value: 'MultiVersion', label: '多版本选择' },
+  { value: 'SingleUser', label: '单一用户选择' },
+  { value: 'MultiUser', label: '多用户选择' },
   { value: 'Url', label: 'URL字段' }
 ];

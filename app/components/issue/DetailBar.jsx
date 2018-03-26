@@ -753,7 +753,11 @@ export default class DetailBar extends Component {
                   }
 
                   let contents = '';
-                  if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingleVersion') {
+                  if (field.type === 'SingleUser') {
+                    contents = data[field.key] && data[field.key].name || '-';
+                  } else if (field.type === 'MultiUser') {
+                    contents = _.map(data[field.key] || [], (v) => v.name).join(',');
+                  } else if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingleVersion') {
                     const optionValues = field.optionValues || [];
                     contents = _.find(optionValues, { id: data[field.key] }) ? _.find(optionValues, { id: data[field.key] }).name : '-';
                   } else if (field.type === 'MultiSelect' || field.type === 'CheckboxGroup' || field.type === 'MultiVersion') {

@@ -56,6 +56,12 @@ class CreateModal extends Component {
           if (v.key == 'assignee' && data[v.key].id) {
             values[v.key] = data[v.key].id; // assignee
             oldValues[v.key] = data[v.key].id; // assignee
+          } else if (v.type == 'SingleUser' && data[v.key].id) {
+            values[v.key] = data[v.key].id; // singleuser 
+            oldValues[v.key] = data[v.key].id; // singleuser 
+          } else if (v.type == 'MultiUser' && _.isArray(data[v.key])) {
+            values[v.key] = _.map(data[v.key], (v) => v.id).join(','); // files
+            oldValues[v.key] = _.map(data[v.key], (v) => v.id).join(','); // files
           } else if (v.type == 'File' && _.isArray(data[v.key])) {
             values[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
             oldValues[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
@@ -418,7 +424,7 @@ class CreateModal extends Component {
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
-              } else if (v.type === 'Select' || v.type === 'MultiSelect' || v.type === 'SingleVersion' || v.type === 'MultiVersion') {
+              } else if (v.type === 'Select' || v.type === 'MultiSelect' || v.type === 'SingleVersion' || v.type === 'MultiVersion' || v.type === 'SingleUser' || v.type === 'MultiUser') {
                 return (
                 <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
                   { title }
