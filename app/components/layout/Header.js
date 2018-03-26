@@ -78,6 +78,14 @@ export default class Header extends Component {
     }
   }
 
+  githubSelect(eventKey) {
+    if (eventKey === 'frontend') {
+      window.open('https://github.com/lxerxa/actionview-fe', '_blank');
+    } else if (eventKey === 'backend') {
+      window.open('https://github.com/lxerxa/actionview', '_blank');
+    }
+  }
+
   render() {
     const { pathname, project, session } = this.props;
 
@@ -206,7 +214,7 @@ export default class Header extends Component {
             pullRight 
             bsStyle='link' 
             title='项目' 
-            id='basic-nav-dropdown' 
+            id='basic-nav-dropdown-project' 
             style={ headerUser } 
             onSelect={ this.operateSelect.bind(this) }>
             { _.map(recentProjects, (v, i) => 
@@ -225,6 +233,18 @@ export default class Header extends Component {
             </MenuItem>
           </DropdownButton>
         </span> }
+        <span style={ { float: 'right' } }>
+          <DropdownButton
+            pullRight
+            bsStyle='link'
+            title='GitHub'
+            id='basic-nav-dropdown-github'
+            style={ headerUser }
+            onSelect={ this.githubSelect.bind(this) }>
+            <MenuItem eventKey='frontend'>前端</MenuItem>
+            <MenuItem eventKey='backend'>后端</MenuItem>
+          </DropdownButton>
+        </span>
       </div>
     );
   }

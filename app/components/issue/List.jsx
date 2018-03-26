@@ -43,6 +43,7 @@ export default class List extends Component {
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
     this.show = this.show.bind(this);
+    this.watch = this.watch.bind(this);
   }
 
   static propTypes = {
@@ -166,22 +167,27 @@ export default class List extends Component {
     } else if (eventKey === 'copy') {
       this.setState({ copyModalShow : true });
     } else if (eventKey === 'watch') {
-      ecode = await watch(selectedItem.id, !selectedItem.watching);
-      if (ecode === 0) {
-        if (selectedItem.watching) {
-          notify.show('关注成功。', 'success', 2000);
-        } else {
-          notify.show('已取消关注。', 'success', 2000);
-        }
-      } else {
-        if (selectedItem.watching) {
-          notify.show('关注失败。', 'error', 2000);
-        } else {
-          notify.show('取消失败。', 'error', 2000);
-        }
-      }
+      this.watch(selectedItem.id, !selectedItem.watching);
     } else {
       // todo err notify
+    }
+  }
+
+  async watch(id, flag) {
+    const { watch } = this.props;
+    const ecode = await watch(id, flag);
+    if (ecode === 0) {
+      if (flag) {
+        notify.show('关注成功。', 'success', 2000);
+      } else {
+        notify.show('已取消关注。', 'success', 2000);
+      }
+    } else {
+      if (flag) {
+        notify.show('关注失败。', 'error', 2000);
+      } else {
+        notify.show('取消失败。', 'error', 2000);
+      }
     }
   }
 
@@ -362,7 +368,7 @@ export default class List extends Component {
               { collection[i].title ? collection[i].title : '-' }
             </a>
             { collection[i].watching &&
-            <span title='已关注' style={ { marginLeft: '8px', color: '#FF9900' } }><i className='fa fa-eye'></i></span> }
+            <span title='已关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(collection[i].id, false) } }><i className='fa fa-eye'></i></span> }
             { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }</span> }
             
           </div>
