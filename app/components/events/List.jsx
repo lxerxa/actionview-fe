@@ -27,6 +27,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    isSysConfig: PropTypes.bool.isRequired,
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     options: PropTypes.object.isRequired,
@@ -114,6 +115,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n, 
+      isSysConfig,
       pkey, 
       collection, 
       selectedItem, 
@@ -242,6 +244,7 @@ export default class List extends Component {
         { this.state.configModalShow && 
         <ConfigModal 
           show 
+          isSysConfig={ isSysConfig }
           loading={ loading } 
           close={ this.configModalClose } 
           data={ selectedItem } 

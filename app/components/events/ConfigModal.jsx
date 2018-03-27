@@ -19,12 +19,12 @@ export default class ConfigModal extends Component {
       } else if (v.key == 'user' && v.value && v.value.id) {
         this.state.notifications.push('user');
         this.state.userParam = v.value.id;
-      } else if (v.key == 'singleUserField' && v.value) {
-        this.state.notifications.push('singleUserField');
-        this.state.roleParam = v.value;
-      } else if (v.key == 'multiUserField' && v.value) {
-        this.state.notifications.push('multiUserField');
-        this.state.userParam = v.value;
+      } else if (v.key == 'single_user_field' && v.value) {
+        this.state.notifications.push('single_user_field');
+        this.state.singleUserFieldParam = v.value;
+      } else if (v.key == 'multi_user_field' && v.value) {
+        this.state.notifications.push('multi_user_field');
+        this.state.multiUserFieldParam = v.value;
       } else {
         this.state.notifications.push(v);
       }
@@ -34,7 +34,7 @@ export default class ConfigModal extends Component {
     this.state.oldUserParam = this.state.userParam;
     this.state.oldRoleParam = this.state.roleParam;
     this.state.oldSingleUserFieldParam = this.state.singleUserFieldParam;
-    this.state.oldMultiUserFieldRoleParam = this.state.multiUserFieldParam;
+    this.state.oldMultiUserFieldParam = this.state.multiUserFieldParam;
 
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
@@ -42,6 +42,7 @@ export default class ConfigModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    isSysConfig: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired,
     setNotify: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired,
@@ -96,18 +97,21 @@ export default class ConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, data, options, loading } = this.props;
+    const { i18n: { errMsg }, data, options, loading, isSysConfig } = this.props;
 
     const roleOptions = options.roles || [];
     const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
-    const singleUserFieldOptions = options.singleUserFields || [];
-    const multiUserFieldOptions = options.multiUserFields || [];
+    const singleUserFieldOptions = options.single_user_fields || [];
+    const multiUserFieldOptions = options.multi_user_fields || [];
 
     const selectEnableStyles = { width: '125px', marginLeft: '10px', backgroundColor: '#ffffff', borderRadius: '4px' };
     const selectDisabledStyles = { width: '125px', marginLeft: '10px', backgroundColor: '#f5f5f5', borderRadius: '4px' };
 
     let isChanged = false;
-    if (this.state.userParam !== this.state.oldUserParam || this.state.roleParam !== this.state.oldRoleParam) {
+    if (this.state.userParam !== this.state.oldUserParam 
+      || this.state.roleParam !== this.state.oldRoleParam 
+      || this.state.singleUserFieldParam !== this.state.oldSingleUserFieldParam 
+      || this.state.oldMultiUserFieldParam !== this.state.multiUserFieldParam) {
       isChanged = true;
     } else {
       const tmp = _.intersection(this.state.notifications, this.state.oldNotifications);
@@ -126,7 +130,7 @@ export default class ConfigModal extends Component {
             <CheckboxGroup name='notifications' value={ this.state.notifications } onChange={ this.notificationsChanged.bind(this) }>
               <ui className='list-unstyled clearfix cond-list'>
                 <li>
-                  <strong>请选择以下通知对象：</strong>
+                  请选择以下通知对象：
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
@@ -158,6 +162,7 @@ export default class ConfigModal extends Component {
                     <span>模块负责人</span>
                   </div>
                 </li>
+                { !isSysConfig &&
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='user'/>
@@ -167,7 +172,7 @@ export default class ConfigModal extends Component {
                       onChange={ (e) => this.setState({ userParam: e.target.value }) }
                       disabled={ (_.indexOf(this.state.notifications, 'user') !== -1 && !loading) ? false : true }
                       style={ _.indexOf(this.state.notifications, 'user') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                      <option value='' key=''>请选择用户</option>
+                      <option value='' key=''>选择用户</option>
                       { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name + '(' + userOption.email + ')' }</option> ) }
                     </select>
                   </div>
@@ -179,11 +184,12 @@ export default class ConfigModal extends Component {
                       onChange={ (e) => this.setState({ roleParam: e.target.value }) }
                       disabled={ (_.indexOf(this.state.notifications, 'role') !== -1 && !loading) ? false : true }
                       style={ _.indexOf(this.state.notifications, 'role') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                      <option value='' key=''>请选择角色</option>
+                      <option value='' key=''>选择角色</option>
                       { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
                     </select>
                   </div>
-                </li>
+                </li> }
+                { !isSysConfig &&
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='single_user_field'/>
@@ -193,7 +199,7 @@ export default class ConfigModal extends Component {
                       onChange={ (e) => this.setState({ singleUserFieldParam: e.target.value }) }
                       disabled={ (_.indexOf(this.state.notifications, 'single_user_field') !== -1 && !loading) ? false : true }
                       style={ _.indexOf(this.state.notifications, 'single_user_field') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                      <option value='' key=''>请选择用户字段</option>
+                      <option value='' key=''>选择用户字段</option>
                       { singleUserFieldOptions.map( fieldOption => <option value={ fieldOption.id } key={ fieldOption.id }>{ fieldOption.name }</option> ) }
                     </select>
                   </div>
@@ -205,11 +211,11 @@ export default class ConfigModal extends Component {
                       onChange={ (e) => this.setState({ multiUserFieldParam: e.target.value }) }
                       disabled={ (_.indexOf(this.state.notifications, 'multi_user_field') !== -1 && !loading) ? false : true }
                       style={ _.indexOf(this.state.notifications, 'multi_user_field') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                      <option value='' key=''>请选择用户字段</option>
+                      <option value='' key=''>选择用户字段</option>
                       { multiUserFieldOptions.map( fieldOption => <option value={ fieldOption.id } key={ fieldOption.id }>{ fieldOption.name }</option> ) }
                     </select>
                   </div>
-                </li>
+                </li> }
               </ui>
             </CheckboxGroup>
           </div>

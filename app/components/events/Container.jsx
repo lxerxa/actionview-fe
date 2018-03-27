@@ -70,6 +70,8 @@ export default class Container extends Component {
   }
 
   render() {
+    const { location: { pathname='' } } = this.props;
+
     return (
       <div>
         <Header 
@@ -77,6 +79,7 @@ export default class Container extends Component {
           i18n={ this.props.i18n }
           { ...this.props.events }/>
         <List 
+          isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           pkey={ this.pid }
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 
