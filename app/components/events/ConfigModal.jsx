@@ -9,7 +9,7 @@ const img = require('../../assets/images/loading.gif');
 export default class ConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, notifications: [], userParam: '', roleParam: '' };
+    this.state = { ecode: 0, notifications: [], userParam: '', roleParam: '', singleUserFieldParam: '', multiUserFieldParam: '' };
 
     const { data: { notifications=[] } } = props;
     _.map(notifications, (v) => {
@@ -19,6 +19,12 @@ export default class ConfigModal extends Component {
       } else if (v.key == 'user' && v.value && v.value.id) {
         this.state.notifications.push('user');
         this.state.userParam = v.value.id;
+      } else if (v.key == 'singleUserField' && v.value) {
+        this.state.notifications.push('singleUserField');
+        this.state.roleParam = v.value;
+      } else if (v.key == 'multiUserField' && v.value) {
+        this.state.notifications.push('multiUserField');
+        this.state.userParam = v.value;
       } else {
         this.state.notifications.push(v);
       }
@@ -27,6 +33,8 @@ export default class ConfigModal extends Component {
     this.state.oldNotifications = _.clone(this.state.notifications);
     this.state.oldUserParam = this.state.userParam;
     this.state.oldRoleParam = this.state.roleParam;
+    this.state.oldSingleUserFieldParam = this.state.singleUserFieldParam;
+    this.state.oldMultiUserFieldRoleParam = this.state.multiUserFieldParam;
 
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
@@ -53,6 +61,14 @@ export default class ConfigModal extends Component {
       } else if (v == 'role') {
         if (this.state.roleParam) {
           notifications.push({ key: v, value: this.state.roleParam });
+        }
+      } else if (v == 'single_user_field') {
+        if (this.state.singleUserFieldParam) {
+          notifications.push({ key: v, value: this.state.singleUserFieldParam });
+        }
+      } else if (v == 'multi_user_field') {
+        if (this.state.multiUserFieldParam) {
+          notifications.push({ key: v, value: this.state.multiUserFieldParam });
         }
       } else {
         notifications.push(v);
@@ -84,6 +100,8 @@ export default class ConfigModal extends Component {
 
     const roleOptions = options.roles || [];
     const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
+    const singleUserFieldOptions = options.singleUserFields || [];
+    const multiUserFieldOptions = options.multiUserFields || [];
 
     const selectEnableStyles = { width: '125px', marginLeft: '10px', backgroundColor: '#ffffff', borderRadius: '4px' };
     const selectDisabledStyles = { width: '125px', marginLeft: '10px', backgroundColor: '#f5f5f5', borderRadius: '4px' };
@@ -171,24 +189,24 @@ export default class ConfigModal extends Component {
                     <Checkbox disabled={ loading } value='single_user_field'/>
                     <span>单一用户字段</span>
                     <select
-                      value={ this.state.userParam }
-                      onChange={ (e) => this.setState({ userParam: e.target.value }) }
-                      disabled={ (_.indexOf(this.state.notifications, 'user') !== -1 && !loading) ? false : true }
-                      style={ _.indexOf(this.state.notifications, 'user') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                      <option value='' key=''>请选择用户</option>
-                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name + '(' + userOption.email + ')' }</option> ) }
+                      value={ this.state.singleUserFieldParam }
+                      onChange={ (e) => this.setState({ singleUserFieldParam: e.target.value }) }
+                      disabled={ (_.indexOf(this.state.notifications, 'single_user_field') !== -1 && !loading) ? false : true }
+                      style={ _.indexOf(this.state.notifications, 'single_user_field') !== -1 ? selectEnableStyles : selectDisabledStyles }>
+                      <option value='' key=''>请选择用户字段</option>
+                      { singleUserFieldOptions.map( fieldOption => <option value={ fieldOption.id } key={ fieldOption.id }>{ fieldOption.name }</option> ) }
                     </select>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='multi_user_field'/>
                     <span>多用户字段</span>
                     <select
-                      value={ this.state.roleParam }
-                      onChange={ (e) => this.setState({ roleParam: e.target.value }) }
-                      disabled={ (_.indexOf(this.state.notifications, 'role') !== -1 && !loading) ? false : true }
-                      style={ _.indexOf(this.state.notifications, 'role') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                      <option value='' key=''>请选择角色</option>
-                      { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
+                      value={ this.state.multiUserFieldParam }
+                      onChange={ (e) => this.setState({ multiUserFieldParam: e.target.value }) }
+                      disabled={ (_.indexOf(this.state.notifications, 'multi_user_field') !== -1 && !loading) ? false : true }
+                      style={ _.indexOf(this.state.notifications, 'multi_user_field') !== -1 ? selectEnableStyles : selectDisabledStyles }>
+                      <option value='' key=''>请选择用户字段</option>
+                      { multiUserFieldOptions.map( fieldOption => <option value={ fieldOption.id } key={ fieldOption.id }>{ fieldOption.name }</option> ) }
                     </select>
                   </div>
                 </li>
