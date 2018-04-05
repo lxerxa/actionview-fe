@@ -168,21 +168,21 @@ export default class List extends Component {
                   if (role) {
                     name = '角色: ' + role.name;
                   } else {
-                    name = '角色: 无';
+                    name = '角色: 不明确';
                   }
                 } else if (v.key == 'single_user_field' && v.value) {
                   const role = _.find(options.single_user_fields || [], { id: v.value });
                   if (role) {
                     name = '单一用户字段: ' + role.name;
                   } else {
-                    name = '单一用户字段: 无';
+                    name = '单一用户字段: 不明确';
                   }
                 } else if (v.key == 'multi_user_field' && v.value) {
                   const role = _.find(options.multi_user_fields || [], { id: v.value });
                   if (role) {
                     name = '多用户字段: ' + role.name;
                   } else {
-                    name = '多用户字段: 无';
+                    name = '多用户字段: 不明确';
                   }
                 }
                 return (<li key={ i }>{ name }</li>) 
