@@ -163,7 +163,7 @@ export default class Comments extends Component {
 
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
-                  <span style={ { lineHeight: '24px' } } dangerouslySetInnerHTML={ { __html: contents } }/>
+                  <span style={ { lineHeight: '24px', wordBreak: 'break-all' } } dangerouslySetInnerHTML={ { __html: contents } }/>
                   <div style={ { marginTop: '5px', fontSize: '12px' } }><span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, {}) }><i className='fa fa-share'></i> 回复</span></div>
                   { val.reply && val.reply.length > 0 &&
                   <div className='reply-region'>

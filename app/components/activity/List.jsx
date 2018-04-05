@@ -205,7 +205,7 @@ export default class List extends Component {
 
     const { hoverRowId } = this.state;
 
-    const ltStyles = { textDecoration: 'line-through', marginRight: '5px', overflow: 'hidden', textOverflow: 'ellipsis' };
+    const ltStyles = { textDecoration: 'line-through', marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' };
 
     const activities = [];
     const activityNum = collection.length;
@@ -317,7 +317,7 @@ export default class List extends Component {
             { collection[i].event_key == 'del_comments'   && <span>删除了备注</span> }
             { comments &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              <li style={ collection[i].event_key == 'del_comments' ? ltStyles : { overflow: 'hidden', textOverflow: 'ellipsis' } } dangerouslySetInnerHTML={ { __html: comments } }/>
+              <li style={ collection[i].event_key == 'del_comments' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: comments } }/>
             </ul> }
 
             { collection[i].event_key == 'add_worklog'    && <span> 添加了工作日志</span> }
