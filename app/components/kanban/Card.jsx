@@ -226,11 +226,11 @@ export default class Card extends Component {
               { pkey } - { issue.no }
             </a>
           </div>
-          <div>
+          <div style={ { hiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
             { issue.title || '' }
           </div>
           { epicShow && !_.isEmpty(selectedEpic) && 
-            <div className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor } } title={ selectedEpic.name || '-' }>
+            <div className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%' } } title={ selectedEpic.name || '-' }>
               { selectedEpic.name || '-' }
             </div> }
         </div>
