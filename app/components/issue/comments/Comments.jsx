@@ -163,7 +163,7 @@ export default class Comments extends Component {
 
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
-                  <span style={ { lineHeight: '24px', wordBreak: 'break-all' } } dangerouslySetInnerHTML={ { __html: contents } }/>
+                  <span style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: contents } }/>
                   <div style={ { marginTop: '5px', fontSize: '12px' } }><span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, {}) }><i className='fa fa-share'></i> 回复</span></div>
                   { val.reply && val.reply.length > 0 &&
                   <div className='reply-region'>
@@ -185,7 +185,7 @@ export default class Comments extends Component {
                            <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span> }
                          </div>
                          <div>
-                           <span style={ { lineHeight: '24px', wordBreak: 'break-all' } } dangerouslySetInnerHTML={ { __html: contents } }/>
+                           <span style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: contents } }/>
                          </div>
                          <div style={ { fontSize: '12px' } }>
                            <span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, v.creator) }><i className='fa fa-share'></i> 回复</span>
