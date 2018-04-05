@@ -857,7 +857,7 @@ export default class DetailBar extends Component {
                         { field.name || '-' }
                       </Col>
                       <Col sm={ 9 }>
-                        <div style={ { marginTop: '7px' } }>
+                        <div style={ { marginTop: '7px', wordWrap: 'break-word' } }>
                           { contents }
                         </div>
                       </Col>

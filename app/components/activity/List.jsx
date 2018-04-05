@@ -304,7 +304,7 @@ export default class List extends Component {
             { collection[i].event_key == 'edit_issue' &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
             { _.map(collection[i].data, (v, i) => {
-              return (<li key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
+              return (<li style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
             }) }
             </ul> }
             { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && collection[i].data.new_user.name || '' }</span> }

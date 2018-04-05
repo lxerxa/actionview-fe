@@ -54,9 +54,21 @@ export default class History extends Component {
                     <tbody>
                     { _.map(val.data || [], (v) => 
                       <tr>
-                        <td>{ v.field || '' }</td>
-                        <td dangerouslySetInnerHTML = { { __html: _.isString(v.before_value) ? v.before_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.before_value } }/>
-                        <td dangerouslySetInnerHTML = { { __html: _.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value } }/>
+                        <td>
+                          <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '120px' } }>
+                            { v.field || '' }
+                          </div>
+                        </td>
+                        <td> 
+                          <div 
+                            style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '190px' } } 
+                            dangerouslySetInnerHTML = { { __html: _.isString(v.before_value) ? v.before_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.before_value } }/>
+                        </td>
+                        <td> 
+                          <div 
+                            style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '190px' } } 
+                            dangerouslySetInnerHTML = { { __html: _.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value } }/>
+                        </td>
                       </tr> ) }
                     </tbody>
                   </Table>
