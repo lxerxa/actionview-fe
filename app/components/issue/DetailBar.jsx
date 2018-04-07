@@ -673,8 +673,15 @@ export default class DetailBar extends Component {
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
                         return (<tr key={ 'subtask' + key }>
-                          <td><a href='#' style={ val.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>{ val.no } - { val.title }</a></td>
-                          <td style={ { whiteSpace: 'nowrap' } }>{ _.find(options.states || [], { id: val.state }) ? _.find(options.states, { id: val.state }).name : '-' }</td></tr>); 
+                          <td>
+                            <a href='#' style={ val.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>
+                            { val.no } - { val.title }
+                            </a>
+                          </td>
+                          <td style={ { whiteSpace: 'nowrap' } }>
+                            { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
+                          </td>
+                        </tr>); 
                       }) }
                       </tbody>
                     </Table>
@@ -847,7 +854,7 @@ export default class DetailBar extends Component {
                           onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
                     </div>);
                   } else if (field.type === 'TextArea') {
-                    contents = ( <span dangerouslySetInnerHTML={ { __html: data[field.key].replace(/(\r\n)|(\n)/g, '<br/>') } } /> ); 
+                    contents = ( <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: data[field.key].replace(/(\r\n)|(\n)/g, '<br/>') } } /> ); 
                   } else {
                     contents = data[field.key];
                   }
@@ -857,7 +864,7 @@ export default class DetailBar extends Component {
                         { field.name || '-' }
                       </Col>
                       <Col sm={ 9 }>
-                        <div style={ { marginTop: '7px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+                        <div style={ { marginTop: '7px' } }>
                           { contents }
                         </div>
                       </Col>
