@@ -27,6 +27,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    isSysConfig: PropTypes.bool.isRequired,
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     options: PropTypes.object.isRequired,
@@ -114,6 +115,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n, 
+      isSysConfig,
       pkey, 
       collection, 
       selectedItem, 
@@ -166,7 +168,21 @@ export default class List extends Component {
                   if (role) {
                     name = '角色: ' + role.name;
                   } else {
-                    name = '角色: 无';
+                    name = '角色: 不明确';
+                  }
+                } else if (v.key == 'single_user_field' && v.value) {
+                  const role = _.find(options.single_user_fields || [], { id: v.value });
+                  if (role) {
+                    name = '单一用户字段: ' + role.name;
+                  } else {
+                    name = '单一用户字段: 不明确';
+                  }
+                } else if (v.key == 'multi_user_field' && v.value) {
+                  const role = _.find(options.multi_user_fields || [], { id: v.value });
+                  if (role) {
+                    name = '多用户字段: ' + role.name;
+                  } else {
+                    name = '多用户字段: 不明确';
                   }
                 }
                 return (<li key={ i }>{ name }</li>) 
@@ -228,6 +244,7 @@ export default class List extends Component {
         { this.state.configModalShow && 
         <ConfigModal 
           show 
+          isSysConfig={ isSysConfig }
           loading={ loading } 
           close={ this.configModalClose } 
           data={ selectedItem } 

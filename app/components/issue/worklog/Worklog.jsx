@@ -215,7 +215,7 @@ export default class Worklog extends Component {
                   </Table>
                   <div style={ { marginLeft: '5px', lineHeight: '24px' } }>
                     <span style={ { width: '10%', float: 'left', fontWeight: 'bold' } }>备注：</span>
-                    <span style={ { width: '90%', float: 'left' } } dangerouslySetInnerHTML={ { __html: comments } }/>
+                    <span style={ { width: '90%', float: 'left', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: comments } }/>
                   </div>
                 </Panel>) }) }
           </Col>

@@ -205,7 +205,7 @@ export default class List extends Component {
 
     const { hoverRowId } = this.state;
 
-    const ltStyles = { textDecoration: 'line-through', marginRight: '5px', overflow: 'hidden', textOverflow: 'ellipsis' };
+    const ltStyles = { textDecoration: 'line-through', marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' };
 
     const activities = [];
     const activityNum = collection.length;
@@ -287,7 +287,7 @@ export default class List extends Component {
             { collection[i].event_key == 'unwatched_issue' && <span>取消关注了</span> }
             { collection[i].event_key.indexOf('_') === -1  && <span>将</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
-            { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
+            { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
             { wfEventFlag && collection[i].event_key.indexOf('_') !== -1 && <span>, </span> }
             { wfEventFlag && collection[i].event_key.indexOf('_') === -1 && <span>的</span> }
             { wfEventFlag &&
@@ -304,7 +304,7 @@ export default class List extends Component {
             { collection[i].event_key == 'edit_issue' &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
             { _.map(collection[i].data, (v, i) => {
-              return (<li key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
+              return (<li style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
             }) }
             </ul> }
             { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && collection[i].data.new_user.name || '' }</span> }
@@ -317,7 +317,7 @@ export default class List extends Component {
             { collection[i].event_key == 'del_comments'   && <span>删除了备注</span> }
             { comments &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              <li style={ collection[i].event_key == 'del_comments' ? ltStyles : { overflow: 'hidden', textOverflow: 'ellipsis' } } dangerouslySetInnerHTML={ { __html: comments } }/>
+              <li style={ collection[i].event_key == 'del_comments' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: comments } }/>
             </ul> }
 
             { collection[i].event_key == 'add_worklog'    && <span> 添加了工作日志</span> }
@@ -329,7 +329,7 @@ export default class List extends Component {
               { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
               { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
               { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }
-              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { overflow: 'hidden', textOverflow: 'ellipsis' } } dangerouslySetInnerHTML={ { __html: '备注 : ' + collection[i].data.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
+              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: '备注 : ' + collection[i].data.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
             </ul> }
             {/* (collection[i].event_key == 'create_version' || collection[i].event_key == 'edit_version') &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>

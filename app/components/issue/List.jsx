@@ -361,7 +361,7 @@ export default class List extends Component {
         name: (
           <div>
             { collection[i].parent &&
-            <span style={ { whiteSpace: 'pre-wrap' } }>
+            <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
               { collection[i].parent.title ? collection[i].parent.title + ' / ' : '- / ' }
             </span> }
             <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } } style={ { whiteSpace: 'pre-wrap' } }>
