@@ -250,24 +250,37 @@
 .page-button:hover { cursor: pointer }
 
 .cond-bar {
-  background-color: #f5f5f5;
   vertical-align: middle;
   padding: 6px 6px 6px 10px;
-  margin: 10px 0px 10px 0px;
-  border: 1px #ccc solid;
-  border-radius: 4px;
+  margin: 10px 10px 10px 0px;
+  display: inline-block;
+  float: right;
+}
+
+.cond-contents {
+  max-width: 35em;
+  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float: left;
 }
 
 .cond-bar .remove-icon {
   opacity: 0 !important;
   margin-left: 5px;
+  color: #5f5f5f;
+  float: right;
 }
 
 .cond-bar:hover .remove-icon{
   opacity: 1 !important;
   cursor: pointer;
   float: right;
-  margin-right: 5px;
+}
+
+.cond-bar .remove-icon:hover{
+  color: #000;
 }
 
 .searcher {
@@ -666,10 +679,15 @@ table tr:hover .remove-icon{
 .dragcard .edit-icon,.dragcard .rm-icon {
   display: none;
   margin-right: 5px;
+  color: #5f5f5f;
 }
 
 .dragcard:hover .edit-icon,.dragcard:hover .rm-icon {
   display: inline-block;
+}
+
+.dragcard .edit-icon:hover,.dragcard .rm-icon:hover {
+  color: #000;
 }
 
 .dragcard:hover {

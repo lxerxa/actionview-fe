@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button, Label, DropdownButton, MenuItem, Form, FormControl, FormGroup, ControlLabel, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import { Link } from 'react-router';
+import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 const $ = require('$');
 
@@ -14,7 +15,7 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false, searcherConfigShow: false, searchShow: false, condShow: false, addSearcherShow: false };
+    this.state = { createModalShow: false, searcherConfigShow: false, searchShow: false, addSearcherShow: false };
     this.createModalClose = this.createModalClose.bind(this);
     this.addSearcherModalClose = this.addSearcherModalClose.bind(this);
     this.searcherConfigModalClose = this.searcherConfigModalClose.bind(this);
@@ -58,7 +59,7 @@ export default class Header extends Component {
     const queryConds = [];
     let index = -1;
 
-    if (query.no) { queryConds.push('编号：' + query.no); }
+    if (query.no) { queryConds.push('编号 ～ ' + query.no); }
     if (query.title) { queryConds.push('主题~' + query.title); }
     if (query.type) { 
       const typeQuery = query.type.split(',');
@@ -70,7 +71,7 @@ export default class Header extends Component {
           return '类型' + errorMsg;
         }
       }
-      queryConds.push('类型：' + typeQueryNames.join('，'));
+      queryConds.push('类型 ～ ' + typeQueryNames.join('，'));
     }
     if (query.assignee) {
       const assigneeQuery = query.assignee.split(',');
@@ -84,7 +85,7 @@ export default class Header extends Component {
           return '经办人' + errorMsg;
         }
       }
-      queryConds.push('经办人：' + assigneeQueryNames.join('，'));
+      queryConds.push('经办人 ～ ' + assigneeQueryNames.join('，'));
     }
     if (query.reporter) {
       const reporterQuery = query.reporter.split(',');
@@ -98,7 +99,7 @@ export default class Header extends Component {
           return '报告人' + errorMsg;
         }
       }
-      queryConds.push('报告人：' + reporterQueryNames.join('，'));
+      queryConds.push('报告人 ～ ' + reporterQueryNames.join('，'));
     }
     if (query.watcher) {
       const watcherQuery = query.watcher.split(',');
@@ -108,7 +109,7 @@ export default class Header extends Component {
           watcherQueryNames.push('当前用户');
         }
       }
-      queryConds.push('关注者：' + watcherQueryNames.join('，'));
+      queryConds.push('关注者 ～ ' + watcherQueryNames.join('，'));
     }
     if (query.state) {
       const stateQuery = query.state.split(',');
@@ -120,7 +121,7 @@ export default class Header extends Component {
           return '状态' + errorMsg;
         }
       }
-      queryConds.push('状态：' + stateQueryNames.join('，'));
+      queryConds.push('状态 ～ ' + stateQueryNames.join('，'));
     }
     if (query.resolution) {
       const resolutionQuery = query.resolution.split(',');
@@ -132,7 +133,7 @@ export default class Header extends Component {
           return '解决结果' + errorMsg;
         }
       }
-      queryConds.push('解决结果：' + resolutionQueryNames.join('，'));
+      queryConds.push('解决结果 ～ ' + resolutionQueryNames.join('，'));
     }
     if (query.priority) {
       const priorityQuery = query.priority.split(',');
@@ -144,7 +145,7 @@ export default class Header extends Component {
           return '优先级' + errorMsg;
         }
       }
-      queryConds.push('优先级：' + priorityQueryNames.join('，'));
+      queryConds.push('优先级 ～ ' + priorityQueryNames.join('，'));
     }
     if (query.module) {
       const moduleQuery = query.module.split(',');
@@ -156,7 +157,7 @@ export default class Header extends Component {
           return '模块' + errorMsg;
         }
       }
-      queryConds.push('模块：' + moduleQueryNames.join('，'));
+      queryConds.push('模块 ～ ' + moduleQueryNames.join('，'));
     }
     if (query.resolve_version) {
       const versionQuery = query.resolve_version.split(',');
@@ -165,10 +166,10 @@ export default class Header extends Component {
         if ((index = _.findIndex(versions, { id: versionQuery[i] })) !== -1) {
           versionQueryNames.push(versions[index].name);
         } else {
-          return '解决版本：' + errorMsg;
+          return '解决版本 ～ ' + errorMsg;
         }
       }
-      queryConds.push('解决版本：' + versionQueryNames.join('，'));
+      queryConds.push('解决版本 ～ ' + versionQueryNames.join('，'));
     }
     if (query.epic) {
       const epicQuery = query.epic.split(',');
@@ -180,7 +181,7 @@ export default class Header extends Component {
           return 'Epic' + errorMsg;
         }
       }
-      queryConds.push('Epic：' + epicQueryNames.join('，'));
+      queryConds.push('Epic ～ ' + epicQueryNames.join('，'));
     }
     if (query.sprint) {
       const sprintQuery = query.sprint.split(',');
@@ -192,10 +193,10 @@ export default class Header extends Component {
           return 'Sprint' + errorMsg;
         }
       }
-      queryConds.push('Sprint：Sprint ' + sprintQueryNames.join('，'));
+      queryConds.push('Sprint ～ Sprint ' + sprintQueryNames.join('，'));
     }
-    if (query.created_at) { queryConds.push('创建时间：' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
-    if (query.updated_at) { queryConds.push('更新时间：' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
+    if (query.created_at) { queryConds.push('创建时间 ～ ' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
+    if (query.updated_at) { queryConds.push('更新时间 ～ ' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
 
     if (queryConds.length <= 0) { return '全部问题'; }
 
@@ -210,10 +211,8 @@ export default class Header extends Component {
     const { refresh, query } = this.props;
     if (eventKey === '1') {
       refresh(query);
-    } else if (eventKey == '2') {
-      this.setState({ condShow : !this.state.condShow });
-    } else if (eventKey == '3') {
-      this.setState({ addSearcherShow : true });
+    } else if (eventKey === '2') {
+      notify.show('抱歉，此功能暂未开发。', 'warning', 5000);
     }
   }
 
@@ -280,20 +279,16 @@ export default class Header extends Component {
             <DropdownButton pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>刷新</MenuItem>
               <MenuItem divider/>
-              <MenuItem eventKey='2'>{ this.state.condShow ? '隐藏条件' : '显示条件' }</MenuItem>
-              <MenuItem eventKey='3'>保存当前检索</MenuItem>
-              <MenuItem divider/>
-              <MenuItem eventKey='5'>导出</MenuItem>
-              <MenuItem eventKey='6'>导入</MenuItem>
+              <MenuItem eventKey='2'>导出</MenuItem>
             </DropdownButton>
           </div>
+          { sqlTxt !== '全部问题' &&
+          <div className='cond-bar'>
+            <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
+            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+          </div> }
         </div>
-        { this.state.condShow &&
-        <div className='cond-bar'>
-          <span>{ sqlTxt }</span>
-          <span className='remove-icon' onClick={ () => { this.setState({ condShow: false }); } } title='关闭'><i className='fa fa-remove'></i></span>
-          <span className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } } title='保存'><i className='fa fa-save'></i></span>
-        </div> }
         { this.state.searcherConfigShow && 
           <SearcherConfigModal 
             show 
