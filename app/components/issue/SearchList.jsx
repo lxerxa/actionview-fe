@@ -108,7 +108,7 @@ export default class SearchList extends Component {
     const sprintOptions = _.map(sprints, (val) => { return { label: 'Sprint ' + val, value: val } });
 
     return (
-      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5' } } className={ !searchShow && 'hide' }>
+      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } } className={ !searchShow && 'hide' }>
         <FormGroup controlId='formControlsLabel'>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             主题/NO

@@ -52,15 +52,19 @@ export default class Header extends Component {
   }
 
   condsTxt() {
-    const { options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], users=[] }, query } = this.props;
-    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
+    const { optionsLoading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], users=[] }, query } = this.props;
 
+    if (optionsLoading) {
+      return '';
+    }
+
+    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
     const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
     const queryConds = [];
     let index = -1;
 
-    if (query.no) { queryConds.push('编号 ～ ' + query.no); }
-    if (query.title) { queryConds.push('主题~' + query.title); }
+    if (query.no) { queryConds.push('编号～' + query.no); }
+    if (query.title) { queryConds.push('主题～' + query.title); }
     if (query.type) { 
       const typeQuery = query.type.split(',');
       const typeQueryNames = [];
@@ -71,7 +75,7 @@ export default class Header extends Component {
           return '类型' + errorMsg;
         }
       }
-      queryConds.push('类型 ～ ' + typeQueryNames.join('，'));
+      queryConds.push('类型～' + typeQueryNames.join('，'));
     }
     if (query.assignee) {
       const assigneeQuery = query.assignee.split(',');
@@ -85,7 +89,7 @@ export default class Header extends Component {
           return '经办人' + errorMsg;
         }
       }
-      queryConds.push('经办人 ～ ' + assigneeQueryNames.join('，'));
+      queryConds.push('经办人～' + assigneeQueryNames.join('，'));
     }
     if (query.reporter) {
       const reporterQuery = query.reporter.split(',');
@@ -99,7 +103,7 @@ export default class Header extends Component {
           return '报告人' + errorMsg;
         }
       }
-      queryConds.push('报告人 ～ ' + reporterQueryNames.join('，'));
+      queryConds.push('报告人～' + reporterQueryNames.join('，'));
     }
     if (query.watcher) {
       const watcherQuery = query.watcher.split(',');
@@ -109,7 +113,7 @@ export default class Header extends Component {
           watcherQueryNames.push('当前用户');
         }
       }
-      queryConds.push('关注者 ～ ' + watcherQueryNames.join('，'));
+      queryConds.push('关注者～' + watcherQueryNames.join('，'));
     }
     if (query.state) {
       const stateQuery = query.state.split(',');
@@ -121,7 +125,7 @@ export default class Header extends Component {
           return '状态' + errorMsg;
         }
       }
-      queryConds.push('状态 ～ ' + stateQueryNames.join('，'));
+      queryConds.push('状态～' + stateQueryNames.join('，'));
     }
     if (query.resolution) {
       const resolutionQuery = query.resolution.split(',');
@@ -133,7 +137,7 @@ export default class Header extends Component {
           return '解决结果' + errorMsg;
         }
       }
-      queryConds.push('解决结果 ～ ' + resolutionQueryNames.join('，'));
+      queryConds.push('解决结果～' + resolutionQueryNames.join('，'));
     }
     if (query.priority) {
       const priorityQuery = query.priority.split(',');
@@ -145,7 +149,7 @@ export default class Header extends Component {
           return '优先级' + errorMsg;
         }
       }
-      queryConds.push('优先级 ～ ' + priorityQueryNames.join('，'));
+      queryConds.push('优先级～' + priorityQueryNames.join('，'));
     }
     if (query.module) {
       const moduleQuery = query.module.split(',');
@@ -157,7 +161,7 @@ export default class Header extends Component {
           return '模块' + errorMsg;
         }
       }
-      queryConds.push('模块 ～ ' + moduleQueryNames.join('，'));
+      queryConds.push('模块～' + moduleQueryNames.join('，'));
     }
     if (query.resolve_version) {
       const versionQuery = query.resolve_version.split(',');
@@ -166,10 +170,10 @@ export default class Header extends Component {
         if ((index = _.findIndex(versions, { id: versionQuery[i] })) !== -1) {
           versionQueryNames.push(versions[index].name);
         } else {
-          return '解决版本 ～ ' + errorMsg;
+          return '解决版本～' + errorMsg;
         }
       }
-      queryConds.push('解决版本 ～ ' + versionQueryNames.join('，'));
+      queryConds.push('解决版本～' + versionQueryNames.join('，'));
     }
     if (query.epic) {
       const epicQuery = query.epic.split(',');
@@ -181,7 +185,7 @@ export default class Header extends Component {
           return 'Epic' + errorMsg;
         }
       }
-      queryConds.push('Epic ～ ' + epicQueryNames.join('，'));
+      queryConds.push('Epic～' + epicQueryNames.join('，'));
     }
     if (query.sprint) {
       const sprintQuery = query.sprint.split(',');
@@ -193,12 +197,12 @@ export default class Header extends Component {
           return 'Sprint' + errorMsg;
         }
       }
-      queryConds.push('Sprint ～ Sprint ' + sprintQueryNames.join('，'));
+      queryConds.push('Sprint～Sprint ' + sprintQueryNames.join('，'));
     }
-    if (query.created_at) { queryConds.push('创建时间 ～ ' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
-    if (query.updated_at) { queryConds.push('更新时间 ～ ' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
+    if (query.created_at) { queryConds.push('创建时间～' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
+    if (query.updated_at) { queryConds.push('更新时间～' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
 
-    if (queryConds.length <= 0) { return '全部问题'; }
+    if (queryConds.length <= 0) { return ''; }
 
     return queryConds.join(' | ');
   }
@@ -269,7 +273,7 @@ export default class Header extends Component {
               <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
             ) }
             <MenuItem divider/>
-            <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem>
+            { sqlTxt && <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem> }
             <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
           </DropdownButton>
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherConfigShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
@@ -282,7 +286,7 @@ export default class Header extends Component {
               <MenuItem eventKey='2'>导出</MenuItem>
             </DropdownButton>
           </div>
-          { sqlTxt !== '全部问题' &&
+          { sqlTxt &&
           <div className='cond-bar'>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
