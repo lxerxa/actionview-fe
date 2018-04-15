@@ -862,7 +862,7 @@ export default class DetailBar extends Component {
                           onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
                     </div>);
                   } else if (field.type === 'TextArea') {
-                    contents = ( <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: data[field.key].replace(/(\r\n)|(\n)/g, '<br/>') } } /> ); 
+                    contents = ( <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: data[field.key].replace(/(\r\n)|(\n)/g, '<br/>') } } /> ); 
                   } else {
                     contents = data[field.key];
                   }
