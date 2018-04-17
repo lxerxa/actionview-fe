@@ -10,15 +10,23 @@ const CreateModal = require('./CreateModal');
 const AddSearcherModal = require('./AddSearcherModal');
 const SearchList = require('./SearchList');
 const SearcherConfigModal = require('./SearcherConfigModal');
+const ExportConfigModal = require('./ExportConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false, searcherConfigShow: false, searchShow: false, addSearcherShow: false };
+    this.state = { 
+      createModalShow: false, 
+      searcherConfigShow: false, 
+      searchShow: false, 
+      addSearcherShow: false,
+      exportConfigShow: false };
+
     this.createModalClose = this.createModalClose.bind(this);
     this.addSearcherModalClose = this.addSearcherModalClose.bind(this);
     this.searcherConfigModalClose = this.searcherConfigModalClose.bind(this);
+    this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
     this.condsTxt = this.condsTxt.bind(this);
   }
 
@@ -28,6 +36,7 @@ export default class Header extends Component {
     addSearcher: PropTypes.func.isRequired,
     configSearcher: PropTypes.func.isRequired,
     refresh: PropTypes.func,
+    exportExcel: PropTypes.func,
     getOptions: PropTypes.func,
     query: PropTypes.object,
     project: PropTypes.object,
@@ -211,12 +220,16 @@ export default class Header extends Component {
     this.setState({ searcherConfigShow: false });
   }
 
+  exportConfigModalClose() {
+    this.setState({ exportConfigShow: false });
+  }
+
   operateSelect(eventKey) {
     const { refresh, query } = this.props;
     if (eventKey === '1') {
       refresh(query);
     } else if (eventKey === '2') {
-      notify.show('抱歉，此功能暂未开发。', 'warning', 5000);
+      this.setState({ exportConfigShow: true });
     }
   }
 
@@ -240,6 +253,11 @@ export default class Header extends Component {
       const searcher = _.find(searchers, { id: eventKey }) || {};
       refresh(searcher.query || {});
     }
+  }
+
+  exportExcel(fields) {
+    const { exportExcel, query } = this.props;
+    exportExcel(query, fields);
   }
 
   render() {
@@ -327,6 +345,13 @@ export default class Header extends Component {
             query={ query } 
             loading={ searcherLoading } 
             sqlTxt={ sqlTxt } 
+            i18n={ i18n }/> }
+        { this.state.exportConfigShow &&
+          <ExportConfigModal
+            show
+            close={ this.exportConfigModalClose }
+            options={ options } 
+            exportExcel={ this.exportExcel.bind(this) }
             i18n={ i18n }/> }
       </div>
     );

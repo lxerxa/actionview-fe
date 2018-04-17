@@ -36,6 +36,7 @@ const validate = (values, props) => {
     'orderBy',
     'from',
     'from_kanban_id',
+    'export_fields',
     'sprint',
     'sprints',
     'filter',

@@ -125,7 +125,7 @@ export default class ConfigModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>通知设置 - { data.name }</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
           <div style={ { paddingTop: '10px', paddingBottom: '0px', paddingLeft: '5px' } }>
             <CheckboxGroup name='notifications' value={ this.state.notifications } onChange={ this.notificationsChanged.bind(this) }>
               <ui className='list-unstyled clearfix cond-list'>

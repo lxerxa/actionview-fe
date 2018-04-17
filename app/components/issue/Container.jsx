@@ -52,6 +52,24 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  exportExcel(query, fields) {
+    const newQuery = _.clone(query);
+    newQuery.from = 'export';
+    newQuery.export_fields = fields.join(',');
+    newQuery.page = 1;
+    newQuery.limit = 10000;
+
+    const eleLink = document.createElement('a');
+    eleLink.style.display = 'none';
+    eleLink.href = '/api/project/' + this.pid + '/issue?' + qs.stringify(newQuery || {});
+    eleLink.target = '_blank';
+    // 触发点击
+    document.body.appendChild(eleLink);
+    eleLink.click();
+    // 然后移除
+    document.body.removeChild(eleLink);
+  }
+
   async create(values) {
     await this.props.actions.create(this.pid, values);
     return this.props.issue.ecode;
@@ -227,6 +245,7 @@ export default class Container extends Component {
           getOptions={ this.getOptions.bind(this) } 
           query={ query } 
           refresh={ this.refresh.bind(this) } 
+          exportExcel={ this.exportExcel.bind(this) } 
           project={ this.props.project.item } 
           i18n={ this.props.i18n }
           { ...this.props.issue }/>
