@@ -100,7 +100,7 @@ export default class ConfigModal extends Component {
           <div style={ { paddingTop: '10px', paddingBottom: '0px', paddingLeft: '5px' } }>
             <CheckboxGroup name='field' value={ this.state.fields } onChange={ this.fieldsChanged.bind(this) }>
               <ui className='list-unstyled clearfix cond-list'>
-                <li>
+                <li style={ { height: '40px' } } >
                   请选择以下导出列：
                 </li>
                 { _.map(rows, (v) => v) }
