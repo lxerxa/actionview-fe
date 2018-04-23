@@ -133,7 +133,8 @@ export default class CreateModal extends Component {
             <Select 
               disabled={ submitting } 
               options={ workflowOptions } 
-              simpleValue clearable={ false } 
+              simpleValue 
+              clearable={ false } 
               value={ workflow_id.value } 
               onChange={ newValue => { workflow_id.onChange(newValue) } } 
               placeholder='请选择一个工作流'/>
@@ -143,7 +144,8 @@ export default class CreateModal extends Component {
             <Select 
               disabled={ submitting } 
               options={ typeOptions } 
-              simpleValue clearable={ false } 
+              simpleValue 
+              clearable={ false } 
               value={ type.value || 'standard' } 
               onChange={ newValue => { type.onChange(newValue) } } 
               placeholder='请选择问题类型'/>

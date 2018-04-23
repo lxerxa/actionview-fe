@@ -222,7 +222,7 @@ export default class Card extends Component {
             <span className='type-abb' title={ _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).name : '' }>
               { _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).abb : '-' }
             </span>
-            <a href='#' onClick={ (e) => { e.preventDefault(); issueView(issue.id) } }>
+            <a href='#' style={ issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); issueView(issue.id) } }>
               { pkey } - { issue.no }
             </a>
           </div>

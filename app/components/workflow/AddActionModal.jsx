@@ -174,8 +174,7 @@ export default class AddActionModal extends Component {
       }
     }
 
-    if (restrictConditions.length > 0)
-    {
+    if (restrictConditions.length > 0) {
       const rcs = _.map(_.sortBy(restrictConditions, 'sn'), function(value) { return _.pick(value, ['name', 'args']); });
       addedAction.restrict_to = { conditions: { type: this.state.relation ? this.state.relation : 'and', list: rcs } };
     }
@@ -198,28 +197,18 @@ export default class AddActionModal extends Component {
   componentWillMount() {
     const { initializeForm, data } = this.props;
     const basicData = {};
-    if (!_.isEmpty(data))
-    {
+    if (!_.isEmpty(data)) {
       basicData.id = data.id;
       basicData.name = data.name;
       basicData.destStep = data.results[0].step;
       basicData.screen = data.screen;
-    }
-    else
-    {
+    } else {
       basicData.id = '';
       basicData.name = '';
       basicData.destStep = '';
       basicData.screen = '';
     }
     initializeForm(basicData);
-  }
-
-  onTabClick(key) {
-    if (key === this.state.activeKey) 
-    {
-      this.setState({ activeKey: '' });
-    }
   }
 
   onTabChange(activeKey) {
@@ -280,7 +269,6 @@ export default class AddActionModal extends Component {
           <FormControl type='hidden' { ...id }/>
           <Tabs
             activeKey={ this.state.activeKey }
-            onTabClick={ this.onTabClick.bind(this) } 
             onChange={ this.onTabChange.bind(this) } >
             <TabPane tab='基本' key='1'>
               <div style={ { paddingTop: '15px' } }>
@@ -295,17 +283,39 @@ export default class AddActionModal extends Component {
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
                   <ControlLabel><span className='txt-impt'>*</span>目标步骤</ControlLabel>
-                  <Select disabled={ submitting } options={ stepOptions } simpleValue value={ destStep.value } onChange={ newValue => { destStep.onChange(newValue) } } placeholder='请选择目标步骤' clearable={ false } searchable={ false }/>
+                  <Select 
+                    disabled={ submitting } 
+                    options={ stepOptions } 
+                    simpleValue 
+                    value={ destStep.value } 
+                    onChange={ newValue => { destStep.onChange(newValue) } } 
+                    placeholder='请选择目标步骤' 
+                    clearable={ false } 
+                    searchable={ false }/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
                   <ControlLabel>动作界面</ControlLabel>
-                  <Select disabled={ submitting } options={ screenOptions } simpleValue value={ screen.value } onChange={ newValue => { screen.onChange(newValue) } } placeholder='无界面' searchable={ false }/>
+                  <Select 
+                    disabled={ submitting } 
+                    options={ screenOptions } 
+                    simpleValue 
+                    value={ screen.value } 
+                    onChange={ newValue => { screen.onChange(newValue) } } 
+                    placeholder='无界面' 
+                    searchable={ false }/>
                 </FormGroup>
               </div>
             </TabPane>
             <TabPane tab='触发条件' key='2'>
               <div style={ { paddingTop: '15px', paddingBottom: '15px', paddingLeft: '5px' } }>
-                <Select options={ relationOptions } simpleValue value={ this.state.relation } onChange={ newValue => { this.setState({ relation: newValue }) } } placeholder='条件关系' clearable={ false } searchable={ false }/>
+                <Select 
+                  options={ relationOptions } 
+                  simpleValue 
+                  value={ this.state.relation } 
+                  onChange={ newValue => { this.setState({ relation: newValue }) } } 
+                  placeholder='条件关系' 
+                  clearable={ false } 
+                  searchable={ false }/>
               </div>
               <CheckboxGroup name='conditions' value={ this.state.conditions } onChange={ this.conditionsChanged.bind(this) }>
                 <ui className='list-unstyled clearfix cond-list'>

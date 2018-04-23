@@ -101,7 +101,8 @@ export default class EditModal extends Component {
               disabled={ submitting } 
               multi 
               options={ typeOptions } 
-              simpleValue value={ applyToTypes.value } 
+              simpleValue 
+              value={ applyToTypes.value } 
               onChange={ newValue => { applyToTypes.onChange(newValue) } } 
               placeholder='默认全部' 
               clearable={ false }/>

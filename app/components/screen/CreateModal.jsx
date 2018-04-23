@@ -97,8 +97,7 @@ export default class CreateModal extends Component {
   add() {
     const { options } = this.props;
     const fids = this.state.addFieldIds.split(',');
-    for (let i = 0; i < fids.length; i++)
-    {
+    for (let i = 0; i < fids.length; i++) {
       const field = _.find(options.fields || [], function(o) { return o.id === fids[i]; });
       this.state.cards.push({ id: field.id, text: field.name });
     }
@@ -117,13 +116,6 @@ export default class CreateModal extends Component {
         ]
       }
     }));
-  }
-
-  onTabClick(key) {
-    if (key === this.state.activeKey)
-    {
-      this.setState({ activeKey: '' });
-    }
   }
 
   onTabChange(activeKey) {
@@ -151,7 +143,6 @@ export default class CreateModal extends Component {
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <Tabs
             activeKey={ this.state.activeKey }
-            onTabClick={ this.onTabClick.bind(this) } 
             onChange={ this.onTabChange.bind(this) } >
             <TabPane tab='基本' key='1'>
               <div style={ { paddingTop: '15px' } }>
@@ -214,7 +205,14 @@ export default class CreateModal extends Component {
               <div style={ { paddingTop: '15px' } }>
                 <FormGroup controlId='formControlsSelect'>
                   <ControlLabel>必填字段</ControlLabel>
-                  <Select simpleValue options={ screenFields } clearable={ false } value={ required_fields.value } onChange={ newValue => { required_fields.onChange(newValue) } } placeholder='选择必填字段(可多选)' multi/>
+                  <Select 
+                    simpleValue 
+                    options={ screenFields } 
+                    clearable={ false } 
+                    value={ required_fields.value } 
+                    onChange={ newValue => { required_fields.onChange(newValue) } } 
+                    placeholder='选择必填字段(可多选)' 
+                    multi/>
                 </FormGroup>
               </div>
             </TabPane>
