@@ -42,7 +42,6 @@ export default class ConfigModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    isSysConfig: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired,
     setNotify: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired,
@@ -97,7 +96,7 @@ export default class ConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, data, options, loading, isSysConfig } = this.props;
+    const { i18n: { errMsg }, data, options, loading } = this.props;
 
     const roleOptions = options.roles || [];
     const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
@@ -162,7 +161,6 @@ export default class ConfigModal extends Component {
                     <span>模块负责人</span>
                   </div>
                 </li>
-                { !isSysConfig &&
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='user'/>
@@ -188,8 +186,7 @@ export default class ConfigModal extends Component {
                       { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
                     </select>
                   </div>
-                </li> }
-                { !isSysConfig &&
+                </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='single_user_field'/>
@@ -215,7 +212,7 @@ export default class ConfigModal extends Component {
                       { multiUserFieldOptions.map( fieldOption => <option value={ fieldOption.id } key={ fieldOption.id }>{ fieldOption.name }</option> ) }
                     </select>
                   </div>
-                </li> }
+                </li>
               </ui>
             </CheckboxGroup>
           </div>
