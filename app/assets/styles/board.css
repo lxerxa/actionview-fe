@@ -183,10 +183,15 @@
 .config-column .edit-icon,.config-column .rm-icon {
   display: none;
   margin-right: 5px;
+  color: #5f5f5f;
 }
 
 .config-column:hover .edit-icon,.config-column:hover .rm-icon {
   display: inline-block;
+}
+
+.config-column:hover .edit-icon:hover,.config-column:hover .rm-icon:hover {
+  color: #000;
 }
 
 .config-column:hover {
