@@ -458,11 +458,12 @@ table tr:hover .remove-icon{
 }
 
 .comments-button {
-  cursor: pointer
+  cursor: pointer;
+  color: #5f5f5f;
 }
 
 .comments-button:hover {
-  color: #337ab7;
+  color: #000;
 }
 
 .comments-edit-button {
