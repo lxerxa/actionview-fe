@@ -166,6 +166,7 @@ export default class Card extends Component {
               index={ index }
               issue={ issue }
               pkey={ pkey }
+              epicShow={ epicShow }
               colNo={ colNo }
               options={ options }
               closeDetail={ closeDetail }
@@ -179,6 +180,7 @@ export default class Card extends Component {
               moveCard={ moveCard }/> }
           <Column 
             isSubtaskCol={ true }
+            epicShow={ epicShow }
             colNo={ colNo } 
             openedIssue={ openedIssue } 
             draggedIssue={ draggedIssue }
