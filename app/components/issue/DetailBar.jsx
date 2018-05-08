@@ -678,7 +678,7 @@ export default class DetailBar extends Component {
                             { val.no } - { val.title }
                             </a>
                           </td>
-                          <td style={ { whiteSpace: 'nowrap', width: '10px' } }>
+                          <td style={ { whiteSpace: 'nowrap', width: '10px', textAlign: 'center' } }>
                             { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
                           </td>
                         </tr>); 
@@ -740,7 +740,7 @@ export default class DetailBar extends Component {
                               { linkedIssue.no } - { linkedIssue.title }
                             </a>
                           </td>
-                          <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', width: '10px' } }>
+                          <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', textAlign: 'center', width: '10px' } }>
                             { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }
                           </td>
                           <td style={ { verticalAlign: 'middle', width: '10px' } }>
