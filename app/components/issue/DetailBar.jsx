@@ -541,7 +541,7 @@ export default class DetailBar extends Component {
                     主题/NO 
                   </Col>
                   <Col sm={ 9 }>
-                    <div style={ { marginTop: '7px' } }>
+                    <div style={ { marginTop: '7px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
                       { data.parent && 
                         <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>
                           { data.parent.no + '-' + data.parent.title }
@@ -659,7 +659,7 @@ export default class DetailBar extends Component {
                     子任务 
                   </Col>
                   <Col sm={ 9 }>
-                    { data.subtasks.length > 2 &&
+                    { data.subtasks.length > 3 &&
                     <div style={ { marginTop: '7px' } }>
                       共{ data.subtasks.length }个子任务
                       <span style={ { marginLeft: '5px' } }> 
@@ -669,7 +669,7 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 3) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
                         return (<tr key={ 'subtask' + key }>
@@ -678,7 +678,7 @@ export default class DetailBar extends Component {
                             { val.no } - { val.title }
                             </a>
                           </td>
-                          <td style={ { whiteSpace: 'nowrap' } }>
+                          <td style={ { whiteSpace: 'nowrap', width: '10px' } }>
                             { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
                           </td>
                         </tr>); 
@@ -694,7 +694,7 @@ export default class DetailBar extends Component {
                     链接问题 
                   </Col>
                   <Col sm={ 9 }>
-                    { data.links.length > 2 &&
+                    { data.links.length > 3 &&
                     <div style={ { marginTop: '7px' } }>
                       共{ data.links.length }个问题
                       <span style={ { marginLeft: '5px' } }> 
@@ -704,7 +704,7 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 2) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 3) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.links, (val, key) => {
                         let linkedIssue = {};
@@ -740,10 +740,10 @@ export default class DetailBar extends Component {
                               { linkedIssue.no } - { linkedIssue.title }
                             </a>
                           </td>
-                          <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle' } }>
+                          <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', width: '10px' } }>
                             { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }
                           </td>
-                          <td style={ { verticalAlign: 'middle' } }>
+                          <td style={ { verticalAlign: 'middle', width: '10px' } }>
                             { options.permissions && options.permissions.indexOf('link_issue') !== -1 ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
                           </td>
                         </tr>); 

@@ -364,7 +364,7 @@ export default class List extends Component {
             <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
               { collection[i].parent.title ? collection[i].parent.title + ' / ' : '- / ' }
             </span> }
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } } style={ { whiteSpace: 'pre-wrap' } }>
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } } style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
               { collection[i].title ? collection[i].title : '-' }
             </a>
             { collection[i].watching &&
