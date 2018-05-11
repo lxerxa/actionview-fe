@@ -164,7 +164,7 @@ export default class List extends Component {
     this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
 
     const { update, collection } = this.props;
-    const ecode = await update(pid, { principal_id: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
+    const ecode = await update(pid, { principal: (this.state.principal[pid] || _.find(collection, { id: pid }).principal || {}).id });
     if (ecode === 0) {
       const willSetIndex = this.state.willSetPrincipalPids.indexOf(pid);
       this.state.willSetPrincipalPids.splice(willSetIndex, 1);
