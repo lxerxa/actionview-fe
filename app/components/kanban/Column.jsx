@@ -20,6 +20,7 @@ export default class Column extends Component {
     isSubtaskCol: PropTypes.bool,
     subtaskShow: PropTypes.bool,
     epicShow: PropTypes.bool,
+    inSprint: PropTypes.bool,
     colNo: PropTypes.number.isRequired,
     openedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
@@ -30,6 +31,7 @@ export default class Column extends Component {
     getDraggableActions: PropTypes.func.isRequired,
     cleanDraggableActions: PropTypes.func.isRequired,
     closeDetail: PropTypes.func.isRequired,
+    removeFromSprint: PropTypes.func.isRequired,
     setRank: PropTypes.func.isRequired,
     rankLoading: PropTypes.bool.isRequired
   }
@@ -90,13 +92,41 @@ export default class Column extends Component {
 
     const ecode = await setRank({ current: draggedIssue.no, up, down });
     if (ecode !== 0) {
-      notify.show('问题排序调整失败。', 'error', 2000);
+      notify.show('移动失败。', 'error', 2000);
     }
   }
 
   issueView(id) {
     const { issueView, colNo } = this.props;
     issueView(id, colNo);
+  }
+
+  async toTop(no) {
+    const { setRank } = this.props;
+    const { mainCards } = this.state;
+
+    const up = -1;
+    const down = mainCards[0].no;
+    if (down !== no) {
+      const ecode = await setRank({ current: no, up, down });
+      if (ecode !== 0) {
+        notify.show('移动失败。', 'error', 2000);
+      }
+    }
+  }
+
+  async toBottom(no) {
+    const { setRank } = this.props;
+    const { mainCards } = this.state;
+
+    const up = _.last(mainCards).no;
+    const down = -1;
+    if (up !== no) {
+      const ecode = await setRank({ current: no, up, down });
+      if (ecode !== 0) {
+        notify.show('移动失败。', 'error', 2000);
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -112,10 +142,12 @@ export default class Column extends Component {
       isSubtaskCol=false,
       subtaskShow=false,
       epicShow=false,
+      inSprint=false,
       getDraggableActions, 
       cleanDraggableActions, 
       setRank,
       rankLoading,
+      removeFromSprint,
       closeDetail, 
       draggedIssue,
       openedIssue, 
@@ -140,6 +172,7 @@ export default class Column extends Component {
           pkey={ pkey }
           subtasks={ classifiedSubtasks[v.no] || [] }
           epicShow={ epicShow }
+          inSprint={ inSprint }
           options={ options }
           closeDetail={ closeDetail }
           draggedIssue={ draggedIssue }
@@ -149,6 +182,9 @@ export default class Column extends Component {
           setRank={ setRank } 
           rankLoading={ rankLoading }
           issueRank={ this.issueRank.bind(this) } 
+          toTop={ this.toTop.bind(this) }
+          toBottom={ this.toBottom.bind(this) }
+          removeFromSprint={ removeFromSprint }
           moveCard={ this.moveCard.bind(this) }/>
         ) }
       </div> );

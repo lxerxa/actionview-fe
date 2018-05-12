@@ -4,7 +4,9 @@ import { DragSource, DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
 import Column from './Column';
+import RightClickMenu from './RightClickMenu';
 
+const $ = require('$');
 const no_avatar = require('../../assets/images/no_avatar.png');
 
 const cardSource = {
@@ -107,6 +109,14 @@ const cardTarget = {
 )
 export default class Card extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { menuShow: false };
+    this.handleBlur = this.handleBlur.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleContextMenu = this.handleContextMenu.bind(this);
+  }
+
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
@@ -124,11 +134,54 @@ export default class Card extends Component {
     index: PropTypes.number.isRequired,
     pkey: PropTypes.string.isRequired,
     epicShow: PropTypes.bool,
+    inSprint: PropTypes.bool,
     subtasks: PropTypes.array,
     colNo: PropTypes.number.isRequired,
     options: PropTypes.object.isRequired,
+    toTop: PropTypes.func,
+    toBottom: PropTypes.func,
+    removeFromSprint: PropTypes.func,
     moveCard: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    $(findDOMNode(this)).on('contextmenu', (e) => { 
+      this.handleContextMenu(e) 
+    });
+    $(findDOMNode(this)).on('mouseleave', (e) => { 
+      this.handleBlur(e);
+    });
+    $(findDOMNode(this)).on('mousedown', (e) => { 
+      e.button != 2 && this.handleClick(e);
+    });
+  }
+
+  componentWillUnmount() {
+    $(findDOMNode(this)).off('contextmenu');
+    $(findDOMNode(this)).off('mouseleave');
+    $(findDOMNode(this)).off('mousedown');
+  }
+
+  handleBlur(e) {
+    setTimeout(() => { 
+      this.setState({ menuShow: false });
+    }, 200);
+  }
+
+  handleClick(e) {
+    setTimeout(() => { 
+      this.setState({ menuShow: false });
+    }, 200);
+  }
+
+  handleContextMenu(e) {
+    this.setState({ menuShow: true });
+
+    e.preventDefault();
+    const menuDom = findDOMNode(this.refs.menu);
+    menuDom.style.left = `${e.pageX}px`;
+    menuDom.style.top = `${e.pageY}px`;
+  }
 
   render() {
     const { 
@@ -149,7 +202,11 @@ export default class Card extends Component {
       closeDetail,
       subtasks=[],
       epicShow,
+      inSprint,
       colNo,
+      toTop,
+      toBottom,
+      removeFromSprint,
       moveCard,
       options } = this.props;
 
@@ -167,6 +224,7 @@ export default class Card extends Component {
               issue={ issue }
               pkey={ pkey }
               epicShow={ epicShow }
+              inSprint={ inSprint }
               colNo={ colNo }
               options={ options }
               closeDetail={ closeDetail }
@@ -177,10 +235,12 @@ export default class Card extends Component {
               issueRank={ issueRank }
               setRank={ setRank }
               rankLoading={ rankLoading }
+              removeFromSprint={ removeFromSprint }
               moveCard={ moveCard }/> }
           <Column 
             isSubtaskCol={ true }
             epicShow={ epicShow }
+            inSprint={ inSprint }
             colNo={ colNo } 
             openedIssue={ openedIssue } 
             draggedIssue={ draggedIssue }
@@ -192,6 +252,7 @@ export default class Card extends Component {
             rankLoading={ rankLoading }
             pkey={ pkey }
             closeDetail={ closeDetail }
+            removeFromSprint={ removeFromSprint }
             options={ options }/>
         </div> );
     }
@@ -236,6 +297,14 @@ export default class Card extends Component {
               { selectedEpic.name || '-' }
             </div> }
         </div>
+        { this.state.menuShow &&
+          <RightClickMenu 
+            ref='menu'
+            issueNo={ issue.no }
+            inSprint={ inSprint }
+            toTop={ toTop }
+            toBottom={ toBottom }
+            removeFromSprint={ removeFromSprint }/> }
       </div>
     ));
   }

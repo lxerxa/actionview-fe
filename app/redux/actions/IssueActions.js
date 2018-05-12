@@ -221,6 +221,10 @@ export function copy(key, values) {
   });
 }
 
+export function removeFromSprint(issue) {
+  return { type: 'ISSUE_SPRINT_REMOVE_ISSUE', issue };
+}
+
 export function setRank(key, kid, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_KANBAN_RANK_SET',

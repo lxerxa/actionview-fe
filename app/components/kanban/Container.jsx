@@ -216,8 +216,13 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async moveSprintIssue(values) {
+  async moveSprintIssue(values, in_sprint) {
     await this.props.actions.moveSprintIssue(this.pid, values);
+    if (this.props.kanban.ecode === 0) {
+      if (in_sprint) {
+        await this.props.issueActions.removeFromSprint(values.issue_no);
+      }
+    }
     return this.props.kanban.ecode;
   }
 

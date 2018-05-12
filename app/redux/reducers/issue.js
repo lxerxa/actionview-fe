@@ -426,6 +426,10 @@ export default function issue(state = initialState, action) {
       }
       return { ...state, ecode: action.result.ecode };
 
+    case t.ISSUE_SPRINT_REMOVE_ISSUE:
+      const collection = _.reject(state.collection, (v) => action.issue === v.no);
+      return { ...state, collection };
+
     case t.ISSUE_KANBAN_RANK_SET:
       return { ...state, rankLoading: true };
 

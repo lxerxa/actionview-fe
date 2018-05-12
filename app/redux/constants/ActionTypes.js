@@ -190,6 +190,8 @@ export default generateConstants([
 
   'ISSUE_WATCHING(ASYNC)',
 
+  'ISSUE_SPRINT_REMOVE_ISSUE',
+
   'ISSUE_KANBAN_RELEASE(ASYNC)',
   'ISSUE_KANBAN_RANK_SET(ASYNC)',
 

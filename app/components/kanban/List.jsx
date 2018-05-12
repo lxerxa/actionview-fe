@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
 const $ = require('$');
@@ -138,8 +139,8 @@ export default class List extends Component {
     this.setState({ workflowScreenShow: true, drop_issue_id, action_id });
   }
 
-  moveSprintIssue(values) {
-    const { collection, moveSprintIssue } = this.props;
+  async moveSprintIssue(values) {
+    const { i18n: { errMsg }, collection, moveSprintIssue } = this.props;
     const { issue_id, src_sprint, dest_sprint } = values;
     const issue = _.find(collection, { id: issue_id });
     const new_values = { issue_no: issue.no, src_sprint_no: src_sprint.no, dest_sprint_no: dest_sprint.no }
@@ -147,7 +148,26 @@ export default class List extends Component {
     if ((src_sprint && src_sprint.status == 'active') || (dest_sprint && dest_sprint.status == 'active')) {
       this.setState({ moveIssueShow: true, movedData: new_values });
     } else {
-      moveSprintIssue(new_values);
+      const ecode = await moveSprintIssue(new_values);
+      if (ecode !== 0) {
+        notify.show(errMsg[ecode], 'warning', 2000);  
+      }
+    }
+  }
+
+  async removeFromSprint(issueNo) {
+    const { i18n: { errMsg }, sprints, moveSprintIssue } = this.props;
+    const activeSprint = _.find(sprints, { status: 'active' }); 
+    if (!_.isEmpty(activeSprint)) {
+      const waitingSprint = _.find(sprints, { status: 'waiting' });
+      let dest_sprint_no = 0;
+      if (waitingSprint) {
+        dest_sprint_no = waitingSprint.no;
+      }
+      const ecode = await moveSprintIssue({ issue_no: issueNo, src_sprint_no: activeSprint.no, dest_sprint_no }, true);
+      if (ecode !== 0) {
+        notify.show(errMsg[ecode], 'warning', 2000);  
+      }
     }
   }
 
@@ -376,7 +396,8 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 colNo={ i }
-                epicShow={ model == 'backlog' && true }
+                epicShow={ model == 'backlog' }
+                inSprint={ model == 'issue' && curKanban.type == 'scrum' }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
@@ -388,6 +409,7 @@ export default class List extends Component {
                 cards={ columnIssues[i] }
                 pkey={ project.key }
                 closeDetail={ this.closeDetail.bind(this) }
+                removeFromSprint={ this.removeFromSprint.bind(this) }
                 options={ options } /> ) } ) }
           </div>
           { model == 'issue' &&
