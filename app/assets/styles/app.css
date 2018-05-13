@@ -724,6 +724,7 @@ table tr:hover .remove-icon{
 }
 .card:hover {
   border: 1px solid #ccc;
+  box-shadow:0 0 5px #ccc;
 }
 .card .content {
   position: relative;
