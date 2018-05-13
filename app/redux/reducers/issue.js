@@ -115,6 +115,13 @@ export default function issue(state = initialState, action) {
         if (ind !== -1) {
           state.collection[ind] = action.result.data;
         }
+        _.map(state.collection, (v) => {
+          if (v.parent_id === action.result.data.id) {
+            if (v.parent && v.parent.id) {
+              v.parent.title = action.result.data.title;
+            }
+          }
+        });
         if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
           state.itemData = action.result.data;
         }
