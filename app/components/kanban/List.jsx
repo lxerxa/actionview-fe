@@ -150,7 +150,7 @@ export default class List extends Component {
     } else {
       const ecode = await moveSprintIssue(new_values);
       if (ecode !== 0) {
-        notify.show(errMsg[ecode], 'warning', 2000);  
+        notify.show('移动失败，' + errMsg[ecode], 'error', 2000);  
       }
     }
   }
@@ -165,8 +165,10 @@ export default class List extends Component {
         dest_sprint_no = waitingSprint.no;
       }
       const ecode = await moveSprintIssue({ issue_no: issueNo, src_sprint_no: activeSprint.no, dest_sprint_no }, true);
-      if (ecode !== 0) {
-        notify.show(errMsg[ecode], 'warning', 2000);  
+      if (ecode === 0) {
+        notify.show('已移出。', 'success', 2000);
+      } else {
+        notify.show('移出失败，' + errMsg[ecode], 'error', 2000);  
       }
     }
   }

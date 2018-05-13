@@ -300,8 +300,10 @@ export default class Card extends Component {
         { this.state.menuShow &&
           <RightClickMenu 
             ref='menu'
+            issueId={ issue.id }
             issueNo={ issue.no }
             inSprint={ inSprint }
+            issueView={ issueView }
             toTop={ toTop }
             toBottom={ toBottom }
             removeFromSprint={ removeFromSprint }/> }

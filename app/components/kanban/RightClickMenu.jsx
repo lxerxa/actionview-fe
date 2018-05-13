@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, Dropdown, MenuItem, Clearfix } from 'react-bootstrap'; 
+import { Button, Dropdown, MenuItem } from 'react-bootstrap'; 
 
 export default class Menu extends Component {
   constructor(props) {
@@ -9,16 +9,20 @@ export default class Menu extends Component {
   }
 
   static propTypes = {
+    issueId: PropTypes.string.isRequired,
     issueNo: PropTypes.string.isRequired,
     inSprint: PropTypes.bool,
+    issueView: PropTypes.func,
     toTop: PropTypes.func,
     toBottom: PropTypes.func,
     removeFromSprint: PropTypes.func
   }
 
   onSelectMenu(eventKey) {
-    const { issueNo, toTop, toBottom, removeFromSprint } = this.props;
-    if (eventKey === 'toTop') {
+    const { issueId, issueNo, issueView, toTop, toBottom, removeFromSprint } = this.props;
+    if (eventKey === 'issueView') {
+      issueView(issueId);
+    } else if (eventKey === 'toTop') {
       toTop(issueNo);
     } else if (eventKey === 'toBottom') {
       toBottom(issueNo);
@@ -36,6 +40,8 @@ export default class Menu extends Component {
         style={ { position: 'fixed' } }
         onSelect={ this.onSelectMenu.bind(this) }>
         <Dropdown.Menu>
+          <MenuItem eventKey='issueView'>查看</MenuItem>
+          <MenuItem divider />
           <MenuItem eventKey='toTop'>移至顶部</MenuItem>
           <MenuItem eventKey='toBottom'>移至底部</MenuItem>
           { inSprint && <MenuItem divider /> }
