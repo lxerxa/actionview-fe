@@ -79,9 +79,9 @@ const cardTarget = {
 
 @DropTarget(
   props => {
-    if (!props.options.permissions || props.options.permissions.indexOf('manage_project') === -1) {
-      return [];
-    }
+    //if (!props.options.permissions || props.options.permissions.indexOf('manage_project') === -1) {
+    //  return [];
+    //}
     if (props.issue.parent && props.issue.parent.id) {
       return [ props.issue.parent.id + '-' + props.colNo ];
     } else {
@@ -178,9 +178,13 @@ export default class Card extends Component {
     this.setState({ menuShow: true });
 
     e.preventDefault();
+    e.stopPropagation();
+
     const menuDom = findDOMNode(this.refs.menu);
-    menuDom.style.left = `${e.pageX}px`;
-    menuDom.style.top = `${e.pageY}px`;
+    if (menuDom) {
+      menuDom.style.left = `${e.pageX}px`;
+      menuDom.style.top = `${e.pageY}px`;
+    }
   }
 
   render() {
@@ -235,6 +239,8 @@ export default class Card extends Component {
               issueRank={ issueRank }
               setRank={ setRank }
               rankLoading={ rankLoading }
+              toTop={ toTop }
+              toBottom={ toBottom }
               removeFromSprint={ removeFromSprint }
               moveCard={ moveCard }/> }
           <Column 
