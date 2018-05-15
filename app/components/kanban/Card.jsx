@@ -308,7 +308,7 @@ export default class Card extends Component {
             ref='menu'
             issueId={ issue.id }
             issueNo={ issue.no }
-            inSprint={ inSprint }
+            hasRemove={ inSprint && options.permissions && options.permissions.indexOf('manage_project') !== -1 }
             issueView={ issueView }
             toTop={ toTop }
             toBottom={ toBottom }
