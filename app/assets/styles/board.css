@@ -20,7 +20,7 @@
   border-spacing: 8px 0;
   display: table;
   list-style: none;
-  margin-bottom: 20px;
+  margin: 0;
   table-layout: fixed;
   width: 100%;
   padding: 0;
