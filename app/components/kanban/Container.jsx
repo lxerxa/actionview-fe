@@ -402,7 +402,7 @@ export default class Container extends Component {
           kanbans={ this.props.kanban.list }
           sprints={ this.props.kanban.sprints }
           epics={ this.props.kanban.epics }
-          epicLoding={ this.props.kanban.epicLoading }
+          epicLoading={ this.props.kanban.epicLoading }
           indexEpicLoading={ this.props.kanban.indexEpicLoading }
           loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
           goto={ this.goto }

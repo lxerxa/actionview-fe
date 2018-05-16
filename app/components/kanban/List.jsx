@@ -431,7 +431,7 @@ export default class List extends Component {
                   acceptStates={ v.states || [] }/> ) } ) }
             </div>
           </div> }
-          { model == 'backlog' &&
+          { model == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div className='board-zone-overlay' style={ { top: '46px' } }>
             <div className='board-zone-overlay-table'>
             { _.map(columns, (v, i) => {

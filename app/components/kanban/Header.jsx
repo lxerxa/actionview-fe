@@ -351,7 +351,6 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow &&
           <SortCardsModal
             show
-            model='Epic'
             close={ this.sortCardsModalClose.bind(this) }
             cards={ epics }
             setSort={ setEpicSort }

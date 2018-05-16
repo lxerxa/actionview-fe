@@ -24,6 +24,8 @@ export default class MoveIssueNotify extends Component {
   async confirm() {
     const { close, move, values } = this.props;
     const ecode = await move(values);
+    this.setState({ ecode: ecode });
+
     if (ecode === 0) {
       close();
     }

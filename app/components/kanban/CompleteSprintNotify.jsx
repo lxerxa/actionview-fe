@@ -26,6 +26,8 @@ export default class CompleteNotify extends Component {
   async confirm() {
     const { close, complete, sprintNo, completedIssues } = this.props;
     const ecode = await complete({ completed_issues: _.map(completedIssues, (v) => v.no) }, sprintNo);
+    this.setState({ ecode: ecode });
+
     if (ecode === 0) {
       close();
       notify.show('Sprint ' + sprintNo + ' 已置完成。', 'success', 2000);
