@@ -24,6 +24,8 @@ export default class DelNotify extends Component {
   async confirm() {
     const { close, del, sprintNo } = this.props;
     const ecode = await del(sprintNo);
+    this.setState({ ecode: ecode });
+
     if (ecode === 0) {
       close();
       notify.show('Sprint已删除。', 'success', 2000);
