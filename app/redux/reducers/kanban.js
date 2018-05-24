@@ -15,6 +15,8 @@ const initialState = {
   configLoading: false, 
   wfactions: [], 
   wfLoading: false, 
+  sprintLog: {},
+  sprintLogLoading: false,
   draggedIssue: '' };
 
 export default function kanban(state = initialState, action) {
@@ -119,6 +121,16 @@ export default function kanban(state = initialState, action) {
     case t.KANBAN_SPRINT_COMPLETE_FAIL:
     case t.KANBAN_SPRINT_PUBLISH_FAIL:
     case t.KANBAN_SPRINT_DELETE_FAIL:
+      return { ...state, sprintLoading: false, error: action.error };
+
+    case t.KANBAN_SPRINT_LOG_GET:
+      return { ...state, sprintLogLoading: true };
+    case t.KANBAN_SPRINT_LOG_GET_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.sprintLog = action.result.data;
+      }
+      return { ...state, sprintLogLoading: false };
+    case t.KANBAN_SPRINT_LOG_GET_FAIL:
       return { ...state, sprintLoading: false, error: action.error };
 
     case t.KANBAN_EPIC_INDEX:

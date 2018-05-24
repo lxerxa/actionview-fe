@@ -8,6 +8,7 @@ const CreateKanbanModal = require('./config/CreateModal');
 const EditKanbanModal = require('./config/EditModal');
 const CreateEpicModal = require('./epic/CreateModal');
 const SortCardsModal = require('../share/SortCardsModal');
+const BurndownModal = require('./BurndownModal');
 
 const $ = require('$');
 const moment = require('moment');
@@ -21,7 +22,8 @@ export default class Header extends Component {
       createIssueModalShow: false, 
       createKanbanModalShow: false, 
       createEpicModalShow: false, 
-      sortCardsModalShow: false };
+      sortCardsModalShow: false,
+      burndownModalShow: false };
     this.getQuery = this.getQuery.bind(this);
     this.changeModel = this.changeModel.bind(this);
   }
@@ -53,6 +55,9 @@ export default class Header extends Component {
     loading: PropTypes.bool,
     epicLoading: PropTypes.bool,
     indexEpicLoading: PropTypes.bool,
+    getSprintLog: PropTypes.func,
+    sprintLog: PropTypes.object,
+    sprintLogLoading: PropTypes.bool,
     goto: PropTypes.func,
     selectFilter: PropTypes.func,
     index: PropTypes.func,
@@ -73,6 +78,10 @@ export default class Header extends Component {
 
   sortCardsModalClose() {
     this.setState({ sortCardsModalShow: false });
+  }
+
+  burndownModalClose() {
+    this.setState({ burndownModalShow: false });
   }
 
   changeKanban(eventKey) {
@@ -194,6 +203,9 @@ export default class Header extends Component {
       loading, 
       epicLoading, 
       indexEpicLoading, 
+      getSprintLog,
+      sprintLog={},
+      sprintLogLoading, 
       project, 
       create, 
       goto, 
@@ -289,6 +301,10 @@ export default class Header extends Component {
           <span style={ { float: 'right' } } title='隐藏看板头'>
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
+          { curKanban.type == 'scrum' && !_.isEmpty(activeSprint) &&
+          <span style={ { float: 'right', marginRight: '15px' } } title='燃尽图'>
+            <Button onClick={ () => { this.setState({ burndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
+          </span> }
         </div> }
         { model === 'backlog' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
@@ -356,6 +372,15 @@ export default class Header extends Component {
             setSort={ setEpicSort }
             sortLoading={ epicLoading }
             i18n={ i18n }/> }
+        { this.state.burndownModalShow &&
+          <BurndownModal
+            show
+            getSprintLog={ getSprintLog }
+            loading={ sprintLogLoading }
+            data={ sprintLog }
+            close={ this.burndownModalClose.bind(this) }
+            no={ activeSprint.no }/>
+        }
       </div>
     );
   }

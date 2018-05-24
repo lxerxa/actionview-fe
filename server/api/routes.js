@@ -856,7 +856,7 @@ export default function(router) {
   router.get('/project/:key/kanban', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', type: 'kanban', filters: [{no: 2, name: '1111', query:{ assignee: [ 'me', 'ttt' ] }}, {no: 3, name: '2222', query:{updated_at: '1w'}}, {no: 1, name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', no: 1, states: ['546761','546762'], max: 4, min: 2}, {name:'处理中', no: 0, states: [ '546763' ], max: 4}, {name:'关闭', no: 2, states:[], min: 1}], query: { subtask: false, type: [ '1111', '3333' ] }, last_access_time: 11111111 }, { id: '2222', name:'2222', type: 'scrum', filters: [{ no: 1, name: 'mmmmmmm', query:{ assignee: [ 'me','ttt' ] } }, {no: 2, name: 'nnnnnnn', query:{updated_at: '1w'}}, {no: 4, name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', no: 0, states: [ '546761']}, {name:'处理中22', no: 2, states: [ '546762' ]}, {name:'关闭22', no: 5, states:[ '546763' ]}], query: { subtask: true, type: [ '1111', '2222' ] } }], options: { sprints: [{no: 3, start_time:1474642399, complete_time:1474642399, status: 'waiting', issues:[1,2]}, {no: 4, status: 'waiting', issues: [3,4]}], epics: [{id: '1111', bgColor: '#4a6785', name: '测试测试11'}, {id: '2222', bgColor: '#8eb021', name: '测试测试22'}] } };
+    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', type: 'kanban', filters: [{no: 2, name: '1111', query:{ assignee: [ 'me', 'ttt' ] }}, {no: 3, name: '2222', query:{updated_at: '1w'}}, {no: 1, name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', no: 1, states: ['546761','546762'], max: 4, min: 2}, {name:'处理中', no: 0, states: [ '546763' ], max: 4}, {name:'关闭', no: 2, states:[], min: 1}], query: { subtask: false, type: [ '1111', '3333' ] }, last_access_time: 11111111 }, { id: '2222', name:'2222', type: 'scrum', filters: [{ no: 1, name: 'mmmmmmm', query:{ assignee: [ 'me','ttt' ] } }, {no: 2, name: 'nnnnnnn', query:{updated_at: '1w'}}, {no: 4, name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', no: 0, states: [ '546761']}, {name:'处理中22', no: 2, states: [ '546762' ]}, {name:'关闭22', no: 5, states:[ '546763' ]}], query: { subtask: true, type: [ '1111', '2222' ] } }], options: { sprints: [{no: 3, start_time:1474642399, complete_time:1474642399, status: 'active', issues:[1,2]}, {no: 4, status: 'waiting', issues: [3,4]}], epics: [{id: '1111', bgColor: '#4a6785', name: '测试测试11'}, {id: '2222', bgColor: '#8eb021', name: '测试测试22'}] } };
     return res.status(200).send(results);
   });
 
@@ -885,6 +885,13 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results={ecode: 0, data:[{no: 3, start_time:1474642399, complete_time:1474642399, status: 'active', issues:[1,2]}]};
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/sprint/:sid/log', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:{ issue_count: { guideline: [{ day: '', value: 18 }, { day: '05/02', value: 15 }, { day: '05/03', value: 12 }, { day: '05/04', value: 9 }, { day: '05/05', value: 9, notWorking: 1 }, { day: '05/06', value: 6 }, { day: '05/07', value: 3 }, { day: '05/08', value: 0 }], remaining: [{ day: '', value: 18 }, { day: '05/02', value: 16 }, { day: '05/03', value: 10 }, { day: '05/04', value: 5 }] }, origin_estimate: { guideline: [{ day: '', value: 12 }, { day: '05/02', value: 10 }, { day: '05/03', value: 8 }, { day: '05/04', value: 6 }, { day: '05/05', value: 6, notWorking: 1 }, { day: '05/06', value: 4 }, { day: '05/07', value: 2 }, { day: '05/08', value: 0 }], remaining: [{ day: '', value: 10.3 }, { day: '05/02', value: 6.5 }, { day: '05/03', value: 4.6 }, { day: '05/04', value: 3 }] } }};
     return res.status(200).send(results);
   });
 

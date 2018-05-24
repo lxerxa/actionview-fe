@@ -91,7 +91,6 @@ export default class PublishModal extends Component {
 
   componentWillMount() {
     const { initializeForm } = this.props;
-    alert
     initializeForm({ start_time: moment(), complete_time: moment().add(15, 'days') });
   }
 

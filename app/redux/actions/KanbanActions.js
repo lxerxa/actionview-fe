@@ -94,6 +94,13 @@ export function deleteSprint(key, no) {
   });
 }
 
+export function getSprintLog(key, kanban_id, no) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_SPRINT_LOG_GET',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + no + '/log?kanban_id=' + kanban_id })
+  });
+}
+
 export function indexEpic(key, kanban_id) {
   return asyncFuncCreator({
     constant: 'KANBAN_EPIC_INDEX',

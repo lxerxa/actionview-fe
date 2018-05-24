@@ -323,6 +323,11 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
+  async getSprintLog(sprintNo) {
+    await this.props.actions.getSprintLog(this.pid, this.kanban_id, sprintNo);
+    return this.props.kanban.ecode;
+  }
+
   async indexEpic() {
     await this.props.actions.indexEpic(this.pid, this.kanban_id);
     return this.props.kanban.ecode;
@@ -405,6 +410,9 @@ export default class Container extends Component {
           epicLoading={ this.props.kanban.epicLoading }
           indexEpicLoading={ this.props.kanban.indexEpicLoading }
           loading={ this.props.kanban.loading || this.props.issue.optionsLoading }
+          getSprintLog={ this.getSprintLog.bind(this) }
+          sprintLog={ this.props.kanban.sprintLog }
+          sprintLogLoading={ this.props.kanban.sprintLogLoading }
           goto={ this.goto }
           selectedFilter={ this.state.filter }
           selectFilter={ (filter) => { this.setState({ filter }) } }
