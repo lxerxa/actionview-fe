@@ -409,7 +409,7 @@ export default class List extends Component {
                     style={ { padding: '2px 7px' } }
                     onSelect={ this.operateBacklog.bind(this) }
                     pullRight>
-                    { columnIssues[i].length > 0 && <MenuItem eventKey={ 'view-' +  v.no }>查看</MenuItem> } 
+                    { selectedFilter == 'all' && columnIssues[i].length > 0 && <MenuItem eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> } 
                     { i == 1 && columnIssues[i].length > 0 && <MenuItem eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
                     <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> 
                   </DropdownButton> 
