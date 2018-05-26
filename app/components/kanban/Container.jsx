@@ -406,6 +406,7 @@ export default class Container extends Component {
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
           sprints={ this.props.kanban.sprints }
+          versions={ this.props.kanban.versions }
           epics={ this.props.kanban.epics }
           epicLoading={ this.props.kanban.epicLoading }
           indexEpicLoading={ this.props.kanban.indexEpicLoading }

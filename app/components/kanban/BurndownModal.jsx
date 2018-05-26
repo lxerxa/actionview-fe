@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, ButtonGroup, Button } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
+import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
@@ -35,9 +36,12 @@ export default class PreviewModal extends Component {
     this.setState({ display: newValue });
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const { no, getSprintLog } = this.props;
-    getSprintLog(no);
+    const ecode = await getSprintLog(no);
+    if (ecode !== 0) {
+      notify.show('获取数据失败。', 'error', 2000);
+    }
   }
 
   render() {
@@ -45,8 +49,8 @@ export default class PreviewModal extends Component {
 
     let newData = {};
     if (!_.isEmpty(data)) {
-      if (this.state.mode === 'originEstimate') {
-        newData = data.origin_estimate;
+      if (this.state.mode === 'storyPoints') {
+        newData = data.story_points;
       } else {
         newData = data.issue_count;
       }
@@ -75,7 +79,7 @@ export default class PreviewModal extends Component {
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <ButtonGroup style={ { float: 'right', marginRight: '110px' } }>
             <Button title='问题数' style={ { backgroundColor: this.state.mode == 'issueCount' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'issueCount' }) } }>问题数</Button>
-            <Button title='预估工作量' style={ { backgroundColor: this.state.mode == 'originEstimate' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'originEstimate' }) } }>预估工作量(D)</Button>
+            <Button title='故事点' style={ { backgroundColor: this.state.mode == 'storyPoints' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'storyPoints' }) } }>故事点</Button>
           </ButtonGroup> 
           <CheckboxGroup style={ { float: 'right', marginTop: '8px', marginRight: '10px' } } name='notifications' value={ this.state.display } onChange={ this.diplayChanged.bind(this) }>
             <Checkbox value='notWorkingShow'/>

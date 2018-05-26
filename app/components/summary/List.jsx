@@ -52,7 +52,7 @@ export default class List extends Component {
           header={ 
             <div>
               <span>{ '一周动态：' + (options.weekAgo || '') + ' ~ 现在' }</span>
-              <span className='exchange-icon' onClick={ () => this.setState({ pulseShowModel: this.state.pulseShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+              <span className='exchange-icon' onClick={ () => this.setState({ pulseShowModel: this.state.pulseShowModel == 'detail' ? 'percentage' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
           { data.new_issues && data.new_issues.total ?
           <Table responsive hover>
@@ -165,7 +165,7 @@ export default class List extends Component {
           header={ 
             <div>
               <span>未解决问题：按经办人</span>
-              <span className='exchange-icon' onClick={ () => this.setState({ assigneeShowModel: this.state.assigneeShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+              <span className='exchange-icon' onClick={ () => this.setState({ assigneeShowModel: this.state.assigneeShowModel == 'detail' ? 'percentage' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
           { data.assignee_unresolved_issues && !_.isEmpty(data.assignee_unresolved_issues) ?
           <Table responsive hover>
@@ -246,7 +246,7 @@ export default class List extends Component {
           header={ 
             <div>
               <span>未解决问题：按优先级</span>
-              <span className='exchange-icon' onClick={ () => this.setState({ priorityShowModel: this.state.priorityShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+              <span className='exchange-icon' onClick={ () => this.setState({ priorityShowModel: this.state.priorityShowModel == 'detail' ? 'percentage' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
           { data.priority_unresolved_issues && !_.isEmpty(data.priority_unresolved_issues) ?
           <Table responsive hover>
@@ -327,7 +327,7 @@ export default class List extends Component {
           header={ 
             <div>
               <span>未解决问题：按模块</span>
-              <span className='exchange-icon' onClick={ () => this.setState({ moduleShowModel: this.state.moduleShowModel == 'detail' ? 'percentage' : 'detail' }) }><i className='fa fa-exchange'></i></span>
+              <span className='exchange-icon' onClick={ () => this.setState({ moduleShowModel: this.state.moduleShowModel == 'detail' ? 'percentage' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
           { data.module_unresolved_issues && !_.isEmpty(data.module_unresolved_issues) ?
           <Table responsive hover>

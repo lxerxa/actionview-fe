@@ -19,6 +19,7 @@ export default class Header extends Component {
     super(props);
     this.state = { 
       hideHeader: false, 
+      backlogFilterMode: 'epic',
       createIssueModalShow: false, 
       createKanbanModalShow: false, 
       createEpicModalShow: false, 
@@ -26,6 +27,7 @@ export default class Header extends Component {
       burndownModalShow: false };
     this.getQuery = this.getQuery.bind(this);
     this.changeModel = this.changeModel.bind(this);
+    this.changeFilterMode = this.changeFilterMode.bind(this);
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -52,6 +54,7 @@ export default class Header extends Component {
     kanbans: PropTypes.array,
     sprints: PropTypes.array,
     epics: PropTypes.array,
+    versions: PropTypes.array,
     loading: PropTypes.bool,
     epicLoading: PropTypes.bool,
     indexEpicLoading: PropTypes.bool,
@@ -150,6 +153,10 @@ export default class Header extends Component {
       newQuery['epic'] = fq.epic;
     }
 
+    if (fq.resolve_version) {
+      newQuery['resolve_version'] = fq.resolve_version;
+    }
+
     return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
   }
 
@@ -180,10 +187,21 @@ export default class Header extends Component {
     }
   }
 
-  async handleSelectEpic(key) {
+  async handleSelectEV(key) {
+    const { backlogFilterMode } = this.state;
     const { index, curKanban, selectFilter } = this.props;
     await selectFilter(key || 'all');
-    index(this.getQuery(curKanban.query || {}, key ? { epic: key } : {}));
+    index(this.getQuery(curKanban.query || {}, key ? (backlogFilterMode === 'epic' ? { epic: key } : { resolve_version: key }) : {}));
+  }
+
+  async changeFilterMode() {
+    this.setState({ backlogFilterMode : this.state.backlogFilterMode === 'epic' ? 'version' : 'epic' });
+
+    const { index, curKanban, selectFilter, selectedFilter } = this.props;
+    await selectFilter('all');
+    if (selectedFilter != 'all') {
+      index(this.getQuery(curKanban.query || {}) , {});
+    }
   }
 
   render() {
@@ -200,6 +218,7 @@ export default class Header extends Component {
       createEpic, 
       setEpicSort,
       epics=[],
+      versions=[],
       loading, 
       epicLoading, 
       indexEpicLoading, 
@@ -212,6 +231,7 @@ export default class Header extends Component {
       options } = this.props;
 
     const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });
+    const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });
 
     let popoverSprint = '';
     let activeSprint = {};
@@ -308,15 +328,26 @@ export default class Header extends Component {
         </div> }
         { model === 'backlog' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
-          <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>Epic过滤：</span>
+          <div className='exchange-icon' style={ { float: 'left', marginTop: '7px' } } onClick={ this.changeFilterMode.bind(this) } title='切换'><i className='fa fa-retweet'></i></div>
+          <span style={ { float: 'left', marginTop: '7px', marginRight: '5px' } }>{ this.state.backlogFilterMode === 'epic' ? 'Epic' : '版本' }过滤：</span>
+          { this.state.backlogFilterMode === 'epic' ?
           <div style={ { display: 'inline-block', float: 'left', width: '28%' } }>
             <Select
               simpleValue
               options={ epicOptions }
               value={ selectedFilter == 'all' ? null : selectedFilter }
-              onChange={ (newValue) => { this.handleSelectEpic(newValue) } }
+              onChange={ (newValue) => { this.handleSelectEV(newValue) } }
               placeholder='选择Epic'/>
           </div>
+          :
+          <div style={ { display: 'inline-block', float: 'left', width: '28%' } }>
+            <Select
+              simpleValue
+              options={ versionOptions }
+              value={ selectedFilter == 'all' ? null : selectedFilter }
+              onChange={ (newValue) => { this.handleSelectEV(newValue) } }
+              placeholder='选择版本'/>
+          </div> }
           <span style={ { float: 'right' } } title='隐藏看板头'>
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>

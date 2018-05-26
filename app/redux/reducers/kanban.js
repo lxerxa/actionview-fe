@@ -10,6 +10,7 @@ const initialState = {
   epicLoading: false,
   selectedEpicItem: {},
   epics: [],
+  versions: [],
   loading: false, 
   rankLoading: false, 
   configLoading: false, 
@@ -29,6 +30,7 @@ export default function kanban(state = initialState, action) {
         state.list = action.result.data || [];
         state.sprints = action.result.options && action.result.options.sprints || [];
         state.epics = action.result.options && action.result.options.epics || [];
+        state.versions = action.result.options && action.result.options.versions || [];
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

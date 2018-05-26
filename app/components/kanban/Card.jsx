@@ -281,6 +281,11 @@ export default class Card extends Component {
       selectedEpic = _.find(options.epics, { id: issue.epic });
     }
 
+    let selectedVersion = {};
+    if (issue.resolve_version) {
+      selectedVersion = _.find(options.versions, { id: issue.resolve_version }) || {};
+    }
+
     return connectDragSource(connectDropTarget(
       <div className='board-issue' style={ { ...styles, opacity, backgroundColor, marginLeft } }>
         <div className='board-issue-content'>
@@ -299,9 +304,13 @@ export default class Card extends Component {
             { issue.title || '' }
           </div>
           { epicShow && !_.isEmpty(selectedEpic) && 
-            <div className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%' } } title={ selectedEpic.name || '-' }>
-              { selectedEpic.name || '-' }
-            </div> }
+          <div className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px' } } title={ selectedEpic.name || '-' }>
+            { selectedEpic.name || '-' }
+          </div> }
+          { epicShow && !_.isEmpty(selectedVersion) && 
+          <div className='epic-title' style={ { borderColor: '#707070', color: '#707070', backgroundColor: '#fff', maxWidth: '100%' } } title={ selectedVersion.name || '-' }>
+            { selectedVersion.name || '-' }
+          </div> }
         </div>
         { this.state.menuShow &&
           <RightClickMenu 

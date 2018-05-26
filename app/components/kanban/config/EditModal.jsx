@@ -76,7 +76,7 @@ export default class EditModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { id, name, type, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
-    const typeOptions = [{ label: 'Srcum Board(暂不支持)', value: 'scrum' }, { label: 'Kanban', value: 'kanban' }]; 
+    const typeOptions = [{ label: 'Srcum Board', value: 'scrum' }, { label: 'Kanban', value: 'kanban' }]; 
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

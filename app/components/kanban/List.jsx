@@ -17,13 +17,15 @@ const PublishSprintModal = require('./PublishSprintModal');
 const DelSprintNotify = require('./DelSprintNotify');
 const CompleteSprintNotify = require('./CompleteSprintNotify');
 const MoveIssueNotify = require('./MoveIssueNotify');
+const ViewSprintModal = require('./ViewSprintModal');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
       barShow: false, 
-      selectVersionShow: false, 
+      selectVersionShow: false,
+      viewSprintShow: false, 
       publishSprintShow: false,
       completeSprintShow: false,
       deleteSprintShow: false,
@@ -131,6 +133,10 @@ export default class List extends Component {
     this.setState({ moveIssueShow: false });
   }
 
+  viewSprintModalClose() {
+    this.setState({ viewSprintShow: false });
+  }
+
   workflowScreenModalClose() {
     this.setState({ workflowScreenShow: false });
   }
@@ -217,6 +223,17 @@ export default class List extends Component {
     });
   }
 
+  operateBacklog(eventKey) {
+    const no = eventKey.split('-').pop();
+    if (eventKey.indexOf('view') !== -1) {
+      this.setState({ viewSprintShow: true, curSprintNo: no - 0 });
+    } else if (eventKey.indexOf('publish') !== -1) {
+      this.setState({ publishSprintShow: true, curSprintNo: no - 0 });
+    } else if (eventKey.indexOf('delete') !== -1) {
+      this.setState({ deleteSprintShow: true, curSprintNo: no - 0 });
+    }
+  }
+
   render() {
     const { 
       i18n,
@@ -292,6 +309,8 @@ export default class List extends Component {
       moveSprintIssue,
       user
     } = this.props;
+
+    const node = ( <span><i className='fa fa-ellipsis-h'></i></span> );
 
     let columns = [];
     const columnIssues = [];
@@ -382,13 +401,19 @@ export default class List extends Component {
                 </a> }
                 { model == 'backlog' && v.status == 'active' && <span style={ { float: 'right' } }>活动中</span> }
                 { model == 'backlog' && v.status == 'waiting' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
-                  <span style={ { marginLeft: '10px', float: 'right' } }>
-                    <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ deleteSprintShow: true, curSprintNo: v.no }); } }>删除</a>
-                  </span> }
-                { model == 'backlog' && i == 1 && v.status == 'waiting' && columnIssues[i].length > 0 && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
-                  <span style={ { float: 'right' } }>
-                    <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ publishSprintShow: true, curSprintNo: v.no }); } }>启动</a>
-                  </span> }
+                <div style={ { float: 'right' } }>
+                  <DropdownButton
+                    bsStyle='default'
+                    title={ node }
+                    noCaret
+                    style={ { padding: '2px 7px' } }
+                    onSelect={ this.operateBacklog.bind(this) }
+                    pullRight>
+                    { columnIssues[i].length > 0 && <MenuItem eventKey={ 'view-' +  v.no }>查看</MenuItem> } 
+                    { i == 1 && columnIssues[i].length > 0 && <MenuItem eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
+                    <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> 
+                  </DropdownButton> 
+                </div> }
               </li> ) ) }
             </ul>
           </div>
@@ -556,6 +581,12 @@ export default class List extends Component {
             move={ moveSprintIssue }
             values={ this.state.movedData }
             i18n={ i18n }/> }
+        { this.state.viewSprintShow &&
+          <ViewSprintModal show
+            close={ this.viewSprintModalClose.bind(this) }
+            sprintNo={ this.state.curSprintNo }
+            sprints={ sprints }
+            collection={ collection }/> }
       </div>
     );
   }
