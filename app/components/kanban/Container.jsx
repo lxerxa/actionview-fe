@@ -69,7 +69,7 @@ export default class Container extends Component {
 
   gotoBacklog(epic) {
     this.setState({ model: 'backlog' });
-    this.refs.header.handleSelectEpic(epic);
+    this.refs.header.handleSelectEV(epic, 'epic');
   }
 
   gotoIssueList(epic) {

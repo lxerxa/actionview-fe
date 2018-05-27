@@ -187,11 +187,13 @@ export default class Header extends Component {
     }
   }
 
-  async handleSelectEV(key) {
-    const { backlogFilterMode } = this.state;
+  async handleSelectEV(key, mode) {
+    if (mode) {
+      this.state.backlogFilterMode = mode;
+    }
     const { index, curKanban, selectFilter } = this.props;
     await selectFilter(key || 'all');
-    index(this.getQuery(curKanban.query || {}, key ? (backlogFilterMode === 'epic' ? { epic: key } : { resolve_version: key }) : {}));
+    index(this.getQuery(curKanban.query || {}, key ? (this.state.backlogFilterMode === 'epic' ? { epic: key } : { resolve_version: key }) : {}));
   }
 
   async changeFilterMode() {
@@ -328,7 +330,7 @@ export default class Header extends Component {
         </div> }
         { model === 'backlog' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
-          <div className='exchange-icon' style={ { float: 'left', marginTop: '7px' } } onClick={ this.changeFilterMode.bind(this) } title='切换'><i className='fa fa-retweet'></i></div>
+          <div className='exchange-icon' style={ { float: 'left', marginTop: '6px' } } onClick={ this.changeFilterMode.bind(this) } title={ '切换至' + (this.state.backlogFilterMode == 'epic' ? '版本' : 'Epic') }><i className='fa fa-retweet'></i></div>
           <span style={ { float: 'left', marginTop: '7px', marginRight: '5px' } }>{ this.state.backlogFilterMode === 'epic' ? 'Epic' : '版本' }过滤：</span>
           { this.state.backlogFilterMode === 'epic' ?
           <div style={ { display: 'inline-block', float: 'left', width: '28%' } }>
