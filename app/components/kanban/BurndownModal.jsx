@@ -79,7 +79,7 @@ export default class PreviewModal extends Component {
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <ButtonGroup style={ { float: 'right', marginRight: '110px' } }>
             <Button title='问题数' style={ { backgroundColor: this.state.mode == 'issueCount' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'issueCount' }) } }>问题数</Button>
-            <Button title='故事点' style={ { backgroundColor: this.state.mode == 'storyPoints' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'storyPoints' }) } }>故事点</Button>
+            <Button title='故事点' style={ { backgroundColor: this.state.mode == 'storyPoints' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'storyPoints' }) } }>故事点数</Button>
           </ButtonGroup> 
           <CheckboxGroup style={ { float: 'right', marginTop: '8px', marginRight: '10px' } } name='notifications' value={ this.state.display } onChange={ this.diplayChanged.bind(this) }>
             <Checkbox value='notWorkingShow'/>

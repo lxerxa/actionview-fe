@@ -67,7 +67,7 @@ export default class ViewSprintModal extends Component {
               <tr>
                 <th>经办人</th>
                 <th>问题数</th>
-                <th>故事点</th>
+                <th>故事点数</th>
               </tr>
             </thead>
             <tbody>
