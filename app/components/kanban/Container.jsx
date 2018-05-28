@@ -303,7 +303,7 @@ export default class Container extends Component {
   }
 
   async publishSprint(values, sprintNo) {
-    await this.props.actions.publishSprint(this.pid, sprintNo, values);
+    await this.props.actions.publishSprint(this.pid, sprintNo, _.extend(values, { kanban_id: this.kanban_id }));
     if (this.props.kanban.ecode === 0) {
       this.refs.header.changeModel('issue');
     }
