@@ -21,7 +21,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'sysetting',
-  fields: ['to', 'subject'],
+  fields: ['to', 'subject', 'contents'],
   validate
 })
 export default class ResetPwdModal extends Component {

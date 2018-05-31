@@ -25,8 +25,6 @@ const validate = (values, props) => {
 
   if (!values.username) {
     errors.username = '必填';
-  } else if (!/^[\w-]+@[\w-]+([.][\w-]+)+$/.test(values.username)) {
-    errors.username = '格式有误';
   }
 
   if (!values.password) {
