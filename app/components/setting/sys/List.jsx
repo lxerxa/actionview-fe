@@ -111,6 +111,20 @@ export default class List extends Component {
       )
     });
     propertyItems.push({
+      id: 'http_host',
+      title: (
+        <div>
+          <span className='table-td-title'>系统域名</span>
+          <span className='table-td-issue-desc'>发送邮件正文、通知消息内容中使用</span>
+        </div>
+      ),
+      contents: (
+        <div>
+          { properties.http_host || '-' }
+        </div>
+      )
+    });
+    propertyItems.push({
       id: 'allowed_login_num',
       title: (
         <div>

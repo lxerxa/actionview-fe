@@ -20,7 +20,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'login_mail_domain', 'allow_create_project', 'week2day', 'day2hour' ],
+  fields: [ 'login_mail_domain', 'allow_create_project', 'http_host', 'week2day', 'day2hour' ],
   validate
 })
 export default class PropertiesModal extends Component {
@@ -52,7 +52,7 @@ export default class PropertiesModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'allow_create_project', 'week2day', 'day2hour' ]) });
+    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'allow_create_project', 'http_host', 'week2day', 'day2hour' ]) });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -72,7 +72,19 @@ export default class PropertiesModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { login_mail_domain, allow_create_project, week2day, day2hour }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { 
+        login_mail_domain, 
+        allow_create_project, 
+        http_host,
+        week2day, 
+        day2hour }, 
+      handleSubmit, 
+      invalid, 
+      dirty, 
+      submitting, 
+      data } = this.props;
 
     const dayOptions = [
       { value: 6, label: '6' },
@@ -117,6 +129,11 @@ export default class PropertiesModal extends Component {
               value={ allow_create_project.value || 0 }
               onChange={ newValue => { allow_create_project.onChange(newValue) } }
               placeholder='请选择'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ http_host.touched && http_host.error ? 'error' : '' }>
+            <ControlLabel>系统域名</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...http_host } placeholder='如:http://www.actionview.cn:8080'/>
+            { http_host.touched && http_host.error && <HelpBlock style={ { float: 'right' } }>{ http_host.error }</HelpBlock> }
           </FormGroup>
           {/*<FormGroup controlId='formControlsText' validationState={ allowed_login_num.touched && allowed_login_num.error ? 'error' : '' }>
             <ControlLabel>最大登录次数</ControlLabel>
