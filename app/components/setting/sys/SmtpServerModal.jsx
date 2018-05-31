@@ -9,27 +9,35 @@ const img = require('../../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
-  if (!values.ip) {
-    errors.ip = '必填';
+  if (!values.host) {
+    errors.host = '必填';
   }
   // if (!/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/.test(values.ip)) {
-  else if (!/^[\w-]+([.][\w-]+)+$/.test(values.ip)) {
-    errors.ip = '格式有误';
+  else if (!/^[\w-]+([.][\w-]+)+$/.test(values.host)) {
+    errors.host = '格式有误';
   }
-  if (values.port && !/^[1-9][0-9]*$/.test(values.port)) {
+
+  if (!values.port) {
+    errors.port = '必填';
+  } else if (values.port && !/^[1-9][0-9]*$/.test(values.port)) {
     errors.port = '必须输入正整数';
   }
-  if (!values.send_addr) {
-    errors.send_addr = '必填';
-  } else if (!/^[\w-]+@[\w-]+([.][\w-]+)+$/.test(values.send_addr)) {
-    errors.send_addr = '格式有误';
+
+  if (!values.username) {
+    errors.username = '必填';
+  } else if (!/^[\w-]+@[\w-]+([.][\w-]+)+$/.test(values.username)) {
+    errors.username = '格式有误';
+  }
+
+  if (!values.password) {
+    errors.password = '必填';
   }
   return errors;
 };
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'ip', 'port', 'send_addr', 'send_auth' ],
+  fields: [ 'host', 'port', 'encryption', 'username', 'password' ],
   validate
 })
 export default class SmtpServerModal extends Component {
@@ -81,7 +89,14 @@ export default class SmtpServerModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { ip, port, send_addr, send_auth }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { host, port, encryption, username, password }, 
+      handleSubmit, 
+      invalid, 
+      dirty, 
+      submitting, 
+      data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -90,31 +105,36 @@ export default class SmtpServerModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ ip.touched && ip.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ host.touched && host.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>服务器</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...ip } placeholder='主机名称或IP地址'/>
-            { ip.touched && ip.error && <HelpBlock style={ { float: 'right' } }>{ ip.error }</HelpBlock> }
+            <FormControl disabled={ submitting } type='text' { ...host } placeholder='主机名称或IP地址'/>
+            { host.touched && host.error && <HelpBlock style={ { float: 'right' } }>{ host.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ port.touched && port.error ? 'error' : '' }>
-            <ControlLabel>端口</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>端口</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...port } placeholder='端口'/>
             { port.touched && port.error && <HelpBlock style={ { float: 'right' } }>{ port.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ send_addr.touched && send_addr.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>发送邮箱地址</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...send_addr } placeholder='邮箱账号'/>
-            { send_addr.touched && send_addr.error && <HelpBlock style={ { float: 'right' } }>{ send_addr.error }</HelpBlock> }
-          </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>发送验证</ControlLabel>
+            <ControlLabel>加密</ControlLabel>
             <Select
               disabled={ submitting }
               clearable={ false }
               searchable={ false }
-              options={ [ { value: 1, label: '开启' }, { value: 0, label: '关闭' } ] }
-              value={ send_auth.value || 0 }
-              onChange={ newValue => { send_auth.onChange(newValue) } }
+              options={ [ { value: '', label: '无' }, { value: 'tls', label: 'tls' }, { value: 'ssl', label: 'ssl' } ] }
+              value={ encryption.value || '' }
+              onChange={ newValue => { encryption.onChange(newValue) } }
               placeholder='请选择'/>
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ username.touched && username.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>帐号</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...username } placeholder='输入帐号'/>
+            { username.touched && username.error && <HelpBlock style={ { float: 'right' } }>{ username.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>密码</ControlLabel>
+            <FormControl disabled={ submitting } type='password' { ...password } placeholder='输入密码'/>
+            { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

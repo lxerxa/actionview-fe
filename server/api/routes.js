@@ -12,16 +12,17 @@ const simplifyUsers = (collection) => collection
 
 export default function(router) {
 
-  router.get('/admin/syssetting', function(req, res) {
+  router.get('/syssetting', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { properties: { allowed_login_num: 3, login_mail_domain: 'chinamobile.com', week2day: 5, day2hour: 8 }, smtp: { ip: '10.2.5.34', port: 25, send_addr: 'actionview@chinamobile.com', auth_pwd: '111' }, sysroles: { sys_admin: [ { id: 'nhy67ujm', email:'liulaoyao@chinamobile.com', name: 'liulaoyao' }, { id: 'nhy67ujm2', email:'liulaoyao@chinamobile.com', name: 'liulaoyaoaaaa' } ] } } };
+    const results = { ecode: 0, data: { properties: { allowed_login_num: 3, login_mail_domain: 'chinamobile.com', week2day: 5, day2hour: 8 }, mailserver: { smtp: { host: '10.2.5.34', port: 25, tls: 1, username:'xxxxx' }, send: { from: 'actionview@126.com', prefix: 'actionview' }}, sysroles: { sys_admin: [ { id: 'nhy67ujm', email:'liulaoyao@chinamobile.com', name: 'liulaoyao' }, { id: 'nhy67ujm2', email:'liulaoyao@chinamobile.com', name: 'liulaoyaoaaaa' } ] } } };
     return res.status(200).send(results);
   });
 
-  router.post('/admin/syssetting', function(req, res) {
+  router.post('/syssetting', function(req, res) {
     const startTime = new Date().getTime();
-    while (new Date().getTime() < startTime + 2000);                                                                               const results = { ecode: 0, data: { properties: { allowed_login_num: 5, mail_domain: 'chinamobile.com' }, timetrack: { week2day: 6, day2hour: 7 }, smtp: { ip: '10.2.5.34', port: 25, account: 'actionview@chinamobile.com' }, permissions: { } } };
+    while (new Date().getTime() < startTime + 2000);                                                                               
+    const results = { ecode: 0, data: { properties: { allowed_login_num: 5, mail_domain: 'chinamobile.com' }, timetrack: { week2day: 6, day2hour: 7 }, mailserver: { smtp: { host: '10.2.5.34', port: 25, tls: 1, username:'xxxxx' }, send: { from: 'actionview@126.com', prefix: 'actionview' }}, sysroles: { sys_admin: [ { id: 'nhy67ujm', email:'liulaoyao@chinamobile.com', name: 'liulaoyao' }, { id: 'nhy67ujm2', email:'liulaoyao@chinamobile.com', name: 'liulaoyaoaaaa' } ] } } };
     return res.status(200).send(results);
   });
 

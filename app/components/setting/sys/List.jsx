@@ -10,6 +10,7 @@ const img = require('../../../assets/images/loading.gif');
 const PropertiesModal = require('./PropertiesModal');
 const TimeTrackModal = require('./TimeTrackModal');
 const SmtpServerModal = require('./SmtpServerModal');
+const SetSendMailModal = require('./SetSendMailModal');
 const ResetPwdModal = require('./ResetPwdModal');
 const SendTestMailModal = require('./SendTestMailModal');
 const ConfigActorModal = require('./ConfigActorModal');
@@ -23,14 +24,14 @@ export default class List extends Component {
       timeTrackModalShow: false, 
       smtpServerModalShow: false, 
       sendTestMailModalShow: false, 
-      resetPwdModalShow: false,
+      setSendMailShow: false,
       configActorModalShow: false };
 
     this.propertiesModalClose = this.propertiesModalClose.bind(this);
     this.timeTrackModalClose = this.timeTrackModalClose.bind(this);
     this.smtpServerModalClose = this.smtpServerModalClose.bind(this);
     this.sendTestMailModalClose = this.sendTestMailModalClose.bind(this);
-    this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
+    this.setSendMailModalClose = this.setSendMailModalClose.bind(this);
     this.configActorModalClose = this.configActorModalClose.bind(this);
   }
 
@@ -60,8 +61,8 @@ export default class List extends Component {
     this.setState({ sendTestMailModalShow: false });
   }
 
-  resetPwdModalClose() {
-    this.setState({ resetPwdModalShow: false });
+  setSendMailModalClose() {
+    this.setState({ setSendMailShow: false });
   }
 
   configActorModalClose() {
@@ -78,7 +79,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, update, resetPwd, sendTestMail, loading, settings: { properties={}, timetrack={}, smtp={}, sysroles={} } } = this.props;
+    const { i18n, update, resetPwd, sendTestMail, loading, settings: { properties={}, timetrack={}, mailserver={}, sysroles={} } } = this.props;
 
     const styles = { marginTop: '10px', marginBottom: '10px' };
  
@@ -189,7 +190,24 @@ export default class List extends Component {
 
     const mailServerItems = [];
     mailServerItems.push({
-      id: 'ip',
+      id: 'mail',
+      title: (
+        <div>
+          <span className='table-td-title'>发送邮箱</span>
+        </div>
+      ),
+      contents: (
+        <div style={ styles }>
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
+            <li>发信地址：{ mailserver.send && mailserver.send.from || '-' }</li>
+            <li>邮件前缀：{ mailserver.send && mailserver.send.prefix || '-' }</li>
+          </ul>
+          <Button disabled={ loading } style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ setSendMailShow: true }) } }>编辑邮箱</Button>
+        </div>
+      ) 
+    });
+    mailServerItems.push({
+      id: 'smtp',
       title: (
         <div>
           <span className='table-td-title'>SMTP服务器</span>
@@ -198,31 +216,16 @@ export default class List extends Component {
       contents: (
         <div style={ styles }>
           <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
-            <li>服务器：{ smtp.ip || '-' }</li>
-            <li>端口：{ smtp.port || '-' }</li>
-            <li>发件地址：{ smtp.send_addr || '-' }</li>
-            <li>发送验证：{ smtp.send_auth === 1 ? '开启' : '关闭' }</li>
+            <li>服务器：{ mailserver.smtp && mailserver.smtp.host || '-' }</li>
+            <li>端口：{ mailserver.smtp && mailserver.smtp.port || '-' }</li>
+            <li>加密：{ mailserver.smtp && mailserver.smtp.encryption || '无' }</li>
+            <li>帐号：{ mailserver.smtp && mailserver.smtp.username || '-' }</li>
+            <li>密码：******</li>
           </ul>
           <Button disabled={ loading } style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ smtpServerModalShow: true }) } }>编辑服务器</Button>
         </div>
       )
     });
-
-    if (smtp.send_auth === 1) {
-      mailServerItems.push({
-        id: 'send_auth_pwd',
-        title: (
-          <div>
-            <span className='table-td-title'>验证密码</span>
-          </div>
-        ),
-        contents: (
-          <div style={ styles }>
-            <Button disabled={ loading } style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ resetPwdModalShow: true }) } }>设置验证密码</Button>
-          </div>
-        )
-      });
-    }
 
     const permissionItems = [];
     permissionItems.push({
@@ -279,12 +282,47 @@ export default class List extends Component {
         <div style={ { width: '100%', marginTop: '20px' } }>
           <Button disabled={ loading } onClick={ () => { this.setState({ configActorModalShow: true }) } }>角色配置</Button>
         </div> }
-        { this.state.propertiesModalShow && <PropertiesModal show close={ this.propertiesModalClose } update={ update } data={ properties } i18n={ i18n }/> }
-        { this.state.timeTrackModalShow && <TimeTrackModal show close={ this.timeTrackModalClose } update={ update } data={ timetrack } i18n={ i18n }/> }
-        { this.state.smtpServerModalShow && <SmtpServerModal show close={ this.smtpServerModalClose } update={ update } data={ smtp } i18n={ i18n }/> }
-        { this.state.resetPwdModalShow && <ResetPwdModal show close={ this.resetPwdModalClose } resetPwd={ resetPwd } i18n={ i18n }/> }
-        { this.state.sendTestMailModalShow && <SendTestMailModal show close={ this.sendTestMailModalClose } sendMail={ sendTestMail } i18n={ i18n }/> }
-        { this.state.configActorModalShow && <ConfigActorModal show close={ this.configActorModalClose } update={ update } data={ sysroles } i18n={ i18n }/> }
+        { this.state.propertiesModalShow && 
+        <PropertiesModal 
+          show 
+          close={ this.propertiesModalClose } 
+          update={ update } 
+          data={ properties } 
+          i18n={ i18n }/> }
+        { this.state.timeTrackModalShow && 
+        <TimeTrackModal 
+          show 
+          close={ this.timeTrackModalClose } 
+          update={ update } 
+          data={ timetrack } 
+          i18n={ i18n }/> }
+        { this.state.smtpServerModalShow && 
+        <SmtpServerModal 
+          show 
+          close={ this.smtpServerModalClose } 
+          update={ update } 
+          data={ mailserver.smtp || {} } 
+          i18n={ i18n }/> }
+        { this.state.setSendMailShow && 
+        <SetSendMailModal 
+          show 
+          close={ this.setSendMailModalClose } 
+          update={ update } 
+          data={ mailserver.send || {} } 
+          i18n={ i18n }/> }
+        { this.state.sendTestMailModalShow && 
+        <SendTestMailModal 
+          show 
+          close={ this.sendTestMailModalClose } 
+          sendMail={ sendTestMail } 
+          i18n={ i18n }/> }
+        { this.state.configActorModalShow && 
+        <ConfigActorModal 
+          show 
+          close={ this.configActorModalClose } 
+          update={ update } 
+          data={ sysroles } 
+          i18n={ i18n }/> }
       </div>
     );
   }

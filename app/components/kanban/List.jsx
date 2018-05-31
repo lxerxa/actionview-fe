@@ -399,8 +399,7 @@ export default class List extends Component {
                   onClick={ (e) => { e.preventDefault(); this.setState({ completeSprintShow: true }); } }>
                   完成...
                 </a> }
-                { model == 'backlog' && v.status == 'active' && <span style={ { float: 'right' } }>活动中</span> }
-                { model == 'backlog' && v.status == 'waiting' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
+                { model == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
                 <div style={ { float: 'right' } }>
                   <DropdownButton
                     bsStyle='default'
@@ -410,10 +409,11 @@ export default class List extends Component {
                     onSelect={ this.operateBacklog.bind(this) }
                     pullRight>
                     { selectedFilter == 'all' && columnIssues[i].length > 0 && <MenuItem eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> } 
-                    { i == 1 && columnIssues[i].length > 0 && <MenuItem eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
-                    <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> 
+                    { v.status == 'waiting' && i == 1 && columnIssues[i].length > 0 && <MenuItem eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
+                    { v.status == 'waiting' && <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> }
                   </DropdownButton> 
                 </div> }
+                { model == 'backlog' && v.status == 'active' && <span> - <b>活动中</b></span> }
               </li> ) ) }
             </ul>
           </div>
