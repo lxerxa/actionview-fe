@@ -103,12 +103,12 @@ export default class SmtpServerModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ host.touched && host.error ? 'error' : '' }>
+          <FormGroup validationState={ host.touched && host.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>服务器</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...host } placeholder='主机名称或IP地址'/>
             { host.touched && host.error && <HelpBlock style={ { float: 'right' } }>{ host.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ port.touched && port.error ? 'error' : '' }>
+          <FormGroup validationState={ port.touched && port.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>端口</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...port } placeholder='端口'/>
             { port.touched && port.error && <HelpBlock style={ { float: 'right' } }>{ port.error }</HelpBlock> }
@@ -124,12 +124,12 @@ export default class SmtpServerModal extends Component {
               onChange={ newValue => { encryption.onChange(newValue) } }
               placeholder='请选择'/>
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ username.touched && username.error ? 'error' : '' }>
+          <FormGroup validationState={ username.touched && username.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>帐号</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...username } placeholder='输入帐号'/>
             { username.touched && username.error && <HelpBlock style={ { float: 'right' } }>{ username.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
+          <FormGroup validationState={ password.touched && password.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>密码</ControlLabel>
             <FormControl disabled={ submitting } type='password' { ...password } placeholder='输入密码'/>
             { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
