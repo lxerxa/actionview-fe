@@ -131,7 +131,7 @@ export default class SmtpServerModal extends Component {
           </FormGroup>
           <FormGroup validationState={ password.touched && password.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>密码</ControlLabel>
-            <FormControl disabled={ submitting } type='password' { ...password } placeholder='输入密码'/>
+            <FormControl disabled={ submitting } type='text' { ...password } placeholder='输入密码'/>
             { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>

@@ -234,7 +234,7 @@ export default class List extends Component {
             <li>端口：{ mailserver.smtp && mailserver.smtp.port || '-' }</li>
             <li>加密：{ mailserver.smtp && mailserver.smtp.encryption || '无' }</li>
             <li>帐号：{ mailserver.smtp && mailserver.smtp.username || '-' }</li>
-            <li>密码：******</li>
+            <li>密码：{ mailserver.smtp && mailserver.smtp.password || '无' }</li>
           </ul>
           <Button disabled={ loading } style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ smtpServerModalShow: true }) } }>编辑服务器</Button>
         </div>
