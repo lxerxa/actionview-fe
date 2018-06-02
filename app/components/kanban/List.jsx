@@ -408,8 +408,8 @@ export default class List extends Component {
                     style={ { padding: '2px 7px' } }
                     onSelect={ this.operateBacklog.bind(this) }
                     pullRight>
-                    { selectedFilter == 'all' && columnIssues[i].length > 0 && <MenuItem eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> } 
-                    { v.status == 'waiting' && i == 1 && columnIssues[i].length > 0 && <MenuItem eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
+                    <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> 
+                    { v.status == 'waiting' && i == 1 && <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
                     { v.status == 'waiting' && <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> }
                   </DropdownButton> 
                 </div> }
