@@ -448,7 +448,7 @@ export default class List extends Component {
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', width: '20%' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }>
+              <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }>
                 <i className='fa fa-plus'></i>&nbsp;新建项目
               </Button>
             </span>

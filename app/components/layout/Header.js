@@ -203,6 +203,7 @@ export default class Header extends Component {
             <MenuItem divider />
             <MenuItem eventKey='user'>用户</MenuItem>
             <MenuItem eventKey='group'>用户组</MenuItem>
+            <MenuItem divider />
             <MenuItem eventKey='project'>项目管理</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>系统设置</MenuItem>

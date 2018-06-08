@@ -12,7 +12,8 @@ export default class Sidebar extends Component {
       projectConfigShow: false, 
       adminPanelShow: false,
       adminSchemeShow: false, 
-      adminSysManageShow: false, 
+      adminUserManageShow: false, 
+      adminProjectManageShow: false, 
       adminSysSettingShow: false, 
       tackFlag: true };
   }
@@ -103,10 +104,14 @@ export default class Sidebar extends Component {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminSchemeShow = true;
-    } else if (/^\/admin\/(project|user|group)$/.test(nextProps.pathname)) {
+    } else if (/^\/admin\/(user|group)$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
-      this.state.adminSysManageShow = true;
+      this.state.adminUserManageShow = true;
+    } else if (/^\/admin\/project$/.test(nextProps.pathname)) {
+      this.state.adminPanelShow = true;
+      this.state.projectPanelShow = false;
+      this.state.adminProjectManageShow = true;
     } else if (/^\/admin\/syssetting$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
@@ -141,11 +146,14 @@ export default class Sidebar extends Component {
               <li><Link to='/admin/scheme/role' activeClassName='menu-active'>角色权限</Link></li>
               <li><Link to='/admin/scheme/events' activeClassName='menu-active'>通知事件</Link></li>
             </ul>
-            <h4><i className={ this.state.adminSysManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysManageShow: !this.state.adminSysManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统管理</h4>
-            <ul className={ !this.state.adminSysManageShow && 'hide' }>
+            <h4><i className={ this.state.adminUserManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminUserManageShow: !this.state.adminUserManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>用户管理</h4>
+            <ul className={ !this.state.adminUserManageShow && 'hide' }>
               <li><Link to='/admin/user' activeClassName='menu-active'>用户</Link></li>
               <li><Link to='/admin/group' activeClassName='menu-active'>用户组</Link></li>
-              <li><Link to='/admin/project' activeClassName='menu-active'>项目管理</Link></li>
+            </ul>
+            <h4><i className={ this.state.adminProjectManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminProjectManageShow: !this.state.adminProjectManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目管理</h4>
+            <ul className={ !this.state.adminProjectManageShow && 'hide' }>
+              <li><Link to='/admin/project' activeClassName='menu-active'>项目</Link></li>
             </ul>
             <h4><i className={ this.state.adminSysSettingShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingShow: !this.state.adminSysSettingShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>
             <ul className={ !this.state.adminSysSettingShow && 'hide' }>
