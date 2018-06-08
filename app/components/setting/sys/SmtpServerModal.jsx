@@ -62,7 +62,9 @@ export default class SmtpServerModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    initializeForm(data);
+    const newData = _.clone(data);
+    newData.password = '';
+    initializeForm(newData);
   }
 
   async handleSubmit() {

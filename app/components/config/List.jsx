@@ -13,7 +13,13 @@ const ScreenPreviewModal = require('../screen/PreviewModal');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { screenPreviewModalShow: false, screenSchema: [], screenName: '', wfPreviewModalShow: false, wfSteps: [], wfName: '' };
+    this.state = { 
+      screenPreviewModalShow: false, 
+      screenSchema: [], 
+      screenName: '', 
+      wfPreviewModalShow: false, 
+      wfSteps: [], 
+      wfName: '' };
   }
 
   static propTypes = {

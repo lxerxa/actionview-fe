@@ -300,14 +300,20 @@ export default class List extends Component {
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', marginRight: '20px' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
+              <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
             </span>
             <span style={ { float: 'left', width: '20%' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ importModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-users'></i>&nbsp;批量导入</Button>
+              <Button onClick={ () => { this.setState({ importModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-users'></i>&nbsp;批量导入</Button>
             </span>
           </FormGroup>
         </div>
         <div>
+          <div className='info-col'>
+            <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+            <div className='info-content'>
+             <span>新建或批量导入的用户，默认密码都是：actionview。<br/>请使用邮箱登录，若在系统配置了“默认登录邮箱域名”可使用邮箱前缀登录。</span>
+            </div>
+          </div>
           <BootstrapTable data={ users } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>姓名</TableHeaderColumn>
