@@ -149,6 +149,9 @@ export default class Card extends Component {
       this.handleContextMenu(e) 
     });
     $(findDOMNode(this)).on('mouseleave', (e) => { 
+      if (e.toElement == null) {
+        return;
+      }
       this.handleBlur(e);
     });
     $(findDOMNode(this)).on('mousedown', (e) => { 
