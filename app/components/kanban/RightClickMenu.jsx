@@ -15,6 +15,8 @@ export default class Menu extends Component {
     issueView: PropTypes.func,
     toTop: PropTypes.func,
     toBottom: PropTypes.func,
+    pullRight: PropTypes.bool,
+    dropup: PropTypes.bool,
     removeFromSprint: PropTypes.func
   }
 
@@ -32,10 +34,12 @@ export default class Menu extends Component {
   }
 
   render() {
-    const { hasRemove } = this.props;
+    const { hasRemove, pullRight=false, dropup=false } = this.props;
 
     return (
       <Dropdown 
+        pullRight={ pullRight }
+        dropup={ dropup }
         open
         style={ { position: 'fixed' } }
         onSelect={ this.onSelectMenu.bind(this) }>

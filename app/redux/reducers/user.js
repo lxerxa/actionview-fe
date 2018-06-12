@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 const initialState = { ecode: 0, collection: [], indexLoading: false, increaseCollection: [], moreLoading: false, itemLoading: false, item: {}, loading: false, options: {}, recents: [], recentsLoading: false, selectedItem: {} };
 
-export default function project(state = initialState, action) {
+export default function user(state = initialState, action) {
   switch (action.type) {
     case t.USER_REGISTER:
       return { ...state, loading: true };

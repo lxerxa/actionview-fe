@@ -111,7 +111,7 @@ export default class Card extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { menuShow: false };
+    this.state = { menuShow: false, menuPullRight: false, menuDropup: false };
     this.handleBlur = this.handleBlur.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleContextMenu = this.handleContextMenu.bind(this);
@@ -149,6 +149,9 @@ export default class Card extends Component {
       this.handleContextMenu(e) 
     });
     $(findDOMNode(this)).on('mouseleave', (e) => { 
+      if (!this.state.menuShow) {
+        return;
+      }
       this.handleBlur(e);
     });
     $(findDOMNode(this)).on('mousedown', (e) => { 
@@ -175,10 +178,14 @@ export default class Card extends Component {
   }
 
   handleContextMenu(e) {
-    this.setState({ menuShow: true });
-
     e.preventDefault();
     e.stopPropagation();
+
+    console.log(document.body.scrollHeight - `${e.pageY}`);
+    this.setState({ 
+      menuShow: true, 
+      menuPullRight: document.body.scrollWidth - `${e.pageX}` < 150 ? true: false, 
+      menuDropup: document.body.scrollHeight - `${e.pageY}` < 160 ? true : false });
 
     const menuDom = findDOMNode(this.refs.menu);
     if (menuDom) {
@@ -315,6 +322,8 @@ export default class Card extends Component {
         { this.state.menuShow &&
           <RightClickMenu 
             ref='menu'
+            pullRight={ this.state.menuPullRight }
+            dropup={ this.state.menuDropup }
             issueId={ issue.id }
             issueNo={ issue.no }
             hasRemove={ inSprint && options.permissions && options.permissions.indexOf('manage_project') !== -1 }

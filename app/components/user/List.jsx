@@ -311,7 +311,7 @@ export default class List extends Component {
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
-             <span>新建或批量导入的用户，默认密码都是：actionview。<br/>请使用邮箱登录，若在系统配置了“默认登录邮箱域名”可使用邮箱前缀登录。</span>
+             <span>新建或批量导入的用户，默认密码都是：actionview。<br/>请使用邮箱登录，若在系统配置里配置了“默认登录邮箱域名”可使用邮箱前缀登录。</span>
             </div>
           </div>
           <BootstrapTable data={ users } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>

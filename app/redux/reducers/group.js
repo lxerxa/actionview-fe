@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 const initialState = { ecode: 0, collection: [], indexLoading: false, itemLoading: false, item: {}, loading: false, options: {}, selectedItem: {} };
 
-export default function project(state = initialState, action) {
+export default function group(state = initialState, action) {
   switch (action.type) {
 
     case t.GROUP_INDEX:
