@@ -9,7 +9,6 @@ import { baseConfig } from './base.config';
 const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
 const LOCAL_IP = require('dev-ip')();
 const HOST = isArray(LOCAL_IP) && LOCAL_IP[0] || LOCAL_IP || 'localhost';
-//const HOST = 'localhost';
 const PUBLIC_PATH = `http://${HOST}:${PORT}/assets/`;
 
 export default {

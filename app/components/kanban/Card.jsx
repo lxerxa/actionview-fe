@@ -149,7 +149,7 @@ export default class Card extends Component {
       this.handleContextMenu(e) 
     });
     $(findDOMNode(this)).on('mouseleave', (e) => { 
-      if (!this.state.menuShow) {
+      if (e.toElement == null) {
         return;
       }
       this.handleBlur(e);
@@ -181,7 +181,6 @@ export default class Card extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(document.body.scrollHeight - `${e.pageY}`);
     this.setState({ 
       menuShow: true, 
       menuPullRight: document.body.scrollWidth - `${e.pageX}` < 150 ? true: false, 

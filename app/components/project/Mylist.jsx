@@ -336,7 +336,7 @@ export default class List extends Component {
           <FormGroup>
             { options.allow_create_project === 1 && 
             <span style={ { float: 'left', width: '20%' } }>
-              <Button bsStyle='success' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
+              <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
             <ButtonGroup style={ { float: 'right', marginLeft: '10px' } }>
               <Button title='卡片模式' style={ { backgroundColor: this.state.mode == 'card' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th-large fa-lg'></i></Button>
