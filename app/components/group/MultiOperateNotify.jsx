@@ -33,7 +33,7 @@ export default class MultiOperateNotify extends Component {
 
     let ecode = 0, msg = '', newIds = [];
     if (operate == 'del') {
-      newIds = _.map(_.filter(collection, (v) => !v.directory || v.directory == 'self'), (v) => v.id);
+      newIds = _.map(_.filter(collection, (v) => (!v.directory || v.directory == 'self') && ids.indexOf(v.id) !== -1), (v) => v.id);
       ecode = await multiDel(newIds);
       msg = '用户组已删除。'; 
     }
@@ -66,7 +66,7 @@ export default class MultiOperateNotify extends Component {
         <Modal.Body>
           用户组被删除后，项目中的用户组也同时被删除。<br/>
           共选中用户组 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
-          其中可被删除用户组 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self')).length }</span> 个。<br/>
+          其中可被删除用户组 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && ids.indexOf(v.id) !== -1).length }</span> 个。<br/>
           是否删除？<br/><br/>
           注：此操作对从外部用户目录同步过来的用户组无效。
         </Modal.Body>

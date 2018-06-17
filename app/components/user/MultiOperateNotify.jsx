@@ -38,15 +38,15 @@ export default class MultiOperateNotify extends Component {
       ecode = await multiRenew(ids);
       msg = '密码已重置。'; 
     } else if (operate == 'validate') {
-      newIds = _.map(_.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'invalid'), (v) => v.id);
+      newIds = _.map(_.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'invalid' && ids.indexOf(v.id) !== -1), (v) => v.id);
       ecode = await multiInvalidate(newIds, 0);
       msg = '用户已启用。'; 
     } else if (operate == 'invalidate') {
-      newIds = _.map(_.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'active'), (v) => v.id);
+      newIds = _.map(_.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'active' && ids.indexOf(v.id) !== -1), (v) => v.id);
       ecode = await multiInvalidate(newIds, 1);
       msg = '用户已禁用。'; 
     } else if (operate == 'del') {
-      newIds = _.map(_.filter(collection, (v) => !v.directory || v.directory == 'self'), (v) => v.id);
+      newIds = _.map(_.filter(collection, (v) => (!v.directory || v.directory == 'self') && ids.indexOf(v.id) !== -1), (v) => v.id);
       ecode = await multiDel(newIds);
       msg = '用户已删除。'; 
     }
@@ -94,14 +94,14 @@ export default class MultiOperateNotify extends Component {
         { operate === 'invalidate' &&
         <Modal.Body>
           共选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
-          其中可被禁用用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'active').length }</span> 个。<br/>
+          其中可被禁用用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'active' && ids.indexOf(v.id) !== -1).length }</span> 个。<br/>
           是否禁用？<br/><br/>
           注：此操作对从外部用户目录同步过来的用户无效。
         </Modal.Body> }
         { operate === 'validate' &&
         <Modal.Body>
           共选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
-          其中可被启用用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'invalid').length }</span> 个。<br/>
+          其中可被启用用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'invalid' && ids.indexOf(v.id) !== -1).length }</span> 个。<br/>
           是否启用？<br/><br/>
           注：此操作对从外部用户目录同步过来的用户无效。
         </Modal.Body> }
@@ -109,7 +109,7 @@ export default class MultiOperateNotify extends Component {
         <Modal.Body>
           用户被删除后，项目中的用户也同时被删除。<br/>
           共选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
-          其中可被删除用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self')).length }</span> 个。<br/>
+          其中可被删除用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && ids.indexOf(v.id) !== -1).length }</span> 个。<br/>
           是否删除？<br/><br/>
           注：此操作对从外部用户目录同步过来的用户无效。
         </Modal.Body> }
