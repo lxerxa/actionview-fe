@@ -15,20 +15,29 @@ export default class OperateNotify extends Component {
     operate: PropTypes.string.isRequired,
     renew: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
+    invalidate: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, operate, renew, del, data } = this.props;
+    const { close, operate, renew, del, invalidate, data } = this.props;
     close();
 
     let ecode = 0, msg = '';
     if (operate === 'renew') {
       ecode = await renew(data.id);
       msg = '密码已重置。'; 
-    } else {
+    } else if (operate === 'del') {
       ecode = await del(data.id);
       msg = '用户已删除。'; 
+    } else if (operate === 'validate') {
+      ecode = await invalidate(data.id, { invalidate_flag: 0 });
+      msg = '用户已启用。'; 
+    } else if (operate === 'invalidate') {
+      ecode = await invalidate(data.id, { invalidate_flag: 1 });
+      msg = '用户已禁用。'; 
+    } else {
+      return;
     }
     if (ecode === 0) {
       notify.show(msg, 'success', 2000);    
@@ -44,21 +53,40 @@ export default class OperateNotify extends Component {
 
   render() {
     const { operate, data } = this.props;
-    const operateTitle = operate === 'renew' ? '密码重置' : '用户删除';
+    let operateTitle = '';
+    if (operate === 'renew') {
+      operateTitle = '密码重置';
+    } else if (operate === 'del') {
+      operateTitle = '用户删除'
+    } else if (operate === 'validate') {
+      operateTitle = '用户启用';
+    } else if (operate === 'invalidate') {
+      operateTitle = '用户禁用';
+    } else {
+      return <div/>;
+    }
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ operateTitle } - { data.first_name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ operateTitle }</Modal.Title>
         </Modal.Header>
         { operate === 'renew' && 
         <Modal.Body>
-          是否将用户密码设置成系统默认值？
+          是否将【{ data.first_name }】该用户密码重置？
         </Modal.Body> }
         { operate === 'del' && 
         <Modal.Body>
           用户被删除后，项目中的用户也同时被删除。<br/>
-          是否删除该用户？
+          是否删除【{ data.first_name }】该用户？
+        </Modal.Body> }
+        { operate === 'validate' &&
+        <Modal.Body>
+          是否启用【{ data.first_name }】该用户？
+        </Modal.Body> }
+        { operate === 'invalidate' &&
+        <Modal.Body>
+          是否禁用【{ data.first_name }】该用户？
         </Modal.Body> }
         <Modal.Footer>
           <Button onClick={ this.confirm }>确定</Button>

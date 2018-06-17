@@ -38,10 +38,10 @@ export default class OperateNotify extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除用户组 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除用户组</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          是否删除该用户组？
+          是否删除【{ data.name }】该用户组？
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={ this.confirm }>确定</Button>

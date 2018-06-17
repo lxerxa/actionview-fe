@@ -31,7 +31,8 @@ export default class List extends Component {
       hoverRowId: '', 
       selectedIds: [],
       name: '', 
-      group: null }; 
+      group: null,
+      directory: null }; 
 
     this.importModalClose = this.importModalClose.bind(this);
     this.createModalClose = this.createModalClose.bind(this);
@@ -57,8 +58,10 @@ export default class List extends Component {
     imports: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     renew: PropTypes.func.isRequired,
+    invalidate: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     multiRenew: PropTypes.func.isRequired,
+    multiInvalidate: PropTypes.func.isRequired,
     multiDel: PropTypes.func.isRequired
   }
 
@@ -70,6 +73,9 @@ export default class List extends Component {
     }
     if (query.group) {
       newQuery.group = this.state.group = query.group;
+    }
+    if (query.directory) {
+      newQuery.directory = this.state.directory = query.directory;
     }
     index(newQuery);
   }
@@ -118,6 +124,7 @@ export default class List extends Component {
 
     this.state.name = query.name || '';
     this.state.group = query.group || null;
+    this.state.directory = query.directory || null;
   }
 
   operateNotify(id) {
@@ -149,6 +156,9 @@ export default class List extends Component {
     }
     if (_.trim(this.state.group)) {
       query.group = _.trim(this.state.group);
+    }
+    if (_.trim(this.state.directory)) {
+      query.directory = _.trim(this.state.directory);
     }
 
     refresh(query);
@@ -201,6 +211,11 @@ export default class List extends Component {
     this.refresh();
   }
 
+  directoryChange(newValue) {
+    this.state.directory = newValue;
+    this.refresh();
+  }
+
   render() {
     const { 
       i18n, 
@@ -215,8 +230,10 @@ export default class List extends Component {
       imports, 
       del, 
       renew, 
+      invalidate, 
       multiDel, 
       multiRenew, 
+      multiInvalidate, 
       update, 
       options, 
       query } = this.props;
@@ -231,7 +248,12 @@ export default class List extends Component {
     for (let i = 0; i < userNum; i++) {
       users.push({
         id: collection[i].id,
-        name: collection[i].first_name || '-',
+        name: (
+          <span>
+            <span style={ { marginRight: '5px' } }>{ collection[i].first_name || '-' }</span>
+            { collection[i].status === 'inactive' &&  <Label>未激活</Label> }
+            { collection[i].status === 'invalid' &&  <Label bsStyle='danger'>已禁用</Label> }
+          </span>),
         email: collection[i].email || '-',
         phone: collection[i].phone || '-',
         groups: (
@@ -239,14 +261,16 @@ export default class List extends Component {
             { _.isEmpty(collection[i].groups) ? '-' : _.map(collection[i].groups, function(v, i) { return (<li key={ i }>{ v }</li>) }) }
           </ul> 
         ),
-        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>未激活</Label>,
+        directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
         operation: (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading && (!collection[i].directory || collection[i].directory === 'self') &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='edit'>编辑</MenuItem>
+              { collection[i].status === 'active' && <MenuItem eventKey='edit'>编辑</MenuItem> }
+              { collection[i].status === 'active' && <MenuItem eventKey='invalidate'>禁用</MenuItem> }
+              { collection[i].status === 'invalid' && <MenuItem eventKey='validate'>启用</MenuItem> }
               <MenuItem eventKey='del'>删除</MenuItem>
-              <MenuItem eventKey='renew'>重置密码</MenuItem>
+              { collection[i].status === 'active' && <MenuItem eventKey='renew'>重置密码</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -271,11 +295,34 @@ export default class List extends Component {
       onSelectAll: this.onSelectAll.bind(this)
     };
 
+    let multiDelShow = false,  multiValidShow = false, multiInvalidateShow = false;
+    _.map(collection, (v) => {
+      if (_.indexOf(this.state.selectedIds, v.id) === -1) {
+        return;
+      }
+      if (!v.directory || v.directory == 'self') {
+        multiDelShow = true;
+        if (v.status == 'invalid') {
+          multiValidShow = true;
+        } else if (v.status = 'active') {
+          multiInvalidateShow = true;
+        }
+      }
+    });
+
     return (
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '22%' } }>
+            <span style={ { float: 'right', width: '18%' } }>
+              <Select
+                simpleValue
+                placeholder='用户目录'
+                value={ this.state.directory }
+                onChange={ this.directoryChange.bind(this) }
+                options={ _.map(options.directories || [], (val) => { return { label: val.name, value: val.id } }) }/>
+            </span>
+            <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
               <Select
                 simpleValue
                 placeholder='所属组'
@@ -283,7 +330,7 @@ export default class List extends Component {
                 onChange={ this.groupChange.bind(this) }
                 options={ _.map(options.groups || [], (val) => { return { label: val.name, value: val.id } }) }/>
             </span>
-            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '20%', marginRight: '10px' } }>
               <FormControl
                 type='text'
                 id='uname'
@@ -295,7 +342,10 @@ export default class List extends Component {
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                <MenuItem eventKey='del'>删除</MenuItem>
+                { !multiDelShow && <MenuItem disabled eventKey='null'>无</MenuItem> }
+                { multiDelShow && <MenuItem eventKey='del'>删除</MenuItem> }
+                { multiValidShow && <MenuItem eventKey='validate'>启用</MenuItem> }
+                { multiInvalidateShow && <MenuItem eventKey='invalidate'>禁用</MenuItem> }
                 {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
               </DropdownButton>
             </span> }
@@ -311,16 +361,19 @@ export default class List extends Component {
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
-             <span>新建或批量导入的用户，默认密码都是：actionview。<br/>请使用邮箱登录，若在系统配置里配置了“默认登录邮箱域名”可使用邮箱前缀登录。</span>
+              <span>
+                请使用邮箱登录，若在系统配置里配置了“默认登录邮箱域名”可使用邮箱前缀登录。<br/>
+                新建或批量导入的用户，默认密码是：actionview。从外部用户目录同步过来的用户，密码和用户目录的保持一致。<br/>
+                从外部用户目录同步过来的用户，不能对其做任何操作。
+              </span>
             </div>
           </div>
           <BootstrapTable data={ users } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>姓名</TableHeaderColumn>
             <TableHeaderColumn dataField='email'>邮箱</TableHeaderColumn>
-            <TableHeaderColumn dataField='phone'>手机号</TableHeaderColumn>
             <TableHeaderColumn dataField='groups'>所属组</TableHeaderColumn>
-            <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
+            <TableHeaderColumn dataField='directory'>目录</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && 
@@ -352,13 +405,16 @@ export default class List extends Component {
                operate={ this.state.operate } 
                del={ del } 
                renew={ renew } 
+               invalidate={ invalidate } 
                i18n={ i18n }/> }
           { this.state.multiOperateNotifyShow && 
             <MultiOperateNotify 
               show 
               close={ this.multiOperateNotifyClose } 
+              collection={ collection }
               multiDel={ multiDel } 
               multiRenew={ multiRenew } 
+              multiInvalidate={ multiInvalidate } 
               ids={ this.state.selectedIds } 
               cancelSelected={ this.cancelSelected.bind(this) } 
               operate={ this.state.multiOperate } 

@@ -65,6 +65,11 @@ export default class Container extends Component {
     return this.props.user.ecode;
   }
 
+  async invalidate(id, values) {
+    await this.props.actions.invalidate(id, values);
+    return this.props.user.ecode;
+  }
+
   async del(id) {
     const { actions } = this.props;
     await actions.del(id);
@@ -89,6 +94,12 @@ export default class Container extends Component {
     return this.props.user.ecode;
   }
 
+  async multiInvalidate(ids, flag) {
+    const { actions } = this.props;
+    await actions.multiInvalidate(ids, flag);
+    return this.props.user.ecode;
+  }
+
   render() {
     const { i18n, session, location: { pathname, query={} } } = this.props;
 
@@ -110,9 +121,11 @@ export default class Container extends Component {
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
           renew={ this.renewPwd.bind(this) } 
+          invalidate={ this.invalidate.bind(this) } 
           del={ this.del.bind(this) } 
           multiRenew={ this.multiRenewPwd.bind(this) }
           multiDel={ this.multiDel.bind(this) }
+          multiInvalidate={ this.multiInvalidate.bind(this) }
           query={ query }
           i18n={ i18n }
           { ...this.props.user }/>

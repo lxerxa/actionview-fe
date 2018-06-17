@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
@@ -14,6 +15,7 @@ export default class MultiOperateNotify extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    collection: PropTypes.array.isRequired,
     ids: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
     operate: PropTypes.string.isRequired,
@@ -23,15 +25,16 @@ export default class MultiOperateNotify extends Component {
   }
 
   async confirm() {
-    const { multiDel, cancelSelected, ids=[], operate, close } = this.props;
+    const { multiDel, cancelSelected, ids=[], collection, operate, close } = this.props;
 
     if (ids.length <= 0) {
       return;
     }
 
-    let ecode = 0, msg = '';
+    let ecode = 0, msg = '', newIds = [];
     if (operate == 'del') {
-      ecode = await multiDel(ids);
+      newIds = _.map(_.filter(collection, (v) => !v.directory || v.directory == 'self'), (v) => v.id);
+      ecode = await multiDel(newIds);
       msg = '用户组已删除。'; 
     }
 
@@ -53,15 +56,19 @@ export default class MultiOperateNotify extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, loading } = this.props;
+    const { i18n: { errMsg }, loading, ids, collection } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除用户组</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>批处理用户组 - 用户组删除</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          是否要删除选中的用户组？
+          用户组被删除后，项目中的用户组也同时被删除。<br/>
+          共选中用户组 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
+          其中可被删除用户组 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self')).length }</span> 个。<br/>
+          是否删除？<br/><br/>
+          注：此操作对从外部用户目录同步过来的用户组无效。
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

@@ -55,7 +55,7 @@ export default class UsersConfigModal extends Component {
   add() {
     const { addUsers } = this.state;
     _.map(addUsers, (v) => {
-      if (_.findIndex(this.state.users, { id: v.id }) > 0) {
+      if (_.findIndex(this.state.users, { id: v.id }) > -1) {
         return;
       }
       this.state.users.unshift({ id: v.id, name: v.nameAndEmail });

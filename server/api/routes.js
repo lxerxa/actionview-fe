@@ -61,6 +61,20 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.put('/user/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { directory: 'self', id: '11133111', first_name: '刘老幺111333', email: 'liulaoyao@chinamobile.com', phone: 13811450899, status: 'active'} };
+    return res.status(200).send(results);
+  });
+
+  router.delete('/user/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: 'aaa' };
+    return res.status(200).send(results);
+  });
+
   router.post('/user', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
@@ -71,7 +85,7 @@ export default function(router) {
   router.get('/user', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', first_name: '刘老幺111', email: 'liulaoyao@chinamobile.com', phone: 13811450899, groups:['aa', 'bb'], status: 'active'}, {id: '111122', first_name: '刘老幺111',email: 'liulaoyao@chinamobile.com', phone: 13811450899, status: 'active'},  { id: '111111', first_name: '刘老幺11331',email: 'liulaoyao@chinamobile.com', phone: 13811450899, status: 'active'}, { id: '11133111', first_name: '刘老幺111333', email: 'liulaoyao@chinamobile.com', phone: 13811450899, status: 'closed'} ], options: { groups: [{id:'111', name:'111'}, {id:'222', name:'222'}] } };
+    const results = { ecode: 0, data: [{ id: '1111', first_name: '刘老幺111', email: 'liulaoyao@chinamobile.com', phone: 13811450899, groups:['aa', 'bb'], status: 'inactive'}, {id: '111122', first_name: '刘老幺111',email: 'liulaoyao@chinamobile.com', phone: 13811450899, status: 'invalid', directory: 'self'},  { directory: '1111', id: '111111', first_name: '刘老幺11331',email: 'liulaoyao@chinamobile.com', phone: 13811450899, status: 'active'}, { directory: 'self', id: '11133111', first_name: '刘老幺111333', email: 'liulaoyao@chinamobile.com', phone: 13811450899, status: 'active'} ], options: { groups: [{id:'111', name:'111'}, {id:'222', name:'222'}], directories: [{id:'1111', name:'111'}, {id:'2222', name:'222'}] } };
     return res.status(200).send(results);
   });
 
@@ -92,7 +106,7 @@ export default function(router) {
   router.get('/group', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', name: '刘老幺111', users:['aa', 'bb']}, {id: '111122', name: '刘老幺111',  users:[ { id: 'aa', name : 'aa' } , { id: 'bb', name: 'bb'}, { id: 'cc', name: 'cc' } ]},  { id: '111111', name: '刘老幺11331', description: '111111111111111111', users:['aa', 'bb', 'cc', 'dd']}, { id: '11133111', name: '刘老幺111333' }], options: { total: 4 }};
+    const results = { ecode: 0, data: [{ id: '1111', name: '刘老幺111', users:['aa', 'bb']}, {id: '111122', name: '刘老幺111',  users:[ { id: 'aa', name : 'aa' } , { id: 'bb', name: 'bb'}, { id: 'cc', name: 'cc' } ]},  { id: '111111', name: '刘老幺11331', description: '111111111111111111', status: 'invalid', users:['aa', 'bb', 'cc', 'dd']}, { id: '11133111', name: '刘老幺111333' }], options: { total: 4, directories: [{id:'1111', name:'111'}, {id:'2222', name:'222'}] }};
     return res.status(200).send(results);
   });
 
@@ -100,6 +114,13 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
+  router.get('/directory', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', name: '1111111', type: 'ldap', status: 'active' }, {id: '2222', name: '22222',type: 'openldap'}, {id: '3333', name: '3333',type: 'openldap', host: '10.1.5.33', port: 389, username: 'admin', password: '******', base_dn: 'dc=aa,dc=com', status: 'disable' }]};
     return res.status(200).send(results);
   });
 

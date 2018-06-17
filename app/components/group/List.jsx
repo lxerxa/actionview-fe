@@ -236,14 +236,15 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         count: collection[i].users ? collection[i].users.length : 0,
+        directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='view'>查看人员</MenuItem>
-              <MenuItem eventKey='config'>配置人员</MenuItem>
-              <MenuItem eventKey='edit'>编辑</MenuItem>
-              <MenuItem eventKey='del'>删除</MenuItem>
+              { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='config'>配置人员</MenuItem> }
+              { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='edit'>编辑</MenuItem> }
+              { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -268,6 +269,16 @@ export default class List extends Component {
       onSelectAll: this.onSelectAll.bind(this)
     };
 
+    let multiDelShow = false;
+    _.map(collection, (v) => {
+      if (_.indexOf(this.state.selectedIds, v.id) === -1) {
+        return;
+      }
+      if (!v.directory || v.directory == 'self') {
+        multiDelShow = true;
+      }
+    });
+
     return (
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
@@ -284,7 +295,8 @@ export default class List extends Component {
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                <MenuItem eventKey='del'>删除</MenuItem>
+                { !multiDelShow && <MenuItem disabled eventKey='null'>无</MenuItem> }
+                { multiDelShow && <MenuItem eventKey='del'>删除</MenuItem> }
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', marginRight: '20px' } }>
@@ -297,6 +309,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>用户组名</TableHeaderColumn>
             <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
+            <TableHeaderColumn dataField='directory'>目录</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && 
@@ -331,6 +344,7 @@ export default class List extends Component {
             <MultiOperateNotify 
               show 
               close={ this.multiOperateNotifyClose } 
+              collection={ collection }
               multiDel={ multiDel } 
               ids={ this.state.selectedIds } 
               cancelSelected={ this.cancelSelected.bind(this) } 

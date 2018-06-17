@@ -42,6 +42,13 @@ export function update(id, values) {
   });
 }
 
+export function invalidate(id, values) {
+  return asyncFuncCreator({
+    constant: 'USER_INVALIDATE',
+    promise: (client) => client.request({ url: '/user/' + id, method: 'put', data: values })
+  });
+}
+
 export function del(id) {
   return asyncFuncCreator({
     constant: 'USER_DELETE',
@@ -73,6 +80,15 @@ export function multiRenewPwd(ids) {
   return asyncFuncCreator({
     constant: 'USER_MULTI_PWDRENEW',
     promise: (client) => client.request({ url: '/user/batch/renewpwd', method: 'post', data: { ids } })
+  });
+}
+
+export function multiInvalidate(ids, flag) {
+  return asyncFuncCreator({
+    constant: 'USER_MULTI_INVALIDATE',
+    flag,
+    ids,
+    promise: (client) => client.request({ url: '/user/batch/invalidate', method: 'post', data: { ids, flag } })
   });
 }
 
