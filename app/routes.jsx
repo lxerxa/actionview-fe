@@ -135,6 +135,11 @@ const GroupContainer = (location, cb) => {
     cb(null, require('./components/group/Container'))
   }, 'group')
 };
+const DirectoryContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/directory/Container'))
+  }, 'directory')
+};
 //const MysettingContainer = require('./components/setting/my/Container');
 const MysettingContainer = (location, cb) => {
   require.ensure([], require => {
@@ -182,6 +187,7 @@ export default (
       <Route path='/admin/project' getComponent={ ProjectContainer }/>
       <Route path='/admin/user' getComponent={ UserContainer }/>
       <Route path='/admin/group' getComponent={ GroupContainer }/>
+      <Route path='/admin/directory' getComponent={ DirectoryContainer }/>
       <Route path='/admin/syssetting' getComponent={ SyssettingContainer }/>
       <Route path='/admin/scheme' component={ Scheme }>
         <IndexRoute getComponent={ TypeContainer }/>

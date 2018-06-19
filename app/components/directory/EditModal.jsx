@@ -8,30 +8,18 @@ const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
-  if (!values.first_name) {
-    errors.first_name = '必填';
+  if (!values.name) {
+    errors.name = '必填';
   } 
-
-  if (!values.email) {
-    errors.email = '必填';
-  } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
-    errors.email = '格式有误';
-  } 
-
-  if (values.phone) {
-    if (!/^1(3|4|5|7|8)\d{9}$/.test(values.phone)) {
-      errors.phone = '格式有误';
-    }
-  }
   return errors;
 };
 
 @reduxForm({
-  form: 'user',
-  fields: [ 'id', 'first_name', 'email', 'phone' ],
+  form: 'group',
+  fields: [ 'id', 'name', 'description' ],
   validate
 })
-export default class EditModal extends Component {
+export default class CreateModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -60,7 +48,7 @@ export default class EditModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('用户已更新。', 'success', 2000);
+      notify.show('组信息已更新。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -81,30 +69,24 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, first_name, email, phone }, dirty, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { id, name, description }, dirty, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>编辑用户</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>编辑用户组</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>姓名</ControlLabel>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+            <ControlLabel><span className='txt-impt'>*</span>组名</ControlLabel>
             <FormControl type='hidden' { ...id }/>
-            <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='项目名'/>
-            { first_name.touched && first_name.error && <HelpBlock style={ { float: 'right' } }>{ first_name.error }</HelpBlock> }
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='组名'/>
+            { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>邮箱</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...email } placeholder='Email'/>
-            { email.touched && email.error && <HelpBlock style={ { float: 'right' } }>{ email.error }</HelpBlock> }
-          </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ phone.touched && phone.error ? 'error' : '' }>
-            <ControlLabel>手机</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...phone } placeholder='手机号'/>
-            { phone.touched && phone.error && <HelpBlock style={ { float: 'right' } }>{ phone.error }</HelpBlock> }
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>描述</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

@@ -127,6 +127,7 @@ export default class Header extends Component {
     const patten8 = new RegExp('^/admin/syssetting$');
     const patten9 = new RegExp('^/mysetting$');
     const patten10 = new RegExp('^/admin/group$');
+    const patten11 = new RegExp('^/admin/directory$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -159,6 +160,8 @@ export default class Header extends Component {
       modulename = '用户管理';
     } else if (patten10.exec(pathname)) {
       modulename = '用户组管理';
+    } else if (patten11.exec(pathname)) {
+      modulename = '用户目录';
     } else if (patten8.exec(pathname)) {
       modulename = '系统设置';
     } else if (patten9.exec(pathname)) {

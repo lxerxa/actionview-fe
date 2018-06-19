@@ -104,7 +104,7 @@ export default class Sidebar extends Component {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminSchemeShow = true;
-    } else if (/^\/admin\/(user|group)$/.test(nextProps.pathname)) {
+    } else if (/^\/admin\/(user|group|directory)$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminUserManageShow = true;
@@ -150,6 +150,7 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.adminUserManageShow && 'hide' }>
               <li><Link to='/admin/user' activeClassName='menu-active'>用户</Link></li>
               <li><Link to='/admin/group' activeClassName='menu-active'>用户组</Link></li>
+              <li><Link to='/admin/directory' activeClassName='menu-active'>用户目录</Link></li>
             </ul>
             <h4><i className={ this.state.adminProjectManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminProjectManageShow: !this.state.adminProjectManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目管理</h4>
             <ul className={ !this.state.adminProjectManageShow && 'hide' }>

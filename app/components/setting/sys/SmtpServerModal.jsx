@@ -135,6 +135,7 @@ export default class SmtpServerModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>密码</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...password } placeholder='输入密码'/>
             { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
+            { !(password.touched && password.error) && data.password && <HelpBlock style={ { float: 'left' } }>服务器配置信息的每次修改都需重新输入密码。</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

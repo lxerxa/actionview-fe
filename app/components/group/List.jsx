@@ -305,6 +305,14 @@ export default class List extends Component {
           </FormGroup>
         </div>
         <div>
+          <div className='info-col'>
+            <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+            <div className='info-content'>
+              <span>
+                从外部用户目录同步过来的用户组，不能对其做任何操作。
+              </span>
+            </div>
+          </div>
           <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>用户组名</TableHeaderColumn>

@@ -42,10 +42,10 @@ export function update(id, values) {
   });
 }
 
-export function invalidate(id, values) {
+export function invalidate(id, flag) {
   return asyncFuncCreator({
     constant: 'USER_INVALIDATE',
-    promise: (client) => client.request({ url: '/user/' + id, method: 'put', data: values })
+    promise: (client) => client.request({ url: '/user/' + id, method: 'put', data: { invalid_flag: flag } })
   });
 }
 

@@ -120,7 +120,21 @@ export default function(router) {
   router.get('/directory', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', name: '1111111', type: 'ldap', status: 'active' }, {id: '2222', name: '22222',type: 'openldap'}, {id: '3333', name: '3333',type: 'openldap', host: '10.1.5.33', port: 389, username: 'admin', password: '******', base_dn: 'dc=aa,dc=com', status: 'disable' }]};
+    const results = { ecode: 0, data: [{ id: '1111', name: '1111111', type: 'ldap', invalid_flag: 1 }, {id: '2222', name: '22222',type: 'OpenLDAP', invalid_flag: 0}, {id: '3333', name: '3333',type: 'OpenLDAP', configs: { host: '10.1.5.33', port: 389, admin_username: 'admin', admin_password: '******', base_dn: 'dc=aa,dc=com', status: 'disable' } }]};
+    return res.status(200).send(results);
+  });
+
+  router.get('/directory/:id/test', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { server_connect: true, user_count: 3, group_count: 2, group_membership: false } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/directory/:id/sync', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: {} };
     return res.status(200).send(results);
   });
 
