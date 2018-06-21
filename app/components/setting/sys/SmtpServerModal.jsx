@@ -121,7 +121,7 @@ export default class SmtpServerModal extends Component {
               disabled={ submitting }
               clearable={ false }
               searchable={ false }
-              options={ [ { value: '', label: '无' }, { value: 'tls', label: 'tls' }, { value: 'ssl', label: 'ssl' } ] }
+              options={ [ { value: '', label: '无' }, { value: 'tls', label: 'TLS' }, { value: 'ssl', label: 'SSL' } ] }
               value={ encryption.value || '' }
               onChange={ newValue => { encryption.onChange(newValue) } }
               placeholder='请选择'/>

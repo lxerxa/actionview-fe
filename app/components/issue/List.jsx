@@ -435,7 +435,13 @@ export default class List extends Component {
                 (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
             </span>
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='no' width='50'>NO</TableHeaderColumn>
+          <TableHeaderColumn dataField='no' width='50'>
+            <span className='table-header' onClick={ this.orderBy.bind(this, 'no') }>
+              NO
+              { mainOrder.field === 'no' && 
+                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+            </span>
+          </TableHeaderColumn>
           <TableHeaderColumn dataField='name'>
             <span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>
               主题 

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-// import { Link } from 'react-router';
+import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
@@ -122,6 +122,11 @@ export default class List extends Component {
             </span> 
           </div>
         ),
+        unresolved_cnt: (
+          <Link to={ '/project/' + collection[i].project_key + '/issue?resolution=Unresolved&resolve_version=' + collection[i].id }>
+            { collection[i].unresolved_cnt || 0 }
+          </Link>
+        ),
         operation: (
           options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
@@ -160,6 +165,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='start_time'>开始时间</TableHeaderColumn>
           <TableHeaderColumn dataField='end_time'>结束时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='unresolved_cnt'>未解决</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && 

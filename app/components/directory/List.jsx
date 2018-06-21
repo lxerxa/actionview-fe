@@ -168,7 +168,7 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='edit'>查看编辑</MenuItem>
+              <MenuItem eventKey='edit'>编辑查看</MenuItem>
               <MenuItem eventKey='test'>测试</MenuItem>
               <MenuItem eventKey='sync'>同步数据</MenuItem>
               { collection[i].invalid_flag == 1 ? <MenuItem eventKey='validate'>启用</MenuItem> : <MenuItem eventKey='invalidate'>禁用</MenuItem> }

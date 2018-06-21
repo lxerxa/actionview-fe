@@ -19,6 +19,8 @@ const validate = (values) => {
   }
   if (!values.port) {
     errors.port = '必填';
+  } else if (values.port && !/^[1-9][0-9]*$/.test(values.port)) {
+    errors.port = '必须输入正整数';
   }
   if (!values.admin_username) {
     errors.admin_username = '必填';
@@ -50,8 +52,8 @@ const validate = (values) => {
   if (!values.group_name_attr) {
     errors.group_name_attr = '必填';
   }
-  if (!values.group_membership) {
-    errors.group_membership = '必填';
+  if (!values.group_membership_attr) {
+    errors.group_membership_attr = '必填';
   }
   return errors;
 };
@@ -63,6 +65,7 @@ const validate = (values) => {
     'name', 
     'host', 
     'port', 
+    'encryption',
     'admin_username', 
     'admin_password', 
     'base_dn', 
@@ -75,7 +78,7 @@ const validate = (values) => {
     'group_object_class',
     'group_object_filter',
     'group_name_attr', 
-    'group_membership'
+    'group_membership_attr'
   ],
   validate
 })
@@ -141,7 +144,17 @@ export default class AddLDAPModal extends Component {
     if (newData.configs) {
       newData = { id: newData.id, name: newData.name, ...newData.configs };
     } 
-    newData.port = newData.port || 389;
+    if (!newData.id) {
+      newData.port = 389;
+      newData.user_object_class = 'inetOrgPerson';
+      newData.user_object_filter = '(objectClass=inetOrgPerson)';
+      newData.user_name_attr = 'cn';
+      newData.user_email_attr = 'mail';
+      newData.group_object_class = 'groupOfUniqueNames';
+      newData.group_object_filter = '(objectClass=groupOfUniqueNames)';
+      newData.group_name_attr = 'cn';
+      newData.group_membership_attr = 'uniqueMember';
+    }
     newData.admin_password = '';
     initializeForm(newData);
   }
@@ -154,6 +167,7 @@ export default class AddLDAPModal extends Component {
         name,
         host,
         port,
+        encryption,
         admin_username,
         admin_password,
         base_dn,
@@ -166,16 +180,17 @@ export default class AddLDAPModal extends Component {
         group_object_class,
         group_object_filter,
         group_name_attr,
-        group_membership }, 
+        group_membership_attr }, 
       handleSubmit, 
       invalid, 
       submitting, 
-      options } = this.props;
+      options,
+      data } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>添加LDAP</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ !data.id ? '添加LDAP' : ('编辑LDAP - ' + data.name) }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <FormControl type='hidden' { ...id }/>
@@ -200,6 +215,17 @@ export default class AddLDAPModal extends Component {
                   <FormControl disabled={ submitting } type='text' { ...port } placeholder='端口'/>
                   { port.touched && port.error && <HelpBlock style={ { float: 'right' } }>{ port.error }</HelpBlock> }
                 </FormGroup>
+                <FormGroup controlId='formControlsSelect'>
+                  <ControlLabel>加密</ControlLabel>
+                  <Select
+                    disabled={ submitting }
+                    clearable={ false }
+                    searchable={ false }
+                    options={ [ { value: '', label: '无' }, { value: 'tls', label: 'TLS' }, { value: 'ssl', label: 'SSL' } ] }
+                    value={ encryption.value || '' }
+                    onChange={ newValue => { encryption.onChange(newValue) } }
+                    placeholder='请选择'/>
+                </FormGroup>
                 <FormGroup controlId='formControlsText' validationState={ admin_username.touched && admin_username.error ? 'error' : '' }>
                   <ControlLabel><span className='txt-impt'>*</span>用户名</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...admin_username } placeholder='用户名'/>
@@ -209,7 +235,7 @@ export default class AddLDAPModal extends Component {
                   <ControlLabel><span className='txt-impt'>*</span>密码</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...admin_password } placeholder='密码'/>
                   { admin_password.touched && admin_password.error && <HelpBlock style={ { float: 'right' } }>{ admin_password.error }</HelpBlock> }
-                  { !(admin_password.touched && admin_password.error) && id.value && <HelpBlock style={ { float: 'left' } }>配置信息的每次修改都需重新输入密码。</HelpBlock> }
+                  { !(admin_password.touched && admin_password.error) && data.id && <HelpBlock style={ { float: 'left' } }>配置信息的每次修改都需重新输入密码。</HelpBlock> }
                 </FormGroup>
               </div>
             </TabPane>
@@ -271,10 +297,10 @@ export default class AddLDAPModal extends Component {
                   <FormControl disabled={ submitting } type='text' { ...group_name_attr } placeholder='组名属性'/>
                   { group_name_attr.touched && group_name_attr.error && <HelpBlock style={ { float: 'right' } }>{ group_name_attr.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ group_membership.touched && group_membership.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ group_membership_attr.touched && group_membership_attr.error ? 'error' : '' }>
                   <ControlLabel><span className='txt-impt'>*</span>组成员属性</ControlLabel>
-                  <FormControl disabled={ submitting } type='text' { ...group_membership } placeholder='组成员属性'/>
-                  { group_membership.touched && group_membership.error && <HelpBlock style={ { float: 'right' } }>{ group_membership.error }</HelpBlock> }
+                  <FormControl disabled={ submitting } type='text' { ...group_membership_attr } placeholder='组成员属性'/>
+                  { group_membership_attr.touched && group_membership_attr.error && <HelpBlock style={ { float: 'right' } }>{ group_membership_attr.error }</HelpBlock> }
                 </FormGroup>
               </div>
             </TabPane>
