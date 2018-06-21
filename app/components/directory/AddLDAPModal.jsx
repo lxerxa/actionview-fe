@@ -111,18 +111,17 @@ export default class AddLDAPModal extends Component {
     if (values.id) {
       ecode = await edit(values.id, { name: values.name, configs: _.omit(values, [ 'id', 'name' ]) });
       if (ecode === 0){
+        close();
         notify.show('已更新。', 'success', 2000);
-      } else {
-        notify.show('更新失败。', 'error', 2000);
       }
     } else {
       ecode = await create({ name: values.name, configs: _.omit(values, [ 'id', 'name' ]) });
       if (ecode === 0){
+        close();
         notify.show('已添加。', 'success', 2000);
-      } else {
-        notify.show('添加失败。', 'error', 2000);
       }
     }
+    this.setState({ ecode });
   }
 
   handleCancel() {
