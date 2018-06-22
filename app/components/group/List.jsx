@@ -32,7 +32,7 @@ export default class List extends Component {
       hoverRowId: '', 
       selectedIds: [],
       name: '', 
-      group: '' }; 
+      directory: null }; 
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
@@ -121,6 +121,7 @@ export default class List extends Component {
     }
 
     this.state.name = query.name || '';
+    this.state.directory = query.directory || null;
   }
 
   operateNotify(id) {
@@ -155,10 +156,9 @@ export default class List extends Component {
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
-    if (_.trim(this.state.group)) {
-      query.group = _.trim(this.state.group);
+    if (this.state.directory) {
+      query.directory = this.state.directory;
     }
-
     refresh(query);
   }
 
@@ -202,6 +202,11 @@ export default class List extends Component {
 
   cancelSelected() {
     this.setState({ selectedIds: [] });
+  }
+
+  directoryChange(newValue) {
+    this.state.directory = newValue;
+    this.refresh(); 
   }
 
   render() {
@@ -283,7 +288,15 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '22%' } }>
+            <span style={ { float: 'right', width: '18%' } }>
+              <Select
+                simpleValue
+                placeholder='用户目录'
+                value={ this.state.directory }
+                onChange={ this.directoryChange.bind(this) }
+                options={ _.map(options.directories || [], (val) => { return { label: val.name, value: val.id } }) }/>
+            </span>
+            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
                 type='text'
                 id='gname'
