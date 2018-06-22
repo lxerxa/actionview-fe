@@ -109,13 +109,13 @@ export default class AddLDAPModal extends Component {
     const { values, create, edit, close } = this.props;
     let ecode = 0;
     if (values.id) {
-      ecode = await edit(values.id, { name: values.name, configs: _.omit(values, [ 'id', 'name' ]) });
+      ecode = await edit(values.id, _.omit(values, [ 'id' ]));
       if (ecode === 0){
         close();
         notify.show('已更新。', 'success', 2000);
       }
     } else {
-      ecode = await create({ name: values.name, configs: _.omit(values, [ 'id', 'name' ]) });
+      ecode = await create(_.omit(values, [ 'id' ]));
       if (ecode === 0){
         close();
         notify.show('已添加。', 'success', 2000);
@@ -227,7 +227,7 @@ export default class AddLDAPModal extends Component {
                 </FormGroup>
                 <FormGroup controlId='formControlsText' validationState={ admin_username.touched && admin_username.error ? 'error' : '' }>
                   <ControlLabel><span className='txt-impt'>*</span>用户名</ControlLabel>
-                  <FormControl disabled={ submitting } type='text' { ...admin_username } placeholder='用户名'/>
+                  <FormControl disabled={ submitting } type='text' { ...admin_username } placeholder='用户名(如：cn=admin,dc=actionview,dc=cn)'/>
                   { admin_username.touched && admin_username.error && <HelpBlock style={ { float: 'right' } }>{ admin_username.error }</HelpBlock> }
                 </FormGroup>
                 <FormGroup controlId='formControlsText' validationState={ admin_password.touched && admin_password.error ? 'error' : '' }>
@@ -242,16 +242,16 @@ export default class AddLDAPModal extends Component {
               <div style={ { paddingTop: '15px' } }>
                 <FormGroup controlId='formControlsText' validationState={ base_dn.touched && base_dn.error ? 'error' : '' }>
                   <ControlLabel><span className='txt-impt'>*</span>Base DN</ControlLabel>
-                  <FormControl disabled={ submitting } type='text' { ...base_dn } placeholder='base DN'/>
+                  <FormControl disabled={ submitting } type='text' { ...base_dn } placeholder='base DN(如：dc=actionview,dc=cn)'/>
                   { base_dn.touched && base_dn.error && <HelpBlock style={ { float: 'right' } }>{ base_dn.error }</HelpBlock> }
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
                   <ControlLabel>Additional User DN</ControlLabel>
-                  <FormControl disabled={ submitting } type='text' { ...additional_user_dn } placeholder='additional user DN'/>
+                  <FormControl disabled={ submitting } type='text' { ...additional_user_dn } placeholder='additional user DN(如：ou=dev)'/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText'>
                   <ControlLabel>Additional Group DN</ControlLabel>
-                  <FormControl disabled={ submitting } type='text' { ...additional_group_dn } placeholder='additional group DN'/>
+                  <FormControl disabled={ submitting } type='text' { ...additional_group_dn } placeholder='additional group DN(如：ou=dev)'/>
                 </FormGroup>
               </div>
             </TabPane>

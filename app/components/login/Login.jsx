@@ -165,6 +165,7 @@ class Login extends Component {
                   { session.ecode === -10000 && '登录失败，用户名或密码错误。' }   
                   { session.ecode === -10004 && session.emsg }   
                   { session.ecode === -10005 && '用户未激活。' }   
+                  { session.ecode === -10006 && '用户已被禁用。' }   
                   { session.ecode === -99999 && '系统错误。' }
                 </div> }
             </div>

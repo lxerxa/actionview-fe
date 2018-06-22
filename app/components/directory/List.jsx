@@ -205,7 +205,11 @@ export default class List extends Component {
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
-             <span>目前仅支持OpenLDAP目录用户的同步。<br/>禁用目录后，用户将不会自动同步，登录认证也将无效。</span>
+             <span>
+               目前仅支持OpenLDAP目录用户的同步。<br/>
+               禁用目录后，用户将不会自动同步，登录认证也将无效。<br/>
+               首次数据同步需要时间多一点，请耐心等待。
+             </span>
             </div>
           </div>
           <BootstrapTable data={ directories } bordered={ false } hover options={ opts } trClassName='tr-middle'>

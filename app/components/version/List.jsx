@@ -165,7 +165,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='start_time'>开始时间</TableHeaderColumn>
           <TableHeaderColumn dataField='end_time'>结束时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='unresolved_cnt'>未解决</TableHeaderColumn>
+          <TableHeaderColumn dataField='unresolved_cnt'>未解决问题</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && 
