@@ -140,7 +140,7 @@ export default class AddLDAPModal extends Component {
   componentWillMount() {
     const { initializeForm, data={} } = this.props;
 
-    if (data.password) {
+    if (data.id) {
       this.state.passwordShow = false;
     }
 
