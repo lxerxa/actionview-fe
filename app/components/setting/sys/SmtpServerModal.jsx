@@ -27,7 +27,7 @@ const validate = (values, props) => {
     errors.username = '必填';
   }
 
-  if (!values.password) {
+  if (!values.has_old_password && !values.password) {
     errors.password = '必填';
   }
   return errors;
@@ -35,13 +35,13 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'host', 'port', 'encryption', 'username', 'password' ],
+  fields: [ 'host', 'port', 'encryption', 'username', 'has_old_password', 'password' ],
   validate
 })
 export default class SmtpServerModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, passwordShow: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -62,14 +62,20 @@ export default class SmtpServerModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
+
+    if (data.password) {
+      this.state.passwordShow = false;
+    }
+
     const newData = _.clone(data);
+    newData.has_old_password = data.password ? true : false;
     newData.password = '';
     initializeForm(newData);
   }
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update({ smtp: values });
+    const ecode = await update({ smtp: _.omit(values.password ? values : _.omit(values, [ 'password' ]), [ 'has_old_password' ]) });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -91,7 +97,7 @@ export default class SmtpServerModal extends Component {
   render() {
     const { 
       i18n: { errMsg }, 
-      fields: { host, port, encryption, username, password }, 
+      fields: { host, port, encryption, username, has_old_password, password }, 
       handleSubmit, 
       invalid, 
       dirty, 
@@ -131,11 +137,18 @@ export default class SmtpServerModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...username } placeholder='输入帐号'/>
             { username.touched && username.error && <HelpBlock style={ { float: 'right' } }>{ username.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup validationState={ password.touched && password.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>密码</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...password } placeholder='输入密码'/>
-            { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
-            { !(password.touched && password.error) && data.password && <HelpBlock style={ { float: 'left' } }>服务器配置信息的每次修改都需重新输入密码。</HelpBlock> }
+          <FormGroup validationState={ !has_old_password.value && password.touched && password.error ? 'error' : '' }>
+            <ControlLabel>
+              { !has_old_password.value ? <span className='txt-impt'>*</span> : <span/> }
+              密码 
+              { has_old_password.value && 
+              <a style={ { fontWeight: 'normal', fontSize: '12px', cursor: 'pointer', marginLeft: '5px' } } 
+                onClick={ (e) => { e.preventDefault(); if (this.state.passwordShow) { password.onChange('') } this.setState({ passwordShow: !this.state.passwordShow }) } }>
+                { this.state.passwordShow ? '取消' : '设置' }
+              </a> }
+            </ControlLabel>
+            { this.state.passwordShow && <FormControl disabled={ submitting } type='text' { ...password } placeholder='输入密码'/> }
+            { !has_old_password.value && password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

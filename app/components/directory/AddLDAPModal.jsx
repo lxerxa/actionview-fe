@@ -25,7 +25,7 @@ const validate = (values) => {
   if (!values.admin_username) {
     errors.admin_username = '必填';
   }
-  if (!values.admin_password) {
+  if (!values.id && !values.admin_password) {
     errors.admin_password = '必填';
   }
   if (!values.base_dn) {
@@ -85,7 +85,7 @@ const validate = (values) => {
 export default class AddLDAPModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, activeKey: '1' };
+    this.state = { ecode: 0, activeKey: '1', passwordShow: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -109,7 +109,7 @@ export default class AddLDAPModal extends Component {
     const { values, create, edit, close } = this.props;
     let ecode = 0;
     if (values.id) {
-      ecode = await edit(values.id, _.omit(values, [ 'id' ]));
+      ecode = await edit(values.id, _.omit(values.admin_password ? values : _.omit(values, [ 'admin_password' ]), [ 'id' ]));
       if (ecode === 0){
         close();
         notify.show('已更新。', 'success', 2000);
@@ -139,6 +139,11 @@ export default class AddLDAPModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data={} } = this.props;
+
+    if (data.password) {
+      this.state.passwordShow = false;
+    }
+
     let newData= _.clone(data);
     if (newData.configs) {
       newData = { id: newData.id, name: newData.name, ...newData.configs };
@@ -230,11 +235,18 @@ export default class AddLDAPModal extends Component {
                   <FormControl disabled={ submitting } type='text' { ...admin_username } placeholder='用户名(如：cn=admin,dc=actionview,dc=cn)'/>
                   { admin_username.touched && admin_username.error && <HelpBlock style={ { float: 'right' } }>{ admin_username.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ admin_password.touched && admin_password.error ? 'error' : '' }>
-                  <ControlLabel><span className='txt-impt'>*</span>密码</ControlLabel>
-                  <FormControl disabled={ submitting } type='text' { ...admin_password } placeholder='密码'/>
-                  { admin_password.touched && admin_password.error && <HelpBlock style={ { float: 'right' } }>{ admin_password.error }</HelpBlock> }
-                  { !(admin_password.touched && admin_password.error) && data.id && <HelpBlock style={ { float: 'left' } }>配置信息的每次修改都需重新输入密码。</HelpBlock> }
+                <FormGroup controlId='formControlsText' validationState={ !id.value && admin_password.touched && admin_password.error ? 'error' : '' }>
+                  <ControlLabel>
+                    { !id.value ? <span className='txt-impt'>*</span> : <span/> }
+                    密码
+                    { id.value &&
+                    <a style={ { fontWeight: 'normal', fontSize: '12px', cursor: 'pointer', marginLeft: '5px' } }
+                      onClick={ (e) => { e.preventDefault(); if (this.state.passwordShow) { admin_password.onChange('') } this.setState({ passwordShow: !this.state.passwordShow }) } }>
+                      { this.state.passwordShow ? '取消' : '设置' }
+                    </a> }
+                  </ControlLabel>
+                  { this.state.passwordShow && <FormControl disabled={ submitting } type='text' { ...admin_password } placeholder='密码'/> }
+                  { !id.value && admin_password.touched && admin_password.error && <HelpBlock style={ { float: 'right' } }>{ admin_password.error }</HelpBlock> }
                 </FormGroup>
               </div>
             </TabPane>

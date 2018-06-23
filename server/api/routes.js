@@ -15,7 +15,7 @@ export default function(router) {
   router.get('/syssetting', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { properties: { allowed_login_num: 3, login_mail_domain: 'chinamobile.com', week2day: 5, day2hour: 8 }, mailserver: { smtp: { host: '10.2.5.34', port: 25, tls: 1, username:'xxxxx' }, send: { from: 'actionview@126.com', prefix: 'actionview' }}, sysroles: { sys_admin: [ { id: 'nhy67ujm', email:'liulaoyao@chinamobile.com', name: 'liulaoyao' }, { id: 'nhy67ujm2', email:'liulaoyao@chinamobile.com', name: 'liulaoyaoaaaa' } ] } } };
+    const results = { ecode: 0, data: { properties: { allowed_login_num: 3, login_mail_domain: 'chinamobile.com', week2day: 5, day2hour: 8 }, mailserver: { smtp: { host: '10.2.5.34', port: 25, tls: 1, username:'xxxxx', password: '******' }, send: { from: 'actionview@126.com', prefix: 'actionview' }}, sysroles: { sys_admin: [ { id: 'nhy67ujm', email:'liulaoyao@chinamobile.com', name: 'liulaoyao' }, { id: 'nhy67ujm2', email:'liulaoyao@chinamobile.com', name: 'liulaoyaoaaaa' } ] } } };
     return res.status(200).send(results);
   });
 

@@ -296,7 +296,7 @@ export default class List extends Component {
                 onChange={ this.directoryChange.bind(this) }
                 options={ _.map(options.directories || [], (val) => { return { label: val.name, value: val.id } }) }/>
             </span>
-            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '20%', marginRight: '10px' } }>
               <FormControl
                 type='text'
                 id='gname'
