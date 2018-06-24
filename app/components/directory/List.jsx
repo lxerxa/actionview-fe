@@ -150,6 +150,7 @@ export default class List extends Component {
       testInfo,
       sync,
       syncLoading,
+      syncInfo,
       invalidate, 
       update, 
       options } = this.props;
