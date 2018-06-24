@@ -56,6 +56,7 @@ export default class List extends Component {
     testInfo: PropTypes.object.isRequired,
     sync: PropTypes.func.isRequired,
     syncLoading: PropTypes.bool.isRequired,
+    syncInfo: PropTypes.object.isRequired,
     invalidate: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -253,6 +254,7 @@ export default class List extends Component {
               loading={ syncLoading }
               close={ this.syncModalClose }
               sync={ sync }
+              syncInfo={ syncInfo } 
               i18n={ i18n }/> }
           { this.state.operateNotifyShow &&
             <OperateNotify
