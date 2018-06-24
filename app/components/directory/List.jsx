@@ -9,6 +9,7 @@ const $ = require('$');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const TestModal = require('./TestModal');
+const SyncModal = require('./SyncModal');
 const OperateNotify = require('./OperateNotify');
 const AddLDAPModal = require('./AddLDAPModal');
 
@@ -22,6 +23,7 @@ export default class List extends Component {
       editModalShow: false, 
       operateNotifyShow: false, 
       testModalShow: false, 
+      syncModalShow: false, 
       addLDAPModalShow: false,
       editLDAPModalShow: false,
       operate: '',
@@ -31,6 +33,7 @@ export default class List extends Component {
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.testModalClose = this.testModalClose.bind(this);
+    this.syncModalClose = this.syncModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
     this.addLDAPModalClose = this.addLDAPModalClose.bind(this);
     this.editLDAPModalClose = this.editLDAPModalClose.bind(this);
@@ -52,6 +55,7 @@ export default class List extends Component {
     testLoading: PropTypes.bool.isRequired,
     testInfo: PropTypes.object.isRequired,
     sync: PropTypes.func.isRequired,
+    syncLoading: PropTypes.bool.isRequired,
     invalidate: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -71,6 +75,10 @@ export default class List extends Component {
 
   testModalClose() {
     this.setState({ testModalShow: false });
+  }
+
+  syncModalClose() {
+    this.setState({ syncModalShow: false });
   }
 
   addLDAPModalClose() {
@@ -108,12 +116,7 @@ export default class List extends Component {
       this.setState({ testModalShow: true });
     } else if (eventKey === 'sync') {
       select(hoverRowId);
-      const ecode = await sync(hoverRowId);
-      if (ecode === 0) {
-        notify.show('已同步。', 'success', 2000); 
-      } else {
-        notify.show('同步失败。', 'error', 2000); 
-      }
+      this.setState({ syncModalShow: true });
     } else {
       this.operateNotify(hoverRowId);
       this.setState({ operate: eventKey });
@@ -144,6 +147,8 @@ export default class List extends Component {
       test,
       testLoading,
       testInfo,
+      sync,
+      syncLoading,
       invalidate, 
       update, 
       options } = this.props;
@@ -240,6 +245,14 @@ export default class List extends Component {
               close={ this.testModalClose } 
               test={ test } 
               testInfo={ testInfo } 
+              i18n={ i18n }/> }
+          { this.state.syncModalShow &&
+            <SyncModal
+              show
+              data={ selectedItem }
+              loading={ syncLoading }
+              close={ this.syncModalClose }
+              sync={ sync }
               i18n={ i18n }/> }
           { this.state.operateNotifyShow &&
             <OperateNotify

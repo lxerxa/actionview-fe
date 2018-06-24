@@ -20,7 +20,11 @@ export default class TestModal extends Component {
   }
 
   handleCancel() {
-    const { close } = this.props;
+    const { close, loading } = this.props;
+    if (loading) {
+      return;
+    }
+
     this.setState({ ecode: 0 });
     close();
   }
@@ -45,21 +49,36 @@ export default class TestModal extends Component {
         </Modal.Header>
         { loading &&
         <Modal.Body style={ { height: '240px', overflow: 'auto' } }>
-          <div style={ { textAlign: 'center', marginTop: '80px' } }>
-            <img src={ img } className='loading'/>
+          <div style={ { textAlign: 'center', marginTop: '75px' } }>
+            <img src={ img } className='loading'/><br/>
+            正在测试中...
           </div>
         </Modal.Body> }
         { !loading &&
         <Modal.Body style={ { height: '240px', overflow: 'auto' } }>
           <br/>
-          服务器连接：{ testInfo.server_connect ? <Label bsStyle='success'>成功</Label> : <Label bsStyle='danger'>失败</Label> }<br/><br/>
-          获取用户：{ testInfo.user_count || 0 } 个<br/><br/>
-          获取用户组：{ testInfo.group_count || 0 } 个<br/><br/>
-          获取用户组成员：{ testInfo.group_membership ? <Label bsStyle='success'>成功</Label> : <Label bsStyle='danger'>失败</Label> }<br/><br/>
+          <table style={ { marginLeft: '20px' } }>
+            <tr>
+              <td style={ { height: '35px', textAlign: 'right' } }>服务器连接：</td>
+              <td>{ testInfo.server_connect ? <Label bsStyle='success'>成功</Label> : <Label bsStyle='danger'>失败</Label> }</td>
+            </tr>
+            <tr>
+              <td style={ { height: '35px', textAlign: 'right' } }>获取用户：</td>
+              <td>{ testInfo.user_count || 0 } 个</td>
+            </tr>
+            <tr>
+              <td style={ { height: '35px', textAlign: 'right' } }>获取用户组：</td>
+              <td>{ testInfo.group_count || 0 } 个</td>
+            </tr>
+            <tr>
+              <td style={ { height: '35px', textAlign: 'right' } }>获取用户组成员：</td>
+              <td>{ testInfo.group_membership ? <Label bsStyle='success'>成功</Label> : <Label bsStyle='danger'>失败</Label> }</td>
+            </tr>
+          </table>
         </Modal.Body> }
         <Modal.Footer>
-          <Button onClick={ this.retest.bind(this) }>重新测试</Button>
-          <Button bsStyle='link' onClick={ this.handleCancel }>关闭</Button>
+          <Button disabled={ loading } onClick={ this.retest.bind(this) }>重新测试</Button>
+          <Button disabled={ loading } bsStyle='link' onClick={ this.handleCancel }>关闭</Button>
         </Modal.Footer>
       </Modal>
     );

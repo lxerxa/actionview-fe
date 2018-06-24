@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], indexLoading: false, itemLoading: false, item: {}, loading: false, options: {}, selectedItem: {}, testLoading: false, testInfo: {} };
+const initialState = { ecode: 0, collection: [], indexLoading: false, itemLoading: false, item: {}, loading: false, options: {}, selectedItem: {}, testLoading: false, testInfo: {}, syncLoading: false, syncInfo: {} };
 
 export default function directory(state = initialState, action) {
   switch (action.type) {
@@ -83,13 +83,13 @@ export default function directory(state = initialState, action) {
       return { ...state, testLoading: false, error: action.error };
 
     case t.DIRECTORY_SYNC:
-      return { ...state, itemLoading: true };
+      return { ...state, syncInfo: {}, syncLoading: true };
 
     case t.DIRECTORY_SYNC_SUCCESS:
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
+      return { ...state, syncLoading: false, syncInfo: action.result.data, ecode: action.result.ecode };
 
     case t.DIRECTORY_SYNC_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      return { ...state, syncLoading: false, error: action.error };
 
     default:
       return state;
