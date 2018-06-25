@@ -94,6 +94,7 @@ export default class AddLDAPModal extends Component {
     i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
+    dirty: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     options: PropTypes.object,
@@ -187,6 +188,7 @@ export default class AddLDAPModal extends Component {
         group_membership_attr }, 
       handleSubmit, 
       invalid, 
+      dirty,
       submitting, 
       options,
       data } = this.props;
@@ -320,7 +322,7 @@ export default class AddLDAPModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
+          <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>

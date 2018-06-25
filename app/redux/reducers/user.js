@@ -97,22 +97,22 @@ export default function user(state = initialState, action) {
     case t.USER_MULTI_DELETE:
     case t.USER_MULTI_PWDRENEW:
     case t.USER_MULTI_INVALIDATE:
-      return { ...state, loading: false };
+      return { ...state, loading: true };
 
     case t.USER_MULTI_DELETE_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = _.reject(state.collection, (v) => { return action.ids.indexOf(v.id) !== -1 });
       }
-      return { ...state, loading: true, ecode: action.result.ecode };
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.USER_MULTI_INVALIDATE_SUCCESS:
       if (action.result.ecode === 0) {
         _.map(state.collection, (v) => { if (action.ids.indexOf(v.id) !== -1) v.status = (action.flag == 1 ? 'invalid' : 'active'); });
       }
-      return { ...state, loading: true, ecode: action.result.ecode };
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.USER_MULTI_PWDRENEW_SUCCESS:
-      return { ...state, loading: true, ecode: action.result.ecode };
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.USER_MULTI_PWDRENEW_FAIL:
     case t.USER_MULTI_INVALIDATE_FAIL:
