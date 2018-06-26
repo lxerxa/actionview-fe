@@ -520,8 +520,9 @@ table tr:hover .remove-icon{
 
 .login-panel {
   width: 365px;
-  margin: 100px auto;
+  margin: 0px auto;
   border: none;
+  padding: 100px 0;
 }
 
 .login-footer {
