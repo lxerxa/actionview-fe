@@ -126,8 +126,8 @@ export default class Container extends Component {
     return this.props.workflow.ecode;
   }
 
-  async indexComments(issue_id) {
-    await this.props.actions.indexComments(this.pid, issue_id);
+  async indexComments(issue_id, sort) {
+    await this.props.actions.indexComments(this.pid, issue_id, sort);
     return this.props.issue.ecode;
   }
 
@@ -146,8 +146,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async indexWorklog(issue_id) {
-    await this.props.actions.indexWorklog(this.pid, issue_id);
+  async indexWorklog(issue_id, sort) {
+    await this.props.actions.indexWorklog(this.pid, issue_id, sort);
     return this.props.issue.ecode;
   }
 
@@ -166,8 +166,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async indexHistory(issue_id) {
-    await this.props.actions.indexHistory(this.pid, issue_id);
+  async indexHistory(issue_id, sort) {
+    await this.props.actions.indexHistory(this.pid, issue_id, sort);
     return this.props.issue.ecode;
   }
 

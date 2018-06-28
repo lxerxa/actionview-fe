@@ -87,10 +87,10 @@ export function setAssignee(key, id, values, modalFlag) {
   });
 }
 
-export function indexComments(key, id) {
+export function indexComments(key, id, sort) {
   return asyncFuncCreator({
     constant: 'ISSUE_COMMENTS_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments' })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/comments?sort=' + (sort || 'desc') })
   });
 }
 
@@ -116,17 +116,17 @@ export function delComments(key, id, comments_id) {
   });
 }
 
-export function indexHistory(key, id) {
+export function indexHistory(key, id, sort) {
   return asyncFuncCreator({
     constant: 'ISSUE_HISTORY_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/history' })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/history?sort=' + (sort || 'desc') })
   });
 } 
 
-export function indexWorklog(key, id) {
+export function indexWorklog(key, id, sort) {
   return asyncFuncCreator({
     constant: 'ISSUE_WORKLOG_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog' })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog?sort=' + (sort || 'desc') })
   });
 }
 

@@ -14,7 +14,16 @@ const EditCommentsModal = require('./EditCommentsModal');
 export default class Comments extends Component {
   constructor(props) {
     super(props);
-    this.state = { addCommentsShow: false, editCommentsShow: false, delCommentsShow: false, delReplyShow: false, selectedComments: {}, contents:  '', atWho: [] };
+    this.state = { 
+      ecode: 0, 
+      sort: 'desc', 
+      addCommentsShow: false, 
+      editCommentsShow: false, 
+      delCommentsShow: false, 
+      delReplyShow: false, 
+      selectedComments: {}, 
+      contents:  '',  
+      atWho: [] };
     this.addAtWho = this.addAtWho.bind(this);
   }
 
@@ -123,6 +132,7 @@ export default class Comments extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexComments(issue_id) } }><i className='fa fa-refresh'></i> 刷新</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { this.state.sort = (this.state.sort === 'desc' ? 'asc' : 'desc'); indexComments(issue_id, this.state.sort) } }><i className='fa fa-sort'></i> 排序</span>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</span>
             </div>
           </Col>
