@@ -94,6 +94,10 @@ export function indexComments(key, id, sort) {
   });
 }
 
+export function sortComments() {
+  return { type: 'ISSUE_COMMENTS_SORT' };
+}
+
 export function addComments(key, id, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_COMMENTS_ADD',
@@ -123,11 +127,19 @@ export function indexHistory(key, id, sort) {
   });
 } 
 
+export function sortHistory() {
+  return { type: 'ISSUE_HISTORY_SORT' };
+}
+
 export function indexWorklog(key, id, sort) {
   return asyncFuncCreator({
     constant: 'ISSUE_WORKLOG_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog?sort=' + (sort || 'desc') })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/worklog?sort=' + (sort || 'asc') })
   });
+}
+
+export function sortWorklog() {
+  return { type: 'ISSUE_WORKLOG_SORT' };
 }
 
 export function addWorklog(key, id, values) {

@@ -16,7 +16,6 @@ export default class Comments extends Component {
     super(props);
     this.state = { 
       ecode: 0, 
-      sort: 'desc', 
       addCommentsShow: false, 
       editCommentsShow: false, 
       delCommentsShow: false, 
@@ -35,6 +34,7 @@ export default class Comments extends Component {
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexComments: PropTypes.func.isRequired,
+    sortComments: PropTypes.func.isRequired,
     addComments: PropTypes.func.isRequired,
     editComments: PropTypes.func.isRequired,
     delComments: PropTypes.func.isRequired,
@@ -124,7 +124,20 @@ export default class Comments extends Component {
   }
 
   render() {
-    const { i18n, permissions, currentUser, indexComments, collection, indexLoading, loading, itemLoading, delComments, editComments, users, issue_id } = this.props;
+    const { 
+      i18n, 
+      permissions, 
+      currentUser, 
+      indexComments, 
+      sortComments, 
+      collection, 
+      indexLoading, 
+      loading, 
+      itemLoading, 
+      delComments, 
+      editComments, 
+      users, 
+      issue_id } = this.props;
 
     return (
       <Form horizontal>
@@ -132,7 +145,7 @@ export default class Comments extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexComments(issue_id) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { this.state.sort = (this.state.sort === 'desc' ? 'asc' : 'desc'); indexComments(issue_id, this.state.sort) } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortComments() } }><i className='fa fa-sort'></i> 排序</span>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</span>
             </div>
           </Col>

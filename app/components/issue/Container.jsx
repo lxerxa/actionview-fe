@@ -126,8 +126,8 @@ export default class Container extends Component {
     return this.props.workflow.ecode;
   }
 
-  async indexComments(issue_id, sort) {
-    await this.props.actions.indexComments(this.pid, issue_id, sort);
+  async indexComments(issue_id) {
+    await this.props.actions.indexComments(this.pid, issue_id, this.props.issue.commentsSort);
     return this.props.issue.ecode;
   }
 
@@ -146,8 +146,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async indexWorklog(issue_id, sort) {
-    await this.props.actions.indexWorklog(this.pid, issue_id, sort);
+  async indexWorklog(issue_id) {
+    await this.props.actions.indexWorklog(this.pid, issue_id, this.props.issue.worklogSort);
     return this.props.issue.ecode;
   }
 
@@ -166,8 +166,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async indexHistory(issue_id, sort) {
-    await this.props.actions.indexHistory(this.pid, issue_id, sort);
+  async indexHistory(issue_id) {
+    await this.props.actions.indexHistory(this.pid, issue_id, this.props.issue.historySort);
     return this.props.issue.ecode;
   }
 
@@ -268,14 +268,17 @@ export default class Container extends Component {
           wfLoading={ this.props.workflow.itemLoading } 
           viewWorkflow={ this.viewWorkflow.bind(this) } 
           indexComments={ this.indexComments.bind(this) } 
+          sortComments={ this.props.actions.sortComments } 
           addComments={ this.addComments.bind(this) } 
           editComments={ this.editComments.bind(this) } 
           delComments={ this.delComments.bind(this) } 
           indexWorklog={ this.indexWorklog.bind(this) }
+          sortWorklog={ this.props.actions.sortWorklog }
           addWorklog={ this.addWorklog.bind(this) }
           editWorklog={ this.editWorklog.bind(this) }
           delWorklog={ this.delWorklog.bind(this) }
           indexHistory={ this.indexHistory.bind(this) }
+          sortHistory={ this.props.actions.sortHistory }
           createLink={ this.createLink.bind(this) }
           delLink={ this.delLink.bind(this) }
           doAction={ this.doAction.bind(this) }

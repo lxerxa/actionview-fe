@@ -88,6 +88,7 @@ export default class DetailBar extends Component {
     create: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
+    sortComments: PropTypes.func.isRequired,
     addComments: PropTypes.func.isRequired,
     editComments: PropTypes.func.isRequired,
     delComments: PropTypes.func.isRequired,
@@ -97,6 +98,7 @@ export default class DetailBar extends Component {
     commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
     indexWorklog: PropTypes.func.isRequired,
+    sortWorklog: PropTypes.func.isRequired,
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
@@ -105,6 +107,7 @@ export default class DetailBar extends Component {
     worklogLoading: PropTypes.bool.isRequired,
     worklogLoaded: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
+    sortHistory: PropTypes.func.isRequired,
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
     historyLoaded: PropTypes.bool.isRequired,
@@ -129,7 +132,15 @@ export default class DetailBar extends Component {
   }
 
   handleTabSelect(tabKey) {
-    const { indexComments, indexHistory, indexWorklog, commentsLoaded, historyLoaded, worklogLoaded, data } = this.props;
+    const { 
+      indexComments, 
+      indexHistory, 
+      indexWorklog, 
+      commentsLoaded, 
+      historyLoaded, 
+      worklogLoaded, 
+      data } = this.props;
+
     this.setState({ tabKey });
     if (tabKey === 2 && !commentsLoaded) {
       indexComments(data.id);
@@ -408,6 +419,7 @@ export default class DetailBar extends Component {
       wfCollection, 
       wfLoading, 
       indexComments, 
+      sortComments, 
       commentsCollection, 
       commentsIndexLoading, 
       commentsLoading, 
@@ -416,9 +428,11 @@ export default class DetailBar extends Component {
       editComments, 
       delComments, 
       indexHistory, 
+      sortHistory, 
       historyCollection, 
       historyIndexLoading, 
       indexWorklog, 
+      sortWorklog, 
       worklogCollection, 
       worklogIndexLoading, 
       worklogLoading, 
@@ -889,6 +903,7 @@ export default class DetailBar extends Component {
                 issue_id={ data.id }
                 collection={ commentsCollection } 
                 indexComments={ indexComments } 
+                sortComments={ sortComments } 
                 indexLoading={ commentsIndexLoading } 
                 loading={ commentsLoading } 
                 users={ options.users || [] } 
@@ -902,6 +917,7 @@ export default class DetailBar extends Component {
                 issue_id={ data.id }
                 collection={ historyCollection } 
                 indexHistory={ indexHistory } 
+                sortHistory={ sortHistory } 
                 indexLoading={ historyIndexLoading } />
             </Tab>
             <Tab eventKey={ 4 } title='工作日志'>
@@ -914,6 +930,7 @@ export default class DetailBar extends Component {
                 options={ options.timetrack || {} }
                 collection={ worklogCollection } 
                 indexWorklog={ indexWorklog } 
+                sortWorklog={ sortWorklog } 
                 indexLoading={ worklogIndexLoading } 
                 loading={ worklogLoading }
                 addWorklog={ addWorklog } 

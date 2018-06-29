@@ -9,18 +9,19 @@ const moment = require('moment');
 export default class History extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, sort: 'desc' };
+    this.state = { ecode: 0 };
   }
 
   static propTypes = {
     issue_id: PropTypes.string.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
+    sortHistory: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired
   }
 
   render() {
-    const { issue_id, indexHistory, collection, indexLoading } = this.props;
+    const { issue_id, indexHistory, sortHistory, collection, indexLoading } = this.props;
 
     return (
       <Form horizontal>
@@ -28,7 +29,7 @@ export default class History extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { this.state.sort = (this.state.sort === 'desc' ? 'asc' : 'desc'); indexHistory(issue_id, this.state.sort) } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortHistory() } }><i className='fa fa-sort'></i> 排序</span>
             </div>
           </Col>
           <Col sm={ 12 }>

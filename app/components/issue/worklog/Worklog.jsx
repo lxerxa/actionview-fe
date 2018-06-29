@@ -12,7 +12,7 @@ const DelWorklogModal = require('./DelWorklogModal');
 export default class Worklog extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, sort: 'desc' };
+    this.state = { ecode: 0 };
     this.m2t = this.m2t.bind(this);
     this.t2m = this.t2m.bind(this);
   }
@@ -27,6 +27,7 @@ export default class Worklog extends Component {
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     indexWorklog: PropTypes.func.isRequired,
+    sortWorklog: PropTypes.func.isRequired,
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
     delWorklog: PropTypes.func.isRequired,
@@ -122,7 +123,20 @@ export default class Worklog extends Component {
   }
 
   render() {
-    const { i18n, permissions, currentUser, issue, indexWorklog, collection, indexLoading, loading, addWorklog, editWorklog, delWorklog, original_estimate='' } = this.props;
+    const { 
+      i18n, 
+      permissions, 
+      currentUser, 
+      issue, 
+      indexWorklog, 
+      sortWorklog, 
+      collection, 
+      indexLoading, 
+      loading, 
+      addWorklog, 
+      editWorklog, 
+      delWorklog, 
+      original_estimate='' } = this.props;
 
     let leave_estimate_m = undefined;
     if (original_estimate) {
@@ -157,7 +171,7 @@ export default class Worklog extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { this.state.sort = (this.state.sort === 'desc' ? 'asc' : 'desc'); indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
               { permissions.indexOf('add_worklog') !== -1 &&
               <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span> }
             </div>

@@ -17,14 +17,17 @@ const initialState = {
   fileLoading: false, 
   selectedItem: {}, 
   commentsCollection: [], 
+  commentsSort: 'desc', 
   commentsIndexLoading: false, 
   commentsLoading: false, 
   commentsItemLoading: false, 
   commentsLoaded: false, 
   historyCollection: [], 
+  historySort: 'desc', 
   historyIndexLoading: false, 
   historyLoaded: false, 
   worklogCollection: [], 
+  worklogSort: 'asc', 
   worklogIndexLoading: false, 
   worklogLoading: false, 
   worklogLoaded: false, 
@@ -259,12 +262,19 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_COMMENTS_INDEX_FAIL:
       return { ...state, commentsIndexLoading: false, error: action.error };
 
+    case t.ISSUE_COMMENTS_SORT:
+      return { ...state, commentsSort: state.commentsSort === 'desc' ? 'asc' : 'desc', commentsCollection: state.commentsCollection.reverse() };
+
     case t.ISSUE_COMMENTS_ADD:
       return { ...state, commentsLoading: true };
 
     case t.ISSUE_COMMENTS_ADD_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.commentsCollection.unshift(action.result.data);
+        if (state.commentsSort === 'asc') {
+          state.commentsCollection.push(action.result.data);
+        } else {
+          state.commentsCollection.unshift(action.result.data);
+        }
       }
       return { ...state, commentsLoading: false, ecode: action.result.ecode };
 
@@ -309,6 +319,9 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_HISTORY_INDEX_FAIL:
       return { ...state, historyIndexLoading: false, error: action.error };
 
+    case t.ISSUE_HISTORY_SORT:
+      return { ...state, historySort: state.historySort === 'desc' ? 'asc' : 'desc', historyCollection: state.historyCollection.reverse() };
+
     case t.ISSUE_WORKLOG_INDEX:
       return { ...state, worklogIndexLoading: true, worklogCollection: [] };
 
@@ -321,12 +334,19 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKLOG_INDEX_FAIL:
       return { ...state, worklogIndexLoading: false, error: action.error };
 
+    case t.ISSUE_WORKLOG_SORT:
+      return { ...state, worklogSort: state.worklogSort === 'asc' ? 'desc' : 'asc', worklogCollection: _.reverse(state.worklogCollection) };
+
     case t.ISSUE_WORKLOG_ADD:
       return { ...state, worklogLoading: true };
 
     case t.ISSUE_WORKLOG_ADD_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.worklogCollection.push(action.result.data);
+        if (state.worklogSort === 'desc') {
+          state.worklogCollection.unshift(action.result.data);
+        } else {
+          state.worklogCollection.push(action.result.data);
+        }
       }
       return { ...state, worklogLoading: false, ecode: action.result.ecode };
 
