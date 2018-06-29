@@ -85,7 +85,7 @@ export default class Container extends Component {
   }
 
   async indexComments(issue_id) {
-    await this.props.issueActions.indexComments(this.pid, issue_id);
+    await this.props.issueActions.indexComments(this.pid, issue_id, this.props.issue.commentsSort);
     return this.props.issue.ecode;
   }
 
@@ -105,7 +105,7 @@ export default class Container extends Component {
   }
 
   async indexWorklog(issue_id) {
-    await this.props.issueActions.indexWorklog(this.pid, issue_id);
+    await this.props.issueActions.indexWorklog(this.pid, issue_id, this.props.issue.worklogSort);
     return this.props.issue.ecode;
   }
 
@@ -125,7 +125,7 @@ export default class Container extends Component {
   }
 
   async indexHistory(issue_id) {
-    await this.props.issueActions.indexHistory(this.pid, issue_id);
+    await this.props.issueActions.indexHistory(this.pid, issue_id, this.props.issue.historySort);
     return this.props.issue.ecode;
   }
 
@@ -216,14 +216,17 @@ export default class Container extends Component {
           wfLoading={ this.props.workflow.itemLoading }
           viewWorkflow={ this.viewWorkflow.bind(this) }
           indexComments={ this.indexComments.bind(this) }
+          sortComments={ this.props.issueActions.sortComments }
           addComments={ this.addComments.bind(this) }
           editComments={ this.editComments.bind(this) }
           delComments={ this.delComments.bind(this) }
           indexWorklog={ this.indexWorklog.bind(this) }
+          sortWorklog={ this.props.issueActions.sortWorklog }
           addWorklog={ this.addWorklog.bind(this) }
           editWorklog={ this.editWorklog.bind(this) }
           delWorklog={ this.delWorklog.bind(this) }
           indexHistory={ this.indexHistory.bind(this) }
+          sortHistory={ this.props.issueActions.sortHistory }
           createLink={ this.createLink.bind(this) }
           delLink={ this.delLink.bind(this) }
           doAction={ this.doAction.bind(this) }

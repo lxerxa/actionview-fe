@@ -27,6 +27,7 @@ export default class Worklog extends Component {
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     indexWorklog: PropTypes.func.isRequired,
+    sort: PropTypes.string.isRequired,
     sortWorklog: PropTypes.func.isRequired,
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
@@ -129,6 +130,7 @@ export default class Worklog extends Component {
       currentUser, 
       issue, 
       indexWorklog, 
+      sort,
       sortWorklog, 
       collection, 
       indexLoading, 
@@ -141,6 +143,10 @@ export default class Worklog extends Component {
     let leave_estimate_m = undefined;
     if (original_estimate) {
       leave_estimate_m = this.t2m(original_estimate);  
+    }
+
+    if (sort === 'desc') {
+      collection.reverse();
     }
 
     let spend_m = 0;
@@ -160,10 +166,14 @@ export default class Worklog extends Component {
     });
 
     const last = _.last(collection);
-    const rCollection = [];
-    _.map(collection, (val) => {
-      rCollection.unshift(val);
-    });
+
+    if (sort === 'desc') {
+      collection.reverse();
+    }
+    //const rCollection = [];
+    //_.map(collection, (val) => {
+    //  rCollection.unshift(val);
+    //});
    
     return (
       <Form horizontal>
@@ -199,7 +209,7 @@ export default class Worklog extends Component {
           { collection.length <= 0 && !indexLoading ?
             <div style={ { width: '100%', textAlign: 'left', marginTop: '10px', marginLeft: '10px' } }>暂无工作记录。</div>
             :
-            _.map(rCollection, (val, i) => {
+            _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
                 <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder && val.recorder.name || '') + '</a> 添加了工作日志 - ' + (val.recorded_at && moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 { ((val.recorder && currentUser.id === val.recorder.id) || permissions.indexOf('manage_project') !== -1) &&  
