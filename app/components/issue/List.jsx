@@ -63,6 +63,7 @@ export default class List extends Component {
     commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
     indexWorklog: PropTypes.func.isRequired,
+    worklogSort: PropTypes.string.isRequired,
     sortWorklog: PropTypes.func.isRequired,
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
@@ -299,6 +300,7 @@ export default class List extends Component {
       delComments, 
       commentsItemLoading, 
       indexWorklog, 
+      worklogSort, 
       sortWorklog, 
       worklogCollection, 
       worklogIndexLoading, 
@@ -521,6 +523,7 @@ export default class List extends Component {
             editComments={ editComments }
             delComments={ delComments }
             indexWorklog={ indexWorklog }
+            worklogSort={ worklogSort }
             sortWorklog={ sortWorklog }
             worklogCollection={ worklogCollection }
             worklogIndexLoading={ worklogIndexLoading }

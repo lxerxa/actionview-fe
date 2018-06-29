@@ -263,7 +263,8 @@ export default function issue(state = initialState, action) {
       return { ...state, commentsIndexLoading: false, error: action.error };
 
     case t.ISSUE_COMMENTS_SORT:
-      return { ...state, commentsSort: state.commentsSort === 'desc' ? 'asc' : 'desc', commentsCollection: state.commentsCollection.reverse() };
+      state.commentsCollection.reverse();
+      return { ...state, commentsSort: state.commentsSort === 'desc' ? 'asc' : 'desc', commentsCollection: _.clone(state.commentsCollection) };
 
     case t.ISSUE_COMMENTS_ADD:
       return { ...state, commentsLoading: true };
@@ -320,7 +321,8 @@ export default function issue(state = initialState, action) {
       return { ...state, historyIndexLoading: false, error: action.error };
 
     case t.ISSUE_HISTORY_SORT:
-      return { ...state, historySort: state.historySort === 'desc' ? 'asc' : 'desc', historyCollection: state.historyCollection.reverse() };
+      state.historyCollection.reverse();
+      return { ...state, historySort: state.historySort === 'desc' ? 'asc' : 'desc', historyCollection: _.clone(state.historyCollection) };
 
     case t.ISSUE_WORKLOG_INDEX:
       return { ...state, worklogIndexLoading: true, worklogCollection: [] };
@@ -335,7 +337,8 @@ export default function issue(state = initialState, action) {
       return { ...state, worklogIndexLoading: false, error: action.error };
 
     case t.ISSUE_WORKLOG_SORT:
-      return { ...state, worklogSort: state.worklogSort === 'asc' ? 'desc' : 'asc', worklogCollection: _.reverse(state.worklogCollection) };
+      state.worklogCollection.reverse();
+      return { ...state, worklogSort: state.worklogSort === 'asc' ? 'desc' : 'asc', worklogCollection: _.clone(state.worklogCollection) };
 
     case t.ISSUE_WORKLOG_ADD:
       return { ...state, worklogLoading: true };

@@ -98,6 +98,7 @@ export default class DetailBar extends Component {
     commentsItemLoading: PropTypes.bool.isRequired,
     commentsLoaded: PropTypes.bool.isRequired,
     indexWorklog: PropTypes.func.isRequired,
+    worklogSort: PropTypes.string.isRequired,
     sortWorklog: PropTypes.func.isRequired,
     addWorklog: PropTypes.func.isRequired,
     editWorklog: PropTypes.func.isRequired,
@@ -432,6 +433,7 @@ export default class DetailBar extends Component {
       historyCollection, 
       historyIndexLoading, 
       indexWorklog, 
+      worklogSort,
       sortWorklog, 
       worklogCollection, 
       worklogIndexLoading, 
@@ -930,6 +932,7 @@ export default class DetailBar extends Component {
                 options={ options.timetrack || {} }
                 collection={ worklogCollection } 
                 indexWorklog={ indexWorklog } 
+                sort={ worklogSort }
                 sortWorklog={ sortWorklog } 
                 indexLoading={ worklogIndexLoading } 
                 loading={ worklogLoading }
