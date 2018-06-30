@@ -307,7 +307,7 @@ export default class List extends Component {
                   <td style={ { width: '20%' } }>
                     { options.priorities && options.priorities[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
-                      & options.priorities[key] || '其他' }
+                      { options.priorities[key] }
                     </Link>
                     :
                     '其他' }
@@ -379,9 +379,9 @@ export default class List extends Component {
                     { options.modules && options.modules[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
                       { val['total'] || 0 }
-                      :
-                      ( val['total'] || 0 ) }
                     </Link>
+                    :
+                    ( val['total'] || 0 ) }
                   </td>
                   { _.map(options.types || [], (v) => { 
                     return (
