@@ -272,21 +272,30 @@ export default class List extends Component {
                 return (
                 <tr>
                   <td style={ { width: '20%' } }>
+                    { options.priorities && options.priorities[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
-                      { options.priorities && options.priorities[key] || '其他' }
+                      { options.priorities[key] }
                     </Link>
+                    :
+                    '其他' }
                   </td>
                   <td style={ { width: '10%' } }>
+                    { options.priorities && options.priorities[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
                       { val['total'] || 0 }
                     </Link>
+                    :
+                    ( val['total'] || 0 ) }
                   </td>
                   { _.map(options.types || [], (v) => { 
                     return (
                       <td key={ v.id }>
+                        { options.priorities && options.priorities[key] ?
                         <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&priority=' + key }>
                           { val[v.id] || 0 }
                         </Link>
+                        :
+                        ( val[v.id] || 0 ) }
                       </td>) }) }
                 </tr>) }) }
             </tbody> }
@@ -296,14 +305,20 @@ export default class List extends Component {
                 return (
                 <tr>
                   <td style={ { width: '20%' } }>
+                    { options.priorities && options.priorities[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
-                      { options.priorities && options.priorities[key] || '其他' }
+                      & options.priorities[key] || '其他' }
                     </Link>
+                    :
+                    '其他' }
                   </td>
                   <td style={ { width: '10%' } }>
+                    { options.priorities && options.priorities[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
                       { val['total'] || 0 }
                     </Link>
+                    :
+                    ( val['total'] || 0 ) }
                   </td>
                   <td>
                     <table style={ { width: '100%' } }>
@@ -353,21 +368,30 @@ export default class List extends Component {
                 return (
                 <tr>
                   <td style={ { width: '20%' } }>
+                    { options.modules && options.modules[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
-                      { options.modules && options.modules[key] || '其他' }
+                      { options.modules[key] }
                     </Link>
+                    :
+                    '其他' }
                   </td>
                   <td style={ { width: '10%' } }>
+                    { options.modules && options.modules[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
                       { val['total'] || 0 }
+                      :
+                      ( val['total'] || 0 ) }
                     </Link>
                   </td>
                   { _.map(options.types || [], (v) => { 
                     return (
                       <td key={ v.id }>
+                        { options.modules && options.modules[key] ?
                         <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&type=' + v.id + '&module=' + key }>
                           { val[v.id] || 0 }
                         </Link>
+                        :
+                        ( val[v.id] || 0 ) }
                       </td>) }) }
                 </tr>) }) }
             </tbody> }
@@ -377,14 +401,20 @@ export default class List extends Component {
                 return (
                 <tr>
                   <td style={ { width: '20%' } }>
+                    { options.modules && options.modules[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
-                      { options.modules && options.modules[key] || '其他' }
+                      { options.modules[key] }
                     </Link>
+                    :
+                    '其他' }
                   </td>
                   <td style={ { width: '10%' } }>
+                    { options.modules && options.modules[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
                       { val['total'] || 0 }
                     </Link>
+                    :
+                    ( val['total'] || 0 ) }
                   </td>
                   <td>
                     <table style={ { width: '100%' } }>
