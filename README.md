@@ -19,7 +19,7 @@ http://www.actionview.cn
 > npm install  
 
 修改代码：  
-> react-image-lightbox.js: 830行去掉close class。  
+> node_modules下的react-image-lightbox.js: 830行去掉close class。  
 
 运行Demo：  
 > npm run dev  
