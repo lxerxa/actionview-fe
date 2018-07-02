@@ -24,7 +24,6 @@ export default class SyncModal extends Component {
     if (loading) {
       return;
     }
-
     this.setState({ ecode: 0 });
     close();
   }
