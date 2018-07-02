@@ -70,8 +70,8 @@ export default class SyncModal extends Component {
           </table>
         </Modal.Body> }
         <Modal.Footer>
-          <Button disabled={ loading } onClick={ this.resync.bind(this) }>重新同步</Button>
-          <Button disabled={ loading } bsStyle='link' onClick={ this.handleCancel }>关闭</Button>
+          <Button disabled={ loading } bsStyle='link' onClick={ this.resync.bind(this) }>重新同步</Button>
+          <Button disabled={ loading } onClick={ this.handleCancel }>关闭</Button>
         </Modal.Footer>
       </Modal>
     );
