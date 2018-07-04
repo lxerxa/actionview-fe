@@ -28,8 +28,8 @@ export default class History extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortHistory() } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
+              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortHistory() } }><i className='fa fa-sort'></i> 排序</span>
             </div>
           </Col>
           <Col sm={ 12 }>

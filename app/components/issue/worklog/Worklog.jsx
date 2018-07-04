@@ -180,10 +180,10 @@ export default class Worklog extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
+              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
               { permissions.indexOf('add_worklog') !== -1 &&
-              <span className='comments-button' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span> }
+              <span className='comments-button' title='添加' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span> }
             </div>
           </Col>
           <Col sm={ 12 } className={ indexLoading && 'hide' }>
