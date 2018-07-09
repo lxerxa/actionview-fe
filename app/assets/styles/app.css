@@ -258,7 +258,7 @@
 }
 
 .cond-bar:hover {
-  background-color: #fafafa;
+  background-color: #f5f5f5;
   border-radius: 4px;
 }
 
@@ -730,7 +730,7 @@ table tr:hover .remove-icon{
 .card .content {
   position: relative;
   height: 83%;
-  background-color: #fafafa;
+  background-color: #f5f5f5;
   border-bottom: 1px solid #eee;
 }
 .card .title {

@@ -293,7 +293,7 @@ html.custom-builds li .highlight {
 }
 
 html.docs #carbonads {
-	background-color: #fafafa;
+	background-color: #f5f5f5;
 	bottom: 0;
 	display: block;
 	font-size: 1.1rem;
@@ -429,7 +429,7 @@ html.docs .doc-container h3 {
 }
 
 html.docs .doc-main .head {
-        background-color: #fafafa;
+        background-color: #f5f5f5;
         width: 100%;
 	padding: 7px 0;
         padding-left: 19%;
@@ -562,7 +562,7 @@ html.docs .toc-container {
 	top: 0;
 	white-space: nowrap;
 	z-index: 1000;
-        background-color: #fafafa;
+        background-color: #f5f5f5;
 	-webkit-overflow-scrolling: touch
 }
 
