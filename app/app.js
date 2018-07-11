@@ -19,9 +19,9 @@ if (BROWSER) {
   require('react-bootstrap-table/css/react-bootstrap-table.css');
   require('react-datetime/css/react-datetime.css');
   require('rc-tabs/assets/index.css');
+  require('assets/styles/layout.css');
   require('assets/styles/app.css');
   require('assets/styles/board.css');
-  require('assets/styles/lodash.css');
   require('assets/styles/jquery.atwho.css');
   require('mermaid/dist/mermaid.css');
   require('react-dropzone-component/styles/filepicker.css');
