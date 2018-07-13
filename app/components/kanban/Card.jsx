@@ -145,6 +145,8 @@ export default class Card extends Component {
   };
 
   componentDidMount() {
+    const { issue, issueView } = this.props;
+
     $(findDOMNode(this)).on('contextmenu', (e) => { 
       this.handleContextMenu(e) 
     });
@@ -154,15 +156,22 @@ export default class Card extends Component {
       }
       this.handleBlur(e);
     });
-    $(findDOMNode(this)).on('mousedown', (e) => { 
-      e.button != 2 && this.handleClick(e);
+    $(findDOMNode(this)).on('mouseup', (e) => { 
+      if (e.button == 2) {
+        return;
+      }
+      if (this.state.menuShow) {
+        this.handleClick(e);
+      } else {
+        issueView(issue.id);
+      }
     });
   }
 
   componentWillUnmount() {
     $(findDOMNode(this)).off('contextmenu');
     $(findDOMNode(this)).off('mouseleave');
-    $(findDOMNode(this)).off('mousedown');
+    $(findDOMNode(this)).off('mouseup');
   }
 
   handleBlur(e) {
@@ -181,9 +190,11 @@ export default class Card extends Component {
     e.preventDefault();
     e.stopPropagation();
 
+    const { openedIssue } = this.props;
+
     this.setState({ 
       menuShow: true, 
-      menuPullRight: document.body.scrollWidth - `${e.pageX}` < 150 ? true: false, 
+      menuPullRight: document.body.scrollWidth - `${e.pageX}` < (openedIssue && openedIssue.id ? 750 : 150) ? true: false, 
       menuDropup: document.body.scrollHeight - `${e.pageY}` < 160 ? true : false });
 
     const menuDom = findDOMNode(this.refs.menu);
@@ -302,7 +313,7 @@ export default class Card extends Component {
             <span className='type-abb' title={ _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).name : '' }>
               { _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).abb : '-' }
             </span>
-            <a href='#' style={ issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); issueView(issue.id) } }>
+            <a href='#' style={ issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); } }>
               { pkey } - { issue.no }
             </a>
           </div>
