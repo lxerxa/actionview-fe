@@ -190,11 +190,11 @@ export default class Card extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const { openedIssue } = this.props;
+    this.props.closeDetail();
 
     this.setState({ 
       menuShow: true, 
-      menuPullRight: document.body.scrollWidth - `${e.pageX}` < (openedIssue && openedIssue.id ? 750 : 150) ? true: false, 
+      menuPullRight: document.body.scrollWidth - `${e.pageX}` < 150 ? true: false, 
       menuDropup: document.body.scrollHeight - `${e.pageY}` < 160 ? true : false });
 
     const menuDom = findDOMNode(this.refs.menu);
