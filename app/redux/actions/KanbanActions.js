@@ -101,6 +101,13 @@ export function getSprintLog(key, kanban_id, no) {
   });
 }
 
+export function getSprint(key, no) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_SPRINT_GET',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + no })
+  });
+}
+
 export function indexEpic(key, kanban_id) {
   return asyncFuncCreator({
     constant: 'KANBAN_EPIC_INDEX',

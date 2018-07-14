@@ -24,7 +24,8 @@ export default class Header extends Component {
       createKanbanModalShow: false, 
       createEpicModalShow: false, 
       sortCardsModalShow: false,
-      burndownModalShow: false };
+      burndownModalShow: false,
+      hisBurndownModalShow: false };
     this.getQuery = this.getQuery.bind(this);
     this.changeModel = this.changeModel.bind(this);
     this.changeFilterMode = this.changeFilterMode.bind(this);
@@ -46,12 +47,15 @@ export default class Header extends Component {
     selectedFilter: PropTypes.string.isRequired,
     create: PropTypes.func.isRequired,
     createKanban: PropTypes.func.isRequired,
+    getSprint: PropTypes.func.isRequired,
     createSprint: PropTypes.func.isRequired,
     createEpic: PropTypes.func.isRequired,
     setEpicSort: PropTypes.func.isRequired,
     project: PropTypes.object,
     curKanban: PropTypes.object,
     kanbans: PropTypes.array,
+    completedSprintNum: PropTypes.number,
+    selectedSprint: PropTypes.object,
     sprints: PropTypes.array,
     epics: PropTypes.array,
     versions: PropTypes.array,
@@ -85,6 +89,10 @@ export default class Header extends Component {
 
   burndownModalClose() {
     this.setState({ burndownModalShow: false });
+  }
+
+  hisBurndownModalClose() {
+    this.setState({ hisBurndownModalShow: false });
   }
 
   changeKanban(eventKey) {
@@ -157,6 +165,10 @@ export default class Header extends Component {
       newQuery['resolve_version'] = fq.resolve_version;
     }
 
+    if (fq.sprint) {
+      newQuery['sprint'] = fq.sprint;
+    }
+
     return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
   }
 
@@ -179,11 +191,15 @@ export default class Header extends Component {
   }
 
   async changeModel(model) {
-    const { changeModel, selectFilter, index, curKanban } = this.props;
+    const { changeModel, selectFilter, index, curKanban, getSprint, completedSprintNum } = this.props;
     await changeModel(model);
     if (model == 'issue' || model == 'backlog') {
       await selectFilter('all');
       index(this.getQuery(curKanban.query || {}, {}));
+    } else if (model == 'history') {
+      await selectFilter(completedSprintNum + '');
+      index(this.getQuery(curKanban.query || {}, { sprint: completedSprintNum }));
+      getSprint(completedSprintNum);
     }
   }
 
@@ -194,6 +210,13 @@ export default class Header extends Component {
     const { index, curKanban, selectFilter } = this.props;
     await selectFilter(key || 'all');
     index(this.getQuery(curKanban.query || {}, key ? (this.state.backlogFilterMode === 'epic' ? { epic: key } : { resolve_version: key }) : {}));
+  }
+
+  async handleSelectSprint(key) {
+    const { index, curKanban, selectFilter, completedSprintNum, getSprint } = this.props;
+    await selectFilter(key || completedSprintNum);
+    index(this.getQuery(curKanban.query || {}, { sprint : key }));
+    getSprint(key);
   }
 
   async changeFilterMode() {
@@ -216,6 +239,8 @@ export default class Header extends Component {
       curKanban, 
       kanbans=[], 
       createSprint, 
+      completedSprintNum=0,
+      selectedSprint={},
       sprints=[],
       createEpic, 
       setEpicSort,
@@ -234,6 +259,11 @@ export default class Header extends Component {
 
     const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });
     const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });
+
+    const completedSprintOptions = [];
+    for (let i = completedSprintNum; i > 0; i--) {
+      completedSprintOptions.push({ label: 'Sprint ' + i , value: '' + i });
+    }
 
     let popoverSprint = '';
     let activeSprint = {};
@@ -281,7 +311,7 @@ export default class Header extends Component {
             <ButtonGroup style={ { marginRight: '10px' } }>
               { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>看板</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'epic' && '#eee' } } onClick={ () => { this.changeModel('epic') } }>Epic</Button> }
-              { curKanban.type == 'scrum2' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'backlog' && '#eee' } } onClick={ () => { this.changeModel('backlog') } }>Backlog</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
               <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
@@ -358,6 +388,33 @@ export default class Header extends Component {
             <Button bsStyle='primary' onClick={ createSprint }><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button>
           </div> }
         </div> }
+
+        { model === 'history' && completedSprintNum > 0 && !_.isEmpty(curKanban) &&
+        <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
+          <div className='exchange-icon' style={ { float: 'left', marginTop: '7px' } }>Sprint</div>
+          <div style={ { display: 'inline-block', float: 'left', width: '28%' } }>
+            <Select
+              simpleValue
+              clearable={ false }
+              options={ completedSprintOptions }
+              value={ selectedFilter == 'all' ? completedSprintNum : selectedFilter }
+              onChange={ (newValue) => { this.handleSelectSprint(newValue) } }
+              placeholder='选择Sprint'/>
+          </div>
+          { !_.isEmpty(selectedSprint) &&
+          <span style={ { float: 'left', marginTop: '7px', marginLeft: '15px' } }>
+            { selectedSprint.start_time && moment.unix(selectedSprint.start_time).format('YYYY/MM/DD') }
+            <span style={ { margin: '0 4px' } }>～</span> 
+            { selectedSprint.complete_time && moment.unix(selectedSprint.complete_time).format('YYYY/MM/DD') }
+          </span> }
+          <span style={ { float: 'right' } } title='隐藏看板头'>
+            <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
+          </span>
+          <span style={ { float: 'right', marginRight: '15px' } } title='燃尽图'>
+            <Button onClick={ () => { this.setState({ hisBurndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
+          </span>
+        </div> }
+
         { model === 'epic' && !_.isEmpty(curKanban) && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
         <div style={ { height: '45px', display: this.state.hideHeader ? 'none': 'block' } }>
           <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
@@ -412,8 +469,15 @@ export default class Header extends Component {
             loading={ sprintLogLoading }
             data={ sprintLog }
             close={ this.burndownModalClose.bind(this) }
-            no={ activeSprint.no }/>
-        }
+            no={ activeSprint.no }/> }
+        { this.state.hisBurndownModalShow &&
+          <BurndownModal
+            show
+            getSprintLog={ getSprintLog }
+            loading={ sprintLogLoading }
+            data={ sprintLog }
+            close={ this.hisBurndownModalClose.bind(this) }
+            no={ selectedFilter }/> }
       </div>
     );
   }

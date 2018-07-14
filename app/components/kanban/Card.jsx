@@ -79,9 +79,9 @@ const cardTarget = {
 
 @DropTarget(
   props => {
-    //if (!props.options.permissions || props.options.permissions.indexOf('manage_project') === -1) {
-    //  return [];
-    //}
+    if (props.inHisSprint || !props.options.permissions || props.options.permissions.indexOf('manage_project') === -1) {
+      return [];
+    }
     if (props.issue.parent && props.issue.parent.id) {
       return [ props.issue.parent.id + '-' + props.colNo ];
     } else {
@@ -135,6 +135,7 @@ export default class Card extends Component {
     pkey: PropTypes.string.isRequired,
     epicShow: PropTypes.bool,
     inSprint: PropTypes.bool,
+    inHisSprint: PropTypes.bool,
     subtasks: PropTypes.array,
     colNo: PropTypes.number.isRequired,
     options: PropTypes.object.isRequired,
@@ -224,6 +225,7 @@ export default class Card extends Component {
       subtasks=[],
       epicShow,
       inSprint,
+      inHisSprint,
       colNo,
       toTop,
       toBottom,
@@ -246,6 +248,7 @@ export default class Card extends Component {
               pkey={ pkey }
               epicShow={ epicShow }
               inSprint={ inSprint }
+              inHisSprint={ inHisSprint }
               colNo={ colNo }
               options={ options }
               closeDetail={ closeDetail }
@@ -264,6 +267,7 @@ export default class Card extends Component {
             isSubtaskCol={ true }
             epicShow={ epicShow }
             inSprint={ inSprint }
+            inHisSprint={ inHisSprint }
             colNo={ colNo } 
             openedIssue={ openedIssue } 
             draggedIssue={ draggedIssue }
@@ -337,6 +341,7 @@ export default class Card extends Component {
             issueId={ issue.id }
             issueNo={ issue.no }
             hasRemove={ inSprint && options.permissions && options.permissions.indexOf('manage_project') !== -1 }
+            hasMove={ !inHisSprint && options.permissions && options.permissions.indexOf('manage_project') !== -1 }
             issueView={ issueView }
             toTop={ toTop }
             toBottom={ toBottom }

@@ -5,6 +5,8 @@ const initialState = {
   ecode: 0, 
   list: [], 
   sprintLoading: false, 
+  completedSprintNum: 0,
+  selectedSprint: {},
   sprints: [],
   indexEpicLoading: false,
   epicLoading: false,
@@ -28,6 +30,7 @@ export default function kanban(state = initialState, action) {
     case t.KANBAN_LIST_GET_SUCCESS:
       if (action.result.ecode === 0) {
         state.list = action.result.data || [];
+        state.completedSprintNum = action.result.options && action.result.options.completed_sprint_num || 0;
         state.sprints = action.result.options && action.result.options.sprints || [];
         state.epics = action.result.options && action.result.options.epics || [];
         state.versions = action.result.options && action.result.options.versions || [];
@@ -100,6 +103,18 @@ export default function kanban(state = initialState, action) {
 
     case t.KANBAN_ISSUE_RANK_SET_FAIL:
       return { ...state, rankLoading: false, error: action.error };
+
+    case t.KANBAN_SPRINT_GET:
+      return { ...state, selectedSprint: {} };
+
+    case t.KANBAN_SPRINT_GET_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.selectedSprint = action.result.data;
+      }
+      return { ...state, ecode: action.result.ecode };
+
+    case t.KANBAN_SPRINT_GET_FAIL:
+      return { ...state, error: action.error };
 
     case t.KANBAN_BACKLOG_ISSUE_MOVE: 
     case t.KANBAN_SPRINT_CREATE:

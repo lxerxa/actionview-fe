@@ -12,6 +12,7 @@ export default class Menu extends Component {
     issueId: PropTypes.string.isRequired,
     issueNo: PropTypes.string.isRequired,
     hasRemove: PropTypes.bool,
+    hasMove: PropTypes.bool,
     issueView: PropTypes.func,
     toTop: PropTypes.func,
     toBottom: PropTypes.func,
@@ -34,7 +35,7 @@ export default class Menu extends Component {
   }
 
   render() {
-    const { hasRemove, pullRight=false, dropup=false } = this.props;
+    const { hasRemove, hasMove, pullRight=false, dropup=false } = this.props;
 
     return (
       <Dropdown 
@@ -45,9 +46,9 @@ export default class Menu extends Component {
         onSelect={ this.onSelectMenu.bind(this) }>
         <Dropdown.Menu>
           <MenuItem eventKey='issueView'>查看</MenuItem>
-          <MenuItem divider />
-          <MenuItem eventKey='toTop'>移至顶部</MenuItem>
-          <MenuItem eventKey='toBottom'>移至底部</MenuItem>
+          { hasMove && <MenuItem divider /> }
+          { hasMove && <MenuItem eventKey='toTop'>移至顶部</MenuItem> }
+          { hasMove && <MenuItem eventKey='toBottom'>移至底部</MenuItem> }
           { hasRemove && <MenuItem divider /> }
           { hasRemove && <MenuItem eventKey='removeFromSprint'>移出Sprint</MenuItem> }
         </Dropdown.Menu>

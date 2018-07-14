@@ -40,6 +40,7 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     curKanban: PropTypes.object.isRequired,
+    selectedSprint: PropTypes.object.isRequired,
     sprints: PropTypes.array.isRequired,
     sprintLoading: PropTypes.bool.isRequired,
     model: PropTypes.string.isRequired,
@@ -193,7 +194,16 @@ export default class List extends Component {
     this.setState({ barShow: true });
 
     const { model, show, record, curKanban, sprints } = this.props;
-    const colNum = model == 'backlog' ? (sprints.length + 1) :  curKanban.columns.length;
+
+    let colNum = 0;
+    if (model == 'backlog') {
+      colNum = sprints.length + 1;
+    } else if (model == 'history') {
+      colNum = 2;
+    } else {
+      colNum = curKanban.columns.length;
+    }
+
     let floatStyle = {};
     if (colNo >= _.ceil(colNum / 2)) {
       floatStyle = { left: $('.doc-container').offset().left };
@@ -242,6 +252,7 @@ export default class List extends Component {
     const { 
       i18n,
       curKanban,
+      selectedSprint,
       sprints,
       sprintLoading,
       model,
@@ -352,6 +363,22 @@ export default class List extends Component {
             columnIssues[0].push(v);
           }
         });
+      } else if (model == 'history') {
+        columns = [ { no: 0, name: '未完成' }, { no: 1, name: '已完成' } ]; 
+        columnIssues[0] = [];
+        columnIssues[1] = [];
+        if (!_.isEmpty(selectedSprint)) {
+          _.forEach(collection, (v) => {
+            if (!(curKanban.query && curKanban.query.subtask) && v.parent && v.parent.id) {
+              return;
+            }
+            if (_.indexOf(selectedSprint.completed_issues || [], v.no) !== -1) {
+              columnIssues[1].push(v);
+            } else if (_.indexOf(selectedSprint.incompleted_issues || [], v.no) !== -1) {
+              columnIssues[0].push(v);
+            }
+          });
+        }
       } else {
         columns = curKanban.columns || [];
         // classified issue as columns 
@@ -433,6 +460,7 @@ export default class List extends Component {
                 colNo={ i }
                 epicShow={ model == 'backlog' }
                 inSprint={ model == 'issue' && curKanban.type == 'scrum' }
+                inHisSprint={ model == 'history' }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }

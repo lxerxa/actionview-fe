@@ -93,9 +93,11 @@ export default class Container extends Component {
       //  _.extend(query, { not_in_states: (lastColumn.states || []).join(',') });
       //}
       if (this.state.model === 'issue') {
-        _.extend(query, { from: 'scrum' });
+        _.extend(query, { from: 'active_sprint' });
       } else if (this.state.model === 'backlog') {
         _.extend(query, { from: 'backlog' });
+      } else if (this.state.model === 'history') {
+        _.extend(query, { from: 'his_sprint' });
       } else {
         return;
       }
@@ -297,6 +299,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async getSprint(no) {
+    await this.props.actions.getSprint(this.pid, no);
+    return this.props.kanban.ecode;
+  }
+
   async createSprint() {
     await this.props.actions.createSprint(this.pid);
     return this.props.kanban.ecode;
@@ -405,6 +412,8 @@ export default class Container extends Component {
           model={ this.state.model }
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
+          completedSprintNum={ this.props.kanban.completedSprintNum }
+          selectedSprint={ this.props.kanban.selectedSprint }
           sprints={ this.props.kanban.sprints }
           versions={ this.props.kanban.versions }
           epics={ this.props.kanban.epics }
@@ -420,15 +429,17 @@ export default class Container extends Component {
           index={ this.index.bind(this) } 
           project={ this.props.project.item }
           createKanban={ this.createKanban.bind(this) }
+          getSprint={ this.getSprint.bind(this) }
           createSprint={ this.createSprint.bind(this) }
           createEpic={ this.createEpic.bind(this) }
           setEpicSort={ this.setEpicSort.bind(this) }
           create={ this.create.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
-        { (this.state.model == 'issue' || this.state.model == 'backlog') &&
+        { (this.state.model == 'issue' || this.state.model == 'backlog' || this.state.model == 'history') &&
         <List 
           curKanban={ curKanban }
+          selectedSprint={ this.props.kanban.selectedSprint }
           sprints={ this.props.kanban.sprints }
           sprintLoading={ this.props.kanban.sprintLoading }
           selectedFilter={ this.state.filter }
