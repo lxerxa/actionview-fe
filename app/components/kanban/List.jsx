@@ -458,7 +458,7 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 colNo={ i }
-                epicShow={ model == 'backlog' }
+                epicShow={ model == 'backlog' || model == 'history' }
                 inSprint={ model == 'issue' && curKanban.type == 'scrum' }
                 inHisSprint={ model == 'history' }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }

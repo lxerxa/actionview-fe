@@ -158,6 +158,9 @@ export default class Card extends Component {
       this.handleBlur(e);
     });
     $(findDOMNode(this)).on('mouseup', (e) => { 
+      e.preventDefault();
+      e.stopPropagation();
+
       if (e.button == 2) {
         return;
       }
