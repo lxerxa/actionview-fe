@@ -13,7 +13,7 @@ export default class History extends Component {
   }
 
   static propTypes = {
-    issue_id: PropTypes.string.isRequired,
+    issue_id: PropTypes.string,
     indexLoading: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
     sortHistory: PropTypes.func.isRequired,

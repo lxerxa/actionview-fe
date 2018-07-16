@@ -362,6 +362,7 @@ export default class Container extends Component {
 
   changeModel(model) {
     this.setState({ model });
+    this.refs.list && this.refs.list.closeDetail();
   }
 
   componentWillMount() {
@@ -408,7 +409,7 @@ export default class Container extends Component {
     return (
       <div style={ { overflowY: 'hidden', height: 'inherit' } }>
         <Header ref='header' 
-          changeModel={ (model) => { this.setState({ model }) } }
+          changeModel={ this.changeModel.bind(this) }
           model={ this.state.model }
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
@@ -437,7 +438,7 @@ export default class Container extends Component {
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
         { (this.state.model == 'issue' || this.state.model == 'backlog' || this.state.model == 'history') &&
-        <List 
+        <List ref='list' 
           curKanban={ curKanban }
           selectedSprint={ this.props.kanban.selectedSprint }
           sprints={ this.props.kanban.sprints }

@@ -40,7 +40,7 @@ export default class Comments extends Component {
     delComments: PropTypes.func.isRequired,
     users: PropTypes.array.isRequired,
     collection: PropTypes.array.isRequired,
-    issue_id: PropTypes.string.isRequired
+    issue_id: PropTypes.string
   }
 
   showCommentsInputor() {
