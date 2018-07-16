@@ -403,6 +403,7 @@ export default class Header extends Component {
           </div>
           { !_.isEmpty(selectedSprint) &&
           <span style={ { float: 'left', marginTop: '7px', marginLeft: '15px' } }>
+            期间：
             { selectedSprint.start_time && moment.unix(selectedSprint.start_time).format('YYYY/MM/DD') }
             <span style={ { margin: '0 4px' } }>～</span> 
             { selectedSprint.complete_time && moment.unix(selectedSprint.complete_time).format('YYYY/MM/DD') }
