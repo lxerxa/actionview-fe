@@ -28,7 +28,6 @@ export default class SearchList extends Component {
 
   static propTypes = {
     refresh: PropTypes.func.isRequired,
-    hide: PropTypes.func.isRequired,
     query: PropTypes.object,
     searchShow: PropTypes.bool,
     options: PropTypes.object,
@@ -92,7 +91,6 @@ export default class SearchList extends Component {
     const { 
       indexLoading, 
       searchShow=false, 
-      hide, 
       options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
@@ -109,7 +107,7 @@ export default class SearchList extends Component {
 
     return (
       <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } } className={ !searchShow && 'hide' }>
-        <FormGroup controlId='formControlsLabel'>
+        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             主题/NO
           </Col>
@@ -146,7 +144,7 @@ export default class SearchList extends Component {
               options={ stateOptions }/>
           </Col>
         </FormGroup>
-        <FormGroup controlId='formControlsLabel'>
+        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             经办人
           </Col>
@@ -184,7 +182,7 @@ export default class SearchList extends Component {
               options={ resolutionOptions }/>
           </Col>
         </FormGroup>
-        <FormGroup controlId='formControlsLabel'>
+        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             报告人
           </Col>
@@ -222,7 +220,7 @@ export default class SearchList extends Component {
               options={ versionOptions }/>
           </Col>
         </FormGroup>
-        <FormGroup controlId='formControlsLabel'>
+        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             关注者
           </Col>
@@ -258,7 +256,7 @@ export default class SearchList extends Component {
               options={ dateOptions }/>
           </Col>
         </FormGroup>
-        <FormGroup controlId='formControlsLabel'>
+        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             Epic 
           </Col>

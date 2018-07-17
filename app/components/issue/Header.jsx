@@ -35,6 +35,7 @@ export default class Header extends Component {
     create: PropTypes.func.isRequired,
     addSearcher: PropTypes.func.isRequired,
     configSearcher: PropTypes.func.isRequired,
+    closeDetailBar: PropTypes.func,
     refresh: PropTypes.func,
     exportExcel: PropTypes.func,
     getOptions: PropTypes.func,
@@ -270,6 +271,7 @@ export default class Header extends Component {
       optionsLoading, 
       searcherLoading, 
       options={}, 
+      closeDetailBar,
       refresh, 
       query, 
       loading, 
@@ -294,9 +296,9 @@ export default class Header extends Component {
             { sqlTxt && <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem> }
             <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
           </DropdownButton>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow, searcherConfigShow: false }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { if (!this.state.searchShow) { closeDetailBar(); }  this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
-            <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
+          <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>刷新</MenuItem>
@@ -312,47 +314,46 @@ export default class Header extends Component {
           </div> }
         </div>
         { this.state.searcherConfigShow && 
-          <SearcherConfigModal 
-            show 
-            close={ this.searcherConfigModalClose } 
-            loading={ searcherLoading } 
-            config={ configSearcher } 
-            searchers={ options.searchers || [] } 
-            i18n={ i18n }/> }
-          <SearchList 
-            className={ !this.state.searchShow && 'hide' } 
-            query={ query } 
-            searchShow={ this.state.searchShow } 
-            indexLoading={ indexLoading } 
-            options={ options } 
-            refresh={ refresh } 
-            hide={ () => { this.setState({ searchShow: false }) } }/>
+        <SearcherConfigModal 
+          show 
+          close={ this.searcherConfigModalClose } 
+          loading={ searcherLoading } 
+          config={ configSearcher } 
+          searchers={ options.searchers || [] } 
+          i18n={ i18n }/> }
+        <SearchList 
+          className={ !this.state.searchShow && 'hide' } 
+          query={ query } 
+          searchShow={ this.state.searchShow } 
+          indexLoading={ indexLoading } 
+          options={ options } 
+          refresh={ refresh } />
         { this.state.createModalShow && 
-          <CreateModal 
-            show 
-            close={ this.createModalClose } 
-            options={ options } 
-            create={ create } 
-            loading={ loading } 
-            project={ project } 
-            i18n={ i18n }/> }
+        <CreateModal 
+          show 
+          close={ this.createModalClose } 
+          options={ options } 
+          create={ create } 
+          loading={ loading } 
+          project={ project } 
+          i18n={ i18n }/> }
         { this.state.addSearcherShow && 
-          <AddSearcherModal 
-            show 
-            close={ this.addSearcherModalClose } 
-            searchers={ options.searchers || [] } 
-            create={ addSearcher } 
-            query={ query } 
-            loading={ searcherLoading } 
-            sqlTxt={ sqlTxt } 
-            i18n={ i18n }/> }
+        <AddSearcherModal 
+          show 
+          close={ this.addSearcherModalClose } 
+          searchers={ options.searchers || [] } 
+          create={ addSearcher } 
+          query={ query } 
+          loading={ searcherLoading } 
+          sqlTxt={ sqlTxt } 
+          i18n={ i18n }/> }
         { this.state.exportConfigShow &&
-          <ExportConfigModal
-            show
-            close={ this.exportConfigModalClose }
-            options={ options } 
-            exportExcel={ this.exportExcel.bind(this) }
-            i18n={ i18n }/> }
+        <ExportConfigModal
+          show
+          close={ this.exportConfigModalClose }
+          options={ options } 
+          exportExcel={ this.exportExcel.bind(this) }
+          i18n={ i18n }/> }
       </div>
     );
   }

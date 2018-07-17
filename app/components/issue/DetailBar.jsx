@@ -552,7 +552,7 @@ export default class DetailBar extends Component {
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
-                <FormGroup controlId='formControlsLabel'>
+                <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     主题/NO 
                   </Col>
@@ -566,7 +566,7 @@ export default class DetailBar extends Component {
                     </div>
                   </Col>
                 </FormGroup>
-                <FormGroup controlId='formControlsLabel'>
+                <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     类型 
                   </Col>
@@ -607,7 +607,7 @@ export default class DetailBar extends Component {
                     </div>
                   </Col>
                 </FormGroup>
-                <FormGroup controlId='formControlsLabel'>
+                <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     经办人
                   </Col>
@@ -648,7 +648,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup>
                 { data.epic &&
-                <FormGroup controlId='formControlsLabel'>
+                <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     Epic
                   </Col>
@@ -659,7 +659,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { data.sprints && data.sprints.length > 0 &&
-                <FormGroup controlId='formControlsLabel'>
+                <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     Sprint
                   </Col>
@@ -670,7 +670,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { data.subtasks && data.subtasks.length > 0 &&
-                <FormGroup controlId='formControlsLabel'>
+                <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     子任务 
                   </Col>
@@ -705,7 +705,7 @@ export default class DetailBar extends Component {
                 </FormGroup> }
 
                 { data.links && data.links.length > 0 &&
-                <FormGroup controlId='formControlsLabel'>
+                <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     链接问题 
                   </Col>
@@ -883,7 +883,7 @@ export default class DetailBar extends Component {
                     contents = data[field.key];
                   }
                   return (
-                    <FormGroup controlId='formControlsLabel' key={ 'form-' + key }>
+                    <FormGroup key={ 'form-' + key }>
                       <Col sm={ 3 } componentClass={ ControlLabel }>
                         { field.name || '-' }
                       </Col>

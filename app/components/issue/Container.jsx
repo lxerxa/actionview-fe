@@ -47,9 +47,15 @@ export default class Container extends Component {
   }
 
   async index(query) {
+    this.closeDetailBar();
+
     if (!query.page) { query.page = 1; }
     await this.props.actions.index(this.pid, qs.stringify(query || {}));
     return this.props.issue.ecode;
+  }
+
+  closeDetailBar() {
+    this.refs.list && this.refs.list.closeDetail();
   }
 
   exportExcel(query, fields) {
@@ -247,9 +253,10 @@ export default class Container extends Component {
           refresh={ this.refresh.bind(this) } 
           exportExcel={ this.exportExcel.bind(this) } 
           project={ this.props.project.item } 
+          closeDetailBar={ this.closeDetailBar.bind(this) }
           i18n={ this.props.i18n }
           { ...this.props.issue }/>
-        <List 
+        <List ref='list' 
           index={ this.index.bind(this) } 
           show={ this.show.bind(this) } 
           edit={ this.edit.bind(this) } 
