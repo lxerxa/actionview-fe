@@ -40,11 +40,13 @@ export default class Container extends Component {
   }
 
   async index(query) {
+    this.refs.list && this.refs.list.closeDetail();
     await this.props.actions.index(this.pid, qs.stringify(query || {}));
     return this.props.activity.ecode;
   }
 
   async more(query) {
+    this.refs.list && this.refs.list.closeDetail();
     await this.props.actions.more(this.pid, qs.stringify(query || {}));
     return this.props.activity.ecode;
   }
@@ -199,7 +201,7 @@ export default class Container extends Component {
     return (
       <div>
         <Header getOptions={ this.getOptions.bind(this) } { ...this.props.activity }/>
-        <List 
+        <List ref='list'
           index={ this.index.bind(this) } 
           more={ this.more.bind(this) } 
           show={ this.show.bind(this) }

@@ -82,6 +82,8 @@ export default class Container extends Component {
       return;
     }
 
+    this.refs.list && this.refs.list.closeDetail();
+
     _.extend(query || {}, {});
 
     const curKanban = _.find(this.props.kanban.list, { id: this.kanban_id }) || {};
@@ -362,7 +364,6 @@ export default class Container extends Component {
 
   changeModel(model) {
     this.setState({ model });
-    this.refs.list && this.refs.list.closeDetail();
   }
 
   componentWillMount() {
