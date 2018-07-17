@@ -83,6 +83,7 @@ export function publishSprint(key, no, values) {
 export function completeSprint(key, no, values) {
   return asyncFuncCreator({
     constant: 'KANBAN_SPRINT_COMPLETE',
+    no,
     promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + no + '/complete', data: values, method: 'post' })
   });
 }

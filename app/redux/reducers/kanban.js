@@ -125,11 +125,17 @@ export default function kanban(state = initialState, action) {
 
     case t.KANBAN_BACKLOG_ISSUE_MOVE_SUCCESS: 
     case t.KANBAN_SPRINT_CREATE_SUCCESS:
-    case t.KANBAN_SPRINT_COMPLETE_SUCCESS:
     case t.KANBAN_SPRINT_PUBLISH_SUCCESS:
     case t.KANBAN_SPRINT_DELETE_SUCCESS:
       if (action.result.ecode === 0) {
         state.sprints = action.result.data;
+      }
+      return { ...state, sprintLoading: false, ecode: action.result.ecode };
+
+    case t.KANBAN_SPRINT_COMPLETE_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.sprints = action.result.data;
+        state.completedSprintNum = action.no; 
       }
       return { ...state, sprintLoading: false, ecode: action.result.ecode };
 
