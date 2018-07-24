@@ -98,9 +98,9 @@ export default class CreateModal extends Component {
               simpleValue 
               clearable={ false }
               searchable={ false }
-              value={ category.value || 'new' }
+              value={ category.value || null }
               onChange={ newValue => { category.onChange(newValue) } }
-              placeholder='请选择问题类型'/>
+              placeholder='请选择类别'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
