@@ -137,7 +137,6 @@ html.docs .doc-main {
   position: relative;
   height: 100%;
   width: 100%;
-  display: inline-block;
 }
 
 html.docs .hidden {
