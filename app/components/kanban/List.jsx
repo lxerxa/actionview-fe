@@ -238,6 +238,8 @@ export default class List extends Component {
   }
 
   operateBacklog(eventKey) {
+    this.closeDetail();
+
     const no = eventKey.split('-').pop();
     if (eventKey.indexOf('view') !== -1) {
       this.setState({ viewSprintShow: true, curSprintNo: no - 0 });
@@ -426,12 +428,12 @@ export default class List extends Component {
                 { model == 'issue' && v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
                 { model == 'issue' && curKanban.type == 'kanban' && i == columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
-                  onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
+                  onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ selectVersionShow: true }); } }>
                   发布...
                 </a> }
                 { model == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && _.findIndex(sprints, { status: 'active' }) !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
-                  onClick={ (e) => { e.preventDefault(); this.setState({ completeSprintShow: true }); } }>
+                  onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ completeSprintShow: true }); } }>
                   完成...
                 </a> }
                 { model == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && i != 0 &&
@@ -442,6 +444,7 @@ export default class List extends Component {
                     noCaret
                     style={ { padding: '2px 7px' } }
                     onSelect={ this.operateBacklog.bind(this) }
+                    onClick={ this.closeDetail.bind(this) }
                     pullRight>
                     <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> 
                     { v.status == 'waiting' && i == 1 && <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
