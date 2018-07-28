@@ -99,7 +99,7 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow && 
           <SortCardsModal 
             show 
-            mode='解决结果'
+            model='解决结果'
             close={ this.sortCardsModalClose } 
             cards={ collection } 
             setSort={ setSort } 
