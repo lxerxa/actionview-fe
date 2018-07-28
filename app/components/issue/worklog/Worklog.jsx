@@ -178,7 +178,7 @@ export default class Worklog extends Component {
     return (
       <Form horizontal>
         <FormGroup>
-          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '10px', marginBottom: '10px' } }>
+          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '13px', marginBottom: '10px' } }>
             <div>
               <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
               <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
