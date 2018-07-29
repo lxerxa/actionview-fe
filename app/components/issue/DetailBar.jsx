@@ -476,7 +476,7 @@ export default class DetailBar extends Component {
     const curInd = _.findIndex(issueCollection, { id: data.id });
 
     const priorityInd = data.priority ? _.findIndex(options.priorities, { id: data.priority }) : -1;
-    const priorityStyle = { marginLeft: '5px', marginRight: '10px' };
+    const priorityStyle = { marginLeft: '5px', marginRight: '5px' };
     if (priorityInd !== -1) {
       _.extend(priorityStyle, { backgroundColor: options.priorities[priorityInd].color });
     }
@@ -511,8 +511,8 @@ export default class DetailBar extends Component {
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
-              <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '5px', marginBottom: '40px' } }>
-                <ButtonToolbar style={ { margin: '15px 10px 15px 5px' } }>
+              <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '10px', marginBottom: '40px' } }>
+                <ButtonToolbar style={ { margin: '15px 0px 15px 5px' } }>
                   { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button> }
                   { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
                     data.wfactions && data.wfactions.length <= 3 ?

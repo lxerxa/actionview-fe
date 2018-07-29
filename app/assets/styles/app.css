@@ -240,10 +240,10 @@
 }
 
 .type-abb {
-  background-color: #ffffff;
+  background-color: #fff;
   border: 1px #ccc solid;
   border-radius: 4px;
-  padding: 0 5px 0 5px; 
+  padding: 0 5px; 
   margin-right: 5px;
 }
 
@@ -444,7 +444,7 @@ table tr:hover .remove-icon{
   position: absolute;
   boottom: 0px;
   left: auto;
-  right: 15px;
+  right: 10px;
   opacity: 0 !important;
 }
 
