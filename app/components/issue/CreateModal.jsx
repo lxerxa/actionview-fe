@@ -342,7 +342,7 @@ class CreateModal extends Component {
                 项目名称
               </Col>
               <Col sm={ 9 }>
-                <div style={ { marginTop: '6px', marginBottom: '6px' } }><span>{ project.name || '-' }</span></div>
+                <div style={ { marginTop: '7px', marginBottom: '6px' } }><span>{ project.name || '-' }</span></div>
               </Col>
             </FormGroup> }
             { !isFromWorkflow &&
@@ -450,7 +450,7 @@ class CreateModal extends Component {
                   { title }
                   <Col sm={ 9 }>
                     <CheckboxGroup
-                      style={ { marginTop: '6px' } }
+                      style={ { marginTop: '7px' } }
                       name={ v.name }
                       value={ this.state.values[v.key] && _.isString(this.state.values[v.key]) ? this.state.values[v.key].split(',') : this.state.values[v.key] }
                       onChange={ newValue => { v.required && newValue.length <= 0 ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } }>
@@ -468,7 +468,7 @@ class CreateModal extends Component {
                   { title }
                   <Col sm={ 9 }>
                     <RadioGroup
-                      style={ { marginTop: '6px' } }
+                      style={ { marginTop: '7px' } }
                       name={ v.name }
                       selectedValue={ this.state.values[v.key] }
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }) } }>
@@ -516,7 +516,9 @@ class CreateModal extends Component {
                 <FormGroup key={ key } controlId={ 'id' + key }>
                   { title }
                   <Col sm={ 7 }>
-                    <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+                    <div style={ { marginTop: '7px' } }>
+                      <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig }/>
+                    </div>
                   </Col>
                 </FormGroup> );
               } else if (v.type === 'Url') {
