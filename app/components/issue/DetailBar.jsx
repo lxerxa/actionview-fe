@@ -511,8 +511,8 @@ export default class DetailBar extends Component {
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
-              <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '10px', marginBottom: '40px' } }>
-                <ButtonToolbar style={ { margin: '15px 0px 15px 5px' } }>
+              <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '10px', marginBottom: '40px', marginLeft: '10px' } }>
+                <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
                   { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button> }
                   { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
                     data.wfactions && data.wfactions.length <= 3 ?
