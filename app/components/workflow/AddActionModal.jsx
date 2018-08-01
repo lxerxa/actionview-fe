@@ -307,7 +307,7 @@ export default class AddActionModal extends Component {
               </div>
             </TabPane>
             <TabPane tab='触发条件' key='2'>
-              <div style={ { paddingTop: '15px', paddingBottom: '15px', paddingLeft: '5px' } }>
+              <div style={ { paddingTop: '15px', paddingBottom: '25px', paddingLeft: '5px' } }>
                 <Select 
                   options={ relationOptions } 
                   simpleValue 
@@ -388,8 +388,8 @@ export default class AddActionModal extends Component {
               </CheckboxGroup>
             </TabPane>
             <TabPane tab='结果处理' key='3'>
-              <div style={ { paddingTop: '15px', paddingBottom: '15px', paddingLeft: '5px' } }>
-                <span><b>发生转变之后下面功能将被执行</b></span>
+              <div style={ { paddingTop: '15px', paddingBottom: '25px', paddingLeft: '10px' } }>
+                <span><b>状态发生转变后以下被选择的动作将被执行</b></span>
               </div>
               <CheckboxGroup name='postFunctions' value={ this.state.postFunctions } onChange={ this.postFunctionsChanged.bind(this) }>
                 <ui className='list-unstyled clearfix cond-list'>
