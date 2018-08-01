@@ -40,7 +40,7 @@ export default class Sidebar extends Component {
 
   hideBar() {
     let detailLeftFloat = false;
-    if ($('.animate-dialog').length > 0 && $('.animate-dialog').offset().left == $('.doc-container').offset().left) {
+    if ($('.animate-dialog').length > 0 && $('.animate-dialog').offset().left - $('.doc-container').offset().left < 1) {
       detailLeftFloat = true;
     }
 
@@ -55,7 +55,7 @@ export default class Sidebar extends Component {
 
   tackBar() {
     let detailLeftFloat = false;
-    if ($('.animate-dialog').length > 0 && $('.animate-dialog').offset().left == $('.doc-container').offset().left) {
+    if ($('.animate-dialog').length > 0 && $('.animate-dialog').offset().left - $('.doc-container').offset().left < 1) {
       detailLeftFloat = true;
     }
     $('.head').css({ paddingLeft: '19%' });
