@@ -247,7 +247,7 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKFLOW_ACTION_FAIL:
     case t.ISSUE_STATE_RESET_FAIL:
     case t.ISSUE_SET_ASSIGNEE_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      return { ...state, itemLoading: false, loading: false, error: action.error };
 
     case t.ISSUE_COMMENTS_INDEX:
       return { ...state, commentsIndexLoading: true, commentsCollection: [] };
