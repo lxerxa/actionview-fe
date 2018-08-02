@@ -22,6 +22,7 @@ const validate = (values, props) => {
     'priority', 
     'resolution', 
     'reporter', 
+    'modifier',
     'created_at', 
     'updated_at', 
     'no', 

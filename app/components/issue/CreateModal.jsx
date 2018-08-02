@@ -194,18 +194,22 @@ class CreateModal extends Component {
       }
     });
 
-    let ecode;
+    let ecode = 0;
     if (!_.isEmpty(data) && data.id) {
+
+      if (doAction && action_id) {
+        ecode = await doAction(data.id, data.entry_id, action_id, { comments: submitData.comments || '' }, true);
+        if (ecode !== 0) {
+          this.setState({ ecode: ecode });
+          return;
+        }
+      }
+
       ecode = await edit(data.id, submitData);
       if (ecode === 0) {
         close();
-        if (data && data.id && doAction && action_id) {
-          ecode = await doAction(data.id, data.entry_id, action_id, { comments: submitData.comments || '' });
-          if (ecode === 0) {
-            notify.show('提交完成。', 'success', 2000);
-          } else {
-            notify.show('提交失败。', 'error', 2000);
-          }
+        if (doAction && action_id) {
+          notify.show('提交完成。', 'success', 2000);
         } else {
           notify.show('问题已更新。', 'success', 2000);
         }

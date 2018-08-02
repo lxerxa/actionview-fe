@@ -222,7 +222,7 @@ export default function issue(state = initialState, action) {
       return { ...state, itemData: state.itemData, historyLoaded: false };
 
     case t.ISSUE_WORKFLOW_ACTION:
-      return { ...state, itemLoading: true, historyLoaded: false, commentsLoaded: false };
+      return { ...state, itemLoading: !action.screen, loading: action.screen, historyLoaded: false, commentsLoaded: false };
 
     case t.ISSUE_SET_ASSIGNEE:
       return { ...state, historyLoaded: false, itemLoading: !action.modelFlag };
