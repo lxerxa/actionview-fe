@@ -128,12 +128,12 @@ export default class List extends Component {
       id: 'allowed_login_num',
       title: (
         <div>
-          <span className='table-td-title'>最大尝试验证登录次数</span>
-          <span className='table-td-issue-desc'>如果设置次数内没有登录成功，需输入验证码。（暂不支持此功能配置）</span>
+          <span className='table-td-title'>启用安全登录保护</span>
+          <span className='table-td-issue-desc'>如果开启此功能，一、防止DDoS攻击；二、同一用户或同一IP 15分钟内 5 次内尝试登录没有成功，该用户或该IP将被锁定。</span>
         </div>
       ),
       contents: (
-        <div>{ properties.allowed_login_num || '-' }</div>
+        <div>{ properties.enable_login_protection === 1 ? '是' : '否' }</div>
       )
     })
     propertyItems.push({
@@ -148,7 +148,7 @@ export default class List extends Component {
         <div>{ '中文' }</div>
       )
     });
-    propertyItems.push({
+    {/* propertyItems.push({
       id: 'default_timezone',
       title: (
         <div>
@@ -159,7 +159,7 @@ export default class List extends Component {
       contents: (
         <div>{ '(GMT+08:00) 上海' }</div>
       )
-    });
+    }); */}
     propertyItems.push({
       id: 'ip',
       title: (

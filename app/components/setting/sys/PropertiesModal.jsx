@@ -12,15 +12,15 @@ const validate = (values, props) => {
   if (values.login_mail_domain && !/^[\w-]+([.][\w-]+)+$/.test(values.login_mail_domain)) {
     errors.login_mail_domain = '格式有误';
   }
-  //if (values.allowed_login_num && !/^[1-9][0-9]*$/.test(values.allowed_login_num)) {
-  //  errors.allowed_login_num = '必须输入正整数';
+  //if (values.enable_login_protection && !/^[1-9][0-9]*$/.test(values.enable_login_protection)) {
+  //  errors.enable_login_protection = '必须输入正整数';
   //}
   return errors;
 };
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'login_mail_domain', 'allow_create_project', 'http_host', 'week2day', 'day2hour' ],
+  fields: [ 'login_mail_domain', 'allow_create_project', 'http_host', 'enable_login_protection', 'week2day', 'day2hour' ],
   validate
 })
 export default class PropertiesModal extends Component {
@@ -52,7 +52,7 @@ export default class PropertiesModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'allow_create_project', 'http_host', 'week2day', 'day2hour' ]) });
+    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'allow_create_project', 'http_host', 'enable_login_protection', 'week2day', 'day2hour' ]) });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -78,6 +78,7 @@ export default class PropertiesModal extends Component {
         login_mail_domain, 
         allow_create_project, 
         http_host,
+        enable_login_protection,
         week2day, 
         day2hour }, 
       handleSubmit, 
@@ -135,11 +136,18 @@ export default class PropertiesModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...http_host } placeholder='如:http://www.actionview.cn:8080'/>
             { http_host.touched && http_host.error && <HelpBlock style={ { float: 'right' } }>{ http_host.error }</HelpBlock> }
           </FormGroup>
-          {/*<FormGroup controlId='formControlsText' validationState={ allowed_login_num.touched && allowed_login_num.error ? 'error' : '' }>
-            <ControlLabel>最大登录次数</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...allowed_login_num } placeholder='登录次数'/>
-            { allowed_login_num.touched && allowed_login_num.error && <HelpBlock style={ { float: 'right' } }>{ allowed_login_num.error }</HelpBlock> }
-          </FormGroup>*/}
+          <FormGroup controlId='formControlsText'>
+            <ControlLabel>启用安全登录保护</ControlLabel>
+            <Select
+              simpleValue
+              disabled={ submitting }
+              clearable={ false }
+              searchable={ false }
+              options={ [ { value: 1, label: '是' }, { value: 0, label: '否' } ] }
+              value={ enable_login_protection.value || 0 }
+              onChange={ newValue => { enable_login_protection.onChange(newValue) } }
+              placeholder='请选择'/>
+          </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>每周有效工作日(天)</ControlLabel>
             <Select
