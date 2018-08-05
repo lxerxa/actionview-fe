@@ -96,7 +96,7 @@ export default class LayoutFieldConfigModal extends Component {
               multi
               options={ screenFields } 
               clearable={ false } 
-              value={ required_fields.value } 
+              value={ required_fields.value || null } 
               onChange={ newValue => { required_fields.onChange(newValue) } } 
               placeholder='选择必填字段(可多选)'/>
           </FormGroup>

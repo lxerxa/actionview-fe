@@ -267,12 +267,15 @@ export default class List extends Component {
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
-    const selectRowProp = {
-      mode: 'checkbox',
-      selected: this.state.selectedIds,
-      onSelect: this.onSelect.bind(this),
-      onSelectAll: this.onSelectAll.bind(this)
-    };
+    let selectRowProp = {};
+    if (groups.length > 0) {
+      selectRowProp = {
+        mode: 'checkbox',
+        selected: this.state.selectedIds,
+        onSelect: this.onSelect.bind(this),
+        onSelectAll: this.onSelectAll.bind(this)
+      };
+    }
 
     let multiDelShow = false;
     _.map(collection, (v) => {

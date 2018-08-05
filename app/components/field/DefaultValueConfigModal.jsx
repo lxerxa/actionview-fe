@@ -105,7 +105,7 @@ export default class DefaultValueConfigModal extends Component {
           options={ optionValues } 
           simpleValue 
           multi={ data.type === 'CheckboxGroup' || data.type === 'MultiSelect' } 
-          value={ defaultValue.value } 
+          value={ defaultValue.value || null } 
           onChange={ newValue => { defaultValue.onChange(newValue) } } 
           placeholder='设置默认值'/> ); 
     } else if (data.type === 'TextArea') {

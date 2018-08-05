@@ -288,12 +288,15 @@ export default class List extends Component {
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
-    const selectRowProp = {
-      mode: 'checkbox',
-      selected: this.state.selectedIds,
-      onSelect: this.onSelect.bind(this),
-      onSelectAll: this.onSelectAll.bind(this)
-    };
+    let selectRowProp = {};
+    if (users.length > 0) {
+      selectRowProp = {
+        mode: 'checkbox',
+        selected: this.state.selectedIds,
+        onSelect: this.onSelect.bind(this),
+        onSelectAll: this.onSelectAll.bind(this)
+      };
+    }
 
     let multiDelShow = false,  multiValidShow = false, multiInvalidateShow = false;
     _.map(collection, (v) => {
@@ -368,7 +371,13 @@ export default class List extends Component {
               </span>
             </div>
           </div>
-          <BootstrapTable data={ users } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
+          <BootstrapTable 
+            hover
+            data={ users } 
+            bordered={ false } 
+            options={ opts } 
+            trClassName='tr-middle' 
+            selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>姓名</TableHeaderColumn>
             <TableHeaderColumn dataField='email'>邮箱</TableHeaderColumn>
