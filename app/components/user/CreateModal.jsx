@@ -14,7 +14,7 @@ const validate = (values, props) => {
 
   if (!values.email) {
     errors.email = '必填';
-  } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
+  } else if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
     errors.email = '格式有误';
   } 
 
