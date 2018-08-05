@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 
-export default class CloseNotify extends Component {
+export default class DelNotify extends Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
@@ -11,18 +11,18 @@ export default class CloseNotify extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, stop, data } = this.props;
+    const { close, del, data } = this.props;
     close();
-    const ecode = await stop(data.id);
+    const ecode = await del(data.id);
     if (ecode === 0) {
-      notify.show('项目已关闭。', 'success', 2000);    
+      notify.show('项目已删除。', 'success', 2000);    
     } else {
-      notify.show('关闭失败。', 'error', 2000);    
+      notify.show('删除失败。', 'error', 2000);    
     }
   }
 
@@ -37,10 +37,11 @@ export default class CloseNotify extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>关闭项目</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除项目</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要关闭【{ data.name }】此项目？
+          项目被删除后，相关信息都将被删除，且不可恢复，请慎重。<br/>
+          确认要删除【{ data.name }】该项目？<br/>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={ this.confirm }>确定</Button>

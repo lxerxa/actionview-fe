@@ -42,6 +42,14 @@ export function close(id) {
   });
 }
 
+export function del(id) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_DELETE',
+    id,
+    promise: (client) => client.request({ url: '/project/' + id, method: 'delete' })
+  });
+}
+
 export function reopen(id) {
   return asyncFuncCreator({
     constant: 'PROJECT_REOPEN',

@@ -12,6 +12,7 @@ const PaginationList = require('../share/PaginationList');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const CloseNotify = require('./CloseNotify');
+const DelNotify = require('./DelNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
 const img = require('../../assets/images/loading.gif');
 
@@ -22,6 +23,7 @@ export default class List extends Component {
       createModalShow: false, 
       editModalShow: false, 
       closeNotifyShow: false, 
+      delNotifyShow: false, 
       operateShow: false, 
       multiOperateNotifyShow: false,
       multiOperate: '',
@@ -37,6 +39,7 @@ export default class List extends Component {
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.closeNotifyClose = this.closeNotifyClose.bind(this);
+    this.delNotifyClose = this.delNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.entry = this.entry.bind(this);
     this.refresh = this.refresh.bind(this);
@@ -63,7 +66,8 @@ export default class List extends Component {
     multiReopen: PropTypes.func.isRequired,
     multiStop: PropTypes.func.isRequired,
     multiCreateIndex: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired
+    stop: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -91,6 +95,10 @@ export default class List extends Component {
 
   closeNotifyClose() {
     this.setState({ closeNotifyShow: false });
+  }
+
+  delNotifyClose() {
+    this.setState({ delNotifyShow: false });
   }
 
   multiOperateNotifyClose() {
@@ -135,6 +143,12 @@ export default class List extends Component {
     select(id);
   }
 
+  delNotify(id) {
+    this.setState({ delNotifyShow: true });
+    const { select } = this.props;
+    select(id);
+  }
+
   async reopen(id) {
     const { select, reopen } = this.props;
     select(id);
@@ -168,6 +182,8 @@ export default class List extends Component {
       this.reopen(hoverRowId);
     } else if (eventKey === '4') {
       this.createIndex(hoverRowId);
+    } else if (eventKey === '5') {
+      this.delNotify(hoverRowId);
     }
   }
 
@@ -304,6 +320,7 @@ export default class List extends Component {
       itemLoading, 
       refresh, 
       create, 
+      del, 
       stop, 
       multiStop, 
       multiReopen, 
@@ -385,6 +402,7 @@ export default class List extends Component {
               <MenuItem eventKey='1'>编辑</MenuItem>
               { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
               <MenuItem eventKey='4'>重建索引</MenuItem>
+              <MenuItem eventKey='5'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -402,12 +420,15 @@ export default class List extends Component {
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
-    const selectRowProp = {
-      mode: 'checkbox',
-      selected: this.state.selectedIds,
-      onSelect: this.onSelect.bind(this),
-      onSelectAll: this.onSelectAll.bind(this)
-    };
+    let selectRowProp = {};
+    if (projects.length > 0) {
+      selectRowProp = {
+        mode: 'checkbox',
+        selected: this.state.selectedIds,
+        onSelect: this.onSelect.bind(this),
+        onSelectAll: this.onSelectAll.bind(this)
+      };
+    }
 
     return (
       <div>
@@ -482,6 +503,12 @@ export default class List extends Component {
               close={ this.closeNotifyClose } 
               data={ selectedItem } 
               stop={ stop }/> }
+          { this.state.delNotifyShow &&
+            <DelNotify
+              show
+              close={ this.delNotifyClose }
+              data={ selectedItem }
+              del={ del }/> }
           { this.state.multiOperateNotifyShow && 
             <MultiOperateNotify 
               show 

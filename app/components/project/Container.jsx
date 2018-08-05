@@ -76,6 +76,12 @@ export default class Container extends Component {
     return this.props.project.ecode;
   }
 
+  async del(id) {
+    const { actions } = this.props;
+    await actions.del(id);
+    return this.props.project.ecode;
+  }
+
   async reopen(id) {
     const { actions } = this.props;
     await actions.reopen(id);
@@ -142,6 +148,7 @@ export default class Container extends Component {
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
           stop={ this.close.bind(this) } 
+          del={ this.del.bind(this) } 
           reopen={ this.reopen.bind(this) } 
           createIndex={ this.createIndex.bind(this) }
           multiStop={ this.multiClose.bind(this) }

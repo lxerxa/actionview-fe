@@ -89,6 +89,7 @@ export default function project(state = initialState, action) {
     case t.PROJECT_UPDATE:
       return { ...state, loading: true };
     case t.PROJECT_CLOSE:
+    case t.PROJECT_DELETE:
     case t.PROJECT_REOPEN:
     case t.PROJECT_CREATEINDEX:
       return { ...state, itemLoading: true };
@@ -103,7 +104,14 @@ export default function project(state = initialState, action) {
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
+    case t.PROJECT_DELETE_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.collection = _.reject(state.collection, { id: action.id });
+      }
+      return { ...state, itemLoading: false, ecode: action.result.ecode };
+
     case t.PROJECT_CLOSE_FAIL:
+    case t.PROJECT_DELETE_FAIL:
     case t.PROJECT_REOPEN_FAIL:
     case t.PROJECT_UPDATE_FAIL:
     case t.PROJECT_CRAETEINDEX_FAIL:
