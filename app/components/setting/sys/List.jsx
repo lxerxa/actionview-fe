@@ -129,7 +129,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>启用安全登录保护</span>
-          <span className='table-td-issue-desc'>如果开启此功能，一、防止DDoS攻击；二、同一用户或同一IP 15分钟内 5 次内尝试登录没有成功，该用户或该IP将被锁定。</span>
+          <span className='table-td-issue-desc'>如果开启此功能，一、防止DDoS攻击；二、同一用户或同一IP 15分钟内连续 5 次尝试登录没有成功，该用户或该IP将被锁定。</span>
         </div>
       ),
       contents: (

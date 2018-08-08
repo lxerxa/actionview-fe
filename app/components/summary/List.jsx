@@ -42,9 +42,10 @@ export default class List extends Component {
         <div style={ { paddingLeft: '5px', marginBottom: '20px' } }>
           <Link to={ '/project/' + project.key + '/issue' }><span style={ filterStyle }>全部问题</span></Link>
           <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }><span style={ filterStyle }>未解决的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?assignee=me' }><span style={ filterStyle }>分配给我的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?assignee=me&resolution=Unresolved' }><span style={ filterStyle }>分配给我的</span></Link>
           <Link to={ '/project/' + project.key + '/issue?reporter=me' }><span style={ filterStyle }>我报告的</span></Link>
           <Link to={ '/project/' + project.key + '/issue?watcher=me' }><span style={ filterStyle }>我关注的</span></Link>
+          <Link to={ '/project/' + project.key + '/issue?assignee=me' }><span style={ filterStyle }>经办人是我的</span></Link>
           <Link to={ '/project/' + project.key + '/issue?created_at=2w' }><span style={ filterStyle }>最近增加的</span></Link>
           <Link to={ '/project/' + project.key + '/issue?updated_at=2w' }><span style={ filterStyle }>最近更新的</span></Link>
         </div>
