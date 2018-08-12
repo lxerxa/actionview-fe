@@ -33,6 +33,7 @@ export default class Header extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
+    addLabels: PropTypes.func.isRequired,
     addSearcher: PropTypes.func.isRequired,
     configSearcher: PropTypes.func.isRequired,
     closeDetailBar: PropTypes.func,
@@ -209,6 +210,9 @@ export default class Header extends Component {
       }
       queryConds.push('Sprint～Sprint ' + sprintQueryNames.join('，'));
     }
+    if (query.labels) {
+      queryConds.push('标签～' + query.labels);
+    }
     if (query.created_at) { queryConds.push('创建时间～' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
     if (query.updated_at) { queryConds.push('更新时间～' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
 
@@ -265,6 +269,7 @@ export default class Header extends Component {
     const { 
       i18n, 
       create, 
+      addLabels, 
       addSearcher, 
       configSearcher, 
       indexLoading, 
@@ -334,6 +339,7 @@ export default class Header extends Component {
           close={ this.createModalClose } 
           options={ options } 
           create={ create } 
+          addLabelse={ addLabels } 
           loading={ loading } 
           project={ project } 
           i18n={ i18n }/> }

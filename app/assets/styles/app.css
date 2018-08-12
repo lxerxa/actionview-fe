@@ -911,3 +911,21 @@ table tr:hover .remove-icon{
   text-shadow: none;
   text-transform: uppercase;
 }
+
+.issue-label {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: normal;
+  max-width: 200px;
+  padding: 1px 5px;
+  margin: 0px 7px 0px 0px;
+  text-align: left;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  float: left;
+  white-space: nowrap;
+}

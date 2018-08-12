@@ -20,6 +20,7 @@ export default class SearchList extends Component {
       resolve_vesion: '', 
       epic: '', 
       sprint: '', 
+      labels: '', 
       created_at: '', 
       updated_at: '', 
       title: '' };
@@ -49,6 +50,7 @@ export default class SearchList extends Component {
       resolve_version: newQuery.resolve_version ? newQuery.resolve_version : '',
       epic: newQuery.epic ? newQuery.epic : '',
       sprint: newQuery.sprint ? newQuery.sprint : null,
+      labels: newQuery.labels ? newQuery.labels : '',
       created_at: newQuery.created_at ? newQuery.created_at : null,
       updated_at: newQuery.updated_at ? newQuery.updated_at : null
     });
@@ -78,6 +80,7 @@ export default class SearchList extends Component {
     if (this.state.resolve_version) { newQuery.resolve_version = this.state.resolve_version; }
     if (this.state.epic) { newQuery.epic = this.state.epic; }
     if (this.state.sprint) { newQuery.sprint = this.state.sprint; }
+    if (this.state.labels) { newQuery.labels = this.state.labels; }
     if (this.state.created_at) { newQuery.created_at = this.state.created_at; }
     if (this.state.updated_at) { newQuery.updated_at = this.state.updated_at; }
     if (this.state.title) { newQuery.title = this.state.title; }
@@ -91,7 +94,7 @@ export default class SearchList extends Component {
     const { 
       indexLoading, 
       searchShow=false, 
-      options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], users=[] } } = this.props;
+      options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -104,6 +107,7 @@ export default class SearchList extends Component {
     const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });
     const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });
     const sprintOptions = _.map(sprints, (val) => { return { label: 'Sprint ' + val, value: val } });
+    const labelOptions = _.map(labels, (val) => { return { label: val, value: val } });
 
     return (
       <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } } className={ !searchShow && 'hide' }>
@@ -279,6 +283,18 @@ export default class SearchList extends Component {
               value={ this.state.sprint }
               onChange={ (newValue) => { this.state.sprint = newValue; this.search(); } }
               options={ sprintOptions }/>
+          </Col>
+          <Col sm={ 1 } componentClass={ ControlLabel }>
+            标签 
+          </Col>
+          <Col sm={ 3 }>
+            <Select
+              simpleValue
+              multi
+              placeholder='选择标签'
+              value={ this.state.labels }
+              onChange={ (newValue) => { this.state.labels = newValue; this.search(); } }
+              options={ labelOptions }/>
           </Col>
         </FormGroup>
       </Form>

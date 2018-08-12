@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, ControlLabel, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup, OverlayTrigger, Popover, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Link } from 'react-router';
 import DropzoneComponent from 'react-dropzone-component';
 import Lightbox from 'react-image-lightbox';
 import Select from 'react-select';
@@ -20,6 +21,7 @@ const ConvertTypeModal = require('./ConvertTypeModal');
 const ConvertType2Modal = require('./ConvertType2Modal');
 const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
+const SetLabelsModal = require('./SetLabelsModal');
 const ShareLinkModal = require('./ShareLinkModal');
 const ResetStateModal = require('./ResetStateModal');
 const WorkflowCommentsModal = require('./WorkflowCommentsModal');
@@ -50,6 +52,7 @@ export default class DetailBar extends Component {
       convertTypeModalShow: false, 
       convertType2ModalShow: false, 
       assignModalShow: false, 
+      setLabelsModalShow: false, 
       shareModalShow: false, 
       resetModalShow: false, 
       workflowScreenShow: false, 
@@ -85,6 +88,8 @@ export default class DetailBar extends Component {
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setLabels: PropTypes.func.isRequired,
+    addLabels: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     indexComments: PropTypes.func.isRequired,
@@ -302,6 +307,8 @@ export default class DetailBar extends Component {
       ecode = await show(data.id);
     } else if (eventKey == 'assign') {
       this.setState({ assignModalShow: true });
+    } else if (eventKey == 'setLabels') {
+      this.setState({ setLabelsModalShow: true });
     } else if (eventKey == 'link') {
       this.setState({ linkIssueModalShow: true });
     } else if (eventKey == 'createSubtask') {
@@ -416,6 +423,8 @@ export default class DetailBar extends Component {
       move,
       convert,
       setAssignee,
+      setLabels,
+      addLabels,
       resetState,
       wfCollection, 
       wfLoading, 
@@ -533,6 +542,7 @@ export default class DetailBar extends Component {
                     <DropdownButton pullRight title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
                       <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
@@ -647,6 +657,19 @@ export default class DetailBar extends Component {
                     </div> }
                   </Col>
                 </FormGroup>
+                { data.labels &&
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    标签 
+                  </Col>
+                  <Col sm={ 9 }>
+                    <div style={ { marginTop: '7px' } }>
+                    { _.map(data.labels, (v) => {
+                      return (<Link to={ '/project/' + project.key + '/issue?labels=' + v }><span title={ v } className='issue-label'>{ v }</span></Link>);
+                    }) }
+                    </div>
+                  </Col>
+                </FormGroup> }
                 { data.epic &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -943,14 +966,16 @@ export default class DetailBar extends Component {
           </Tabs>
         </div>
         { delFileShow && 
-          <DelFileModal show 
+          <DelFileModal 
+            show 
             close={ this.delFileModalClose } 
             del={ delFile } 
             data={ selectedFile } 
             loading={ fileLoading }
             i18n={ i18n }/> }
         { this.state.editModalShow && 
-          <CreateModal show 
+          <CreateModal 
+            show 
             close={ this.editModalClose.bind(this) } 
             options={ options } 
             edit={ edit } 
@@ -958,9 +983,11 @@ export default class DetailBar extends Component {
             project={ project } 
             data={ data } 
             isSubtask={ data.parent_id && true }
+            addLabels={ addLabels }
             i18n={ i18n }/> }
         { this.state.workflowScreenShow &&
-          <CreateModal show
+          <CreateModal 
+            show
             close={ this.workflowScreenModalClose.bind(this) }
             options={ options }
             edit={ edit }
@@ -972,13 +999,15 @@ export default class DetailBar extends Component {
             isFromWorkflow={ true }
             i18n={ i18n }/> }
         { this.state.workflowCommentsShow &&
-          <WorkflowCommentsModal show
+          <WorkflowCommentsModal 
+            show
             close={ this.workflowCommentsModalClose.bind(this) }
             data={ data }
             action_id={ action_id  }
             doAction={ doAction }/> }
         { this.state.createSubtaskModalShow && 
-          <CreateModal show 
+          <CreateModal 
+            show 
             close={ this.createSubtaskModalClose.bind(this) } 
             options={ options } 
             create={ create } 
@@ -988,12 +1017,14 @@ export default class DetailBar extends Component {
             isSubtask={ true }
             i18n={ i18n }/> }
         { this.state.previewModalShow && 
-          <PreviewModal show 
+          <PreviewModal 
+            show 
             close={ () => { this.setState({ previewModalShow: false }); } } 
             state={ data.state }
             collection={ wfCollection } /> }
         { this.state.linkIssueModalShow && 
-          <LinkIssueModal show 
+          <LinkIssueModal 
+            show 
             close={ () => { this.setState({ linkIssueModalShow: false }); } } 
             loading={ linkLoading } 
             createLink={ createLink } 
@@ -1002,14 +1033,16 @@ export default class DetailBar extends Component {
             project={ project }
             i18n={ i18n }/> }
         { this.state.delLinkModalShow && 
-          <DelLinkModal show 
+          <DelLinkModal 
+            show 
             close={ () => { this.setState({ delLinkModalShow: false }); } } 
             loading={ linkLoading } 
             delLink={ delLink } 
             data={ this.state.delLinkData }
             i18n={ i18n }/> }
         { this.state.convertTypeModalShow &&
-          <ConvertTypeModal show
+          <ConvertTypeModal 
+            show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
             convert={ convert }
@@ -1017,7 +1050,8 @@ export default class DetailBar extends Component {
             issue={ data }
             i18n={ i18n }/> }
         { this.state.convertType2ModalShow &&
-          <ConvertType2Modal show
+          <ConvertType2Modal 
+            show
             close={ () => { this.setState({ convertType2ModalShow: false }); } }
             options={ options }
             project={ project }
@@ -1026,7 +1060,8 @@ export default class DetailBar extends Component {
             issue={ data }
             i18n={ i18n }/> }
         { this.state.moveModalShow &&
-          <MoveModal show
+          <MoveModal 
+            show
             close={ () => { this.setState({ moveModalShow: false }); } }
             options={ options }
             project={ project }
@@ -1035,40 +1070,55 @@ export default class DetailBar extends Component {
             issue={ data }
             i18n={ i18n }/> }
         { this.state.assignModalShow &&
-          <AssignModal show
+          <AssignModal 
+            show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             setAssignee={ setAssignee }
             issue={ data }
             i18n={ i18n }/> }
+        { this.state.setLabelsModalShow &&
+          <SetLabelsModal 
+            show
+            close={ () => { this.setState({ setLabelsModalShow: false }); } }
+            options={ options }
+            setLabels={ setLabels }
+            addLabels={ addLabels }
+            issue={ data }
+            i18n={ i18n }/> }
         { this.state.shareModalShow &&
-          <ShareLinkModal show
+          <ShareLinkModal 
+            show
             project={ project }
             close={ () => { this.setState({ shareModalShow: false }); } }
             issue={ data }/> }
         { this.state.resetModalShow &&
-          <ResetStateModal show
+          <ResetStateModal 
+            show
             close={ () => { this.setState({ resetModalShow: false }); } }
             resetState={ resetState }
             loading={ itemLoading }
             issue={ data }
             i18n={ i18n }/> }
         { this.state.delNotifyShow &&
-          <DelNotify show
+          <DelNotify 
+            show
             close={ () => { this.setState({ delNotifyShow: false }) } }
             data={ data }
             del={ del }
             detailClose={ close }
             i18n={ i18n }/> }
         { this.state.copyModalShow &&
-          <CopyModal show
+          <CopyModal 
+            show
             close={ () => { this.setState({ copyModalShow: false }); } }
             loading={ loading }
             copy={ copy }
             data={ data }
             i18n={ i18n }/> }
         { this.state.watchersModalShow &&
-          <WatcherListModal show
+          <WatcherListModal 
+            show
             close={ () => { this.setState({ watchersModalShow: false }); } }
             issue_no={ data.no }
             watchers={ data.watchers || [] }

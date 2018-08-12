@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, ControlLabel, FormControl, Form, FormGroup, Col, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
+import CreatableSelect from 'react-select/lib/Creatable';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import { RadioGroup, Radio } from 'react-radio-group';
 import DateTime from 'react-datetime';
@@ -56,6 +57,9 @@ class CreateModal extends Component {
           if (v.key == 'assignee' && data[v.key].id) {
             values[v.key] = data[v.key].id; // assignee
             oldValues[v.key] = data[v.key].id; // assignee
+          } else if (v.key == 'labels') {
+            values[v.key] = data[v.key] ? _.map(data[v.key], (v) => { return { value: v, label: v } }) : null;
+            oldValues[v.key] = data[v.key] ? _.map(data[v.key], (v) => { return { value: v, label: v } }) : null;
           } else if (v.type == 'SingleUser' && data[v.key].id) {
             values[v.key] = data[v.key].id; // singleuser 
             oldValues[v.key] = data[v.key].id; // singleuser 
@@ -133,6 +137,7 @@ class CreateModal extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
+    addLabels: PropTypes.func.isRequired,
     data: PropTypes.object,
     project: PropTypes.object,
     options: PropTypes.object,
@@ -164,7 +169,7 @@ class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { create, edit, close, options, data={}, parent_id='', doAction=undefined, action_id='' } = this.props;
+    const { create, edit, addLabels, close, options, data={}, parent_id='', doAction=undefined, action_id='' } = this.props;
     //const schema = _.find(options.types, { id: this.state.values['type'] }).schema;
     const { schema } = this.state;
 
@@ -176,11 +181,15 @@ class CreateModal extends Component {
       _.extend(submitData, this.state.values);
     }
 
+    let newLabels = [];
     _.mapValues(submitData, (val, key) => {
       const index = _.findIndex(schema, { key });
       const field = index === -1 ? {} : schema[index];
       if (val) {
-        if (field.type === 'DatePicker') {
+        if (field.key === 'labels') {
+          newLabels = _.map(_.filter(val, (v) => !!v.className), (v) => v.value);
+          submitData[key] = _.map(val, (v) => v.value);
+        } else if (field.type === 'DatePicker') {
           submitData[key] = parseInt(moment(val).startOf('day').format('X')); 
         } else if (field.type === 'DateTimePicker') {
           submitData[key] = parseInt(moment(val).format('X')); 
@@ -224,6 +233,11 @@ class CreateModal extends Component {
         notify.show('问题已创建。', 'success', 2000);
       }
     }
+
+    if (ecode === 0 && newLabels.length > 0) {
+      addLabels(newLabels);
+    }
+
     this.setState({ ecode: ecode });
   }
 
@@ -426,6 +440,21 @@ class CreateModal extends Component {
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
+                  </Col>
+                </FormGroup> );
+              } else if (v.key === 'labels' && options.permissions && options.permissions.indexOf('manage_project') !== -1) {
+                return (
+                <FormGroup key={ key } controlId={ 'id' + key }>
+                  { title }
+                  <Col sm={ 7 }>
+                    <CreatableSelect
+                      multi
+                      value={ this.state.values[v.key] }
+                      clearable={ false }
+                      onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); } }
+                      options={ _.map(options.labels || [], (val) => { return { label: val, value: val } } ) }
+                      placeholder='选择或输入标签'/>
+                    <div><span style={ { fontSize: '12px' } }>拥有项目管理权限的用户才可创建新的标签。</span></div>
                   </Col>
                 </FormGroup> );
               } else if (v.type === 'Select' || v.type === 'MultiSelect' || v.type === 'SingleVersion' || v.type === 'MultiVersion' || v.type === 'SingleUser' || v.type === 'MultiUser') {

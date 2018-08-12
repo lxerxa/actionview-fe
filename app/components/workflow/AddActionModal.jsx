@@ -248,7 +248,7 @@ export default class AddActionModal extends Component {
     const someOptions = [ { id: 'assignee', name: '经办人' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
     const assigneeOptions = [ { id: 'me', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
 
-    const userOptions = (options.users || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
+    const userOptions = (options.users || []).sort(function(a, b) { return a.email.localeCompare(b.email); });
 
     const eventOptions = options.events || [];
     const stateOptions = options.states || [];
@@ -426,7 +426,7 @@ export default class AddActionModal extends Component {
                       disabled={ (_.indexOf(this.state.postFunctions, 'assignIssueToUser') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.postFunctions, 'assignIssueToUser') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
                       <option value='' key=''>请选择用户</option>
-                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name }</option> ) }
+                      { userOptions.map( userOption => <option value={ userOption.id } key={ userOption.id }>{ userOption.name + '(' + userOption.email + ')' }</option> ) }
                     </select>
                   </li>
                   <li>

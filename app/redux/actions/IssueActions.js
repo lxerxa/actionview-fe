@@ -87,6 +87,17 @@ export function setAssignee(key, id, values, modalFlag) {
   });
 }
 
+export function setLabels(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SET_LABELS',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/labels', method: 'post', data: values })
+  });
+}
+
+export function addLabels(values) {
+  return { type: 'ISSUE_ADD_LABELS', newLabels: values || [] };
+}
+
 export function indexComments(key, id, sort) {
   return asyncFuncCreator({
     constant: 'ISSUE_COMMENTS_INDEX',

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem, Label, Nav, NavItem } from 'react-bootstrap';
+import { Link } from 'react-router';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -16,6 +17,7 @@ const ConvertTypeModal = require('./ConvertTypeModal');
 const ConvertType2Modal = require('./ConvertType2Modal');
 const MoveModal = require('./MoveModal');
 const AssignModal = require('./AssignModal');
+const SetLabelsModal = require('./SetLabelsModal');
 const ShareLinkModal = require('./ShareLinkModal');
 const ResetStateModal = require('./ResetStateModal');
 const CopyModal = require('./CopyModal');
@@ -34,6 +36,7 @@ export default class List extends Component {
       convertType2ModalShow: false,
       moveModalShow: false,
       assignModalShow: false,
+      setLabelsModalShow: false,
       shareModalShow: false,
       resetModalShow: false,
       copyModalShow: false,
@@ -90,6 +93,8 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setLabels: PropTypes.func.isRequired,
+    addLabels: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -152,6 +157,8 @@ export default class List extends Component {
       this.setState({ delNotifyShow : true });
     } else if (eventKey === 'assign') {
       this.setState({ assignModalShow : true });
+    } else if (eventKey === 'setLabels') {
+      this.setState({ setLabelsModalShow : true });
     } else if (eventKey === 'worklog') {
       this.setState({ addWorklogShow : true });
     } else if (eventKey === 'edit') {
@@ -280,6 +287,8 @@ export default class List extends Component {
       edit, 
       create, 
       setAssignee, 
+      setLabels, 
+      addLabels, 
       query, 
       refresh, 
       project, 
@@ -377,8 +386,13 @@ export default class List extends Component {
             </a>
             { collection[i].watching &&
             <span title='已关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(collection[i].id, false) } }><i className='fa fa-eye'></i></span> }
-            { collection[i].reporter && <span className='table-td-issue-desc'>{ collection[i].reporter.name + '  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }</span> }
-            
+            <span className='table-td-issue-desc'>
+              { collection[i].reporter &&
+              <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
+                { collection[i].reporter.name + '  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }
+              </span> }
+              { _.map(collection[i].labels || [], (v) => <Link to={ '/project/' + project.key + '/issue?labels=' + v }><span title={ v } className='issue-label'>{ v }</span></Link>) }
+            </span>
           </div>
         ), 
         assignee: !_.isEmpty(collection[i].assignee) ? collection[i].assignee.name : '-',
@@ -399,6 +413,7 @@ export default class List extends Component {
                 <MenuItem eventKey='view'>查看</MenuItem>
                 { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
                 { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
+                { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                 <MenuItem divider/>
                 <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
                 <MenuItem eventKey='share'>分享链接</MenuItem>
@@ -494,6 +509,8 @@ export default class List extends Component {
             edit={ edit } 
             del={ del } 
             setAssignee={ setAssignee } 
+            setLabels={ setLabels } 
+            addLabels={ addLabels } 
             close={ this.closeDetail } 
             options={ options } 
             data={ itemData } 
@@ -621,6 +638,15 @@ export default class List extends Component {
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             setAssignee={ setAssignee }
+            issue={ selectedItem }
+            i18n={ i18n }/> }
+        { this.state.setLabelsModalShow &&
+          <SetLabelsModal
+            show
+            close={ () => { this.setState({ setLabelsModalShow: false }); } }
+            options={ options }
+            setLabels={ setLabels }
+            addLabels={ addLabels }
             issue={ selectedItem }
             i18n={ i18n }/> }
         { this.state.shareModalShow &&

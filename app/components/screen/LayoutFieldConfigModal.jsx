@@ -94,7 +94,7 @@ export default class LayoutFieldConfigModal extends Component {
             <Select 
               simpleValue 
               multi
-              options={ screenFields } 
+              options={ _.reject(screenFields, { value : 'labels' }) } 
               clearable={ false } 
               value={ required_fields.value || null } 
               onChange={ newValue => { required_fields.onChange(newValue) } } 

@@ -224,8 +224,15 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKFLOW_ACTION:
       return { ...state, itemLoading: !action.screen, loading: action.screen, historyLoaded: false, commentsLoaded: false };
 
+    case t.ISSUE_ADD_LABELS:
+      state.options.labels = action.newLabels.concat(state.options.labels);
+      return { ...state, options: state.options };
+
     case t.ISSUE_SET_ASSIGNEE:
       return { ...state, historyLoaded: false, itemLoading: !action.modelFlag };
+
+    case t.ISSUE_SET_LABELS:
+      return { ...state, historyLoaded: false };
 
     case t.ISSUE_STATE_RESET:
       return { ...state, itemLoading: true, historyLoaded: false };
@@ -233,6 +240,7 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKFLOW_ACTION_SUCCESS:
     case t.ISSUE_STATE_RESET_SUCCESS:
     case t.ISSUE_SET_ASSIGNEE_SUCCESS:
+    case t.ISSUE_SET_LABELS_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         if (ind !== -1) {
@@ -247,6 +255,7 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKFLOW_ACTION_FAIL:
     case t.ISSUE_STATE_RESET_FAIL:
     case t.ISSUE_SET_ASSIGNEE_FAIL:
+    case t.ISSUE_SET_LABELS_FAIL:
       return { ...state, itemLoading: false, loading: false, error: action.error };
 
     case t.ISSUE_COMMENTS_INDEX:
