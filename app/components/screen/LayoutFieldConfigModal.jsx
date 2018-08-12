@@ -77,7 +77,7 @@ export default class LayoutFieldConfigModal extends Component {
 
     const { i18n: { errMsg }, fields: { id, required_fields }, dirty, handleSubmit, submitting, data } = this.props;
 
-    const screenFields = _.map(data.schema || [], function(val) {
+    const screenFields = _.map(_.reject(data.schema || [], { key: 'labels' }), function(val) {
       return { label: val.name, value: val.id };
     });
 
@@ -94,7 +94,7 @@ export default class LayoutFieldConfigModal extends Component {
             <Select 
               simpleValue 
               multi
-              options={ _.reject(screenFields, { value : 'labels' }) } 
+              options={ screenFields } 
               clearable={ false } 
               value={ required_fields.value || null } 
               onChange={ newValue => { required_fields.onChange(newValue) } } 

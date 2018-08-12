@@ -58,8 +58,13 @@ class CreateModal extends Component {
             values[v.key] = data[v.key].id; // assignee
             oldValues[v.key] = data[v.key].id; // assignee
           } else if (v.key == 'labels') {
-            values[v.key] = data[v.key] ? _.map(data[v.key], (v) => { return { value: v, label: v } }) : null;
-            oldValues[v.key] = data[v.key] ? _.map(data[v.key], (v) => { return { value: v, label: v } }) : null;
+            if (options.permissions && options.permissions.indexOf('manage_project') !== -1) {
+              values[v.key] = _.map(data[v.key] || [], (v) => { return { value: v, label: v } });
+              oldValues[v.key] = _.map(data[v.key] || [], (v) => { return { value: v, label: v } });
+            } else {
+              values[v.key] = (data[v.key] || []).join(',');
+              oldValues[v.key] = (data[v.key] || []).join(','); 
+            }
           } else if (v.type == 'SingleUser' && data[v.key].id) {
             values[v.key] = data[v.key].id; // singleuser 
             oldValues[v.key] = data[v.key].id; // singleuser 
@@ -187,8 +192,12 @@ class CreateModal extends Component {
       const field = index === -1 ? {} : schema[index];
       if (val) {
         if (field.key === 'labels') {
-          newLabels = _.map(_.filter(val, (v) => !!v.className), (v) => v.value);
-          submitData[key] = _.map(val, (v) => v.value);
+          if (_.isArray(val)) {
+            newLabels = _.map(_.filter(val, (v) => !!v.className), (v) => v.value);
+            submitData[key] = _.map(val, (v) => v.value);
+          } else {
+            submitData[key] = val.split(',');
+          }
         } else if (field.type === 'DatePicker') {
           submitData[key] = parseInt(moment(val).startOf('day').format('X')); 
         } else if (field.type === 'DateTimePicker') {
@@ -454,7 +463,6 @@ class CreateModal extends Component {
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); } }
                       options={ _.map(options.labels || [], (val) => { return { label: val, value: val } } ) }
                       placeholder='选择或输入标签'/>
-                    <div><span style={ { fontSize: '12px' } }>拥有项目管理权限的用户才可创建新的标签。</span></div>
                   </Col>
                 </FormGroup> );
               } else if (v.type === 'Select' || v.type === 'MultiSelect' || v.type === 'SingleVersion' || v.type === 'MultiVersion' || v.type === 'SingleUser' || v.type === 'MultiUser') {
@@ -472,6 +480,10 @@ class CreateModal extends Component {
                       onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } } 
                       className={ this.state.touched[v.key] && this.state.errors[v.key] && 'select-error' }
                       placeholder={ '选择' + v.name } />
+                    { v.key === 'labels' &&
+                      <div>
+                        <span style={ { fontSize: '12px' } }>拥有项目管理权限的用户才可创建新的标签。</span>
+                      </div> }
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }

@@ -57,8 +57,8 @@ export default class DefaultValueConfigModal extends Component {
   componentWillMount() {
     const { initializeForm, data } = this.props;
     if ((data.type === 'MultiSelect' || data.type === 'CheckboxGroup') && _.isArray(data.defaultValue)) {
-      data.defaultValue = data.defaultValue.join(',');
-    } else if (data.type === 'DatePicker') {
+      data.defaultValue = data.defaultValue && data.defaultValue.join(',');
+    } else if (data.type === 'DatePicker' && data.defaultValue) {
       data.defaultValue = moment.unix(data.defaultValue);
     }
     initializeForm(data);

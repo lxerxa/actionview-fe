@@ -21,6 +21,7 @@ const sysFields = [
   'comments', 
   'resolve_version', 
   'descriptions', 
+  'epic',
   'labels', 
   'original_estimate',
   'story_points',

@@ -496,6 +496,11 @@ export default class DetailBar extends Component {
       stateClassName = 'state-' + options.states[stateInd].category + '-label';
     }
 
+    let selectedEpic = {};
+    if (data.epic) {
+      selectedEpic = _.find(options.epics, { id: data.epic });
+    }
+
     return (
       <div className='animate-dialog' style={ { ...detailFloatStyle } }>
         <Button className='close' onClick={ close } title='关闭'>
@@ -657,7 +662,7 @@ export default class DetailBar extends Component {
                     </div> }
                   </Col>
                 </FormGroup>
-                { data.labels &&
+                { data.labels && data.labels.length > 0 &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     标签 
@@ -677,7 +682,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
-                      { _.find(options.epics || [], { id: data.epic }) ? _.find(options.epics, { id: data.epic }).name : '-' }
+                      <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px' } } title={ selectedEpic.name || '-' } >{ selectedEpic.name || '-' }</span>
                     </div>
                   </Col>
                 </FormGroup> }

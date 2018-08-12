@@ -38,11 +38,20 @@ export default class SetLabelsModal extends Component {
   async handleSubmit() {
     const { values, addLabels, setLabels, close, issue } = this.props;
 
-    const newLabels = _.filter(values.labels, (v) => !!v.className);
+    let newLabels = [];
+    let submitLabels = [];
+    if (_.isArray(values.labels)) {
+      newLabels = _.map(_.filter(values.labels, (v) => !!v.className), (v) => v.value);
+      submitLabels = _.map(values.labels, (v) => v.value); 
+    } else {
+      submitLabels = values.labels ? values.labels.split(',') : [];
+    }
 
-    const ecode = await setLabels(issue.id, { labels: _.map(values.labels, (v) => v.value) });
+    const ecode = await setLabels(issue.id, { labels: submitLabels });
     if (ecode === 0) {
-      addLabels(_.map(newLabels, (v) => v.value ));
+      if (newLabels.length > 0) {
+        addLabels(newLabels);
+      }
       close();
       notify.show('已设置。', 'success', 2000);
     }
@@ -60,8 +69,12 @@ export default class SetLabelsModal extends Component {
   }
 
   componentWillMount() {
-    const { initializeForm, issue } = this.props;
-    initializeForm({ labels: (issue.labels || []).join(',') });
+    const { initializeForm, options, issue } = this.props;
+    if (options.permissions && options.permissions.indexOf('manage_project') !== -1) {
+      initializeForm({ labels: _.map(issue.labels || [], (v) => { return { value: v, label :v } }) });
+    } else {
+      initializeForm({ labels: (issue.labels || []).join(',') });
+    }
   }
 
   render() {
@@ -87,16 +100,20 @@ export default class SetLabelsModal extends Component {
               options={ labelOptions }
               placeholder='选择或输入标签'/>
             : 
-            <Select 
-              multi
-              simpleValue 
-              clearable={ false } 
-              disabled={ submitting } 
-              options={ labelOptions } 
-              value={ labels.value } 
-              onChange={ (newValue) => { labels.onChange(newValue) } } 
-              placeholder='选择标签'/> }
-            <div><span style={ { fontSize: '12px' } }>拥有项目管理权限的用户才可创建新的标签。</span></div>
+            <div>
+              <Select 
+                multi
+                simpleValue 
+                clearable={ false } 
+                disabled={ submitting } 
+                options={ labelOptions } 
+                value={ labels.value } 
+                onChange={ (newValue) => { labels.onChange(newValue) } } 
+                placeholder='选择标签'/>
+              <div>
+                <span style={ { fontSize: '12px' } }>拥有项目管理权限的用户才可创建新的标签。</span>
+              </div>
+            </div> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
