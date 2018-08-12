@@ -71,6 +71,7 @@ export default class CreateModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    isSysConfig: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     options: PropTypes.object,
@@ -105,6 +106,7 @@ export default class CreateModal extends Component {
   render() {
     const { 
       i18n: { errMsg }, 
+      isSysConfig,
       fields: { name, key, type, applyToTypes, description }, 
       handleSubmit, 
       invalid, 
@@ -142,17 +144,16 @@ export default class CreateModal extends Component {
               clearable={ false }/>
             { type.touched && type.error && <HelpBlock style={ { float: 'right' } }>{ type.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
+          <FormGroup controlId='formControlsSelect' style={ { display: isSysConfig ? 'none' : '' } }>
             <ControlLabel>适用类型</ControlLabel>
             <Select 
               disabled={ submitting } 
               multi 
               options={ typeOptions } 
               simpleValue 
-              value={ applyToTypes.value } 
+              value={ applyToTypes.value || null } 
               onChange={ newValue => { applyToTypes.onChange(newValue) } } 
-              placeholder='默认全部' 
-              clearable={ false }/>
+              placeholder='默认全部'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

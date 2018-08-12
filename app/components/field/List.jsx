@@ -11,6 +11,21 @@ const DefaultValueConfigModal = require('./DefaultValueConfigModal');
 const img = require('../../assets/images/loading.gif');
 const fieldTypes = require('../share/FieldTypes.js');
 
+const sysFields = [ 
+  'title', 
+  'priority', 
+  'resolution', 
+  'state', 
+  'assignee', 
+  'module', 
+  'comments', 
+  'resolve_version', 
+  'descriptions', 
+  'labels', 
+  'original_estimate',
+  'story_points',
+  'attachments' ];
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +45,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    isSysConfig: PropTypes.bool,
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     options: PropTypes.object.isRequired,
@@ -88,6 +104,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n, 
+      isSysConfig,
       pkey, 
       collection, 
       selectedItem, 
@@ -129,7 +146,7 @@ export default class List extends Component {
         key: collection[i].key,
         type: _.find(fieldTypes, { value: collection[i].type }).label,
         screen: ( <span dangerouslySetInnerHTML={ { __html: screens } }/> ),
-        operation: !isGlobal ? (
+        operation: !isGlobal && sysFields.indexOf(collection[i].key) === -1 ? (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
               <DropdownButton 
@@ -140,9 +157,9 @@ export default class List extends Component {
                 key={ i } 
                 id={ `dropdown-basic-${i}` } 
                 onSelect={ this.operateSelect.bind(this) }>
-                { ((collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RadioGroup' || collection[i].type === 'CheckboxGroup') && collection[i].key !== 'resolution' && collection[i].key !== 'priority' && collection[i].key !== 'module' && collection[i].key !== 'assignee') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
+                { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RadioGroup' || collection[i].type === 'CheckboxGroup') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
                 { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
-                { collection[i].type !== 'File' && collection[i].type !== 'SingleVersion' && collection[i].type !== 'MultiVersion' && collection[i].type !== 'SingleUser' && collection[i].type !== 'MultiUser' && collection[i].type !== 'TimeTracking' && collection[i].type !== 'DateTimePicker' && collection[i].key !== 'resolution' && collection[i].key !== 'priority' && collection[i].key !== 'module' && collection[i].key !== 'assignee' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
+                { collection[i].type !== 'File' && collection[i].type !== 'SingleVersion' && collection[i].type !== 'MultiVersion' && collection[i].type !== 'SingleUser' && collection[i].type !== 'MultiUser' && collection[i].type !== 'TimeTracking' && collection[i].type !== 'DateTimePicker' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
@@ -176,6 +193,7 @@ export default class List extends Component {
         { this.state.editModalShow && 
           <EditModal 
             show 
+            isSysConfig={ isSysConfig }
             close={ this.editModalClose } 
             update={ update } 
             data={ selectedItem } 

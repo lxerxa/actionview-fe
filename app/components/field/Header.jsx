@@ -47,6 +47,7 @@ export default class Header extends Component {
         { this.state.createModalShow && 
           <CreateModal 
             show 
+            isSysConfig={ isSysConfig }
             close={ this.createModalClose } 
             create={ create } 
             collection={ collection } 

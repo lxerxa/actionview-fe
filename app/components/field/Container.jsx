@@ -69,6 +69,7 @@ export default class Container extends Component {
           i18n={ this.props.i18n }
           { ...this.props.field }/>
         <List 
+          isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           pkey={ this.pid }
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 

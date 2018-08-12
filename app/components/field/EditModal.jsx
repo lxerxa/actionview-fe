@@ -30,6 +30,7 @@ export default class EditModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    isSysConfig: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     options: PropTypes.object,
@@ -72,6 +73,7 @@ export default class EditModal extends Component {
   render() {
     const { 
       i18n: { errMsg }, 
+      isSysConfig,
       fields: { id, name, applyToTypes, description }, 
       dirty, 
       handleSubmit, 
@@ -95,7 +97,7 @@ export default class EditModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='字段名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
+          <FormGroup controlId='formControlsSelect' style={ { display: isSysConfig ? 'none' : '' } }>
             <ControlLabel>适用类型</ControlLabel>
             <Select 
               disabled={ submitting } 
