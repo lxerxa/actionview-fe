@@ -70,7 +70,6 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
-    console.log(values);
     const ecode = await create({ ...values, principal: values.principal && values.principal.id || '' });
     if (ecode === 0) {
       this.setState({ ecode: 0 });

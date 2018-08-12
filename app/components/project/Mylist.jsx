@@ -128,7 +128,6 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    console.log(this.state)
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
