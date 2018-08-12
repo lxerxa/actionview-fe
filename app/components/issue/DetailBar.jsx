@@ -797,7 +797,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic') {
+                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic' || field.key == 'labels') {
                     return;
                   }
                   if (field.type === 'File') {

@@ -458,7 +458,7 @@ class CreateModal extends Component {
                   <Col sm={ 7 }>
                     <CreatableSelect
                       multi
-                      value={ this.state.values[v.key] }
+                      value={ this.state.values[v.key] || [] }
                       clearable={ false }
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); } }
                       options={ _.map(options.labels || [], (val) => { return { label: val, value: val } } ) }
