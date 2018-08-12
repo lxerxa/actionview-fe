@@ -46,6 +46,7 @@ export default class Header extends Component {
     model: PropTypes.string.isRequired,
     selectedFilter: PropTypes.string.isRequired,
     create: PropTypes.func.isRequired,
+    addLabels: PropTypes.func.isRequired,
     createKanban: PropTypes.func.isRequired,
     getSprint: PropTypes.func.isRequired,
     createSprint: PropTypes.func.isRequired,
@@ -254,6 +255,7 @@ export default class Header extends Component {
       sprintLogLoading, 
       project, 
       create, 
+      addLabels,
       goto, 
       options } = this.props;
 
@@ -445,6 +447,7 @@ export default class Header extends Component {
             close={ this.createIssueModalClose.bind(this) }
             options={ options }
             create={ create }
+            addLabels={ addLabels }
             loading={ loading }
             project={ project }
             i18n={ i18n }/> }

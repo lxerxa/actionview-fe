@@ -26,8 +26,6 @@ export default class RemoveFromSprintNotify extends Component {
   }
 
   render() {
-    console.log('tt');
-
     const { issueNo } = this.props;
 
     return (

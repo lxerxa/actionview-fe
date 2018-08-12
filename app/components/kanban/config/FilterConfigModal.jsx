@@ -18,6 +18,7 @@ export default class FilterConfigModal extends Component {
       priority: '', 
       resolution: '', 
       module: '', 
+      labels: '', 
       created_at: null, 
       updated_at: null,
       touched: {},
@@ -36,6 +37,7 @@ export default class FilterConfigModal extends Component {
       this.state.resolution = query.resolution && query.resolution.join(',') || ''; 
       this.state.priority = query.priority && query.priority.join(',') || ''; 
       this.state.module = query.module && query.module.join(',') || ''; 
+      this.state.labels = query.labels && query.labels.join(',') || ''; 
       this.state.created_at = query.created_at || null; 
       this.state.updated_at = query.updated_at || null; 
     } else if (model == 'filter' && no >= 0) {
@@ -52,6 +54,7 @@ export default class FilterConfigModal extends Component {
       this.state.resolution = filterQuery.resolution && filterQuery.resolution.join(',') || '';
       this.state.priority = filterQuery.priority && filterQuery.priority.join(',') || '';
       this.state.module = filterQuery.module && filterQuery.module.join(',') || '';
+      this.state.labels = filterQuery.labels && filterQuery.labels.join(',') || '';
       this.state.created_at = filterQuery.created_at || null;
       this.state.updated_at = filterQuery.updated_at || null;
     }
@@ -77,6 +80,7 @@ export default class FilterConfigModal extends Component {
     if (this.state.priority) { submitData.priority = this.state.priority.split(','); } 
     if (this.state.resolution) { submitData.resolution = this.state.resolution.split(','); } 
     if (this.state.module) { submitData.module = this.state.module.split(','); } 
+    if (this.state.labels) { submitData.labels = this.state.labels.split(','); } 
     if (this.state.assignee) { submitData.assignee = this.state.assignee.split(','); } 
     if (this.state.reporter) { submitData.reporter = this.state.reporter.split(','); } 
     if (this.state.created_at) { submitData.created_at = this.state.created_at; }
@@ -118,7 +122,7 @@ export default class FilterConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, model, no, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
+    const { i18n: { errMsg }, model, no, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], labels=[], users=[] } } = this.props;
 
     const typeOptions = _.map(_.filter(types, (v) => { return v.type === 'standard' }), (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -128,6 +132,7 @@ export default class FilterConfigModal extends Component {
     const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });
     const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }];
     const moduleOptions = _.map(modules, (val) => { return { label: val.name, value: val.id } });
+    const labelOptions = _.map(labels.sort((a, b) => a.localeCompare(b)), (val) => { return { label: val, value: val } });
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
@@ -267,6 +272,18 @@ export default class FilterConfigModal extends Component {
                 value={ this.state.module }
                 onChange={ (newValue) => { this.setState({ module: newValue }); } }
                 options={ moduleOptions }/>
+            </Col>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
+              标签 
+            </Col>
+            <Col sm={ 4 }>
+              <Select
+                simpleValue
+                multi
+                placeholder='选择标签'
+                value={ this.state.labels }
+                onChange={ (newValue) => { this.setState({ labels: newValue }); } }
+                options={ labelOptions }/>
             </Col>
           </FormGroup>
         </Modal.Body>

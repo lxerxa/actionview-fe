@@ -160,6 +160,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async setLabels(id, values) {
+    await this.props.issueActions.setLabels(this.pid, id, values);
+    return this.props.issue.ecode;
+  }
+
   async delFile(field_key, file_id) {
     await this.props.issueActions.delFile(this.pid, this.props.issue.itemData.id, field_key, file_id);
     return this.props.issue.ecode;
@@ -436,6 +441,7 @@ export default class Container extends Component {
           createEpic={ this.createEpic.bind(this) }
           setEpicSort={ this.setEpicSort.bind(this) }
           create={ this.create.bind(this) }
+          addLabels={ this.props.issueActions.addLabels }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
         { (this.state.model == 'issue' || this.state.model == 'backlog' || this.state.model == 'history') &&
@@ -454,6 +460,8 @@ export default class Container extends Component {
           edit={ this.edit.bind(this) }
           create={ this.create.bind(this) }
           setAssignee={ this.setAssignee.bind(this) }
+          setLabels={ this.setLabels.bind(this) }
+          addLabels={ this.props.issueActions.addLabels }
           delFile={ this.delFile.bind(this) }
           addFile={ this.props.issueActions.addFile }
           record={ this.record.bind(this) }
