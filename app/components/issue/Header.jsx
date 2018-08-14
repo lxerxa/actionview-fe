@@ -339,7 +339,7 @@ export default class Header extends Component {
           close={ this.createModalClose } 
           options={ options } 
           create={ create } 
-          addLabelse={ addLabels } 
+          addLabels={ addLabels } 
           loading={ loading } 
           project={ project } 
           i18n={ i18n }/> }

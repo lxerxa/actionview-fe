@@ -591,6 +591,7 @@ export default class List extends Component {
           <CreateModal show 
             close={ () => { this.setState({ editModalShow: false }); } } 
             options={ options } 
+            addLabels={ addLabels } 
             loading={ loading } 
             project={ project } 
             edit={ edit }
