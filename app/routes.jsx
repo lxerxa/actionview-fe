@@ -183,6 +183,7 @@ export default (
         <Route path='events' getComponent={ EventsContainer }/>
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
+        <Route path='document' getComponent={ KanbanContainer }/>
       </Route>
       <Route path='/admin/project' getComponent={ ProjectContainer }/>
       <Route path='/admin/user' getComponent={ UserContainer }/>
