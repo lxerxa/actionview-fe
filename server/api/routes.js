@@ -175,7 +175,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '视频网站', key: 'BOBA', principal: { id:'xxx', name: '刘老幺' }, creator: '刘老幺', create_time: 144444 }, options: { permissions: [ 'manage_project', 'create_issue', 'edit_issue', 'exec_workflow', 'link_issue', 'view_project', 'download_file', 'remove_file' ] }};
+    const results = { ecode: 0, data: { id: '546761', name: '视频网站', key: 'BOBA', principal: { id:'xxx', name: '刘老幺' }, creator: '刘老幺', create_time: 144444 }, options: { permissions: [ 'manage_project', 'create_issue', 'edit_issue', 'exec_workflow', 'link_issue', 'view_project', 'download_file', 'remove_file', 'upload_file' ] }};
     return res.status(200).send(results);
   });
 
@@ -1007,4 +1007,48 @@ export default function(router) {
     return res.status(200).send(results);
   });
   /******************kanban***************/
+
+  /******************document*****************/
+  router.get('/project/:key/document/options', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:{ uploader: [{id: '1111', 'name': '刘老幺'}, {id: '2222', 'name': '王老师'}]}};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/document/0/fileupload', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data:{ name: 'ffff.pdf', id: '6666', uploader: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: '123M', parent: '1111', index: '1111', versions: [] } };
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/document/5555', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data: { name: '测试文档222', id: '5555', d:1 } };
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/document/0/directory', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data: { name: '测试文档', id: '6666', d:1 } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/document/111', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{name: 'aaaa.pdf', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: '123K', parent: '1111', index: '1111', versions: []}, {name: 'bbbb.pdf', id: '2222', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: '0.4G', parent: '1111', index: '2222', versions: []}, {name: 'cccc.xlsx', id: '3333', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: '2.8M', parent: '1111', index: '1111', versions: []}, {name: 'eeee.jpg', id: '4444', uploader: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: '123M', parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '1111', name: 'aaaa'}] }};
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/document/0', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{ name: '设计文档', id: '5555', d:1 }, {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: '123K', parent: '0', index: '1111', versions: []}, {name: 'bbbb.docx', id: '2222', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: '0.4G', parent: '0', index: '2222', versions: []}, {name: 'cccc.xlsx', id: '3333', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: '2.8M', parent: '0', index: '1111', versions: []}, {name: 'eeee.jpg', id: '4444', uploader: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: '123M', parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
+    return res.status(200).send(results);
+  });
+
 }

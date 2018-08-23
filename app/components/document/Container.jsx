@@ -4,22 +4,23 @@ import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
-import * as ProjectActions from 'redux/actions/ProjectActions';
+import * as DocumentActions from 'redux/actions/DocumentActions';
 
 const qs = require('qs');
 const List = require('./List');
-const Mylist = require('./Mylist');
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(ProjectActions, dispatch)
+    actions: bindActionCreators(DocumentActions, dispatch)
   };
 }
 
-@connect(({ i18n, session, project }) => ({ i18n, session, project }), mapDispatchToProps)
+@connect(({ i18n, project, document }) => ({ i18n, project, document }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
+    this.pid = '';
+    this.directory = '0';
   }
 
   static contextTypes = {
@@ -31,149 +32,71 @@ export default class Container extends Component {
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
-    session: PropTypes.object.isRequired,
-    project: PropTypes.object.isRequired
+    project: PropTypes.object.isRequired,
+    document: PropTypes.object.isRequired
   }
 
   refresh(query) {
-    const pathname = '/admin/project';
+    const pathname = '/project/' + this.pid + '/document' + (this.directory != '0' ? ('/' + this.directory) : '');
     this.context.router.push({ pathname, query });
   }
 
-  entry(pathname) {
-    this.context.router.push({ pathname });
-  }
-
   async index(query) {
-    if (!query.page) { query.page = 1; }
-    await this.props.actions.index(qs.stringify(query || {}));
-    return this.props.project.ecode;
+    await this.props.actions.index(this.pid, this.directory || '0', qs.stringify(query || {}));
+    return this.props.document.ecode;
   }
 
-  async myIndex(query) {
-    await this.props.actions.myIndex(qs.stringify(query || {}));
-    return this.props.project.ecode;
-  }
-
-  async more(query) {
-    await this.props.actions.more(qs.stringify(query || {}));
-    return this.props.project.ecode;
-  }
-
-  async create(values) {
-    await this.props.actions.create(values);
-    return this.props.project.ecode;
+  async createFolder(values) {
+    await this.props.actions.createFolder(this.pid, this.directory, values);
+    return this.props.document.ecode;
   }
 
   async update(id, values) {
-    await this.props.actions.update(id, values);
-    return this.props.project.ecode;
-  }
-
-  async close(id) {
-    const { actions } = this.props;
-    await actions.close(id);
-    return this.props.project.ecode;
+    await this.props.actions.update(this.pid, id, values);
+    return this.props.document.ecode;
   }
 
   async del(id) {
     const { actions } = this.props;
-    await actions.del(id);
-    return this.props.project.ecode;
+    await actions.del(this.pid, id);
+    return this.props.document.ecode;
   }
 
-  async reopen(id) {
-    const { actions } = this.props;
-    await actions.reopen(id);
-    return this.props.project.ecode;
+  componentWillMount() {
+    const { params: { key, id } } = this.props;
+    this.props.actions.getOptions(key);
+    this.pid = key;
+    this.directory = id || '0';
   }
 
-  async createIndex(id) {
-    const { actions } = this.props;
-    await actions.createIndex(id);
-    return this.props.project.ecode;
-  }
-
-  async multiClose(ids) {
-    const { actions } = this.props;
-    await actions.multiClose(ids);
-    return this.props.project.ecode;
-  }
-
-  async multiReopen(ids) {
-    const { actions } = this.props;
-    await actions.multiReopen(ids);
-    return this.props.project.ecode;
-  }
-
-  async multiCreateIndex(ids) {
-    const { actions } = this.props;
-    await actions.multiCreateIndex(ids);
-    return this.props.project.ecode;
-  }
-
-  async show(id) {
-    const { actions } = this.props;
-    await actions.show(id);
-    return this.props.project.ecode;
-  }
-
-  async getOptions() {
-    const { actions } = this.props;
-    await actions.getOptions();
-    return this.props.project.ecode;
+  componentWillReceiveProps(nextProps) {
+    const { params: { id } } = nextProps;
+    if (!_.isEqual(this.directory, id)) {
+      this.directory = id || '0';
+    }
   }
 
   render() {
-    const { i18n, session, location: { pathname, query={} } } = this.props;
-
-    if (pathname.indexOf('admin') === 1) {
-      if (_.isEmpty(session.user)) {
-        return (<div/>);
-      } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
-        notify.show(i18n.errMsg[-10002], 'warning', 2000);
-        return (<div/>);
-      }
+    if (this.props.project.options) {
+      _.assign(this.props.document.options, this.props.project.options);
     }
 
+    const { i18n, location: { query={} } } = this.props;
+
     return (
-      <div className='doc-container'>
-        { pathname.indexOf('admin') === 1 ?
-        <List 
-          index={ this.index.bind(this) } 
-          entry={ this.entry.bind(this) } 
-          refresh={ this.refresh.bind(this) } 
-          create={ this.create.bind(this) } 
-          show={ this.show.bind(this) } 
-          select={ this.props.actions.select } 
-          update={ this.update.bind(this) } 
-          stop={ this.close.bind(this) } 
-          del={ this.del.bind(this) } 
-          reopen={ this.reopen.bind(this) } 
-          createIndex={ this.createIndex.bind(this) }
-          multiStop={ this.multiClose.bind(this) }
-          multiReopen={ this.multiReopen.bind(this) }
-          multiCreateIndex={ this.multiCreateIndex.bind(this) }
-          getOptions={ this.getOptions.bind(this) } 
-          query={ query }
-          i18n={ i18n }
-          { ...this.props.project }/>
-        :
-        <Mylist
-          index={ this.myIndex.bind(this) }
-          more={ this.more.bind(this) }
-          entry={ this.entry.bind(this) }
-          create={ this.create.bind(this) }
-          select={ this.props.actions.select } 
-          show={ this.show.bind(this) }
-          update={ this.update.bind(this) }
-          stop={ this.close.bind(this) }
-          reopen={ this.reopen.bind(this) }
-          createIndex={ this.createIndex.bind(this) }
-          user={ this.props.session.user }
-          i18n={ i18n }
-          { ...this.props.project }/> }
-      </div>
+      <List 
+        project_key={ this.pid }
+        directory={ this.directory }
+        index={ this.index.bind(this) } 
+        refresh={ this.refresh.bind(this) } 
+        createFolder={ this.createFolder.bind(this) } 
+        select={ this.props.actions.select } 
+        addFile={ this.props.actions.addFile } 
+        update={ this.update.bind(this) } 
+        del={ this.del.bind(this) } 
+        query={ query }
+        i18n={ i18n }
+        { ...this.props.document }/>
     );
   }
 }

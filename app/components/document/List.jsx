@@ -1,54 +1,44 @@
 import React, { PropTypes, Component } from 'react';
-//import { Link } from 'react-router';
+import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { FormGroup, FormControl, ButtonGroup, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
+import { FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
-import ApiClient from '../../../shared/api-client';
+import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const $ = require('$');
-const PaginationList = require('../share/PaginationList');
-const CreateModal = require('./CreateModal');
-const EditModal = require('./EditModal');
-const CloseNotify = require('./CloseNotify');
+const moment = require('moment');
 const DelNotify = require('./DelNotify');
-const MultiOperateNotify = require('./MultiOperateNotify');
+const EditRow = require('./EditRow');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      createModalShow: false, 
-      editModalShow: false, 
-      closeNotifyShow: false, 
       delNotifyShow: false, 
       operateShow: false, 
-      multiOperateNotifyShow: false,
-      multiOperate: '',
       hoverRowId: '', 
-      selectedIds: [],
-      willSetPrincipalPids: [], 
-      settingPrincipalPids: [],
-      principal: {},
-      principal_id: null,
-      name: '', 
-      status: 'active' };
+      editRowId: '',
+      editTextShow: false,
+      createFolderShow: false,
+      uploader_id: null,
+      name: '' };
 
-    this.createModalClose = this.createModalClose.bind(this);
-    this.editModalClose = this.editModalClose.bind(this);
-    this.closeNotifyClose = this.closeNotifyClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
-    this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
-    this.entry = this.entry.bind(this);
     this.refresh = this.refresh.bind(this);
+    this.uploadSuccess = this.uploadSuccess.bind(this);
+    this.cancelEditRow = this.cancelEditRow.bind(this);
+    this.initEditRow = this.initEditRow.bind(this);
+    this.downloadAll = this.downloadAll.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    project_key: PropTypes.string.isRequired,
+    directory: PropTypes.string.isRequired,
     options: PropTypes.object,
-    getOptions: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
@@ -57,63 +47,46 @@ export default class List extends Component {
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
-    entry: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired,
+    addFile: PropTypes.func.isRequired,
+    createFolder: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
-    reopen: PropTypes.func.isRequired,
-    createIndex: PropTypes.func.isRequired,
-    multiReopen: PropTypes.func.isRequired,
-    multiStop: PropTypes.func.isRequired,
-    multiCreateIndex: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    const { index, getOptions, query={} } = this.props;
+    const { index, query={} } = this.props;
     const newQuery = {};
-    newQuery.status = this.state.status = query.status || 'active';
+    if (query.uploader_id) {
+      newQuery.uploader_id = this.state.uploader_id = query.uploader_id;
+    }
     if (query.name) {
       newQuery.name = this.state.name = query.name;
     }
-    if (query.principal_id) {
-      newQuery.principal_id = this.state.principal_id = query.principal_id;
-    }
-
     index(newQuery);
-    getOptions();
   }
 
-  createModalClose() {
-    this.setState({ createModalShow: false });
+  cancelEditRow() {
+    this.setState({ 
+      editRowId: '',
+      editTextShow: false,
+      createFolderShow: false });
   }
 
-  editModalClose() {
-    this.setState({ editModalShow: false });
-  }
-
-  closeNotifyClose() {
-    this.setState({ closeNotifyShow: false });
+  initEditRow() {
+    this.state.editRowId = '';
+    this.state.editTextShow = false;
+    this.state.createFolderShow = false;
   }
 
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
   }
 
-  multiOperateNotifyClose() {
-    this.setState({ multiOperateNotifyShow: false });
-  }
-
   edit(id) {
     this.setState({ editModalShow: true });
     const { select } = this.props;
     select(id);
-  }
-
-  entry(key) {
-    const { entry } = this.props;
-    entry('/project/' + key); 
   }
 
   componentDidMount() {
@@ -127,20 +100,14 @@ export default class List extends Component {
 
   componentWillReceiveProps(nextProps) {
     const newQuery = nextProps.query || {};
-    const { index, query } = this.props;
-    if (!_.isEqual(newQuery, query)) {
+    const { directory, index, query } = this.props;
+    if (!_.isEqual(newQuery, query) || !_.isEqual(directory, nextProps.directory)) {
       index(newQuery);
+      this.initEditRow();
     }
 
-    this.state.status = newQuery.status || 'active';
+    this.state.uploader_id = newQuery.uploader_id || null;
     this.state.name = newQuery.name || '';
-    this.state.principal_id = newQuery.principal_id || null;
-  }
-
-  closeNotify(id) {
-    this.setState({ closeNotifyShow: true });
-    const { select } = this.props;
-    select(id);
   }
 
   delNotify(id) {
@@ -149,70 +116,25 @@ export default class List extends Component {
     select(id);
   }
 
-  async reopen(id) {
-    const { select, reopen } = this.props;
-    select(id);
-    const ecode = await reopen(id);
-    if (ecode === 0) {
-      notify.show('项目已打开。', 'success', 2000);    
-    } else {
-      notify.show('打开失败。', 'error', 2000);    
-    }
-  }
-
-  async createIndex(id) {
-    const { select, createIndex } = this.props;
-    select(id);
-    const ecode = await createIndex(id);
-    if (ecode === 0) {
-      notify.show('索引已创建。', 'success', 2000);
-    } else {
-      notify.show('创建失败。', 'error', 2000);
-    }
-  }
-
-  operateSelect(eventKey) {
+  async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
+    const { select, project_key } = this.props;
+    await select(hoverRowId);
 
-    if (eventKey === '1') {
-      this.edit(hoverRowId);
-    } else if (eventKey === '2') {
-      this.closeNotify(hoverRowId);
-    } else if (eventKey === '3') {
-      this.reopen(hoverRowId);
-    } else if (eventKey === '4') {
-      this.createIndex(hoverRowId);
-    } else if (eventKey === '5') {
-      this.delNotify(hoverRowId);
+    if (eventKey === 'rename') {
+      this.setState({ editRowId: hoverRowId, editTextShow: true });
+    } else if (eventKey === 'del') {
+      this.setState({ delNotifyShow: true });
+    } else if (eventKey === 'download') {
+      const url = '/api/project/' + project_key + '/download/' + hoverRowId;
+      window.open(url, '_blank');
     }
   }
 
-  multiOperateSelect(eventKey) {
-    this.setState({ multiOperateNotifyShow: true, multiOperate: eventKey });
-  }
-
-  willSetPrincipal(pid) {
-    this.state.willSetPrincipalPids.push(pid);
-    this.setState({ willSetPrincipalPids: this.state.willSetPrincipalPids });
-  }
-
-  uploaderChange(newValue) {
-    this.state.uploader = newValue;
-    this.refresh();
-  }
-
-  refresh() {
-    const { refresh } = this.props;
-    const query = {};
-    if (_.trim(this.state.name)) {
-      query.name = _.trim(this.state.name);
-    }
-    if (this.state.principal_id) {
-      query.principal_id = this.state.principal_id;
-    }
-    query.status = this.state.status;
-
-    refresh(query);
+  downloadAll() {
+    const { project_key, directory } = this.props;
+    const url = '/api/project/' + project_key + '/download/' + (directory || '0');
+    window.open(url, '_blank');
   }
 
   onRowMouseOver(rowData) {
@@ -225,76 +147,204 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
-  onSelectAll(isSelected, rows) {
-    if (isSelected) {
-      const length = rows.length;
-      for (let i = 0; i < length; i++) {
-        this.state.selectedIds.push(rows[i].id);
-      }
-    } else {
-      this.state.selectedIds = [];
+  refresh() {
+    const { refresh } = this.props;
+    const query = {};
+    if (this.state.uploader_id) {
+      query.uploader_id = this.state.uploader_id;
     }
-    this.setState({ selectedIds: this.state.selectedIds });
+    if (_.trim(this.state.name)) {
+      query.name = _.trim(this.state.name);
+    }
+    refresh(query);
   }
 
-  onSelect(row, isSelected) {
-    if (isSelected) {
-      this.state.selectedIds.push(row.id);
-    } else {
-      const newSelectedIds = [];
-      const length = this.state.selectedIds.length;
-      for (let i = 0; i < length; i++) {
-        if (this.state.selectedIds[i] !== row.id) {
-          newSelectedIds.push(this.state.selectedIds[i]);
-        }
-      }
-      this.state.selectedIds = newSelectedIds;
-    }
-    this.setState({ selectedIds: this.state.selectedIds });
+  uploaderChange(newValue) {
+    this.state.uploader_id = newValue;
+    this.refresh();
   }
 
-  cancelSelected() {
-    this.setState({ selectedIds: [] });
+  getFileIconCss(fileName) {
+    const newFileName = (fileName || '').toLowerCase();
+    if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
+      return { color: '#4A8FEF', fa: 'fa fa-file-word-o' };
+    } else if (_.endsWith(newFileName, 'xls') || _.endsWith(newFileName, 'xlsx')) {
+      return { color: '#5DB820', fa: 'fa fa-file-excel-o' };
+    } else if (_.endsWith(newFileName, 'ppt') || _.endsWith(newFileName, 'pptx')) {
+      return { color: '#F58F3D', fa: 'fa fa-file-powerpoint-o' };
+    } else if (_.endsWith(newFileName, 'pdf')) {
+      return { color: '#EC5858', fa: 'fa fa-file-pdf-o' };
+    } else if (_.endsWith(newFileName, 'txt')) {
+      return { color: '#4A8FEF', fa: 'fa fa-file-text-o' };
+    } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
+      return { color: '#8082EB', fa: 'fa fa-file-zip-o' };
+    } else if (_.endsWith(newFileName, 'jpeg') || _.endsWith(newFileName, 'jpg') || _.endsWith(newFileName, 'png') || _.endsWith(newFileName, 'gif') || _.endsWith(newFileName, 'bmp')) {
+      return { color: '#F37140', fa: 'fa fa-file-image-o' };
+    } else {
+      return { color: '', fa: 'fa fa-file-o' };
+    }
+  }
+
+  uploadSuccess(localfile, res) {
+    const { addFile } = this.props;
+    if (res.ecode === 0 && res.data) {
+      addFile(res.data);
+    }
   }
 
   render() {
     const { 
       i18n, 
+      project_key,
+      directory,
       collection, 
       selectedItem, 
       loading, 
       indexLoading, 
       itemLoading, 
       refresh, 
-      create, 
+      createFolder, 
       del, 
-      stop, 
-      multiStop, 
-      multiReopen, 
-      multiCreateIndex, 
       update, 
       options, 
       query } = this.props;
-    const { willSetPrincipalPids, settingPrincipalPids } = this.state;
-    const { hoverRowId, operateShow } = this.state;
+    const { createFolderShow, editRowId, editTextShow, hoverRowId, operateShow } = this.state;
+
+    const componentConfig = {
+      showFiletypeIcon: true,
+      postUrl: '/api/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'fileupload'
+    };
+    const djsConfig = {
+      addRemoveLinks: true,
+      maxFilesize: 50
+    };
+    const eventHandlers = {
+      init: dz => this.dropzone = dz,
+      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); } 
+    }
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const projects = [];
-    const projectNum = collection.length;
-    for (let i = 0; i < projectNum; i++) {
-      projects.push({
-        id: collection[i].id,
-        name: ( 
-          <div> 
-            <a href='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.entry(collection[i].key); } }>{ collection[i].name }</a>
-            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
+    const rows = [];
+    if (!indexLoading && options.path && options.path.length > 1) {
+      const parent = options.path[options.path.length - 2];
+      rows.push({ 
+        id: parent.id,
+        name: (
+          <div>
+            <span style={ { marginRight: '5px', color: 'gold' } }><i className='fa fa-reply'></i></span>
+            <Link to={ '/project/' + project_key + '/document' + (parent.id !== '0' ? ( '/' + parent.id ) : '') }>返回上级</Link>
           </div> ),
-        uploader: collection[i].uploader && collection[i].uploader.name,
-        uploaded_at: 'ssss',
+        operation: (<div/>)
+      });
+    }
+
+    if (createFolderShow) {
+      rows.push({
+        id: 'createFolder',
+        name: 
+          <EditRow 
+            loading={ itemLoading }
+            data={ {} } 
+            createFolder={ createFolder }
+            collection={ collection } 
+            cancel={ this.cancelEditRow } 
+            mode='createFolder'/>, 
+        operation: (<div/>)
+      });
+    }
+
+    const directories = _.filter(collection, { d: 1 });
+    _.map(directories, (v, i) => {
+      if (editRowId == v.id) {
+        rows.push({
+          id: v.id,
+          name: 
+            <EditRow 
+              loading={ itemLoading }
+              data={ selectedItem } 
+              collection={ collection } 
+              edit={ update }
+              cancel={ this.cancelEditRow } 
+              mode='editFolder'/>, 
+          operation: (<div/>)
+        });
+        return;
+      }
+      rows.push({
+        id: v.id,
+        name: (
+          <div>
+            <span style={ { marginRight: '5px', color: 'gold' } }><i className='fa fa-folder'></i></span>
+            <Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link>
+          </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+          { operateShow && hoverRowId === v.id && !itemLoading && options.permissions && (options.permissions.indexOf('download_file') !== -1 || options.permissions.indexOf('manage_project') !== -1) &&
+            <DropdownButton
+              pullRight
+              bsStyle='link'
+              style={ { textDecoration: 'blink' ,color: '#000' } }
+              key={ i }
+              title={ node }
+              id={ `dropdown-basic-${i}` }
+              onClick={ this.cancelEditRow }
+              onSelect={ this.operateSelect.bind(this) }>
+              { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+            </DropdownButton> }
+            <img src={ img } className={ (itemLoading && selectedItem.id === v.id) ? 'loading' : 'hide' }/>
+          </div>)
+      });      
+    });
+
+    const files = _.reject(collection, { d: 1 });
+    const fileNum = files.length;
+    for (let i = 0; i < fileNum; i++) {
+      const iconCss = this.getFileIconCss(files[i].name);
+
+      if (editRowId == files[i].id) {
+        rows.push({
+          id: files[i].id,
+          name: 
+            <EditRow 
+              loading={ itemLoading }
+              data={ selectedItem } 
+              collection={ collection } 
+              edit={ update }
+              cancel={ this.cancelEditRow } 
+              mode='editFile' 
+              fileIconCss={ iconCss }/>,
+          operation: (<div/>)
+        });
+        continue;
+      }
+
+      rows.push({
+        id: files[i].id,
+        name: ( 
+          <div> 
+            <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss.fa }></i></span>
+            { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
+              <a href={ '/api/project/' + project_key + '/file/' + files[i].index } download={ files[i].name } style={ { cursor: 'pointer' } }>
+                <span style={ { float: 'left' } }>{ files[i].name }</span>
+              </a>
+              :
+              <span>{ files[i].name }</span> }
+            <span style={ { float: 'right' } }>
+              { files[i].parent != directory && 
+              <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
+              { files[i].uploader &&
+              <span style={ { marginRight: '15px', float: 'left' } }>
+                { files[i].uploader.name + '  ' + moment.unix(files[i].uploaded_at).format('YY/MM/DD HH:mm') }
+              </span> }
+              <span style={ { float: 'left' } }>{ files[i].size }</span>
+            </span>
+          </div> ),
+        operation: (
+          <div>
+          { operateShow && hoverRowId === files[i].id && !itemLoading && options.permissions && (options.permissions.indexOf('download_file') !== -1 || options.permissions.indexOf('remove_file') !== -1 || options.permissions.indexOf('upload_file') !== -1) &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -302,13 +352,13 @@ export default class List extends Component {
               key={ i } 
               title={ node } 
               id={ `dropdown-basic-${i}` } 
+              onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>设置标签</MenuItem>
-              <MenuItem eventKey='2'>编辑</MenuItem>
-              <MenuItem eventKey='3'>上传新版本</MenuItem>
-              <MenuItem eventKey='4'>删除</MenuItem>
+              { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
+              { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || options.permissions.indexOf('upload_file') !== -1) && <MenuItem eventKey='rename'>重命名</MenuItem> }
+              { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
-            <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
+            <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -324,29 +374,24 @@ export default class List extends Component {
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
-    let selectRowProp = {};
-    if (projects.length > 0) {
-      selectRowProp = {
-        mode: 'checkbox',
-        selected: this.state.selectedIds,
-        onSelect: this.onSelect.bind(this),
-        onSelectAll: this.onSelectAll.bind(this)
-      };
-    }
-
     return (
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='上传者'
-                value={ this.state.principal_id }
-                onChange={ this.principalChange.bind(this) }
-                options={ _.map(options.principals, (v) => { return { value: v.id, label: v.name + '(' + v.email + ')' } } ) }/>
+            <span style={ { float: 'left' } }>
+              <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
+                { _.map(options.path, (v, i) => {
+                  if (i === 0) {
+                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document' }>根目录</Link></Breadcrumb.Item>);
+                  } else if (i === options.path.length - 1) {
+                    return (<Breadcrumb.Item active key={ i }>{ v.name }</Breadcrumb.Item>);
+                  } else {
+                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
+                  }
+                }) }
+              </Breadcrumb>
             </span>
-            <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
               <FormControl
                 type='text'
                 id='pname'
@@ -355,76 +400,47 @@ export default class List extends Component {
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '文档名称查询...' } />
             </span>
-            { this.state.selectedIds.length > 0 &&
-            <span style={ { float: 'left', marginRight: '10px' } }>
-              <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                <MenuItem eventKey='setLabels'>设置标签</MenuItem>
-                <MenuItem eventKey='delete'>删除</MenuItem>
-              </DropdownButton>
-            </span> }
-            <span style={ { float: 'left', width: '20%' } }>
-              <Button onClick={ () => { this.setState({ uploadModalShow: true }); } } disabled={ indexLoading }>
-                <i className='fa fa-plus'></i>&nbsp;上传文档
-              </Button>
+            <span style={ { float: 'right', width: '12%', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='上传者'
+                value={ this.state.uploader_id }
+                onChange={ this.uploaderChange.bind(this) }
+                options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
             </span>
+            { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+            <span style={ { float: 'right', marginRight: '10px' } }>
+              <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading }>
+                <i className='fa fa-plus'></i>&nbsp;新建目录
+              </Button>
+            </span> }
           </FormGroup>
         </div>
         <div>
-          <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
+          <BootstrapTable data={ rows } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-            <TableHeaderColumn dataField='uploader' width='320'>上传者</TableHeaderColumn>
-            <TableHeaderColumn dataField='uploaded_at'>上传时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='size'>大小</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { this.state.editModalShow && 
-            <EditModal 
-              show 
-              close={ this.editModalClose } 
-              update={ update } 
-              data={ selectedItem } 
-              i18n={ i18n }/> }
-          { this.state.createModalShow && 
-            <CreateModal 
-              show 
-              close={ this.createModalClose } 
-              create={ create } 
-              i18n={ i18n }/> }
-          { this.state.closeNotifyShow && 
-            <CloseNotify 
-              show 
-              close={ this.closeNotifyClose } 
-              data={ selectedItem } 
-              stop={ stop }/> }
+          <div style={ { marginLeft: '10px', marginTop: '15px' } }>
+            { !indexLoading && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
+            { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && 
+            <span style={ { marginLeft: '20px' } }>
+              <i className='fa fa-download'></i>
+              <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>
+            </span> }
+          </div>
+          { !indexLoading && options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
+            <div style={ { marginTop: '20px' } }>
+              <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+            </div> }
           { this.state.delNotifyShow &&
             <DelNotify
               show
               close={ this.delNotifyClose }
               data={ selectedItem }
               del={ del }/> }
-          { this.state.multiOperateNotifyShow && 
-            <MultiOperateNotify 
-              show 
-              close={ this.multiOperateNotifyClose } 
-              multiReopen={ multiReopen } 
-              multiStop={ multiStop } 
-              multiCreateIndex={ multiCreateIndex } 
-              ids={ this.state.selectedIds } 
-              cancelSelected={ this.cancelSelected.bind(this) } 
-              operate={ this.state.multiOperate } 
-              loading={ loading } 
-              i18n={ i18n }/> }
         </div>
-        { !indexLoading && options.total && options.total > 0 ?
-          <PaginationList
-            total={ options.total || 0 }
-            curPage={ query.page || 1 }
-            sizePerPage={ options.sizePerPage || 30 }
-            paginationSize={ 4 }
-            query={ query }
-            refresh={ refresh }/>
-          : '' }
       </div>
     );
   }

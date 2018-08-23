@@ -839,7 +839,7 @@ export default class DetailBar extends Component {
                       parallelUploads: 1,
                       addRemoveLinks: false,
                       paramName: field.key,
-                      maxFilesize: 20
+                      maxFilesize: 50
                     };
                     const eventHandlers = {
                       init: dz => this.dropzone = dz,
@@ -855,7 +855,7 @@ export default class DetailBar extends Component {
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
                                 <td>
-                                  <span style={ { marginRight: '5px' } }><i className={ this.getFileIconCss(f.name) }></i></span> 
+                                  <span style={ { marginRight: '5px', color: '#777' } }><i className={ this.getFileIconCss(f.name) }></i></span> 
                                   { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
                                     <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }

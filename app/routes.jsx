@@ -153,6 +153,12 @@ const SyssettingContainer = (location, cb) => {
   }, 'syssetting')
 };
 
+const DocumentContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/document/Container'))
+  }, 'document')
+};
+
 export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Login }/>
@@ -183,7 +189,7 @@ export default (
         <Route path='events' getComponent={ EventsContainer }/>
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
-        <Route path='document' getComponent={ KanbanContainer }/>
+        <Route path='document(/:id)' getComponent={ DocumentContainer }/>
       </Route>
       <Route path='/admin/project' getComponent={ ProjectContainer }/>
       <Route path='/admin/user' getComponent={ UserContainer }/>

@@ -550,7 +550,7 @@ class CreateModal extends Component {
                 const djsConfig = {
                   addRemoveLinks: true,
                   paramName: v.key,
-                  maxFilesize: 20
+                  maxFilesize: 50
                 };
                 const eventHandlers = {
                   init: dz => this.dropzone = dz,

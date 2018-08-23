@@ -34,14 +34,16 @@ export default class DelNotify extends Component {
   render() {
     const { data } = this.props;
 
+    const obj = data.d == 1 ? '目录' : '文档';
+
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除项目</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除{ obj }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          项目被删除后，相关信息都将被删除，且不可恢复，请慎重。<br/>
-          确认要删除【{ data.name }】该项目？<br/>
+          { obj }被删除后，将不可恢复。<br/>
+          确认要删除【{ data.name }】该{ obj }？<br/>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={ this.confirm }>确定</Button>

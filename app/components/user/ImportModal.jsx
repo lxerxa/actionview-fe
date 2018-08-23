@@ -63,7 +63,7 @@ export default class ImportModal extends Component {
     };
     const djsConfig = {
       addRemoveLinks: true,
-      maxFilesize: 20
+      maxFilesize: 50
     };
     const eventHandlers = {
       init: dz => this.dropzone = dz,
