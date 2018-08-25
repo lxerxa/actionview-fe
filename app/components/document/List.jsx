@@ -126,7 +126,7 @@ export default class List extends Component {
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
-      const url = '/api/project/' + project_key + '/download/' + hoverRowId;
+      const url = '/api/project/' + project_key + '/document/' + hoverRowId + '/download';
       window.open(url, '_blank');
     }
   }
@@ -192,6 +192,21 @@ export default class List extends Component {
     }
   }
 
+  getFileSize(bytes) {
+    const K = 1024;
+    const M = 1024 * 1024;
+    const G = 1024 * 1024 * 1024;
+    if (bytes < K/10) {
+      return bytes + 'B';
+    } else if (bytes < M/10) {
+      return _.round(bytes/K, 1) + 'K';
+    } else if (bytes < G/10) {
+      return _.round(bytes/M, 1) + 'M';
+    } else {
+      return _.round(bytes/G, 1) + 'G';
+    }
+  }
+
   render() {
     const { 
       i18n, 
@@ -212,7 +227,7 @@ export default class List extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: '/api/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'fileupload'
+      postUrl: '/api/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
     };
     const djsConfig = {
       addRemoveLinks: true,
@@ -339,7 +354,7 @@ export default class List extends Component {
               <span style={ { marginRight: '15px', float: 'left' } }>
                 { files[i].uploader.name + '  ' + moment.unix(files[i].uploaded_at).format('YY/MM/DD HH:mm') }
               </span> }
-              <span style={ { float: 'left' } }>{ files[i].size }</span>
+              <span style={ { float: 'left' } }>{ this.getFileSize(files[i].size) }</span>
             </span>
           </div> ),
         operation: (
@@ -423,7 +438,7 @@ export default class List extends Component {
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           <div style={ { marginLeft: '10px', marginTop: '15px' } }>
-            { !indexLoading && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
+            { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
             { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && 
             <span style={ { marginLeft: '20px' } }>
               <i className='fa fa-download'></i>
