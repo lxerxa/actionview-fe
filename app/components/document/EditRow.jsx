@@ -15,6 +15,7 @@ export default class EditRow extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
     fileIconCss: PropTypes.string,
@@ -26,7 +27,7 @@ export default class EditRow extends Component {
   }
 
   async confirm() {
-    const { mode, createFolder, edit, data, collection, cancel } = this.props;
+    const { i18n: { errMsg }, mode, createFolder, edit, data, collection, cancel } = this.props;
 
     const reg = /^[^@\/\'\\\"#$%&\^\*]+$/;
     if (!reg.test(this.state.name)) {
@@ -54,7 +55,7 @@ export default class EditRow extends Component {
         notify.show('创建完成。', 'success', 2000);
         cancel();
       } else {
-        notify.show('创建失败。', 'error', 2000);
+        notify.show(errMsg[ecode] + '，创建失败。', 'error', 2000);
         $('#input_nm').select();
       }
     } else {
@@ -63,7 +64,7 @@ export default class EditRow extends Component {
         notify.show('编辑完成。', 'success', 2000);
         cancel();
       } else {
-        notify.show('更新失败。', 'error', 2000);
+        notify.show(errMsg[ecode] + '，更新失败。', 'error', 2000);
         $('#input_nm').select();
       }
     }

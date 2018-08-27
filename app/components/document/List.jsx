@@ -133,7 +133,7 @@ export default class List extends Component {
 
   downloadAll() {
     const { project_key, directory } = this.props;
-    const url = '/api/project/' + project_key + '/download/' + (directory || '0');
+    const url = '/api/project/' + project_key + '/document/' + directory + '/download';
     window.open(url, '_blank');
   }
 
@@ -241,7 +241,7 @@ export default class List extends Component {
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const rows = [];
-    if (!indexLoading && options.path && options.path.length > 1) {
+    if (!indexLoading && options.path && options.path.length > 1 && _.isEmpty(query)) {
       const parent = options.path[options.path.length - 2];
       rows.push({ 
         id: parent.id,
@@ -259,6 +259,7 @@ export default class List extends Component {
         id: 'createFolder',
         name: 
           <EditRow 
+            i18n={ i18n }
             loading={ itemLoading }
             data={ {} } 
             createFolder={ createFolder }
@@ -276,6 +277,7 @@ export default class List extends Component {
           id: v.id,
           name: 
             <EditRow 
+              i18n={ i18n }
               loading={ itemLoading }
               data={ selectedItem } 
               collection={ collection } 
@@ -324,6 +326,7 @@ export default class List extends Component {
           id: files[i].id,
           name: 
             <EditRow 
+              i18n={ i18n }
               loading={ itemLoading }
               data={ selectedItem } 
               collection={ collection } 
@@ -342,7 +345,7 @@ export default class List extends Component {
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss.fa }></i></span>
             { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
-              <a href={ '/api/project/' + project_key + '/file/' + files[i].index } download={ files[i].name } style={ { cursor: 'pointer' } }>
+              <a href={ '/api/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
                 <span style={ { float: 'left' } }>{ files[i].name }</span>
               </a>
               :
@@ -370,7 +373,7 @@ export default class List extends Component {
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
               { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
-              { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || options.permissions.indexOf('upload_file') !== -1) && <MenuItem eventKey='rename'>重命名</MenuItem> }
+              { options.permissions && options.permissions.indexOf('download_file') !== -1 && options.permissions.indexOf('upload_file') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
               { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
@@ -395,11 +398,11 @@ export default class List extends Component {
           <FormGroup>
             <span style={ { float: 'left' } }>
               <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
-                { _.map(options.path, (v, i) => {
-                  if (i === 0) {
+                { _.map(options.path || [], (v, i) => {
+                  if (i === options.path.length - 1) {
+                    return (<Breadcrumb.Item active key={ i }>{ i === 0 ? '根目录' : v.name }</Breadcrumb.Item>);
+                  } else if (i === 0) {
                     return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document' }>根目录</Link></Breadcrumb.Item>);
-                  } else if (i === options.path.length - 1) {
-                    return (<Breadcrumb.Item active key={ i }>{ v.name }</Breadcrumb.Item>);
                   } else {
                     return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
                   }
@@ -425,7 +428,7 @@ export default class List extends Component {
             </span>
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
             <span style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading }>
+              <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
                 <i className='fa fa-plus'></i>&nbsp;新建目录
               </Button>
             </span> }
@@ -437,6 +440,10 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
+          { !indexLoading && options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
+            <div style={ { marginTop: '15px' } }>
+              <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+            </div> }
           <div style={ { marginLeft: '10px', marginTop: '15px' } }>
             { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
             { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && 
@@ -445,10 +452,6 @@ export default class List extends Component {
               <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>
             </span> }
           </div>
-          { !indexLoading && options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
-            <div style={ { marginTop: '20px' } }>
-              <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
-            </div> }
           { this.state.delNotifyShow &&
             <DelNotify
               show
