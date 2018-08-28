@@ -20,7 +20,7 @@ export default class DelNotify extends Component {
     close();
     const ecode = await del(data.id);
     if (ecode === 0) {
-      notify.show('项目已删除。', 'success', 2000);    
+      notify.show((data.d == 1 ? '目录' : '文档') + '已删除。', 'success', 2000);    
     } else {
       notify.show('删除失败。', 'error', 2000);    
     }

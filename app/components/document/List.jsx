@@ -199,11 +199,11 @@ export default class List extends Component {
     if (bytes < K/10) {
       return bytes + 'B';
     } else if (bytes < M/10) {
-      return _.round(bytes/K, 1) + 'K';
+      return _.ceil(bytes/K, 1) + 'K';
     } else if (bytes < G/10) {
-      return _.round(bytes/M, 1) + 'M';
+      return _.ceil(bytes/M, 1) + 'M';
     } else {
-      return _.round(bytes/G, 1) + 'G';
+      return _.ceil(bytes/G, 1) + 'G';
     }
   }
 
@@ -444,7 +444,7 @@ export default class List extends Component {
             <div style={ { marginTop: '15px' } }>
               <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
             </div> }
-          <div style={ { marginLeft: '10px', marginTop: '15px' } }>
+          <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
             { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
             { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && 
             <span style={ { marginLeft: '20px' } }>
