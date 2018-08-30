@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 const img = require('../../../assets/images/loading.gif');
 const moment = require('moment');
+const getAgoAt = require('../../share/AgoAt');
 
 const AddWorklogModal = require('./AddWorklogModal');
 const DelWorklogModal = require('./DelWorklogModal');
@@ -19,6 +20,7 @@ export default class Worklog extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    currentTime: PropTypes.number.isRequired,
     currentUser: PropTypes.object.isRequired,
     permissions: PropTypes.array.isRequired,
     issue: PropTypes.object.isRequired,
@@ -127,6 +129,7 @@ export default class Worklog extends Component {
     const { 
       i18n, 
       permissions, 
+      currentTime, 
       currentUser, 
       issue, 
       indexWorklog, 
@@ -211,7 +214,7 @@ export default class Worklog extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder && val.recorder.name || '') + '</a> 添加了工作日志 - ' + (val.recorded_at && moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss')) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder.id === currentUser.id ? '我' : val.recorder.name) + '</a> 添加了工作日志 - ' + getAgoAt(val.recorded_at, currentTime) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 { ((val.recorder && currentUser.id === val.recorder.id) || permissions.indexOf('manage_project') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }
                 { ((val.recorder && currentUser.id === val.recorder.id) || permissions.indexOf('manage_project') !== -1) &&  

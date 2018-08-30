@@ -4,7 +4,7 @@ import { Table, Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel }
 import _ from 'lodash';
 
 const img = require('../../../assets/images/loading.gif');
-const moment = require('moment');
+const getAgoAt = require('../../share/AgoAt');
 
 export default class History extends Component {
   constructor(props) {
@@ -14,6 +14,8 @@ export default class History extends Component {
 
   static propTypes = {
     issue_id: PropTypes.string,
+    currentTime: PropTypes.number.isRequired,
+    currentUser: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     indexHistory: PropTypes.func.isRequired,
     sortHistory: PropTypes.func.isRequired,
@@ -21,7 +23,7 @@ export default class History extends Component {
   }
 
   render() {
-    const { issue_id, indexHistory, sortHistory, collection, indexLoading } = this.props;
+    const { issue_id, currentTime, currentUser, indexHistory, sortHistory, collection, indexLoading } = this.props;
 
     return (
       <Form horizontal>
@@ -39,7 +41,7 @@ export default class History extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && (val.operator.name + '(' + val.operator.email + ')')) + '">' + (val.operator && val.operator.name || '') + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + (val.operated_at && moment.unix(val.operated_at).format('YY/MM/DD HH:mm:ss')) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && (val.operator.name + '(' + val.operator.email + ')')) + '">' + (val.operator && val.operator.id === currentUser.id ? '我' : val.operator.name) + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + getAgoAt(val.operated_at, currentTime) } } />
               </div> ); 
 
               return (

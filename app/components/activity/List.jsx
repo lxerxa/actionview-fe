@@ -9,12 +9,12 @@ const moment = require('moment');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
+const getAgoAt = require('../share/AgoAt');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { limit: 50, category: 'all', barShow: false, hoverRowId: '' };
-    this.getAgoAt = this.getAgoAt.bind(this);
   }
 
   static propTypes = {
@@ -123,34 +123,10 @@ export default class List extends Component {
     }
   }
 
-  getAgoAt(stamptime) {
-    const { current_time } = this.props;
-
-    const points = [
-      { value: 365 * 24 * 60 * 60, suffix: '年前', max: 2 },
-      { value: 30 * 24 * 60 * 60, suffix: '个月前', max: 11 }, 
-      { value: 7 * 24 * 60 * 60, suffix: '周前', max: 4 }, 
-      { value: 24 * 60 * 60, suffix: '天前', max: 6 }, 
-      { value: 60 * 60, suffix: '小时前', max: 23 },             
-      { value: 10 * 60, suffix: '0分钟前', max: 5 }
-    ];
-
-    let agoAt = '刚刚';
-    const diff = current_time - stamptime;
-
-    for (let i = 0; i < 6; i++) {
-      const mode = _.floor(diff / points[i].value);
-      if (mode >= 1) {
-        agoAt = _.min([ mode, points[i].max ]) + points[i].suffix;
-        break;
-      }
-    }
-    return agoAt;
-  }
-
   render() {
     const { 
       i18n,
+      current_time,
       collection, 
       increaseCollection, 
       indexLoading, 
@@ -223,8 +199,7 @@ export default class List extends Component {
     const activityNum = collection.length;
     for (let i = 0; i < activityNum; i++) {
 
-      const user = <Person data={ collection[i].user } />;
-      const agoAt = this.getAgoAt(collection[i].created_at);
+      const agoAt = getAgoAt(collection[i].created_at, current_time);
 
       const wfEventFlag =
          collection[i].event_key === 'close_issue' 
@@ -249,7 +224,7 @@ export default class List extends Component {
         avatar: ( <img src={ collection[i].user.avatar ? '/api/getavatar?fid=' + collection[i].user.avatar : no_avatar } className='no-avatar'/> ),
         summary: (
           <div>
-            <span style={ { marginRight: '5px' } }><b>{ collection[i].user.name }</b></span>
+            <span style={ { marginRight: '5px' } }><b>{ user.id === collection[i].user.id ? '我' : collection[i].user.name }</b></span>
 
             { collection[i].event_key == 'create_link'     && <span>创建了问题链接</span> }
             { collection[i].event_key == 'del_link'        && <span>删除了问题链接</span> }
@@ -319,7 +294,7 @@ export default class List extends Component {
               return (<li style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
             }) }
             </ul> }
-            { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && collection[i].data.new_user.name || '' }</span> }
+            { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && user.id === collection[i].data.new_user.id ? '我' : (collection[i].data.new_user.name || '') }</span> }
 
             { collection[i].event_key == 'add_file' && <span>上传了文档 { collection[i].data }</span> }
             { collection[i].event_key == 'del_file' && <span>删除了文档 <span style={ ltStyles }>{ collection[i].data }</span></span> }

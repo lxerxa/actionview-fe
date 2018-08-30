@@ -446,7 +446,7 @@ export default class List extends Component {
             </div> }
           <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
             { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
-            { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && 
+            { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && options.path.length > 1 && 
             <span style={ { marginLeft: '20px' } }>
               <i className='fa fa-download'></i>
               <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>

@@ -339,6 +339,7 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKLOG_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.worklogCollection = action.result.data;
+        _.assign(state.options, action.result.options || {});
       }
       return { ...state, worklogIndexLoading: false, worklogLoaded: true, ecode: action.result.ecode };
 

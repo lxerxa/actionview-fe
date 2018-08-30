@@ -928,6 +928,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 2 } title='备注'>
               <Comments 
                 i18n={ i18n }
+                currentTime={ options.current_time || '' }
                 currentUser={ user }
                 permissions={ options.permissions || [] }
                 issue_id={ data.id }
@@ -945,6 +946,8 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 3 } title='改动纪录'>
               <History 
                 issue_id={ data.id }
+                currentTime={ options.current_time || '' }
+                currentUser={ user }
                 collection={ historyCollection } 
                 indexHistory={ indexHistory } 
                 sortHistory={ sortHistory } 
@@ -953,6 +956,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 4 } title='工作日志'>
               <Worklog 
                 i18n={ i18n }
+                currentTime={ options.current_time || '' }
                 currentUser={ user }
                 permissions={ options.permissions || [] }
                 issue={ data }
