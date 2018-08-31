@@ -70,10 +70,11 @@ export default class TestModal extends Component {
               <td style={ { height: '35px', textAlign: 'right' } }>获取用户组：</td>
               <td>{ testInfo.group_count || 0 } 个</td>
             </tr>
+            { testInfo.group_count > 0 &&
             <tr>
               <td style={ { height: '35px', textAlign: 'right' } }>获取用户组成员：</td>
               <td>{ testInfo.group_membership ? <Label bsStyle='success'>成功</Label> : <Label bsStyle='danger'>失败</Label> }</td>
-            </tr>
+            </tr> }
           </table>
         </Modal.Body> }
         <Modal.Footer>
