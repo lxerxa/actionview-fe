@@ -346,10 +346,10 @@ export default class List extends Component {
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss.fa }></i></span>
             { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
               <a href={ '/api/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
-                <span style={ { float: 'left' } }>{ files[i].name }</span>
+                { files[i].name }
               </a>
               :
-              <span>{ files[i].name }</span> }
+              files[i].name }
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
               <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
