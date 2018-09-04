@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
+import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
 const EditModal = require('./EditModal');
@@ -89,13 +90,18 @@ export default class List extends Component {
     const { update } = this.props;
     const ecode = await update({ screen_id: this.state.screen[typeId], id: typeId });
     if (ecode === 0) {
+      notify.show('设置完成。', 'success', 2000);
+
       const willSetIndex = _.indexOf(this.state.willSetScreenTypeIds, typeId);
       this.state.willSetScreenTypeIds.splice(willSetIndex, 1);
 
       const settingIndex = _.indexOf(this.state.settingScreenTypeIds, typeId);
       this.state.settingScreenTypeIds.splice(settingIndex, 1);
+
       this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds, willSetScreenTypeIds: this.state.willSetScreenTypeIds });
     } else {
+      notify.show('设置失败。', 'error', 2000);
+
       const settingIndex = _.indexOf(this.state.settingScreenTypeIds, typeId);
       this.state.settingScreenTypeIds.splice(settingIndex, 1);
       this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds });
@@ -128,6 +134,8 @@ export default class List extends Component {
     const { update } = this.props;
     const ecode = await update({ workflow_id: this.state.workflow[typeId], id: typeId });
     if (ecode === 0) {
+      notify.show('设置完成。', 'success', 2000);
+
       const willSetIndex = _.indexOf(this.state.willSetWorkflowTypeIds, typeId);
       this.state.willSetWorkflowTypeIds.splice(willSetIndex, 1);
 
@@ -136,6 +144,8 @@ export default class List extends Component {
 
       this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds, willSetWorkflowTypeIds: this.state.willSetWorkflowTypeIds });
     } else {
+      notify.show('设置失败。', 'error', 2000);
+
       const settingIndex = _.indexOf(this.state.settingWorkflowTypeIds, typeId);
       this.state.settingWorkflowTypeIds.splice(settingIndex, 1);
       this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds });
