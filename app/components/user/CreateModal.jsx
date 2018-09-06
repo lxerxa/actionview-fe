@@ -14,12 +14,12 @@ const validate = (values, props) => {
 
   if (!values.email) {
     errors.email = '必填';
-  } else if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
+  } else if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(values.email)) {
     errors.email = '格式有误';
   } 
 
   if (values.phone) {
-    if (!/^1(3|4|5|7|8)\d{9}$/.test(values.phone)) {
+    if (!/^1(3|4|5|6|7|8)\d{9}$/.test(values.phone)) {
       errors.phone = '格式有误';
     }
   }
