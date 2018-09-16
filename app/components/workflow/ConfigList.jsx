@@ -130,6 +130,7 @@ export default class ConfigList extends Component {
             { collection[i].actions.map((item, j) =>
               <li key={ j }>
                 <span style={ { color: '#337ab7', cursor: 'pointer' } } onClick={ this.showAction.bind(this, collection[i].id, item.id) } >{ item.name }</span>
+                <span>({ item.id })</span>
                 { item.results.map((item2, j2) =>
                   <span key={ j2 } style={ { fontSize: '10px', fontStyle: 'italic' } }>
                     <br/> >>{ ' ' + _.find(collection, { id: item2.step }).name }

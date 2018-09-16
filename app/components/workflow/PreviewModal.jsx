@@ -35,7 +35,7 @@ export default class PreviewModal extends Component {
       _.map(collection[i].actions, function(v) {
         _.map(v.results, function(v2) {
           graphTxt += collection[i].name;
-          graphTxt += '--' + v.name + '-->';
+          graphTxt += '--' + v.name + '(' + v.id + ')' + '-->';
           graphTxt += _.find(collection, { id: v2.step }).name + ';';
         });
       });
