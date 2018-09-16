@@ -26,6 +26,10 @@ const initialState = {
   historySort: 'desc', 
   historyIndexLoading: false, 
   historyLoaded: false, 
+  gitCommitsCollection: [],
+  gitCommitsSort: 'desc',
+  gitCommitsIndexLoading: false,
+  gitCommitsLoaded: false,
   worklogCollection: [], 
   worklogSort: 'asc', 
   worklogIndexLoading: false, 
@@ -332,6 +336,23 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_HISTORY_SORT:
       state.historyCollection.reverse();
       return { ...state, historySort: state.historySort === 'desc' ? 'asc' : 'desc', historyCollection: _.clone(state.historyCollection) };
+
+    case t.ISSUE_GITCOMMITS_INDEX:
+      return { ...state, gitCommitsIndexLoading: true, gitCommitsCollection: [] };
+
+    case t.ISSUE_GITCOMMITS_INDEX_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.gitCommitsCollection = action.result.data;
+        _.assign(state.options, action.result.options || {});
+      }
+      return { ...state, gitCommitsIndexLoading: false, gitCommitsLoaded: true, ecode: action.result.ecode };
+
+    case t.ISSUE_GITCOMMITS_INDEX_FAIL:
+      return { ...state, gitCommitsIndexLoading: false, error: action.error };
+
+    case t.ISSUE_GITCOMMITS_SORT:
+      state.gitCommitsCollection.reverse();
+      return { ...state, gitCommitsSort: state.gitCommitsSort === 'desc' ? 'asc' : 'desc', gitCommitsCollection: _.clone(state.gitCommitsCollection) };
 
     case t.ISSUE_WORKLOG_INDEX:
       return { ...state, worklogIndexLoading: true, worklogCollection: [] };

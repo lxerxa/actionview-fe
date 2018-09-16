@@ -11,6 +11,7 @@ const moment = require('moment');
 const CreateModal = require('./CreateModal');
 const Comments = require('./comments/Comments');
 const History = require('./history/History');
+const GitCommits = require('./gitcommits/GitCommits');
 const Worklog = require('./worklog/Worklog');
 const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
@@ -117,6 +118,11 @@ export default class DetailBar extends Component {
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
     historyLoaded: PropTypes.bool.isRequired,
+    indexGitCommits: PropTypes.func.isRequired,
+    sortGitCommits: PropTypes.func.isRequired,
+    gitCommitsCollection: PropTypes.array.isRequired,
+    gitCommitsIndexLoading: PropTypes.bool.isRequired,
+    gitCommitsLoaded: PropTypes.bool.isRequired,
     createLink: PropTypes.func.isRequired,
     delLink: PropTypes.func.isRequired,
     linkLoading: PropTypes.bool.isRequired,
@@ -141,9 +147,11 @@ export default class DetailBar extends Component {
     const { 
       indexComments, 
       indexHistory, 
+      indexGitCommits, 
       indexWorklog, 
       commentsLoaded, 
       historyLoaded, 
+      gitCommitsLoaded, 
       worklogLoaded, 
       data } = this.props;
 
@@ -154,6 +162,8 @@ export default class DetailBar extends Component {
       indexHistory(data.id);
     } else if (tabKey === 4 && !worklogLoaded) {
       indexWorklog(data.id);
+    } else if (tabKey === 5 && !gitCommitsLoaded) {
+      indexGitCommits(data.id);
     }
   }
 
@@ -441,6 +451,10 @@ export default class DetailBar extends Component {
       sortHistory, 
       historyCollection, 
       historyIndexLoading, 
+      indexGitCommits,
+      sortGitCommits,
+      gitCommitsCollection,
+      gitCommitsIndexLoading,
       indexWorklog, 
       worklogSort,
       sortWorklog, 
@@ -928,7 +942,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 2 } title='备注'>
               <Comments 
                 i18n={ i18n }
-                currentTime={ options.current_time || '' }
+                currentTime={ options.current_time || 0 }
                 currentUser={ user }
                 permissions={ options.permissions || [] }
                 issue_id={ data.id }
@@ -946,7 +960,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 3 } title='改动纪录'>
               <History 
                 issue_id={ data.id }
-                currentTime={ options.current_time || '' }
+                currentTime={ options.current_time || 0 }
                 currentUser={ user }
                 collection={ historyCollection } 
                 indexHistory={ indexHistory } 
@@ -956,7 +970,7 @@ export default class DetailBar extends Component {
             <Tab eventKey={ 4 } title='工作日志'>
               <Worklog 
                 i18n={ i18n }
-                currentTime={ options.current_time || '' }
+                currentTime={ options.current_time || 0 }
                 currentUser={ user }
                 permissions={ options.permissions || [] }
                 issue={ data }
@@ -971,6 +985,16 @@ export default class DetailBar extends Component {
                 addWorklog={ addWorklog } 
                 editWorklog={ editWorklog } 
                 delWorklog={ delWorklog } />
+            </Tab>
+            <Tab eventKey={ 5 } title='Git提交'>
+              <GitCommits
+                issue_id={ data.id }
+                currentTime={ options.current_time || 0 }
+                currentUser={ user }
+                collection={ gitCommitsCollection }
+                indexGitCommits={ indexGitCommits }
+                sortGitCommits={ sortGitCommits }
+                indexLoading={ gitCommitsIndexLoading } />
             </Tab>
           </Tabs>
         </div>

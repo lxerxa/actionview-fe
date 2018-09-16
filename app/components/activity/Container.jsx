@@ -136,6 +136,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async indexGitCommits(issue_id) {
+    await this.props.issueActions.indexGitCommits(this.pid, issue_id, this.props.issue.gitCommitsSort);
+    return this.props.issue.ecode;
+  }
+
   async doAction(issue_id, workflow_id, action_id, values) {
     await this.props.issueActions.doAction(this.pid, issue_id, workflow_id, action_id, values || {});
     return this.props.issue.ecode;
@@ -236,6 +241,8 @@ export default class Container extends Component {
           delWorklog={ this.delWorklog.bind(this) }
           indexHistory={ this.indexHistory.bind(this) }
           sortHistory={ this.props.issueActions.sortHistory }
+          indexGitCommits={ this.indexGitCommits.bind(this) }
+          sortGitCommits={ this.props.issueActions.sortGitCommits }
           createLink={ this.createLink.bind(this) }
           delLink={ this.delLink.bind(this) }
           doAction={ this.doAction.bind(this) }

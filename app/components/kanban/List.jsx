@@ -79,6 +79,11 @@ export default class List extends Component {
     historyCollection: PropTypes.array.isRequired,
     historyIndexLoading: PropTypes.bool.isRequired,
     historyLoaded: PropTypes.bool.isRequired,
+    indexGitCommits: PropTypes.func.isRequired,
+    sortGitCommits: PropTypes.func.isRequired,
+    gitCommitsCollection: PropTypes.array.isRequired,
+    gitCommitsIndexLoading: PropTypes.bool.isRequired,
+    gitCommitsLoaded: PropTypes.bool.isRequired,
     itemData: PropTypes.object.isRequired,
     project: PropTypes.object,
     options: PropTypes.object,
@@ -294,6 +299,11 @@ export default class List extends Component {
       historyCollection,
       historyIndexLoading,
       historyLoaded,
+      indexGitCommits,
+      sortGitCommits,
+      gitCommitsCollection,
+      gitCommitsIndexLoading,
+      gitCommitsLoaded,
       itemData,
       project,
       options,
@@ -572,6 +582,11 @@ export default class List extends Component {
             historyCollection={ historyCollection }
             historyIndexLoading={ historyIndexLoading }
             historyLoaded={ historyLoaded }
+            indexGitCommits={ indexGitCommits }
+            sortGitCommits={ sortGitCommits }
+            gitCommitsCollection={ gitCommitsCollection }
+            gitCommitsIndexLoading={ gitCommitsIndexLoading }
+            gitCommitsLoaded={ gitCommitsLoaded }
             linkLoading={ linkLoading }
             createLink={ createLink }
             delLink={ delLink }

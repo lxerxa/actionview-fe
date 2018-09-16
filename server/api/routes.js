@@ -1051,4 +1051,11 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/issue/:id/gitcommits', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', committed_at: 1478414469, branch: 'master', sha: '11daffdsaf', message: 'demo-1 test', added: ['aa.php', 'bb.php'], modified:['cc.php', 'dd.php'], removed: ['zz.php'], author:{ id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, repo: { name: 'test', homepage: 'http://test.com'}, branch: 'develop', parent: '11111'}, { id: '2222', committed_at: 1488414469, sha: '13daffdsaf', message: 'demo-1 test2', added: ['aa.php', 'bb.php'], removed: ['zz.php'], author:{ id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, repo: { name: 'test', homepage: 'http://test.com'}, parent: '11111'}, { id: '3333', committed_at: 1528414469, sha: '12affdsaf', message: 'demo-1 test3', added: ['aa33.php', 'bb33.php'], modified:['cc33.php', 'dd.php'], author:{ id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, repo: { name: 'test', homepage: 'http://test.com'}, parent: '11111'}], options:{ current_time: 1520943279 }};
+    return res.status(200).send(results);
+  });
+
 }

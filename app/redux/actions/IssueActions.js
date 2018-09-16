@@ -142,6 +142,17 @@ export function sortHistory() {
   return { type: 'ISSUE_HISTORY_SORT' };
 }
 
+export function indexGitCommits(key, id, sort) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_GITCOMMITS_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/gitcommits?sort=' + (sort || 'desc') })
+  });
+}
+
+export function sortGitCommits() {
+  return { type: 'ISSUE_GITCOMMITS_SORT' };
+}
+
 export function indexWorklog(key, id, sort) {
   return asyncFuncCreator({
     constant: 'ISSUE_WORKLOG_INDEX',
