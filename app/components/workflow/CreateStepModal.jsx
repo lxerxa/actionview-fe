@@ -10,8 +10,6 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (values.name.indexOf(' ') !== -1 || values.name.indexOf('%') !== -1) {
-    errors.name = '步骤名称不能有空格或者%';
   } else if (_.findIndex(props.collection || [], { name: values.name }) !== -1) {
     errors.name = '该步骤已存在';
   }

@@ -24,19 +24,20 @@ export default class PreviewModal extends Component {
 
     const stepNum = collection.length;
 
-    let graphTxt = 'graph LR;S(( ))-->' + (collection.length > 0 ? collection[0].name : '-') + ';';
+    let graphTxt = 'graph LR;S(( ))-->' + (collection.length > 0 ? (collection[0].id + '["' + collection[0].name + '"]') : '-') + ';';
     for (let i = 0; i < stepNum; i++) {
 
       if (collection[i].actions && collection[i].actions.length <= 0) {
-        graphTxt += collection[i].name + ';';
+        graphTxt += collection[i].id + '["' + collection[i].name + '"];';
         continue;
       }
 
       _.map(collection[i].actions, function(v) {
         _.map(v.results, function(v2) {
-          graphTxt += collection[i].name;
-          graphTxt += '--' + v.name + '(' + v.id + ')' + '-->';
-          graphTxt += _.find(collection, { id: v2.step }).name + ';';
+          graphTxt += collection[i].id + '["' + collection[i].name + '"]';
+          graphTxt += '--"' + v.name + '(' + v.id + ')' + '"-->';
+          const destStep = _.find(collection, { id: v2.step });
+          graphTxt += destStep.id + '["' + destStep.name + '"];';
         });
       });
     }
@@ -44,7 +45,7 @@ export default class PreviewModal extends Component {
     if (state) {
       const current_step = _.find(collection, { state });
       if (current_step) {
-        graphTxt += ' style ' + current_step.name + ' fill:#ffffbd;';
+        graphTxt += ' style ' + current_step.id + ' fill:#ffffbd;';
       }
     }
 
