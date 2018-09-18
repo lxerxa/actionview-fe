@@ -26,18 +26,19 @@ export default class PreviewModal extends Component {
 
     let graphTxt = 'graph LR;S(( ))-->' + (collection.length > 0 ? (collection[0].id + '["' + collection[0].name + '"]') : '-') + ';';
     for (let i = 0; i < stepNum; i++) {
+      const stepname = collection[i].name.replace(/"/g, '&quot;');
 
       if (collection[i].actions && collection[i].actions.length <= 0) {
-        graphTxt += collection[i].id + '["' + collection[i].name + '"];';
+        graphTxt += collection[i].id + '["' + stepname + '"];';
         continue;
       }
 
       _.map(collection[i].actions, function(v) {
         _.map(v.results, function(v2) {
-          graphTxt += collection[i].id + '["' + collection[i].name + '"]';
-          graphTxt += '--"' + v.name + '(' + v.id + ')' + '"-->';
+          graphTxt += collection[i].id + '["' + stepname + '"]';
+          graphTxt += '--"' + v.name.replace(/"/g, '&quot;') + '(' + v.id + ')' + '"-->';
           const destStep = _.find(collection, { id: v2.step });
-          graphTxt += destStep.id + '["' + destStep.name + '"];';
+          graphTxt += destStep.id + '["' + destStep.name.replace(/"/g, '&quot;') + '"];';
         });
       });
     }
