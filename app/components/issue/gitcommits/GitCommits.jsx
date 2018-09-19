@@ -84,7 +84,7 @@ export default class GitCommits extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <td style={ { width: '125px' } }>
+                      <td style={ { width: '125px', verticalAlign: 'top' } }>
                         <div style={ { textAlign: 'right', fontWeight: 600, paddingRight: '15px' } }>
                           Message 
                         </div>
