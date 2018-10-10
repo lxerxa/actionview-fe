@@ -23,7 +23,7 @@ class Layout extends Component {
   render() {
     const { session } = this.props;
     return (
-      <div style={ { height: '100%' } }>
+      <div style={ { height: '100%', backgroundColor: '#eee' } }>
         { this.props.children }
         <Notifications />
       </div>

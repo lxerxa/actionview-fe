@@ -357,7 +357,7 @@ export default class List extends Component {
           <NavItem eventKey='account' href='#'>账号资料</NavItem>
           <NavItem eventKey='favorite' href='#'>个人偏好</NavItem>
           <NavItem eventKey='notification' href='#'>消息提醒</NavItem>
-          <NavItem eventKey='record' href='#'>登录日志</NavItem>
+          {/*<NavItem eventKey='record' href='#'>登录日志</NavItem>*/}
         </Nav>
         <BootstrapTable data={ data } bordered={ false } hover trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>

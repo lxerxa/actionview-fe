@@ -544,6 +544,13 @@ table tr:hover .remove-icon{
   border-left: 1px #e8edf3 solid;
 }
 
+.login-form {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(0,0,0,.08), inset 0 0 3px #fff;
+}
+
 .login-form input {
   height: auto;
   margin-top: 25px;
@@ -559,7 +566,6 @@ table tr:hover .remove-icon{
   width: 100%;
   padding: 12px;
   font-size: 19px;
-  font-weight: 600;
   line-height: 20px;
 }
 
