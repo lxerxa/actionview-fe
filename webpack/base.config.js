@@ -33,6 +33,7 @@ export default {
     ],
     externals: {
       'mermaid': 'window.mermaid',
+      'SimpleMDE': 'window.SimpleMDE',
       '$': 'window.$'
     },
     resolve: {

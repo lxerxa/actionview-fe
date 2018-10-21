@@ -159,6 +159,12 @@ const DocumentContainer = (location, cb) => {
   }, 'document')
 };
 
+const WikiContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/wiki/Container'))
+  }, 'document')
+};
+
 export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Login }/>
@@ -190,6 +196,7 @@ export default (
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
         <Route path='document(/:id)' getComponent={ DocumentContainer }/>
+        <Route path='wiki(/:id)(/:fid)' getComponent={ WikiContainer }/>
       </Route>
       <Route path='/admin/project' getComponent={ ProjectContainer }/>
       <Route path='/admin/user' getComponent={ UserContainer }/>

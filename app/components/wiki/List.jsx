@@ -23,15 +23,12 @@ export default class List extends Component {
       editRowId: '',
       editTextShow: false,
       createFolderShow: false,
-      uploader_id: null,
       name: '' };
 
     this.delNotifyClose = this.delNotifyClose.bind(this);
-    this.refresh = this.refresh.bind(this);
-    this.uploadSuccess = this.uploadSuccess.bind(this);
+    this.reload = this.reload.bind(this);
     this.cancelEditRow = this.cancelEditRow.bind(this);
     this.initEditRow = this.initEditRow.bind(this);
-    this.downloadAll = this.downloadAll.bind(this);
   }
 
   static propTypes = {
@@ -46,10 +43,9 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
-    refresh: PropTypes.func.isRequired,
+    reload: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
-    addFile: PropTypes.func.isRequired,
-    createFolder: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -57,9 +53,6 @@ export default class List extends Component {
   componentWillMount() {
     const { index, query={} } = this.props;
     const newQuery = {};
-    if (query.uploader_id) {
-      newQuery.uploader_id = this.state.uploader_id = query.uploader_id;
-    }
     if (query.name) {
       newQuery.name = this.state.name = query.name;
     }
@@ -93,7 +86,7 @@ export default class List extends Component {
     const self = this;
     $('#pname').bind('keypress',function(event){  
       if(event.keyCode == '13') {  
-        self.refresh();
+        self.reload();
       }
     });
   }
@@ -106,7 +99,6 @@ export default class List extends Component {
       this.initEditRow();
     }
 
-    this.state.uploader_id = newQuery.uploader_id || null;
     this.state.name = newQuery.name || '';
   }
 
@@ -125,16 +117,7 @@ export default class List extends Component {
       this.setState({ editRowId: hoverRowId, editTextShow: true });
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
-    } else if (eventKey === 'download') {
-      const url = '/api/project/' + project_key + '/document/' + hoverRowId + '/download';
-      window.open(url, '_blank');
     }
-  }
-
-  downloadAll() {
-    const { project_key, directory } = this.props;
-    const url = '/api/project/' + project_key + '/document/' + directory + '/download';
-    window.open(url, '_blank');
   }
 
   onRowMouseOver(rowData) {
@@ -147,64 +130,13 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
-  refresh() {
-    const { refresh } = this.props;
+  reload() {
+    const { reload } = this.props;
     const query = {};
-    if (this.state.uploader_id) {
-      query.uploader_id = this.state.uploader_id;
-    }
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
-    refresh(query);
-  }
-
-  uploaderChange(newValue) {
-    this.state.uploader_id = newValue;
-    this.refresh();
-  }
-
-  getFileIconCss(fileName) {
-    const newFileName = (fileName || '').toLowerCase();
-    if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
-      return { color: '#4A8FEF', fa: 'fa fa-file-word-o' };
-    } else if (_.endsWith(newFileName, 'xls') || _.endsWith(newFileName, 'xlsx')) {
-      return { color: '#5DB820', fa: 'fa fa-file-excel-o' };
-    } else if (_.endsWith(newFileName, 'ppt') || _.endsWith(newFileName, 'pptx')) {
-      return { color: '#F58F3D', fa: 'fa fa-file-powerpoint-o' };
-    } else if (_.endsWith(newFileName, 'pdf')) {
-      return { color: '#EC5858', fa: 'fa fa-file-pdf-o' };
-    } else if (_.endsWith(newFileName, 'txt')) {
-      return { color: '#4A8FEF', fa: 'fa fa-file-text-o' };
-    } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
-      return { color: '#8082EB', fa: 'fa fa-file-zip-o' };
-    } else if (_.endsWith(newFileName, 'jpeg') || _.endsWith(newFileName, 'jpg') || _.endsWith(newFileName, 'png') || _.endsWith(newFileName, 'gif') || _.endsWith(newFileName, 'bmp')) {
-      return { color: '#F37140', fa: 'fa fa-file-image-o' };
-    } else {
-      return { color: '', fa: 'fa fa-file-o' };
-    }
-  }
-
-  uploadSuccess(localfile, res) {
-    const { addFile } = this.props;
-    if (res.ecode === 0 && res.data) {
-      addFile(res.data);
-    }
-  }
-
-  getFileSize(bytes) {
-    const K = 1024;
-    const M = 1024 * 1024;
-    const G = 1024 * 1024 * 1024;
-    if (bytes < K/10) {
-      return bytes + 'B';
-    } else if (bytes < M/10) {
-      return _.ceil(bytes/K, 1) + 'K';
-    } else if (bytes < G/10) {
-      return _.ceil(bytes/M, 1) + 'M';
-    } else {
-      return _.ceil(bytes/G, 1) + 'G';
-    }
+    reload(query);
   }
 
   render() {
@@ -217,26 +149,13 @@ export default class List extends Component {
       loading, 
       indexLoading, 
       itemLoading, 
-      refresh, 
-      createFolder, 
+      reload, 
+      create, 
       del, 
       update, 
       options, 
       query } = this.props;
     const { createFolderShow, editRowId, editTextShow, hoverRowId, operateShow } = this.state;
-
-    const componentConfig = {
-      showFiletypeIcon: true,
-      postUrl: '/api/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
-    };
-    const djsConfig = {
-      addRemoveLinks: true,
-      maxFilesize: 50
-    };
-    const eventHandlers = {
-      init: dz => this.dropzone = dz,
-      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); } 
-    }
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
@@ -248,7 +167,7 @@ export default class List extends Component {
         name: (
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-arrow-up'></i></span>
-            <Link to={ '/project/' + project_key + '/document' + (parent.id !== '0' ? ( '/' + parent.id ) : '') }>返回上级</Link>
+            <Link to={ '/project/' + project_key + '/wiki' + (parent.id !== '0' ? ( '/' + parent.id ) : '') }>返回上级</Link>
           </div> ),
         operation: (<div/>)
       });
@@ -262,7 +181,7 @@ export default class List extends Component {
             i18n={ i18n }
             loading={ itemLoading }
             data={ {} } 
-            createFolder={ createFolder }
+            create={ create }
             collection={ collection } 
             cancel={ this.cancelEditRow } 
             mode='createFolder'/>, 
@@ -293,11 +212,11 @@ export default class List extends Component {
         name: (
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
-            <Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link>
+            <Link to={ '/project/' + project_key + '/wiki/' + v.id }>{ v.name }</Link>
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === v.id && !itemLoading && options.permissions && (options.permissions.indexOf('download_file') !== -1 || options.permissions.indexOf('manage_project') !== -1) &&
+          { operateShow && hoverRowId === v.id && !itemLoading && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
             <DropdownButton
               pullRight
               bsStyle='link'
@@ -307,8 +226,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` }
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>编辑</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === v.id) ? 'loading' : 'hide' }/>
@@ -319,8 +237,6 @@ export default class List extends Component {
     const files = _.reject(collection, { d: 1 });
     const fileNum = files.length;
     for (let i = 0; i < fileNum; i++) {
-      const iconCss = this.getFileIconCss(files[i].name);
-
       if (editRowId == files[i].id) {
         rows.push({
           id: files[i].id,
@@ -332,8 +248,7 @@ export default class List extends Component {
               collection={ collection } 
               edit={ update }
               cancel={ this.cancelEditRow } 
-              mode='editFile' 
-              fileIconCss={ iconCss }/>,
+              mode='editFile'/>, 
           operation: (<div/>)
         });
         continue;
@@ -343,26 +258,22 @@ export default class List extends Component {
         id: files[i].id,
         name: ( 
           <div> 
-            <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss.fa }></i></span>
-            { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
-              <a href={ '/api/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
-                { files[i].name }
-              </a>
-              :
-              files[i].name }
+            <span style={ { marginRight: '5px', color: '#777', float: 'left', visibility: 'hidden' } }><i className='fa fa-file-text-o'></i></span>
+            <Link to={ '/project/' + project_key + '/wiki/' + (files[i].parent == '0' ? 'root' : files[i].parent)  + '/' + files[i].id }>
+              { files[i].name }
+            </Link>
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
-              <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
-              { files[i].uploader &&
+              <Link to={ '/project/' + project_key + '/wiki' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
+              { files[i].creator &&
               <span style={ { marginRight: '15px', float: 'left' } }>
-                { files[i].uploader.name + '  ' + moment.unix(files[i].uploaded_at).format('YY/MM/DD HH:mm') }
+                { files[i].creator.name + '  ' + moment.unix(files[i].uploaded_at).format('YY/MM/DD HH:mm') }
               </span> }
-              <span style={ { float: 'left' } }>{ this.getFileSize(files[i].size) }</span>
             </span>
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === files[i].id && !itemLoading && options.permissions && (options.permissions.indexOf('download_file') !== -1 || options.permissions.indexOf('remove_file') !== -1 || options.permissions.indexOf('upload_file') !== -1) &&
+          { operateShow && hoverRowId === files[i].id && !itemLoading &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -372,9 +283,9 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
-              { options.permissions && options.permissions.indexOf('download_file') !== -1 && options.permissions.indexOf('upload_file') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
-              { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+              <MenuItem eventKey='checkin'>Check In</MenuItem>
+              <MenuItem eventKey='rename'>编辑</MenuItem>
+              <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -402,9 +313,9 @@ export default class List extends Component {
                   if (i === options.path.length - 1) {
                     return (<Breadcrumb.Item active key={ i }>{ i === 0 ? '根目录' : v.name }</Breadcrumb.Item>);
                   } else if (i === 0) {
-                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document' }>根目录</Link></Breadcrumb.Item>);
+                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/wiki' }>根目录</Link></Breadcrumb.Item>);
                   } else {
-                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
+                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/wiki/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
                   }
                 }) }
               </Breadcrumb>
@@ -416,15 +327,7 @@ export default class List extends Component {
                 style={ { height: '36px' } }
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '文档名称查询...' } />
-            </span>
-            <span style={ { float: 'right', width: '12%', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='上传者'
-                value={ this.state.uploader_id }
-                onChange={ this.uploaderChange.bind(this) }
-                options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
+                placeholder='标题名称查询...' />
             </span>
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
             <span style={ { float: 'right', marginRight: '10px' } }>
@@ -440,18 +343,13 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { !indexLoading && options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
-            <div style={ { marginTop: '15px' } }>
-              <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
-            </div> }
-          <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
-            { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
-            { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && options.path.length > 1 && 
-            <span style={ { marginLeft: '10px' } }>
-              <i className='fa fa-download'></i>
-              <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>
-            </span> }
-          </div>
+          { !indexLoading && options.path && options.path.length === 1 && (!options.home || !options.home.id) && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          <div className='info-col'>
+            <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+            <div className='info-content'>
+              <span>为了项目成员能更好的理解此项目，建议增加 <a href='#'>Home</a> 页面。</span>
+            </div>
+          </div> }
           { this.state.delNotifyShow &&
             <DelNotify
               show

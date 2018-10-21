@@ -106,6 +106,7 @@
     "redux-form": "5.0.0",
     "response-time": "2.3.1",
     "serialize-javascript": "1.2.0",
-    "serve-favicon": "2.3.0"
+    "serve-favicon": "2.3.0",
+    "simplemde": "1.11.2"
   }
 }

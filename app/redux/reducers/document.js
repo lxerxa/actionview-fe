@@ -35,12 +35,11 @@ export default function document(state = initialState, action) {
 
     case t.DOCUMENT_CREATE_FOLDER_SUCCESS:
       if ( action.result.ecode === 0 ) { 
-        console.log(action.result.data);
         state.collection.unshift(action.result.data);
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
-    case t.DOCUMENT_CREATE_FAIL:
+    case t.DOCUMENT_CREATE_FOLDER_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
     case t.DOCUMENT_UPDATE:

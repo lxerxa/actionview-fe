@@ -27,6 +27,7 @@ if (BROWSER) {
   require('react-dropzone-component/styles/filepicker.css');
   require('dropzone/dist/dropzone.css');
   require('cropperjs/dist/cropper.css');
+  require('simplemde/dist/simplemde.min.css');
 }
 
 (async function() {

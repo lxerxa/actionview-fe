@@ -101,9 +101,10 @@ export default class Header extends Component {
       { key: 'issue', name: '问题' }, 
       { key: 'activity', name: '活动' },
       { key: 'kanban', name: '看板' },
-      { key: 'document', name: '文档' },
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
+      { key: 'document', name: '文档' },
+      { key: 'wiki', name: 'Wiki' },
       { key: 'team', name: '项目成员' },
       { key: 'config', name: '配置概要' },
       { key: 'type', name: '问题类型' },
@@ -119,7 +120,7 @@ export default class Header extends Component {
 
     const patten0 = new RegExp('^/myproject$');
     const patten1 = new RegExp('^/project/(\\w+)$');
-    const patten2 = new RegExp('^/project/(\\w+)/(\\w+)(/\\w+)?$');
+    const patten2 = new RegExp('^/project/(\\w+)/(\\w+)(/\\w+)*$');
     const patten3 = new RegExp('^/project/(\\w+)/workflow/(\\w+)$');
     const patten4 = new RegExp('^/admin/project$');
     const patten5 = new RegExp('^/admin/user$');

@@ -89,10 +89,20 @@ export default class Sidebar extends Component {
     } else {
       $('#admin-workflow').removeClass('menu-active');
     }
+    if (/^\/project\/(\w+)\/document(\/\w+)?$/.test(pathname)) {
+      $('#document').addClass('menu-active');
+    } else {
+      $('#document').removeClass('menu-active');
+    }
+    if (/^\/project\/(\w+)\/wiki(\/\w+)*$/.test(pathname)) {
+      $('#wiki').addClass('menu-active');
+    } else {
+      $('#wiki').removeClass('menu-active');
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (/^\/project\/(\w+)(\/(summary|issue|kanban|activity|version|module|team|document)(\/\w+)?)?$/.test(nextProps.pathname)) {
+    if (/^\/project\/(\w+)(\/(summary|issue|kanban|activity|version|module|team|document|wiki)(\/\w+)*)?$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = false;
       this.state.projectPanelShow = true;
       this.state.projectSummaryShow = true;
@@ -182,9 +192,10 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/issue' } activeClassName='menu-active'>问题</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active' id='kanban'>看板</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/activity' } activeClassName='menu-active'>活动</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/document' } activeClassName='menu-active'>文档</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/module' } activeClassName='menu-active'>模块</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/version' } activeClassName='menu-active'>版本</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/document' } activeClassName='menu-active' id='document'>文档</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/wiki' } activeClassName='menu-active' id='wiki'>Wiki</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/team' } activeClassName='menu-active'>成员</Link></li>
             </ul> }
             <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>配置管理</h4>

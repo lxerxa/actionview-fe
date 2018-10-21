@@ -519,7 +519,7 @@ table tr:hover .remove-icon{
 }
 
 .login-panel {
-  width: 365px;
+  width: 375px;
   margin: 0px auto;
   border: none;
   padding: 100px 0;
@@ -546,7 +546,7 @@ table tr:hover .remove-icon{
 
 .login-form {
   background-color: #fff;
-  padding: 15px;
+  padding: 25px;
   border-radius: 4px;
   box-shadow: 0 0 20px rgba(0,0,0,.08), inset 0 0 3px #fff;
 }
@@ -593,7 +593,7 @@ table tr:hover .remove-icon{
 
 .brand {
   text-align: center;
-  padding-top: 25px;
+  padding-top: 20px;
   padding-bottom: 10px;
 }
 
