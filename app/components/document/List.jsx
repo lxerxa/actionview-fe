@@ -21,7 +21,6 @@ export default class List extends Component {
       operateShow: false, 
       hoverRowId: '', 
       editRowId: '',
-      editTextShow: false,
       createFolderShow: false,
       uploader_id: null,
       name: '' };
@@ -69,13 +68,11 @@ export default class List extends Component {
   cancelEditRow() {
     this.setState({ 
       editRowId: '',
-      editTextShow: false,
       createFolderShow: false });
   }
 
   initEditRow() {
     this.state.editRowId = '';
-    this.state.editTextShow = false;
     this.state.createFolderShow = false;
   }
 
@@ -122,7 +119,7 @@ export default class List extends Component {
     await select(hoverRowId);
 
     if (eventKey === 'rename') {
-      this.setState({ editRowId: hoverRowId, editTextShow: true });
+      this.setState({ editRowId: hoverRowId });
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
@@ -223,7 +220,7 @@ export default class List extends Component {
       update, 
       options, 
       query } = this.props;
-    const { createFolderShow, editRowId, editTextShow, hoverRowId, operateShow } = this.state;
+    const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
 
     const componentConfig = {
       showFiletypeIcon: true,

@@ -16,12 +16,13 @@ export default class DelFileModal extends Component {
     close: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
+    wid: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, del, data } = this.props;
-    const ecode = await del(data.field_key, data.id);
+    const { close, del, wid, data } = this.props;
+    const ecode = await del(wid, data.id);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -41,10 +42,11 @@ export default class DelFileModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除文件</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除文档</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除【{ data.name }】此文件？
+          文档被删除后，将不可恢复。<br/>
+          确认要删除【{ data.name }】该文档？<br/>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

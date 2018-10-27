@@ -23,6 +23,7 @@ export default class Container extends Component {
     super(props);
     this.pid = '';
     this.directory = 'root';
+    this.wid = '';
   }
 
   static contextTypes = {
@@ -55,7 +56,7 @@ export default class Container extends Component {
   }
 
   async create(values) {
-    await this.props.actions.create(this.pid, this.directory, values);
+    await this.props.actions.create(this.pid, { ...values, parent: this.directory == 'root' ? '0' : this.directory });
     return this.props.wiki.ecode;
   }
 
@@ -64,18 +65,18 @@ export default class Container extends Component {
     return this.props.wiki.ecode;
   }
 
-  async show(fid, v) {
-    await this.props.actions.show(this.pid, fid, v);
+  async show(wid, v) {
+    await this.props.actions.show(this.pid, wid, v);
     return this.props.wiki.ecode;
   }
 
-  async checkin(fid) {
-    await this.props.actions.checkin(this.pid, fid);
+  async checkin(wid) {
+    await this.props.actions.checkin(this.pid, wid);
     return this.props.wiki.ecode;
   }
 
-  async checkout(fid) {
-    await this.props.actions.checkout(this.pid, fid);
+  async checkout(wid) {
+    await this.props.actions.checkout(this.pid, wid);
     return this.props.wiki.ecode;
   }
 
@@ -85,20 +86,26 @@ export default class Container extends Component {
     return this.props.wiki.ecode;
   }
 
+  async delFile(wid, fid) {
+    const { actions } = this.props;
+    await actions.delFile(this.pid, wid, fid);
+    return this.props.wiki.ecode;
+  }
+
   componentWillMount() {
-    const { params: { key, id, fid } } = this.props;
+    const { params: { key, id, wid } } = this.props;
     this.pid = key;
     this.directory = id || '0';
-    this.fid = fid || '';
+    this.wid = wid || '';
   }
 
   componentWillReceiveProps(nextProps) {
-    const { params: { id, fid } } = nextProps;
-    if (!_.isEqual(this.directory, id)) {
-      this.directory = id || 'root';
+    const { params: { dir, wid } } = nextProps;
+    if (!_.isEqual(this.directory, dir)) {
+      this.directory = dir || 'root';
     }
-    if (!_.isEqual(this.fid, fid)) {
-      this.fid = fid || '';
+    if (!_.isEqual(this.wid, wid)) {
+      this.wid = wid || '';
     }
   }
 
@@ -110,16 +117,18 @@ export default class Container extends Component {
     const { i18n, location: { query={} } } = this.props;
 
     return (
-      this.fid ?
+      this.wid ?
       <Preview
         i18n={ i18n }
         project_key={ this.pid }
-        fid={ this.fid }
+        wid={ this.wid }
         update={ this.update.bind(this) }
         show={ this.show.bind(this) }
         checkin={ this.checkin.bind(this) }
         checkout={ this.checkout.bind(this) }
         del={ this.del.bind(this) }
+        delFile={ this.delFile.bind(this) }
+        addAttachment={ this.props.actions.addAttachment }
         reload={ this.reload.bind(this) } 
         user={ this.props.session.user }
         { ...this.props.wiki }/>
@@ -130,6 +139,7 @@ export default class Container extends Component {
         index={ this.index.bind(this) } 
         reload={ this.reload.bind(this) } 
         create={ this.create.bind(this) } 
+        show={ this.show.bind(this) }
         select={ this.props.actions.select } 
         checkin={ this.checkin.bind(this) }
         checkout={ this.checkout.bind(this) }

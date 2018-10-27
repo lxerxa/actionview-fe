@@ -3,23 +3,23 @@ import { asyncFuncCreator } from '../utils';
 export function index(key, directory, qs) {
   return asyncFuncCreator({
     constant: 'WIKI_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/wiki' + '/' + directory + (qs ? '?' + qs : '') })
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/directory/' + directory + (qs ? '?' + qs : '') })
   });
 }
 
-export function show(key, fid, v) {
+export function show(key, wid, v) {
   return asyncFuncCreator({
     constant: 'WIKI_SHOW',
-    fid,
+    wid,
     v,
-    promise: (client) => client.request({ url: '/project/' + key + '/wiki' + '/file/' + fid + ( v ? ('?v=' + v) : '' ) })
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + wid + ( v ? ('?v=' + v) : '' ) })
   });
 }
 
-export function create(key, directory, values) {
+export function create(key, values) {
   return asyncFuncCreator({
     constant: 'WIKI_CREATE',
-    promise: (client) => client.request({ url: '/project/' + key + '/wiki' + '/' + directory, method: 'post', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki', method: 'post', data: values })
   });
 }
 
@@ -38,20 +38,32 @@ export function del(key, id) {
   });
 }
 
-export function checkin(key, fid) {
+export function checkin(key, wid) {
   return asyncFuncCreator({
     constant: 'WIKI_CHECK_IN',
-    promise: (client) => client.request({ url: '/project/' + key + '/wiki' + '/file/' + fid + '/checkin' })
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + wid + '/checkin' })
   });
 }
 
-export function checkout(key, fid) {
+export function checkout(key, wid) {
   return asyncFuncCreator({
     constant: 'WIKI_CHECK_OUT',
-    promise: (client) => client.request({ url: '/project/' + key + '/wiki' + '/file/' + fid + '/checkout' })
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + wid + '/checkout' })
   });
 }
 
 export function select(id) {
   return { type: 'WIKI_SELECT', id: id };
+}
+
+export function addAttachment(file) {
+  return { type: 'WIKI_ATTACHMENT_ADD', file };
+}
+
+export function delFile(key, wid, fid) {
+  return asyncFuncCreator({
+    constant: 'WIKI_ATTACHMENT_DELETE',
+    id: fid,
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + wid + '/file/' + fid, method: 'delete' })
+  });
 }

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Panel, FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
@@ -10,8 +10,13 @@ import { notify } from 'react-notify-toast';
 const $ = require('$');
 const moment = require('moment');
 const DelNotify = require('./DelNotify');
+const CreateModal = require('./CreateModal');
+const EditModal = require('./EditModal');
 const EditRow = require('./EditRow');
 const img = require('../../assets/images/loading.gif');
+const SimpleMDE = require('SimpleMDE');
+
+let simplemde = {};
 
 export default class List extends Component {
   constructor(props) {
@@ -21,11 +26,15 @@ export default class List extends Component {
       operateShow: false, 
       hoverRowId: '', 
       editRowId: '',
-      editTextShow: false,
       createFolderShow: false,
+      isCreateHome: false,
+      createModalShow: false,
+      editeModalShow: false,
       name: '' };
 
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.createModalClose = this.createModalClose.bind(this);
+    this.editModalClose = this.editModalClose.bind(this);
     this.reload = this.reload.bind(this);
     this.cancelEditRow = this.cancelEditRow.bind(this);
     this.initEditRow = this.initEditRow.bind(this);
@@ -36,8 +45,10 @@ export default class List extends Component {
     project_key: PropTypes.string.isRequired,
     directory: PropTypes.string.isRequired,
     options: PropTypes.object,
+    user: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
+    item: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -45,8 +56,11 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     reload: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
+    show: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    checkout: PropTypes.func.isRequired,
+    checkin: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -62,13 +76,11 @@ export default class List extends Component {
   cancelEditRow() {
     this.setState({ 
       editRowId: '',
-      editTextShow: false,
       createFolderShow: false });
   }
 
   initEditRow() {
     this.state.editRowId = '';
-    this.state.editTextShow = false;
     this.state.createFolderShow = false;
   }
 
@@ -76,10 +88,12 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
-  edit(id) {
-    this.setState({ editModalShow: true });
-    const { select } = this.props;
-    select(id);
+  createModalClose() {
+    this.setState({ createModalShow: false });
+  }
+
+  editModalClose() {
+    this.setState({ editModalShow: false });
   }
 
   componentDidMount() {
@@ -110,13 +124,29 @@ export default class List extends Component {
 
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { select, project_key } = this.props;
+    const { select, project_key, checkin, checkout } = this.props;
     await select(hoverRowId);
 
-    if (eventKey === 'rename') {
-      this.setState({ editRowId: hoverRowId, editTextShow: true });
+    if (eventKey === 'checkin') {
+      const ecode = await checkin(hoverRowId);
+      if (ecode !== 0) {
+        notify.show('文档加锁失败。', 'error', 2000);
+      } else {
+        notify.show('已加锁。', 'success', 2000);
+      }
+    } else if (eventKey === 'checkout') {
+      const ecode = await checkout(hoverRowId);
+      if (ecode !== 0) {
+        notify.show('文档解锁失败。', 'error', 2000);
+      } else {
+        notify.show('已解锁。', 'success', 2000);
+      }
+    } else if (eventKey === 'edit') {
+      this.setState({ editModalShow: true });
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
+    } else if (eventKey === 'rename') {
+      this.setState({ editRowId: hoverRowId });
     }
   }
 
@@ -146,16 +176,33 @@ export default class List extends Component {
       directory,
       collection, 
       selectedItem, 
+      item, 
       loading, 
       indexLoading, 
       itemLoading, 
       reload, 
+      show,
       create, 
       del, 
       update, 
       options, 
+      user, 
       query } = this.props;
-    const { createFolderShow, editRowId, editTextShow, hoverRowId, operateShow } = this.state;
+    const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
+
+    let contents = '';
+    let homeHeader = '';
+    const filepreviewDOM = document.getElementById('homepreview');
+    if (filepreviewDOM && options.home && options.home.contents) {
+      simplemde = new SimpleMDE({ element: filepreviewDOM, autoDownloadFontAwesome: false });
+      contents = simplemde.markdown(options.home.contents);
+      homeHeader = (
+        <span style={ { fontWeight: 200, fontSize: '14px' } }>
+          <i className='fa fa-file-text-o'></i>
+          <span style={ { marginLeft: '8px' } }><Link to={ '/project/' + project_key + '/wiki/root/' + options.home.id }>Home</Link></span>
+          <span style={ { float: 'right', fontWeight: 200, fontSize: '14px' } }>最近修改：{ options.home.editor && options.home.editor.name ? options.home.editor.name : (options.home.creator && options.home.creator.name || '') }于 { options.home.updated_at ? moment.unix(options.home.updated_at).format('YYYY/MM/DD HH:mm') : moment.unix(options.home.created_at).format('YYYY/MM/DD HH:mm') }</span>
+        </span>);
+    }
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
@@ -179,12 +226,11 @@ export default class List extends Component {
         name: 
           <EditRow 
             i18n={ i18n }
-            loading={ itemLoading }
+            loading={ loading }
             data={ {} } 
             create={ create }
             collection={ collection } 
-            cancel={ this.cancelEditRow } 
-            mode='createFolder'/>, 
+            cancel={ this.cancelEditRow }/>, 
         operation: (<div/>)
       });
     }
@@ -197,12 +243,11 @@ export default class List extends Component {
           name: 
             <EditRow 
               i18n={ i18n }
-              loading={ itemLoading }
+              loading={ loading }
               data={ selectedItem } 
               collection={ collection } 
               edit={ update }
-              cancel={ this.cancelEditRow } 
-              mode='editFolder'/>, 
+              cancel={ this.cancelEditRow }/>, 
           operation: (<div/>)
         });
         return;
@@ -226,7 +271,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` }
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>编辑</MenuItem> } 
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === v.id) ? 'loading' : 'hide' }/>
@@ -237,43 +282,30 @@ export default class List extends Component {
     const files = _.reject(collection, { d: 1 });
     const fileNum = files.length;
     for (let i = 0; i < fileNum; i++) {
-      if (editRowId == files[i].id) {
-        rows.push({
-          id: files[i].id,
-          name: 
-            <EditRow 
-              i18n={ i18n }
-              loading={ itemLoading }
-              data={ selectedItem } 
-              collection={ collection } 
-              edit={ update }
-              cancel={ this.cancelEditRow } 
-              mode='editFile'/>, 
-          operation: (<div/>)
-        });
-        continue;
-      }
-
       rows.push({
         id: files[i].id,
         name: ( 
           <div> 
-            <span style={ { marginRight: '5px', color: '#777', float: 'left', visibility: 'hidden' } }><i className='fa fa-file-text-o'></i></span>
+            <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className='fa fa-file-text-o'></i></span>
             <Link to={ '/project/' + project_key + '/wiki/' + (files[i].parent == '0' ? 'root' : files[i].parent)  + '/' + files[i].id }>
               { files[i].name }
             </Link>
+            { !_.isEmpty(files[i].attachments) &&
+            <span style={ { marginLeft: '8px' } } title={ files[i].attachments.length + '个附件' }><i className='fa fa-paperclip'></i></span> }
+            { !_.isEmpty(files[i].checkin) &&
+            <span style={ { marginLeft: '8px', color: '#f0ad4e' } } title={ '该文档被' + ( files[i].checkin.user ? (files[i].checkin.user.id == user.id ? '我' : (files[i].checkin.user.name || '')) : '' ) + '于 ' + ( files[i].checkin.at ? moment.unix(files[i].checkin.at).format('YYYY/MM/DD HH:mm') : '' ) + ' 锁定。' }><i className='fa fa-lock'></i></span> }
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
               <Link to={ '/project/' + project_key + '/wiki' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
               { files[i].creator &&
               <span style={ { marginRight: '15px', float: 'left' } }>
-                { files[i].creator.name + '  ' + moment.unix(files[i].uploaded_at).format('YY/MM/DD HH:mm') }
+                { files[i].creator.name + '  ' + moment.unix(files[i].created_at).format('YY/MM/DD HH:mm') }
               </span> }
             </span>
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === files[i].id && !itemLoading &&
+          { operateShow && hoverRowId === files[i].id && !itemLoading && !(!_.isEmpty(files[i].checkin) && files[i].checkin.user.id !== user.id) &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -283,8 +315,9 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='checkin'>Check In</MenuItem>
-              <MenuItem eventKey='rename'>编辑</MenuItem>
+              <MenuItem eventKey='edit'>编辑</MenuItem>
+              { _.isEmpty(files[i].checkin) && <MenuItem eventKey='checkin'>加锁</MenuItem> }
+              { !_.isEmpty(files[i].checkin) && files[i].checkin.user.id == user.id && <MenuItem eventKey='checkout'>解锁</MenuItem> }
               <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
@@ -329,12 +362,15 @@ export default class List extends Component {
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder='标题名称查询...' />
             </span>
-            { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-            <span style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
-                <i className='fa fa-plus'></i>&nbsp;新建目录
+            <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
+              <Button onClick={ () => { this.setState({ createModalShow: true, isCreateHome: false }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                <i className='fa fa-pencil'></i>&nbsp;新建文档
               </Button>
-            </span> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+              <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                <i className='fa fa-plus'></i>&nbsp;创建目录
+              </Button> }
+            </ButtonGroup>
           </FormGroup>
         </div>
         <div>
@@ -343,19 +379,49 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { !indexLoading && options.path && options.path.length === 1 && (!options.home || !options.home.id) && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          { !indexLoading && directory === '0' && (!options.home || !options.home.id) && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
-              <span>为了项目成员能更好的理解此项目，建议增加 <a href='#'>Home</a> 页面。</span>
+              <span>为了项目成员能更好的理解此项目，建议增加 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createModalShow: true, isCreateHome: true }); } }>Home</a> 页面。</span>
             </div>
           </div> }
+          { !indexLoading && options.home && options.home.id &&
+          <Panel header={ homeHeader } style={ { marginTop: '10px' } }>
+            <div dangerouslySetInnerHTML= { { __html: contents } } />
+          </Panel> }
+          <div style={ { marginBottom: '40px' } }>
+            <div style={ { display: 'none' } }>
+              <textarea name='field' id='homepreview'></textarea>
+            </div>
+          </div>
           { this.state.delNotifyShow &&
             <DelNotify
               show
               close={ this.delNotifyClose }
               data={ selectedItem }
               del={ del }/> }
+          { this.state.createModalShow &&
+            <CreateModal
+              i18n={ i18n }
+              show
+              isHome={ this.state.isCreateHome }
+              close={ this.createModalClose }
+              path={ options.path || [] }
+              loading={ loading }
+              create={ create }/> }
+          { this.state.editModalShow &&
+            <EditModal
+              i18n={ i18n }
+              show
+              get={ show }
+              close={ this.editModalClose }
+              path={ options.path || [] }
+              itemLoading={ itemLoading }
+              loading={ loading }
+              wid={ selectedItem.id }
+              data={ item }
+              update={ update }/> }
         </div>
       </div>
     );

@@ -213,9 +213,16 @@ export default class List extends Component {
         principal: (
           options.permissions && options.permissions.indexOf('manage_project') === -1 ?
           <div>
+            { collection[i].principal && collection[i].principal.name ? 
+            <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
+              <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } }>
+                { collection[i].principal.name }
+              </Label>
+            </div>
+            :
             <span>
-            { collection[i].principal && collection[i].principal.name || '-' } 
-            </span>
+              <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
+            </span> }
           </div> 
           :
           <div>

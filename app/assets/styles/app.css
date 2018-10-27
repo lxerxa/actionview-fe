@@ -935,3 +935,7 @@ table tr:hover .remove-icon{
   float: left;
   white-space: nowrap;
 }
+
+.CodeMirror, .CodeMirror-scroll {
+  min-height: 415px;
+}

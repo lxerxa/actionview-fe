@@ -18,6 +18,7 @@ if (BROWSER) {
   require('react-select/dist/react-select.css');
   require('react-bootstrap-table/css/react-bootstrap-table.css');
   require('react-datetime/css/react-datetime.css');
+  require('simplemde/dist/simplemde.min.css');
   require('rc-tabs/assets/index.css');
   require('assets/styles/layout.css');
   require('assets/styles/app.css');
@@ -27,7 +28,6 @@ if (BROWSER) {
   require('react-dropzone-component/styles/filepicker.css');
   require('dropzone/dist/dropzone.css');
   require('cropperjs/dist/cropper.css');
-  require('simplemde/dist/simplemde.min.css');
 }
 
 (async function() {

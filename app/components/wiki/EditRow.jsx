@@ -9,25 +9,23 @@ const img = require('../../assets/images/loading.gif');
 export default class EditRow extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: '', ext: '' };
+    this.state = { name: '' };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    mode: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
-    fileIconCss: PropTypes.string,
     cancel: PropTypes.func.isRequired,
-    createFolder: PropTypes.func,
+    create: PropTypes.func,
     edit: PropTypes.func,
     data: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired
   }
 
   async confirm() {
-    const { i18n: { errMsg }, mode, createFolder, edit, data, collection, cancel } = this.props;
+    const { i18n: { errMsg }, create, edit, data, collection, cancel } = this.props;
 
     const reg = /^[^@\/\'\\\"#$%&\^\*]+$/;
     if (!reg.test(this.state.name)) {
@@ -37,11 +35,7 @@ export default class EditRow extends Component {
     }
 
     let repeatChk = false;
-    if (mode === 'createFolder' || mode === 'editFolder') {
-      repeatChk = _.findIndex(_.filter(collection, { d: 1 }), { name: this.state.name }) !== -1;
-    } else {
-      repeatChk = _.findIndex(_.reject(collection, { d: 1 }), { name: this.state.ext ? (this.state.name + '.' + this.state.ext) : this.state.name }) !== -1;
-    }
+    repeatChk = _.findIndex(_.filter(collection, { d: 1 }), { name: this.state.name }) !== -1;
     if (repeatChk) {
       notify.show('名称重复。', 'error', 2000);
       $('#input_nm').select();
@@ -49,8 +43,8 @@ export default class EditRow extends Component {
     }
 
     let ecode = 0;
-    if (mode === 'createFolder') {
-      ecode = await createFolder({ name: this.state.name });
+    if (create) {
+      ecode = await create({ name: this.state.name, d: 1 });
       if (ecode === 0) {
         notify.show('创建完成。', 'success', 2000);
         cancel();
@@ -59,7 +53,7 @@ export default class EditRow extends Component {
         $('#input_nm').select();
       }
     } else {
-      ecode = await edit(data.id, { name: this.state.ext ? (this.state.name + '.' + this.state.ext) : this.state.name })
+      ecode = await edit(data.id, { name: this.state.name })
       if (ecode === 0) {
         notify.show('编辑完成。', 'success', 2000);
         cancel();
@@ -76,16 +70,10 @@ export default class EditRow extends Component {
   }
 
   componentWillMount() {
-    const { data, mode } = this.props;
+    const { data } = this.props;
 
     let name = data.name || '';
-    if (mode == 'editFile') {
-      const lastInd = name.lastIndexOf('.');
-      this.state.oldname = this.state.name = name.substring(0, lastInd);
-      this.state.ext = name.substring(lastInd + 1);
-    } else {
-      this.state.oldname = this.state.name = name;
-    }
+    this.state.oldname = this.state.name = name;
   }
 
   componentDidMount() {
@@ -93,14 +81,11 @@ export default class EditRow extends Component {
   }
 
   render() {
-    const { data, mode, fileIconCss, loading } = this.props;
+    const { data, loading } = this.props;
 
     return (
       <div>
-        { (mode === 'createFolder' || mode === 'editFolder') &&
-          <span style={ { marginRight: '5px', color: 'gold' } }><i className='fa fa-folder'></i></span> }
-        { mode === 'editFile' && 
-          <span style={ { marginRight: '5px', color: '#777' } }><i className={ fileIconCss.fa }></i></span> }
+        <span style={ { marginRight: '5px', color: 'gold' } }><i className='fa fa-folder'></i></span>
         <FormControl 
           type='text' 
           id='input_nm' 

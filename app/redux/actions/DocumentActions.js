@@ -10,14 +10,14 @@ export function getOptions(key) {
 export function index(key, directory, qs) {
   return asyncFuncCreator({
     constant: 'DOCUMENT_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/document' + '/' + directory + (qs ? '?' + qs : '') })
+    promise: (client) => client.request({ url: '/project/' + key + '/document/directory' + '/' + directory + (qs ? '?' + qs : '') })
   });
 }
 
-export function createFolder(key, directory, values) {
+export function createFolder(key, values) {
   return asyncFuncCreator({
     constant: 'DOCUMENT_CREATE_FOLDER',
-    promise: (client) => client.request({ url: '/project/' + key + '/document' + '/' + directory + '/directory', method: 'post', data: values })
+    promise: (client) => client.request({ url: '/project/' + key + '/document' + '/directory', method: 'post', data: values })
   });
 }
 

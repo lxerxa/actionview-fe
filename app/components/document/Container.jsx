@@ -47,7 +47,7 @@ export default class Container extends Component {
   }
 
   async createFolder(values) {
-    await this.props.actions.createFolder(this.pid, this.directory, values);
+    await this.props.actions.createFolder(this.pid, { ...values, parent: this.directory });
     return this.props.document.ecode;
   }
 

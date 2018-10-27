@@ -196,7 +196,7 @@ export default (
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
         <Route path='document(/:id)' getComponent={ DocumentContainer }/>
-        <Route path='wiki(/:id)(/:fid)' getComponent={ WikiContainer }/>
+        <Route path='wiki(/:dir)(/:wid)' getComponent={ WikiContainer }/>
       </Route>
       <Route path='/admin/project' getComponent={ ProjectContainer }/>
       <Route path='/admin/user' getComponent={ UserContainer }/>

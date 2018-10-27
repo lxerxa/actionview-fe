@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { Button, Label, DropdownButton, MenuItem, Breadcrumb, Table } from 'react-bootstrap';
+import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -9,6 +10,8 @@ const loadingImg = require('../../assets/images/loading.gif');
 const SimpleMDE = require('SimpleMDE');
 
 const DelNotify = require('./DelNotify');
+const DelFileModal = require('./DelFileModal');
+const EditModal = require('./EditModal');
 const HistoryView = require('./HistoryView');
 
 let simplemde = {};
@@ -16,10 +19,20 @@ let simplemde = {};
 export default class Preview extends Component {
   constructor(props) {
     super(props);
-    this.state = { operate: '', version: '', delNotifyShow: false, historyViewShow: false };
+    this.state = { 
+      operate: '', 
+      version: '', 
+      delNotifyShow: false, 
+      editModalShow: false, 
+      historyViewShow: false, 
+      selectedFile: {},
+      delFileShow: false };
     this.refresh = this.refresh.bind(this);
     this.checkin = this.checkin.bind(this);
     this.checkout = this.checkout.bind(this);
+    this.uploadSuccess = this.uploadSuccess.bind(this);
+    this.downloadAll = this.downloadAll.bind(this);
+    this.delFileModalClose = this.delFileModalClose.bind(this);
   }
 
   static propTypes = {
@@ -27,7 +40,7 @@ export default class Preview extends Component {
     options: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     project_key: PropTypes.string.isRequired,
-    fid: PropTypes.string.isRequired,
+    wid: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     item: PropTypes.object.isRequired,
@@ -36,12 +49,14 @@ export default class Preview extends Component {
     checkout: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
+    delFile: PropTypes.func.isRequired,
+    addAttachment: PropTypes.func.isRequired,
     reload: PropTypes.func.isRequired
   }
 
   async componentWillMount() {
-    const { show, fid } = this.props;
-    const ecode = await show(fid);
+    const { show, wid } = this.props;
+    const ecode = await show(wid);
     if (ecode !== 0) {
       notify.show('文档信息获取失败。', 'error', 2000);
     }
@@ -49,8 +64,8 @@ export default class Preview extends Component {
 
   async refresh() {
     this.state.operate = 'refresh';
-    const { show, fid } = this.props;
-    const ecode = await show(fid, this.state.version);
+    const { show, wid } = this.props;
+    const ecode = await show(wid);
     if (ecode !== 0) {
       notify.show('文档信息获取失败。', 'error', 2000);
     } else {
@@ -60,8 +75,8 @@ export default class Preview extends Component {
 
   async checkout() {
     this.state.operate = 'checkout';
-    const { checkout, fid } = this.props;
-    const ecode = await checkout(fid);
+    const { checkout, wid } = this.props;
+    const ecode = await checkout(wid);
     if (ecode !== 0) {
       notify.show('文档解锁失败。', 'error', 2000);
     } else {
@@ -71,8 +86,8 @@ export default class Preview extends Component {
 
   async checkin() {
     this.state.operate = 'checkin';
-    const { checkin, fid } = this.props;
-    const ecode = await checkin(fid);
+    const { checkin, wid } = this.props;
+    const ecode = await checkin(wid);
     if (ecode !== 0) {
       notify.show('文档加锁失败。', 'error', 2000);
     } else {
@@ -82,8 +97,8 @@ export default class Preview extends Component {
 
   async selectVersion(v) {
     this.state.version = v;
-    const { show, fid } = this.props;
-    const ecode = await show(fid, v);
+    const { show, wid } = this.props;
+    const ecode = await show(wid, v);
     if (ecode !== 0) {
       notify.show('文档信息获取失败。', 'error', 2000);
     } else {
@@ -95,8 +110,27 @@ export default class Preview extends Component {
     this.setState({ delNotifyShow: false });
   }
 
+  editModalClose() {
+    this.setState({ editModalShow: false });
+  }
+
   historyViewClose() {
     this.setState({ historyViewShow: false });
+  }
+
+  delFileNotify(id, name) {
+    this.setState({ delFileShow: true, selectedFile: { id, name } });
+  }
+
+  delFileModalClose() {
+    this.setState({ delFileShow: false });
+  }
+
+  uploadSuccess(localfile, res) {
+    const { addAttachment } = this.props;
+    if (res.ecode === 0 && res.data) {
+      addAttachment(res.data);
+    }
   }
 
   getFileIconCss(fileName) {
@@ -118,11 +152,43 @@ export default class Preview extends Component {
     }
   }
 
+  downloadAll() {
+    const { project_key, wid } = this.props;
+    const url = '/api/project/' + project_key + '/wiki/' + wid + '/download';
+    window.open(url, '_blank');
+  }
+
   render() {
-    const { options, user, project_key, loading, itemLoading, item, update, del, reload } = this.props;
+    const { 
+      i18n, 
+      options, 
+      user, 
+      project_key, 
+      loading, 
+      itemLoading, 
+      item, 
+      wid,
+      update, 
+      del, 
+      delFile,
+      show, 
+      reload } = this.props;
 
     if (!itemLoading && _.isEmpty(item)) {
       return (<div/>);
+    }
+
+    const componentConfig = {
+      showFiletypeIcon: true,
+      postUrl: '/api/project/' + project_key + '/wiki/' + item.id + '/upload'
+    };
+    const djsConfig = {
+      addRemoveLinks: true,
+      maxFilesize: 50
+    };
+    const eventHandlers = {
+      init: dz => this.dropzone = dz,
+      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); }
     }
 
     let contents = '';
@@ -164,10 +230,14 @@ export default class Preview extends Component {
             </Breadcrumb>
           </span>
           { !_.isEmpty(item.attachments) &&
-          <span style={ { paddingTop: '8px', float: 'left' } } title={ item.attachments.length + '个附件' }><i className='fa fa-paperclip'></i></span> }
+          <a href='#attachmentlist'>
+            <span style={ { paddingTop: '8px', float: 'left' } } title={ item.attachments.length + '个附件' }>
+              <i className='fa fa-paperclip'></i>
+            </span>
+          </a> }
           { (!isCheckin || (isCheckin && item.checkin.user.id === user.id)) && !(this.state.operate === 'delete' && itemLoading) &&
           <span style={ { float: 'right' } }>
-            <Button style={ { marginRight: '5px' } } disabled={ itemLoading }><i className='fa fa-pencil'></i> 编辑</Button>
+            <Button style={ { marginRight: '5px' } } disabled={ itemLoading } onClick={ () => { this.setState({ operate: 'edit', editModalShow: true }); } }><i className='fa fa-pencil'></i> 编辑</Button>
             <Button bsStyle='link' style={ { fontSize: '14px', marginRight: '5px' } } disabled={ itemLoading } onClick={ () => { this.setState({ operate: 'delete', delNotifyShow: true }); } }>删除</Button>
           </span> }
           { this.state.operate === 'delete' && itemLoading &&
@@ -181,6 +251,7 @@ export default class Preview extends Component {
         </div> }
         { item.id &&
         <div style={ { lineHeight: 2, borderBottom: '1px solid #e6ebf1', paddingLeft: '5px', paddingBottom: '10px', fontSize: '12px' } }>
+          <span>创建者：{ item.creator && item.creator.name || '' }，</span>
           { isNewestVer ? 
           <span style={ { color: '#707070' } }>该版本为最新版，{ item.editor && item.editor.name ? item.editor.name : (item.creator && item.creator.name || '') }于 { item.updated_at ? moment.unix(item.updated_at).format('YYYY/MM/DD HH:mm') : moment.unix(item.created_at).format('YYYY/MM/DD HH:mm') } 编辑。</span>
           :
@@ -210,44 +281,79 @@ export default class Preview extends Component {
           <div style={ { display: 'none' } }>
             <textarea name='field' id='filepreview'></textarea>
           </div>
-          <div dangerouslySetInnerHTML= { { __html: contents } } />
+          { item.id && contents && 
+          <div dangerouslySetInnerHTML= { { __html: contents } } style={ { minHeight: '200px' } }/> }
+          { item.id && !contents && 
+          <div style={ { height: '200px', textAlign: 'center' } }>
+            <div style={ { paddingTop: '80px', color: '#999' } }>暂无内容</div> 
+          </div> }
         </div>
-        { item.attachments && item.attachments.length > 0 &&
+        { item.id && item.attachments && item.attachments.length > 0 &&
         <div style={ { marginBottom: '0px' } }>
-          <Table condensed hover responsive>
+          <Table id='attachmentlist' condensed hover responsive>
             <tbody>
             { _.map(item.attachments, (f, i) =>
               <tr key={ i }>
                 <td>
                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ this.getFileIconCss(f.name) }></i></span>
-                  <a href={ '/api/project/' + project_key + '/file/' + f.id } download={ f.name }>{ f.name }</a>
+                  <a href={ '/api/project/' + project_key + '/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
+                 </td>
+                 <td width='10%'>
+                   <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YY/MM/DD HH:mm') }</div>
+                 </td>
+                 <td width='2%'>
+                   <span className='remove-icon' onClick={ this.delFileNotify.bind(this, f.id, f.name) }>
+                     <i className='fa fa-trash'></i>
+                   </span>
                  </td>
               </tr>) }
             </tbody>
           </Table>
         </div> }
+        { item.id && options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
+        <div style={ { marginTop: '0px' } }>
+          <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+        </div> }
         { item.attachments && item.attachments.length > 1 &&
-        <div>
-          <span>共计 { item.attachments.length } 个附件。</span>
-          <span style={ { marginLeft: '10px' } }>
-            <i className='fa fa-download'></i>
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>
-          </span>
+        <div style={ { marginLeft: '5px', marginTop: '10px' } }>
+          <i className='fa fa-download'></i>
+          <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>
         </div> }
         <div style={ { marginBottom: '40px' } }/>
         { this.state.delNotifyShow &&
-          <DelNotify
-            show
-            close={ this.delNotifyClose.bind(this) }
-            data={ item }
-            reload = { reload }
-            del={ del }/> }
+        <DelNotify
+          show
+          close={ this.delNotifyClose.bind(this) }
+          data={ item }
+          reload = { reload }
+          del={ del }/> }
         { this.state.historyViewShow &&
-          <HistoryView
-            show
-            close={ this.historyViewClose.bind(this) }
-            select={ this.selectVersion.bind(this) }
-            data={ item }/> }
+        <HistoryView
+          show
+          close={ this.historyViewClose.bind(this) }
+          select={ this.selectVersion.bind(this) }
+          data={ item }/> }
+        { this.state.editModalShow &&
+        <EditModal
+          i18n={ i18n }
+          show
+          get={ show }
+          close={ this.editModalClose.bind(this) }
+          path={ options.path || [] }
+          itemLoading={ itemLoading }
+          loading={ loading }
+          wid={ wid }
+          data={ item }
+          update={ update }/> }
+        { this.state.delFileShow &&
+        <DelFileModal
+          show
+          close={ this.delFileModalClose }
+          del={ delFile }
+          data={ this.state.selectedFile }
+          loading={ loading }
+          wid={ wid }
+          i18n={ i18n }/> }
       </div>
     );
   }

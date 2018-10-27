@@ -217,7 +217,7 @@ export default function(router) {
   router.get('/project/:key/module', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', principal_id:'111', defaultAssignee_id:'111'},{ id: '546763', name: '需求', principal_id:'222', defaultAssignee_id:'111', default: true },{ id: '546762', name: '缺陷', principal_id:'111', defaultAssignee_id:'111'},{ id: '2323', name: '子任务'}], options:{ users: [{ id: '111', name:'刘老幺', email:'liulaoyao@chinamobile.com' }, { id: '222', name:'葛老十', email: 'gelaoshi@chinamobile.com' }] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', principal: { name: 'lihui', id: '111'}, defaultAssignee_id:'111'},{ id: '546763', name: '需求', principal_id:'222', defaultAssignee_id:'111', default: true },{ id: '546762', name: '缺陷', principal_id:'111', defaultAssignee_id:'111'},{ id: '2323', name: '子任务'}], options:{ users: [{ id: '111', name:'刘老幺', email:'liulaoyao@chinamobile.com' }, { id: '222', name:'葛老十', email: 'gelaoshi@chinamobile.com' }] }};
     return res.status(200).send(results);
   });
 
@@ -1030,21 +1030,21 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
-  router.post('/project/:key/document/0/directory', function(req, res) {
+  router.post('/project/:key/document/directory', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ecode: 0, data: { name: '测试文档', id: '6666', d:1 } };
+    const results={ecode: 0, data: { name: '测试文档', id: '6666', d:1, parent: '1111' } };
     return res.status(200).send(results);
   });
 
-  router.get('/project/:key/document/111', function(req, res) {
+  router.get('/project/:key/document/directory/111', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results={ecode: 0, data:[{name: 'aaaa.pdf', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123, parent: '1111', index: '1111', versions: []}, {name: 'bbbb.pdf', id: '2222', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 64652, parent: '1111', index: '2222', versions: []}, {name: 'cccc.xlsx', id: '3333', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 28, parent: '1111', index: '1111', versions: []}, {name: 'eeee.jpg', id: '4444', uploader: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: 10240, parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '1111', name: 'aaaa'}] }};
     return res.status(200).send(results);
   });
 
-  router.get('/project/:key/document/0', function(req, res) {
+  router.get('/project/:key/document/directory/0', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results={ecode: 0, data:[{ name: '设计文档', id: '5555', d:1 }, {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123, parent: '0', index: '1111', versions: []}, {name: 'bbbb.docx', id: '2222', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 10240, parent: '0', index: '2222', versions: []}, {name: 'cccc.xlsx', id: '3333', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 2346111, parent: '0', index: '1111', versions: []}, {name: 'eeee.jpg', id: '4444', uploader: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: 1233, parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
@@ -1053,34 +1053,48 @@ export default function(router) {
   /******************document*****************/
 
   /******************wiki*****************/
-  router.get('/project/:key/wiki/0', function(req, res) {
+  router.get('/project/:key/wiki/directory/0', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ecode: 0, data:[{ name: '设计文档', id: '5555', d:1 }, {name: 'aaaa', id: '1111', creator: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123, parent: '0', index: '1111', versions: []}, {name: 'bbbb', id: '2222', creator: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 10240, parent: '0', index: '2222', versions: []}, {name: 'cccc', id: '3333', creator: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 2346111, parent: '0', index: '1111', versions: []}, {name: 'eeee', id: '4444', creator: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: 1233, parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
+    const results={ecode: 0, data:[{ name: '设计文档', id: '5555', d:1 }, {name: 'aaaa', id: '1111', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, size: 123, parent: '0', index: '1111', versions: []}, {name: 'bbbb', id: '2222', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, size: 10240, parent: '0', attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123 } ], checkin: { user: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, at: 1533636580 }, index: '2222', versions: []}, {name: 'cccc', id: '3333', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, size: 2346111, parent: '0', index: '1111', versions: []}, {name: 'eeee', id: '4444', creator: { id: '2222', name: '王老师' }, created_at: 1533636586, size: 1233, parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}], home: { id: '1111', contents: '## aaa\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586 } }};
     return res.status(200).send(results);
   });
-  router.get('/project/:key/wiki/111', function(req, res) {
+  router.get('/project/:key/wiki/directory/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ecode: 0, data:[{name: 'aaaa', id: '1111', creator: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123, parent: '1111', index: '1111', versions: []}, {name: 'bbbb', id: '2222', creator: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 64652, parent: '1111', index: '2222', versions: []}, {name: 'cccc', id: '3333', creator: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 28, parent: '1111', index: '1111', versions: []}, {name: 'eeee', id: '4444', creator: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: 10240, parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '1111', name: 'aaaa'}] }};
+    const results={ecode: 0, data:[{name: 'aaaa', id: '1111', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, size: 123, parent: '1111', index: '1111', versions: []}, {name: 'bbbb', id: '2222', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, size: 64652, parent: '1111', index: '2222', versions: []}, {name: 'cccc', id: '3333', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, size: 28, parent: '1111', index: '1111', versions: []}, {name: 'eeee', id: '4444', creator: { id: '2222', name: '王老师' }, created_at: 1533636586, size: 10240, parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '1111', name: 'aaaa'}] }};
     return res.status(200).send(results);
   });
-  router.get('/project/:key/wiki/file/:fid/checkout', function(req, res) {
+  router.get('/project/:key/wiki/:id/checkout', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results={ecode: 0, data: { id: '1111', name: '测试测试测试', contents:'## aaa', updated_at: 1533636580, version: 2, editor: {id: '2222', name: '王老师', 'email': 'aa@aa.com'}, attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123 } ], history:[{ id: '1111', version: 2, editor: { id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, updated_at: 1533636580 }, { id: '2222', version: 1, editor: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, updated_at: 1533636586 }] }, options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
     return res.status(200).send(results);
   });
-  router.get('/project/:key/wiki/file/:fid/checkin', function(req, res) {
+  router.get('/project/:key/wiki/:id/checkin', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results={ecode: 0, data: { id: '1111', name: '测试测试测试', contents:'## aaa', updated_at: 1533636580, version: 2, editor: {id: '2222', name: '王老师', 'email': 'aa@aa.com'}, checkin: { user: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, at: 1533636580 }, attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123 } ], history:[{ id: '1111', version: 2, editor: { id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, updated_at: 1533636580 }, { id: '2222', version: 1, editor: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, updated_at: 1533636586 }] }, options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
     return res.status(200).send(results);
   });
-  router.get('/project/:key/wiki/file/:fid', function(req, res) {
+  router.get('/project/:key/wiki/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ecode: 0, data: { id: '1111', name: '测试测试测试', contents:'## aaa\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb', updated_at: 1533636580, version: 3, editor: {id: '2222', name: '王老师', 'email': 'aa@aa.com'}, checkin2: { user: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, at: 1533636580 }, attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123 } ], history:[{ id: '1111', version: 2, editor: { id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, updated_at: 1533636580 }, { id: '2222', version: 1, editor: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, updated_at: 1533636586 }] }, options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
+    const results={ecode: 0, data: { id: '1111', name: '测试测试测试', contents:'## aaa\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, updated_at: 1533636580, version: 3, editor: {id: '2222', name: '王老师', 'email': 'aa@aa.com'}, checkin2: { user: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, at: 1533636580 }, attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123 } ], history:[{ id: '1111', version: 2, editor: { id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, updated_at: 1533636580 }, { id: '2222', version: 1, editor: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, updated_at: 1533636586 }] }, options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/wiki', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '4444', name: '测试测试测试2222', contents:'## aaa', updated_at: 1533636580, version: 1, creator: {id: '2222', name: '王老师', 'email': 'aa@aa.com' }, created_at: 1533636586 } };
+    return res.status(200).send(results);
+  });
+
+  router.put('/project/:key/wiki/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '4444', name: '测试测试测试2222', contents:'## aaa', updated_at: 1533636580, version: 1, creator: {id: '2222', name: '王老师', 'email': 'aa@aa.com' }, created_at: 1533636586 } };
     return res.status(200).send(results);
   });
 
