@@ -257,7 +257,7 @@ export default class Preview extends Component {
           :
           <span style={ { color: '#707070' } }>当前版本 - { item.version }，{ item.editor && item.editor.name || '' }于 { item.updated_at ? moment.unix(item.updated_at).format('YYYY/MM/DD HH:mm') : '' } 编辑。</span> }
 
-          { item.history && item.history.length > 1 &&
+          { item.history && item.history.length > 0 &&
           <span style={ { color: '#707070' } }>共 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ historyViewShow: true }); } }>{ item.history.length + 1 }</a> 个版本。</span> }
 
           { item.checkin && !_.isEmpty(item.checkin) && 
@@ -282,7 +282,7 @@ export default class Preview extends Component {
             <textarea name='field' id='filepreview'></textarea>
           </div>
           { item.id && contents && 
-          <div dangerouslySetInnerHTML= { { __html: contents } } style={ { minHeight: '200px' } }/> }
+          <div dangerouslySetInnerHTML= { { __html: contents } }/> }
           { item.id && !contents && 
           <div style={ { height: '200px', textAlign: 'center' } }>
             <div style={ { paddingTop: '80px', color: '#999' } }>暂无内容</div> 
@@ -296,7 +296,7 @@ export default class Preview extends Component {
               <tr key={ i }>
                 <td>
                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ this.getFileIconCss(f.name) }></i></span>
-                  <a href={ '/api/project/' + project_key + '/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
+                  <a href={ '/api/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
                  </td>
                  <td width='10%'>
                    <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YY/MM/DD HH:mm') }</div>
