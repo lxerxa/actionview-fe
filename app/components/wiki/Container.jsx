@@ -80,6 +80,16 @@ export default class Container extends Component {
     return this.props.wiki.ecode;
   }
 
+  async copy(values) {
+    await this.props.actions.copy(this.pid, values);
+    return this.props.wiki.ecode;
+  }
+
+  async move(values) {
+    await this.props.actions.move(this.pid, values);
+    return this.props.wiki.ecode;
+  }
+
   async del(id) {
     const { actions } = this.props;
     await actions.del(this.pid, id);
@@ -93,9 +103,9 @@ export default class Container extends Component {
   }
 
   componentWillMount() {
-    const { params: { key, id, wid } } = this.props;
+    const { params: { key, dir, wid } } = this.props;
     this.pid = key;
-    this.directory = id || '0';
+    this.directory = dir || '0';
     this.wid = wid || '';
   }
 
@@ -143,6 +153,8 @@ export default class Container extends Component {
         select={ this.props.actions.select } 
         checkin={ this.checkin.bind(this) }
         checkout={ this.checkout.bind(this) }
+        copy={ this.copy.bind(this) } 
+        move={ this.move.bind(this) } 
         update={ this.update.bind(this) } 
         del={ this.del.bind(this) } 
         query={ query }

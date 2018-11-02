@@ -10,6 +10,8 @@ import { notify } from 'react-notify-toast';
 const $ = require('$');
 const moment = require('moment');
 const DelNotify = require('./DelNotify');
+const CopyModal = require('./CopyModal');
+const MoveModal = require('./MoveModal');
 const EditRow = require('./EditRow');
 const img = require('../../assets/images/loading.gif');
 
@@ -17,6 +19,8 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      copyModalShow: false,
+      moveModalShow: false,
       delNotifyShow: false, 
       operateShow: false, 
       hoverRowId: '', 
@@ -50,6 +54,8 @@ export default class List extends Component {
     addFile: PropTypes.func.isRequired,
     createFolder: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    copy: PropTypes.func.isRequired,
+    move: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -120,6 +126,10 @@ export default class List extends Component {
 
     if (eventKey === 'rename') {
       this.setState({ editRowId: hoverRowId });
+    } else if (eventKey === 'copy') {
+      this.setState({ copyModalShow: true });
+    } else if (eventKey === 'move') {
+      this.setState({ moveModalShow: true });
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
@@ -218,6 +228,8 @@ export default class List extends Component {
       createFolder, 
       del, 
       update, 
+      copy, 
+      move, 
       options, 
       query } = this.props;
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
@@ -306,6 +318,7 @@ export default class List extends Component {
               onSelect={ this.operateSelect.bind(this) }>
               { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === v.id) ? 'loading' : 'hide' }/>
@@ -371,6 +384,7 @@ export default class List extends Component {
               onSelect={ this.operateSelect.bind(this) }>
               { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
               { options.permissions && options.permissions.indexOf('download_file') !== -1 && options.permissions.indexOf('upload_file') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
+              { options.permissions && options.permissions.indexOf('download_file') !== -1 && options.permissions.indexOf('upload_file') !== -1 && options.permissions.indexOf('remove_file') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
               { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
@@ -449,12 +463,29 @@ export default class List extends Component {
               <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>
             </span> }
           </div>
+          { this.state.copyModalShow &&
+          <CopyModal 
+            show
+            project_key={ project_key }
+            close={ () => { this.setState({ copyModalShow: false }); } }
+            copy={ copy }
+            data={ selectedItem }
+            i18n={ i18n }/> }
+          { this.state.moveModalShow &&
+          <MoveModal
+            show
+            project_key={ project_key }
+            close={ () => { this.setState({ moveModalShow: false }); } }
+            move={ move }
+            data={ selectedItem }
+            curPath={ directory }
+            i18n={ i18n }/> }
           { this.state.delNotifyShow &&
-            <DelNotify
-              show
-              close={ this.delNotifyClose }
-              data={ selectedItem }
-              del={ del }/> }
+          <DelNotify
+            show
+            close={ this.delNotifyClose }
+            data={ selectedItem }
+            del={ del }/> }
         </div>
       </div>
     );

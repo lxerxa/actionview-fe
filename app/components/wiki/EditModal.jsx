@@ -11,7 +11,7 @@ let simplemde = {};
 export default class EditModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, name: '', contents: '', touched: false };
+    this.state = { ecode: 0, editable: true, name: '', contents: '', touched: false };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -20,10 +20,12 @@ export default class EditModal extends Component {
     i18n: PropTypes.object.isRequired,
     path: PropTypes.array.isRequired,
     wid: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired,
+    checkin: PropTypes.func.isRequired,
     get: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired
   }
@@ -50,12 +52,22 @@ export default class EditModal extends Component {
   }
 
   async componentWillMount() {
-    const { get, wid } = this.props;
+    const { checkin, get, wid } = this.props;
+    // lock the wiki
+    await checkin(wid);
+
     const ecode = await get(wid);
     if (ecode !== 0) {
       notify.show('获取文档信息失败。', 'error', 2000);
     } else {
-      const { data } = this.props; 
+      const { data, user } = this.props; 
+      if (_.isEmpty(data.checkin)) {
+        notify.show('其他人可能正在编辑该文档，暂不能编辑提交。', 'warning', 2000);
+        this.state.editable = false;
+      } else if (data.checkin.user.id !== user.id) {
+        notify.show(data.checkin.user.name + ' 正编辑该文档，暂不能编辑提交。', 'warning', 2000);
+        this.state.editable = false;
+      }
       this.setState({ name: data.name || '' });
       simplemde.value(data.contents || '');
     }
@@ -103,7 +115,7 @@ export default class EditModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
+          <Button disabled={ !this.state.editable || loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>

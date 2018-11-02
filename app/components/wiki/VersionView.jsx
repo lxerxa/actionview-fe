@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 const moment = require('moment');
 
-export default class HistoryViewModal extends Component {
+export default class VersionViewModal extends Component {
   constructor(props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
@@ -13,7 +13,7 @@ export default class HistoryViewModal extends Component {
   static propTypes = {
     close: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired
+    versions: PropTypes.array.isRequired
   }
 
   handleCancel() {
@@ -22,7 +22,7 @@ export default class HistoryViewModal extends Component {
   }
 
   render() {
-    const { data, select, close } = this.props;
+    const { versions, select, close } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -38,19 +38,7 @@ export default class HistoryViewModal extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div style={ { float: 'left' } }>
-                   <a href='#'>{ data.version }</a>
-                  </div>
-                </td>
-                <td>
-                  <div style={ { float: 'left' } }>
-                    { data.editor && data.editor.name || '' }于 { data.updated_at && moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') || '' } 编辑。
-                  </div>
-                </td>
-              </tr>
-            { _.map(data.history || [], (v, key) => {
+            { _.map(versions || [], (v, key) => {
               return (<tr key={ key }>
                 <td>
                   <div style={ { float: 'left' } }>

@@ -11,6 +11,8 @@ const $ = require('$');
 const moment = require('moment');
 const DelNotify = require('./DelNotify');
 const CreateModal = require('./CreateModal');
+const CopyModal = require('./CopyModal');
+const MoveModal = require('./MoveModal');
 const EditModal = require('./EditModal');
 const EditRow = require('./EditRow');
 const img = require('../../assets/images/loading.gif');
@@ -22,6 +24,8 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      copyModalShow: false,
+      moveModalShow: false,
       delNotifyShow: false, 
       operateShow: false, 
       hoverRowId: '', 
@@ -59,6 +63,8 @@ export default class List extends Component {
     show: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    copy: PropTypes.func.isRequired,
+    move: PropTypes.func.isRequired,
     checkout: PropTypes.func.isRequired,
     checkin: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
@@ -143,6 +149,10 @@ export default class List extends Component {
       }
     } else if (eventKey === 'edit') {
       this.setState({ editModalShow: true });
+    } else if (eventKey === 'copy') {
+      this.setState({ copyModalShow: true });
+    } else if (eventKey === 'move') {
+      this.setState({ moveModalShow: true });
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'rename') {
@@ -181,10 +191,13 @@ export default class List extends Component {
       indexLoading, 
       itemLoading, 
       reload, 
+      checkin,
       show,
       create, 
       del, 
       update, 
+      copy, 
+      move, 
       options, 
       user, 
       query } = this.props;
@@ -272,6 +285,7 @@ export default class List extends Component {
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === v.id) ? 'loading' : 'hide' }/>
@@ -291,7 +305,9 @@ export default class List extends Component {
               { files[i].name }
             </Link>
             { !_.isEmpty(files[i].attachments) &&
-            <span style={ { marginLeft: '8px' } } title={ files[i].attachments.length + '个附件' }><i className='fa fa-paperclip'></i></span> }
+            <span style={ { marginLeft: '8px' } } title={ files[i].attachments.length + '个附件' }>
+              <i className='fa fa-paperclip'></i>
+            </span> } 
             { !_.isEmpty(files[i].checkin) &&
             <span style={ { marginLeft: '8px', color: '#f0ad4e' } } title={ '该文档被' + ( files[i].checkin.user ? (files[i].checkin.user.id == user.id ? '我' : (files[i].checkin.user.name || '')) : '' ) + '于 ' + ( files[i].checkin.at ? moment.unix(files[i].checkin.at).format('YYYY/MM/DD HH:mm') : '' ) + ' 锁定。' }><i className='fa fa-lock'></i></span> }
             <span style={ { float: 'right' } }>
@@ -318,6 +334,8 @@ export default class List extends Component {
               <MenuItem eventKey='edit'>编辑</MenuItem>
               { _.isEmpty(files[i].checkin) && <MenuItem eventKey='checkin'>加锁</MenuItem> }
               { !_.isEmpty(files[i].checkin) && files[i].checkin.user.id == user.id && <MenuItem eventKey='checkout'>解锁</MenuItem> }
+              <MenuItem eventKey='copy'>复制</MenuItem>
+              <MenuItem eventKey='move'>移动</MenuItem>
               <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
@@ -379,7 +397,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { !indexLoading && directory === '0' && (!options.home || !options.home.id) && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          { !indexLoading && directory === '0' && _.isEmpty(query) && (!options.home || !options.home.id) && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
@@ -388,7 +406,7 @@ export default class List extends Component {
           </div> }
           { !indexLoading && options.home && options.home.id &&
           <Panel header={ homeHeader } style={ { marginTop: '10px' } }>
-            <div dangerouslySetInnerHTML= { { __html: contents } } />
+            <div id='homewiki-contents' dangerouslySetInnerHTML= { { __html: contents } } />
           </Panel> }
           <div style={ { marginBottom: '40px' } }>
             <div style={ { display: 'none' } }>
@@ -415,13 +433,32 @@ export default class List extends Component {
               i18n={ i18n }
               show
               get={ show }
+              checkin={ checkin }
               close={ this.editModalClose }
               path={ options.path || [] }
               itemLoading={ itemLoading }
               loading={ loading }
               wid={ selectedItem.id }
+              user={ user }
               data={ item }
               update={ update }/> }
+          { this.state.copyModalShow &&
+            <CopyModal
+              show
+              project_key={ project_key }
+              close={ () => { this.setState({ copyModalShow: false }); } }
+              copy={ copy }
+              data={ selectedItem }
+              i18n={ i18n }/> }
+          { this.state.moveModalShow &&
+            <MoveModal
+              show
+              project_key={ project_key }
+              close={ () => { this.setState({ moveModalShow: false }); } }
+              move={ move }
+              data={ selectedItem }
+              curPath={ directory }
+              i18n={ i18n }/> }
         </div>
       </div>
     );

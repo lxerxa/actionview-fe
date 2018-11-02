@@ -63,6 +63,26 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_UPDATE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
+    case t.DOCUMENT_COPY:
+    case t.DOCUMENT_MOVE:
+      return { ...state, loading: true };
+
+    case t.DOCUMENT_COPY_SUCCESS:
+      if ( action.result.ecode === 0 && action.isSamePath ) {
+        state.collection.push(action.result.data);
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.DOCUMENT_MOVE_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.collection = _.reject(state.collection, { id: action.result.data.id });
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.DOCUMENT_COPY_FAIL:
+    case t.DOCUMENT_MOVE_FAIL:
+      return { ...state, loading: false, error: action.error };
+
     case t.DOCUMENT_SELECT:
       const el = _.find(state.collection, { id: action.id });
       return { ...state, selectedItem: el };

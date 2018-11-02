@@ -56,6 +56,16 @@ export default class Container extends Component {
     return this.props.document.ecode;
   }
 
+  async copy(values) {
+    await this.props.actions.copy(this.pid, values);
+    return this.props.document.ecode;
+  }
+
+  async move(values) {
+    await this.props.actions.move(this.pid, values);
+    return this.props.document.ecode;
+  }
+
   async del(id) {
     const { actions } = this.props;
     await actions.del(this.pid, id);
@@ -93,6 +103,8 @@ export default class Container extends Component {
         select={ this.props.actions.select } 
         addFile={ this.props.actions.addFile } 
         update={ this.update.bind(this) } 
+        copy={ this.copy.bind(this) } 
+        move={ this.move.bind(this) } 
         del={ this.del.bind(this) } 
         query={ query }
         i18n={ i18n }

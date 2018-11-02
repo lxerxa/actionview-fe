@@ -79,13 +79,6 @@ html.docs .doc-container>div>div {
   position: relative
 }
 
-html.docs .doc-container h3 {
-  background-color: #eee;
-  margin: 0 -999rem;
-  padding: 2.0rem 999rem;
-  overflow-y: hidden
-}
-
 html.docs .doc-main .head {
   background-color: #f5f5f5;
   width: 100%;

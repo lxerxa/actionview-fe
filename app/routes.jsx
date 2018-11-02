@@ -162,7 +162,7 @@ const DocumentContainer = (location, cb) => {
 const WikiContainer = (location, cb) => {
   require.ensure([], require => {
     cb(null, require('./components/wiki/Container'))
-  }, 'document')
+  }, 'wiki')
 };
 
 export default (

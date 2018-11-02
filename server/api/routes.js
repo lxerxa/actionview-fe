@@ -1009,6 +1009,13 @@ export default function(router) {
   /******************kanban***************/
 
   /******************document*****************/
+  router.get('/project/:key/document/search/path', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data: [{id: '1111', 'name': '/aaa/bbb/ccc/ccc'}, {id: '2222', 'name': '/1111/2222/333/444'}]};
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/document/options', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
@@ -1080,7 +1087,7 @@ export default function(router) {
   router.get('/project/:key/wiki/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ecode: 0, data: { id: '1111', name: '测试测试测试', contents:'## aaa\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, updated_at: 1533636580, version: 3, editor: {id: '2222', name: '王老师', 'email': 'aa@aa.com'}, checkin2: { user: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, at: 1533636580 }, attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123 } ], history:[{ id: '1111', version: 2, editor: { id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, updated_at: 1533636580 }, { id: '2222', version: 1, editor: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, updated_at: 1533636586 }] }, options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
+    const results={ecode: 0, data: { id: '1111', name: '测试测试测试', contents:'## aaa\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb\n## bb', creator: { id: '1111', name: '刘老幺' }, created_at: 1533636586, updated_at: 1533636580, version: 3, editor: {id: '2222', name: '王老师', 'email': 'aa@aa.com'}, checkin2: { user: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, at: 1533636580 }, attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '刘老幺' }, uploaded_at: 1533636586, size: 123 } ], versions:[{ id: '1111', version: 2, editor: { id: '111', name: '刘老幺', 'email': 'aa@aa.com' }, updated_at: 1533636580 }, { id: '2222', version: 1, editor: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, updated_at: 1533636586 }] }, options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
     return res.status(200).send(results);
   });
 

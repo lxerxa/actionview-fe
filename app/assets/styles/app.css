@@ -546,7 +546,7 @@ table tr:hover .remove-icon{
 
 .login-form {
   background-color: #fff;
-  padding: 25px;
+  padding: 20px;
   border-radius: 4px;
   box-shadow: 0 0 20px rgba(0,0,0,.08), inset 0 0 3px #fff;
 }
@@ -938,4 +938,16 @@ table tr:hover .remove-icon{
 
 .CodeMirror, .CodeMirror-scroll {
   min-height: 415px;
+}
+
+.CodeMirror p > img {
+  max-width: 100%
+}
+
+#wiki-contents p > img {
+  max-width: 100%
+}
+
+#homewiki-contents p > img {
+  max-width: 100%
 }

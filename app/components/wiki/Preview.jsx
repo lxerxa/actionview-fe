@@ -12,7 +12,7 @@ const SimpleMDE = require('SimpleMDE');
 const DelNotify = require('./DelNotify');
 const DelFileModal = require('./DelFileModal');
 const EditModal = require('./EditModal');
-const HistoryView = require('./HistoryView');
+const VersionView = require('./VersionView');
 
 let simplemde = {};
 
@@ -24,7 +24,7 @@ export default class Preview extends Component {
       version: '', 
       delNotifyShow: false, 
       editModalShow: false, 
-      historyViewShow: false, 
+      versionViewShow: false, 
       selectedFile: {},
       delFileShow: false };
     this.refresh = this.refresh.bind(this);
@@ -114,8 +114,8 @@ export default class Preview extends Component {
     this.setState({ editModalShow: false });
   }
 
-  historyViewClose() {
-    this.setState({ historyViewShow: false });
+  versionViewClose() {
+    this.setState({ versionViewShow: false });
   }
 
   delFileNotify(id, name) {
@@ -171,6 +171,7 @@ export default class Preview extends Component {
       update, 
       del, 
       delFile,
+      checkin,
       show, 
       reload } = this.props;
 
@@ -199,7 +200,7 @@ export default class Preview extends Component {
     }
 
     let isNewestVer = true;
-    if (item.history && item.version <= item.history.length) {
+    if (item.versions && item.version < item.versions.length) {
       isNewestVer = false;
     }
 
@@ -257,8 +258,8 @@ export default class Preview extends Component {
           :
           <span style={ { color: '#707070' } }>当前版本 - { item.version }，{ item.editor && item.editor.name || '' }于 { item.updated_at ? moment.unix(item.updated_at).format('YYYY/MM/DD HH:mm') : '' } 编辑。</span> }
 
-          { item.history && item.history.length > 0 &&
-          <span style={ { color: '#707070' } }>共 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ historyViewShow: true }); } }>{ item.history.length + 1 }</a> 个版本。</span> }
+          { item.versions && item.versions.length > 1 &&
+          <span style={ { color: '#707070' } }>共 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ versionViewShow: true }); } }>{ item.versions.length }</a> 个版本。</span> }
 
           { item.checkin && !_.isEmpty(item.checkin) && 
           <span style={ { marginLeft: '8px', color: '#f0ad4e' } }><i className='fa fa-lock'></i> 该文档被{ item.checkin.user ? (item.checkin.user.id == user.id ? '我' : (item.checkin.user.name || '')) : '' }于 { item.checkin.at ? moment.unix(item.checkin.at).format('YYYY/MM/DD HH:mm') : '' } 锁定。</span> }
@@ -282,7 +283,7 @@ export default class Preview extends Component {
             <textarea name='field' id='filepreview'></textarea>
           </div>
           { item.id && contents && 
-          <div dangerouslySetInnerHTML= { { __html: contents } }/> }
+          <div id='wiki-contents' dangerouslySetInnerHTML= { { __html: contents } }/> }
           { item.id && !contents && 
           <div style={ { height: '200px', textAlign: 'center' } }>
             <div style={ { paddingTop: '80px', color: '#999' } }>暂无内容</div> 
@@ -327,16 +328,18 @@ export default class Preview extends Component {
           data={ item }
           reload = { reload }
           del={ del }/> }
-        { this.state.historyViewShow &&
-        <HistoryView
+        { this.state.versionViewShow &&
+        <VersionView
           show
-          close={ this.historyViewClose.bind(this) }
+          close={ this.versionViewClose.bind(this) }
           select={ this.selectVersion.bind(this) }
-          data={ item }/> }
+          versions={ item.versions || [] }/> }
         { this.state.editModalShow &&
         <EditModal
           i18n={ i18n }
           show
+          user={ user }
+          checkin={ checkin }
           get={ show }
           close={ this.editModalClose.bind(this) }
           path={ options.path || [] }

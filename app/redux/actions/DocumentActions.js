@@ -36,6 +36,21 @@ export function del(key, id) {
   });
 }
 
+export function copy(key, values) {
+  return asyncFuncCreator({
+    constant: 'DOCUMENT_COPY',
+    isSamePath: values.src_path === values.dest_path,
+    promise: (client) => client.request({ url: '/project/' + key + '/document/copy', method: 'post', data: values })
+  });
+}
+
+export function move(key, values) {
+  return asyncFuncCreator({
+    constant: 'DOCUMENT_MOVE',
+    promise: (client) => client.request({ url: '/project/' + key + '/document/move', method: 'post', data: values })
+  });
+}
+
 export function select(id) {
   return { type: 'DOCUMENT_SELECT', id: id };
 }

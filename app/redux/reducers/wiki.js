@@ -36,7 +36,7 @@ export default function wiki(state = initialState, action) {
 
     case t.WIKI_CREATE_SUCCESS:
       if ( action.result.ecode === 0 ) { 
-        state.collection.unshift(action.result.data);
+        state.collection.push(action.result.data);
         if (action.result.data.d !== 1 && action.result.data.name.toLowerCase() === 'home' && (!state.options.home || !state.options.home.id)) {
           state.options.home = action.result.data;
         }
@@ -57,12 +57,20 @@ export default function wiki(state = initialState, action) {
         }
         state.item = action.result.data;
 
-        if (state.options.home && state.options.home.id === action.result.data.id) {
-          if (action.result.data.name.toLowerCase() === 'home') {
-            state.options.home = action.result.data;
-          } else {
-            state.options.home = {};
+        if (action.result.data.d === 1) {
+          return { ...state, loading: false, ecode: action.result.ecode };
+        }
+
+        if (state.options.home && state.options.home.id) {
+          if (state.options.home.id === action.result.data.id) {
+            if (action.result.data.name.toLowerCase() === 'home') {
+              state.options.home = action.result.data;
+            } else {
+              state.options.home = {};
+            }
           }
+        } else if (action.result.data.name.toLowerCase() === 'home') {
+          state.options.home = action.result.data;
         }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
@@ -106,6 +114,26 @@ export default function wiki(state = initialState, action) {
     case t.WIKI_CHECK_IN_FAIL:
     case t.WIKI_CHECK_OUT_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.WIKI_COPY:
+    case t.WIKI_MOVE:
+      return { ...state, loading: true };
+
+    case t.WIKI_COPY_SUCCESS:
+      if ( action.result.ecode === 0 && action.isSamePath ) {
+        state.collection.push(action.result.data);
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.WIKI_MOVE_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.collection = _.reject(state.collection, { id: action.result.data.id });
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.WIKI_COPY_FAIL:
+    case t.WIKI_MOVE_FAIL:
+      return { ...state, loading: false, error: action.error };
 
     case t.WIKI_SELECT:
       const el = _.find(state.collection, { id: action.id });

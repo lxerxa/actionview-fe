@@ -6,53 +6,58 @@ import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 
-const validate = (values, props) => {
+const validate = (values) => {
   const errors = {};
-  if (!values.parent_id) {
-    errors.parent_id = '必填';
+  if (!values.dest_path) {
+    errors.dest_path = '必填';
   }
   return errors;
 };
 
 @reduxForm({
-  form: 'move',
-  fields: [ 'parent_id' ],
+  form: 'move_file',
+  fields: [ 'id', 'dest_path' ],
   validate
 })
-export default class MoveModal extends Component {
+export default class CopyModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, initilizedFlag: false };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    options: PropTypes.object.isRequired,
-    project: PropTypes.object.isRequired,
-    issue: PropTypes.object.isRequired,
+    project_key: PropTypes.string.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    move: PropTypes.func.isRequired,
-    close: PropTypes.func.isRequired
+    close: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
+    curPath: PropTypes.string.isRequired,
+    move: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, move, close, issue } = this.props;
-    const ecode = await move(issue.id, { ...values, parent_id: values.parent_id && values.parent_id.id || '' });
+    const { values, move, data, close } = this.props;
+    const ecode = await move({ id: data.id, dest_path: values.dest_path && values.dest_path.id || data.parent });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
       notify.show('移动完成。', 'success', 2000);
-    } else { 
+    } else {
       this.setState({ ecode: ecode });
     }
+  }
+
+  handleEntry() {
+    $('input[name=name]').select();
   }
 
   handleCancel() {
@@ -64,52 +69,53 @@ export default class MoveModal extends Component {
     close();
   }
 
-  async searchIssue(input) {
+  async searchPath(input) {
     input = input.toLowerCase();
     if (!input) {
       return { options: [] };
     }
 
-    const { issue, options: { types=[] }, project } = this.props;
+    const { project_key, data, curPath } = this.props;
 
     const api = new ApiClient;
-    const limit = 10;
-    const results = await api.request( { url: '/project/' + project.key + '/issue/search?s=' + input + '&type=standard' + '&limit=' + limit } );
+    const limit = 20;
+    const results = await api.request( { url: '/project/' + project_key + '/document/search/path?s=' + input + ( data.d === 1 ? ('&moved_path=' + data.id) : '' ) } );
 
     const options = [];
     if (results.data.length > 0) {
       _.map(results.data, (v) => {
-        if (v.id != issue.parent_id) {
-          options.push({ id: v.id, name: _.find(types, { id: v.type }).name + '/' + v.no + ' - ' + v.title });
+        if (v.id === curPath) {
+          return;
         }
+        options.push({ id: v.id, name: v.name });
       });
     }
     return { options };
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { parent_id }, handleSubmit, invalid, submitting, issue } = this.props;
+    const { i18n: { errMsg }, fields: { id, dest_path }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal { ...this.props } bsSize='large' onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '移动子任务 - ' + issue.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>移动{ data.d === 1 ? '目录' : '文档' } - { data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ parent_id.touched && parent_id.error ? 'error' : '' }>
+          <FormGroup validationState={ dest_path.touched && dest_path.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>移动到</ControlLabel>
-            <Select.Async 
-              clearable={ false } 
-              disabled={ submitting } 
-              options={ [] } 
-              value={ parent_id.value } 
-              onChange={ (newValue) => { parent_id.onChange(newValue) } } 
-              valueKey='id' 
-              labelKey='name' 
-              loadOptions={ this.searchIssue.bind(this) } 
-              placeholder='输入问题号或名称'/>
-            { parent_id.touched && parent_id.error && <HelpBlock style={ { float: 'right' } }>{ parent_id.error }</HelpBlock> }
+            <Select.Async
+              clearable={ false }
+              disabled={ submitting }
+              options={ [] }
+              value={ dest_path.value }
+              onChange={ (newValue) => { dest_path.onChange(newValue) } }
+              valueKey='id'  
+              labelKey='name'
+              loadOptions={ this.searchPath.bind(this) }
+              placeholder='输入路径名称'/>
+            { dest_path.touched && dest_path.error && <HelpBlock style={ { float: 'right' } }>{ dest_path.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

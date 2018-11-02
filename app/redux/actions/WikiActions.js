@@ -52,6 +52,21 @@ export function checkout(key, wid) {
   });
 }
 
+export function copy(key, values) {
+  return asyncFuncCreator({
+    constant: 'WIKI_COPY',
+    isSamePath: values.src_path === values.dest_path,
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/copy', method: 'post', data: values })
+  });
+}
+
+export function move(key, values) {
+  return asyncFuncCreator({
+    constant: 'WIKI_MOVE',
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/move', method: 'post', data: values })
+  });
+}
+
 export function select(id) {
   return { type: 'WIKI_SELECT', id: id };
 }
