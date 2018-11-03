@@ -36,7 +36,7 @@ export default function wiki(state = initialState, action) {
 
     case t.WIKI_CREATE_SUCCESS:
       if ( action.result.ecode === 0 ) { 
-        state.collection.push(action.result.data);
+        state.collection.unshift(action.result.data);
         if (action.result.data.d !== 1 && action.result.data.name.toLowerCase() === 'home' && (!state.options.home || !state.options.home.id)) {
           state.options.home = action.result.data;
         }

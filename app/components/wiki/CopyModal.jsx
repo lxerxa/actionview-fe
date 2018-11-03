@@ -18,7 +18,7 @@ const validate = (values) => {
 };
 
 @reduxForm({
-  form: 'copy_file',
+  form: 'copy_wiki',
   fields: [ 'name', 'dest_path' ],
   validate
 })
@@ -53,7 +53,7 @@ export default class CopyModal extends Component {
 
   async handleSubmit() {
     const { values, copy, data, close } = this.props;
-    const ecode = await copy({ id: data.id, src_path: data.parent, dest_path: values.dest_path && values.dest_path.id || data.parent });
+    const ecode = await copy({ id: data.id, name: values.name, src_path: data.parent, dest_path: values.dest_path && values.dest_path.id || data.parent });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

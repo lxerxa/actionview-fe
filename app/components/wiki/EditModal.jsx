@@ -11,7 +11,7 @@ let simplemde = {};
 export default class EditModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, editable: true, name: '', contents: '', touched: false };
+    this.state = { ecode: 0, emsg: '', name: '', contents: '', touched: false };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -58,15 +58,13 @@ export default class EditModal extends Component {
 
     const ecode = await get(wid);
     if (ecode !== 0) {
-      notify.show('获取文档信息失败。', 'error', 2000);
+      this.state.emsg = '获取文档信息失败。';
     } else {
       const { data, user } = this.props; 
       if (_.isEmpty(data.checkin)) {
-        notify.show('其他人可能正在编辑该文档，暂不能编辑提交。', 'warning', 2000);
-        this.state.editable = false;
+        this.state.emsg = '其他人可能正在编辑该文档，暂不能编辑提交。';
       } else if (data.checkin.user.id !== user.id) {
-        notify.show(data.checkin.user.name + ' 正编辑该文档，暂不能编辑提交。', 'warning', 2000);
-        this.state.editable = false;
+        this.state.emsg = data.checkin.user.name + ' 正编辑该文档，暂不能编辑提交。';
       }
       this.setState({ name: data.name || '' });
       simplemde.value(data.contents || '');
@@ -113,9 +111,9 @@ export default class EditModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
+          <span className='ralign'>{ this.state.ecode !== 0 && !loading ? errMsg[this.state.ecode] : this.state.emsg }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ !this.state.editable || loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
+          <Button disabled={ this.state.emsg || loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
       </Modal>

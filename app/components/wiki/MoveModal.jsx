@@ -18,7 +18,7 @@ const validate = (values) => {
 };
 
 @reduxForm({
-  form: 'move_file',
+  form: 'move_wiki',
   fields: [ 'id', 'dest_path' ],
   validate
 })
@@ -83,7 +83,7 @@ export default class CopyModal extends Component {
       return { options: [] };
     }
 
-    const { project_key, curPath } = this.props;
+    const { project_key, curPath, data } = this.props;
 
     const api = new ApiClient;
     const limit = 20;

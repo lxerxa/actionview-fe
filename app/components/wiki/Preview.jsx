@@ -297,7 +297,10 @@ export default class Preview extends Component {
               <tr key={ i }>
                 <td>
                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ this.getFileIconCss(f.name) }></i></span>
+                  { options.permissions && options.permissions.indexOf('download_file') !== -1 ?
                   <a href={ '/api/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
+                  :
+                  f.name }
                  </td>
                  <td width='10%'>
                    <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YY/MM/DD HH:mm') }</div>
