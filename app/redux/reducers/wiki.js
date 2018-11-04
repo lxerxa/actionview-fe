@@ -120,8 +120,11 @@ export default function wiki(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.WIKI_COPY_SUCCESS:
-      if ( action.result.ecode === 0 && action.isSamePath ) {
+      if ( action.result.ecode === 0 && action.toCurPath ) {
         state.collection.push(action.result.data);
+        if (action.result.data.name.toLowerCase() === 'home' && (!state.options.home || !state.options.home.id)) {
+          state.options.home = action.result.data;
+        }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

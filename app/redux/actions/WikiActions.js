@@ -52,10 +52,10 @@ export function checkout(key, wid) {
   });
 }
 
-export function copy(key, values) {
+export function copy(key, values, toCurPath) {
   return asyncFuncCreator({
     constant: 'WIKI_COPY',
-    isSamePath: values.src_path === values.dest_path,
+    toCurPath,
     promise: (client) => client.request({ url: '/project/' + key + '/wiki/copy', method: 'post', data: values })
   });
 }

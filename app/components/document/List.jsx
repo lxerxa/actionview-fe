@@ -478,7 +478,6 @@ export default class List extends Component {
             close={ () => { this.setState({ moveModalShow: false }); } }
             move={ move }
             data={ selectedItem }
-            curPath={ directory }
             i18n={ i18n }/> }
           { this.state.delNotifyShow &&
           <DelNotify

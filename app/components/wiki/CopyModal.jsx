@@ -41,6 +41,7 @@ export default class CopyModal extends Component {
     close: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
+    curPath: PropTypes.string.isRequired,
     copy: PropTypes.func.isRequired
   }
 
@@ -52,8 +53,8 @@ export default class CopyModal extends Component {
   }
 
   async handleSubmit() {
-    const { values, copy, data, close } = this.props;
-    const ecode = await copy({ id: data.id, name: values.name, src_path: data.parent, dest_path: values.dest_path && values.dest_path.id || data.parent });
+    const { values, copy, data, close, curPath } = this.props;
+    const ecode = await copy({ id: data.id, name: values.name, src_path: data.parent, dest_path: values.dest_path && values.dest_path.id || curPath }, !(values.dest_path && values.dest_path.id));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

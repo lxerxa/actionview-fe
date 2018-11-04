@@ -41,7 +41,6 @@ export default class CopyModal extends Component {
     close: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     initializeForm: PropTypes.func.isRequired,
-    curPath: PropTypes.string.isRequired,
     move: PropTypes.func.isRequired
   }
 
@@ -83,7 +82,7 @@ export default class CopyModal extends Component {
       return { options: [] };
     }
 
-    const { project_key, curPath, data } = this.props;
+    const { project_key, data } = this.props;
 
     const api = new ApiClient;
     const limit = 20;
@@ -92,7 +91,7 @@ export default class CopyModal extends Component {
     const options = [];
     if (results.data.length > 0) {
       _.map(results.data, (v) => {
-        if (v.id === curPath) {
+        if (v.id === data.parent) {
           return;
         }
         options.push({ id: v.id, name: v.name });

@@ -404,7 +404,7 @@ export default class List extends Component {
               <span>为了项目成员能更好的理解此项目，建议增加 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createModalShow: true, isCreateHome: true }); } }>Home</a> 页面。</span>
             </div>
           </div> }
-          { !indexLoading && options.home && options.home.id &&
+          { !indexLoading && options.home && options.home.id && _.isEmpty(query) &&
           <Panel header={ homeHeader } style={ { marginTop: '10px' } }>
             <div id='homewiki-contents' dangerouslySetInnerHTML= { { __html: contents } } />
           </Panel> }
@@ -449,6 +449,7 @@ export default class List extends Component {
               close={ () => { this.setState({ copyModalShow: false }); } }
               copy={ copy }
               data={ selectedItem }
+              curPath={ directory }
               i18n={ i18n }/> }
           { this.state.moveModalShow &&
             <MoveModal
@@ -457,7 +458,6 @@ export default class List extends Component {
               close={ () => { this.setState({ moveModalShow: false }); } }
               move={ move }
               data={ selectedItem }
-              curPath={ directory }
               i18n={ i18n }/> }
         </div>
       </div>

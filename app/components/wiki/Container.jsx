@@ -80,8 +80,8 @@ export default class Container extends Component {
     return this.props.wiki.ecode;
   }
 
-  async copy(values) {
-    await this.props.actions.copy(this.pid, values);
+  async copy(values, toCurPath) {
+    await this.props.actions.copy(this.pid, values, toCurPath);
     return this.props.wiki.ecode;
   }
 
