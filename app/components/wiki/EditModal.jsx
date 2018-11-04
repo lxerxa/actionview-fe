@@ -59,6 +59,7 @@ export default class EditModal extends Component {
     const ecode = await get(wid);
     if (ecode !== 0) {
       this.state.emsg = '获取文档信息失败。';
+      this.setState({ emsg : this.state.emsg });
     } else {
       const { data, user } = this.props; 
       if (_.isEmpty(data.checkin)) {
@@ -66,7 +67,7 @@ export default class EditModal extends Component {
       } else if (data.checkin.user.id !== user.id) {
         this.state.emsg = data.checkin.user.name + ' 正编辑该文档，暂不能编辑提交。';
       }
-      this.setState({ name: data.name || '' });
+      this.setState({ name: data.name || '', emsg : this.state.msg });
       simplemde.value(data.contents || '');
     }
   }
