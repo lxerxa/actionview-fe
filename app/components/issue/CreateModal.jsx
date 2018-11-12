@@ -10,6 +10,7 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { findDOMNode } from 'react-dom';
 
+const $ = require('$');
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
@@ -137,6 +138,29 @@ class CreateModal extends Component {
     if (rect.height < 580) {
       dom.style.overflow = 'visible';
     }
+
+    const { project, options } = this.props;
+    if (true || options.permissions && options.permissions.indexOf('upload_file') !== -1) {
+      const self = this;
+      $(function() {
+        $('textarea').inlineattachment({
+          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          uploadUrl: '/api/project/' + project.key + '/file',
+          onFileUploaded: (editor, filename) => { 
+            const fieldkey = editor.getAttr('id').substr(15); 
+            self.state.values[fieldkey] = editor.getValue(); 
+            delete self.state.errors[fieldkey]; 
+            self.setState({ values: self.state.values }); 
+          },
+          onFileReceived: (editor, file) => { 
+            const fieldkey = editor.getAttr('id').substr(15); 
+            self.state.values[fieldkey] = editor.getValue(); 
+            delete self.state.errors[fieldkey]; 
+            self.setState({ values: self.state.values }); 
+          }
+        });
+      });
+    }
   }
 
   static propTypes = {
@@ -204,6 +228,8 @@ class CreateModal extends Component {
           submitData[key] = parseInt(moment(val).format('X')); 
         } else if (field.type === 'Number') {
           submitData[key] = parseFloat(val);
+        //} else if (field.type === 'TextArea') {
+        //  submitData[key] = val.replace(/!\[Uploading file\.\.\.\]\(\)((\r\n)|(\n))?/ig, '');
         } else {
           submitData[key] = val;
         }
@@ -439,6 +465,8 @@ class CreateModal extends Component {
                   { title }
                   <Col sm={ 9 }>
                     <FormControl
+                      id={ 'field-textarea-' + v.key }
+                      ref={ 'field-textarea-' + v.key }
                       componentClass='textarea'
                       disabled={ loading }
                       value={ this.state.values[v.key] }

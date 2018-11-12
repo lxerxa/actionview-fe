@@ -222,7 +222,7 @@ export default class List extends Component {
 
       let comments = '';
       if (collection[i].event_key == 'add_comments' || collection[i].event_key == 'edit_comments' || collection[i].event_key == 'del_comments') {
-        comments = collection[i].data.contents || '-';
+        comments = collection[i].data.contents ? _.escape(collection[i].data.contents) : '-';
         _.map(collection[i].data.atWho || [], (v) => {
           comments = comments.replace(eval('/@' + v.name + '/'), '<a title="' + v.name + '(' + v.email + ')' + '">@' + v.name + '</a>');
         });
@@ -301,7 +301,7 @@ export default class List extends Component {
             { collection[i].event_key == 'edit_issue' &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
             { _.map(collection[i].data, (v, i) => {
-              return (<li style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
+              return (<li style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? _.escape(v.after_value).replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
             }) }
             </ul> }
             { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && user.id === collection[i].data.new_user.id ? '我' : (collection[i].data.new_user.name || '') }</span> }
@@ -326,7 +326,7 @@ export default class List extends Component {
               { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
               { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
               { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }
-              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: '备注 : ' + collection[i].data.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
+              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: '备注 : ' + _.escape(collection[i].data.comments).replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
             </ul> }
             {/* (collection[i].event_key == 'create_version' || collection[i].event_key == 'edit_version') &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>

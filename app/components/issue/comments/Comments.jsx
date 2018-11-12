@@ -180,7 +180,7 @@ export default class Comments extends Component {
                 { ((val.creator && currentUser.id === val.creator.id) || permissions.indexOf('manage_project') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span> }
               </div> ); 
-              let contents = val.contents || '-';
+              let contents = val.contents ? _.escape(val.contents) : '-';
               _.map(val.atWho || [], (v) => {
                 contents = contents.replace(eval('/@' + v.name + '/'), '<a title="' + v.name + '(' + v.email + ')' + '">@' + v.name + '</a>');
               });
@@ -194,7 +194,7 @@ export default class Comments extends Component {
                   <div className='reply-region'>
                     <ul className='reply-contents'>
                      { _.map(val.reply, (v, i) => {
-                       let contents = v.contents || '-';
+                       let contents = v.contents ? _.escape(v.contents) : '-';
                        _.map(v.atWho || [], (value) => {
                          contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.name + '(' + value.email + ')' + '">@' + value.name + '</a>');
                        });

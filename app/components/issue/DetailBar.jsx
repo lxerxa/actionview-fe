@@ -37,7 +37,8 @@ export default class DetailBar extends Component {
       tabKey: 1, 
       delFileShow: false, 
       selectedFile: {}, 
-      previewShow: false, 
+      inlinePreviewShow: {}, 
+      previewShow: {}, 
       photoIndex: 0, 
       editAssignee: false, 
       settingAssignee: false, 
@@ -181,10 +182,11 @@ export default class DetailBar extends Component {
     addFile(field, file); 
   }
 
-  openPreview(index) {
+  openPreview(index, fieldkey) {
     const { options } = this.props;
     if (options.permissions && options.permissions.indexOf('download_file') !== -1) {
-      this.setState({ previewShow: true, photoIndex: index });
+      this.state.previewShow[fieldkey] = true;
+      this.setState({ previewShow: this.state.previewShow, photoIndex: index });
     } else {
       notify.show('权限不足。', 'error', 2000);
     }
@@ -410,6 +412,23 @@ export default class DetailBar extends Component {
     }
   }
 
+  previewInlineImg(e) {
+    const targetid = e.target.id;
+    if (!targetid) {
+      return;
+    }
+
+    let fieldkey = '';
+    let imgInd = -1;
+    if (targetid.indexOf('inlineimg-') === 0) {
+      fieldkey = targetid.substring(10, targetid.lastIndexOf('-'));
+      imgInd = targetid.substr(targetid.lastIndexOf('-') + 1) - 0;
+    }
+
+    this.state.inlinePreviewShow[fieldkey] = true;
+    this.setState({ inlinePreviewShow: this.state.inlinePreviewShow, photoIndex: imgInd });
+  }
+
   render() {
     const { 
       i18n,
@@ -471,6 +490,7 @@ export default class DetailBar extends Component {
       user } = this.props;
 
     const { 
+      inlinePreviewShow, 
       previewShow, 
       photoIndex, 
       newAssignee, 
@@ -885,22 +905,22 @@ export default class DetailBar extends Component {
                         </Table> }
 
                       { imgFiles.length > 0 && 
-                         <Grid style={ { paddingLeft: '0px' } }>
-                           <Row>
-                           { _.map(imgFiles, (f, i) =>
-                             <Col sm={ 6 } key={ i }>
-                               <div className='attachment-content'>
-                                 <div className='attachment-thumb' onClick={ this.openPreview.bind(this, i) }>
-                                   <img src={  '/api/project/' + project.key + '/file/' + f.id + '/thumbnail' }/>
-                                 </div>
-                                 <div className='attachment-title-container'>
-                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>
-                                    { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
-                                 </div>
-                               </div>
-                             </Col> ) }
-                           </Row>
-                         </Grid> }
+                        <Grid style={ { paddingLeft: '0px' } }>
+                          <Row>
+                          { _.map(imgFiles, (f, i) =>
+                            <Col sm={ 6 } key={ i }>
+                              <div className='attachment-content'>
+                                <div className='attachment-thumb' onClick={ this.openPreview.bind(this, i, field.key) }>
+                                  <img src={  '/api/project/' + project.key + '/file/' + f.id + '/thumbnail' }/>
+                                </div>
+                                <div className='attachment-title-container'>
+                                   <div className='attachment-title' title={ f.name }>{ f.name }</div>
+                                   { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
+                                </div>
+                              </div>
+                            </Col> ) }
+                          </Row>
+                        </Grid> }
                       { options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
                       <div style={ { marginTop: '8px' } }>
                         <DropzoneComponent 
@@ -908,19 +928,46 @@ export default class DetailBar extends Component {
                           eventHandlers={ eventHandlers } 
                           djsConfig={ djsConfig } />
                       </div> }
-                      { previewShow &&
+                      { previewShow[field.key] &&
                         <Lightbox
                           mainSrc={  '/api/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
                           nextSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
                           prevSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
                           imageTitle={ imgFiles[photoIndex].name }
                           imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
-                          onCloseRequest={ () => this.setState({ previewShow: false }) }
+                          onCloseRequest={ () => { this.state.previewShow[field.key] = false; this.setState({ previewShow: this.state.previewShow }) } }
                           onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
                           onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
                     </div>);
                   } else if (field.type === 'TextArea') {
-                    contents = ( <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: data[field.key].replace(/(\r\n)|(\n)/g, '<br/>') } } /> ); 
+                    let txt = _.escape(data[field.key]);
+                    const images = txt.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+                    const imgFileUrls = [];
+                    if (images) {
+                      _.forEach(images, (v, i) => {
+                        const imgurl = v.match(/http(s)?:\/\/([^\)]+)/ig); 
+                        txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl[0] + '/thumbnail"/></div>');
+                        imgFileUrls.push(imgurl);
+                      });
+                      txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
+                    }
+                    contents = ( 
+                      <div>
+                        <div 
+                          onClick={ this.previewInlineImg.bind(this) } 
+                          style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
+                          dangerouslySetInnerHTML={ { __html: txt.replace(/(\r\n)|(\n)/g, '<br/>') } } /> 
+                      { inlinePreviewShow[field.key] && 
+                        <Lightbox
+                          mainSrc={  imgFileUrls[photoIndex] }
+                          nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
+                          prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
+                          imageTitle=''
+                          imageCaption=''
+                          onCloseRequest={ () => { this.state.inlinePreviewShow[field.key] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
+                          onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
+                          onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+                      </div>); 
                   } else {
                     contents = data[field.key];
                   }

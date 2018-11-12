@@ -220,7 +220,7 @@ export default class Worklog extends Component {
                 { ((val.recorder && currentUser.id === val.recorder.id) || permissions.indexOf('manage_project') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditWorklog.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span> }
               </div> ); 
-              let comments = val.comments || '-';
+              let comments = val.comments ? _.escape(val.comments) : '-';
               comments = comments.replace(/(\r\n)|(\n)/g, '<br/>'); 
 
               return (

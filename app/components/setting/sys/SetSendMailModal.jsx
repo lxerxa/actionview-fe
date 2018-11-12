@@ -11,7 +11,7 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.from) {
     errors.from = '必填';
-  } else if (!/^[\w-]+@[\w-]+([.][\w-]+)+$/.test(values.from)) {
+  } else if (!/^(\w-*\.*)+@(\w+[\w|-]*)+(\.\w+[\w|-]*)*(\.\w{2,})+$/.test(values.from)) {
     errors.from = '格式有误';
   }
   return errors;

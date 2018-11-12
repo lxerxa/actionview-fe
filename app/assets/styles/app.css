@@ -951,3 +951,13 @@ table tr:hover .remove-icon{
 #homewiki-contents p > img {
   max-width: 100%
 }
+
+#wiki-contents table td, #wiki-contents table th, #homewiki-contents table td, #homewiki-contents table th {
+  border: 1px solid #ddd;
+  padding: 5px;
+  text-align: left;
+}
+
+.inline-img {
+  cursor: pointer;
+}
