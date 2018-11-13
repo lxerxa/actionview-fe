@@ -945,8 +945,11 @@ export default class DetailBar extends Component {
                     const imgFileUrls = [];
                     if (images) {
                       _.forEach(images, (v, i) => {
-                        const imgurl = v.match(/http(s)?:\/\/([^\)]+)/ig); 
-                        txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl[0] + '/thumbnail"/></div>');
+                        const imgurls = v.match(/http(s)?:\/\/([^\)]+)/ig); 
+                        const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
+                        pattern.exec(imgurls[0]);
+                        const imgurl = RegExp.$1;
+                        txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
                         imgFileUrls.push(imgurl);
                       });
                       txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
