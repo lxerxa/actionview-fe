@@ -413,6 +413,13 @@ export default class DetailBar extends Component {
   }
 
   previewInlineImg(e) {
+    const { options } = this.props;
+
+    if (options.permissions && options.permissions.indexOf('download_file') !== -1) {
+      notify.show('权限不足。', 'error', 2000);
+      return;
+    }
+
     const targetid = e.target.id;
     if (!targetid) {
       return;
