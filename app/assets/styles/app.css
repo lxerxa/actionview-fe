@@ -748,6 +748,7 @@ table tr:hover .remove-icon{
   color: #000;
   box-sizing: border-box;
   text-align: center;
+  padding: 5px;
 }
 .card .title .name {
   font-size: 19px;

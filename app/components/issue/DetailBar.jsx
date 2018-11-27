@@ -415,7 +415,7 @@ export default class DetailBar extends Component {
   previewInlineImg(e) {
     const { options } = this.props;
 
-    if (options.permissions && options.permissions.indexOf('download_file') !== -1) {
+    if (options.permissions && options.permissions.indexOf('download_file') === -1) {
       notify.show('权限不足。', 'error', 2000);
       return;
     }
@@ -650,8 +650,9 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px' } }>
-                      <div className='circle' style={ priorityStyle }/>
-                        { _.find(options.priorities || [], { id: data.priority }) ? _.find(options.priorities, { id: data.priority }).name : '-' }
+                      { priorityInd !== -1 &&
+                      <div className='circle' style={ priorityStyle }/> }
+                      { priorityInd !== -1 ? options.priorities[priorityInd].name : '-' }
                       </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
