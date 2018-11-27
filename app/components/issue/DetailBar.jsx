@@ -559,8 +559,8 @@ export default class DetailBar extends Component {
         <Button className={ visitedIndex <= 0 ? 'angle-disable' : 'angle' } onClick={ this.forward.bind(this, -1) } disabled={ visitedIndex <= 0 } title='后退'>
           <i className='fa fa-angle-left'></i>
         </Button>
-        <Button className='angle' title={ data.watching ? '已关注' : '未关注' } onClick={ () => { this.watch(data.id, !data.watching) } }>
-          <i className='fa fa-eye' style={ { color: data.watching ? '#FF9900' : '#000000' } }></i>
+        <Button className='angle' title={ data.watching ? '点击取消关注' : '点击关注' } onClick={ () => { this.watch(data.id, !data.watching) } }>
+          { data.watching ? <i className='fa fa-eye-slash'></i> : <i className='fa fa-eye'></i> }
         </Button>
         <div className='panel panel-default' style={ panelStyle }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
@@ -723,7 +723,11 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
-                      <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px' } } title={ selectedEpic.name || '-' } >{ selectedEpic.name || '-' }</span>
+                      <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
+                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px' } } title={ selectedEpic.name || '-' } >
+                          { selectedEpic.name || '-' }
+                        </span>
+                      </Link>
                     </div>
                   </Col>
                 </FormGroup> }

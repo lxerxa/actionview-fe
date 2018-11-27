@@ -103,6 +103,7 @@ export default class Header extends Component {
       { key: 'kanban', name: '看板' },
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
+      { key: 'report', name: '报告' },
       { key: 'document', name: '文档' },
       { key: 'wiki', name: 'Wiki' },
       { key: 'team', name: '项目成员' },

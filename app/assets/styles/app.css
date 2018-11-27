@@ -738,6 +738,7 @@ table tr:hover .remove-icon{
   height: 83%;
   background-color: #f5f5f5;
   border-bottom: 1px solid #eee;
+  overflow: hidden;
 }
 .card .title {
   position: absolute;
@@ -751,6 +752,9 @@ table tr:hover .remove-icon{
 .card .title .name {
   font-size: 19px;
   margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .card .title .key {
   font-size: 16px;
@@ -898,6 +902,7 @@ table tr:hover .remove-icon{
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
+  float: left;
 }
 
 .badge {
