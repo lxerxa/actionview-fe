@@ -210,10 +210,10 @@ export default class List extends Component {
       simplemde = new SimpleMDE({ element: filepreviewDOM, autoDownloadFontAwesome: false });
       contents = simplemde.markdown(options.home.contents);
       homeHeader = (
-        <span style={ { fontWeight: 200, fontSize: '14px' } }>
+        <span style={ { fontWeight: 400, fontSize: '14px' } }>
           <i className='fa fa-file-text-o'></i>
           <span style={ { marginLeft: '8px' } }><Link to={ '/project/' + project_key + '/wiki/root/' + options.home.id }>{ options.home.name }</Link></span>
-          <span style={ { float: 'right', fontWeight: 200, fontSize: '14px' } }>最近修改：{ options.home.editor && options.home.editor.name ? options.home.editor.name : (options.home.creator && options.home.creator.name || '') }于 { options.home.updated_at ? moment.unix(options.home.updated_at).format('YYYY/MM/DD HH:mm') : moment.unix(options.home.created_at).format('YYYY/MM/DD HH:mm') }</span>
+          <span style={ { float: 'right', fontWeight: 400, fontSize: '14px' } }>最近修改：{ options.home.editor && options.home.editor.name ? options.home.editor.name : (options.home.creator && options.home.creator.name || '') }于 { options.home.updated_at ? moment.unix(options.home.updated_at).format('YYYY/MM/DD HH:mm') : moment.unix(options.home.created_at).format('YYYY/MM/DD HH:mm') }</span>
         </span>);
     }
 

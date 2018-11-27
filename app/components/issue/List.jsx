@@ -395,7 +395,7 @@ export default class List extends Component {
               { collection[i].title ? collection[i].title : '-' }
             </a>
             { collection[i].watching &&
-            <span title='已关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(collection[i].id, false) } }><i className='fa fa-eye'></i></span> }
+            <span title='点击取消关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(collection[i].id, false) } }><i className='fa fa-eye'></i></span> }
             <span className='table-td-issue-desc'>
               { collection[i].reporter &&
               <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>

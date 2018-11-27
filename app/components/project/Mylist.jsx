@@ -391,7 +391,7 @@ export default class List extends Component {
                   <div className='content'>
                     <span className='title'>
                       { model.status == 'active'
-                      ? <p className='name'><a href='#' onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.name }</a></p>
+                      ? <p className='name'><a href='#' title={ model.name } onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.name }</a></p>
                       : <p className='name'>{ model.name }</p> }
                       <p className='key'>{ model.key }</p>
                     </span>
