@@ -39,6 +39,11 @@ const VersionContainer = (location, cb) => {
     cb(null, require('./components/version/Container'))
   }, 'version')
 };
+const ReportContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/version/Container'))
+  }, 'version')
+};
 //const TeamContainer = require('./components/team/Container');
 const TeamContainer = (location, cb) => {
   require.ensure([], require => {
@@ -181,6 +186,7 @@ export default (
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='module' getComponent={ ModuleContainer }/>
         <Route path='version' getComponent={ VersionContainer }/>
+        <Route path='report' getComponent={ ReportContainer }/>
         <Route path='team' getComponent={ TeamContainer }/>
         <Route path='config' getComponent={ ConfigContainer }/>
         <Route path='type' getComponent={ TypeContainer }/>
