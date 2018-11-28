@@ -903,7 +903,6 @@ table tr:hover .remove-icon{
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
-  float: left;
 }
 
 .badge {

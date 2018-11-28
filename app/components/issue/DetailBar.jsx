@@ -725,7 +725,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
                       <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
-                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px' } } title={ selectedEpic.name || '-' } >
+                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px', float: 'left' } } title={ selectedEpic.name || '-' } >
                           { selectedEpic.name || '-' }
                         </span>
                       </Link>
