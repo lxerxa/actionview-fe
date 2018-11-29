@@ -10,6 +10,7 @@
   overflow-y: auto;
   position: relative;
   display: block;
+  min-height: 150px;
 }
 
 .board-column-header-group {
