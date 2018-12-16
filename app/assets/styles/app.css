@@ -962,4 +962,10 @@ table tr:hover .remove-icon{
 
 .inline-img {
   cursor: pointer;
+  border: 1px solid #f0f0f0;
+}
+
+.inline-img:hover {
+  border: 1px solid #f0f0f0;
+  box-shadow:0 0 5px #f0f0f0;
 }
