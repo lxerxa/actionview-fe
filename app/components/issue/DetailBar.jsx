@@ -7,6 +7,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
 const moment = require('moment');
 const CreateModal = require('./CreateModal');
 const Comments = require('./comments/Comments');
@@ -136,6 +137,16 @@ export default class DetailBar extends Component {
     del: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
+  }
+
+  componentDidMount() {
+    if ($('.animate-dialog').length > 0) {
+      let width = 0;
+      const docWidth = $('.doc-container').get(0).clientWidth;
+      width = _.max([ docWidth / 2, 600 ]);
+      width = _.min([ width, 1000 ]);
+      $('.animate-dialog').css('width', width + 'px');
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -542,6 +553,45 @@ export default class DetailBar extends Component {
       selectedEpic = _.find(options.epics, { id: data.epic });
     }
 
+    //const storage = window.localStorage;
+    //let issueStorage = storage.getItem(project.key + '-' + data.no);
+    //if (issueStorage) {
+    //  issueStorage = JSON.parse(issueStorage); 
+    //}
+
+    const commentsTab = (
+      <div>
+        <span style={ { paddingRight: '6px' } }>备注</span>
+        { !itemLoading &&
+        <span 
+          className='badge-number' 
+          style={ { position: 'absolute', top: 2, right: 0, float: 'right' } }>
+          { _.min([ data.comments_num || 0, 99 ]) }
+        </span> }
+      </div>);
+
+    const worklogTab = (
+      <div>
+        <span style={ { paddingRight: '6px' } }>工作日志</span>
+        { !itemLoading &&
+        <span 
+          className='badge-number' 
+          style={ { position: 'absolute', top: 2, right: 0, float: 'right' } }>
+          { _.min([ data.worklogs_num || 0, 99 ]) }
+        </span> }
+      </div>);
+
+    const gitTab = (
+      <div>
+        <span style={ { paddingRight: '6px' } }>Git提交</span>
+        { !itemLoading &&
+        <span 
+          className='badge-number' 
+          style={ { position: 'absolute', top: 2, right: 0, float: 'right' } }>
+          { _.min([ data.gitcommits_num || 0, 99 ]) }
+        </span> }
+      </div>);
+
     return (
       <div className='animate-dialog' style={ { ...detailFloatStyle } }>
         <Button className='close' onClick={ close } title='关闭'>
@@ -591,7 +641,7 @@ export default class DetailBar extends Component {
                       { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
-                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
+                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && ((options.permissions.indexOf('edit_issue') !== -1 && !data.hasSubtasks) || options.permissions.indexOf('create_issue') !== -1) && <MenuItem divider/> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
@@ -1001,7 +1051,7 @@ export default class DetailBar extends Component {
                 }) }
               </Form>
             </Tab>
-            <Tab eventKey={ 2 } title='备注'>
+            <Tab eventKey={ 2 } title={ commentsTab }>
               <Comments 
                 i18n={ i18n }
                 currentTime={ options.current_time || 0 }
@@ -1029,7 +1079,7 @@ export default class DetailBar extends Component {
                 sortHistory={ sortHistory } 
                 indexLoading={ historyIndexLoading } />
             </Tab>
-            <Tab eventKey={ 4 } title='工作日志'>
+            <Tab eventKey={ 4 } title={ worklogTab }>
               <Worklog 
                 i18n={ i18n }
                 currentTime={ options.current_time || 0 }
@@ -1048,7 +1098,8 @@ export default class DetailBar extends Component {
                 editWorklog={ editWorklog } 
                 delWorklog={ delWorklog } />
             </Tab>
-            <Tab eventKey={ 5 } title='Git提交'>
+            { data.gitcommits_num > 0 &&
+            <Tab eventKey={ 5 } title={ gitTab }>
               <GitCommits
                 issue_id={ data.id }
                 currentTime={ options.current_time || 0 }
@@ -1057,7 +1108,7 @@ export default class DetailBar extends Component {
                 indexGitCommits={ indexGitCommits }
                 sortGitCommits={ sortGitCommits }
                 indexLoading={ gitCommitsIndexLoading } />
-            </Tab>
+            </Tab> }
           </Tabs>
         </div>
         { delFileShow && 

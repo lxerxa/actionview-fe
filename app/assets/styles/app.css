@@ -317,7 +317,7 @@
 .animate-dialog {
   overflow-x: hidden;
   overflow-y: auto;
-  width: 600px;
+  width: 640px;
   position: fixed;
   top: 50px;
   right: 0;
@@ -428,7 +428,7 @@ table tr:hover .remove-icon{
   display: block;
   height: 20px;
   overflow: hidden;
-  width: 180px;
+  width: 200px;
 }
 
 .attachment-title {
@@ -441,10 +441,8 @@ table tr:hover .remove-icon{
 }
 
 .attachment-content .remove-icon {
-  position: absolute;
-  boottom: 0px;
-  left: auto;
-  right: 10px;
+  float: right;
+  margin-right: 8px;
   opacity: 0 !important;
 }
 
@@ -905,13 +903,12 @@ table tr:hover .remove-icon{
   display: inline-block;
 }
 
-.badge {
-  background: rgba(0, 0, 0, 0.2);
+.badge-number {
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 2em;
   color: rgba(51, 51, 51, 0.8);
   display: inline-block;
   font-size: 11px;
-  font-weight: bold;
   line-height: 1;
   margin: 0;
   min-width: 1em;
