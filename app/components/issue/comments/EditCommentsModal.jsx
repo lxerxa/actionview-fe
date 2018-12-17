@@ -9,7 +9,14 @@ const img = require('../../../assets/images/loading.gif');
 export default class EditCommentsModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, oldContents: props.data.contents || '', contents: props.data.contents || '', atWho: _.map(props.data.atWho || [], 'id') };
+
+    const { data } = props;
+    this.state = { 
+      ecode: 0, 
+      oldContents: data.id ? (data.contents || '') : ('@' + (data.to && data.to.name || '') + ' '), 
+      contents: data.id ? (data.contents || '') : ('@' + (data.to && data.to.name || '') + ' '), 
+      atWho: data.id ? _.map(data.atWho || [], 'id') : (data.to && data.to.id ? [ data.to.id ] : [])
+    };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -36,7 +43,16 @@ export default class EditCommentsModal extends Component {
     });
     let ecode = 0;
     if (data.comments_id) {
-      ecode = await edit(issue_id, data.comments_id, { contents: this.state.contents, to: data.to || {}, reply_id: data.id || '', atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ), operation: data.id ? 'editReply' : 'addReply' });
+
+      ecode = await edit(
+        issue_id, 
+        data.comments_id, 
+        { contents: this.state.contents, 
+          to: data.to || {}, 
+          reply_id: data.id || '', 
+          atWho: _.map(newAtWho, (v) => _.find(users, { id: v })), 
+          operation: data.id ? 'editReply' : 'addReply' });
+
       this.setState({ ecode });
       if (ecode === 0) {
         close();
@@ -59,6 +75,10 @@ export default class EditCommentsModal extends Component {
   cancel() {
     const { close } = this.props;
     close();
+  }
+
+  componentDidMount() {
+    $('.edit-comments-inputor textarea').focus();
   }
 
   componentDidUpdate() {
@@ -84,7 +104,7 @@ export default class EditCommentsModal extends Component {
       },
       data: users
     });
-    $('.edit-comments-inputor textarea').on('inserted.atwho', function(event, flag, query) {
+    $('.edit-comments-inputor textarea').one('inserted.atwho', function(event, flag, query) {
       self.setState({ contents: event.target.value });
     });
   }
@@ -93,14 +113,10 @@ export default class EditCommentsModal extends Component {
     const { i18n: { errMsg }, data, loading } = this.props;
 
     let title = '';
-    if (data.comments_id) {
-      if (data.id) {
-        title = '编辑回复';
-      } else {
-        title = '回复 ' + (data.to && data.to.name ? data.to.name : '备注');
-      }
+    if (data.id) {
+      title = '编辑回复';
     } else {
-      title = '编辑备注';
+      title = '回复 ' + (data.to && data.to.name ? data.to.name : '备注');
     }
 
     return (
