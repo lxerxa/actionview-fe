@@ -697,7 +697,6 @@ table tr:hover .remove-icon{
 
 .dragcard .edit-icon,.dragcard .rm-icon {
   display: none;
-  margin-right: 5px;
   color: #5f5f5f;
 }
 

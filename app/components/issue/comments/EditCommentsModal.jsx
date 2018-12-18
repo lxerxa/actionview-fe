@@ -11,12 +11,22 @@ export default class EditCommentsModal extends Component {
     super(props);
 
     const { data } = props;
-    this.state = { 
-      ecode: 0, 
-      oldContents: data.id ? (data.contents || '') : ('@' + (data.to && data.to.name || '') + ' '), 
-      contents: data.id ? (data.contents || '') : ('@' + (data.to && data.to.name || '') + ' '), 
-      atWho: data.id ? _.map(data.atWho || [], 'id') : (data.to && data.to.id ? [ data.to.id ] : [])
-    };
+
+    if (data.id) {
+      this.state = { 
+        ecode: 0, 
+        oldContents: data.contents || '', 
+        contents: data.contents || '', 
+        atWho: _.map(data.atWho || [], 'id')
+      };
+    } else {
+      this.state = { 
+        ecode: 0, 
+        oldContents: data.to && data.to.id ? ('@' + data.to.name + ' ') : '', 
+        contents: data.to && data.to.id ? ('@' + data.to.name + ' ') : '', 
+        atWho: data.to && data.to.id ? [ data.to.id ] : []
+      };
+    }
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -27,6 +37,7 @@ export default class EditCommentsModal extends Component {
     close: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
+    isAutoAt: PropTypes.bool,
     users: PropTypes.array.isRequired,
     data: PropTypes.object.isRequired
   }
@@ -42,13 +53,13 @@ export default class EditCommentsModal extends Component {
       }
     });
     let ecode = 0;
-    if (data.comments_id) {
+    if (data.parent_id) {
 
       ecode = await edit(
         issue_id, 
-        data.comments_id, 
+        data.parent_id, 
         { contents: this.state.contents, 
-          to: data.to || {}, 
+          to: data.parent_creator || {}, 
           reply_id: data.id || '', 
           atWho: _.map(newAtWho, (v) => _.find(users, { id: v })), 
           operation: data.id ? 'editReply' : 'addReply' });
@@ -116,7 +127,7 @@ export default class EditCommentsModal extends Component {
     if (data.id) {
       title = '编辑回复';
     } else {
-      title = '回复 ' + (data.to && data.to.name ? data.to.name : '备注');
+      title = '回复备注';
     }
 
     return (
