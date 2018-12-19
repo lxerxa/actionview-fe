@@ -33,8 +33,10 @@ export default class EditCommentsModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     issue_id: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
+    permissions: PropTypes.array.isRequired,
     edit: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
     isAutoAt: PropTypes.bool,
@@ -59,7 +61,6 @@ export default class EditCommentsModal extends Component {
         issue_id, 
         data.parent_id, 
         { contents: this.state.contents, 
-          to: data.parent_creator || {}, 
           reply_id: data.id || '', 
           atWho: _.map(newAtWho, (v) => _.find(users, { id: v })), 
           operation: data.id ? 'editReply' : 'addReply' });
@@ -89,6 +90,23 @@ export default class EditCommentsModal extends Component {
   }
 
   componentDidMount() {
+    const { project, permissions=[] } = this.props;
+    if (permissions.indexOf('upload_file') !== -1) {
+      const self = this;
+      $(function() {
+        $('.edit-comments-inputor textarea').inlineattachment({
+          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          uploadUrl: '/api/project/' + project.key + '/file',
+          onFileUploaded: (editor, filename) => {
+            self.setState({ contents: editor.getValue() });
+          },
+          onFileReceived: (editor, file) => {
+            self.setState({ contents: editor.getValue() });
+          }
+        });
+      });
+    }
+
     $('.edit-comments-inputor textarea').focus();
   }
 
@@ -125,7 +143,7 @@ export default class EditCommentsModal extends Component {
 
     let title = '';
     if (data.id) {
-      title = '编辑回复';
+      title = '编辑备注';
     } else {
       title = '回复备注';
     }

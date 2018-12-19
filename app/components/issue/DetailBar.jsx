@@ -561,35 +561,17 @@ export default class DetailBar extends Component {
 
     const commentsTab = (
       <div>
-        <span style={ { paddingRight: '6px' } }>备注</span>
-        { !itemLoading &&
-        <span 
-          className='badge-number' 
-          style={ { position: 'absolute', top: 2, right: 0, float: 'right' } }>
-          { _.min([ data.comments_num || 0, 99 ]) }
-        </span> }
+        <span style={ { paddingRight: '6px' } }>备注{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
       </div>);
 
     const worklogTab = (
       <div>
-        <span style={ { paddingRight: '6px' } }>工作日志</span>
-        { !itemLoading &&
-        <span 
-          className='badge-number' 
-          style={ { position: 'absolute', top: 2, right: 0, float: 'right' } }>
-          { _.min([ data.worklogs_num || 0, 99 ]) }
-        </span> }
+        <span style={ { paddingRight: '6px' } }>工作日志{ !itemLoading && '(' + (data.worklogs_num > 99 ? '99+' : (data.worklogs_num || 0)) + ')' }</span>
       </div>);
 
     const gitTab = (
       <div>
-        <span style={ { paddingRight: '6px' } }>Git提交</span>
-        { !itemLoading &&
-        <span 
-          className='badge-number' 
-          style={ { position: 'absolute', top: 2, right: 0, float: 'right' } }>
-          { _.min([ data.gitcommits_num || 0, 99 ]) }
-        </span> }
+        <span style={ { paddingRight: '6px' } }>Git提交{ !itemLoading && '(' + (data.gitcommits_num > 99 ? '99+' : (data.gitcommits_num || 0)) + ')' }</span>
       </div>);
 
     return (
@@ -1056,6 +1038,7 @@ export default class DetailBar extends Component {
                 i18n={ i18n }
                 currentTime={ options.current_time || 0 }
                 currentUser={ user }
+                project={ project } 
                 permissions={ options.permissions || [] }
                 issue_id={ data.id }
                 collection={ commentsCollection } 

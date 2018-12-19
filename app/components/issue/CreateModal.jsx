@@ -140,7 +140,7 @@ class CreateModal extends Component {
     }
 
     const { project, options } = this.props;
-    if (true || options.permissions && options.permissions.indexOf('upload_file') !== -1) {
+    if (options.permissions && options.permissions.indexOf('upload_file') !== -1) {
       const self = this;
       $(function() {
         $('#create-issue-dialog textarea').inlineattachment({

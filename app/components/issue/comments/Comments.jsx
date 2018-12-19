@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, Col, Panel } from 'react-bootstrap';
+import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -16,6 +17,8 @@ export default class Comments extends Component {
     super(props);
     this.state = { 
       ecode: 0, 
+      photoIndex: 0,
+      inlinePreviewShow: {},
       addCommentsShow: false, 
       editCommentsShow: false, 
       delCommentsShow: false, 
@@ -30,6 +33,7 @@ export default class Comments extends Component {
     i18n: PropTypes.object.isRequired,
     currentTime: PropTypes.number.isRequired,
     currentUser: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     permissions: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -65,8 +69,8 @@ export default class Comments extends Component {
     this.setState({ editCommentsShow: true, selectedComments: _.extend(data, { parent_id }) });
   }
 
-  showAddReply(parent_id, to, parent_creator) {
-    this.setState({ editCommentsShow: true, selectedComments: { parent_id, to, parent_creator } });
+  showAddReply(parent_id, to) {
+    this.setState({ editCommentsShow: true, selectedComments: { parent_id, to } });
   }
 
   async addComments() {
@@ -95,6 +99,49 @@ export default class Comments extends Component {
 
   addAtWho(user) {
     this.state.atWho.push(user.id);
+  }
+
+  componentDidMount() {
+    const { project, permissions=[] } = this.props;
+    if (permissions.indexOf('upload_file') !== -1) {
+      const self = this;
+      $(function() {
+        $('.comments-inputor textarea').inlineattachment({
+          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          uploadUrl: '/api/project/' + project.key + '/file',
+          onFileUploaded: (editor, filename) => {
+            self.setState({ contents: editor.getValue() });
+          },
+          onFileReceived: (editor, file) => {
+            self.setState({ contents: editor.getValue() });
+          }
+        });
+      });
+    }
+  }
+
+  previewInlineImg(e) {
+    const { permissions } = this.props;
+
+    if (permissions.indexOf('download_file') === -1) {
+      notify.show('权限不足。', 'error', 2000);
+      return;
+    }
+
+    const targetid = e.target.id;
+    if (!targetid) {
+      return;
+    }
+
+    let fieldkey = '';
+    let imgInd = -1;
+    if (targetid.indexOf('inlineimg-') === 0) {
+      fieldkey = targetid.substring(10, targetid.lastIndexOf('-'));
+      imgInd = targetid.substr(targetid.lastIndexOf('-') + 1) - 0;
+    }
+
+    this.state.inlinePreviewShow[fieldkey] = true;
+    this.setState({ inlinePreviewShow: this.state.inlinePreviewShow, photoIndex: imgInd });
   }
 
   componentDidUpdate() {
@@ -140,7 +187,10 @@ export default class Comments extends Component {
       delComments, 
       editComments, 
       users, 
+      project, 
       issue_id } = this.props;
+
+    const { inlinePreviewShow, photoIndex } = this.state;
 
     return (
       <Form horizontal>
@@ -180,9 +230,24 @@ export default class Comments extends Component {
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) } title='删除'><i className='fa fa-trash'></i></span> }
                 { ((val.creator && currentUser.id === val.creator.id) || permissions.indexOf('manage_project') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) } title='编辑'><i className='fa fa-pencil'></i></span> }
-                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, {}, val.creator) } title='回复'><i className='fa fa-reply'></i></span>
+                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, {}) } title='回复'><i className='fa fa-reply'></i></span>
               </div> ); 
               let contents = val.contents ? _.escape(val.contents) : '-';
+
+              const images = contents.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+              const imgFileUrls = [];
+              if (images) {
+                _.forEach(images, (pv, i) => {
+                  const imgurls = pv.match(/http(s)?:\/\/([^\)]+)/ig);
+                  const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
+                  pattern.exec(imgurls[0]);
+                  const imgurl = RegExp.$1;
+                  contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + val.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                  imgFileUrls.push(imgurl);
+                });
+                contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
+              }
+
               _.map(val.atWho || [], (v) => {
                 contents = contents.replace(eval('/@' + v.name + '/'), '<a title="' + v.name + '(' + v.email + ')' + '">@' + v.name + '</a>');
               });
@@ -190,12 +255,42 @@ export default class Comments extends Component {
 
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
-                  <div style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: contents } }/>
+                  <div 
+                    onClick={ this.previewInlineImg.bind(this) } 
+                    style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
+                    dangerouslySetInnerHTML={ { __html: contents } }/>
+
+                  { inlinePreviewShow[val.id] &&
+                  <Lightbox
+                    mainSrc={  imgFileUrls[photoIndex] }
+                    nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
+                    prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
+                    imageTitle=''
+                    imageCaption=''
+                    onCloseRequest={ () => { this.state.inlinePreviewShow[val.id] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
+                    onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
+                    onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+
                   { val.reply && val.reply.length > 0 &&
                   <div className='reply-region'>
                     <ul className='reply-contents'>
                      { _.map(val.reply, (v, i) => {
                        let contents = v.contents ? _.escape(v.contents) : '-';
+
+                       const images = contents.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+                       const imgFileUrls = [];
+                       if (images) {
+                         _.forEach(images, (pv, i) => {
+                           const imgurls = pv.match(/http(s)?:\/\/([^\)]+)/ig);
+                           const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
+                           pattern.exec(imgurls[0]);
+                           const imgurl = RegExp.$1;
+                           contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + v.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                           imgFileUrls.push(imgurl);
+                         });
+                         contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
+                       }
+
                        _.map(v.atWho || [], (value) => {
                          contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.name + '(' + value.email + ')' + '">@' + value.name + '</a>');
                        });
@@ -209,9 +304,24 @@ export default class Comments extends Component {
                            <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) } title='删除'><i className='fa fa-trash'></i></span> }
                            { ((v.creator && currentUser.id === v.creator.id) || permissions.indexOf('manage_project') !== -1) &&  
                            <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) } title='编辑'><i className='fa fa-pencil'></i></span> }
-                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, v.creator, val.creator) } title='回复'><i className='fa fa-reply'></i></span>
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, v.creator) } title='回复'><i className='fa fa-reply'></i></span>
                          </div>
-                         <div style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: contents } }/>
+                         <div 
+                           onClick={ this.previewInlineImg.bind(this) }
+                           style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
+                           dangerouslySetInnerHTML={ { __html: contents } }/>
+ 
+                           { inlinePreviewShow[v.id] &&
+                           <Lightbox
+                             mainSrc={  imgFileUrls[photoIndex] }
+                             nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
+                             prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
+                             imageTitle=''
+                             imageCaption=''
+                             onCloseRequest={ () => { this.state.inlinePreviewShow[v.id] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
+                             onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
+                             onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+
                        </li> ) } ) }
                     </ul>
                   </div> }
@@ -224,6 +334,8 @@ export default class Comments extends Component {
             data={ this.state.selectedComments }
             loading = { itemLoading }
             users ={ users }
+            project ={ project }
+            permissions ={ permissions }
             issue_id={ issue_id }
             edit={ editComments }
             i18n={ i18n }/> }
