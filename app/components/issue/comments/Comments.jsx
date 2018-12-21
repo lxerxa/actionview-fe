@@ -240,12 +240,23 @@ export default class Comments extends Component {
                 _.forEach(images, (pv, i) => {
                   const imgurls = pv.match(/http(s)?:\/\/([^\)]+)/ig);
                   const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
-                  pattern.exec(imgurls[0]);
-                  const imgurl = RegExp.$1;
-                  contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + val.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
-                  imgFileUrls.push(imgurl);
+                  if (pattern.exec(imgurls[0])) {
+                    const imgurl = RegExp.$1;
+                    contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + val.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                    imgFileUrls.push(imgurl);
+                  }
                 });
                 contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
+              }
+
+              const links = contents.match(/\[.*?\]\(.*?\)/ig);
+              if (links) {
+                _.forEach(links, (lv, i) => {
+                  const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+                  if (pattern.exec(lv)) {
+                    contents = contents.replace(lv, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+                  }
+                });
               }
 
               _.map(val.atWho || [], (v) => {
@@ -289,6 +300,16 @@ export default class Comments extends Component {
                            imgFileUrls.push(imgurl);
                          });
                          contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
+                       }
+
+                       const links = contents.match(/\[.*?\]\(.*?\)/ig);
+                       if (links) {
+                         _.forEach(links, (lv, i) => {
+                           const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+                           if (pattern.exec(lv)) {
+                             contents = contents.replace(lv, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+                           }
+                         });
                        }
 
                        _.map(v.atWho || [], (value) => {

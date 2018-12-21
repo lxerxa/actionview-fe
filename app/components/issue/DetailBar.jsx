@@ -985,19 +985,31 @@ export default class DetailBar extends Component {
                     </div>);
                   } else if (field.type === 'TextArea') {
                     let txt = _.escape(data[field.key]);
-                    const images = txt.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+
+                    const images = txt.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
                     const imgFileUrls = [];
                     if (images) {
                       _.forEach(images, (v, i) => {
                         const imgurls = v.match(/http(s)?:\/\/([^\)]+)/ig); 
                         const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
-                        pattern.exec(imgurls[0]);
-                        const imgurl = RegExp.$1;
-                        txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
-                        imgFileUrls.push(imgurl);
+                        if (pattern.exec(imgurls[0])) {
+                          const imgurl = RegExp.$1;
+                          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                          imgFileUrls.push(imgurl);
+                        }
                       });
                       txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
                     }
+
+                    const links = txt.match(/\[.*?\]\(.*?\)/ig);
+                    if (links) {
+                      _.forEach(links, (v, i) => {
+                        const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+                        pattern.exec(v);
+                        txt = txt.replace(v, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+                      });
+                    }
+
                     contents = ( 
                       <div>
                         <div 
