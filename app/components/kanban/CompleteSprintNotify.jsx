@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Checkbox } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
@@ -8,7 +8,7 @@ const img = require('../../assets/images/loading.gif');
 export default class CompleteNotify extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, isSendMsg: true };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -25,7 +25,7 @@ export default class CompleteNotify extends Component {
 
   async confirm() {
     const { close, complete, sprintNo, completedIssues } = this.props;
-    const ecode = await complete({ completed_issues: _.map(completedIssues, (v) => v.no) }, sprintNo);
+    const ecode = await complete({ completed_issues: _.map(completedIssues, (v) => v.no), isSendMsg: this.state.isSendMsg }, sprintNo);
     this.setState({ ecode: ecode });
 
     if (ecode === 0) {
@@ -56,6 +56,13 @@ export default class CompleteNotify extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
+          <Checkbox
+            disabled={ loading }
+            checked={ this.state.isSendMsg }
+            onClick={ () => { this.setState({ isSendMsg: !this.state.isSendMsg }) } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            通知项目成员
+          </Checkbox>
           <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
         </Modal.Footer>

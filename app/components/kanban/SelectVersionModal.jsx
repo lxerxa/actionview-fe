@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock, Checkbox } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
@@ -23,7 +23,7 @@ const validate = (values, props) => {
 export default class SelectVersionModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, isSendMsg: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -43,7 +43,7 @@ export default class SelectVersionModal extends Component {
 
   async handleSubmit() {
     const { release, releasedIssues, values, close } = this.props;
-    const ecode = await release({ ids: _.map(releasedIssues, (v) => v.id), version: values.version });
+    const ecode = await release({ ids: _.map(releasedIssues, (v) => v.id), version: values.version, isSendMsg: this.state.isSendMsg });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -90,6 +90,13 @@ export default class SelectVersionModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
+          <Checkbox
+            disabled={ submitting }
+            checked={ this.state.isSendMsg }
+            onClick={ () => { this.setState({ isSendMsg: !this.state.isSendMsg }) } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            通知项目成员
+          </Checkbox>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
