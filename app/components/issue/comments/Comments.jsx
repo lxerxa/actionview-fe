@@ -234,7 +234,7 @@ export default class Comments extends Component {
               </div> ); 
               let contents = val.contents ? _.escape(val.contents) : '-';
 
-              const images = contents.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+              const images = contents.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
               const imgFileUrls = [];
               if (images) {
                 _.forEach(images, (pv, i) => {
