@@ -385,6 +385,8 @@ class CreateModal extends Component {
     return (
       <Modal 
         id='create-issue-dialog'
+        backdrop='static'
+        aria-labelledby='contained-modal-title-sm'
         onHide={ close } 
         bsSize={ isFromWorkflow ? 'middle' : 'large' } 
         { ...this.props }>
