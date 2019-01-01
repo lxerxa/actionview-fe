@@ -147,7 +147,7 @@ export default class List extends Component {
           hover
           data={ epics } 
           bordered={ false } 
-          tableStyle={ { marginBottom: '200px' } } 
+          tableStyle={ { marginBottom: '230px' } } 
           options={ opts } 
           trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
