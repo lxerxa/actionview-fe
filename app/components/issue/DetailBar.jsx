@@ -518,7 +518,7 @@ export default class DetailBar extends Component {
       selectedFile, 
       action_id } = this.state;
 
-    const panelStyle = { marginBottom: '0px', borderTop: '0px' };
+    const panelStyle = { marginBottom: '0px', borderTop: '0px', borderRadius: '0px' };
 
     const assigneeOptions = _.map(options.assignees || [], (val) => { 
       return { label: val.name + '(' + val.email + ')', value: val.id } 
@@ -595,7 +595,7 @@ export default class DetailBar extends Component {
           { data.watching ? <i className='fa fa-eye-slash'></i> : <i className='fa fa-eye'></i> }
         </Button>
         <div className='panel panel-default' style={ panelStyle }>
-          <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
+          <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='issue-detail-tab'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '10px', marginBottom: '40px', marginLeft: '10px' } }>

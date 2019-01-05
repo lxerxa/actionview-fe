@@ -968,3 +968,11 @@ table tr:hover .remove-icon{
   border: 1px solid #f0f0f0;
   box-shadow:0 0 5px #f0f0f0;
 }
+
+.animate-dialog .nav-tabs>li>a, 
+.animate-dialog .nav-tabs>li.active>a, 
+.animate-dialog .nav-tabs>li.active>a:focus, 
+.animate-dialog .nav-tabs > li.active > a:hover {
+  border-top-color: transparent;
+  border-radius: 0px;
+}

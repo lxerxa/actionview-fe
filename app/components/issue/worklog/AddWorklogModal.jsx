@@ -181,8 +181,8 @@ export default class AddWorklogModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑工作日志' : ('添加工作日志' + (issue.no ? (' - ' + issue.no) : '')) }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form horizontal>
-            <FormGroup controlId='formControlsLabel' validationState={ this.state.touched.started_at && this.state.errors.started_at && 'error' }>
+          <Form horizontal style={ { marginTop: '15px' } }>
+            <FormGroup validationState={ this.state.touched.started_at && this.state.errors.started_at && 'error' }>
               <Col sm={ 3 } componentClass={ ControlLabel }>
                 <span className='txt-impt'>*</span> 开始时间 
               </Col>

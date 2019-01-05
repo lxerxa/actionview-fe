@@ -335,11 +335,14 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_COMMENTS_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.commentsCollection = _.reject(state.commentsCollection, { id: action.id });
-        if (state.itemData.comments_num > 0) {
-          state.itemData.comments_num -= 1;
-        } else {
-          state.itemData.comments_num = 0;
-        }
+
+        state.itemData.comments_num = 0;
+        _.forEach(state.commentsCollection, (v) => {
+          state.itemData.comments_num += 1;
+          if (v.reply) {
+            state.itemData.comments_num += v.reply.length;
+          }
+        });
       }
       return { ...state, commentsItemLoading: false, ecode: action.result.ecode };
 
