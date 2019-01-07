@@ -307,7 +307,7 @@ export default class Header extends Component {
 
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
-        <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'center' } }>
+        <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'right' } }>
           <span title='展示看板头'>
             <Button onClick={ this.showHeader.bind(this) } style={ { marginTop: '-37px' } }><i className='fa fa-angle-double-down' aria-hidden='true'></i></Button>
           </span>
