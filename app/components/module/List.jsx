@@ -359,8 +359,10 @@ export default class List extends Component {
           <DelNotify 
             show 
             close={ this.delNotifyClose } 
+            modules={ collection } 
             data={ selectedItem } 
-            del={ del }/> }
+            del={ del }
+            i18n={ i18n }/> }
       </div>
     );
   }

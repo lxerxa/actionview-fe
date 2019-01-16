@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as VersionActions from 'redux/actions/VersionActions';
+import _ from 'lodash';
 
 const Header = require('./Header');
 const List = require('./List');
@@ -43,9 +44,19 @@ export default class Container extends Component {
     return this.props.version.ecode;
   }
 
-  async del(id) {
+  async merge(values) {
+    await this.props.actions.merge(this.pid, values);
+    return this.props.version.ecode;
+  }
+
+  async release(values) {
+    await this.props.actions.release(this.pid, values);
+    return this.props.version.ecode;
+  }
+
+  async del(values) {
     const { actions } = this.props;
-    await actions.del(this.pid, id);
+    await actions.del(this.pid, values);
     return this.props.version.ecode;
   }
 
@@ -55,22 +66,24 @@ export default class Container extends Component {
   }
 
   render() {
-    const { project: { options={} } } = this.props;
+    if (this.props.project.options) {
+      _.assign(this.props.version.options, this.props.project.options);
+    }
 
     return (
       <div>
         <Header 
           create={ this.create.bind(this) } 
-          options={ options }
+          merge={ this.merge.bind(this) } 
           i18n={ this.props.i18n } 
           { ...this.props.version }/>
         <List 
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 
+          release={ this.release.bind(this) } 
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           delNotify={ this.props.actions.delNotify } 
-          options={ options }
           i18n={ this.props.i18n }
           { ...this.props.version }/>
       </div>

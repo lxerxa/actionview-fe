@@ -10,8 +10,8 @@ export default function module(state = initialState, action) {
 
     case t.MODULE_INDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection = action.result.data;
-        state.options = action.result.options;
+        state.collection = action.result.data || {};
+        state.options = action.result.options || {};
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
 
@@ -48,16 +48,16 @@ export default function module(state = initialState, action) {
       return { ...state, itemLoading: false, selectedItem: el };
 
     case t.MODULE_DELETE:
-      return { ...state, itemLoading: true };
+      return { ...state, loading: true };
 
     case t.MODULE_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.collection = _.reject(state.collection, { id: action.id });
       }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.MODULE_DELETE_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      return { ...state, loading: false, error: action.error };
 
     case t.MODULE_SET_SORT:
       return { ...state, loading: true };

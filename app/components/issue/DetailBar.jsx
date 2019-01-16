@@ -592,7 +592,7 @@ export default class DetailBar extends Component {
           <i className='fa fa-angle-left'></i>
         </Button>
         <Button className='angle' title={ data.watching ? '点击取消关注' : '点击关注' } onClick={ () => { this.watch(data.id, !data.watching) } }>
-          { data.watching ? <i className='fa fa-eye-slash'></i> : <i className='fa fa-eye'></i> }
+        { data.watching ? <i className='fa fa-eye-slash'></i> : <i className='fa fa-eye'></i> }
         </Button>
         <div className='panel panel-default' style={ panelStyle }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='issue-detail-tab'>
@@ -749,6 +749,17 @@ export default class DetailBar extends Component {
                     </div>
                   </Col>
                 </FormGroup> }
+                { data.resolve_version &&
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    解决版本 
+                  </Col>
+                  <Col sm={ 7 }>
+                    <div style={ { marginTop: '7px' } }>
+                     { _.find(options.versions, { id: data.resolve_version }) ? _.find(options.versions, { id: data.resolve_version }).name : '-' }
+                    </div>
+                  </Col>
+                </FormGroup> }
                 { data.epic &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -875,7 +886,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic' || field.key == 'labels') {
+                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic' || field.key == 'labels' || field.key == 'resolve_version') {
                     return;
                   }
                   if (field.type === 'File') {

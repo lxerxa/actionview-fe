@@ -1,10 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
 const EditModal = require('./EditModal');
+const ReleaseModal = require('./ReleaseModal');
 const DelNotify = require('./DelNotify');
 
 var moment = require('moment');
@@ -19,6 +20,7 @@ export default class List extends Component {
       operateShow: false, 
       hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
+    this.releaseModalClose = this.releaseModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
   }
 
@@ -27,11 +29,13 @@ export default class List extends Component {
     options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    release: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -44,12 +48,22 @@ export default class List extends Component {
     this.setState({ editModalShow: false });
   }
 
+  releaseModalClose() {
+    this.setState({ releaseModalShow: false });
+  }
+
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
   }
 
   edit(id) {
     this.setState({ editModalShow: true });
+    const { select } = this.props;
+    select(id);
+  }
+
+  release(id) {
+    this.setState({ releaseModalShow: true });
     const { select } = this.props;
     select(id);
   }
@@ -62,10 +76,12 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    if (eventKey === '1') {
+    if (eventKey === 'edit') {
       this.edit(hoverRowId);
-    } else if (eventKey === '2') {
+    } else if (eventKey === 'del') {
       this.delNotify(hoverRowId);
+    } else if (eventKey === 'release' || eventKey === 'unrelease') {
+      this.release(hoverRowId);
     }
   }
 
@@ -87,7 +103,9 @@ export default class List extends Component {
       selectedItem, 
       indexLoading, 
       itemLoading, 
+      loading, 
       del, 
+      release, 
       update } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
@@ -116,16 +134,20 @@ export default class List extends Component {
         end_time: (
           <div style={ { display: 'table', width: '100%' } }>
             <span>
-              <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> 
+              <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px', color: (collection[i].end_time && options.current_time > collection[i].end_time && collection[i].status !== 'released') ? 'red' : '#000' } }> 
                 { collection[i].end_time ? moment.unix(collection[i].end_time).format('YYYY/MM/DD') : '-' }
               </div>
             </span> 
           </div>
         ),
-        unresolved_cnt: (
-          <Link to={ '/project/' + collection[i].project_key + '/issue?resolution=Unresolved&resolve_version=' + collection[i].id }>
-            { collection[i].unresolved_cnt || 0 }
-          </Link>
+        issues: (
+          <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+            <li>所有问题 - <Link to={ '/project/' + collection[i].project_key + '/issue?resolve_version=' + collection[i].id }>{ collection[i].all_cnt || 0 }</Link></li>
+            <li>未解决的 - <Link to={ '/project/' + collection[i].project_key + '/issue?resolution=Unresolved&resolve_version=' + collection[i].id }><span style={ { color: 'red' } }>{ collection[i].unresolved_cnt || 0 }</span></Link></li>
+          </ul>
+        ),
+        status: (
+          <span>{ collection[i].status === 'released' ? <span style={ { color: '#009900' } } title='已发布'><i className='fa fa-check'></i></span> : '未发布' }</span>
         ),
         operation: (
           options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
@@ -139,8 +161,9 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
-              { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              <MenuItem eventKey='edit'>编辑</MenuItem>
+              { collection[i].status == 'released' ? <MenuItem eventKey='unrelease'>未发布</MenuItem> : <MenuItem eventKey='release'>发布</MenuItem> }
+              <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -164,8 +187,9 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='start_time'>开始时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='end_time'>结束时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='unresolved_cnt'>未解决问题</TableHeaderColumn>
+          <TableHeaderColumn dataField='end_time'>发布时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='issues'>问题完成情况</TableHeaderColumn>
+          <TableHeaderColumn dataField='status' width='100'>状态</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && 
@@ -181,7 +205,17 @@ export default class List extends Component {
             show 
             close={ this.delNotifyClose } 
             data={ selectedItem } 
+            versions={ collection }
             del={ del } 
+            i18n={ i18n }/> }
+        { this.state.releaseModalShow &&
+          <ReleaseModal
+            show
+            loading={ loading }
+            close={ this.releaseModalClose }
+            data={ selectedItem }
+            versions={ collection }
+            release={ release }
             i18n={ i18n }/> }
       </div>
     );

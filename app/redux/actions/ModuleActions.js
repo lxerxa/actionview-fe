@@ -25,11 +25,11 @@ export function select(id) {
   return { type: 'MODULE_SELECT', id: id };
 }
 
-export function del(key, id) {
+export function del(key, values) {
   return asyncFuncCreator({
     constant: 'MODULE_DELETE',
-    id,
-    promise: (client) => client.request({ url: '/project/' + key + '/module/' + id, method: 'delete' })
+    id: values.id,
+    promise: (client) => client.request({ url: '/project/' + key + '/module/' + values.id + '/delete', data: values, method: 'post' })
   });
 }
 

@@ -135,7 +135,7 @@ export default class EditModal extends Component {
             { start_time.value && start_time.error && <HelpBlock style={ { float: 'right' } }>{ start_time.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ end_time.value && end_time.error ? 'error' : '' }>
-            <ControlLabel>结束时间</ControlLabel>
+            <ControlLabel>发布时间</ControlLabel>
             <DateTime 
               locale='zh-cn' 
               mode='date' 

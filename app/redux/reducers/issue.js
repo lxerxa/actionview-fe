@@ -248,10 +248,10 @@ export default function issue(state = initialState, action) {
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         if (ind !== -1) {
-          state.collection[ind] = _.extend(state.collection[ind], action.result.data);
+          _.extend(state.collection[ind], action.result.data);
         }
         if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
-          state.itemData = _.extend(state.itemData, action.result.data);
+          _.extend(state.itemData, action.result.data);
         }
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };

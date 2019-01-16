@@ -64,7 +64,7 @@ export default class EditModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update(values.id, _.extend(_.omit(values, ['id']), { principal: values.principal && values.principal.id || '' }));
+    const ecode = await update(values.id, _.extend({}, _.omit(values, ['id']), { principal: values.principal && values.principal.id || '' }));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

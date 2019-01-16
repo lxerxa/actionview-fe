@@ -45,9 +45,9 @@ export default class Container extends Component {
     return this.props.module.ecode;
   }
 
-  async del(id) {
+  async del(values) {
     const { actions } = this.props;
-    await actions.del(this.pid, id);
+    await actions.del(this.pid, values);
     return this.props.module.ecode;
   }
 

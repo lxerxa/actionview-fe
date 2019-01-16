@@ -171,7 +171,7 @@ export default class Sidebar extends Component {
         <div className='react-menu-container'>
           <div style={ { height: '50px', lineHeight: '35px', paddingTop: '8px' } }>
             <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
-            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
+            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-thumb-tack fa-rotate-90'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           { session.user.permissions && session.user.permissions.sys_admin &&
@@ -212,7 +212,7 @@ export default class Sidebar extends Component {
         <div className='react-menu-container'>
           <div style={ { height: '50px', lineHeight: '35px', paddingTop: '8px' } }>
             <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
-            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
+            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-thumb-tack fa-rotate-90'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           { project.item.key ? 
