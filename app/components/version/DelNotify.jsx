@@ -58,7 +58,7 @@ export default class DelNotify extends Component {
           :
           <div className='info-col' style={ { marginTop: '5px' } }>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-            <div className='info-content'>没有问题和此版本关系，可放心删除。</div>
+            <div className='info-content'>没有问题和此版本关联，可放心删除。</div>
           </div> }
           { data.is_used && 
           <div style={ { margin: '20px 10px 10px 10px' } }>

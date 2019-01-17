@@ -51,14 +51,14 @@ export default class ReleaseModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>版本{ data.status === 'released' ? '未发布' : '发布' }- { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>版本{ data.status === 'released' ? '未发布' : '发布' } - { data.name }</Modal.Title>
         </Modal.Header>
         { data.status !== 'released' &&
         <Modal.Body>
           { data.unresolved_cnt > 0 ?
           <div className='info-col' style={ { marginTop: '5px' } }>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-            <div className='info-content'>该版本还有 <span style={ { color: 'red' } }>{ data.unresolved_cnt }</span> 个问题未解决。</div>
+            <div className='info-content'>该版本还有 <span style={ { color: 'red', fontWeight: 600 } }>{ data.unresolved_cnt }</span> 个问题未解决。</div>
           </div>
           :
           <div className='info-col' style={ { marginTop: '5px' } }>

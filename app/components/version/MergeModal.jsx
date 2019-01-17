@@ -78,7 +78,7 @@ export default class MergeModal extends Component {
         <Modal.Body>
           <div className='info-col' style={ { marginBottom: '15px', marginTop: '5px' } }>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-            <div className='info-content'>版本合并后，将无法还原, 请谨慎合并。</div>
+            <div className='info-content'>版本合并后，将无法还原，请谨慎合并。</div>
           </div>
           <FormGroup controlId='formControlsText' validationState={ source.touched && source.error ? 'error' : '' }>
             <ControlLabel><span className='txt-impt'>*</span>要合并版本</ControlLabel>
