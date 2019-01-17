@@ -700,8 +700,8 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     经办人
                   </Col>
-                  <Col sm={ 7 }>
-                  { !editAssignee ?
+                  <Col sm={ editAssignee ? 7 : 3 }>
+                    { !editAssignee ?
                     <div style={ { marginTop: '7px' } }>
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
@@ -735,6 +735,16 @@ export default class DetailBar extends Component {
                       </div>
                     </div> }
                   </Col>
+                  { !editAssignee && 
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    报告人 
+                  </Col> }
+                  { !editAssignee && 
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
+                    </div>
+                  </Col> }
                 </FormGroup>
                 { data.labels && data.labels.length > 0 &&
                 <FormGroup>
