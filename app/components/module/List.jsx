@@ -35,6 +35,7 @@ export default class List extends Component {
     selectedItem: PropTypes.object.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
@@ -179,6 +180,7 @@ export default class List extends Component {
       options, 
       indexLoading, 
       itemLoading, 
+      loading, 
       del, 
       update } = this.props;
 
@@ -319,7 +321,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
-              { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              <MenuItem eventKey='2'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -358,6 +360,7 @@ export default class List extends Component {
         { this.state.delNotifyShow && 
           <DelNotify 
             show 
+            loading={ loading }
             close={ this.delNotifyClose } 
             modules={ collection } 
             data={ selectedItem } 

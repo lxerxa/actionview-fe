@@ -49,11 +49,18 @@ export default class ReleaseVersionModal extends Component {
   async handleSubmit() {
     const { release, releasedIssues, values, close } = this.props;
 
+    let end_time = '';
     if (values.end_time) {
-      values.end_time = parseInt(moment(values.end_time).endOf('day').format('X'));
+      end_time = parseInt(moment(values.end_time).endOf('day').format('X'));
     }
 
-    const ecode = await release({ ids: _.map(releasedIssues, (v) => v.id), isSendMsg: this.state.isSendMsg, ...values });
+    const ecode = await release({ 
+      ids: _.map(releasedIssues, (v) => v.id), 
+      isSendMsg: this.state.isSendMsg, 
+      name: values.name, 
+      end_time, 
+      description: values.description });
+
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

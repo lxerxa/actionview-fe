@@ -36,7 +36,9 @@ export default function module(state = initialState, action) {
     case t.MODULE_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        _.extend(state.collection[ind], action.result.data);
+        if (ind !== -1) {
+          _.extend(state.collection[ind], action.result.data);
+        }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
@@ -53,6 +55,10 @@ export default function module(state = initialState, action) {
     case t.MODULE_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.collection = _.reject(state.collection, { id: action.id });
+        const ind = _.findIndex(state.collection, { id: action.result.data.id });
+        if (ind !== -1) {
+          _.extend(state.collection[ind], action.result.data);
+        }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
