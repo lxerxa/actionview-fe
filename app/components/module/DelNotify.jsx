@@ -51,12 +51,12 @@ export default class DelNotify extends Component {
         </Modal.Header>
         <Modal.Body>
           { data.is_used ?
-          <div className='info-col'>
+          <div className='info-col' style={ { marginTop: '5px' } }>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>有问题和此模块关联，请选择以下操作。</div>
           </div>
           :
-          <div className='info-col'>
+          <div className='info-col' style={ { marginTop: '5px' } }>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>没有问题和此模块关联，可放心删除。</div>
           </div> }
@@ -98,7 +98,7 @@ export default class DelNotify extends Component {
           <img src={ loadimg } className={ loading ? 'loading' : 'hide' }/>
           <Button
             onClick={ this.confirm }
-            disabled={ loading || (data.is_used && this.state.operate_flg === '0') || (this.state.operate_flg === '1' && !this.state.swapVersion) }>
+            disabled={ loading || (data.is_used && this.state.operate_flg === '0') || (this.state.operate_flg === '1' && !this.state.swapModule) }>
             确定
           </Button>
           <Button bsStyle='link' onClick={ this.cancel }>取消</Button>

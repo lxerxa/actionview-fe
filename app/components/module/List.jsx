@@ -37,6 +37,7 @@ export default class List extends Component {
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
+    gotoIssueList: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
@@ -69,10 +70,14 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
+    const { gotoIssueList } = this.props;
+
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId);
+    } else if (eventKey === '3') {
+      gotoIssueList(hoverRowId);
     }
   }
 
@@ -309,7 +314,6 @@ export default class List extends Component {
           </div>
         ),
         operation: (
-          options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
@@ -320,8 +324,10 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
-              <MenuItem eventKey='2'>删除</MenuItem>
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='2'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
+              <MenuItem eventKey='3'>问题列表</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>

@@ -30,6 +30,10 @@ export default class Container extends Component {
     module: PropTypes.object.isRequired
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   async index() {
     await this.props.actions.index(this.pid);
     return this.props.module.ecode;
@@ -43,6 +47,10 @@ export default class Container extends Component {
   async update(values) {
     await this.props.actions.update(this.pid, values);
     return this.props.module.ecode;
+  }
+
+  gotoIssueList(module) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/issue', query: { module } });
   }
 
   async del(values) {
@@ -75,6 +83,7 @@ export default class Container extends Component {
           { ...this.props.module }/>
         <List 
           index={ this.index.bind(this) } 
+          gotoIssueList={ this.gotoIssueList.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 

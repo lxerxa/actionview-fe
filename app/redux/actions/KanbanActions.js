@@ -130,11 +130,11 @@ export function editEpic(key, values) {
   });
 }
 
-export function delEpic(key, id) {
+export function delEpic(key, values) {
   return asyncFuncCreator({
     constant: 'KANBAN_EPIC_DELETE',
-    id,
-    promise: (client) => client.request({ url: '/project/' + key + '/epic/' + id, method: 'delete' })
+    id: values.id,
+    promise: (client) => client.request({ url: '/project/' + key + '/epic/' + values.id + '/delete', data: values, method: 'post' })
   });
 }
 

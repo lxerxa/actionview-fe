@@ -187,6 +187,10 @@ export default function kanban(state = initialState, action) {
     case t.KANBAN_EPIC_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.epics = _.reject(state.epics, { id: action.id });
+        //const ind = _.findIndex(state.epics, { id: action.result.data.id });
+        //if (ind !== -1) {
+        //  _.extend(state.epics, action.result.data);
+        //}
       }
       return { ...state, epicLoading: false, ecode: action.result.ecode };
 

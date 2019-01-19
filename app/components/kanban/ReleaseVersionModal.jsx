@@ -43,6 +43,7 @@ export default class ReleaseVersionModal extends Component {
     handleSubmit: PropTypes.func.isRequired,
     release: PropTypes.func.isRequired,
     releasedIssues: PropTypes.array.isRequired,
+    initializeForm: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   }
 
@@ -79,6 +80,11 @@ export default class ReleaseVersionModal extends Component {
     close();
   }
 
+  componentWillMount() {
+    const { initializeForm } = this.props;
+    initializeForm({ end_time: moment() });
+  }
+
   render() {
     const { i18n: { errMsg }, fields: { name, end_time, description }, handleSubmit, invalid, submitting, options } = this.props;
 
@@ -87,13 +93,13 @@ export default class ReleaseVersionModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>问题发布</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>版本发布</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
-            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='版本名'/ >
+            <ControlLabel><span className='txt-impt'>*</span>版本名称</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='版本名称'/ >
             { name.touched && name.error &&
               <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
