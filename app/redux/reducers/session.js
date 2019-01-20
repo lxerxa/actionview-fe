@@ -50,7 +50,7 @@ export default function session(state = initialState, action) {
       return { ...state, invalid: true };
 
     case t.SESSION_UPD_AVATAR:
-      return { ...state, user: _.extend(state.user, { avatar: action.avatar }) };
+      return { ...state, user: _.extend({}, state.user, { avatar: action.avatar }) };
 
     default:
       return state;

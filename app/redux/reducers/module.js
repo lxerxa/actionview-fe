@@ -10,8 +10,8 @@ export default function module(state = initialState, action) {
 
     case t.MODULE_INDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection = action.result.data;
-        state.options = action.result.options;
+        state.collection = action.result.data || {};
+        state.options = action.result.options || {};
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
 
@@ -36,7 +36,9 @@ export default function module(state = initialState, action) {
     case t.MODULE_UPDATE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        _.extend(state.collection[ind], action.result.data);
+        if (ind !== -1) {
+          _.extend(state.collection[ind], action.result.data);
+        }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
@@ -48,16 +50,20 @@ export default function module(state = initialState, action) {
       return { ...state, itemLoading: false, selectedItem: el };
 
     case t.MODULE_DELETE:
-      return { ...state, itemLoading: true };
+      return { ...state, loading: true };
 
     case t.MODULE_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.collection = _.reject(state.collection, { id: action.id });
+        const ind = _.findIndex(state.collection, { id: action.result.data.id });
+        if (ind !== -1) {
+          _.extend(state.collection[ind], action.result.data);
+        }
       }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.MODULE_DELETE_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      return { ...state, loading: false, error: action.error };
 
     case t.MODULE_SET_SORT:
       return { ...state, loading: true };

@@ -21,8 +21,8 @@ export default class List extends Component {
     options: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
     gotoBacklog: PropTypes.func.isRequired,
     gotoIssueList: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired,
@@ -82,7 +82,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, options, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { i18n, options, collection, selectedItem, indexLoading, loading, del, update, index } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -106,7 +106,7 @@ export default class List extends Component {
         ),
         operation: (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+          { operateShow && hoverRowId === collection[i].id &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -116,12 +116,11 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='2'>删除</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
               <MenuItem eventKey='3'>问题列表</MenuItem>
               <MenuItem eventKey='4'>Backlog列表</MenuItem>
             </DropdownButton> }
-            <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
         )
       });
@@ -147,7 +146,7 @@ export default class List extends Component {
           hover
           data={ epics } 
           bordered={ false } 
-          tableStyle={ { marginBottom: '200px' } } 
+          tableStyle={ { marginBottom: '230px' } } 
           options={ opts } 
           trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
@@ -166,9 +165,13 @@ export default class List extends Component {
         { this.state.delNotifyShow && 
           <DelNotify 
             show 
+            loading={ loading }
             close={ this.delNotifyClose } 
+            index={ index }
+            epics={ collection }
             data={ selectedItem } 
-            del={ del }/> }
+            del={ del }
+            i18n={ i18n }/> }
       </div>
     );
   }

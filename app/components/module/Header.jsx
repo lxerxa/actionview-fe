@@ -60,11 +60,6 @@ export default class Header extends Component {
         </div>
         :
         <div style={ { marginTop: '15px' } }/> }
-        { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-        <div className='info-col'>
-          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'>只能删除没有应用到项目问题中的模块。</div>
-        </div> }
         { this.state.createModalShow && 
           <CreateModal 
             show 

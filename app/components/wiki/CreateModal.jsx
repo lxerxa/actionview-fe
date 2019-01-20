@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, Checkbox } from 'react-bootstrap';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -11,7 +11,7 @@ let simplemde = {};
 export default class CreateModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, name: '', touched: false };
+    this.state = { ecode: 0, name: '', touched: false, isSendMsg: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -27,7 +27,7 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { create, close } = this.props;
-    const ecode = await create({ name: this.state.name, contents: simplemde.value() });
+    const ecode = await create({ name: this.state.name, contents: simplemde.value(), isSendMsg: this.state.isSendMsg });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -56,7 +56,13 @@ export default class CreateModal extends Component {
   componentDidMount() {
     const fileeditDOM = document.getElementById('fileedit');
     if (fileeditDOM) {
-      simplemde = new SimpleMDE({ element: fileeditDOM, autoDownloadFontAwesome: false, showIcons: ['table'], hideIcons: ['side-by-side', 'fullscreen'], spellChecker: false, status: false });
+      simplemde = new SimpleMDE({ 
+        element: fileeditDOM, 
+        autoDownloadFontAwesome: false, 
+        showIcons: ['table'], 
+        hideIcons: ['side-by-side', 'fullscreen'], 
+        spellChecker: false, 
+        status: false });
     }
   }
 
@@ -90,6 +96,13 @@ export default class CreateModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
+          <Checkbox 
+            disabled={ loading } 
+            checked={ this.state.isSendMsg } 
+            onClick={ () => { this.setState({ isSendMsg: !this.state.isSendMsg }) } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            通知项目成员
+          </Checkbox>
           <Button disabled={ loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>

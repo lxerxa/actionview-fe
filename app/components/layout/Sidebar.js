@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { Label } from 'react-bootstrap';
+import _ from 'lodash';
+
 const $ = require('$');
 
 export default class Sidebar extends Component {
@@ -36,6 +38,11 @@ export default class Sidebar extends Component {
         $('.toc-container').animate({ left: '-20%' });
       }
     });
+
+    const storage = window.localStorage;
+    if (storage && storage.getItem('sideBarHide') === '1') {
+      this.hideBar();
+    }
   }
 
   hideBar() {
@@ -51,6 +58,19 @@ export default class Sidebar extends Component {
     $('.toc-logo').css({ left: '45%' });
     $('#show-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
+
+    if ($('.animate-dialog').length > 0) {
+      let width = 0;
+      const docWidth = $('.doc-container').get(0).clientWidth;
+      width = _.max([ docWidth / 2, 600 ]);
+      width = _.min([ width, 1000 ]);
+      $('.animate-dialog').css('width', width + 'px');
+    }
+
+    const storage = window.localStorage;
+    if (storage) {
+      storage.setItem('sideBarHide', '1');
+    }
   }
 
   tackBar() {
@@ -65,6 +85,19 @@ export default class Sidebar extends Component {
     $('#tack-bar').hide();
     $('#hide-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
+
+    if ($('.animate-dialog').length > 0) {
+      let width = 0;
+      const docWidth = $('.doc-container').get(0).clientWidth;
+      width = _.max([ docWidth / 2, 600 ]);
+      width = _.min([ width, 1000 ]);
+      $('.animate-dialog').css('width', width + 'px');
+    }
+
+    const storage = window.localStorage;
+    if (storage) {
+      storage.setItem('sideBarHide', '0');
+    }
   }
 
   componentDidUpdate() {
@@ -138,7 +171,7 @@ export default class Sidebar extends Component {
         <div className='react-menu-container'>
           <div style={ { height: '50px', lineHeight: '35px', paddingTop: '8px' } }>
             <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
-            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
+            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-thumb-tack fa-rotate-90'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           { session.user.permissions && session.user.permissions.sys_admin &&
@@ -179,7 +212,7 @@ export default class Sidebar extends Component {
         <div className='react-menu-container'>
           <div style={ { height: '50px', lineHeight: '35px', paddingTop: '8px' } }>
             <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
-            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-angle-double-left'></i></span>
+            <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-thumb-tack fa-rotate-90'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           { project.item.key ? 

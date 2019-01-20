@@ -9,17 +9,37 @@ const img = require('../../../assets/images/loading.gif');
 export default class EditCommentsModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, oldContents: props.data.contents || '', contents: props.data.contents || '', atWho: _.map(props.data.atWho || [], 'id') };
+
+    const { data } = props;
+
+    if (data.id) {
+      this.state = { 
+        ecode: 0, 
+        oldContents: data.contents || '', 
+        contents: data.contents || '', 
+        atWho: _.map(data.atWho || [], 'id')
+      };
+    } else {
+      this.state = { 
+        ecode: 0, 
+        oldContents: data.to && data.to.id ? ('@' + data.to.name + ' ') : '', 
+        contents: data.to && data.to.id ? ('@' + data.to.name + ' ') : '', 
+        atWho: data.to && data.to.id ? [ data.to.id ] : []
+      };
+    }
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     issue_id: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
+    permissions: PropTypes.array.isRequired,
     edit: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
+    isAutoAt: PropTypes.bool,
     users: PropTypes.array.isRequired,
     data: PropTypes.object.isRequired
   }
@@ -35,8 +55,16 @@ export default class EditCommentsModal extends Component {
       }
     });
     let ecode = 0;
-    if (data.comments_id) {
-      ecode = await edit(issue_id, data.comments_id, { contents: this.state.contents, to: data.to || {}, reply_id: data.id || '', atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ), operation: data.id ? 'editReply' : 'addReply' });
+    if (data.parent_id) {
+
+      ecode = await edit(
+        issue_id, 
+        data.parent_id, 
+        { contents: this.state.contents, 
+          reply_id: data.id || '', 
+          atWho: _.map(newAtWho, (v) => _.find(users, { id: v })), 
+          operation: data.id ? 'editReply' : 'addReply' });
+
       this.setState({ ecode });
       if (ecode === 0) {
         close();
@@ -59,6 +87,27 @@ export default class EditCommentsModal extends Component {
   cancel() {
     const { close } = this.props;
     close();
+  }
+
+  componentDidMount() {
+    const { project, permissions=[] } = this.props;
+    if (permissions.indexOf('upload_file') !== -1) {
+      const self = this;
+      $(function() {
+        $('.edit-comments-inputor textarea').inlineattachment({
+          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          uploadUrl: '/api/project/' + project.key + '/file',
+          onFileUploaded: (editor, filename) => {
+            self.setState({ contents: editor.getValue() });
+          },
+          onFileReceived: (editor, file) => {
+            self.setState({ contents: editor.getValue() });
+          }
+        });
+      });
+    }
+
+    $('.edit-comments-inputor textarea').focus();
   }
 
   componentDidUpdate() {
@@ -84,7 +133,7 @@ export default class EditCommentsModal extends Component {
       },
       data: users
     });
-    $('.edit-comments-inputor textarea').on('inserted.atwho', function(event, flag, query) {
+    $('.edit-comments-inputor textarea').one('inserted.atwho', function(event, flag, query) {
       self.setState({ contents: event.target.value });
     });
   }
@@ -93,14 +142,10 @@ export default class EditCommentsModal extends Component {
     const { i18n: { errMsg }, data, loading } = this.props;
 
     let title = '';
-    if (data.comments_id) {
-      if (data.id) {
-        title = '编辑回复';
-      } else {
-        title = '回复 ' + (data.to && data.to.name ? data.to.name : '备注');
-      }
-    } else {
+    if (data.id) {
       title = '编辑备注';
+    } else {
+      title = '回复备注';
     }
 
     return (

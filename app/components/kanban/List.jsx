@@ -12,7 +12,7 @@ const CreateModal = require('../issue/CreateModal');
 const Column = require('./Column');
 const OverlayColumn = require('./OverlayColumn');
 const BacklogOverlayColumn = require('./BacklogOverlayColumn');
-const SelectVersionModal = require('./SelectVersionModal');
+const ReleaseVersionModal = require('./ReleaseVersionModal');
 const PublishSprintModal = require('./PublishSprintModal');
 const DelSprintNotify = require('./DelSprintNotify');
 const CompleteSprintNotify = require('./CompleteSprintNotify');
@@ -610,7 +610,7 @@ export default class List extends Component {
             isFromWorkflow={ true }
             i18n={ i18n }/> }
         { this.state.selectVersionShow &&
-          <SelectVersionModal show
+          <ReleaseVersionModal show
             options={ options }
             close={ this.selectVersionModalClose.bind(this) }
             release={ release } 

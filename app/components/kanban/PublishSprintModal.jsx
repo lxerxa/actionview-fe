@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock, Checkbox } from 'react-bootstrap';
 import _ from 'lodash';
 import DateTime from 'react-datetime';
 import { notify } from 'react-notify-toast';
@@ -41,7 +41,7 @@ const validate = (values, props) => {
 export default class PublishModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0 };
+    this.state = { ecode: 0, isSendMsg: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -70,6 +70,8 @@ export default class PublishModal extends Component {
     {
       values.complete_time = parseInt(moment(values.complete_time).endOf('day').format('X'));
     }
+
+    values.isSendMsg = this.state.isSendMsg;
 
     const ecode = await publish(values, sprintNo);
     this.setState({ ecode: ecode });
@@ -140,6 +142,13 @@ export default class PublishModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
+          <Checkbox
+            disabled={ submitting }
+            checked={ this.state.isSendMsg }
+            onClick={ () => { this.setState({ isSendMsg: !this.state.isSendMsg }) } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            通知项目成员
+          </Checkbox>
           <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>

@@ -1,7 +1,7 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], item: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { ecode: 0, collection: [], item: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {}, options: {} };
 
 export default function version(state = initialState, action) {
   switch (action.type) {
@@ -10,7 +10,8 @@ export default function version(state = initialState, action) {
 
     case t.VERSION_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
-        state.collection = action.result.data;
+        state.collection = action.result.data || {};
+        state.options = action.result.options || {};
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
 
@@ -30,16 +31,32 @@ export default function version(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.VERSION_UPDATE:
+    case t.VERSION_MERGE:
+    case t.VERSION_RELEASE:
       return { ...state, loading: true };
 
     case t.VERSION_UPDATE_SUCCESS:
+    case t.VERSION_RELEASE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         _.extend(state.collection[ind], action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
+    case t.VERSION_MERGE_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        const ind = _.findIndex(state.collection, { id: action.result.data.id });
+        if (ind !== -1) {
+          _.extend(state.collection[ind], action.result.data);
+        }
+        state.collection = _.reject(state.collection, { id: action.source });
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+
     case t.VERSION_UPDATE_FAIL:
+    case t.VERSION_RELEASE_FAIL:
+    case t.VERSION_MERGE_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.VERSION_SELECT:
@@ -47,16 +64,20 @@ export default function version(state = initialState, action) {
       return { ...state, itemLoading: false, selectedItem: el };
 
     case t.VERSION_DELETE:
-      return { ...state, itemLoading: true };
+      return { ...state, loading: true };
 
     case t.VERSION_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.collection = _.reject(state.collection, { id: action.id });
+        const ind = _.findIndex(state.collection, { id: action.result.data.id });
+        if (ind !== -1) {
+          _.extend(state.collection[ind], action.result.data);
+        }
       }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
+      return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.VERSION_DELETE_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      return { ...state, loading: false, error: action.error };
 
     default:
       return state;

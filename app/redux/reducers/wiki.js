@@ -11,7 +11,7 @@ export default function wiki(state = initialState, action) {
     case t.WIKI_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
-        state.options = _.extend(state.options, action.result.options);
+        _.extend(state.options, action.result.options);
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
 
@@ -24,7 +24,7 @@ export default function wiki(state = initialState, action) {
     case t.WIKI_SHOW_SUCCESS:
       if (action.result.ecode === 0) {
         state.item = action.result.data;
-        state.options = _.extend(state.options, action.result.options);
+        _.extend(state.options, action.result.options);
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 

@@ -68,8 +68,9 @@ html.docs .doc-container {
   display: block;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 50px 12px 10px 12px;
-  height: 100%;
+  padding: 0px 12px 10px 12px;
+  margin-top: 50px;
+  height: calc(100% - 50px);
   width: auto;
   -webkit-overflow-scrolling: touch
 }

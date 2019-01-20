@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, Col, Panel } from 'react-bootstrap';
+import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -16,6 +17,8 @@ export default class Comments extends Component {
     super(props);
     this.state = { 
       ecode: 0, 
+      photoIndex: 0,
+      inlinePreviewShow: {},
       addCommentsShow: false, 
       editCommentsShow: false, 
       delCommentsShow: false, 
@@ -30,6 +33,7 @@ export default class Comments extends Component {
     i18n: PropTypes.object.isRequired,
     currentTime: PropTypes.number.isRequired,
     currentUser: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     permissions: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -44,8 +48,9 @@ export default class Comments extends Component {
     issue_id: PropTypes.string
   }
 
-  showCommentsInputor() {
-    this.setState({ addCommentsShow: true });
+  async showCommentsInputor() {
+    await this.setState({ addCommentsShow: true });
+    $('.comments-inputor textarea').focus();
   }
 
   showDelComments(data) {
@@ -53,19 +58,19 @@ export default class Comments extends Component {
   }
 
   showEditComments(data) {
-    this.setState({ editCommentsShow: true, selectedComments: data, editType: 'comments' });
+    this.setState({ editCommentsShow: true, selectedComments: data });
   }
 
-  showDelReply(comments_id, data) {
-    this.setState({ delReplyShow: true, selectedComments: _.extend(data, { comments_id }) });
+  showDelReply(parent_id, data) {
+    this.setState({ delReplyShow: true, selectedComments: _.extend(data, { parent_id }) });
   }
 
-  showEditReply(comments_id, data) {
-    this.setState({ editCommentsShow: true, selectedComments: _.extend(data, { comments_id }) });
+  showEditReply(parent_id, data) {
+    this.setState({ editCommentsShow: true, selectedComments: _.extend(data, { parent_id }) });
   }
 
-  showAddReply(comments_id, to) {
-    this.setState({ editCommentsShow: true, selectedComments: { comments_id, to } });
+  showAddReply(parent_id, to) {
+    this.setState({ editCommentsShow: true, selectedComments: { parent_id, to } });
   }
 
   async addComments() {
@@ -96,6 +101,49 @@ export default class Comments extends Component {
     this.state.atWho.push(user.id);
   }
 
+  componentDidMount() {
+    const { project, permissions=[] } = this.props;
+    if (permissions.indexOf('upload_file') !== -1) {
+      const self = this;
+      $(function() {
+        $('.comments-inputor textarea').inlineattachment({
+          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          uploadUrl: '/api/project/' + project.key + '/file',
+          onFileUploaded: (editor, filename) => {
+            self.setState({ contents: editor.getValue() });
+          },
+          onFileReceived: (editor, file) => {
+            self.setState({ contents: editor.getValue() });
+          }
+        });
+      });
+    }
+  }
+
+  previewInlineImg(e) {
+    const { permissions } = this.props;
+
+    if (permissions.indexOf('download_file') === -1) {
+      notify.show('权限不足。', 'error', 2000);
+      return;
+    }
+
+    const targetid = e.target.id;
+    if (!targetid) {
+      return;
+    }
+
+    let fieldkey = '';
+    let imgInd = -1;
+    if (targetid.indexOf('inlineimg-') === 0) {
+      fieldkey = targetid.substring(10, targetid.lastIndexOf('-'));
+      imgInd = targetid.substr(targetid.lastIndexOf('-') + 1) - 0;
+    }
+
+    this.state.inlinePreviewShow[fieldkey] = true;
+    this.setState({ inlinePreviewShow: this.state.inlinePreviewShow, photoIndex: imgInd });
+  }
+
   componentDidUpdate() {
     const { users } = this.props;
     _.map(users || [], (v) => {
@@ -119,7 +167,7 @@ export default class Comments extends Component {
       },
       data: users
     });
-    $('.comments-inputor textarea').on('inserted.atwho', function(event, flag, query) {
+    $('.comments-inputor textarea').one('inserted.atwho', function(event, flag, query) {
       self.setState({ contents: event.target.value });
     });
   }
@@ -139,7 +187,10 @@ export default class Comments extends Component {
       delComments, 
       editComments, 
       users, 
+      project, 
       issue_id } = this.props;
+
+    const { inlinePreviewShow, photoIndex } = this.state;
 
     return (
       <Form horizontal>
@@ -174,13 +225,40 @@ export default class Comments extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (val.creator && val.creator.id === currentUser.id ? '我' : val.creator.name) + '</a> 添加备注 - ' + getAgoAt(val.created_at, currentTime) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (val.creator && val.creator.id === currentUser.id ? '我' : val.creator.name) + '</a> - ' + getAgoAt(val.created_at, currentTime) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 { ((val.creator && currentUser.id === val.creator.id) || permissions.indexOf('manage_project') !== -1) &&  
-                <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelComments.bind(this, val) } title='删除'><i className='fa fa-trash'></i></span> }
                 { ((val.creator && currentUser.id === val.creator.id) || permissions.indexOf('manage_project') !== -1) &&  
-                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) } title='编辑'><i className='fa fa-pencil'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, {}) } title='回复'><i className='fa fa-reply'></i></span>
               </div> ); 
               let contents = val.contents ? _.escape(val.contents) : '-';
+
+              const images = contents.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+              const imgFileUrls = [];
+              if (images) {
+                _.forEach(images, (pv, i) => {
+                  const imgurls = pv.match(/http(s)?:\/\/([^\)]+)/ig);
+                  const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
+                  if (pattern.exec(imgurls[0])) {
+                    const imgurl = RegExp.$1;
+                    contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + val.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                    imgFileUrls.push(imgurl);
+                  }
+                });
+                contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
+              }
+
+              const links = contents.match(/\[.*?\]\(.*?\)/ig);
+              if (links) {
+                _.forEach(links, (lv, i) => {
+                  const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+                  if (pattern.exec(lv)) {
+                    contents = contents.replace(lv, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+                  }
+                });
+              }
+
               _.map(val.atWho || [], (v) => {
                 contents = contents.replace(eval('/@' + v.name + '/'), '<a title="' + v.name + '(' + v.email + ')' + '">@' + v.name + '</a>');
               });
@@ -188,13 +266,52 @@ export default class Comments extends Component {
 
               return (
                 <Panel header={ header } key={ i } style={ { margin: '5px' } }>
-                  <div style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: contents } }/>
-                  <div style={ { marginTop: '5px', fontSize: '12px' } }><span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, {}) }><i className='fa fa-share'></i> 回复</span></div>
+                  <div 
+                    onClick={ this.previewInlineImg.bind(this) } 
+                    style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
+                    dangerouslySetInnerHTML={ { __html: contents } }/>
+
+                  { inlinePreviewShow[val.id] &&
+                  <Lightbox
+                    mainSrc={  imgFileUrls[photoIndex] }
+                    nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
+                    prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
+                    imageTitle=''
+                    imageCaption=''
+                    onCloseRequest={ () => { this.state.inlinePreviewShow[val.id] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
+                    onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
+                    onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+
                   { val.reply && val.reply.length > 0 &&
                   <div className='reply-region'>
                     <ul className='reply-contents'>
                      { _.map(val.reply, (v, i) => {
                        let contents = v.contents ? _.escape(v.contents) : '-';
+
+                       const images = contents.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+                       const imgFileUrls = [];
+                       if (images) {
+                         _.forEach(images, (pv, i) => {
+                           const imgurls = pv.match(/http(s)?:\/\/([^\)]+)/ig);
+                           const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
+                           pattern.exec(imgurls[0]);
+                           const imgurl = RegExp.$1;
+                           contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + v.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                           imgFileUrls.push(imgurl);
+                         });
+                         contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
+                       }
+
+                       const links = contents.match(/\[.*?\]\(.*?\)/ig);
+                       if (links) {
+                         _.forEach(links, (lv, i) => {
+                           const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+                           if (pattern.exec(lv)) {
+                             contents = contents.replace(lv, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+                           }
+                         });
+                       }
+
                        _.map(v.atWho || [], (value) => {
                          contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.name + '(' + value.email + ')' + '">@' + value.name + '</a>');
                        });
@@ -203,16 +320,29 @@ export default class Comments extends Component {
                        return (
                        <li className='reply-contents-item'>
                          <div className='reply-item-header'>
-                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (v.creator.name + '(' + v.creator.email + ')')) + '">' + (v.creator && v.creator.id === currentUser.id ? '我' : v.creator.name) + '</a> 回复' + (v.to && v.to.name ? (' <a title="' + (v.to && v.to.nameAndEmail || '') + '">' + (v.to.id === currentUser.id ? '我' : v.to.name) + '</a>') : '') + ' - ' + getAgoAt(v.created_at, currentTime) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
+                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (v.creator.name + '(' + v.creator.email + ')')) + '">' + (v.creator && v.creator.id === currentUser.id ? '我' : v.creator.name) + '</a> - ' + getAgoAt(v.created_at, currentTime) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
                            { ((v.creator && currentUser.id === v.creator.id) || permissions.indexOf('manage_project') !== -1) &&  
-                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) }><i className='fa fa-trash' title='删除'></i></span> }
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) } title='删除'><i className='fa fa-trash'></i></span> }
                            { ((v.creator && currentUser.id === v.creator.id) || permissions.indexOf('manage_project') !== -1) &&  
-                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) }><i className='fa fa-pencil' title='编辑'></i></span> }
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) } title='编辑'><i className='fa fa-pencil'></i></span> }
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, v.creator) } title='回复'><i className='fa fa-reply'></i></span>
                          </div>
-                         <div style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: contents } }/>
-                         <div style={ { fontSize: '12px' } }>
-                           <span className='comments-button' onClick={ this.showAddReply.bind(this, val.id, v.creator) }><i className='fa fa-share'></i> 回复</span>
-                         </div>
+                         <div 
+                           onClick={ this.previewInlineImg.bind(this) }
+                           style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
+                           dangerouslySetInnerHTML={ { __html: contents } }/>
+ 
+                           { inlinePreviewShow[v.id] &&
+                           <Lightbox
+                             mainSrc={  imgFileUrls[photoIndex] }
+                             nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
+                             prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
+                             imageTitle=''
+                             imageCaption=''
+                             onCloseRequest={ () => { this.state.inlinePreviewShow[v.id] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
+                             onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
+                             onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+
                        </li> ) } ) }
                     </ul>
                   </div> }
@@ -225,6 +355,8 @@ export default class Comments extends Component {
             data={ this.state.selectedComments }
             loading = { itemLoading }
             users ={ users }
+            project ={ project }
+            permissions ={ permissions }
             issue_id={ issue_id }
             edit={ editComments }
             i18n={ i18n }/> }

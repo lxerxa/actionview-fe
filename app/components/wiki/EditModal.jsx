@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, HelpBlock, Checkbox } from 'react-bootstrap';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -11,7 +11,7 @@ let simplemde = {};
 export default class EditModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, emsg: '', name: '', contents: '', touched: false };
+    this.state = { ecode: 0, emsg: '', name: '', contents: '', touched: false, isSendMsg: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -32,7 +32,7 @@ export default class EditModal extends Component {
 
   async handleSubmit() {
     const { update, wid, close } = this.props;
-    const ecode = await update(wid, { name: this.state.name, contents: simplemde.value() });
+    const ecode = await update(wid, { name: this.state.name, contents: simplemde.value(), isSendMsg: this.state.isSendMsg });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -114,6 +114,13 @@ export default class EditModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading ? errMsg[this.state.ecode] : this.state.emsg }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
+          <Checkbox
+            disabled={ loading }
+            checked={ this.state.isSendMsg }
+            onClick={ () => { this.setState({ isSendMsg: !this.state.isSendMsg }) } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            通知项目成员
+          </Checkbox>
           <Button disabled={ this.state.emsg || loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>

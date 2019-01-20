@@ -262,6 +262,7 @@ export default class Container extends Component {
           getOptions={ this.getOptions.bind(this) } 
           query={ query } 
           refresh={ this.refresh.bind(this) } 
+          index={ this.index.bind(this) } 
           exportExcel={ this.exportExcel.bind(this) } 
           project={ this.props.project.item } 
           closeDetailBar={ this.closeDetailBar.bind(this) }

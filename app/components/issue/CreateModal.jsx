@@ -140,10 +140,10 @@ class CreateModal extends Component {
     }
 
     const { project, options } = this.props;
-    if (true || options.permissions && options.permissions.indexOf('upload_file') !== -1) {
+    if (options.permissions && options.permissions.indexOf('upload_file') !== -1) {
       const self = this;
       $(function() {
-        $('textarea').inlineattachment({
+        $('#create-issue-dialog textarea').inlineattachment({
           allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
           uploadUrl: '/api/project/' + project.key + '/file',
           onFileUploaded: (editor, filename) => { 
@@ -383,9 +383,15 @@ class CreateModal extends Component {
     }
 
     return (
-      <Modal { ...this.props } onHide={ close } bsSize={ isFromWorkflow ? 'middle' : 'large' } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal 
+        id='create-issue-dialog'
+        backdrop='static'
+        aria-labelledby='contained-modal-title-sm'
+        onHide={ close } 
+        bsSize={ isFromWorkflow ? 'middle' : 'large' } 
+        { ...this.props }>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : '编辑问题') : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : ('编辑问题' + ' - ' + data.no)) : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
         <Form horizontal>
           <Modal.Body style={ bodyStyles } ref='createModal'>

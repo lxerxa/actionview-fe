@@ -17,9 +17,16 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
+
+    const storage = window.localStorage;
+    let ev = 'epic';
+    if (storage && storage.getItem(props.project.key + '-backlog-filter-mode') === 'version') {
+      ev = 'version';
+    }
+
     this.state = { 
       hideHeader: false, 
-      backlogFilterMode: 'epic',
+      backlogFilterMode: ev,
       createIssueModalShow: false, 
       createKanbanModalShow: false, 
       createEpicModalShow: false, 
@@ -221,9 +228,15 @@ export default class Header extends Component {
   }
 
   async changeFilterMode() {
-    this.setState({ backlogFilterMode : this.state.backlogFilterMode === 'epic' ? 'version' : 'epic' });
 
-    const { index, curKanban, selectFilter, selectedFilter } = this.props;
+    await this.setState({ backlogFilterMode : this.state.backlogFilterMode === 'epic' ? 'version' : 'epic' });
+
+    const { index, curKanban, selectFilter, selectedFilter, project } = this.props;
+    const storage = window.localStorage;
+    if (storage) {
+      storage.setItem(project.key + '-backlog-filter-mode', this.state.backlogFilterMode);
+    }
+
     await selectFilter('all');
     if (selectedFilter != 'all') {
       index(this.getQuery(curKanban.query || {}) , {});
@@ -294,7 +307,7 @@ export default class Header extends Component {
 
     return (
       <div style={ { margin: '18px 10px 10px 10px' } }>
-        <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'center' } }>
+        <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'right' } }>
           <span title='展示看板头'>
             <Button onClick={ this.showHeader.bind(this) } style={ { marginTop: '-37px' } }><i className='fa fa-angle-double-down' aria-hidden='true'></i></Button>
           </span>

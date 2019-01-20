@@ -362,8 +362,8 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
-  async delEpic(eid) {
-    await this.props.actions.delEpic(this.pid, eid);
+  async delEpic(values) {
+    await this.props.actions.delEpic(this.pid, values);
     return this.props.kanban.ecode;
   }
 
@@ -418,7 +418,7 @@ export default class Container extends Component {
     }
 
     return (
-      <div style={ { overflowY: 'hidden', height: 'inherit' } }>
+      <div style={ { overflowY: 'hidden', height: '100%' } }>
         <Header ref='header' 
           changeModel={ this.changeModel.bind(this) }
           model={ this.state.model }
@@ -520,7 +520,7 @@ export default class Container extends Component {
         { this.state.model == 'epic' &&
         <EpicList
           indexLoading={ this.props.kanban.indexEpicLoading }
-          itemLoading={ this.props.kanban.epicLoading }
+          loading={ this.props.kanban.epicLoading }
           collection={ this.props.kanban.epics }
           selectedItem={ this.props.kanban.selectedEpicItem }
           gotoBacklog={ this.gotoBacklog.bind(this) }

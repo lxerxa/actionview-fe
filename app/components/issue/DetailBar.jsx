@@ -7,6 +7,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
 const moment = require('moment');
 const CreateModal = require('./CreateModal');
 const Comments = require('./comments/Comments');
@@ -136,6 +137,16 @@ export default class DetailBar extends Component {
     del: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
+  }
+
+  componentDidMount() {
+    if ($('.animate-dialog').length > 0) {
+      let width = 0;
+      const docWidth = $('.doc-container').get(0).clientWidth;
+      width = _.max([ docWidth / 2, 600 ]);
+      width = _.min([ width, 1000 ]);
+      $('.animate-dialog').css('width', width + 'px');
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -415,7 +426,7 @@ export default class DetailBar extends Component {
   previewInlineImg(e) {
     const { options } = this.props;
 
-    if (options.permissions && options.permissions.indexOf('download_file') !== -1) {
+    if (options.permissions && options.permissions.indexOf('download_file') === -1) {
       notify.show('权限不足。', 'error', 2000);
       return;
     }
@@ -507,7 +518,7 @@ export default class DetailBar extends Component {
       selectedFile, 
       action_id } = this.state;
 
-    const panelStyle = { marginBottom: '0px', borderTop: '0px' };
+    const panelStyle = { marginBottom: '0px', borderTop: '0px', borderRadius: '0px' };
 
     const assigneeOptions = _.map(options.assignees || [], (val) => { 
       return { label: val.name + '(' + val.email + ')', value: val.id } 
@@ -542,6 +553,27 @@ export default class DetailBar extends Component {
       selectedEpic = _.find(options.epics, { id: data.epic });
     }
 
+    //const storage = window.localStorage;
+    //let issueStorage = storage.getItem(project.key + '-' + data.no);
+    //if (issueStorage) {
+    //  issueStorage = JSON.parse(issueStorage); 
+    //}
+
+    const commentsTab = (
+      <div>
+        <span style={ { paddingRight: '6px' } }>备注{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
+      </div>);
+
+    const worklogTab = (
+      <div>
+        <span style={ { paddingRight: '6px' } }>工作日志{ !itemLoading && '(' + (data.worklogs_num > 99 ? '99+' : (data.worklogs_num || 0)) + ')' }</span>
+      </div>);
+
+    const gitTab = (
+      <div>
+        <span style={ { paddingRight: '6px' } }>Git提交{ !itemLoading && '(' + (data.gitcommits_num > 99 ? '99+' : (data.gitcommits_num || 0)) + ')' }</span>
+      </div>);
+
     return (
       <div className='animate-dialog' style={ { ...detailFloatStyle } }>
         <Button className='close' onClick={ close } title='关闭'>
@@ -563,7 +595,7 @@ export default class DetailBar extends Component {
           { data.watching ? <i className='fa fa-eye-slash'></i> : <i className='fa fa-eye'></i> }
         </Button>
         <div className='panel panel-default' style={ panelStyle }>
-          <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='uncontrolled-tab-example'>
+          <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='issue-detail-tab'>
             <Tab eventKey={ 1 } title='基本'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '10px', marginBottom: '40px', marginLeft: '10px' } }>
@@ -591,7 +623,7 @@ export default class DetailBar extends Component {
                       { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
-                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
+                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && ((options.permissions.indexOf('edit_issue') !== -1 && !data.hasSubtasks) || options.permissions.indexOf('create_issue') !== -1) && <MenuItem divider/> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
@@ -650,8 +682,9 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px' } }>
-                      <div className='circle' style={ priorityStyle }/>
-                        { _.find(options.priorities || [], { id: data.priority }) ? _.find(options.priorities, { id: data.priority }).name : '-' }
+                      { priorityInd !== -1 &&
+                      <div className='circle' style={ priorityStyle }/> }
+                      { priorityInd !== -1 ? options.priorities[priorityInd].name : '-' }
                       </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
@@ -667,8 +700,8 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     经办人
                   </Col>
-                  <Col sm={ 7 }>
-                  { !editAssignee ?
+                  <Col sm={ editAssignee ? 7 : 3 }>
+                    { !editAssignee ?
                     <div style={ { marginTop: '7px' } }>
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
@@ -702,6 +735,16 @@ export default class DetailBar extends Component {
                       </div>
                     </div> }
                   </Col>
+                  { !editAssignee && 
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    报告人 
+                  </Col> }
+                  { !editAssignee && 
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
+                    </div>
+                  </Col> }
                 </FormGroup>
                 { data.labels && data.labels.length > 0 &&
                 <FormGroup>
@@ -716,6 +759,17 @@ export default class DetailBar extends Component {
                     </div>
                   </Col>
                 </FormGroup> }
+                { data.resolve_version &&
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    解决版本 
+                  </Col>
+                  <Col sm={ 7 }>
+                    <div style={ { marginTop: '7px' } }>
+                     { _.find(options.versions, { id: data.resolve_version }) ? _.find(options.versions, { id: data.resolve_version }).name : '-' }
+                    </div>
+                  </Col>
+                </FormGroup> }
                 { data.epic &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -723,8 +777,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
-                      <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
-                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px' } } title={ selectedEpic.name || '-' } >
+                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px', float: 'left' } } title={ selectedEpic.name || '-' } >
                           { selectedEpic.name || '-' }
                         </span>
                       </Link>
@@ -842,7 +895,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic' || field.key == 'labels') {
+                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic' || field.key == 'labels' || field.key == 'resolve_version') {
                     return;
                   }
                   if (field.type === 'File') {
@@ -952,19 +1005,31 @@ export default class DetailBar extends Component {
                     </div>);
                   } else if (field.type === 'TextArea') {
                     let txt = _.escape(data[field.key]);
-                    const images = txt.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+
+                    const images = txt.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
                     const imgFileUrls = [];
                     if (images) {
                       _.forEach(images, (v, i) => {
                         const imgurls = v.match(/http(s)?:\/\/([^\)]+)/ig); 
                         const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
-                        pattern.exec(imgurls[0]);
-                        const imgurl = RegExp.$1;
-                        txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
-                        imgFileUrls.push(imgurl);
+                        if (pattern.exec(imgurls[0])) {
+                          const imgurl = RegExp.$1;
+                          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                          imgFileUrls.push(imgurl);
+                        }
                       });
                       txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
                     }
+
+                    const links = txt.match(/\[.*?\]\(.*?\)/ig);
+                    if (links) {
+                      _.forEach(links, (v, i) => {
+                        const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+                        pattern.exec(v);
+                        txt = txt.replace(v, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+                      });
+                    }
+
                     contents = ( 
                       <div>
                         <div 
@@ -1000,11 +1065,12 @@ export default class DetailBar extends Component {
                 }) }
               </Form>
             </Tab>
-            <Tab eventKey={ 2 } title='备注'>
+            <Tab eventKey={ 2 } title={ commentsTab }>
               <Comments 
                 i18n={ i18n }
                 currentTime={ options.current_time || 0 }
                 currentUser={ user }
+                project={ project } 
                 permissions={ options.permissions || [] }
                 issue_id={ data.id }
                 collection={ commentsCollection } 
@@ -1028,7 +1094,7 @@ export default class DetailBar extends Component {
                 sortHistory={ sortHistory } 
                 indexLoading={ historyIndexLoading } />
             </Tab>
-            <Tab eventKey={ 4 } title='工作日志'>
+            <Tab eventKey={ 4 } title={ worklogTab }>
               <Worklog 
                 i18n={ i18n }
                 currentTime={ options.current_time || 0 }
@@ -1047,7 +1113,8 @@ export default class DetailBar extends Component {
                 editWorklog={ editWorklog } 
                 delWorklog={ delWorklog } />
             </Tab>
-            <Tab eventKey={ 5 } title='Git提交'>
+            { data.gitcommits_num > 0 &&
+            <Tab eventKey={ 5 } title={ gitTab }>
               <GitCommits
                 issue_id={ data.id }
                 currentTime={ options.current_time || 0 }
@@ -1056,7 +1123,7 @@ export default class DetailBar extends Component {
                 indexGitCommits={ indexGitCommits }
                 sortGitCommits={ sortGitCommits }
                 indexLoading={ gitCommitsIndexLoading } />
-            </Tab>
+            </Tab> }
           </Tabs>
         </div>
         { delFileShow && 

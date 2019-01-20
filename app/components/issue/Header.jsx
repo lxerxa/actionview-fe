@@ -37,6 +37,7 @@ export default class Header extends Component {
     addSearcher: PropTypes.func.isRequired,
     configSearcher: PropTypes.func.isRequired,
     closeDetailBar: PropTypes.func,
+    index: PropTypes.func,
     refresh: PropTypes.func,
     exportExcel: PropTypes.func,
     getOptions: PropTypes.func,
@@ -230,9 +231,13 @@ export default class Header extends Component {
   }
 
   operateSelect(eventKey) {
-    const { refresh, query } = this.props;
+    const { refresh, index, query } = this.props;
     if (eventKey === '1') {
-      refresh(query);
+      if (query.page > 1) {
+        refresh(_.extend(query, { page: 1 }));
+      } else {
+        index(query);
+      }
     } else if (eventKey === '2') {
       this.setState({ exportConfigShow: true });
     }

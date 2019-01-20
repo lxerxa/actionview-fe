@@ -11,7 +11,7 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
-        state.options = _.extend(state.options, action.result.options);
+        _.extend(state.options, action.result.options);
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
 
@@ -23,7 +23,7 @@ export default function document(state = initialState, action) {
 
     case t.DOCUMENT_OPTIONS_SUCCESS:
       if (action.result.ecode === 0) {
-        state.options = _.extend(state.options, action.result.data);
+        _.extend(state.options, action.result.data);
       }
       return { ...state, optionsLoading: false, ecode: action.result.ecode };
 

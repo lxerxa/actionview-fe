@@ -248,10 +248,10 @@ export default function issue(state = initialState, action) {
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         if (ind !== -1) {
-          state.collection[ind] = _.extend(state.collection[ind], action.result.data);
+          _.extend(state.collection[ind], action.result.data);
         }
         if (!_.isEmpty(state.itemData) && action.result.data.id === state.itemData.id) {
-          state.itemData = _.extend(state.itemData, action.result.data);
+          _.extend(state.itemData, action.result.data);
         }
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
@@ -269,6 +269,14 @@ export default function issue(state = initialState, action) {
       if (action.result.ecode === 0) {
         state.commentsCollection = action.result.data;
         _.assign(state.options, action.result.options || {});
+
+        state.itemData.comments_num = 0;
+        _.forEach(state.commentsCollection, (v) => {
+          state.itemData.comments_num += 1;
+          if (v.reply) {
+            state.itemData.comments_num += v.reply.length;
+          }
+        });
       }
       return { ...state, commentsIndexLoading: false, commentsLoaded: true, ecode: action.result.ecode };
 
@@ -289,6 +297,11 @@ export default function issue(state = initialState, action) {
         } else {
           state.commentsCollection.unshift(action.result.data);
         }
+        if (state.itemData.comments_num) {
+          state.itemData.comments_num += 1;
+        } else {
+          state.itemData.comments_num = 1;
+        }
       }
       return { ...state, commentsLoading: false, ecode: action.result.ecode };
 
@@ -302,6 +315,14 @@ export default function issue(state = initialState, action) {
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.commentsCollection, { id: action.result.data.id });
         state.commentsCollection[ind] = action.result.data;
+
+        state.itemData.comments_num = 0;
+        _.forEach(state.commentsCollection, (v) => {
+          state.itemData.comments_num += 1;
+          if (v.reply) {
+            state.itemData.comments_num += v.reply.length;
+          }
+        });
       }
       return { ...state, commentsItemLoading: false, ecode: action.result.ecode };
 
@@ -314,6 +335,14 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_COMMENTS_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.commentsCollection = _.reject(state.commentsCollection, { id: action.id });
+
+        state.itemData.comments_num = 0;
+        _.forEach(state.commentsCollection, (v) => {
+          state.itemData.comments_num += 1;
+          if (v.reply) {
+            state.itemData.comments_num += v.reply.length;
+          }
+        });
       }
       return { ...state, commentsItemLoading: false, ecode: action.result.ecode };
 
@@ -344,6 +373,7 @@ export default function issue(state = initialState, action) {
       if (action.result.ecode === 0) {
         state.gitCommitsCollection = action.result.data;
         _.assign(state.options, action.result.options || {});
+        state.itemData.gitcommits_num = state.gitCommitsCollection.length; 
       }
       return { ...state, gitCommitsIndexLoading: false, gitCommitsLoaded: true, ecode: action.result.ecode };
 
@@ -361,6 +391,7 @@ export default function issue(state = initialState, action) {
       if (action.result.ecode === 0) {
         state.worklogCollection = action.result.data;
         _.assign(state.options, action.result.options || {});
+        state.itemData.worklogs_num = state.worklogCollection.length; 
       }
       return { ...state, worklogIndexLoading: false, worklogLoaded: true, ecode: action.result.ecode };
 
@@ -380,6 +411,11 @@ export default function issue(state = initialState, action) {
           state.worklogCollection.unshift(action.result.data);
         } else {
           state.worklogCollection.push(action.result.data);
+        }
+        if (state.itemData.worklogs_num) {
+          state.itemData.worklogs_num += 1;
+        } else {
+          state.itemData.worklogs_num = 1;
         }
       }
       return { ...state, worklogLoading: false, ecode: action.result.ecode };
@@ -406,6 +442,11 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_WORKLOG_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.worklogCollection = _.reject(state.worklogCollection, { id: action.id });
+        if (state.itemData.worklogs_num > 0) {
+          state.itemData.worklogs_num -= 1;
+        } else {
+          state.itemData.worklogs_num = 0;
+        }
       }
       return { ...state, worklogCollection: state.worklogCollection, worklogLoading: false, ecode: action.result.ecode };
 
