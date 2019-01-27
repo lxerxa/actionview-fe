@@ -110,7 +110,7 @@ export default class List extends Component {
     this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
 
     const { update } = this.props;
-    const ecode = await update({ principal: this.state.principal[moduleId], id: moduleId });
+    const ecode = await update({ principal: this.state.principal[moduleId] || '', id: moduleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetPrincipalModuleIds, moduleId);
       this.state.willSetPrincipalModuleIds.splice(willSetIndex, 1);
@@ -153,7 +153,7 @@ export default class List extends Component {
     this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
 
     const { update } = this.props;
-    const ecode = await update({ defaultAssignee: this.state.defaultAssignee[moduleId], id: moduleId });
+    const ecode = await update({ defaultAssignee: this.state.defaultAssignee[moduleId] || '', id: moduleId });
     if (ecode === 0) {
       const willSetIndex = _.indexOf(this.state.willSetDefalutAssigneeModuleIds, moduleId);
       this.state.willSetDefalutAssigneeModuleIds.splice(willSetIndex, 1);
@@ -253,10 +253,10 @@ export default class List extends Component {
             <div>
               <Select 
                 simpleValue 
-                clearable={ false } 
+                clearable={ true } 
                 disabled={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 && true } 
                 options={ userOptions } 
-                value={ this.state.principal[collection[i].id] || collection[i].principal.id } 
+                value={ _.isUndefined(this.state.principal[collection[i].id]) ? collection[i].principal.id : this.state.principal[collection[i].id] } 
                 onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } 
                 placeholder='请选择用户'/>
               <div className={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>

@@ -98,9 +98,9 @@ export default class EditRow extends Component {
     return (
       <div>
         { (mode === 'createFolder' || mode === 'editFolder') &&
-          <span style={ { marginRight: '5px', color: 'gold' } }><i className='fa fa-folder'></i></span> }
+        <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span> }
         { mode === 'editFile' && 
-          <span style={ { marginRight: '5px', color: '#777' } }><i className={ fileIconCss.fa }></i></span> }
+        <span style={ { marginRight: '5px', color: '#777' } }><i className={ fileIconCss.fa }></i></span> }
         <FormControl 
           type='text' 
           id='input_nm' 

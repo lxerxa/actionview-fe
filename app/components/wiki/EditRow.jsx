@@ -85,7 +85,7 @@ export default class EditRow extends Component {
 
     return (
       <div>
-        <span style={ { marginRight: '5px', color: 'gold' } }><i className='fa fa-folder'></i></span>
+        <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
         <FormControl 
           type='text' 
           id='input_nm' 

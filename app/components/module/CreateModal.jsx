@@ -93,7 +93,7 @@ export default class CreateModal extends Component {
             <ControlLabel>责任人</ControlLabel>
             <Select 
               disabled={ submitting } 
-              clearable={ false } 
+              clearable={ true } 
               value={ principal.value } 
               onChange={ newValue => { principal.onChange(newValue) } } 
               options={ userOptions } 
@@ -104,7 +104,7 @@ export default class CreateModal extends Component {
             <Select 
               disabled={ submitting } 
               options={ assigneeOptions } 
-              clearable={ false } 
+              clearable={ true } 
               value={ defaultAssignee.value } 
               onChange={ newValue => { defaultAssignee.onChange(newValue) } } 
               placeholder='默认经办人(项目负责人)'/>
