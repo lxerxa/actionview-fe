@@ -41,7 +41,7 @@ const VersionContainer = (location, cb) => {
 };
 const ReportContainer = (location, cb) => {
   require.ensure([], require => {
-    cb(null, require('./components/version/Container'))
+    cb(null, require('./components/report/Container'))
   }, 'version')
 };
 //const TeamContainer = require('./components/team/Container');

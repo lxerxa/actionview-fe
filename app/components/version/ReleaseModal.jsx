@@ -9,7 +9,7 @@ const loadimg = require('../../assets/images/loading.gif');
 export default class ReleaseModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, operate_flg: '0', swapVersion: '', isSendMsg: true };
+    this.state = { ecode: 0, operate_flg: '0', swapVersion: '', isSendMsg: true, isTrigger: true };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -25,7 +25,7 @@ export default class ReleaseModal extends Component {
 
   async confirm() {
     const { close, release, data } = this.props;
-    const ecode = await release(_.extend({}, { id: data.id }, { status: data.status === 'released' ? 'unreleased' : 'released', operate_flg: this.state.operate_flg, swap_version: this.state.swapVersion, isSendMsg: this.state.isSendMsg }));
+    const ecode = await release(_.extend({}, { id: data.id }, { status: data.status === 'released' ? 'unreleased' : 'released', operate_flg: this.state.operate_flg, swap_version: this.state.swapVersion, isSendMsg: this.state.isSendMsg, isTrigger: this.state.isTrigger }));
     if (ecode === 0) {
       close();
       if (data.status === 'released') {
@@ -51,7 +51,7 @@ export default class ReleaseModal extends Component {
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>版本{ data.status === 'released' ? '未发布' : '发布' } - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>版本{ data.status === 'released' ? '取消发布' : '发布' } - { data.name }</Modal.Title>
         </Modal.Header>
         { data.status !== 'released' &&
         <Modal.Body>
@@ -97,10 +97,17 @@ export default class ReleaseModal extends Component {
               </FormGroup>
             </div>
           </div> }
+          <Checkbox
+            disabled={ loading }
+            checked={ this.state.isTrigger }
+            onClick={ () => { this.setState({ isTrigger: !this.state.isTrigger }) } }
+            style={ { display: 'inline-block', margin: '10px 5px' } }>
+            触发 <b>版本发布</b> 事件 
+          </Checkbox>
         </Modal.Body> }
         { data.status === 'released' &&
         <Modal.Body>
-          确认要将此版本置为未发布吗？
+          该版本确认要取消发布吗？
         </Modal.Body> }
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

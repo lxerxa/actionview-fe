@@ -977,3 +977,21 @@ table tr:hover .remove-icon{
   border-top-color: transparent;
   border-radius: 0px;
 }
+
+.report-container td {
+  width: 25%
+}
+
+.rdtOpen .rdtPicker {
+  width: 100%
+}
+
+.direct-button {
+  margin-left: 5px
+}
+
+.direct-button:hover {
+  opacity: 1 !important;
+  cursor: pointer;
+  color: #5f5f5f;
+}

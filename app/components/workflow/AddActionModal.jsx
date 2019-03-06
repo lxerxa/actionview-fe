@@ -299,7 +299,7 @@ export default class AddActionModal extends Component {
                     disabled={ submitting } 
                     options={ screenOptions } 
                     simpleValue 
-                    value={ screen.value } 
+                    value={ screen.value || null } 
                     onChange={ newValue => { screen.onChange(newValue) } } 
                     placeholder='无界面' 
                     searchable={ false }/>
