@@ -270,6 +270,7 @@ export default generateConstants([
   'WIKI_MOVE(ASYNC)',
 
   'REPORT_LIST(ASYNC)',
+  'REPORT_WORKLOG(ASYNC)',
 
   'MYSETTING_USER_SHOW(ASYNC)',
   'MYSETTING_PWD_RESET(ASYNC)',

@@ -9,7 +9,7 @@ const loadimg = require('../../assets/images/loading.gif');
 export default class ReleaseModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, operate_flg: '0', swapVersion: '', isSendMsg: true, isTrigger: true };
+    this.state = { ecode: 0, operate_flg: '0', swapVersion: '', isSendMsg: true };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -25,7 +25,7 @@ export default class ReleaseModal extends Component {
 
   async confirm() {
     const { close, release, data } = this.props;
-    const ecode = await release(_.extend({}, { id: data.id }, { status: data.status === 'released' ? 'unreleased' : 'released', operate_flg: this.state.operate_flg, swap_version: this.state.swapVersion, isSendMsg: this.state.isSendMsg, isTrigger: this.state.isTrigger }));
+    const ecode = await release(_.extend({}, { id: data.id }, { status: data.status === 'released' ? 'unreleased' : 'released', operate_flg: this.state.operate_flg, swap_version: this.state.swapVersion, isSendMsg: this.state.isSendMsg }));
     if (ecode === 0) {
       close();
       if (data.status === 'released') {
@@ -97,13 +97,6 @@ export default class ReleaseModal extends Component {
               </FormGroup>
             </div>
           </div> }
-          <Checkbox
-            disabled={ loading }
-            checked={ this.state.isTrigger }
-            onClick={ () => { this.setState({ isTrigger: !this.state.isTrigger }) } }
-            style={ { display: 'inline-block', margin: '10px 5px' } }>
-            触发 <b>版本发布</b> 事件 
-          </Checkbox>
         </Modal.Body> }
         { data.status === 'released' &&
         <Modal.Body>

@@ -77,116 +77,86 @@ export default class Header extends Component {
 
     if (query.no) { queryConds.push('编号～' + query.no); }
     if (query.title) { queryConds.push('主题～' + query.title); }
-    if (query.type) { 
-      const typeQuery = query.type.split(',');
-      const typeQueryNames = [];
-      for (let i = 0; i < typeQuery.length; i++) {
-        if ((index = _.findIndex(types, { id: typeQuery[i] })) !== -1) {
-          typeQueryNames.push(types[index].name);
+
+    const baseConds = [
+      { key: 'type', name: '类型', values: types },
+      { key: 'priority', name: '优先级', values: priorities },
+      { key: 'state', name: '状态', values: states },
+      { key: 'resolution', name: '解决结果', values: resolutions },
+      { key: 'module', name: '模块', values: modules },
+      { key: 'resolve_version', name: '解决版本', values: versions  },
+      { key: 'effect_versions', name: '影响版本', values: versions }
+    ];
+    for (let i = 0; i < baseConds.length; i++) {
+      const v = baseConds[i];
+      if (query[v.key]) { 
+        const baseQuery = query[v.key].split(',');
+        const baseQueryNames = [];
+        for (let j = 0; j < baseQuery.length; j++) {
+          if ((index = _.findIndex(v.values, { id: baseQuery[j] })) !== -1) {
+            baseQueryNames.push(v.values[index].name);
+          } else {
+            return v.name + errorMsg;
+          }
+        }
+        queryConds.push(v.name + '～' + baseQueryNames.join('，'));
+      }
+    };
+
+    if (query.labels) {
+      queryConds.push('标签～' + query.labels);
+    }
+
+    const memberConds = [ 
+      { key: 'assignee', name: '经办人' }, 
+      { key: 'reporter', name : '报告人' }, 
+      { key: 'watcher', name : '关注者' }, 
+      { key: 'resolver', name : '解决者' }, 
+      { key: 'closer', name : '关闭者' } 
+    ];
+    for (let i = 0; i < memberConds.length; i++) {
+      const v = memberConds[i];
+      if (query[v.key]) {
+        const memberQuery = query[v.key].split(',');
+        const memberQueryNames = [];
+        for (let j = 0; j < memberQuery.length; j++) {
+          if (memberQuery[j] == 'me') {
+            memberQueryNames.push('当前用户');
+          } else if ((index = _.findIndex(users, { id: memberQuery[j] })) !== -1) {
+            memberQueryNames.push(users[index].name);
+          } else {
+            return v.name + errorMsg;
+          }
+        }
+        queryConds.push(v.name + '～' + memberQueryNames.join('，'));
+      }
+    }
+
+    const timeConds = [
+      { key: 'created_at', name: '创建时间' },
+      { key: 'updated_at', name : '更新时间' },
+      { key: 'resolved_at', name : '解决时间' },
+      { key: 'closed_at', name : '关闭时间' }
+    ];
+    const units = { w: '周', m: '月', y: '年' };
+    for (let i = 0; i < timeConds.length; i++) {
+      const v = timeConds[i];
+      if (query[v.key]) {
+        let cond = '';
+        if (_.endsWith(query[v.key], 'w') || _.endsWith(query[v.key], 'm') || _.endsWith(query[v.key], 'y')) {
+          const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
+          if (pattern.exec(query[v.key])) {
+            cond = RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '外' : '内');
+          } else {
+            return v.name + errorMsg;
+          }
         } else {
-          return '类型' + errorMsg;
+          cond = query[v.key];
         }
+        queryConds.push(v.name + '～' + cond);
       }
-      queryConds.push('类型～' + typeQueryNames.join('，'));
-    }
-    if (query.assignee) {
-      const assigneeQuery = query.assignee.split(',');
-      const assigneeQueryNames = [];
-      for (let i = 0; i < assigneeQuery.length; i++) {
-        if (assigneeQuery[i] == 'me') {
-          assigneeQueryNames.push('当前用户');
-        } else if ((index = _.findIndex(users, { id: assigneeQuery[i] })) !== -1) {
-          assigneeQueryNames.push(users[index].name);
-        } else {
-          return '经办人' + errorMsg;
-        }
-      }
-      queryConds.push('经办人～' + assigneeQueryNames.join('，'));
-    }
-    if (query.reporter) {
-      const reporterQuery = query.reporter.split(',');
-      const reporterQueryNames = [];
-      for (let i = 0; i < reporterQuery.length; i++) {
-        if (reporterQuery[i] == 'me') {
-          reporterQueryNames.push('当前用户');
-        } else if ((index = _.findIndex(users, { id: reporterQuery[i] })) !== -1) {
-          reporterQueryNames.push(users[index].name);
-        } else {
-          return '报告人' + errorMsg;
-        }
-      }
-      queryConds.push('报告人～' + reporterQueryNames.join('，'));
-    }
-    if (query.watcher) {
-      const watcherQuery = query.watcher.split(',');
-      const watcherQueryNames = [];
-      for (let i = 0; i < watcherQuery.length; i++) {
-        if (watcherQuery[i] == 'me') {
-          watcherQueryNames.push('当前用户');
-        }
-      }
-      queryConds.push('关注者～' + watcherQueryNames.join('，'));
-    }
-    if (query.state) {
-      const stateQuery = query.state.split(',');
-      const stateQueryNames = [];
-      for (let i = 0; i < stateQuery.length; i++) {
-        if ((index = _.findIndex(states, { id: stateQuery[i] })) !== -1) {
-          stateQueryNames.push(states[index].name);
-        } else {
-          return '状态' + errorMsg;
-        }
-      }
-      queryConds.push('状态～' + stateQueryNames.join('，'));
-    }
-    if (query.resolution) {
-      const resolutionQuery = query.resolution.split(',');
-      const resolutionQueryNames = [];
-      for (let i = 0; i < resolutionQuery.length; i++) {
-        if ((index = _.findIndex(resolutions, { id: resolutionQuery[i] })) !== -1) {
-          resolutionQueryNames.push(resolutions[index].name);
-        } else {
-          return '解决结果' + errorMsg;
-        }
-      }
-      queryConds.push('解决结果～' + resolutionQueryNames.join('，'));
-    }
-    if (query.priority) {
-      const priorityQuery = query.priority.split(',');
-      const priorityQueryNames = [];
-      for (let i = 0; i < priorityQuery.length; i++) {
-        if ((index = _.findIndex(priorities, { id: priorityQuery[i] })) !== -1) {
-          priorityQueryNames.push(priorities[index].name);
-        } else {
-          return '优先级' + errorMsg;
-        }
-      }
-      queryConds.push('优先级～' + priorityQueryNames.join('，'));
-    }
-    if (query.module) {
-      const moduleQuery = query.module.split(',');
-      const moduleQueryNames = [];
-      for (let i = 0; i < moduleQuery.length; i++) {
-        if ((index = _.findIndex(modules, { id: moduleQuery[i] })) !== -1) {
-          moduleQueryNames.push(modules[index].name);
-        } else {
-          return '模块' + errorMsg;
-        }
-      }
-      queryConds.push('模块～' + moduleQueryNames.join('，'));
-    }
-    if (query.resolve_version) {
-      const versionQuery = query.resolve_version.split(',');
-      const versionQueryNames = [];
-      for (let i = 0; i < versionQuery.length; i++) {
-        if ((index = _.findIndex(versions, { id: versionQuery[i] })) !== -1) {
-          versionQueryNames.push(versions[index].name);
-        } else {
-          return '解决版本～' + errorMsg;
-        }
-      }
-      queryConds.push('解决版本～' + versionQueryNames.join('，'));
-    }
+    } 
+
     if (query.epic) {
       const epicQuery = query.epic.split(',');
       const epicQueryNames = [];
@@ -211,11 +181,6 @@ export default class Header extends Component {
       }
       queryConds.push('Sprint～Sprint ' + sprintQueryNames.join('，'));
     }
-    if (query.labels) {
-      queryConds.push('标签～' + query.labels);
-    }
-    if (query.created_at) { queryConds.push('创建时间～' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
-    if (query.updated_at) { queryConds.push('更新时间～' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
 
     if (queryConds.length <= 0) { return ''; }
 

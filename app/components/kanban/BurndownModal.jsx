@@ -56,11 +56,11 @@ export default class PreviewModal extends Component {
       }
 
       if (_.indexOf(this.state.display, 'notWorkingShow') === -1) {
-        series[0].data = _.map(_.reject(newData.guideline || [], (v) => { return v.notWorking === 1 }), (v) => { return { category: v.day, value: v.value } });
-        series[1].data = _.map(_.reject(newData.remaining || [], (v) => { return v.notWorking == 1 }), (v) => { return { category: v.day, value: v.value } });
+        series[0].data = _.reject(newData.guideline || [], { notWorking : 1 });
+        series[1].data = _.reject(newData.remaining || [], { notWorking : 1 });
       } else {
-        series[0].data = _.map(newData.guideline || [], (v) => { return { category: v.day, value: v.value } });
-        series[1].data = _.map(newData.remaining || [], (v) => { return { category: v.day, value: v.value } });
+        series[0].data = newData.guideline || [];
+        series[1].data = newData.remaining || [];
       }
     }
 
@@ -86,7 +86,7 @@ export default class PreviewModal extends Component {
             <span style={ { marginLeft: '3px' } }>显示非工作日</span>
           </CheckboxGroup>
           <LineChart width={ 760 } height={ 340 } style={ { marginTop: '45px' } }>
-            <XAxis dataKey='category' type='category' allowDuplicatedCategory={ false } />
+            <XAxis dataKey='day' type='category' allowDuplicatedCategory={ false } />
             <YAxis dataKey='value'/>
             <CartesianGrid strokeDasharray='3 3'/>
             <Tooltip/>

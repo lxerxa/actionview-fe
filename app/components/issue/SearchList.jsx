@@ -123,7 +123,6 @@ export default class SearchList extends Component {
     const stateOptions = _.map(states, (val) => { return { label: (<span className={ 'state-' + val.category + '-label' }>{ val.name }</span>), value: val.id } });
     const priorityOptions = _.map(priorities, (val) => { return { label: val.name, value: val.id } });
     const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });
-    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
     const moduleOptions = _.map(modules, (val) => { return { label: val.name, value: val.id } });
     const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });
     const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });

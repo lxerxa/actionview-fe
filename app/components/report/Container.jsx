@@ -2,12 +2,13 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import * as ConfigActions from 'redux/actions/ConfigActions';
+import * as ReportActions from 'redux/actions/ReportActions';
 const List = require('./List');
+const Worklog = require('./worklog/Worklog');
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(ConfigActions, dispatch)
+    actions: bindActionCreators(ReportActions, dispatch)
   };
 }
 
@@ -26,24 +27,36 @@ export default class Container extends Component {
     report: PropTypes.object.isRequired
   }
 
+  componentWillMount() {
+    const { params: { key } } = this.props;
+    this.pid = key;
+  }
+
   async index() {
     await this.props.actions.index(this.pid);
     return this.props.report.ecode;
   }
 
-  componentWillMount() {
-    const { actions, params: { key } } = this.props;
-    actions.index(key);
-    this.pid = key;
+  async worklog() {
+    await this.props.actions.worklog(this.pid);
+    return this.props.report.ecode;
   }
 
   render() {
+    const { params: { mode } } = this.props;
+    console.log(mode);
     return (
       <div>
+        { !mode && 
         <List 
           index={ this.index.bind(this) } 
           project={ this.props.project.item }
-          { ...this.props.report }/>
+          { ...this.props.report }/> }
+        { mode == 'worklog' && 
+        <Worklog 
+          index={ this.worklog.bind(this) } 
+          project={ this.props.project.item }
+          { ...this.props.report }/> }
       </div>
     );
   }

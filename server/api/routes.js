@@ -1113,6 +1113,23 @@ export default function(router) {
   });
   /******************wiki*****************/
 
+  /******************report*****************/
+  router.get('/project/:key/report/index', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { issue:[], trend: [], worklog: [], track: [], compare: [], other: [] } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/report/worklog', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{value: 33, user: { name: '张三', id: 'zhangsan' } }, { value: 10, user: { name: '李四', id: 'lisi' } }, { value: 23, user: { name: '王五', id: 'wangwu' } }, { value: 123, user: { name: '高六', id: 'gaoliu' } }, {value: 33, user: { name: '张三', id: 'zhangsan' } }, { value: 10, user: { name: '李四', id: 'lisi' } }, { value: 23, user: { name: '王五', id: 'wangwu' } }, { value: 123, user: { name: '高六', id: 'gaoliu' } }]};
+    return res.status(200).send(results);
+  });
+
+  /******************report*****************/
+
   router.get('/project/:key/issue/:id/gitcommits', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

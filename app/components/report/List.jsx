@@ -19,13 +19,18 @@ export default class List extends Component {
     index: PropTypes.func.isRequired
   }
 
+  componentWillMount() {
+    const { index } = this.props;
+    index();
+  }
+
   render() {
 
     const { project, data, options, loading } = this.props;
 
     const issueTitle = (<span><i className='fa fa-pie-chart'></i> 问题分布图</span>)
     const trendTitle = (<span><i className='fa fa-line-chart'></i> 问题趋势图</span>)
-    const worklogTitle = (<span><i className='fa fa-bar-chart'></i> 人员工作量报告</span>)
+    const worklogTitle = (<span><i className='fa fa-bar-chart'></i> 人员工作日志报告</span>)
     const trackTitle = (<span><i className='fa fa-clock-o'></i> 时间跟踪报告</span>)
     const compareTitle = (<span><i className='fa fa-area-chart'></i> 创建问题和解决问题对比报告</span>)
     const otherTitle = (<span><i className='fa fa-bar-chart'></i> 其它报表</span>)
@@ -39,63 +44,63 @@ export default class List extends Component {
       :
       <div style={ { marginTop: '15px', marginBottom: '30px' } } className='report-container'>
         <Panel header={ issueTitle }>
-          <Table responsive hover>
-            <tr>
+          <Table responsive bordered={ false }>
+            <thead><tr>
               <td>aa</td>
               <td>bb</td>
               <td>bb</td>
               <td>bb</td>
-            </tr>
+            </tr></thead>
           </Table>
         </Panel>
         <Panel header={ trendTitle }>
-          <Table responsive hover>
-            <tr>
+          <Table responsive>
+            <thead><tr>
               <td>aa</td>
               <td>bb</td>
               <td>bb</td>
               <td>bb</td>
-            </tr>
+            </tr></thead>
           </Table>
         </Panel>
         <Panel header={ worklogTitle }>
           <Table responsive hover>
-            <tr>
-              <td>aa</td>
+            <thead><tr>
+              <td><Link to={ '/project/' + project.key + '/report/worklog' }>aa</Link></td>
               <td>bb</td>
               <td>bb</td>
               <td>bb</td>
-            </tr>
+            </tr></thead>
           </Table>
         </Panel>
         <Panel header={ trackTitle }>
           <Table responsive hover>
-            <tr>
+            <thead><tr>
               <td>aa</td>
               <td>bb</td>
               <td>bb</td>
               <td>bb</td>
-            </tr>
+            </tr></thead>
           </Table>
         </Panel>
         <Panel header={ compareTitle }>
           <Table responsive hover>
-            <tr>
+            <thead><tr>
               <td>aa</td>
               <td>bb</td>
               <td>bb</td>
               <td>bb</td>
-            </tr>
+            </tr></thead>
           </Table>
         </Panel>
         <Panel header={ otherTitle }>
           <Table responsive hover>
-            <tr>
+            <thead><tr>
               <td>延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率</td>
               <td>完成率</td>
               <td>bb</td>
               <td>bb</td>
-            </tr>
+            </tr></thead>
           </Table>
         </Panel>
       </div>
