@@ -13,3 +13,10 @@ export function worklog(key, qs) {
     promise: (client) => client.request({ url: '/project/' + key + '/report/worklog' + (qs ? '?' + qs : '') })
   });
 }
+
+export function getOptions(key) {
+  return asyncFuncCreator({
+    constant: 'REPORT_OPTIONS',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/options' })
+  });
+}

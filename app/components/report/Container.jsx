@@ -19,6 +19,10 @@ export default class Container extends Component {
     this.pid = '';
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   static propTypes = {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -27,9 +31,16 @@ export default class Container extends Component {
     report: PropTypes.object.isRequired
   }
 
+  refresh(query) {
+    const { params: { mode } } = this.props;
+    const pathname = '/project/' + this.pid + '/' + mode;
+    this.context.router.push({ pathname, query });
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
+    this.props.actions.getOptions();
   }
 
   async index() {
@@ -44,7 +55,6 @@ export default class Container extends Component {
 
   render() {
     const { params: { mode } } = this.props;
-    console.log(mode);
     return (
       <div>
         { !mode && 
