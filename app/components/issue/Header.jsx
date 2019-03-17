@@ -70,7 +70,6 @@ export default class Header extends Component {
       return '';
     }
 
-    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
     const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
     const queryConds = [];
     let index = -1;

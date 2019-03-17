@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import * as ReportActions from 'redux/actions/ReportActions';
 const List = require('./List');
-const Worklog = require('./worklog/Worklog');
+const Worklog = require('./Worklog');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -33,7 +33,7 @@ export default class Container extends Component {
 
   refresh(query) {
     const { params: { mode } } = this.props;
-    const pathname = '/project/' + this.pid + '/' + mode;
+    const pathname = '/project/' + this.pid + '/report/' + mode;
     this.context.router.push({ pathname, query });
   }
 
@@ -54,7 +54,7 @@ export default class Container extends Component {
   }
 
   render() {
-    const { params: { mode } } = this.props;
+    const { location: { query={} }, params: { mode } } = this.props;
     return (
       <div>
         { !mode && 
@@ -66,6 +66,8 @@ export default class Container extends Component {
         <Worklog 
           index={ this.worklog.bind(this) } 
           project={ this.props.project.item }
+          query={ query }
+          refresh={ this.refresh.bind(this) }
           { ...this.props.report }/> }
       </div>
     );

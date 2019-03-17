@@ -14,12 +14,11 @@ const initialState = {
 export default function report(state = initialState, action) {
   switch (action.type) {
     case t.REPORT_LIST:
-      return { ...state, loading: true, data: {}, options: {} };
+      return { ...state, loading: true, data: {} };
 
     case t.REPORT_LIST_SUCCESS:
       if (action.result.ecode === 0) {
         state.data = action.result.data;
-        state.options = action.result.options;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

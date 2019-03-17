@@ -6,6 +6,29 @@ import _ from 'lodash';
 import Duration from '../share/Duration';
 
 const $ = require('$');
+const filters = [
+  'type',
+  'assignee',
+  'reporter',
+  'watcher',
+  'resolver',
+  'closer',
+  'state',
+  'resolution',
+  'priority',
+  'module',
+  'resolve_version',
+  'effect_versions',
+  'epic',
+  'sprint',
+  'labels',
+  'created_at',
+  'updated_at',
+  'resolved_at',
+  'closed_at',
+  'title',
+  'orderBy'
+];
 
 export default class SearchList extends Component {
   constructor(props) {
@@ -14,27 +37,13 @@ export default class SearchList extends Component {
       baseFilterShow: true,
       memberFilterShow: true,
       timeFilterShow: true,
-      agileFilterShow: true,
-      type: '', 
-      assignee: '', 
-      reporter: '', 
-      watcher: '', 
-      resolver: '', 
-      closer: '', 
-      state: '', 
-      priority: '', 
-      resolution: '', 
-      module: '', 
-      resolve_vesion: '', 
-      effect_versions: '',
-      epic: '', 
-      sprint: '', 
-      labels: '', 
-      created_at: '', 
-      updated_at: '', 
-      resolved_at: '', 
-      closed_at: '', 
-      title: '' };
+      agileFilterShow: true
+    }
+
+    _.forEach(filters, (v) => {
+      this.state[v] = '';
+    });
+
     this.search = this.search.bind(this);
   }
 
@@ -42,33 +51,13 @@ export default class SearchList extends Component {
     refresh: PropTypes.func.isRequired,
     query: PropTypes.object,
     searchShow: PropTypes.bool,
-    options: PropTypes.object,
-    indexLoading: PropTypes.bool.isRequired
+    options: PropTypes.object
   }
 
   componentWillReceiveProps(nextProps) {
     const newQuery = nextProps.query || {};
-    this.setState({ 
-      title: newQuery.title ? newQuery.title : '',
-      type: newQuery.type ? newQuery.type : '',
-      assignee: newQuery.assignee ? newQuery.assignee : '',
-      reporter: newQuery.reporter ? newQuery.reporter : '',
-      watcher: newQuery.watcher ? newQuery.watcher : '',
-      resolver: newQuery.resolver ? newQuery.resolver : '',
-      closer: newQuery.closer ? newQuery.closer : '',
-      state: newQuery.state ? newQuery.state : '',
-      resolution: newQuery.resolution ? newQuery.resolution : '',
-      priority: newQuery.priority ? newQuery.priority : '',
-      module: newQuery.module ? newQuery.module : '',
-      resolve_version: newQuery.resolve_version ? newQuery.resolve_version : '',
-      effect_versions: newQuery.effect_versions ? newQuery.effect_versions : '',
-      epic: newQuery.epic ? newQuery.epic : '',
-      sprint: newQuery.sprint ? newQuery.sprint : null,
-      labels: newQuery.labels ? newQuery.labels : '',
-      created_at: newQuery.created_at ? newQuery.created_at : null,
-      updated_at: newQuery.updated_at ? newQuery.updated_at : null,
-      resolved_at: newQuery.resolved_at ? newQuery.resolved_at : null,
-      closed_at: newQuery.closed_at ? newQuery.closed_at : null
+    _.forEach(filters, (v) => {
+      this.state[v] = newQuery[v] ? newQuery[v] : '';
     });
   }
 
@@ -84,36 +73,20 @@ export default class SearchList extends Component {
   search() {
     const { query={}, refresh } = this.props;
 
-    const newQuery = {};
-    if (this.state.type) {  newQuery.type = this.state.type; }
-    if (this.state.assignee) { newQuery.assignee = this.state.assignee; }
-    if (this.state.reporter) { newQuery.reporter = this.state.reporter; }
-    if (this.state.watcher) { newQuery.watcher = this.state.watcher; }
-    if (this.state.resolver) { newQuery.resolver = this.state.resolver; }
-    if (this.state.closer) { newQuery.closer = this.state.closer; }
-    if (this.state.state) { newQuery.state = this.state.state; }
-    if (this.state.resolution) { newQuery.resolution = this.state.resolution; }
-    if (this.state.priority) { newQuery.priority = this.state.priority; }
-    if (this.state.module) { newQuery.module = this.state.module; }
-    if (this.state.resolve_version) { newQuery.resolve_version = this.state.resolve_version; }
-    if (this.state.effect_versions) { newQuery.effect_versions = this.state.effect_versions; }
-    if (this.state.epic) { newQuery.epic = this.state.epic; }
-    if (this.state.sprint) { newQuery.sprint = this.state.sprint; }
-    if (this.state.labels) { newQuery.labels = this.state.labels; }
-    if (this.state.created_at) { newQuery.created_at = this.state.created_at; }
-    if (this.state.updated_at) { newQuery.updated_at = this.state.updated_at; }
-    if (this.state.resolved_at) { newQuery.resolved_at = this.state.resolved_at; }
-    if (this.state.closed_at) { newQuery.closed_at = this.state.closed_at; }
-    if (this.state.title) { newQuery.title = this.state.title; }
-
-    if (query.orderBy) { newQuery.orderBy = query.orderBy; }
+    const newQuery = _.assign({}, query);
+    _.forEach(filters, (v) => {
+      if (this.state[v]) {
+        newQuery[v] = this.state[v];
+      } else {
+        delete newQuery[v];
+      }
+    });
 
     refresh(newQuery);
   }
 
   render() {
     const { 
-      indexLoading, 
       searchShow=false, 
       options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[] } } = this.props;
 
@@ -396,7 +369,7 @@ export default class SearchList extends Component {
             <Select
               simpleValue
               placeholder='选择Sprint'
-              value={ this.state.sprint }
+              value={ this.state.sprint || null }
               onChange={ (newValue) => { this.state.sprint = newValue; this.search(); } }
               options={ sprintOptions }/>
           </Col>

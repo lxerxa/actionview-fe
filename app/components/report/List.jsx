@@ -14,7 +14,6 @@ export default class List extends Component {
   static propTypes = {
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
-    options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired
   }
@@ -26,7 +25,7 @@ export default class List extends Component {
 
   render() {
 
-    const { project, data, options, loading } = this.props;
+    const { project, data, loading } = this.props;
 
     const issueTitle = (<span><i className='fa fa-pie-chart'></i> 问题分布图</span>)
     const trendTitle = (<span><i className='fa fa-line-chart'></i> 问题趋势图</span>)
@@ -66,10 +65,10 @@ export default class List extends Component {
         <Panel header={ worklogTitle }>
           <Table responsive hover>
             <thead><tr>
-              <td><Link to={ '/project/' + project.key + '/report/worklog' }>aa</Link></td>
-              <td>bb</td>
-              <td>bb</td>
-              <td>bb</td>
+              <td><Link to={ '/project/' + project.key + '/report/worklog' }>全部日志</Link></td>
+              <td><Link to={ '/project/' + project.key + '/report/worklog?recorded_at=2w' }>最近两周的</Link></td>
+              <td><Link to={ '/project/' + project.key + '/report/worklog?recorded_at=1m' }>最近一个月的</Link></td>
+              <td></td>
             </tr></thead>
           </Table>
         </Panel>
