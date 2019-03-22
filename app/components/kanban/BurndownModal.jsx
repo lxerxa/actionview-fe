@@ -71,7 +71,7 @@ export default class PreviewModal extends Component {
         </Modal.Header>
         { loading &&
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
-          <div style={ { textAlign: 'center', marginTop: '120px' } }>
+          <div style={ { textAlign: 'center', marginTop: '150px' } }>
             <img src={ img } className='loading'/>
           </div>
         </Modal.Body> }

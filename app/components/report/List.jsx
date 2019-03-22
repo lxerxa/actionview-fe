@@ -35,7 +35,7 @@ export default class List extends Component {
     const otherTitle = (<span><i className='fa fa-bar-chart'></i> 其它报表</span>)
 
     return ( loading ?
-      <div style={ { marginTop: '15px' } }>
+      <div style={ { marginTop: '30px' } }>
         <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }>
           <img src={ img } className='loading'/>
         </div>

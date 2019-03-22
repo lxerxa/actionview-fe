@@ -1128,6 +1128,34 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/report/worklog/list', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [
+    { no:1555, id: '546761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号', state:'546761', total_value: 34 },
+    { no:10, id: '546762', type:'2222', title: '国拨类型的项目添加任务中责任人没有必选号22222', state:'546762', total_value: 24 },
+    { no:12, id: '546763', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号333333', state:'546763', total_value: 12 } 
+    ] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/report/worklog/issue/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { 
+    total: [
+    { id: '1111', started_at: 1478414469, adjust_type: '1', spend: '3d 4h', spend_m: 200, comments: '1111111', recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }, 
+    { id: '2222', started_at: 1478414469, adjust_type: '2', spend: '6h', spend_m: 120, comments: '2222222', recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }, 
+    { id: '3333', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 },
+    { id: '4444', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 },
+    { id: '5555', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333\r\n333\r\n3333\r\n44444\r\n5555\r\n6666\r\n测试测试\r\n\r\n\r\n测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试\r\n测试测试\r\n测试测试\r\n测试测试\r\n测试测试\r\n测试测试',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 },
+    { id: '6666', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }],
+    parts: [     
+    { id: '1111', started_at: 1478414469, adjust_type: '1', spend: '3d 4h', spend_m: 200, comments: '111\r\n1111', recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }, 
+    { id: '3333', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }] } };
+    return res.status(200).send(results);
+  });
+
   /******************report*****************/
 
   router.get('/project/:key/issue/:id/gitcommits', function(req, res) {

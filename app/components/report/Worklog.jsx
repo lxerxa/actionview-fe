@@ -4,25 +4,44 @@ import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button } from '
 import Select from 'react-select';
 import { PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
+import { IssueFilterList, getCondsTxt } from '../issue/IssueFilterList';
 import Duration from '../share/Duration';
+import SaveFilterModal from './SaveFilterModal';
+import WorklogList from './WorklogList';
 
 const img = require('../../assets/images/loading.gif');
-const SearchList = require('../issue/SearchList');
 
 export default class Worklog extends Component {
   constructor(props) {
     super(props);
-    this.state = { recorded_at: '', issueFilterShow: false, sort: 'default', shape: 'pie' };
+    this.state = { 
+      recorded_at: '', 
+      issueFilterShow: false, 
+      saveFilterShow: false, 
+      worklogListShow: false,
+      showedUser: {},
+      sort: 'default', 
+      shape: 'pie' };
+    this.showList = this.showList.bind(this);
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
-    worklog: PropTypes.array.isRequired,
+    list: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
+    optionsLoading: PropTypes.bool.isRequired,
     query: PropTypes.object,
+    worklog: PropTypes.array.isRequired,
     worklogLoading: PropTypes.bool.isRequired,
+    getWorklogList: PropTypes.func.isRequired,
+    worklogList: PropTypes.array.isRequired,
+    worklogListLoading: PropTypes.bool.isRequired,
+    getWorklogDetail: PropTypes.func.isRequired,
+    worklogDetail: PropTypes.object.isRequired,
     worklogDetailLoading: PropTypes.bool.isRequired,
     refresh: PropTypes.func.isRequired,
+    saveFilter: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired
   }
 
@@ -36,6 +55,7 @@ export default class Worklog extends Component {
     const { index, query } = this.props;
     if (!_.isEqual(newQuery, query)) {
       index(newQuery);
+      this.state.worklogListShow = false;
     }
     this.setState({ recorded_at: newQuery.recorded_at ? newQuery.recorded_at : '' });
   }
@@ -48,13 +68,33 @@ export default class Worklog extends Component {
     refresh(newQuery);
   }
 
+  showList(user) {
+    this.setState({ worklogListShow: true, showedUser: user });
+  }
+
   render() {
     const COLORS = [ '#3b7fc4', '#815b3a', '#f79232', '#d39c3f', '#654982', '#4a6785', '#8eb021', '#f15c75', '#ac707a' ];
     const sortOptions = [ { value: 'default', label: '默认顺序' }, { value: 'total_asc', label: '总数升序' }, { value: 'total_desc', label: '总数降序' } ];
 
-    const { project, worklog, options, worklogLoading, refresh, query } = this.props;
+    const { 
+      i18n, 
+      project, 
+      list, 
+      options, 
+      optionsLoading, 
+      worklog, 
+      worklogLoading, 
+      getWorklogList,
+      worklogList, 
+      worklogListLoading, 
+      getWorklogDetail,
+      worklogDetail, 
+      worklogDetailLoading, 
+      refresh, 
+      query, 
+      saveFilter } = this.props;
 
-    const srcData = _.map(worklog, (v) => { return { name: v.user.name, value: v.value } });
+    const srcData = _.map(worklog, (v) => { return { id: v.user.id, name: v.user.name, value: v.value } });
     let data = [];
     if (this.state.sort == 'total_asc') {
       data = _.sortBy(srcData, (v) => { return v.value });
@@ -62,6 +102,29 @@ export default class Worklog extends Component {
       data = _.sortBy(srcData, (v) => { return -v.value });
     } else {
       data = srcData;
+    }
+    //data = [];
+
+    const units = { w: '周', m: '月', y: '年' };
+    let sqlTxt = '';
+    if (!optionsLoading) {
+      const recorded_at = query['recorded_at'];
+      if (recorded_at) {
+        if (_.endsWith(recorded_at, 'w') || _.endsWith(recorded_at, 'm') || _.endsWith(recorded_at, 'y')) {
+          const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
+          if (pattern.exec(recorded_at)) {
+            sqlTxt = '填报时间～' + RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '外' : '内');
+          }
+        } else {
+          sqlTxt = '填报时间～' + recorded_at;
+        }
+      }
+      const issueSqlTxt = getCondsTxt(query, options);
+      if (sqlTxt && issueSqlTxt) {
+        sqlTxt += ' | ' + issueSqlTxt;
+      } else if (issueSqlTxt) {
+        sqlTxt = issueSqlTxt;
+      }
     }
 
     return ( 
@@ -92,41 +155,51 @@ export default class Worklog extends Component {
             </Col>
           </FormGroup>
         </Form>
-        <SearchList
+        <IssueFilterList
           query={ query }
           searchShow={ this.state.issueFilterShow }
           options={ options }
           refresh={ refresh } />
+        <div style={ { marginTop: '10px', height: '50px' } }>
+          { sqlTxt &&
+          <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
+            <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
+            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+          </div> }
+          <ButtonGroup style={ { float: 'right', marginRight: '6px' } }>
+            <Button title='饼状图' style={ { height: '36px', backgroundColor: this.state.shape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button>
+            <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
+            <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
+          </ButtonGroup> 
+          <div style={ { float: 'right', width: '120px', marginRight: '15px' } }>
+            <Select
+              simpleValue
+              clearable={ false }
+              placeholder='选择顺序'
+              value={ this.state.sort || 'default' }
+              onChange={ (newValue) => { this.setState({ sort: newValue }); } }
+              options={ sortOptions }/>
+          </div>
+        </div>
         { worklogLoading ?
-        <div style={ { height: '600px' } }>
+        <div style={ { height: '550px', paddingTop: '40px' } }>
           <div style={ { textAlign: 'center' } }>
             <img src={ img } className='loading'/>
           </div>
         </div>
         :
-        <div style={ { height: '600px' } }>
-          <div style={ { marginTop: '10px' } }>
-            <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
-              <div className='cond-contents' title={ 'aaabbccc' }><b>检索条件</b>：{ 'aabbcc' }</div>
-              <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-              <div className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+        <div style={ { height: '550px' } }>
+          { data.length <= 0 &&
+          <div style={ { width: '100%', height: '450px', float: 'left', paddingTop: '40px' } }>
+            <div style={ { textAlign: 'center' } }>
+              <span style={ { fontSize: '160px', color: '#FFC125' } } >
+                <i className='fa fa-warning'></i>
+              </span><br/> 
+              <span>抱歉，暂无满足该检索条件的数据。</span>
             </div>
-            <ButtonGroup style={ { float: 'right', marginRight: '6px' } }>
-              <Button title='饼状图' style={ { height: '36px', backgroundColor: this.state.shape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button>
-              <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
-              <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
-            </ButtonGroup> 
-            <div style={ { float: 'right', width: '120px', marginRight: '15px' } }>
-              <Select
-                simpleValue
-                clearable={ false }
-                placeholder='选择顺序'
-                value={ this.state.sort || 'default' }
-                onChange={ (newValue) => { this.setState({ sort: newValue }); } }
-                options={ sortOptions }/>
-            </div>
-          </div>
-          { this.state.shape === 'pie' &&
+          </div> }
+          { this.state.shape === 'pie' && data.length > 0 &&
           <div style={ { width: '100%', height: '450px', float: 'left' } }>
             <PieChart 
               width={ 800 } 
@@ -146,7 +219,7 @@ export default class Worklog extends Component {
               <Tooltip />
             </PieChart>
           </div> }
-          { this.state.shape === 'bar' &&
+          { this.state.shape === 'bar' && data.length > 0 && 
           <div style={ { width: '100%', height: '450px', float: 'left' } }>
             <BarChart
               width={ 800 }
@@ -161,7 +234,7 @@ export default class Worklog extends Component {
               <Bar yAxisId='left' dataKey='value' fill='#3b7fc4' />
             </BarChart>
           </div> }
-          { this.state.shape === 'line' &&
+          { this.state.shape === 'line' && data.length > 0 &&
           <div style={ { width: '100%', height: '450px', float: 'left' } }>
             <LineChart 
               width={ 800 } 
@@ -174,8 +247,9 @@ export default class Worklog extends Component {
               <Line dataKey='value' data={ data } stroke='#d04437' />
             </LineChart>
           </div> }
+          { data.length > 0 &&
           <div style={ { float: 'left', width: '100%' } }>
-            <span>注：图表值是以分钟(m)为单位</span>
+            <span>注：图表耗费时间值是以分钟(m)为单位</span>
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
@@ -186,12 +260,39 @@ export default class Worklog extends Component {
               <tbody>
                 <tr>
                   <td>{ _.reduce(data, (sum, v) => { return sum + v.value }, 0) }</td>
-                  { _.map(data, (v, i) => <td key={ i }>{ v.value }</td>) }
+                  { _.map(data, (v, i) => <td key={ i }><a href='#workloglist' onClick={ (e) => { this.showList({ id: v.id, name: v.name }) } }>{ v.value }</a></td>) }
                 </tr>
               </tbody>
             </Table>
-          </div>
+          </div> }
         </div> }
+        { this.state.worklogListShow &&
+        <div id='workloglist' style={ { float: 'left', width: '100%', textAlign: 'center', margin: '15px 0px 30px 0px' } }>
+          <span style={ { fontSize: '19px' } }>{ this.state.showedUser.name || '' } - 工作日志</span>
+          <WorklogList
+            show
+            showedUser={ this.state.showedUser }
+            query={ query }
+            options={ options }
+            index={ getWorklogList }
+            collection={ worklogList }
+            indexLoading={ worklogListLoading }
+            select={ getWorklogDetail }
+            item={ worklogDetail }
+            itemLoading={ worklogDetailLoading }
+            i18n={ i18n }/>
+        </div> }
+        { this.state.saveFilterShow &&
+        <SaveFilterModal
+          show
+          close={ () => { this.setState({ saveFilterShow: false }) } }
+          filters={ list.worklog || [] }
+          options={ options }
+          create={ saveFilter }
+          mode={ 'worklog' }
+          query={ query }
+          sqlTxt={ sqlTxt }
+          i18n={ i18n }/> }
       </div>
     );
   }

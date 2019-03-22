@@ -4,11 +4,11 @@ import Select from 'react-select';
 import { Link } from 'react-router';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
-const $ = require('$');
+import { IssueFilterList, getCondsTxt } from './IssueFilterList';
 
+const $ = require('$');
 const CreateModal = require('./CreateModal');
 const AddSearcherModal = require('./AddSearcherModal');
-const SearchList = require('./SearchList');
 const SearcherConfigModal = require('./SearcherConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
 const img = require('../../assets/images/loading.gif');
@@ -27,7 +27,6 @@ export default class Header extends Component {
     this.addSearcherModalClose = this.addSearcherModalClose.bind(this);
     this.searcherConfigModalClose = this.searcherConfigModalClose.bind(this);
     this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
-    this.condsTxt = this.condsTxt.bind(this);
   }
 
   static propTypes = {
@@ -61,129 +60,6 @@ export default class Header extends Component {
 
   addSearcherModalClose() {
     this.setState({ addSearcherShow: false });
-  }
-
-  condsTxt() {
-    const { optionsLoading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], users=[] }, query } = this.props;
-
-    if (optionsLoading) {
-      return '';
-    }
-
-    const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
-    const queryConds = [];
-    let index = -1;
-
-    if (query.no) { queryConds.push('编号～' + query.no); }
-    if (query.title) { queryConds.push('主题～' + query.title); }
-
-    const baseConds = [
-      { key: 'type', name: '类型', values: types },
-      { key: 'priority', name: '优先级', values: priorities },
-      { key: 'state', name: '状态', values: states },
-      { key: 'resolution', name: '解决结果', values: resolutions },
-      { key: 'module', name: '模块', values: modules },
-      { key: 'resolve_version', name: '解决版本', values: versions  },
-      { key: 'effect_versions', name: '影响版本', values: versions }
-    ];
-    for (let i = 0; i < baseConds.length; i++) {
-      const v = baseConds[i];
-      if (query[v.key]) { 
-        const baseQuery = query[v.key].split(',');
-        const baseQueryNames = [];
-        for (let j = 0; j < baseQuery.length; j++) {
-          if ((index = _.findIndex(v.values, { id: baseQuery[j] })) !== -1) {
-            baseQueryNames.push(v.values[index].name);
-          } else {
-            return v.name + errorMsg;
-          }
-        }
-        queryConds.push(v.name + '～' + baseQueryNames.join('，'));
-      }
-    };
-
-    if (query.labels) {
-      queryConds.push('标签～' + query.labels);
-    }
-
-    const memberConds = [ 
-      { key: 'assignee', name: '经办人' }, 
-      { key: 'reporter', name : '报告人' }, 
-      { key: 'watcher', name : '关注者' }, 
-      { key: 'resolver', name : '解决者' }, 
-      { key: 'closer', name : '关闭者' } 
-    ];
-    for (let i = 0; i < memberConds.length; i++) {
-      const v = memberConds[i];
-      if (query[v.key]) {
-        const memberQuery = query[v.key].split(',');
-        const memberQueryNames = [];
-        for (let j = 0; j < memberQuery.length; j++) {
-          if (memberQuery[j] == 'me') {
-            memberQueryNames.push('当前用户');
-          } else if ((index = _.findIndex(users, { id: memberQuery[j] })) !== -1) {
-            memberQueryNames.push(users[index].name);
-          } else {
-            return v.name + errorMsg;
-          }
-        }
-        queryConds.push(v.name + '～' + memberQueryNames.join('，'));
-      }
-    }
-
-    const timeConds = [
-      { key: 'created_at', name: '创建时间' },
-      { key: 'updated_at', name : '更新时间' },
-      { key: 'resolved_at', name : '解决时间' },
-      { key: 'closed_at', name : '关闭时间' }
-    ];
-    const units = { w: '周', m: '月', y: '年' };
-    for (let i = 0; i < timeConds.length; i++) {
-      const v = timeConds[i];
-      if (query[v.key]) {
-        let cond = '';
-        if (_.endsWith(query[v.key], 'w') || _.endsWith(query[v.key], 'm') || _.endsWith(query[v.key], 'y')) {
-          const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
-          if (pattern.exec(query[v.key])) {
-            cond = RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '外' : '内');
-          } else {
-            return v.name + errorMsg;
-          }
-        } else {
-          cond = query[v.key];
-        }
-        queryConds.push(v.name + '～' + cond);
-      }
-    } 
-
-    if (query.epic) {
-      const epicQuery = query.epic.split(',');
-      const epicQueryNames = [];
-      for (let i = 0; i < epicQuery.length; i++) {
-        if ((index = _.findIndex(epics, { id: epicQuery[i] })) !== -1) {
-          epicQueryNames.push(epics[index].name);
-        } else {
-          return 'Epic' + errorMsg;
-        }
-      }
-      queryConds.push('Epic～' + epicQueryNames.join('，'));
-    }
-    if (query.sprint) {
-      const sprintQuery = query.sprint.split(',');
-      const sprintQueryNames = [];
-      for (let i = 0; i < sprintQuery.length; i++) {
-        if ((index = sprints.indexOf(sprintQuery[i])) !== -1) {
-          sprintQueryNames.push(sprints[index]);
-        } else {
-          return 'Sprint' + errorMsg;
-        }
-      }
-      queryConds.push('Sprint～Sprint ' + sprintQueryNames.join('，'));
-    }
-
-    if (queryConds.length <= 0) { return ''; }
-
-    return queryConds.join(' | ');
   }
 
   searcherConfigModalClose() {
@@ -252,7 +128,7 @@ export default class Header extends Component {
       project } = this.props;
 
     const standardTypes = _.reject(_.reject(options.types || [], { type: 'subtask' }) || [], { disabled: true }) || [];
-    const sqlTxt = this.condsTxt();
+    const sqlTxt = optionsLoading ? '' : getCondsTxt(query, options);
 
     return (
       <div>
@@ -295,7 +171,7 @@ export default class Header extends Component {
           config={ configSearcher } 
           searchers={ options.searchers || [] } 
           i18n={ i18n }/> }
-        <SearchList 
+        <IssueFilterList 
           className={ !this.state.searchShow && 'hide' } 
           query={ query } 
           searchShow={ this.state.searchShow } 

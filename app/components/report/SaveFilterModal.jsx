@@ -10,19 +10,18 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (_.findIndex(props.searchers || [], { name: values.name }) !== -1) {
+  } else if (_.findIndex(props.filters || [], { name: values.name }) !== -1) {
     errors.name = '该名称已存在';
   }
-
   return errors;
 };
 
 @reduxForm({
-  form: 'add_searcher',
+  form: 'save_filter',
   fields: [ 'name' ],
   validate
 })
-export default class AddSearcherModal extends Component {
+export default class SaveFilterModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -32,7 +31,9 @@ export default class AddSearcherModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    filters: PropTypes.array,
     query: PropTypes.object,
+    mode: PropTypes.string,
     sqlTxt: PropTypes.string,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -44,8 +45,9 @@ export default class AddSearcherModal extends Component {
   }
 
   async handleSubmit() {
-    const { values, create, close, query={} } = this.props;
-    values.query = _.omit(query, [ 'page' ]);
+    const { mode, values, create, close, query={} } = this.props;
+    values.query = query;
+    values.mode = mode;
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
