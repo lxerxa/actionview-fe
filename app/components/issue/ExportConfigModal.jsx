@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Checkbox as Checkbox2 } from 'react-bootstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
@@ -46,7 +46,23 @@ export default class ConfigModal extends Component {
       }
     });
 
-    const field_keys = [ 'no', 'title', 'type', 'priority', 'state', 'resolution', 'assignee', 'reporter', 'created_at', 'updated_at', 'epic', 'sprints' ];
+    const field_keys = [ 
+      'no', 
+      'title', 
+      'type', 
+      'priority', 
+      'state', 
+      'resolution', 
+      'assignee', 
+      'reporter', 
+      'resolver', 
+      'closer', 
+      'created_at', 
+      'updated_at', 
+      'resolved_at', 
+      'closed_at', 
+      'epic', 
+      'sprints' ];
     const diff_field_keys = _.difference(defined_field_keys, field_keys);
     const sorted_field_keys = field_keys.concat(diff_field_keys);
 
@@ -55,8 +71,12 @@ export default class ConfigModal extends Component {
       { key: 'type', name: '类型' },
       { key: 'state', name: '状态' },
       { key: 'reporter', name: '报告者' },
+      { key: 'resolver', name: '解决者' },
+      { key: 'closer', name: '关闭者' },
       { key: 'created_at', name: '创建时间' },
       { key: 'updated_at', name: '更新时间' },
+      { key: 'resolved_at', name: '解决时间' },
+      { key: 'closed_at', name: '关闭时间' },
       { key: 'epic', name: 'Epic' },
       { key: 'sprints', name: 'Sprint' }
     ];
@@ -109,7 +129,20 @@ export default class ConfigModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.confirm }>导出</Button>
+          <Checkbox2
+            checked={ fields.length == this.state.fields.length }
+            onClick={ () => 
+            { 
+              if (this.state.fields.length === fields.length) { 
+                this.setState({ fields: [] });
+              } else { 
+                this.setState({ fields: _.map(fields, (v) => v.key) }); 
+              } 
+            } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            全部选择
+          </Checkbox2>
+          <Button onClick={ this.confirm } disabled={ this.state.fields.length <= 0 }>导出</Button>
           <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
         </Modal.Footer>
       </Modal>
