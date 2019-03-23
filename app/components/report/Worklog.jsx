@@ -23,6 +23,7 @@ export default class Worklog extends Component {
       sort: 'default', 
       shape: 'pie' };
     this.showList = this.showList.bind(this);
+    this.refreshList = this.refreshList.bind(this);
   }
 
   static propTypes = {
@@ -70,6 +71,11 @@ export default class Worklog extends Component {
 
   showList(user) {
     this.setState({ worklogListShow: true, showedUser: user });
+  }
+
+  refreshList() {
+    const { query, getWorklogList } = this.props;
+    getWorklogList(_.assign({}, query, { recorder: this.state.showedUser.id }));
   }
 
   render() {
@@ -189,7 +195,7 @@ export default class Worklog extends Component {
           </div>
         </div>
         :
-        <div style={ { height: '550px' } }>
+        <div style={ { height: '565px' } }>
           { data.length <= 0 &&
           <div style={ { width: '100%', height: '450px', float: 'left', paddingTop: '40px' } }>
             <div style={ { textAlign: 'center' } }>
@@ -268,7 +274,8 @@ export default class Worklog extends Component {
         </div> }
         { this.state.worklogListShow &&
         <div id='workloglist' style={ { float: 'left', width: '100%', textAlign: 'center', margin: '15px 0px 30px 0px' } }>
-          <span style={ { fontSize: '19px' } }>{ this.state.showedUser.name || '' } - 工作日志</span>
+          <span style={ { fontWeight: '600' } }>{ this.state.showedUser.name || '' } - 工作日志</span>
+          <span title='刷新' onClick={ this.refreshList }><Button bsStyle='link' disabled={ worklogListLoading }><i className='fa fa-refresh'></i></Button></span>
           <WorklogList
             show
             showedUser={ this.state.showedUser }

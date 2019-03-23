@@ -33,6 +33,11 @@ export default class WorklogDetailModal extends Component {
     index(issue.id, _.assign({}, query, { recorder: showedUser.id }));
   }
 
+  refresh() {
+    const { showedUser, issue, index, query } = this.props;
+    index(issue.id, _.assign({}, query, { recorder: showedUser.id }));
+  }
+
   render() {
     const { data: { total=[], parts=[] }, issue, loading } = this.props;
 
@@ -53,6 +58,7 @@ export default class WorklogDetailModal extends Component {
         <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
           <div style={ { marginBottom: '10px' } }>
             <span>共耗费 <strong>{ _.reduce(worklogs, (sum, v) => { return sum + v.spend_m }, 0) }</strong> 分钟</span>
+            <span title='刷新'><Button bsStyle='link' onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i></Button></span>
           </div>
           <Table condensed responsive>
             <thead>
