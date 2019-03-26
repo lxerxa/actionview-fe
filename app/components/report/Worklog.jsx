@@ -134,14 +134,14 @@ export default class Worklog extends Component {
     }
 
     return ( 
-      <div style={ { margin: '20px 10px 10px 10px' } }>
-        <div style={ { display: 'block', fontSize: '19px', marginTop: '20px' } }>
+      <div className='project-report-container'>
+        <div className='report-title'>
           人员工作日志报告 
           <Link to={ '/project/' + project.key + '/report' }>
             <Button bsStyle='link'>返回</Button>
           </Link>
         </div>
-        <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } }>
+        <Form horizontal className='report-filter-form'>
           <FormGroup>
             <Col sm={ 1 } componentClass={ ControlLabel }>
               填报时间
@@ -164,21 +164,22 @@ export default class Worklog extends Component {
         <IssueFilterList
           query={ query }
           searchShow={ this.state.issueFilterShow }
+          notShowFields={ [ 'watcher' ] }
           options={ options }
           refresh={ refresh } />
-        <div style={ { marginTop: '10px', height: '50px' } }>
+        <div className='report-conds-style'>
           { sqlTxt &&
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
-          <ButtonGroup style={ { float: 'right', marginRight: '6px' } }>
+          <ButtonGroup className='report-shape-buttongroup'>
             <Button title='饼状图' style={ { height: '36px', backgroundColor: this.state.shape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button>
             <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
             <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
           </ButtonGroup> 
-          <div style={ { float: 'right', width: '120px', marginRight: '15px' } }>
+          <div className='report-select-sort'>
             <Select
               simpleValue
               clearable={ false }
@@ -197,7 +198,7 @@ export default class Worklog extends Component {
         :
         <div style={ { height: '565px' } }>
           { data.length <= 0 &&
-          <div style={ { width: '100%', height: '450px', float: 'left', paddingTop: '40px' } }>
+          <div className='report-shape-container' style={ { paddingTop: '40px' } }>
             <div style={ { textAlign: 'center' } }>
               <span style={ { fontSize: '160px', color: '#FFC125' } } >
                 <i className='fa fa-warning'></i>
@@ -206,7 +207,7 @@ export default class Worklog extends Component {
             </div>
           </div> }
           { this.state.shape === 'pie' && data.length > 0 &&
-          <div style={ { width: '100%', height: '450px', float: 'left' } }>
+          <div className='report-shape-container'>
             <PieChart 
               width={ 800 } 
               height={ 380 } 
@@ -226,7 +227,7 @@ export default class Worklog extends Component {
             </PieChart>
           </div> }
           { this.state.shape === 'bar' && data.length > 0 && 
-          <div style={ { width: '100%', height: '450px', float: 'left' } }>
+          <div className='report-shape-container'>
             <BarChart
               width={ 800 }
               height={ 380 }
@@ -241,7 +242,7 @@ export default class Worklog extends Component {
             </BarChart>
           </div> }
           { this.state.shape === 'line' && data.length > 0 &&
-          <div style={ { width: '100%', height: '450px', float: 'left' } }>
+          <div className='report-shape-container'>
             <LineChart 
               width={ 800 } 
               height={ 380 } 

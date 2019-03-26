@@ -7,7 +7,22 @@ import _ from 'lodash';
 export default class ConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { fields: [ 'no', 'title', 'type', 'priority', 'state', 'resolution', 'assignee', 'reporter', 'created_at', 'updated_at' ] };
+    this.state = { 
+      fields: [ 
+        'no', 
+        'title', 
+        'type', 
+        'priority', 
+        'state', 
+        'resolution', 
+        'assignee', 
+        'reporter', 
+        'resolver', 
+        'closer', 
+        'created_at',  
+        'updated_at', 
+        'resolved_at', 
+        'closed_at' ] };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }

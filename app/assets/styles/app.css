@@ -995,3 +995,43 @@ table tr:hover .remove-icon{
   cursor: pointer;
   color: #5f5f5f;
 }
+
+.project-report-container {
+  margin: 20px 10px 20px 10px;
+}
+
+.project-report-container .report-title {
+  display: block; 
+  font-size: 19px; 
+  margin-top: 20px;
+}
+
+.project-report-container .report-filter-form {
+  margin-top: 10px; 
+  margin-bottom: 15px;
+  padding: 15px 10px 1px 10px; 
+  background-color: #f5f5f5; 
+  border-radius: 4px;
+}
+
+.project-report-container .report-conds-style {
+  margin-top: 10px;
+  height: 50px;
+}
+
+.project-report-container .report-shape-buttongroup {
+  float: right;
+  margin-right: 6px;
+}
+
+.project-report-container .report-select-sort {
+  float: right; 
+  width: 120px; 
+  margin-right: 15px;
+}
+
+.project-report-container .report-shape-container {
+  width: 100%; 
+  height: 450px; 
+  float: left;
+}

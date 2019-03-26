@@ -51,6 +51,7 @@ export class IssueFilterList extends Component {
     refresh: PropTypes.func.isRequired,
     query: PropTypes.object,
     searchShow: PropTypes.bool,
+    notShowFields: PropTypes.array,
     options: PropTypes.object
   }
 
@@ -88,6 +89,7 @@ export class IssueFilterList extends Component {
   render() {
     const { 
       searchShow=false, 
+      notShowFields=[],
       options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
@@ -259,22 +261,7 @@ export class IssueFilterList extends Component {
               options={ userOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
-            关注者
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择关注者'
-              value={ this.state.watcher }
-              onChange={ (newValue) => { this.state.watcher = newValue; this.search(); } }
-              options={ [ { value: 'me', label: '当前用户' } ] }/>
-          </Col>
-        </FormGroup> }
-        { this.state.memberFilterShow &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            解决者 
+            解决者
           </Col>
           <Col sm={ 3 }>
             <Select
@@ -285,6 +272,9 @@ export class IssueFilterList extends Component {
               onChange={ (newValue) => { this.state.resolver = newValue; this.search(); } }
               options={ userOptions }/>
           </Col>
+        </FormGroup> }
+        { this.state.memberFilterShow &&
+        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             关闭者
           </Col>
@@ -297,6 +287,20 @@ export class IssueFilterList extends Component {
               onChange={ (newValue) => { this.state.closer = newValue; this.search(); } }
               options={ userOptions }/>
           </Col>
+          { notShowFields.indexOf('watcher') === -1 &&
+          <Col sm={ 1 } componentClass={ ControlLabel }>
+            关注者
+          </Col> }
+          { notShowFields.indexOf('watcher') === -1 &&
+          <Col sm={ 3 }>
+            <Select
+              simpleValue
+              multi
+              placeholder='选择关注者'
+              value={ this.state.watcher }
+              onChange={ (newValue) => { this.state.watcher = newValue; this.search(); } }
+              options={ [ { value: 'me', label: '当前用户' } ] }/>
+          </Col> }
         </FormGroup> }
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
           时间 
