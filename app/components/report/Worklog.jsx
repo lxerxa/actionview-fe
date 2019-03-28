@@ -267,7 +267,17 @@ export default class Worklog extends Component {
               <tbody>
                 <tr>
                   <td>{ _.reduce(data, (sum, v) => { return sum + v.value }, 0) }</td>
-                  { _.map(data, (v, i) => <td key={ i }><a href='#workloglist' onClick={ (e) => { this.showList({ id: v.id, name: v.name }) } }>{ v.value }</a></td>) }
+                  { _.map(data, (v, i) => {
+                    if (v.id === 'others') {
+                      return (
+                        <td key={ i }>{ v.value }</td>
+                      );
+                    } else {
+                      return ( 
+                        <td key={ i }><a href='#workloglist' onClick={ (e) => { this.showList({ id: v.id, name: v.name }) } }>{ v.value }</a></td>
+                      ); 
+                    }
+                  }) }
                 </tr>
               </tbody>
             </Table>

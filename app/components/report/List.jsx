@@ -27,12 +27,17 @@ export default class List extends Component {
 
     const { project, data, loading } = this.props;
 
-    const issueTitle = (<span><i className='fa fa-pie-chart'></i> 问题分布图</span>)
+    const issueTitle = (
+      <div className='report-list-header'>
+        <span><i className='fa fa-pie-chart'></i> 问题分布图</span>
+        <span className='report-button report-edit-button' onClick={ () => { } } title='编辑'><i className='fa fa-pencil'></i></span>
+        <span className='report-button report-edit-button' onClick={ () => { } } title='重置'><i className='fa fa-repeat'></i></span>
+      </div>);
     const trendTitle = (<span><i className='fa fa-line-chart'></i> 问题趋势图</span>)
     const worklogTitle = (<span><i className='fa fa-bar-chart'></i> 人员工作日志报告</span>)
     const trackTitle = (<span><i className='fa fa-clock-o'></i> 时间跟踪报告</span>)
     const compareTitle = (<span><i className='fa fa-area-chart'></i> 创建问题和解决问题对比报告</span>)
-    const otherTitle = (<span><i className='fa fa-bar-chart'></i> 其它报表</span>)
+    const othersTitle = (<span><i className='fa fa-bar-chart'></i> 其它报表</span>)
 
     return ( loading ?
       <div style={ { marginTop: '30px' } }>
@@ -44,12 +49,14 @@ export default class List extends Component {
       <div style={ { marginTop: '15px', marginBottom: '30px' } } className='report-container'>
         <Panel header={ issueTitle }>
           <Table responsive bordered={ false }>
-            <thead><tr>
-              <td>aa</td>
-              <td>bb</td>
-              <td>bb</td>
-              <td>bb</td>
-            </tr></thead>
+            <thead>
+              <tr>
+                <td>aa</td>
+                <td>bb</td>
+                <td>bb</td>
+                <td>bb</td>
+              </tr>
+            </thead>
           </Table>
         </Panel>
         <Panel header={ trendTitle }>
@@ -92,7 +99,7 @@ export default class List extends Component {
             </tr></thead>
           </Table>
         </Panel>
-        <Panel header={ otherTitle }>
+        <Panel header={ othersTitle }>
           <Table responsive hover>
             <thead><tr>
               <td>延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率</td>

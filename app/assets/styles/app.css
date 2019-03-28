@@ -1035,3 +1035,23 @@ table tr:hover .remove-icon{
   height: 450px; 
   float: left;
 }
+
+.report-button {
+  cursor: pointer;
+  color: #5f5f5f;
+}
+
+.report-button:hover {
+  color: #000;
+}
+
+.report-edit-button {
+  display: none;
+}
+
+.panel-heading:hover .report-edit-button {
+  float: right;
+  margin-right: 10px;
+  display: block;
+  font-size: 14px;
+}
