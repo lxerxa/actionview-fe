@@ -2,7 +2,7 @@ import * as t from '../constants/ActionTypes';
 
 const initialState = { 
   ecode: 0, 
-  list: {}, 
+  filters: {}, 
   loading: false, 
   saveLoading: false, 
   options: {}, 
@@ -21,7 +21,7 @@ export default function report(state = initialState, action) {
 
     case t.REPORT_LIST_GET_SUCCESS:
       if (action.result.ecode === 0) {
-        state.list = action.result.data;
+        state.filters = action.result.data;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
@@ -39,6 +39,21 @@ export default function report(state = initialState, action) {
 
     case t.REPORT_OPTIONS_FAIL:
       return { ...state, optionsLoading: false, error: action.error };
+
+    case t.REPORT_FILTER_RESET:
+    case t.REPORT_FILTER_EDIT:
+      return { ...state, saveLoading: true };
+
+    case t.REPORT_FILTER_RESET_SUCCESS:
+    case t.REPORT_FILTER_EDIT_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.filters[action.mode] = action.result.data || [];
+      }
+      return { ...state, saveLoading: false, ecode: action.result.ecode };
+
+    case t.REPORT_FILTER_RESET_FAIL:
+    case t.REPORT_FILTER_EDIT_FAIL:
+      return { ...state, saveLoading: false, error: action.error };
 
     case t.REPORT_FILTER_SAVE:
       return { ...state, saveLoading: true };

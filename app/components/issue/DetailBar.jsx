@@ -812,7 +812,7 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 3) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
                         return (<tr key={ 'subtask' + key }>
@@ -847,7 +847,7 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 3) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
                       <tbody>
                       { _.map(data.links, (val, key) => {
                         let linkedIssue = {};

@@ -29,7 +29,7 @@ export default class Worklog extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
-    list: PropTypes.object.isRequired,
+    filters: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     optionsLoading: PropTypes.bool.isRequired,
     query: PropTypes.object,
@@ -85,7 +85,7 @@ export default class Worklog extends Component {
     const { 
       i18n, 
       project, 
-      list, 
+      filters, 
       options, 
       optionsLoading, 
       worklog, 
@@ -304,7 +304,7 @@ export default class Worklog extends Component {
         <SaveFilterModal
           show
           close={ () => { this.setState({ saveFilterShow: false }) } }
-          filters={ list.worklog || [] }
+          filters={ filters.worklog || [] }
           options={ options }
           create={ saveFilter }
           mode={ 'worklog' }

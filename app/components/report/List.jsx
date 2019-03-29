@@ -3,18 +3,25 @@ import { Link } from 'react-router';
 import { Button, Label, Table, Panel } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import ResetNotify from './ResetNotify';
 
+const qs = require('qs');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
+    this.state = { resetShow: false, editShow: false };
+    this.getClassifiedData = this.getClassifiedData.bind(this);
   }
 
   static propTypes = {
     project: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
+    filters: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
+    saveLoading: PropTypes.bool.isRequired,
+    reset: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired
   }
 
@@ -23,9 +30,31 @@ export default class List extends Component {
     index();
   }
 
+  getClassifiedData(data, mode, columns) {
+
+    const { project } = this.props;
+
+    const tmp = [];
+    const len = data.length;
+    for (let i = 0; i < len; ) {
+      tmp.push(data.slice(i, i + columns));
+      i += columns;
+    }
+
+    const classifiedData = _.map(tmp, (v) => 
+      <tr>
+        { _.map(v, (v2, i) => 
+          <td key={ i }>
+            <Link to={ '/project/' + project.key + '/report/' + mode + (!_.isEmpty(v2.query) ? ('?' + qs.stringify(v2.query)) : '') }>{ v2.name }</Link>
+          </td>) }
+      </tr> 
+    );
+    return classifiedData;
+  }
+
   render() {
 
-    const { project, data, loading } = this.props;
+    const { project, filters, loading, saveLoading, edit, reset } = this.props;
 
     const issueTitle = (
       <div className='report-list-header'>
@@ -39,6 +68,9 @@ export default class List extends Component {
     const compareTitle = (<span><i className='fa fa-area-chart'></i> 创建问题和解决问题对比报告</span>)
     const othersTitle = (<span><i className='fa fa-bar-chart'></i> 其它报表</span>)
 
+    const issueItems = this.getClassifiedData(filters.issue || [], 'issue', 4);
+    const worklogItems = this.getClassifiedData(filters.worklog || [], 'worklog', 4);
+
     return ( loading ?
       <div style={ { marginTop: '30px' } }>
         <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }>
@@ -48,15 +80,10 @@ export default class List extends Component {
       :
       <div style={ { marginTop: '15px', marginBottom: '30px' } } className='report-container'>
         <Panel header={ issueTitle }>
-          <Table responsive bordered={ false }>
-            <thead>
-              <tr>
-                <td>aa</td>
-                <td>bb</td>
-                <td>bb</td>
-                <td>bb</td>
-              </tr>
-            </thead>
+          <Table responsive>
+            <tbody>
+              { issueItems }
+            </tbody>
           </Table>
         </Panel>
         <Panel header={ trendTitle }>
@@ -70,13 +97,10 @@ export default class List extends Component {
           </Table>
         </Panel>
         <Panel header={ worklogTitle }>
-          <Table responsive hover>
-            <thead><tr>
-              <td><Link to={ '/project/' + project.key + '/report/worklog' }>全部日志</Link></td>
-              <td><Link to={ '/project/' + project.key + '/report/worklog?recorded_at=2w' }>最近两周的</Link></td>
-              <td><Link to={ '/project/' + project.key + '/report/worklog?recorded_at=1m' }>最近一个月的</Link></td>
-              <td></td>
-            </tr></thead>
+          <Table responsive>
+            <tbody>
+              { worklogItems }
+            </tbody>
           </Table>
         </Panel>
         <Panel header={ trackTitle }>

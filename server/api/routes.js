@@ -1119,9 +1119,9 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode:0, data: { 
-    	issue: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '3333', name: 'tttttt', query: {}}, {id: '3333', name: 'tttttt', query: {}}, {id: '3333', name: 'tttttt', query: {}}], 
+    	issue: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}], 
     	trend: [], 
-    	worklog: [], 
+    	worklog: [{id: '1111', name: '近一月的', query: { recorded_at: '1m' }}, {id: '2222', name: '创建3个月外的', query: { created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}], 
     	timetrack: [], 
     	compare: [], 
     	others: [] } };

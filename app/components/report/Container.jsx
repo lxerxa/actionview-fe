@@ -61,6 +61,16 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
+  async resetFilter(mode) {
+    await this.props.actions.resetFilter(this.pid, mode);
+    return this.props.report.ecode;
+  }
+
+  async editFilter(mode, values) {
+    await this.props.actions.editFilter(this.pid, mode, values);
+    return this.props.report.ecode;
+  }
+
   async getWorklogList(query) {
     await this.props.actions.getWorklogList(this.pid, qs.stringify(query || {}));
     return this.props.report.ecode;
@@ -78,6 +88,8 @@ export default class Container extends Component {
         { !mode && 
         <List 
           index={ this.index.bind(this) } 
+          reset={ this.resetFilter.bind(this) } 
+          edit={ this.editFilter.bind(this) } 
           project={ this.props.project.item }
           { ...this.props.report }/> }
         { mode == 'worklog' && 

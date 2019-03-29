@@ -1055,3 +1055,7 @@ table tr:hover .remove-icon{
   display: block;
   font-size: 14px;
 }
+
+.report-container .panel-body .table > tbody > tr > td {
+  border-top: 0px;
+}

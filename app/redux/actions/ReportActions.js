@@ -7,6 +7,22 @@ export function index(key) {
   });
 }
 
+export function resetFilter(key, mode) {
+  return asyncFuncCreator({
+    constant: 'REPORT_FILTER_RESET',
+    mode: mode,
+    promise: (client) => client.request({ url: '/project/' + key + '/report/filter/reset', method: 'post', data: { mode: mode } })
+  });
+}
+
+export function editFilter(key, mode, values) {
+  return asyncFuncCreator({
+    constant: 'REPORT_FILTER_EDIT',
+    mode: mode,
+    promise: (client) => client.request({ url: '/project/' + key + '/report/filter', method: 'post', data: { mode: mode, filters: values } })
+  });
+}
+
 export function saveFilter(key, values) {
   return asyncFuncCreator({
     constant: 'REPORT_FILTER_SAVE',

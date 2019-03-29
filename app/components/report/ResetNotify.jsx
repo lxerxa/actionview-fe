@@ -1,11 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
-import _ from 'lodash';
 
 const img = require('../../assets/images/loading.gif');
 
-export default class DelNotify extends Component {
+export default class ResetNotify extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -17,18 +16,18 @@ export default class DelNotify extends Component {
     i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
-    del: PropTypes.func.isRequired,
-    sprintNo: PropTypes.number.isRequired
+    reset: PropTypes.func.isRequired,
+    mode: PropTypes.string.isRequired
   }
 
   async confirm() {
-    const { close, del, sprintNo } = this.props;
-    const ecode = await del(sprintNo);
+    const { close, reset, mode } = this.props;
+    const ecode = await reset(mode);
     this.setState({ ecode: ecode });
 
     if (ecode === 0) {
       close();
-      notify.show('Sprint已删除。', 'success', 2000);
+      notify.show('已重置。', 'success', 2000);
     }
   }
 
@@ -41,17 +40,17 @@ export default class DelNotify extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, sprintNo, loading } = this.props;
+    const { i18n: { errMsg }, mode, loading } = this.props;
+
+    const blocks = { issue: '问题分布图', worklog: '人员工作日志报告' };
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>
-            删除 - Sprint{ sprintNo }
-          </Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>重置过滤器 - { blocks[mode] }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此Sprint? <br/>
+          确认要重置此模块的过滤器？
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
