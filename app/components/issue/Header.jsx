@@ -9,7 +9,7 @@ import { IssueFilterList, getCondsTxt } from './IssueFilterList';
 const $ = require('$');
 const CreateModal = require('./CreateModal');
 const AddSearcherModal = require('./AddSearcherModal');
-const SearcherConfigModal = require('./SearcherConfigModal');
+const SearcherConfigModal = require('../share/SearcherConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
 const img = require('../../assets/images/loading.gif');
 

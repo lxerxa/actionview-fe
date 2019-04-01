@@ -87,6 +87,7 @@ export default class Container extends Component {
       <div>
         { !mode && 
         <List 
+          i18n={ this.props.i18n }
           index={ this.index.bind(this) } 
           reset={ this.resetFilter.bind(this) } 
           edit={ this.editFilter.bind(this) } 

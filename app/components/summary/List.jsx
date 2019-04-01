@@ -40,14 +40,15 @@ export default class List extends Component {
           <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
         </div>
         <div style={ { paddingLeft: '5px', marginBottom: '20px' } }>
-          <Link to={ '/project/' + project.key + '/issue' }><span style={ filterStyle }>全部问题</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }><span style={ filterStyle }>未解决的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?assignee=me&resolution=Unresolved' }><span style={ filterStyle }>分配给我的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?reporter=me' }><span style={ filterStyle }>我报告的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?watcher=me' }><span style={ filterStyle }>我关注的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?assignee=me' }><span style={ filterStyle }>经办人是我的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?created_at=2w' }><span style={ filterStyle }>最近增加的</span></Link>
-          <Link to={ '/project/' + project.key + '/issue?updated_at=2w' }><span style={ filterStyle }>最近更新的</span></Link>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue' }>全部问题</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }>未解决的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?assignee=me&resolution=Unresolved' }>分配给我的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?reporter=me' }>我报告的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?watcher=me' }>我关注的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?created_at=2w' }>最近增加的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?updated_at=2w' }>最近更新的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolved_at=2w' }>最近解决的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?closed_at=2w' }>最近关闭的</Link></span>
         </div>
         <Panel
           header={ 

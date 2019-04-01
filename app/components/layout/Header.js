@@ -240,17 +240,14 @@ export default class Header extends Component {
             </MenuItem>
           </DropdownButton>
         </span> }
-        <span style={ { float: 'right' } }>
-          <DropdownButton
-            pullRight
-            bsStyle='link'
-            title='GitHub'
-            id='basic-nav-dropdown-github'
-            style={ headerUser }
-            onSelect={ this.githubSelect.bind(this) }>
-            <MenuItem eventKey='frontend'>前端</MenuItem>
-            <MenuItem eventKey='backend'>后端</MenuItem>
-          </DropdownButton>
+        <span style={ { paddingTop: '5px', float: 'right' } }>
+          <iframe 
+            src='https://ghbtns.com/github-btn.html?user=lxerxa&repo=actionview&type=star&count=true' 
+            frameBorder='0' 
+            scrolling='0' 
+            width='100px' 
+            height='20px'>
+          </iframe>
         </span>
       </div>
     );

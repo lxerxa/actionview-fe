@@ -1129,6 +1129,23 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.post('/project/:key/report/filter', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+
+    const results = { ecode:0, data: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}] };
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/report/filter/reset', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+
+    const results = { ecode:0, data: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}] };
+
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/report/index', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

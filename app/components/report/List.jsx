@@ -6,16 +6,18 @@ import _ from 'lodash';
 import ResetNotify from './ResetNotify';
 
 const qs = require('qs');
+const SearcherConfigModal = require('../share/SearcherConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { resetShow: false, editShow: false };
+    this.state = { resetShow: false, searchConfigShow: false, editShow: false, selectedBlock: '' };
     this.getClassifiedData = this.getClassifiedData.bind(this);
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     filters: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -41,8 +43,8 @@ export default class List extends Component {
       i += columns;
     }
 
-    const classifiedData = _.map(tmp, (v) => 
-      <tr>
+    const classifiedData = _.map(tmp, (v, k) => 
+      <tr key={ k }>
         { _.map(v, (v2, i) => 
           <td key={ i }>
             <Link to={ '/project/' + project.key + '/report/' + mode + (!_.isEmpty(v2.query) ? ('?' + qs.stringify(v2.query)) : '') }>{ v2.name }</Link>
@@ -52,21 +54,47 @@ export default class List extends Component {
     return classifiedData;
   }
 
+  async edit(values) {
+    const { selectedBlock } = this.state;
+    const { edit } = this.props;
+    const ecode = await edit(selectedBlock, values);
+    return ecode
+  }
+
   render() {
 
-    const { project, filters, loading, saveLoading, edit, reset } = this.props;
+    const { i18n, project, filters, loading, saveLoading, edit, reset } = this.props;
+
+    const blockTitles = { 
+      issue: '问题分布图',
+      trend: '问题趋势图',
+      worklog: '员工作日志报告',
+      track: '时间跟踪报告',
+      compare: '创建问题和解决问题对比报告',
+      others: '其它报表'
+    };
 
     const issueTitle = (
       <div className='report-list-header'>
-        <span><i className='fa fa-pie-chart'></i> 问题分布图</span>
-        <span className='report-button report-edit-button' onClick={ () => { } } title='编辑'><i className='fa fa-pencil'></i></span>
-        <span className='report-button report-edit-button' onClick={ () => { } } title='重置'><i className='fa fa-repeat'></i></span>
+        <span><i className='fa fa-pie-chart'></i> { blockTitles['issue'] }</span>
+        <span 
+          className='report-button report-edit-button' 
+          onClick={ () => { this.setState({ selectedBlock: 'issue', searchConfigShow: true }) } } 
+          title='编辑顺序'>
+          <i className='fa fa-pencil'></i>
+        </span>
+        <span 
+          className='report-button report-edit-button' 
+          onClick={ () => { this.setState({ selectedBlock: 'issue', resetShow: true }) } } 
+          title='重置'>
+          <i className='fa fa-repeat'></i>
+        </span>
       </div>);
-    const trendTitle = (<span><i className='fa fa-line-chart'></i> 问题趋势图</span>)
-    const worklogTitle = (<span><i className='fa fa-bar-chart'></i> 人员工作日志报告</span>)
-    const trackTitle = (<span><i className='fa fa-clock-o'></i> 时间跟踪报告</span>)
-    const compareTitle = (<span><i className='fa fa-area-chart'></i> 创建问题和解决问题对比报告</span>)
-    const othersTitle = (<span><i className='fa fa-bar-chart'></i> 其它报表</span>)
+    const trendTitle = (<span><i className='fa fa-line-chart'></i> { blockTitles['trend'] }</span>)
+    const worklogTitle = (<span><i className='fa fa-bar-chart'></i> { blockTitles['worklog'] }</span>)
+    const trackTitle = (<span><i className='fa fa-clock-o'></i> { blockTitles['track'] }</span>)
+    const compareTitle = (<span><i className='fa fa-area-chart'></i> { blockTitles['compare'] }</span>)
+    const othersTitle = (<span><i className='fa fa-bar-chart'></i> { blockTitles['others'] }</span>)
 
     const issueItems = this.getClassifiedData(filters.issue || [], 'issue', 4);
     const worklogItems = this.getClassifiedData(filters.worklog || [], 'worklog', 4);
@@ -133,6 +161,23 @@ export default class List extends Component {
             </tr></thead>
           </Table>
         </Panel>
+        { this.state.resetShow &&
+          <ResetNotify 
+            show
+            mode={ this.state.selectedBlock }
+            close={ () => { this.setState({ resetShow: false }) } }
+            reset={ reset }
+            loading={ saveLoading }
+            i18n={ i18n }/> }
+        { this.state.searchConfigShow &&
+          <SearcherConfigModal
+            show
+            title={ blockTitles[this.state.selectedBlock] + ' - 过滤器管理' }
+            close={ () => { this.setState({ searchConfigShow: false }) } }
+            searchers={ filters[this.state.selectedBlock] }
+            config={ this.edit.bind(this) }
+            loading={ saveLoading }
+            i18n={ i18n }/> }
       </div>
     );
   }
