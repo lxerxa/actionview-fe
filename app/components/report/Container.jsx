@@ -43,7 +43,7 @@ export default class Container extends Component {
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
-    this.props.actions.getOptions();
+    this.props.actions.getOptions(key);
   }
 
   async index() {
@@ -56,8 +56,8 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
-  async saveFilter(values) {
-    await this.props.actions.saveFilter(this.pid, values);
+  async saveFilter(mode, values) {
+    await this.props.actions.saveFilter(this.pid, mode, values);
     return this.props.report.ecode;
   }
 

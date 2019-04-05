@@ -39,18 +39,24 @@ export default class List extends Component {
     const tmp = [];
     const len = data.length;
     for (let i = 0; i < len; ) {
-      tmp.push(data.slice(i, i + columns));
+      const section = data.slice(i, i + columns);
+      for (let j = section.length; j <= 4; j++) {
+        section.push({});
+      }
+      tmp.push(section);
       i += columns;
     }
 
-    const classifiedData = _.map(tmp, (v, k) => 
-      <tr key={ k }>
+    let classifiedData = [ <tr><td>该模块过滤器已被删除，请重置。</td></tr> ];
+    if (tmp.length > 0) {
+      classifiedData = _.map(tmp, (v, k) => 
+        <tr key={ k }>
         { _.map(v, (v2, i) => 
           <td key={ i }>
-            <Link to={ '/project/' + project.key + '/report/' + mode + (!_.isEmpty(v2.query) ? ('?' + qs.stringify(v2.query)) : '') }>{ v2.name }</Link>
+            { v2.name && <Link to={ '/project/' + project.key + '/report/' + mode + (!_.isEmpty(v2.query) ? ('?' + qs.stringify(v2.query)) : '') }>{ v2.name }</Link> }
           </td>) }
-      </tr> 
-    );
+        </tr> );
+    }
     return classifiedData;
   }
 
@@ -77,12 +83,13 @@ export default class List extends Component {
     const issueTitle = (
       <div className='report-list-header'>
         <span><i className='fa fa-pie-chart'></i> { blockTitles['issue'] }</span>
+        { filters.issue && filters.issue.length > 0 &&
         <span 
           className='report-button report-edit-button' 
           onClick={ () => { this.setState({ selectedBlock: 'issue', searchConfigShow: true }) } } 
           title='编辑顺序'>
           <i className='fa fa-pencil'></i>
-        </span>
+        </span> }
         <span 
           className='report-button report-edit-button' 
           onClick={ () => { this.setState({ selectedBlock: 'issue', resetShow: true }) } } 

@@ -54,7 +54,11 @@ export default class Duration extends Component {
     const { start_time, end_time, mode, inside_variable_duration, outside_variable_duration } = this.state;
 
     if (mode === 'fix_duration') {
-      return (start_time ? moment(start_time).format('YYYY/MM/DD') : '') + '~' + (end_time ? moment(end_time).format('YYYY/MM/DD') : '');
+      if (start_time || end_time) {
+        return (start_time ? moment(start_time).format('YYYY/MM/DD') : '') + '~' + (end_time ? moment(end_time).format('YYYY/MM/DD') : '');
+      } else {
+        return '';
+      }
     } else if (mode === 'outside_variable_duration') {
       return outside_variable_duration;
     } else if (mode === 'inside_variable_duration') {
@@ -111,8 +115,8 @@ export default class Duration extends Component {
             disabled={ false }
             simpleValue
             searchable={ false }
-            clearable={ false }
-            value={ this.state.outside_variable_duration }
+            clearable={ true }
+            value={ this.state.outside_variable_duration || null }
             onChange={ (newValue) => { this.onChange({ outside_variable_duration: newValue }); } }
             placeholder='请选择'/>
         </div> }
@@ -124,8 +128,8 @@ export default class Duration extends Component {
             disabled={ false }
             simpleValue
             searchable={ false }
-            clearable={ false }
-            value={ this.state.inside_variable_duration }
+            clearable={ true }
+            value={ this.state.inside_variable_duration || null }
             onChange={ (newValue) => { this.onChange({ inside_variable_duration: newValue }); } }
             placeholder='请选择'/>
         </div> }

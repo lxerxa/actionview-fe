@@ -41,14 +41,13 @@ export default class SaveFilterModal extends Component {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired
+    save: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { mode, values, create, close, query={} } = this.props;
+    const { mode, values, save, close, query={} } = this.props;
     values.query = query;
-    values.mode = mode;
-    const ecode = await create(values);
+    const ecode = await save(mode, values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

@@ -11,7 +11,7 @@ export function resetFilter(key, mode) {
   return asyncFuncCreator({
     constant: 'REPORT_FILTER_RESET',
     mode: mode,
-    promise: (client) => client.request({ url: '/project/' + key + '/report/filter/reset', method: 'post', data: { mode: mode } })
+    promise: (client) => client.request({ url: '/project/' + key + '/report/' + mode  + '/filters/reset' })
   });
 }
 
@@ -19,14 +19,15 @@ export function editFilter(key, mode, values) {
   return asyncFuncCreator({
     constant: 'REPORT_FILTER_EDIT',
     mode: mode,
-    promise: (client) => client.request({ url: '/project/' + key + '/report/filter', method: 'post', data: { mode: mode, filters: values } })
+    promise: (client) => client.request({ url: '/project/' + key + '/report/' + mode + '/filters', method: 'post', data: values })
   });
 }
 
-export function saveFilter(key, values) {
+export function saveFilter(key, mode, values) {
   return asyncFuncCreator({
     constant: 'REPORT_FILTER_SAVE',
-    promise: (client) => client.request({ url: '/project/' + key + '/report/filter', method: 'post', data: values })
+    mode: mode,
+    promise: (client) => client.request({ url: '/project/' + key + '/report/' + mode + '/filter', method: 'post', data: values })
   });
 }
 

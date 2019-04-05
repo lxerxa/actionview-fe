@@ -47,8 +47,8 @@ export default class Worklog extends Component {
   }
 
   componentWillMount() {
-    const { index } = this.props;
-    index();
+    const { index, query } = this.props;
+    index(query);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -65,7 +65,11 @@ export default class Worklog extends Component {
     const { query={}, refresh } = this.props;
 
     const newQuery = _.assign({}, query);
-    if (this.state.recorded_at) {  newQuery.recorded_at = this.state.recorded_at; }
+    if (this.state.recorded_at) {
+      newQuery.recorded_at = this.state.recorded_at; 
+    } else {
+      delete newQuery.recorded_at;
+    }
     refresh(newQuery);
   }
 
@@ -149,7 +153,7 @@ export default class Worklog extends Component {
             <Col sm={ 5 }>
               <Duration
                 value={ this.state.recorded_at }
-                onChange={ (newValue) => { this.setState({ recorded_at: newValue }); this.search(); } }/>
+                onChange={ (newValue) => { this.state.recorded_at = newValue; this.search(); } }/>
             </Col>
             <Col sm={ 6 }>
               <Button
@@ -306,7 +310,7 @@ export default class Worklog extends Component {
           close={ () => { this.setState({ saveFilterShow: false }) } }
           filters={ filters.worklog || [] }
           options={ options }
-          create={ saveFilter }
+          save={ saveFilter }
           mode={ 'worklog' }
           query={ query }
           sqlTxt={ sqlTxt }
