@@ -17,6 +17,7 @@ export default class ResetNotify extends Component {
     close: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
     reset: PropTypes.func.isRequired,
+    blockTitles: PropTypes.string.isRequired,
     mode: PropTypes.string.isRequired
   }
 
@@ -40,14 +41,12 @@ export default class ResetNotify extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, mode, loading } = this.props;
-
-    const blocks = { issue: '问题分布图', worklog: '人员工作日志报告' };
+    const { i18n: { errMsg }, blockTitles, mode, loading } = this.props;
 
     return (
       <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>重置过滤器 - { blocks[mode] }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>重置过滤器 - { blockTitles[mode] }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           确认要重置此模块的过滤器？

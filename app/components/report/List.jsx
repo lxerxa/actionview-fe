@@ -47,7 +47,13 @@ export default class List extends Component {
       i += columns;
     }
 
-    let classifiedData = [ <tr><td>该模块过滤器已被删除，请重置。</td></tr> ];
+    let classifiedData = [ 
+      <tr>
+        <td>
+          该模块过滤器已被删除，请点击<a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ selectedBlock: mode, resetShow: true }) } }>重置</a>。
+        </td>
+      </tr> 
+    ];
     if (tmp.length > 0) {
       classifiedData = _.map(tmp, (v, k) => 
         <tr key={ k }>
@@ -74,37 +80,38 @@ export default class List extends Component {
     const blockTitles = { 
       issue: '问题分布图',
       trend: '问题趋势图',
-      worklog: '员工作日志报告',
+      worklog: '人员工作日志报告',
       track: '时间跟踪报告',
       compare: '创建问题和解决问题对比报告',
       others: '其它报表'
     };
 
-    const issueTitle = (
-      <div className='report-list-header'>
-        <span><i className='fa fa-pie-chart'></i> { blockTitles['issue'] }</span>
-        { filters.issue && filters.issue.length > 0 &&
-        <span 
-          className='report-button report-edit-button' 
-          onClick={ () => { this.setState({ selectedBlock: 'issue', searchConfigShow: true }) } } 
-          title='编辑顺序'>
-          <i className='fa fa-pencil'></i>
-        </span> }
-        <span 
-          className='report-button report-edit-button' 
-          onClick={ () => { this.setState({ selectedBlock: 'issue', resetShow: true }) } } 
-          title='重置'>
-          <i className='fa fa-repeat'></i>
-        </span>
-      </div>);
-    const trendTitle = (<span><i className='fa fa-line-chart'></i> { blockTitles['trend'] }</span>)
-    const worklogTitle = (<span><i className='fa fa-bar-chart'></i> { blockTitles['worklog'] }</span>)
-    const trackTitle = (<span><i className='fa fa-clock-o'></i> { blockTitles['track'] }</span>)
-    const compareTitle = (<span><i className='fa fa-area-chart'></i> { blockTitles['compare'] }</span>)
-    const othersTitle = (<span><i className='fa fa-bar-chart'></i> { blockTitles['others'] }</span>)
+    console.log(this.state.selectedBlock);
 
-    const issueItems = this.getClassifiedData(filters.issue || [], 'issue', 4);
-    const worklogItems = this.getClassifiedData(filters.worklog || [], 'worklog', 4);
+    const blockHeaders = {};
+    const blockItems = {};
+    const blocks = [ 'issue', 'trend', 'worklog', 'track', 'compare', 'others' ];
+    _.forEach(blocks, (v) => {
+      blockHeaders[v] = (
+        <div className='report-list-header'>
+          <span><i className='fa fa-pie-chart'></i> { blockTitles[v] }</span>
+          { filters[v] && filters[v].length > 0 &&
+          <span
+            className='report-button report-edit-button'
+            onClick={ () => { this.setState({ selectedBlock: v, searchConfigShow: true }) } }
+            title='编辑顺序'>
+            <i className='fa fa-pencil'></i>
+          </span> }
+          <span
+            className='report-button report-edit-button'
+            onClick={ () => { this.setState({ selectedBlock: v, resetShow: true }) } }
+            title='重置'>
+            <i className='fa fa-repeat'></i>
+          </span>
+        </div>
+      );
+      blockItems[v] = this.getClassifiedData(filters[v] || [], v, 4);
+    });
 
     return ( loading ?
       <div style={ { marginTop: '30px' } }>
@@ -114,51 +121,42 @@ export default class List extends Component {
       </div>
       :
       <div style={ { marginTop: '15px', marginBottom: '30px' } } className='report-container'>
-        <Panel header={ issueTitle }>
+        <Panel header={ blockHeaders['issue'] }>
           <Table responsive>
             <tbody>
-              { issueItems }
+              { blockItems['issue'] }
             </tbody>
           </Table>
         </Panel>
-        <Panel header={ trendTitle }>
-          <Table responsive>
-            <thead><tr>
-              <td>aa</td>
-              <td>bb</td>
-              <td>bb</td>
-              <td>bb</td>
-            </tr></thead>
-          </Table>
-        </Panel>
-        <Panel header={ worklogTitle }>
+        <Panel header={ blockHeaders['trend'] }>
           <Table responsive>
             <tbody>
-              { worklogItems }
+              { blockItems['trend'] }
             </tbody>
           </Table>
         </Panel>
-        <Panel header={ trackTitle }>
-          <Table responsive hover>
-            <thead><tr>
-              <td>aa</td>
-              <td>bb</td>
-              <td>bb</td>
-              <td>bb</td>
-            </tr></thead>
+        <Panel header={ blockHeaders['worklog'] }>
+          <Table responsive>
+            <tbody>
+              { blockItems['worklog'] }
+            </tbody>
           </Table>
         </Panel>
-        <Panel header={ compareTitle }>
+        <Panel header={ blockHeaders['track'] }>
           <Table responsive hover>
-            <thead><tr>
-              <td>aa</td>
-              <td>bb</td>
-              <td>bb</td>
-              <td>bb</td>
-            </tr></thead>
+            <tbody>
+              { blockItems['track'] }
+            </tbody>
           </Table>
         </Panel>
-        <Panel header={ othersTitle }>
+        <Panel header={ blockHeaders['compare'] }>
+          <Table responsive hover>
+            <tbody>
+              { blockItems['compare'] }
+            </tbody>
+          </Table>
+        </Panel>
+        <Panel header={ blockHeaders['others'] }>
           <Table responsive hover>
             <thead><tr>
               <td>延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率</td>
@@ -171,6 +169,7 @@ export default class List extends Component {
         { this.state.resetShow &&
           <ResetNotify 
             show
+            blockTitles={ blockTitles }
             mode={ this.state.selectedBlock }
             close={ () => { this.setState({ resetShow: false }) } }
             reset={ reset }
