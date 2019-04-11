@@ -26,6 +26,7 @@ const filters = [
   'updated_at',
   'resolved_at',
   'closed_at',
+  'expect_complete_time',
   'title',
   'orderBy'
 ];
@@ -52,6 +53,7 @@ export class IssueFilterList extends Component {
     query: PropTypes.object,
     searchShow: PropTypes.bool,
     notShowFields: PropTypes.array,
+    notShowBlocks: PropTypes.array,
     options: PropTypes.object
   }
 
@@ -90,6 +92,7 @@ export class IssueFilterList extends Component {
     const { 
       searchShow=false, 
       notShowFields=[],
+      notShowBlocks=[],
       options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
@@ -302,13 +305,14 @@ export class IssueFilterList extends Component {
               options={ [ { value: 'me', label: '当前用户' } ] }/>
           </Col> }
         </FormGroup> }
+        { notShowBlocks.indexOf('time') === -1 &&
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
           时间 
           <span className='direct-button' onClick={ () => this.setState({ timeFilterShow: !this.state.timeFilterShow }) } title={ this.state.timeFilterShow ? '收缩' : '展开' }>
             { this.state.timeFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
           </span>
-        </div>
-        { this.state.timeFilterShow &&
+        </div> }
+        { this.state.timeFilterShow && notShowBlocks.indexOf('time') === -1 &&
         <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             创建时间
@@ -327,7 +331,7 @@ export class IssueFilterList extends Component {
               onChange={ (newValue) => { this.setState({ updated_at: newValue }); this.search(); } }/>
           </Col>
         </FormGroup> }
-        { this.state.timeFilterShow &&
+        { this.state.timeFilterShow && notShowBlocks.indexOf('time') === -1 &&
         <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             解决时间
@@ -344,6 +348,18 @@ export class IssueFilterList extends Component {
             <Duration
               value={ this.state.closed_at }
               onChange={ (newValue) => { this.setState({ closed_at: newValue }); this.search(); } }/>
+          </Col>
+        </FormGroup> }
+        { this.state.timeFilterShow && notShowBlocks.indexOf('time') === -1 &&
+        <FormGroup>
+          <Col sm={ 1 } componentClass={ ControlLabel }>
+            期望完成 
+          </Col>
+          <Col sm={ 5 }>
+            <Duration
+              mode='fix_duration'
+              value={ this.state.expect_complete_time }
+              onChange={ (newValue) => { this.setState({ expect_complete_time: newValue }); this.search(); } }/>
           </Col>
         </FormGroup> }
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
@@ -451,7 +467,8 @@ export function getCondsTxt(query, options) {
     { key: 'created_at', name: '创建时间' },
     { key: 'updated_at', name : '更新时间' },
     { key: 'resolved_at', name : '解决时间' },
-    { key: 'closed_at', name : '关闭时间' }
+    { key: 'closed_at', name : '关闭时间' },
+    { key: 'expect_complete_time', name : '期望完成时间' }
   ];
   const units = { w: '周', m: '月', y: '年' };
   for (let i = 0; i < timeConds.length; i++) {

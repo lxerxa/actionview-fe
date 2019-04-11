@@ -8,12 +8,19 @@ const moment = require('moment');
 export default class Duration extends Component {
   constructor(props) {
     super(props);
-    this.state = { mode: 'fix_duration', start_time: '', end_time: '', inside_variable_duration: '', outside_variable_duration: '' };
+    this.state = { 
+      mode: props.mode || 'fix_duration', 
+      isModeChanged: props.mode ? false : true, 
+      start_time: '', 
+      end_time: '', 
+      inside_variable_duration: '', 
+      outside_variable_duration: '' };
     this.getValue = this.getValue.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   static propTypes = {
+    mode: PropTypes.string,
     onChange: PropTypes.func,
     value: PropTypes.string
   }
@@ -97,6 +104,7 @@ export default class Duration extends Component {
 
     return (
       <div style={ { display: 'inline' } }>
+        { this.state.isModeChanged &&
         <div style={ { width: '25%', display: 'inline-block', float: 'left', marginRight: '5px' } }>
           <Select
             options={ modeOptions }
@@ -107,7 +115,7 @@ export default class Duration extends Component {
             value={ this.state.mode }
             onChange={ (newValue) => { this.setState({ mode: newValue }) } }
             placeholder='请选择'/>
-        </div>
+        </div> }
         { this.state.mode === 'outside_variable_duration' &&
         <div style={ { width: '40%', display: 'inline-block', float: 'left' } }>
           <Select

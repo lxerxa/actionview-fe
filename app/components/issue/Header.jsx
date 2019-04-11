@@ -133,7 +133,7 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
-          <DropdownButton className='create-btn' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
+          <DropdownButton className='create-btn' id='filters' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
             <MenuItem eventKey='all'>全部问题</MenuItem>
             <MenuItem eventKey='todos'>分配给我的</MenuItem>
             <MenuItem eventKey='mywatches'>我关注的</MenuItem>
@@ -150,7 +150,7 @@ export default class Header extends Component {
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
           <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
           <div style={ { marginTop: '8px', float: 'right' } }>
-            <DropdownButton pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton id='more' pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>刷新</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='2'>导出</MenuItem>

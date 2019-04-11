@@ -52,6 +52,13 @@ export function getWorklogDetail(key, issue_id, qs) {
   });
 }
 
+export function trend(key, qs) {
+  return asyncFuncCreator({
+    constant: 'REPORT_TREND_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/report/trend' + (qs ? '?' + qs : '') })
+  });
+}
+
 export function getOptions(key) {
   return asyncFuncCreator({
     constant: 'REPORT_OPTIONS',

@@ -401,7 +401,7 @@ export default class List extends Component {
               <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
                 { collection[i].reporter.name + '  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }
               </span> }
-              { _.map(collection[i].labels || [], (v) => <Link to={ '/project/' + project.key + '/issue?labels=' + v }><span title={ v } className='issue-label'>{ v }</span></Link>) }
+              { _.map(collection[i].labels || [], (v, i) => <Link to={ '/project/' + project.key + '/issue?labels=' + v } key={ i }><span title={ v } className='issue-label'>{ v }</span></Link>) }
             </span>
           </div>
         ), 

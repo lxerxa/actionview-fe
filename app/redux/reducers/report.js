@@ -12,7 +12,9 @@ const initialState = {
   worklogList: [], 
   worklogListLoading: false,
   worklogDetail: {},
-  worklogDetailLoading: false };
+  worklogDetailLoading: false,
+  trend: [], 
+  trendLoading: false };
 
 export default function report(state = initialState, action) {
   switch (action.type) {
@@ -99,6 +101,18 @@ export default function report(state = initialState, action) {
 
     case t.REPORT_WORKLOG_DETAIL_GET_FAIL:
       return { ...state, worklogDetailLoading: false, error: action.error };
+
+    case t.REPORT_TREND_INDEX:
+      return { ...state, trendLoading: true, trend: [] };
+
+    case t.REPORT_TREND_INDEX_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.trend = action.result.data;
+      }
+      return { ...state, trendLoading: false, ecode: action.result.ecode };
+
+    case t.REPORT_TREND_INDEX_FAIL:
+      return { ...state, trendLoading: false, error: action.error };
 
     default:
       return state;

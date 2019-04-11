@@ -7,6 +7,7 @@ import * as ReportActions from 'redux/actions/ReportActions';
 const qs = require('qs');
 const List = require('./List');
 const Worklog = require('./Worklog');
+const Trend = require('./Trend');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -32,6 +33,11 @@ export default class Container extends Component {
     params: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     report: PropTypes.object.isRequired
+  }
+
+  gotoIssue(query) {
+    const pathname = '/project/' + this.pid + '/issue';
+    this.context.router.push({ pathname, query });
   }
 
   refresh(query) {
@@ -81,6 +87,11 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
+  async trend(query) {
+    await this.props.actions.trend(this.pid, qs.stringify(query || {}));
+    return this.props.report.ecode;
+  }
+
   render() {
     const { location: { query={} }, params: { mode } } = this.props;
     return (
@@ -103,6 +114,16 @@ export default class Container extends Component {
           project={ this.props.project.item }
           query={ query }
           refresh={ this.refresh.bind(this) }
+          { ...this.props.report }/> }
+        { mode == 'trend' &&
+        <Trend
+          i18n={ this.props.i18n }
+          index={ this.trend.bind(this) }
+          saveFilter={ this.saveFilter.bind(this) }
+          project={ this.props.project.item }
+          query={ query }
+          refresh={ this.refresh.bind(this) }
+          gotoIssue={ this.gotoIssue.bind(this) }
           { ...this.props.report }/> }
       </div>
     );

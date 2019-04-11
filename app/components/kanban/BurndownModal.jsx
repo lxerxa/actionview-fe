@@ -92,7 +92,7 @@ export default class PreviewModal extends Component {
             <Tooltip/>
             <Legend />
             { series.map(s => (
-              <Line dataKey='value' data={ s.data } stroke={ s.stroke } name={ s.name } key={ s.name } />
+              <Line dataKey='value' data={ s.data } stroke={ s.stroke } name={ s.name } key={ s.name } strokeWidth={ 2 }/>
             )) }
           </LineChart>
         </Modal.Body> }

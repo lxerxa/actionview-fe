@@ -124,7 +124,7 @@ export default class List extends Component {
                 </td>
                 <td>
                   <table style={ { width: '90%' } }>
-                    <tr>
+                    <tbody><tr>
                       <td style={ { width: data.new_issues.percent + '%' } }>
                         <div className='green-bar'/>
                       </td>
@@ -133,7 +133,7 @@ export default class List extends Component {
                           { data.new_issues && data.new_issues['total'] || 0 }
                         </Link>
                       </td>
-                    </tr>
+                    </tr></tbody>
                   </table>
                 </td>
               </tr>
@@ -145,7 +145,7 @@ export default class List extends Component {
                 </td>
                 <td>
                   <table style={ { width: '90%' } }>
-                    <tr>
+                    <tbody><tr>
                       <td style={ { width: data.closed_issues.percent + '%' } }>
                         <div className='red-bar'/>
                       </td>
@@ -154,7 +154,7 @@ export default class List extends Component {
                           { data.closed_issues && data.closed_issues['total'] || 0 }
                         </Link>
                       </td>
-                    </tr>
+                    </tr></tbody>
                   </table>
                 </td>
               </tr>
@@ -191,7 +191,7 @@ export default class List extends Component {
             <tbody>
               { _.map(data.assignee_unresolved_issues, (val, key) => {
                 return (
-                <tr>
+                <tr key={ key }>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
                       { options.users && options.users[key] || '' }
@@ -215,7 +215,7 @@ export default class List extends Component {
             <tbody>
               { _.map(data.assignee_unresolved_issues, (val, key) => {
                 return (
-                <tr>
+                <tr key={ key }>
                   <td style={ { width: '20%' } }>
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&assignee=' + key }>
                       { options.users && options.users[key] || '' }
@@ -228,14 +228,14 @@ export default class List extends Component {
                   </td>
                   <td>
                     <table style={ { width: '100%' } }>
-                      <tr>
+                      <tbody><tr>
                         <td style={ { width: val.percent + '%' } }>
                           <div className='color-bar'/> 
                         </td>
                         <td style={ { width: (100 - val.percent) + '%', paddingLeft: '10px' } }>
                           { val.percent + '%' } 
                         </td>
-                      </tr>
+                      </tr></tbody>
                     </table>
                   </td>
                 </tr>) }) }
@@ -272,7 +272,7 @@ export default class List extends Component {
             <tbody>
               { _.map(data.priority_unresolved_issues, (val, key) => {
                 return (
-                <tr>
+                <tr key={ key }>
                   <td style={ { width: '20%' } }>
                     { options.priorities && options.priorities[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
@@ -305,7 +305,7 @@ export default class List extends Component {
             <tbody>
               { _.map(data.priority_unresolved_issues, (val, key) => {
                 return (
-                <tr>
+                <tr key={ key }>
                   <td style={ { width: '20%' } }>
                     { options.priorities && options.priorities[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&priority=' + key }>
@@ -324,14 +324,14 @@ export default class List extends Component {
                   </td>
                   <td>
                     <table style={ { width: '100%' } }>
-                      <tr>
+                      <tbody><tr>
                         <td style={ { width: val.percent + '%' } }>
                           <div className='color-bar'/>
                         </td>
                         <td style={ { width: (100 - val.percent) + '%', paddingLeft: '10px' } }>
                           { val.percent + '%' }
                         </td>
-                      </tr>
+                      </tr></tbody>
                     </table>
                   </td>
                 </tr>) }) }
@@ -368,7 +368,7 @@ export default class List extends Component {
             <tbody>
               { _.map(data.module_unresolved_issues, (val, key) => {
                 return (
-                <tr>
+                <tr key={ key }>
                   <td style={ { width: '20%' } }>
                     { options.modules && options.modules[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
@@ -401,7 +401,7 @@ export default class List extends Component {
             <tbody>
               { _.map(data.module_unresolved_issues, (val, key) => {
                 return (
-                <tr>
+                <tr key={ key }>
                   <td style={ { width: '20%' } }>
                     { options.modules && options.modules[key] ?
                     <Link to={ '/project/' + project.key + '/issue?resolution=Unresolved&module=' + key }>
@@ -420,14 +420,14 @@ export default class List extends Component {
                   </td>
                   <td>
                     <table style={ { width: '100%' } }>
-                      <tr>
+                      <tbody><tr>
                         <td style={ { width: val.percent + '%' } }>
                           <div className='color-bar'/>
                         </td>
                         <td style={ { width: (100 - val.percent) + '%', paddingLeft: '10px' } }>
                           { val.percent + '%' }
                         </td>
-                      </tr>
+                      </tr></tbody>
                     </table>
                   </td>
                 </tr>) }) }

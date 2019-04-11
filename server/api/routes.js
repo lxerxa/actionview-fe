@@ -1120,7 +1120,7 @@ export default function(router) {
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode:0, data: { 
     	issue: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}], 
-    	trend: [], 
+    	trend: [{id: '1111', name: '近一月的', query: { stat_time: '1m' }}], 
     	worklog: [{id: '1111', name: '近一月的', query: { recorded_at: '1m' }}, {id: '2222', name: '创建3个月外的', query: { created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}], 
     	timetrack: [], 
     	compare: [], 
@@ -1185,6 +1185,13 @@ export default function(router) {
     parts: [     
     { id: '1111', started_at: 1478414469, adjust_type: '1', spend: '3d 4h', spend_m: 200, comments: '111\r\n1111', recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }, 
     { id: '3333', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }] } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/report/trend', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ ecode: 0, data: [{ category: '05/02', new: 15, resolved: 10, closed: 4 }, { category: '05/03', new: 1, resolved: 6, closed: 14 }, { category: '05/04', new: 5, resolved: 10, closed: 2 }, { category: '05/05', new: 7, resolved: 10, closed: 6, notWorking: 1 }, { category: '05/06', new: 5, resolved: 8, closed: 4 }, { category: '05/07', new: 9, resolved: 9, closed: 9 }, { category: '05/08', new: 8, resolved: 5, closed: 4}] };
     return res.status(200).send(results);
   });
 

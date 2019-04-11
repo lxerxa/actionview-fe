@@ -180,8 +180,8 @@ export default class Worklog extends Component {
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>
             <Button title='饼状图' style={ { height: '36px', backgroundColor: this.state.shape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button>
-            <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
             <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
+            <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
           </ButtonGroup> 
           <div className='report-select-sort'>
             <Select
@@ -250,12 +250,13 @@ export default class Worklog extends Component {
             <LineChart 
               width={ 800 } 
               height={ 380 } 
+              data={ data }
               style={ { margin: '25px auto' } }>
-              <XAxis dataKey='name' type='category' allowDuplicatedCategory={ true } />
-              <YAxis dataKey='value'/>
+              <XAxis dataKey='name' />
+              <YAxis/>
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
-              <Line dataKey='value' data={ data } stroke='#d04437' />
+              <Line dataKey='value' stroke='#d04437' strokeWidth={ 2 } />
             </LineChart>
           </div> }
           { data.length > 0 &&

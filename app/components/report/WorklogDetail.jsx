@@ -76,7 +76,7 @@ export default class WorklogDetailModal extends Component {
                   <td>{ v.started_at ? moment.unix(v.started_at).format('YY/MM/DD HH:mm:ss') : '-' }</td>
                   <td>{ v.spend || '-' }</td>
                   <td>{ v.spend_m || '-' }</td>
-                  <td width='45%' dangerouslySetInnerHTML={ { __html: v.comments.replace(/(\r\n)|(\n)/g, '<br/>') } }/>
+                  <td width='45%' dangerouslySetInnerHTML={ { __html: v.comments.replace(/(\r\n)|(\n)/g, '<br/>') || '-' } }/>
                 </tr>); }) }
             </tbody>
           </Table>

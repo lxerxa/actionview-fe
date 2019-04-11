@@ -86,15 +86,22 @@ export default class List extends Component {
       others: '其它报表'
     };
 
-    console.log(this.state.selectedBlock);
+    const blockIcons = { 
+      issue: 'fa fa-pie-chart',
+      trend: 'fa fa-line-chart',
+      worklog: 'fa fa-bar-chart',
+      track: 'fa fa-clock-o',
+      compare: 'fa fa-area-chart',
+      others: 'fa fa-bar-chart'
+    };
 
     const blockHeaders = {};
     const blockItems = {};
     const blocks = [ 'issue', 'trend', 'worklog', 'track', 'compare', 'others' ];
-    _.forEach(blocks, (v) => {
+    _.forEach(blocks, (v, i) => {
       blockHeaders[v] = (
-        <div className='report-list-header'>
-          <span><i className='fa fa-pie-chart'></i> { blockTitles[v] }</span>
+        <div className='report-list-header' key={ i }>
+          <span><i className={ blockIcons[v] }></i> { blockTitles[v] }</span>
           { filters[v] && filters[v].length > 0 &&
           <span
             className='report-button report-edit-button'

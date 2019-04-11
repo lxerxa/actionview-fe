@@ -382,9 +382,9 @@ export default class List extends Component {
               您可创建项目 或 联系其他项目管理员将您添加到项目成员中
             </div> }
           { this.state.mode === 'card' && !indexLoading && collection.length > 0 &&
-          collection.map((model) => {
+          collection.map((model, i) => {
             return (
-              <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer'>
+              <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer' key={ i }>
                 <div className='card'>
                   { model.status !== 'active' &&
                   <div className='status'><Label>已关闭</Label></div> }
