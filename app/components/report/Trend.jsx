@@ -75,7 +75,11 @@ export default class Trend extends Component {
         start_time = moment(time).startOf('day').format('YYYY/MM/DD');
         end_time = moment(time).endOf('day').format('YYYY/MM/DD');
       }
-      t[mode] = start_time + '~' + end_time;
+      if (query.is_accu === '1') {
+        t[mode] = '~' + end_time;
+      } else {
+        t[mode] = start_time + '~' + end_time;
+      }
     } else {
       t[mode] = query.stat_time;
     }
@@ -91,12 +95,10 @@ export default class Trend extends Component {
     } else {
       delete newQuery.stat_time;
     }
-    if (this.state.interval) {
-      newQuery.interval = this.state.interval;
-    }
-    if (this.state.is_accu) {
-      newQuery.is_accu = this.state.is_accu;
-    }
+
+    newQuery.interval = this.state.interval || 'day';
+    newQuery.is_accu = this.state.is_accu === '1' ? '1' : '0';
+
     refresh(newQuery);
   }
 
@@ -183,7 +185,7 @@ export default class Trend extends Component {
                 inline
                 name='is_accu'
                 onClick={ () => { this.state.is_accu = '0'; this.search(); } }
-                checked={ this.state.is_accu === '0' }>
+                checked={ this.state.is_accu !== '1' }>
                 否 
               </Radio>
             </Col>
@@ -297,6 +299,7 @@ export default class Trend extends Component {
           </div> }
           { !hasErr &&
           <div style={ { float: 'left', width: '100%', marginBottom: '30px' } }>
+            <span>注：该图表最多展示100条目。</span>
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
@@ -307,15 +310,15 @@ export default class Trend extends Component {
                 </tr>
               </thead>
               <tbody>
-              { _.map(data, (v, i) => {
-                return (
-                  <tr key={ i }>
-                    <td>{ v.category }</td>
-                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('created_at', 'sub', v.category); } }>{ v.new }</a></td>
-                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('resolved_at', 'sub', v.category); } }>{ v.resolved }</a></td>
-                    <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('closed_at', 'sub', v.category); } }>{ v.closed }</a></td>
-                  </tr> ) }) 
-              }
+                { _.map(data, (v, i) => {
+                  return (
+                    <tr key={ i }>
+                      <td>{ v.category }</td>
+                      <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('created_at', 'sub', v.category); } }>{ v.new }</a></td>
+                      <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('resolved_at', 'sub', v.category); } }>{ v.resolved }</a></td>
+                      <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('closed_at', 'sub', v.category); } }>{ v.closed }</a></td>
+                    </tr> ) }) }
+                { this.state.is_accu === '0' &&
                 <tr>
                   <td>合计</td>
                   <td>
@@ -333,7 +336,7 @@ export default class Trend extends Component {
                       { _.reduce(data, (sum, v) => { return sum + v.closed }, 0) }
                     </a>
                   </td>
-                </tr>
+                </tr> }
               </tbody>
             </Table>
           </div> }
