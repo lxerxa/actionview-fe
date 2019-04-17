@@ -8,12 +8,14 @@ import _ from 'lodash';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
 import * as SessionActions from 'redux/actions/SessionActions';
+import * as LayoutActions from 'redux/actions/LayoutActions';
 
 const qs = require('qs');
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(ProjectActions, dispatch),
+    layoutActions: bindActionCreators(LayoutActions, dispatch),
     sessionActions: bindActionCreators(SessionActions, dispatch)
   };
 }
@@ -30,6 +32,7 @@ export default class Home extends Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    layoutActions: PropTypes.object.isRequired,
     sessionActions: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
@@ -89,6 +92,7 @@ export default class Home extends Component {
           cleanSelectedProject={ this.props.actions.cleanSelectedProject }
           entry={ this.entry.bind(this) }/>
         <Sidebar 
+          resize={ this.props.layoutActions.resize }
           project={ project } 
           session={ session } 
           pathname={ pathname }/>

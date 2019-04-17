@@ -23,6 +23,7 @@ export default class Sidebar extends Component {
   static propTypes = {
     project: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
+    resize: PropTypes.func.isRequired,
     pathname: PropTypes.string
   }
 
@@ -67,6 +68,10 @@ export default class Sidebar extends Component {
       $('.animate-dialog').css('width', width + 'px');
     }
 
+    if ($('.doc-container').length > 0) {
+      this.props.resize({ containerWidth: $('.doc-container').get(0).clientWidth });
+    }
+
     const storage = window.localStorage;
     if (storage) {
       storage.setItem('sideBarHide', '1');
@@ -92,6 +97,10 @@ export default class Sidebar extends Component {
       width = _.max([ docWidth / 2, 600 ]);
       width = _.min([ width, 1000 ]);
       $('.animate-dialog').css('width', width + 'px');
+    }
+
+    if ($('.doc-container').length > 0) {
+      this.props.resize({ containerWidth: $('.doc-container').get(0).clientWidth });
     }
 
     const storage = window.localStorage;

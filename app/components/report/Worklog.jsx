@@ -28,6 +28,7 @@ export default class Worklog extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     filters: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
@@ -88,6 +89,7 @@ export default class Worklog extends Component {
 
     const { 
       i18n, 
+      layout,
       project, 
       filters, 
       options, 
@@ -180,8 +182,8 @@ export default class Worklog extends Component {
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>
             <Button title='饼状图' style={ { height: '36px', backgroundColor: this.state.shape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button>
-            <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
             <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
+            <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
           </ButtonGroup> 
           <div className='report-select-sort'>
             <Select
@@ -233,7 +235,7 @@ export default class Worklog extends Component {
           { this.state.shape === 'bar' && data.length > 0 && 
           <div className='report-shape-container'>
             <BarChart
-              width={ 800 }
+              width={ layout.containerWidth - 60 }
               height={ 380 }
               data={ data }
               barSize={ 25 }
@@ -248,7 +250,7 @@ export default class Worklog extends Component {
           { this.state.shape === 'line' && data.length > 0 &&
           <div className='report-shape-container'>
             <LineChart 
-              width={ 800 } 
+              width={ layout.containerWidth - 60 } 
               height={ 380 } 
               data={ data }
               style={ { margin: '25px auto' } }>

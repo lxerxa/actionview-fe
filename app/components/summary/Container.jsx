@@ -11,7 +11,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ project, summary }) => ({ project, summary }), mapDispatchToProps)
+@connect(({ layout, project, summary }) => ({ layout, project, summary }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +22,7 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     summary: PropTypes.object.isRequired
   }
@@ -50,6 +51,7 @@ export default class Container extends Component {
     return (
       <div>
         <List 
+          layout={ this.props.layout }
           index={ this.index.bind(this) } 
           project={ this.props.project.item }
           { ...this.props.summary }/>

@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ i18n, project, report }) => ({ i18n, project, report }), mapDispatchToProps)
+@connect(({ i18n, layout, project, report }) => ({ i18n, layout, project, report }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -31,6 +31,7 @@ export default class Container extends Component {
     location: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     report: PropTypes.object.isRequired
   }
@@ -107,6 +108,7 @@ export default class Container extends Component {
         { mode == 'worklog' && 
         <Worklog 
           i18n={ this.props.i18n }
+          layout={ this.props.layout }
           index={ this.worklog.bind(this) } 
           getWorklogList={ this.getWorklogList.bind(this) }
           getWorklogDetail={ this.getWorklogDetail.bind(this) }
@@ -118,6 +120,7 @@ export default class Container extends Component {
         { mode == 'trend' &&
         <Trend
           i18n={ this.props.i18n }
+          layout={ this.props.layout }
           index={ this.trend.bind(this) }
           saveFilter={ this.saveFilter.bind(this) }
           project={ this.props.project.item }

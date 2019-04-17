@@ -1,18 +1,21 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
-import { Button, Label, Table, Panel } from 'react-bootstrap';
+import { FormGroup, Col, Button, Label, Table, Panel } from 'react-bootstrap';
+import { LineChart, Line, XAxis, YAxis, Legend, CartesianGrid, Tooltip, Cell } from 'recharts';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
+const qs = require('qs');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { pulseShowModel: 'percentage', assigneeShowModel: 'percentage', priorityShowModel: 'percentage', moduleShowModel: 'percentage' };
+    this.state = { pulseShowModel: 'charts', assigneeShowModel: 'percentage', priorityShowModel: 'percentage', moduleShowModel: 'percentage' };
   }
 
   static propTypes = {
+    layout: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
@@ -21,9 +24,10 @@ export default class List extends Component {
   }
 
   render() {
-    const { project, data, options, loading } = this.props;
+    const { layout, project, data, options, loading } = this.props;
 
     const filterStyle = { marginRight: '50px' };
+    const bgColors = [ '#58ca9a', '#ee706d', '#f7da47', '#447eff' ];   
 
     return ( loading ?
       <div style={ { marginTop: '20px' } }>
@@ -39,6 +43,22 @@ export default class List extends Component {
           <span style={ { marginLeft: '15px', fontSize: '14px' } }>负责人：{ project.principal && project.principal.name || '-' }</span>
           <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
         </div>
+        { data.searchers && data.searchers.length > 0 ? 
+        <div style={ { height: '120px', margin: '0px -10px 25px -10px' } }>
+          <FormGroup>
+          { _.map(data.searchers || [], (v, i) => {
+            return (
+            <Col sm={ 3 } key={ i }>
+              <div style={ { padding : '30px 0px', textAlign: 'center', backgroundColor: bgColors[i], borderRadius: '4px' } }>
+                <div style={ { fontWeight: 600, fontSize: '30px' } }>
+                  <Link to={ '/project/' + project.key + '/issue' + (!_.isEmpty(v.query) ? '?' + qs.stringify(v.query || {}) : '') } style={ { color: '#fff' } }>{ v.count }</Link>
+                </div>
+                <div style={ { fontSize: '14px', color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' } } title={ v.name }>{ v.name }</div>
+              </div>
+            </Col> ) }) }
+          </FormGroup>
+        </div> 
+        :
         <div style={ { paddingLeft: '5px', marginBottom: '20px' } }>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue' }>全部问题</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }>未解决的</Link></span>
@@ -49,119 +69,82 @@ export default class List extends Component {
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?updated_at=2w' }>最近更新的</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolved_at=2w' }>最近解决的</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?closed_at=2w' }>最近关闭的</Link></span>
-        </div>
+        </div> }
         <Panel
+          style={ { height: '300px' } }
           header={ 
             <div>
-              <span>{ '一周动态：' + (options.weekAgo || '') + ' ~ 现在' }</span>
-              <span className='exchange-icon' onClick={ () => this.setState({ pulseShowModel: this.state.pulseShowModel == 'detail' ? 'percentage' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
+              <span>{ '问题动态：' + (options.weekAgo || '') + ' ~ 现在' }</span>
+              <span className='exchange-icon' onClick={ () => this.setState({ pulseShowModel: this.state.pulseShowModel == 'detail' ? 'charts' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
-          { data.new_issues && data.new_issues.total ?
+          { this.state.pulseShowModel == 'detail' &&
           <Table responsive hover>
-            { this.state.pulseShowModel == 'detail' &&
             <thead>
               <tr>
-                <th>类别</th>
-                <th>问题</th>
-                { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
+                <th>日期</th>
+                { _.map(data.trend || [], (v, i) => { return (<th key={ i }>{ v.day.substr(5) }</th>) }) }
+                <th>合计</th>
               </tr>
-            </thead> }
-            { this.state.pulseShowModel == 'percentage' &&
-            <thead>
-              <tr>
-                <th>类别</th>
-                <th>问题</th>
-              </tr>
-            </thead> }
-            { this.state.pulseShowModel == 'detail' &&
+            </thead>
             <tbody>
               <tr>
-                <td style={ { width: '20%' } }>
-                  <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?created_at=2w' }>
                     新建问题
                   </Link>
                 </td>
-                <td style={ { width: '10%' } }>
-                  <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
-                    { data.new_issues && data.new_issues['total'] || 0 }
+                { _.map(data.trend || [], (v, i) => <td key={ i }><Link to={ '/project/' + project.key + '/issue?created_at=' + v.day + '~' + v.day }>{ v.new }</Link></td>) }
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?created_at=2w' }>
+                    { _.reduce(data.trend || [], (sum, v) => { return sum + v.new }, 0) }
                   </Link>
                 </td>
-                { _.map(options.types || [], (v) => { 
-                  return (
-                    <td key={ v.id }>
-                      <Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&created_at=1w' }>
-                        { data.new_issues && data.new_issues[v.id] || 0 }
-                      </Link>
-                    </td>) }) }
               </tr>
               <tr>
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
+                  <Link to={ '/project/' + project.key + '/issue?resolved_at=2w' }>
+                    解决问题
+                  </Link>
+                </td>
+                { _.map(data.trend || [], (v, i) => <td key={ i }><Link to={ '/project/' + project.key + '/issue?resolved_at=' + v.day + '~' + v.day }>{ v.resolved }</Link></td>) }
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?resolved_at=2w' }>
+                    { _.reduce(data.trend || [], (sum, v) => { return sum + v.resolved }, 0) }
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to={ '/project/' + project.key + '/issue?closed_at=2w' }>
                     关闭问题
                   </Link>
                 </td>
+                { _.map(data.trend || [], (v, i) => <td key={ i }><Link to={ '/project/' + project.key + '/issue?closed_at=' + v.day + '~' + v.day }>{ v.closed }</Link></td>) }
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
-                    { data.closed_issues && data.closed_issues['total'] || 0 }
+                  <Link to={ '/project/' + project.key + '/issue?closed_at=2w' }>
+                    { _.reduce(data.trend || [], (sum, v) => { return sum + v.closed }, 0) }
                   </Link>
                 </td>
-                { _.map(options.types || [], (v) => { 
-                  return (
-                    <td key={ v.id }>
-                      <Link to={ '/project/' + project.key + '/issue?type=' + v.id + '&state=Closed&updated_at=1w' }>
-                        { data.closed_issues && data.closed_issues[v.id] || 0 }
-                      </Link>
-                    </td>) }) }
               </tr>
-            </tbody> }
-            { this.state.pulseShowModel == 'percentage' &&
-            <tbody>
-              <tr>
-                <td style={ { width: '20%' } }>
-                  <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
-                    新建问题
-                  </Link>
-                </td>
-                <td>
-                  <table style={ { width: '90%' } }>
-                    <tbody><tr>
-                      <td style={ { width: data.new_issues.percent + '%' } }>
-                        <div className='green-bar'/>
-                      </td>
-                      <td style={ { width: (100 - data.new_issues.percent) + '%', paddingLeft: '10px' } }>
-                        <Link to={ '/project/' + project.key + '/issue?created_at=1w' }>
-                          { data.new_issues && data.new_issues['total'] || 0 }
-                        </Link>
-                      </td>
-                    </tr></tbody>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
-                    关闭问题
-                  </Link>
-                </td>
-                <td>
-                  <table style={ { width: '90%' } }>
-                    <tbody><tr>
-                      <td style={ { width: data.closed_issues.percent + '%' } }>
-                        <div className='red-bar'/>
-                      </td>
-                      <td style={ { width: (100 - data.closed_issues.percent) + '%', paddingLeft: data.closed_issues.percent ? '10px' : '0px' } }>
-                        <Link to={ '/project/' + project.key + '/issue?state=Closed&updated_at=1w' }>
-                          { data.closed_issues && data.closed_issues['total'] || 0 }
-                        </Link>
-                      </td>
-                    </tr></tbody>
-                  </table>
-                </td>
-              </tr>
-            </tbody> }
-          </Table>
-          :
-          <div>暂无信息</div> }
+            </tbody>
+          </Table> }
+          { this.state.pulseShowModel == 'charts' &&
+          <div className='report-shape-container'>
+            <LineChart
+              width={ layout.containerWidth - 60 }
+              height={ 200 }
+              data={ data.trend || [] }
+              style={ { margin: '25px auto' } }>
+              <XAxis dataKey='day'/>
+              <YAxis />
+              <CartesianGrid strokeDasharray='3 3'/>
+              <Tooltip/>
+              <Legend />
+              <Line dataKey='new' name='新建的' stroke='#4572A7'/>
+              <Line dataKey='resolved' name='已解决的' stroke='#AA4643'/>
+              <Line dataKey='closed' name='已关闭的' stroke='#89A54E'/>
+            </LineChart>
+          </div> }
         </Panel>
         <Panel 
           header={ 

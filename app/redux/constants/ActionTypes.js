@@ -292,5 +292,7 @@ export default generateConstants([
   'SYSSETTING_SEND_TESTMAIL(ASYNC)',
 
   'LOCALE_INITIALIZE',
-  'LOCALE_CHANGE(ASYNC)'
+  'LOCALE_CHANGE(ASYNC)',
+
+  'LAYOUT_RESIZE'
 ]);

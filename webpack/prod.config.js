@@ -10,7 +10,7 @@ export default {
     app: [
       './app/index.js'
     ],
-    common: ['react', 'react-dom', 'redux', 'redux-form', 'react-redux', 'react-router', 'react-router-redux', 'react-bootstrap', 'react-bootstrap-table', 'react-dnd', 'react-dnd-html5-backend', 'react-notify-toast', 'lodash']
+    common: ['react', 'react-dom', 'redux', 'redux-form', 'react-redux', 'react-router', 'react-router-redux', 'react-bootstrap', 'react-bootstrap-table', 'react-dnd', 'react-dnd-html5-backend', 'react-notify-toast', 'lodash', 'recharts']
   },
   module: {
     ...baseConfig.module,

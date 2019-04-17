@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, Checkbox } from 'react-bootstrap';
 import Select from 'react-select';
-import { Legend, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
+import { Area, AreaChart, Legend, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
 import { IssueFilterList, getCondsTxt } from '../issue/IssueFilterList';
 import Duration from '../share/Duration';
@@ -21,12 +21,13 @@ export default class Trend extends Component {
       notWorkingShow: true, 
       interval: 'day',
       is_accu: '0',
-      shape: 'line' };
+      shape: 'bar' };
     this.gotoIssue = this.gotoIssue.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     filters: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
@@ -72,8 +73,8 @@ export default class Trend extends Component {
         start_time = moment(time).startOf('month').format('YYYY/MM/DD');
         end_time = moment(time).endOf('month').format('YYYY/MM/DD');
       } else {
-        start_time = moment(time).startOf('day').format('YYYY/MM/DD');
-        end_time = moment(time).endOf('day').format('YYYY/MM/DD');
+        start_time = time;
+        end_time = time;
       }
       if (query.is_accu === '1') {
         t[mode] = '~' + end_time;
@@ -106,6 +107,7 @@ export default class Trend extends Component {
 
     const { 
       i18n, 
+      layout,
       project, 
       filters, 
       options, 
@@ -228,8 +230,9 @@ export default class Trend extends Component {
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>
-            <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
             <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
+            <Button title='面积图' style={ { height: '36px', backgroundColor: this.state.shape == 'area' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'area' }) } }>面积图</Button>
+            <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
           </ButtonGroup> 
           { this.state.interval === 'day' &&
           <div style={ { float: 'right' } }>
@@ -265,7 +268,7 @@ export default class Trend extends Component {
           { this.state.shape === 'bar' && !hasErr && 
           <div className='report-shape-container'>
             <BarChart
-              width={ 800 }
+              width={ layout.containerWidth - 60 }
               height={ 380 }
               barSize={ 25 }
               data={ data }
@@ -282,8 +285,25 @@ export default class Trend extends Component {
           </div> }
           { this.state.shape === 'line' && !hasErr &&
           <div className='report-shape-container'>
-            <LineChart 
-              width={ 800 } 
+            <LineChart
+              width={ layout.containerWidth - 60 }
+              height={ 380 }
+              data={ data }
+              style={ { margin: '25px auto' } }>
+              <XAxis dataKey='category'/>
+              <YAxis />
+              <CartesianGrid strokeDasharray='3 3'/>
+              <Tooltip/>
+              <Legend />
+              <Line dataKey='new' name='新建的' stroke='#4572A7' strokeWidth={ 2 }/>
+              <Line dataKey='resolved' name='已解决的' stroke='#AA4643' strokeWidth={ 2 }/>
+              <Line dataKey='closed' name='已关闭的' stroke='#89A54E' strokeWidth={ 2 }/>
+            </LineChart>
+          </div> }
+          { this.state.shape === 'area' && !hasErr &&
+          <div className='report-shape-container'>
+            <AreaChart 
+              width={ layout.containerWidth - 60 } 
               height={ 380 } 
               data={ data }
               style={ { margin: '25px auto' } }>
@@ -292,10 +312,10 @@ export default class Trend extends Component {
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              <Line dataKey='new' name='新建的' stroke='#4572A7' strokeWidth={ 2 } />
-              <Line dataKey='resolved' name='已解决的' stroke='#AA4643' strokeWidth={ 2 } />
-              <Line dataKey='closed' name='已关闭的' stroke='#89A54E' strokeWidth={ 2 } />
-            </LineChart>
+              <Area dataKey='new' name='新建的' stroke='#4572A7' file='#4572A7' type='monotone'/>
+              <Area dataKey='resolved' name='已解决的' stroke='#AA4643' fill='#AA4643' type='monotone'/>
+              <Area dataKey='closed' name='已关闭的' stroke='#89A54E' fill='#89A54E' type='monotone'/>
+            </AreaChart>
           </div> }
           { !hasErr &&
           <div style={ { float: 'left', width: '100%', marginBottom: '30px' } }>
@@ -310,7 +330,7 @@ export default class Trend extends Component {
                 </tr>
               </thead>
               <tbody>
-                { _.map(data, (v, i) => {
+                { _.map(trend, (v, i) => {
                   return (
                     <tr key={ i }>
                       <td>{ v.category }</td>
@@ -323,17 +343,17 @@ export default class Trend extends Component {
                   <td>合计</td>
                   <td>
                     <a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('created_at', 'total'); } }>
-                      { _.reduce(data, (sum, v) => { return sum + v.new }, 0) }
+                      { _.reduce(trend, (sum, v) => { return sum + v.new }, 0) }
                     </a>
                   </td>
                   <td>
                     <a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('resolved_at', 'total'); } }>
-                      { _.reduce(data, (sum, v) => { return sum + v.resolved }, 0) }
+                      { _.reduce(trend, (sum, v) => { return sum + v.resolved }, 0) }
                     </a>
                   </td>
                   <td>
                     <a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue('closed_at', 'total'); } }>
-                      { _.reduce(data, (sum, v) => { return sum + v.closed }, 0) }
+                      { _.reduce(trend, (sum, v) => { return sum + v.closed }, 0) }
                     </a>
                   </td>
                 </tr> }

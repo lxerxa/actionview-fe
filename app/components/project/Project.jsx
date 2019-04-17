@@ -1,15 +1,18 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
 import * as ProjectActions from 'redux/actions/ProjectActions';
+import * as LayoutActions from 'redux/actions/LayoutActions';
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(ProjectActions, dispatch)
+    actions: bindActionCreators(ProjectActions, dispatch),
+    layoutActions: bindActionCreators(LayoutActions, dispatch)
   };
 }
 
@@ -24,15 +27,17 @@ export default class Project extends Component {
     i18n: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    layoutActions: PropTypes.object.isRequired,
     children: PropTypes.element,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired
   }
 
   componentDidMount() {
-    const { actions, params: { key } } = this.props;
+    const { actions, layoutActions, params: { key } } = this.props;
     actions.show(key);
     this.key = key;
+    layoutActions.resize({ containerWidth: findDOMNode(this).clientWidth }); 
   }
 
   componentWillReceiveProps(nextProps) {
