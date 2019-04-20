@@ -51,6 +51,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     wfCollection: PropTypes.array.isRequired,
     wfLoading: PropTypes.bool.isRequired,
@@ -277,6 +278,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n,
+      layout,
       collection, 
       itemData={}, 
       loading, 
@@ -515,6 +517,7 @@ export default class List extends Component {
         { this.state.barShow &&
           <DetailBar 
             i18n={ i18n }
+            layout={ layout }
             create={ create } 
             edit={ edit } 
             del={ del } 

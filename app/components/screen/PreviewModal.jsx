@@ -1,8 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 import _ from 'lodash';
-
-const fieldTypes = require('../share/FieldTypes.js');
+import { FieldTypes } from '../share/Constants';
 
 export default class PreviewModal extends Component {
   constructor(props) {
@@ -13,7 +12,7 @@ export default class PreviewModal extends Component {
   static propTypes = {
     close: PropTypes.func.isRequired,
     name: PropTypes.string,
-    data: PropTypes.object.isRequired
+    data: PropTypes.array.isRequired
   }
 
   handleCancel() {
@@ -33,7 +32,7 @@ export default class PreviewModal extends Component {
           <ListGroup>
             { _.map(data, (val, key) => 
               <ListGroupItem header={ val.name || '' }>
-              { '键值:' + (val.key || '-') + ' - 类型:' + (_.find(fieldTypes, { value: val.type }) ? _.find(fieldTypes, { value: val.type }).label : '') + (val.required ? ' - 必填' : '') }
+              { '键值:' + (val.key || '-') + ' - 类型:' + (_.find(FieldTypes, { value: val.type }) ? _.find(FieldTypes, { value: val.type }).label : '') + (val.required ? ' - 必填' : '') }
               </ListGroupItem> ) }
           </ListGroup>
         </Modal.Body>

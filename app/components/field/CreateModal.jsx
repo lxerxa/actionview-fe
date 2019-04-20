@@ -4,9 +4,9 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { FieldTypes } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
-const fieldTypes = require('../share/FieldTypes.js');
 
 const validate = (values, props) => {
   const errors = {};
@@ -147,7 +147,7 @@ export default class CreateModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
             <Select 
               disabled={ submitting } 
-              options={ fieldTypes } 
+              options={ FieldTypes } 
               simpleValue 
               value={ type.value } 
               onChange={ newValue => { type.onChange(newValue) } } 

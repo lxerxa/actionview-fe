@@ -28,24 +28,24 @@ export function getOptions(key) {
   });
 }
 
-export function addSearcher(key, values) {
+export function saveFilter(key, values) {
   return asyncFuncCreator({
-    constant: 'ISSUE_SEARCHER_ADD',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/searcher', method: 'post', data: values })
+    constant: 'ISSUE_FILTER_SAVE',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/filter', method: 'post', data: values })
   });
 }
 
-export function delSearcher(key, id) {
+export function resetFilters(key) {
   return asyncFuncCreator({
-    constant: 'ISSUE_SEARCHER_DELETE',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/searcher/' + id, method: 'delete' })
+    constant: 'ISSUE_FILTERS_RESET',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/filters/reset' })
   });
 }
 
-export function configSearcher(key, values) {
+export function configFilters(key, values) {
   return asyncFuncCreator({
-    constant: 'ISSUE_SEARCHER_CONFIG',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/searcher/batch', method: 'post', data: values })
+    constant: 'ISSUE_FILTERS_CONFIG',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/filters', method: 'post', data: values })
   });
 }
 

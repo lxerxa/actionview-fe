@@ -4,6 +4,7 @@ import { Button, Label, DropdownButton, MenuItem, Breadcrumb, Table } from 'reac
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { getFileIconCss } from '../share/Funcs';
 
 const moment = require('moment');
 const loadingImg = require('../../assets/images/loading.gif');
@@ -130,25 +131,6 @@ export default class Preview extends Component {
     const { addAttachment } = this.props;
     if (res.ecode === 0 && res.data) {
       addAttachment(res.data);
-    }
-  }
-
-  getFileIconCss(fileName) {
-    const newFileName = (fileName || '').toLowerCase();
-    if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
-      return 'fa fa-file-word-o';
-    } else if (_.endsWith(newFileName, 'xls') || _.endsWith(newFileName, 'xlsx')) {
-      return 'fa fa-file-excel-o';
-    } else if (_.endsWith(newFileName, 'ppt') || _.endsWith(newFileName, 'pptx')) {
-      return 'fa fa-file-powerpoint-o';
-    } else if (_.endsWith(newFileName, 'pdf')) {
-      return 'fa fa-file-pdf-o';
-    } else if (_.endsWith(newFileName, 'txt')) {
-      return 'fa fa-file-text-o';
-    } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
-      return 'fa fa-file-zip-o';
-    } else {
-      return 'fa fa-file-o';
     }
   }
 
@@ -296,7 +278,7 @@ export default class Preview extends Component {
             { _.map(item.attachments, (f, i) =>
               <tr key={ i }>
                 <td>
-                  <span style={ { marginRight: '5px', color: '#777' } }><i className={ this.getFileIconCss(f.name) }></i></span>
+                  <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span>
                   { options.permissions && options.permissions.indexOf('download_file') !== -1 ?
                   <a href={ '/api/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
                   :

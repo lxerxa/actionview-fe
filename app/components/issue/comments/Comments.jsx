@@ -4,13 +4,13 @@ import { Button, Form, FormControl, FormGroup, Col, Panel } from 'react-bootstra
 import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { getAgoAt } from '../../share/Funcs';
 
 const $ = require('$');
 const img = require('../../../assets/images/loading.gif');
 const DelCommentsModal = require('./DelCommentsModal');
 const DelReplyModal = require('./DelReplyModal');
 const EditCommentsModal = require('./EditCommentsModal');
-const getAgoAt = require('../../share/AgoAt');
 
 export default class Comments extends Component {
   constructor(props) {

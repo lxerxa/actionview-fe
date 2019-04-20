@@ -8,8 +8,9 @@ import { IssueFilterList, getCondsTxt } from './IssueFilterList';
 
 const $ = require('$');
 const CreateModal = require('./CreateModal');
-const AddSearcherModal = require('./AddSearcherModal');
-const SearcherConfigModal = require('../share/SearcherConfigModal');
+const SaveFilterModal = require('./SaveFilterModal');
+const ResetFiltersNotify = require('./ResetFiltersNotify');
+const FilterConfigModal = require('../share/FilterConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
 const img = require('../../assets/images/loading.gif');
 
@@ -18,14 +19,16 @@ export default class Header extends Component {
     super(props);
     this.state = { 
       createModalShow: false, 
-      searcherConfigShow: false, 
+      filterConfigShow: false, 
       searchShow: false, 
-      addSearcherShow: false,
+      saveFilterShow: false,
+      resetFiltersShow: false,
       exportConfigShow: false };
 
     this.createModalClose = this.createModalClose.bind(this);
-    this.addSearcherModalClose = this.addSearcherModalClose.bind(this);
-    this.searcherConfigModalClose = this.searcherConfigModalClose.bind(this);
+    this.saveFilterModalClose = this.saveFilterModalClose.bind(this);
+    this.resetFiltersNotifyClose = this.resetFiltersNotifyClose.bind(this);
+    this.filterConfigModalClose = this.filterConfigModalClose.bind(this);
     this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
   }
 
@@ -33,8 +36,9 @@ export default class Header extends Component {
     i18n: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
-    addSearcher: PropTypes.func.isRequired,
-    configSearcher: PropTypes.func.isRequired,
+    saveFilter: PropTypes.func.isRequired,
+    resetFilters: PropTypes.func.isRequired,
+    configFilters: PropTypes.func.isRequired,
     closeDetailBar: PropTypes.func,
     index: PropTypes.func,
     refresh: PropTypes.func,
@@ -45,7 +49,7 @@ export default class Header extends Component {
     options: PropTypes.object,
     loading: PropTypes.bool.isRequired,
     optionsLoading: PropTypes.bool.isRequired,
-    searcherLoading: PropTypes.bool.isRequired,
+    filterLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired
   }
 
@@ -58,12 +62,16 @@ export default class Header extends Component {
     this.setState({ createModalShow: false });
   }
 
-  addSearcherModalClose() {
-    this.setState({ addSearcherShow: false });
+  saveFilterModalClose() {
+    this.setState({ saveFilterShow: false });
   }
 
-  searcherConfigModalClose() {
-    this.setState({ searcherConfigShow: false });
+  resetFiltersNotifyClose() {
+    this.setState({ resetFiltersShow: false });
+  }
+
+  filterConfigModalClose() {
+    this.setState({ filterConfigShow: false });
   }
 
   exportConfigModalClose() {
@@ -83,13 +91,15 @@ export default class Header extends Component {
     }
   }
 
-  selectSearcher(eventKey) {
+  selectFilter(eventKey) {
     const { refresh, options={} } = this.props;
 
-    if (eventKey == 'searcherConfig') {
-      this.setState({ searcherConfigShow: true });
-    } else if(eventKey == 'saveSearcher') {
-      this.setState({ addSearcherShow : true });
+    if (eventKey == 'filterConfig') {
+      this.setState({ filterConfigShow: true });
+    } else if(eventKey == 'saveFilter') {
+      this.setState({ saveFilterShow : true });
+    } else if(eventKey == 'resetFilters') {
+      this.setState({ 'resetFiltersShow' : true });
     } else if(eventKey == 'all') {
       refresh({});
     } else if(eventKey == 'todos') {
@@ -99,9 +109,9 @@ export default class Header extends Component {
     } else if(eventKey == 'mywatches') {
       refresh({ watcher: 'me' });
     } else {
-      const searchers = options.searchers || [];
-      const searcher = _.find(searchers, { id: eventKey }) || {};
-      refresh(searcher.query || {});
+      const filters = options.filters || [];
+      const filter = _.find(filters, { id: eventKey }) || {};
+      refresh(filter.query || {});
     }
   }
 
@@ -115,11 +125,12 @@ export default class Header extends Component {
       i18n, 
       create, 
       addLabels, 
-      addSearcher, 
-      configSearcher, 
+      saveFilter, 
+      resetFilters, 
+      configFilters, 
       indexLoading, 
       optionsLoading, 
-      searcherLoading, 
+      filterLoading, 
       options={}, 
       closeDetailBar,
       refresh, 
@@ -133,18 +144,14 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
-          <DropdownButton className='create-btn' id='filters' title='过滤器' onSelect={ this.selectSearcher.bind(this) }>
-            <MenuItem eventKey='all'>全部问题</MenuItem>
-            <MenuItem eventKey='todos'>分配给我的</MenuItem>
-            <MenuItem eventKey='mywatches'>我关注的</MenuItem>
-            <MenuItem eventKey='myreports'>我报告的</MenuItem>
-            { options.searchers && options.searchers.length > 0 && <MenuItem divider/> }
-            { _.map(options.searchers || [], (val) => 
-              <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem>
-            ) }
+          <DropdownButton className='create-btn' id='filters' title='过滤器' onSelect={ this.selectFilter.bind(this) }>
+            { options.filters && options.filters.length > 0 ? 
+              _.map(options.filters || [], (val) => <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem> ) :
+              <MenuItem disabled>无</MenuItem> }
             <MenuItem divider/>
-            { sqlTxt && <MenuItem eventKey='saveSearcher'>保存当前检索</MenuItem> }
-            <MenuItem eventKey='searcherConfig'>过滤器管理</MenuItem>
+            <MenuItem eventKey='saveFilter'>保存当前检索</MenuItem>
+            <MenuItem eventKey='filterConfig'>过滤器管理</MenuItem>
+            <MenuItem eventKey='resetFilters'>过滤器重置</MenuItem>
           </DropdownButton>
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { if (!this.state.searchShow) { closeDetailBar(); }  this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
@@ -160,16 +167,16 @@ export default class Header extends Component {
           <div className='cond-bar'>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ addSearcherShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
         </div>
-        { this.state.searcherConfigShow && 
-        <SearcherConfigModal 
+        { this.state.filterConfigShow && 
+        <FilterConfigModal 
           show 
-          close={ this.searcherConfigModalClose } 
-          loading={ searcherLoading } 
-          config={ configSearcher } 
-          searchers={ options.searchers || [] } 
+          close={ this.filterConfigModalClose } 
+          loading={ filterLoading } 
+          config={ configFilters } 
+          filters={ options.filters || [] } 
           i18n={ i18n }/> }
         <IssueFilterList 
           className={ !this.state.searchShow && 'hide' } 
@@ -188,16 +195,23 @@ export default class Header extends Component {
           loading={ loading } 
           project={ project } 
           i18n={ i18n }/> }
-        { this.state.addSearcherShow && 
-        <AddSearcherModal 
+        { this.state.saveFilterShow && 
+        <SaveFilterModal 
           show 
-          close={ this.addSearcherModalClose } 
-          searchers={ options.searchers || [] } 
-          create={ addSearcher } 
+          close={ this.saveFilterModalClose } 
+          filters={ options.filters || [] } 
+          create={ saveFilter } 
           query={ query } 
-          loading={ searcherLoading } 
+          loading={ filterLoading } 
           sqlTxt={ sqlTxt } 
           i18n={ i18n }/> }
+        { this.state.resetFiltersShow &&
+          <ResetFiltersNotify
+            show
+            close={ this.resetFiltersNotifyClose }
+            reset={ resetFilters }
+            loading={ filterLoading }
+            i18n={ i18n }/> }
         { this.state.exportConfigShow &&
         <ExportConfigModal
           show

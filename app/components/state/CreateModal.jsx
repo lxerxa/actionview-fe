@@ -4,9 +4,9 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { StateCategories } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
-const stateCategories = require('../share/StateCategories.js');
 
 const validate = (values, props) => {
   const errors = {};
@@ -71,7 +71,7 @@ export default class CreateModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { name, category, description }, handleSubmit, invalid, submitting } = this.props;
 
-    const categoryOptions = _.map(stateCategories, (v) => { 
+    const categoryOptions = _.map(StateCategories, (v) => { 
       return {
         value: v.id,
         label: v.name 

@@ -10,7 +10,7 @@ const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
     errors.name = '必填';
-  } else if (_.findIndex(props.searchers || [], { name: values.name }) !== -1) {
+  } else if (_.findIndex(props.filters || [], { name: values.name }) !== -1) {
     errors.name = '该名称已存在';
   }
 
@@ -18,11 +18,11 @@ const validate = (values, props) => {
 };
 
 @reduxForm({
-  form: 'add_searcher',
+  form: 'save_filter',
   fields: [ 'name' ],
   validate
 })
-export default class AddSearcherModal extends Component {
+export default class SaveFilterModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -82,7 +82,7 @@ export default class AddSearcherModal extends Component {
           </FormGroup>
           <FormGroup>
             <ControlLabel>条件</ControlLabel>
-            <div><span>{ sqlTxt }</span></div>
+            <div><span>{ sqlTxt || '全部' }</span></div>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

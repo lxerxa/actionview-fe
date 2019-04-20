@@ -4,8 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
-
-const stateCategories = require('../share/StateCategories.js');
+import { stateCategories } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
 

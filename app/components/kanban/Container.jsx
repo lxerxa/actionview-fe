@@ -24,7 +24,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 @DragDropContext(HTML5Backend)
-@connect(({ i18n, session, kanban, project, issue, workflow }) => ({ i18n, session, kanban, project, issue, workflow }), mapDispatchToProps)
+@connect(({ i18n, session, layout, kanban, project, issue, workflow }) => ({ i18n, session, layout, kanban, project, issue, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -45,6 +45,7 @@ export default class Container extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     issueActions: PropTypes.object.isRequired,
     wfActions: PropTypes.object.isRequired,
@@ -507,6 +508,7 @@ export default class Container extends Component {
           deleteSprint={ this.deleteSprint.bind(this) }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
+          layout={ this.props.layout }
           model={ this.state.model }
           { ...this.props.issue }/> }
         { this.state.model == 'config' &&

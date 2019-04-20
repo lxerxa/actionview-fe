@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ i18n, session, issue, project, workflow }) => ({ i18n, session, issue, project, workflow }), mapDispatchToProps)
+@connect(({ i18n, session, layout, issue, project, workflow }) => ({ i18n, session, layout, issue, project, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +36,7 @@ export default class Container extends Component {
     location: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     workflow: PropTypes.object.isRequired,
     issue: PropTypes.object.isRequired
@@ -102,18 +103,18 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async addSearcher(values) {
-    await this.props.actions.addSearcher(this.pid, values);
+  async saveFilter(values) {
+    await this.props.actions.saveFilter(this.pid, values);
     return this.props.issue.ecode;
   }
 
-  async configSearcher(values) {
-    await this.props.actions.configSearcher(this.pid, values);
+  async configFilters(values) {
+    await this.props.actions.configFilters(this.pid, values);
     return this.props.issue.ecode;
   }
 
-  async delSearcher(id) {
-    await this.props.actions.delSearcher(this.pid, id);
+  async resetFilters() {
+    await this.props.actions.resetFilters(this.pid);
     return this.props.issue.ecode;
   }
 
@@ -256,9 +257,9 @@ export default class Container extends Component {
         <Header 
           create={ this.create.bind(this) } 
           addLabels={ this.props.actions.addLabels } 
-          addSearcher={ this.addSearcher.bind(this) } 
-          configSearcher={ this.configSearcher.bind(this) } 
-          delSearcher={ this.delSearcher.bind(this) } 
+          saveFilter={ this.saveFilter.bind(this) } 
+          resetFilters={ this.resetFilters.bind(this) } 
+          configFilters={ this.configFilters.bind(this) } 
           getOptions={ this.getOptions.bind(this) } 
           query={ query } 
           refresh={ this.refresh.bind(this) } 
@@ -269,6 +270,7 @@ export default class Container extends Component {
           i18n={ this.props.i18n }
           { ...this.props.issue }/>
         <List ref='list' 
+          layout={ this.props.layout }
           index={ this.index.bind(this) } 
           show={ this.show.bind(this) } 
           edit={ this.edit.bind(this) } 

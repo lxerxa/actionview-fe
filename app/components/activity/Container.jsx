@@ -19,7 +19,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ i18n, session, activity, project, issue, workflow }) => ({ i18n, session, activity, project, issue, workflow }), mapDispatchToProps)
+@connect(({ i18n, session, layout, activity, project, issue, workflow }) => ({ i18n, session, layout, activity, project, issue, workflow }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +29,7 @@ export default class Container extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     issueActions: PropTypes.object.isRequired,
     wfActions: PropTypes.object.isRequired,
@@ -212,6 +213,7 @@ export default class Container extends Component {
       <div>
         <Header getOptions={ this.getOptions.bind(this) } { ...this.props.activity }/>
         <List ref='list'
+          layout={ this.props.layout }
           index={ this.index.bind(this) } 
           more={ this.more.bind(this) } 
           show={ this.show.bind(this) }

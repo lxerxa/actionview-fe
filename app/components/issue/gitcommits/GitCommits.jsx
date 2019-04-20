@@ -2,9 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel } from 'react-bootstrap';
 import _ from 'lodash';
+import { getAgoAt } from '../../share/Funcs';
 
 const img = require('../../../assets/images/loading.gif');
-const getAgoAt = require('../../share/AgoAt');
 
 export default class GitCommits extends Component {
   constructor(props) {

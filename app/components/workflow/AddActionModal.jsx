@@ -5,6 +5,7 @@ import Select from 'react-select';
 import Tabs, { TabPane } from 'rc-tabs';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
+import { Permissions } from '../share/Constants';
 
 const CONDITION_FUNCTIONS = {
   isSome: { name: 'App\\Workflow\\Func@isSome', args: [ 'someParam' ], sn: 1 },
@@ -252,7 +253,7 @@ export default class AddActionModal extends Component {
 
     const eventOptions = options.events || [];
     const stateOptions = options.states || [];
-    const permissionOptions = _.reject(require('../share/Permissions.js'), { id: 'all' });
+    const permissionOptions = _.reject(Permissions, { id: 'all' });
     const roleOptions = options.roles || [];
     const resolutionOptions = options.resolutions || [];
 

@@ -5,12 +5,12 @@ import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { Permissions } from '../share/Constants';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 
 const img = require('../../assets/images/loading.gif');
-const allPermissions = require('../share/Permissions.js');
 
 export default class List extends Component {
   constructor(props) {
@@ -149,7 +149,7 @@ export default class List extends Component {
     const { willSetPermissionRoleIds, settingPermissionRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
-    const somePermissions = _.clone(allPermissions); somePermissions.shift();
+    const somePermissions = _.clone(Permissions); somePermissions.shift();
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const roles = [];

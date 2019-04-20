@@ -11,7 +11,7 @@ const initialState = {
   visitedIndex: -1, 
   optionsLoading: false, 
   searchLoading: false, 
-  searcherLoading: false, 
+  filterLoading: false, 
   loading: false, 
   itemLoading: false, 
   fileLoading: false, 
@@ -167,44 +167,23 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_DELETE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
-    case t.ISSUE_SEARCHER_ADD:
-      return { ...state, searcherLoading: true };
+    case t.ISSUE_FILTER_SAVE:
+    case t.ISSUE_FILTERS_CONFIG:
+    case t.ISSUE_FILTERS_RESET:
+      return { ...state, filterLoading: true };
 
-    case t.ISSUE_SEARCHER_ADD_SUCCESS:
+    case t.ISSUE_FILTER_SAVE_SUCCESS:
+    case t.ISSUE_FILTERS_CONFIG_SUCCESS:
+    case t.ISSUE_FILTERS_RESET_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        if (!state.options.searchers) {
-          state.options.searchers = [];
-        }
-        state.options.searchers.push(action.result.data);
+        state.options.filters = action.result.data;
       }
-      return { ...state, searcherLoading: false, ecode: action.result.ecode };
+      return { ...state, filterLoading: false, ecode: action.result.ecode };
 
-    case t.ISSUE_SEARCHER_ADD_FAIL:
-      return { ...state, searcherLoading: false, error: action.error };
-
-    //case t.ISSUE_SEARCHER_DELETE:
-    //  return { ...state, searcherLoading: true };
-
-    //case t.ISSUE_SEARCHER_DELETE_SUCCESS:
-    //  if ( action.result.ecode === 0 ) {
-    //    state.options.searchers = _.reject(state.options.searchers, { id: action.id });
-    //  }
-    //  return { ...state, searcherLoading: false, ecode: action.result.ecode };
-
-    //case t.ISSUE_SEARCHER_DELETE_FAIL:
-    //  return { ...state, searcherLoading: false, error: action.error };
-
-    case t.ISSUE_SEARCHER_CONFIG:
-      return { ...state, searcherLoading: true };
-
-    case t.ISSUE_SEARCHER_CONFIG_SUCCESS:
-      if ( action.result.ecode === 0 ) {
-        state.options.searchers = action.result.data;
-      }
-      return { ...state, searcherLoading: false, ecode: action.result.ecode };
-
-    case t.ISSUE_SEARCHER_CONFIG_FAIL:
-      return { ...state, searcherLoading: false, error: action.error };
+    case t.ISSUE_FILTER_SAVE_FAIL:
+    case t.ISSUE_FILTERS_CONFIG_FAIL:
+    case t.ISSUE_FILTERS_RESET_FAIL:
+      return { ...state, filterLoading: false, error: action.error };
 
     case t.ISSUE_FILE_DELETE:
       return { ...state, fileLoading: true, historyLoaded: false };

@@ -10,17 +10,17 @@ import { notify } from 'react-notify-toast';
 const img = require('../../assets/images/loading.gif');
 
 @DragDropContext(HTML5Backend)
-export default class SearcherConfigModal extends Component {
+export default class FilterConfigModal extends Component {
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
     this.state = { cards: [], ecode: 0 };
-    const searchers = this.props.searchers || [];
-    const searcherNum = searchers.length;
-    for (let i = 0; i < searcherNum; i++) {
+    const filters = this.props.filters || [];
+    const filterNum = filters.length;
+    for (let i = 0; i < filterNum; i++) {
       this.state.cards.push({
-        id: searchers[i].id,
-        text: searchers[i].name
+        id: filters[i].id,
+        text: filters[i].name
       });
     }
     this.state.strCards = JSON.stringify(this.state.cards);
@@ -31,7 +31,7 @@ export default class SearcherConfigModal extends Component {
     title: PropTypes.string,
     loading: PropTypes.bool,
     config: PropTypes.func.isRequired,
-    searchers: PropTypes.array.isRequired,
+    filters: PropTypes.array.isRequired,
     close: PropTypes.func.isRequired
   }
 

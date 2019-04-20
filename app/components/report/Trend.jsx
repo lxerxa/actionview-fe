@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, Checkbox } from 'react-bootstrap';
 import Select from 'react-select';
-import { Area, AreaChart, Legend, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
+import { Area, AreaChart, linearGradient, defs, stop, Legend, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
 import { IssueFilterList, getCondsTxt } from '../issue/IssueFilterList';
 import Duration from '../share/Duration';
@@ -307,14 +307,28 @@ export default class Trend extends Component {
               height={ 380 } 
               data={ data }
               style={ { margin: '25px auto' } }>
+              <defs>
+                <linearGradient id='colorNew' x1='0' y1='0' x2='0' y2='1'>
+                  <stop offset='5%' stopColor='#4572A7' stopOpacity={ 0.8 }/>
+                  <stop offset='95%' stopColor='#4572A7' stopOpacity={ 0 }/>
+                </linearGradient>
+                <linearGradient id='colorResolved' x1='0' y1='0' x2='0' y2='1'>
+                  <stop offset='5%' stopColor='#AA4643' stopOpacity={ 0.8 }/>
+                  <stop offset='95%' stopColor='#AA4643' stopOpacity={ 0 }/>
+                </linearGradient>
+                <linearGradient id='colorClosed' x1='0' y1='0' x2='0' y2='1'>
+                  <stop offset='5%' stopColor='#89A54E' stopOpacity={ 0.8 }/>
+                  <stop offset='95%' stopColor='#89A54E' stopOpacity={ 0 }/>
+                </linearGradient>
+              </defs>
               <XAxis dataKey='category'/>
               <YAxis />
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              <Area dataKey='new' name='新建的' stroke='#4572A7' file='#4572A7' type='monotone'/>
-              <Area dataKey='resolved' name='已解决的' stroke='#AA4643' fill='#AA4643' type='monotone'/>
-              <Area dataKey='closed' name='已关闭的' stroke='#89A54E' fill='#89A54E' type='monotone'/>
+              <Area dataKey='new' name='新建的' fillOpacity={ 1 } stroke='#4572A7' fill='url(#colorNew)' type='monotone'/>
+              <Area dataKey='resolved' name='已解决的' fillOpacity={ 1 } stroke='#AA4643' fill='url(#colorResolved)' type='monotone'/>
+              <Area dataKey='closed' name='已关闭的' fillOpacity={ 1 } stroke='#89A54E' fill='url(#colorClosed)' type='monotone'/>
             </AreaChart>
           </div> }
           { !hasErr &&

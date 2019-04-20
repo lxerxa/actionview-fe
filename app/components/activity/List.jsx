@@ -2,14 +2,13 @@ import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem } from 'react-bootstrap';
-import Person from '../share/Person';
+import { getAgoAt } from '../share/Funcs';
 import _ from 'lodash';
 
 const moment = require('moment');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
-const getAgoAt = require('../share/AgoAt');
 
 export default class List extends Component {
   constructor(props) {
@@ -19,6 +18,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     current_time: PropTypes.number.isRequired,
     collection: PropTypes.array.isRequired,
     increaseCollection: PropTypes.array.isRequired,
@@ -131,6 +131,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n,
+      layout,
       current_time,
       collection, 
       increaseCollection, 
@@ -368,6 +369,7 @@ export default class List extends Component {
         { this.state.barShow &&
           <DetailBar
             i18n={ i18n }
+            layout={ layout }
             edit={ edit }
             create={ create }
             del={ del }

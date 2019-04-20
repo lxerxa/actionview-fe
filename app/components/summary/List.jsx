@@ -43,10 +43,10 @@ export default class List extends Component {
           <span style={ { marginLeft: '15px', fontSize: '14px' } }>负责人：{ project.principal && project.principal.name || '-' }</span>
           <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
         </div>
-        { data.searchers && data.searchers.length > 0 ? 
+        { data.filters && data.filters.length > 0 ? 
         <div style={ { height: '120px', margin: '0px -10px 25px -10px' } }>
           <FormGroup>
-          { _.map(data.searchers || [], (v, i) => {
+          { _.map(data.filters || [], (v, i) => {
             return (
             <Col sm={ 3 } key={ i }>
               <div style={ { padding : '30px 0px', textAlign: 'center', backgroundColor: bgColors[i], borderRadius: '4px' } }>
@@ -74,7 +74,7 @@ export default class List extends Component {
           style={ { height: '300px' } }
           header={ 
             <div>
-              <span>{ '问题动态：' + (options.weekAgo || '') + ' ~ 现在' }</span>
+              <span>{ '问题动态：' + (options.twoWeeksAgo || '') + ' ~ 现在' }</span>
               <span className='exchange-icon' onClick={ () => this.setState({ pulseShowModel: this.state.pulseShowModel == 'detail' ? 'charts' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
           { this.state.pulseShowModel == 'detail' &&
@@ -140,9 +140,9 @@ export default class List extends Component {
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              <Line dataKey='new' name='新建的' stroke='#4572A7'/>
-              <Line dataKey='resolved' name='已解决的' stroke='#AA4643'/>
-              <Line dataKey='closed' name='已关闭的' stroke='#89A54E'/>
+              <Line type='monotone' dataKey='new' name='新建的' stroke='#4572A7' fill='#4572A7'/>
+              <Line type='monotone' dataKey='resolved' name='已解决的' stroke='#AA4643' fill='#AA4643'/>
+              <Line type='monotone' dataKey='closed' name='已关闭的' stroke='#89A54E' fill='#89A54E'/>
             </LineChart>
           </div> }
         </Panel>

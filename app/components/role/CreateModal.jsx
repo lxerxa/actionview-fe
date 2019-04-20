@@ -5,9 +5,9 @@ import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
 import { notify } from 'react-notify-toast';
+import { Permissions } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
-const allPermissions = require('../share/Permissions.js');
 
 const validate = (values) => {
   const errors = {};
@@ -86,7 +86,7 @@ export default class CreateModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { name, description, permissions }, values, handleSubmit, invalid, submitting } = this.props;
 
-    let permissionOptions = _.map(allPermissions, function(v) { return { value: v.id, label: v.name }; });
+    let permissionOptions = _.map(Permissions, function(v) { return { value: v.id, label: v.name }; });
     if (_.findIndex(permissions.value, { value: 'all' }) !== -1) {
       values.permissions = permissions.value = permissionOptions = _.reject(permissionOptions, { value: 'all' });
     }

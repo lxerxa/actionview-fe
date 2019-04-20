@@ -60,14 +60,6 @@ export default class Sidebar extends Component {
     $('#show-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
 
-    if ($('.animate-dialog').length > 0) {
-      let width = 0;
-      const docWidth = $('.doc-container').get(0).clientWidth;
-      width = _.max([ docWidth / 2, 600 ]);
-      width = _.min([ width, 1000 ]);
-      $('.animate-dialog').css('width', width + 'px');
-    }
-
     if ($('.doc-container').length > 0) {
       this.props.resize({ containerWidth: $('.doc-container').get(0).clientWidth });
     }
@@ -90,14 +82,6 @@ export default class Sidebar extends Component {
     $('#tack-bar').hide();
     $('#hide-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
-
-    if ($('.animate-dialog').length > 0) {
-      let width = 0;
-      const docWidth = $('.doc-container').get(0).clientWidth;
-      width = _.max([ docWidth / 2, 600 ]);
-      width = _.min([ width, 1000 ]);
-      $('.animate-dialog').css('width', width + 'px');
-    }
 
     if ($('.doc-container').length > 0) {
       this.props.resize({ containerWidth: $('.doc-container').get(0).clientWidth });

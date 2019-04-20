@@ -6,6 +6,7 @@ import Select from 'react-select';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { getFileIconCss } from '../share/Funcs';
 
 const $ = require('$');
 const moment = require('moment');
@@ -171,27 +172,6 @@ export default class List extends Component {
     this.refresh();
   }
 
-  getFileIconCss(fileName) {
-    const newFileName = (fileName || '').toLowerCase();
-    if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
-      return { color: '#4A8FEF', fa: 'fa fa-file-word-o' };
-    } else if (_.endsWith(newFileName, 'xls') || _.endsWith(newFileName, 'xlsx')) {
-      return { color: '#5DB820', fa: 'fa fa-file-excel-o' };
-    } else if (_.endsWith(newFileName, 'ppt') || _.endsWith(newFileName, 'pptx')) {
-      return { color: '#F58F3D', fa: 'fa fa-file-powerpoint-o' };
-    } else if (_.endsWith(newFileName, 'pdf')) {
-      return { color: '#EC5858', fa: 'fa fa-file-pdf-o' };
-    } else if (_.endsWith(newFileName, 'txt')) {
-      return { color: '#4A8FEF', fa: 'fa fa-file-text-o' };
-    } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
-      return { color: '#8082EB', fa: 'fa fa-file-zip-o' };
-    } else if (_.endsWith(newFileName, 'jpeg') || _.endsWith(newFileName, 'jpg') || _.endsWith(newFileName, 'png') || _.endsWith(newFileName, 'gif') || _.endsWith(newFileName, 'bmp')) {
-      return { color: '#F37140', fa: 'fa fa-file-image-o' };
-    } else {
-      return { color: '', fa: 'fa fa-file-o' };
-    }
-  }
-
   uploadSuccess(localfile, res) {
     const { addFile } = this.props;
     if (res.ecode === 0 && res.data) {
@@ -329,7 +309,7 @@ export default class List extends Component {
     const files = _.reject(collection, { d: 1 });
     const fileNum = files.length;
     for (let i = 0; i < fileNum; i++) {
-      const iconCss = this.getFileIconCss(files[i].name);
+      const iconCss = getFileIconCss(files[i].name);
 
       if (editRowId == files[i].id) {
         rows.push({
@@ -353,7 +333,7 @@ export default class List extends Component {
         id: files[i].id,
         name: ( 
           <div> 
-            <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss.fa }></i></span>
+            <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
             { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
               <a href={ '/api/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
                 { files[i].name }

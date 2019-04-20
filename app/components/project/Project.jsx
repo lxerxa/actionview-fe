@@ -37,7 +37,14 @@ export default class Project extends Component {
     const { actions, layoutActions, params: { key } } = this.props;
     actions.show(key);
     this.key = key;
-    layoutActions.resize({ containerWidth: findDOMNode(this).clientWidth }); 
+
+    const containerWidth = findDOMNode(this).clientWidth;
+    const storage = window.localStorage;
+    if (storage && storage.getItem('sideBarHide') === '1') {
+      layoutActions.resize({ containerWidth }); 
+    } else {
+      layoutActions.resize({ containerWidth: containerWidth * 0.8 }); 
+    }
   }
 
   componentWillReceiveProps(nextProps) {

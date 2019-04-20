@@ -6,6 +6,7 @@ import Lightbox from 'react-image-lightbox';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { getFileIconCss } from '../share/Funcs';
 
 const $ = require('$');
 const moment = require('moment');
@@ -72,6 +73,7 @@ export default class DetailBar extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
@@ -137,16 +139,6 @@ export default class DetailBar extends Component {
     del: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
-  }
-
-  componentDidMount() {
-    if ($('.animate-dialog').length > 0) {
-      let width = 0;
-      const docWidth = $('.doc-container').get(0).clientWidth;
-      width = _.max([ docWidth / 2, 600 ]);
-      width = _.min([ width, 1000 ]);
-      $('.animate-dialog').css('width', width + 'px');
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -267,25 +259,6 @@ export default class DetailBar extends Component {
 
   createSubtaskModalClose() {
     this.setState({ createSubtaskModalShow: false });
-  }
-
-  getFileIconCss(fileName) {
-    const newFileName = (fileName || '').toLowerCase();
-    if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
-      return 'fa fa-file-word-o';
-    } else if (_.endsWith(newFileName, 'xls') || _.endsWith(newFileName, 'xlsx')) {
-      return 'fa fa-file-excel-o';
-    } else if (_.endsWith(newFileName, 'ppt') || _.endsWith(newFileName, 'pptx')) {
-      return 'fa fa-file-powerpoint-o';
-    } else if (_.endsWith(newFileName, 'pdf')) {
-      return 'fa fa-file-pdf-o';
-    } else if (_.endsWith(newFileName, 'txt')) {
-      return 'fa fa-file-text-o';
-    } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
-      return 'fa fa-file-zip-o';
-    } else {
-      return 'fa fa-file-o';
-    }
   }
 
   async next(curInd) {
@@ -450,6 +423,7 @@ export default class DetailBar extends Component {
   render() {
     const { 
       i18n,
+      layout,
       close, 
       detailFloatStyle={},
       data={}, 
@@ -574,8 +548,10 @@ export default class DetailBar extends Component {
         <span style={ { paddingRight: '6px' } }>Git提交{ !itemLoading && '(' + (data.gitcommits_num > 99 ? '99+' : (data.gitcommits_num || 0)) + ')' }</span>
       </div>);
 
+    const width = _.min([ _.max([ layout.containerWidth / 2, 600 ]), 1000 ]) + 'px';
+
     return (
-      <div className='animate-dialog' style={ { ...detailFloatStyle } }>
+      <div className='animate-dialog' style={ { ...detailFloatStyle, width } }>
         <Button className='close' onClick={ close } title='关闭'>
           <i className='fa fa-close'></i>
         </Button>
@@ -753,8 +729,8 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
-                    { _.map(data.labels, (v) => {
-                      return (<Link to={ '/project/' + project.key + '/issue?labels=' + v }><span title={ v } className='issue-label'>{ v }</span></Link>);
+                    { _.map(data.labels, (v, i) => {
+                      return (<Link to={ '/project/' + project.key + '/issue?labels=' + v } key={ i }><span title={ v } className='issue-label'>{ v }</span></Link>);
                     }) }
                     </div>
                   </Col>
@@ -954,7 +930,7 @@ export default class DetailBar extends Component {
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
                                 <td>
-                                  <span style={ { marginRight: '5px', color: '#777' } }><i className={ this.getFileIconCss(f.name) }></i></span> 
+                                  <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span> 
                                   { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
                                     <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }

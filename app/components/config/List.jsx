@@ -3,9 +3,9 @@ import { Link } from 'react-router';
 import { Button, Label, Table, Panel } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import { Permissions } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
-const allPermissions = require('../share/Permissions.js');
 
 const PreviewModal = require('../workflow/PreviewModal');
 const ScreenPreviewModal = require('../screen/PreviewModal');
@@ -130,7 +130,7 @@ export default class List extends Component {
                       <div style={ { display: 'table', width: '100%' } }>
                       { v.permissions && v.permissions.length > 0 ?
                         <span>
-                        { _.map(_.filter(allPermissions, function(o) { return _.indexOf(v.permissions, o.id) !== -1 }), function(val, i) { return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ i }>{ val.name || '' }</Label></div> }) }
+                        { _.map(_.filter(Permissions, function(o) { return _.indexOf(v.permissions, o.id) !== -1 }), function(val, i) { return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ i }>{ val.name || '' }</Label></div> }) }
                        </span>
                        :
                        <span>

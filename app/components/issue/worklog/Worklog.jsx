@@ -2,10 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label, Table } from 'react-bootstrap';
 import _ from 'lodash';
+import { getAgoAt } from '../../share/Funcs';
 
 const img = require('../../../assets/images/loading.gif');
 const moment = require('moment');
-const getAgoAt = require('../../share/AgoAt');
 
 const AddWorklogModal = require('./AddWorklogModal');
 const DelWorklogModal = require('./DelWorklogModal');

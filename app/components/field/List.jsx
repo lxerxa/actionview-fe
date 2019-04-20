@@ -3,13 +3,13 @@ import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem, Label } from 'react-bootstrap';
 import _ from 'lodash';
+import { FieldTypes } from '../share/Constants';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 const OptionValuesConfigModal = require('./OptionValuesConfigModal');
 const DefaultValueConfigModal = require('./DefaultValueConfigModal');
 const img = require('../../assets/images/loading.gif');
-const fieldTypes = require('../share/FieldTypes.js');
 
 const sysFields = [ 
   'title', 
@@ -145,7 +145,7 @@ export default class List extends Component {
           </div>
         ),
         key: collection[i].key,
-        type: _.find(fieldTypes, { value: collection[i].type }).label,
+        type: _.find(FieldTypes, { value: collection[i].type }).label,
         screen: ( <span dangerouslySetInnerHTML={ { __html: screens } }/> ),
         operation: !isGlobal && sysFields.indexOf(collection[i].key) === -1 ? (
           <div>

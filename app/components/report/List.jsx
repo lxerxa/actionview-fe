@@ -6,7 +6,7 @@ import _ from 'lodash';
 import ResetNotify from './ResetNotify';
 
 const qs = require('qs');
-const SearcherConfigModal = require('../share/SearcherConfigModal');
+const FilterConfigModal = require('../share/FilterConfigModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -183,11 +183,11 @@ export default class List extends Component {
             loading={ saveLoading }
             i18n={ i18n }/> }
         { this.state.searchConfigShow &&
-          <SearcherConfigModal
+          <FilterConfigModal
             show
             title={ blockTitles[this.state.selectedBlock] + ' - 过滤器管理' }
             close={ () => { this.setState({ searchConfigShow: false }) } }
-            searchers={ filters[this.state.selectedBlock] }
+            filters={ filters[this.state.selectedBlock] }
             config={ this.edit.bind(this) }
             loading={ saveLoading }
             i18n={ i18n }/> }

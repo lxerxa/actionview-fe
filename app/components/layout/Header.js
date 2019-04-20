@@ -240,7 +240,7 @@ export default class Header extends Component {
             </MenuItem>
           </DropdownButton>
         </span> }
-        <span style={ { paddingTop: '5px', float: 'right' } }>
+        {/* <span style={ { paddingTop: '5px', float: 'right' } }>
           <iframe 
             src='https://ghbtns.com/github-btn.html?user=lxerxa&repo=actionview&type=star&count=true' 
             frameBorder='0' 
@@ -248,7 +248,7 @@ export default class Header extends Component {
             width='100px' 
             height='20px'>
           </iframe>
-        </span>
+        </span> */}
       </div>
     );
   }
