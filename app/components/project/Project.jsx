@@ -21,6 +21,7 @@ export default class Project extends Component {
   constructor(props) {
     super(props);
     this.key = '';
+    this.onWindowResize = this.onWindowResize.bind(this);
   }
 
   static propTypes = {
@@ -38,6 +39,8 @@ export default class Project extends Component {
     actions.show(key);
     this.key = key;
 
+    window.addEventListener('resize', this.onWindowResize);
+
     const containerWidth = findDOMNode(this).clientWidth;
     const storage = window.localStorage;
     if (storage && storage.getItem('sideBarHide') === '1') {
@@ -45,6 +48,12 @@ export default class Project extends Component {
     } else {
       layoutActions.resize({ containerWidth: containerWidth * 0.8 }); 
     }
+  }
+
+  onWindowResize() {
+    const { layoutActions } = this.props;
+    const containerWidth = findDOMNode(this).clientWidth;
+    layoutActions.resize({ containerWidth });
   }
 
   componentWillReceiveProps(nextProps) {

@@ -295,9 +295,9 @@ export default class Trend extends Component {
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              <Line dataKey='new' name='新建的' stroke='#4572A7' strokeWidth={ 2 }/>
-              <Line dataKey='resolved' name='已解决的' stroke='#AA4643' strokeWidth={ 2 }/>
-              <Line dataKey='closed' name='已关闭的' stroke='#89A54E' strokeWidth={ 2 }/>
+              <Line dataKey='new' name='新建的' stroke='#4572A7' type='monotone'/>
+              <Line dataKey='resolved' name='已解决的' stroke='#AA4643' type='monotone'/>
+              <Line dataKey='closed' name='已关闭的' stroke='#89A54E' type='monotone'/>
             </LineChart>
           </div> }
           { this.state.shape === 'area' && !hasErr &&
