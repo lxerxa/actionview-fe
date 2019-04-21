@@ -64,11 +64,12 @@ export default class Trend extends Component {
   gotoIssue(mode, type, time) {
     let t = {}, start_time = '', end_time = '';
 
-    const { query, gotoIssue } = this.props;
+    const { query, gotoIssue, options } = this.props;
+
     if (type === 'sub') {
       if (query.interval === 'week') {
-        start_time = moment(time).startOf('week').format('YYYY/MM/DD');
-        end_time = moment(time).endOf('week').format('YYYY/MM/DD');
+        start_time = moment(time).startOf('week').add(1, 'days').format('YYYY/MM/DD');
+        end_time = moment(time).endOf('week').add(1, 'days').format('YYYY/MM/DD');
       } else if (query.interval === 'month') {
         start_time = moment(time).startOf('month').format('YYYY/MM/DD');
         end_time = moment(time).endOf('month').format('YYYY/MM/DD');
@@ -79,7 +80,11 @@ export default class Trend extends Component {
       if (query.is_accu === '1') {
         t[mode] = '~' + end_time;
       } else {
-        t[mode] = start_time + '~' + end_time;
+        if (options.trend_start_stat_date) {
+          t[mode] = (options.trend_start_stat_date > start_time ? options.trend_start_stat_date : start_time) + '~' + end_time;
+        } else {
+          t[mode] = start_time + '~' + end_time;
+        }
       }
     } else {
       t[mode] = query.stat_time;

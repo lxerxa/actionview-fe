@@ -1191,7 +1191,7 @@ export default function(router) {
   router.get('/project/:key/report/trend', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ ecode: 0, data: [{ category: '2019/05/02', new: 15, resolved: 10, closed: 4 }, { category: '2019/05/03', new: 1, resolved: 6, closed: 14 }, { category: '2019/05/04', new: 5, resolved: 10, closed: 2 }, { category: '2019/05/05', new: 7, resolved: 10, closed: 6, notWorking: 1 }, { category: '2019/05/06', new: 5, resolved: 8, closed: 4 }, { category: '2019/05/07', new: 9, resolved: 9, closed: 9 }, { category: '2019/05/08', new: 8, resolved: 5, closed: 4}] };
+    const results={ ecode: 0, data: [{ category: '2019/05/02', new: 15, resolved: 10, closed: 4 }, { category: '2019/05/03', new: 1, resolved: 6, closed: 14 }, { category: '2019/05/04', new: 5, resolved: 10, closed: 2 }, { category: '2019/05/05', new: 7, resolved: 10, closed: 6, notWorking: 1 }, { category: '2019/05/06', new: 5, resolved: 8, closed: 4 }, { category: '2019/05/07', new: 9, resolved: 9, closed: 9 }, { category: '2019/05/08', new: 8, resolved: 5, closed: 4}], options: { trend_start_stat_date: '2019/05/02' } };
     return res.status(200).send(results);
   });
 

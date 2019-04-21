@@ -1,4 +1,5 @@
 import * as t from '../constants/ActionTypes';
+import _ from 'lodash';
 
 const initialState = { 
   ecode: 0, 
@@ -108,6 +109,7 @@ export default function report(state = initialState, action) {
     case t.REPORT_TREND_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.trend = action.result.data;
+        state.options = _.assign({}, state.options, action.result.options);
       }
       return { ...state, trendLoading: false, ecode: action.result.ecode };
 
