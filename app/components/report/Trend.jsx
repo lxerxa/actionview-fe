@@ -63,7 +63,6 @@ export default class Trend extends Component {
 
   gotoIssue(mode, type, time) {
     let t = {}, start_time = '', end_time = '';
-
     const { query, gotoIssue, options } = this.props;
 
     if (type === 'sub') {

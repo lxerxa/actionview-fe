@@ -36,7 +36,7 @@ export default function report(state = initialState, action) {
 
     case t.REPORT_OPTIONS_SUCCESS:
       if (action.result.ecode === 0) {
-        state.options = action.result.data || {};
+        state.options = _.assign({}, state.options, action.result.data || {});
       }
       return { ...state, optionsLoading: false, ecode: action.result.ecode };
 
