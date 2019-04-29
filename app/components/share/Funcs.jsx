@@ -47,3 +47,51 @@ export function getFileIconCss(fileName) {
     return 'fa fa-file-o';
   }
 }
+
+export function ttFormat(value, w2m, d2m) {
+  const direct = value < 0 ? -1 : 1;
+  value = Math.abs(value);
+
+  const newTT = [];
+  let new_remain_min = _.ceil(value);
+  if (new_remain_min >= 0)
+  {
+    const new_weeknum = _.floor(value / w2m);
+    if (new_weeknum > 0)
+    {
+      newTT.push(new_weeknum + 'w');
+    }
+  }
+
+  new_remain_min = value % w2m;
+  if (new_remain_min >= 0)
+  {
+    const new_daynum = _.floor(new_remain_min / d2m);
+    if (new_daynum > 0)
+    {
+      newTT.push(new_daynum + 'd');
+    }
+  }
+
+  new_remain_min = new_remain_min % d2m;
+  if (new_remain_min >= 0)
+  {
+    const new_hournum = _.floor(new_remain_min / 60);
+    if (new_hournum > 0)
+    {
+      newTT.push(new_hournum + 'h');
+    }
+  }
+
+  new_remain_min = new_remain_min % 60;
+  if (new_remain_min > 0)
+  {
+    newTT.push(new_remain_min + 'm');
+  }
+
+  if (newTT.length <= 0)
+  {
+    newTT.push('0m');
+  }
+  return (direct < 0 ? '-' : '') + newTT.join(' ');
+}

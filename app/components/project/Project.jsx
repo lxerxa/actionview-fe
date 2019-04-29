@@ -6,13 +6,13 @@ import { bindActionCreators } from 'redux';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
+const $ = require('$');
+
 import * as ProjectActions from 'redux/actions/ProjectActions';
-import * as LayoutActions from 'redux/actions/LayoutActions';
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(ProjectActions, dispatch),
-    layoutActions: bindActionCreators(LayoutActions, dispatch)
+    actions: bindActionCreators(ProjectActions, dispatch)
   };
 }
 
@@ -21,39 +21,21 @@ export default class Project extends Component {
   constructor(props) {
     super(props);
     this.key = '';
-    this.onWindowResize = this.onWindowResize.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    layoutActions: PropTypes.object.isRequired,
     children: PropTypes.element,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired
   }
 
   componentDidMount() {
-    const { actions, layoutActions, params: { key } } = this.props;
+    const { actions, params: { key } } = this.props;
     actions.show(key);
     this.key = key;
-
-    window.addEventListener('resize', this.onWindowResize);
-
-    const containerWidth = findDOMNode(this).clientWidth;
-    const storage = window.localStorage;
-    if (storage && storage.getItem('sideBarHide') === '1') {
-      layoutActions.resize({ containerWidth }); 
-    } else {
-      layoutActions.resize({ containerWidth: containerWidth * 0.8 }); 
-    }
-  }
-
-  onWindowResize() {
-    const { layoutActions } = this.props;
-    const containerWidth = findDOMNode(this).clientWidth;
-    layoutActions.resize({ containerWidth });
   }
 
   componentWillReceiveProps(nextProps) {

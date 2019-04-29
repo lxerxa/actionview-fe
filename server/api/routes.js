@@ -1122,7 +1122,7 @@ export default function(router) {
     	issue: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}], 
     	trend: [{id: '1111', name: '近一月的', query: { stat_time: '1m' }}], 
     	worklog: [{id: '1111', name: '近一月的', query: { recorded_at: '1m' }}, {id: '2222', name: '创建3个月外的', query: { created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}], 
-    	timetrack: [], 
+    	timetracks: [ {id: '1111', name: '近一月的', query: { state: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ], 
     	compare: [], 
     	others: [] } };
 
@@ -1156,7 +1156,7 @@ export default function(router) {
   router.get('/project/:key/report/worklog', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ecode: 0, data:[{value: 33, user: { name: '张三', id: 'zhangsan' } }, { value: 10, user: { name: '李四', id: 'lisi' } }, { value: 23, user: { name: '王五', id: 'wangwu' } }, { value: 123, user: { name: '高六', id: 'gaoliu' } }, {value: 33, user: { name: '张三', id: 'zhangsan' } }, { value: 10, user: { name: '李四', id: 'lisi' } }, { value: 23, user: { name: '王五', id: 'wangwu' } }, { value: 123, user: { name: '高六', id: 'gaoliu' } }, { value: 153, user: { name: 'others', id: 'others' } }]};
+    const results={ecode: 0, data:[{value: 33, user: { name: '张三', id: 'zhangsan' } }, { value: 10, user: { name: '李四', id: 'lisi' } }, { value: 23, user: { name: '王五', id: 'wangwu' } }, { value: 123, user: { name: '高六', id: 'gaoliu' } }, {value: 33, user: { name: '张三', id: 'zhangsan' } }, { value: 10, user: { name: '李四', id: 'lisi' } }, { value: 23, user: { name: '王五', id: 'wangwu' } }, { value: 123, user: { name: '高六', id: 'gaoliu' } }, { value: 153, user: { name: 'others', id: 'others' } }], options:{ d2h: 8, w2d: 5 }};
     return res.status(200).send(results);
   });
 
@@ -1192,6 +1192,19 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results={ ecode: 0, data: [{ category: '2019/05/02', new: 15, resolved: 10, closed: 4 }, { category: '2019/05/03', new: 1, resolved: 6, closed: 14 }, { category: '2019/05/04', new: 5, resolved: 10, closed: 2 }, { category: '2019/05/05', new: 7, resolved: 10, closed: 6, notWorking: 1 }, { category: '2019/05/06', new: 5, resolved: 8, closed: 4 }, { category: '2019/05/07', new: 9, resolved: 9, closed: 9 }, { category: '2019/05/08', new: 8, resolved: 5, closed: 4}], options: { trend_start_stat_date: '2019/05/02' } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/report/timetracks', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [
+    { no:1555, id: 's546761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号', state:'546761', origin: '2d 4h', origin_m: 1200, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:10, id: 'b546762', type:'2222', title: '国拨类型的项目添加任务中责任人没有必选号22222', state:'546762', origin: '4d', origin_m: 1920,spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:155, id: 'c546761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号', state:'546761', origin: '2d 4h', origin_m: 1200, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:102, id: 'd546762', type:'2222', title: '国拨类型的项目添加任务中责任人没有必选号22222', state:'546762', origin: '4d', origin_m: 1920, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:12, id: 'e546763', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号333333', state:'546763', origin: '3d', origin_m: 1440, spend: '3h', spend_m: 180, left: '2d 5h', left_m: 1260 }
+    ], options:{d2h: 8, w2d: 5}, options2:{ progress: { percent: 0.8, spend: '1w 1d', total: '2w 2d' }, accuracy: { percent: 0.7, plan: '2w', real: '2d' }, total: { origin: '20d', spend: '2d, 4h', left: '3d', diff: '2w' } } };
     return res.status(200).send(results);
   });
 

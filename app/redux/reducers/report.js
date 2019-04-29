@@ -15,7 +15,11 @@ const initialState = {
   worklogDetail: {},
   worklogDetailLoading: false,
   trend: [], 
-  trendLoading: false };
+  trendLoading: false, 
+  timetracks: [], 
+  timetracksLoading: false,
+  timetrackItem: {}, 
+  timetrackItemLoading: false };
 
 export default function report(state = initialState, action) {
   switch (action.type) {
@@ -73,6 +77,7 @@ export default function report(state = initialState, action) {
     case t.REPORT_WORKLOG_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.worklog = action.result.data;
+        state.options = _.assign({}, state.options, action.result.options);
       }
       return { ...state, worklogLoading: false, ecode: action.result.ecode };
 
@@ -115,6 +120,19 @@ export default function report(state = initialState, action) {
 
     case t.REPORT_TREND_INDEX_FAIL:
       return { ...state, trendLoading: false, error: action.error };
+
+    case t.REPORT_TIMETRACKS_INDEX:
+      return { ...state, timetracksLoading: true, timetracks: [] };
+
+    case t.REPORT_TIMETRACKS_INDEX_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.timetracks = action.result.data;
+        state.options = _.assign({}, state.options, action.result.options);
+      }
+      return { ...state, timetracksLoading: false, ecode: action.result.ecode };
+
+    case t.REPORT_TIMETRACKS_INDEX_FAIL:
+      return { ...state, timetracksLoading: false, error: action.error };
 
     default:
       return state;

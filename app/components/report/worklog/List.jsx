@@ -3,11 +3,12 @@ import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
-import WorklogDetail from './WorklogDetail';
+import DetailModal from './DetailModal';
+import { ttFormat } from '../../share/Funcs'
 
-const img = require('../../assets/images/loading.gif');
+const img = require('../../../assets/images/loading.gif');
 
-export default class WorklogList extends Component {
+export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { detailShow: false, selectedIssue: {} };
@@ -48,13 +49,16 @@ export default class WorklogList extends Component {
     const { 
       i18n, 
       query,
-      options: { states=[], types=[] }, 
+      options: { states=[], types=[], w2d=5, d2h=8 }, 
       collection, 
       indexLoading, 
       showedUser, 
       select, 
       item, 
       itemLoading } = this.props;
+
+    const w2m = w2d * d2h * 60;
+    const d2m = d2h * 60;
 
     const worklogs = [];
     const worklogNum = collection.length;
@@ -79,7 +83,7 @@ export default class WorklogList extends Component {
           </div>
         ),
         state: stateInd !== -1 ? <span className={ stateClassName }>{ states[stateInd].name || '-' }</span> : '-',
-        total_value: collection[i].total_value
+        total_value: ttFormat(collection[i].total_value, w2m, d2m)
       });
     }
 
@@ -97,11 +101,12 @@ export default class WorklogList extends Component {
           <TableHeaderColumn dataField='type' width='50'>类型</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='state' width='100'>状态</TableHeaderColumn>
-          <TableHeaderColumn dataField='total_value' width='100'>耗费时间(m)</TableHeaderColumn>
+          <TableHeaderColumn dataField='total_value' width='100'>耗费时间</TableHeaderColumn>
         </BootstrapTable>
         { this.state.detailShow &&
-        <WorklogDetail
+        <DetailModal
           show
+          options={ this.props.options }
           close={ () => { this.setState({ detailShow: false }) } }
           showedUser={ showedUser }
           query={ query }

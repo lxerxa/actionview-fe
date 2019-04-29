@@ -29,14 +29,8 @@ export default class Sidebar extends Component {
 
   componentDidMount() {
     $('.toc-container').click(function(e) {
-      if (e.target.nodeName !== 'I' && e.target.nodeName !== 'A' && e.target.nodeName !== 'SPAN') {
+      if ([ 'I', 'A', 'SPAN' ].indexOf(e.target.nodeName) === -1) {
         e.stopPropagation();
-      }
-    });
-
-    $(document).click(function() {
-      if ($('.toc-container').eq(0).css('position') === 'fixed') {
-        $('.toc-container').animate({ left: '-20%' });
       }
     });
 
@@ -44,6 +38,12 @@ export default class Sidebar extends Component {
     if (storage && storage.getItem('sideBarHide') === '1') {
       this.hideBar();
     }
+
+    $(document).click(function() {
+      if (storage && storage.getItem('sideBarHide') === '1') {
+        $('.toc-container').animate({ left: '-20%' });
+      }
+    });
   }
 
   hideBar() {
@@ -60,9 +60,7 @@ export default class Sidebar extends Component {
     $('#show-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
 
-    if ($('.doc-container').length > 0) {
-      this.props.resize({ containerWidth: $('.doc-container').get(0).clientWidth });
-    }
+    this.props.resize({ containerWidth: $('.doc-main').get(0).clientWidth });
 
     const storage = window.localStorage;
     if (storage) {
@@ -83,9 +81,7 @@ export default class Sidebar extends Component {
     $('#hide-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
 
-    if ($('.doc-container').length > 0) {
-      this.props.resize({ containerWidth: $('.doc-container').get(0).clientWidth });
-    }
+    this.props.resize({ containerWidth: $('.doc-main').get(0).clientWidth * 0.8 });
 
     const storage = window.localStorage;
     if (storage) {

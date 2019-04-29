@@ -59,6 +59,13 @@ export function trend(key, qs) {
   });
 }
 
+export function timetracks(key, qs) {
+  return asyncFuncCreator({
+    constant: 'REPORT_TIMETRACKS_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/report/timetracks' + (qs ? '?' + qs : '') })
+  });
+}
+
 export function getOptions(key) {
   return asyncFuncCreator({
     constant: 'REPORT_OPTIONS',

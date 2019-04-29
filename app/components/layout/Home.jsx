@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Header from './Header';
@@ -24,6 +25,7 @@ function mapDispatchToProps(dispatch) {
 export default class Home extends Component {
   constructor(props) {
     super(props);
+    this.onWindowResize = this.onWindowResize.bind(this);
   }
 
   static contextTypes = {
@@ -60,6 +62,25 @@ export default class Home extends Component {
 
   entry(pathname) {
     this.context.router.push({ pathname });
+  }
+
+  componentDidMount() {
+    const { layoutActions } = this.props;
+
+    window.addEventListener('resize', this.onWindowResize);
+    this.onWindowResize();
+  }
+
+  onWindowResize() {
+    const { layoutActions } = this.props;
+
+    const containerWidth = findDOMNode(this).clientWidth;
+    const storage = window.localStorage;
+    if (storage && storage.getItem('sideBarHide') === '1') {
+      layoutActions.resize({ containerWidth });
+    } else {
+      layoutActions.resize({ containerWidth: containerWidth * 0.8 });
+    }
   }
 
   componentWillReceiveProps(nextProps) {

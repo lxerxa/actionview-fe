@@ -4,12 +4,12 @@ import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, 
 import Select from 'react-select';
 import { Area, AreaChart, linearGradient, defs, stop, Legend, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
-import { IssueFilterList, getCondsTxt } from '../issue/IssueFilterList';
-import Duration from '../share/Duration';
-import SaveFilterModal from './SaveFilterModal';
+import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
+import Duration from '../../share/Duration';
+import SaveFilterModal from '../SaveFilterModal';
 
 const moment = require('moment');
-const img = require('../../assets/images/loading.gif');
+const img = require('../../../assets/images/loading.gif');
 
 export default class Trend extends Component {
   constructor(props) {

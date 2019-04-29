@@ -4,12 +4,13 @@ import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button } from '
 import Select from 'react-select';
 import { PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
-import { IssueFilterList, getCondsTxt } from '../issue/IssueFilterList';
-import Duration from '../share/Duration';
-import SaveFilterModal from './SaveFilterModal';
-import WorklogList from './WorklogList';
+import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
+import Duration from '../../share/Duration';
+import SaveFilterModal from '../SaveFilterModal';
+import List from './List';
+import { ttFormat } from '../../share/Funcs'
 
-const img = require('../../assets/images/loading.gif');
+const img = require('../../../assets/images/loading.gif');
 
 export default class Worklog extends Component {
   constructor(props) {
@@ -105,6 +106,9 @@ export default class Worklog extends Component {
       refresh, 
       query, 
       saveFilter } = this.props;
+
+    const w2m = (options.w2d || 5) * (options.d2h || 8) * 60;
+    const d2m = (options.d2h || 8) * 60;
 
     const srcData = _.map(worklog, (v) => { return { id: v.user.id, name: v.user.name, value: v.value } });
     let data = [];
@@ -212,6 +216,7 @@ export default class Worklog extends Component {
               <span>抱歉，暂无满足该检索条件的数据。</span>
             </div>
           </div> }
+          { data.length > 0 && <div style={ { marginLeft: '10px' } }>注：图表耗费时间值是以分钟(m)为单位</div> }
           { this.state.shape === 'pie' && data.length > 0 &&
           <div className='report-shape-container'>
             <PieChart 
@@ -226,10 +231,10 @@ export default class Worklog extends Component {
                 outerRadius={ 130 } 
                 label>
                 {
-                  data.map((entry, index) => <Cell key={ index } fill={ COLORS[index % COLORS.length] } />)
+                  data.map((entry, index) => <Cell key={ index } fill={ COLORS[index % COLORS.length] }/>)
                 }
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={ (value) => { return ttFormat(value, w2m, d2m) } }/>
             </PieChart>
           </div> }
           { this.state.shape === 'bar' && data.length > 0 && 
@@ -243,8 +248,8 @@ export default class Worklog extends Component {
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis dataKey='name' />
               <YAxis yAxisId='left' orientation='left' stroke='#8884d8' />
-              <Tooltip />
-              <Bar yAxisId='left' dataKey='value' fill='#3b7fc4' />
+              <Tooltip formatter={ (value) => { return ttFormat(value, w2m, d2m) } }/>
+              <Bar name='工时' yAxisId='left' dataKey='value' fill='#3b7fc4'/>
             </BarChart>
           </div> }
           { this.state.shape === 'line' && data.length > 0 &&
@@ -257,13 +262,12 @@ export default class Worklog extends Component {
               <XAxis dataKey='name' />
               <YAxis/>
               <CartesianGrid strokeDasharray='3 3'/>
-              <Tooltip/>
-              <Line dataKey='value' stroke='#d04437' strokeWidth={ 2 } />
+              <Tooltip formatter={ (value) => { return ttFormat(value, w2m, d2m) } }/>
+              <Line name='工时' dataKey='value' stroke='#d04437'/>
             </LineChart>
           </div> }
           { data.length > 0 &&
           <div style={ { float: 'left', width: '100%' } }>
-            <span>注：图表耗费时间值是以分钟(m)为单位</span>
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
@@ -273,15 +277,15 @@ export default class Worklog extends Component {
               </thead>
               <tbody>
                 <tr>
-                  <td>{ _.reduce(data, (sum, v) => { return sum + v.value }, 0) }</td>
+                  <td>{ ttFormat(_.reduce(data, (sum, v) => { return sum + v.value }, 0), w2m, d2m) }</td>
                   { _.map(data, (v, i) => {
                     if (v.id === 'others') {
                       return (
-                        <td key={ i }>{ v.value }</td>
+                        <td key={ i }>{ ttFormat(v.value, w2m, d2m) }</td>
                       );
                     } else {
                       return ( 
-                        <td key={ i }><a href='#workloglist' onClick={ (e) => { this.showList({ id: v.id, name: v.name }) } }>{ v.value }</a></td>
+                        <td key={ i }><a href='#workloglist' onClick={ (e) => { this.showList({ id: v.id, name: v.name }) } }>{ ttFormat(v.value, w2m, d2m) }</a></td>
                       ); 
                     }
                   }) }
@@ -294,7 +298,7 @@ export default class Worklog extends Component {
         <div id='workloglist' style={ { float: 'left', width: '100%', textAlign: 'center', margin: '15px 0px 30px 0px' } }>
           <span style={ { fontWeight: '600' } }>{ this.state.showedUser.name || '' } - 工作日志</span>
           <span title='刷新' onClick={ this.refreshList }><Button bsStyle='link' disabled={ worklogListLoading }><i className='fa fa-refresh'></i></Button></span>
-          <WorklogList
+          <List
             show
             showedUser={ this.state.showedUser }
             query={ query }

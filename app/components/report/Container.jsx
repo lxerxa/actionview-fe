@@ -6,8 +6,9 @@ import * as ReportActions from 'redux/actions/ReportActions';
 
 const qs = require('qs');
 const List = require('./List');
-const Worklog = require('./Worklog');
-const Trend = require('./Trend');
+const Worklog = require('./worklog/Worklog');
+const Trend = require('./trend/Trend');
+const TimeTracks = require('./timetracks/TimeTracks');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -93,6 +94,11 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
+  async timetracks(query) {
+    await this.props.actions.timetracks(this.pid, qs.stringify(query || {}));
+    return this.props.report.ecode;
+  }
+
   render() {
     const { location: { query={} }, params: { mode } } = this.props;
     return (
@@ -127,6 +133,19 @@ export default class Container extends Component {
           query={ query }
           refresh={ this.refresh.bind(this) }
           gotoIssue={ this.gotoIssue.bind(this) }
+          { ...this.props.report }/> }
+        { mode == 'timetracks' &&
+        <TimeTracks
+          i18n={ this.props.i18n }
+          saveFilter={ this.saveFilter.bind(this) }
+          project={ this.props.project.item }
+          index={ this.timetracks.bind(this) }
+          collection={ this.props.report.timetracks }
+          indexLoading={ this.props.report.timetracksLoading }
+          item={ this.props.report.timetrackItem }
+          itemLoading={ this.props.report.timetrackItemLoading }
+          query={ query }
+          refresh={ this.refresh.bind(this) }
           { ...this.props.report }/> }
       </div>
     );
