@@ -29,12 +29,13 @@ export default class TimeTracks extends Component {
     options: PropTypes.object.isRequired,
     optionsLoading: PropTypes.bool.isRequired,
     query: PropTypes.object,
-    item: PropTypes.object.isRequired,
+    item: PropTypes.array.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     refresh: PropTypes.func.isRequired,
     saveFilter: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired
   }
 
@@ -99,6 +100,9 @@ export default class TimeTracks extends Component {
       optionsLoading, 
       collection, 
       indexLoading, 
+      select,
+      item,
+      itemLoading,
       refresh, 
       query, 
       saveFilter } = this.props;
@@ -118,7 +122,7 @@ export default class TimeTracks extends Component {
       if ((selectedIds.length > 0 && selectedIds.indexOf(v.id) !== -1) || selectedIds.length <= 0) {
         total.origin_m += (v.origin_m || 0);
         total.spend_m += (v.spend_m || 0);
-        total.left_m += (v.left_m || 0);
+        total.left_m += (v.origin ? (v.left_m || 0) : 0);
       }
     });
 
@@ -152,10 +156,10 @@ export default class TimeTracks extends Component {
           </div>
         ),
         state: stateInd !== -1 ? <span className={ stateClassName }>{ states[stateInd].name || '-' }</span> : '-',
-        origin: collection[i].origin,
-        spend: collection[i].spend,
-        left: collection[i].left,
-        diff: ttFormat(collection[i].origin_m - collection[i].spend_m - collection[i].left_m, w2m, d2m) 
+        origin: collection[i].origin || '-',
+        spend: collection[i].spend || '-',
+        left: collection[i].left || '-',
+        diff: collection[i].origin ? ttFormat(collection[i].origin_m - collection[i].spend_m - collection[i].left_m, w2m, d2m) : '-' 
       });
     }
 
@@ -224,9 +228,9 @@ export default class TimeTracks extends Component {
             <TableHeaderColumn dataField='type' width='50'>类型</TableHeaderColumn>
             <TableHeaderColumn dataField='state' width='100'>状态</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-            <TableHeaderColumn dataField='origin' width='100'>初始预估时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='spend' width='100'>耗费时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='left' width='100'>剩余时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='origin' width='150'>初始预估时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='spend' width='150'>耗费时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='left' width='150'>剩余时间</TableHeaderColumn>
             <TableHeaderColumn dataField='diff' width='100'>误差</TableHeaderColumn>
           </BootstrapTable>
         </div>
@@ -240,6 +244,16 @@ export default class TimeTracks extends Component {
           mode={ 'timetrack' }
           query={ query }
           sqlTxt={ sqlTxt }
+          i18n={ i18n }/> }
+        { this.state.detailShow &&
+        <DetailModal
+          show
+          options={ this.props.options }
+          close={ () => { this.setState({ detailShow: false }) } }
+          issue={ this.state.selectedIssue }
+          index={ select }
+          data={ item }
+          loading={ itemLoading }
           i18n={ i18n }/> }
       </div>
     );

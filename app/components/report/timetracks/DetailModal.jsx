@@ -62,12 +62,12 @@ export default class DetailModal extends Component {
             <span title='刷新'><Button bsStyle='link' onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i></Button></span>
           </div>
           <Table condensed responsive>
-            <thead>
+            <thead><tr>
               <th>人员</th>
               <th>开始时间</th>
               <th>耗费时间</th>
               <th>备注</th>
-            </thead>
+            </tr></thead>
             <tbody>
             { _.map(data, (v, key) => {
               return (

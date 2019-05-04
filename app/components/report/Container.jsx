@@ -99,6 +99,11 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
+  async getTimetrackDetail(issue_id) {
+    await this.props.actions.getTimetrackDetail(this.pid, issue_id);
+    return this.props.report.ecode;
+  }
+
   render() {
     const { location: { query={} }, params: { mode } } = this.props;
     return (
@@ -142,6 +147,7 @@ export default class Container extends Component {
           index={ this.timetracks.bind(this) }
           collection={ this.props.report.timetracks }
           indexLoading={ this.props.report.timetracksLoading }
+          select={ this.getTimetrackDetail.bind(this) }
           item={ this.props.report.timetrackItem }
           itemLoading={ this.props.report.timetrackItemLoading }
           query={ query }

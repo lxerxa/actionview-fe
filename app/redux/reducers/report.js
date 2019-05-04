@@ -18,7 +18,7 @@ const initialState = {
   trendLoading: false, 
   timetracks: [], 
   timetracksLoading: false,
-  timetrackItem: {}, 
+  timetrackItem: [], 
   timetrackItemLoading: false };
 
 export default function report(state = initialState, action) {
@@ -133,6 +133,18 @@ export default function report(state = initialState, action) {
 
     case t.REPORT_TIMETRACKS_INDEX_FAIL:
       return { ...state, timetracksLoading: false, error: action.error };
+
+    case t.REPORT_TIMETRACKS_DETAIL_GET:
+      return { ...state, timetrackItemLoading: true, timetrackItem: [] };
+
+    case t.REPORT_TIMETRACKS_DETAIL_GET_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.timetrackItem = action.result.data;
+      }
+      return { ...state, timetrackItemLoading: false, ecode: action.result.ecode };
+
+    case t.REPORT_TIMETRACKS_DETAIL_GET_FAIL:
+      return { ...state, timetrackItemLoading: false, error: action.error };
 
     default:
       return state;

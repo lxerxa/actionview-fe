@@ -33,6 +33,7 @@ const validate = (values, props) => {
     'stat_time',
     'interval',
     'is_accu',
+    'original_estimate_m',
     'no', 
     'schema', 
     'parent_id', 

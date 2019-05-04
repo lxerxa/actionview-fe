@@ -59,6 +59,7 @@ export default class Worklog extends Component {
     if (!_.isEqual(newQuery, query)) {
       index(newQuery);
       this.state.worklogListShow = false;
+      this.state.showedUser = {};
     }
     this.setState({ recorded_at: newQuery.recorded_at ? newQuery.recorded_at : '' });
   }
@@ -279,7 +280,7 @@ export default class Worklog extends Component {
                 <tr>
                   <td>{ ttFormat(_.reduce(data, (sum, v) => { return sum + v.value }, 0), w2m, d2m) }</td>
                   { _.map(data, (v, i) => {
-                    if (v.id === 'others') {
+                    if (v.id === 'others' || v.id == this.state.showedUser.id) {
                       return (
                         <td key={ i }>{ ttFormat(v.value, w2m, d2m) }</td>
                       );

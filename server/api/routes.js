@@ -1195,6 +1195,19 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/report/timetracks/issue/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [
+    { id: '1111', started_at: 1478414469, adjust_type: '1', spend: '3d 4h', spend_m: 200, comments: '1111111', recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }, 
+    { id: '2222', started_at: 1478414469, adjust_type: '2', spend: '6h', spend_m: 120, comments: '2222222', recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }, 
+    { id: '3333', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 },
+    { id: '4444', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 },
+    { id: '5555', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333\r\n333\r\n3333\r\n44444\r\n5555\r\n6666\r\n测试测试\r\n\r\n\r\n测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试\r\n测试测试\r\n测试测试\r\n测试测试\r\n测试测试\r\n测试测试',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 },
+    { id: '6666', started_at: 1478414469, adjust_type: 1, spend: '3d 4h 5m', spend_m: 1200, comments: '333333',recorder: {id:'aaa', name:'刘老幺'}, recorded_at: 1478414469 }] };
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/report/timetracks', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

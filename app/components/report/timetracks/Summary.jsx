@@ -52,7 +52,7 @@ export default class Summary extends Component {
               </td>
               <td width='30%'>
                 <span>{ progress * 100 + '%' }</span>
-                <span style={ { marginLeft: '10px', fontWeight: 600 } }>{ values.left } 比 { ttFormat(values.spend_m + values.left_m, w2m, d2m) }</span>
+                <span style={ { marginLeft: '10px', fontWeight: 600 } }>{ values.spend } 比 { ttFormat(values.spend_m + values.left_m, w2m, d2m) }</span>
               </td>
             </tr>
             <tr>

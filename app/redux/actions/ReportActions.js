@@ -66,6 +66,13 @@ export function timetracks(key, qs) {
   });
 }
 
+export function getTimetrackDetail(key, issue_id) {
+  return asyncFuncCreator({
+    constant: 'REPORT_TIMETRACKS_DETAIL_GET',
+    promise: (client) => client.request({ url: '/project/' + key + '/report/timetracks/issue/' + issue_id })
+  });
+}
+
 export function getOptions(key) {
   return asyncFuncCreator({
     constant: 'REPORT_OPTIONS',

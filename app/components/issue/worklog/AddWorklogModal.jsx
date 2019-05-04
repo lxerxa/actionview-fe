@@ -108,7 +108,7 @@ export default class AddWorklogModal extends Component {
           flag = false;
         }
         let time = v.substr(0, v.length - 1);
-        if (time && isNaN(time)) {
+        if ((time && isNaN(time)) || time < 0) {
           flag = false;
         }
       }
