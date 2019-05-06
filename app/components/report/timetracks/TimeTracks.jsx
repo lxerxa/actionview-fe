@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, Checkbox } from 'react-bootstrap';
+import Select from 'react-select';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import _ from 'lodash';
 import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
@@ -16,6 +17,7 @@ export default class TimeTracks extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      scale: 'all',
       selectedIds: [],
       detailShow: false,
       issueFilterShow: false, 
@@ -50,11 +52,20 @@ export default class TimeTracks extends Component {
     if (!_.isEqual(newQuery, query)) {
       index(newQuery);
     }
+    this.setState({ scale: newQuery.scale ? newQuery.scale : 'all' });
   }
 
   search() {
     const { query={}, refresh } = this.props;
-    refresh(query);
+
+    const newQuery = _.assign({}, query);
+    if (this.state.scale) {
+      newQuery.scale = this.state.scale;
+    } else {
+      delete newQuery.scale;
+    }
+
+    refresh(newQuery);
   }
 
   showDetail(issue) {
@@ -109,7 +120,11 @@ export default class TimeTracks extends Component {
 
     let sqlTxt = '';
     if (!optionsLoading) {
-      sqlTxt = getCondsTxt(query, options);
+      sqlTxt = '统计范围～' + (query.scale === 'only' ? '仅包含有初始预估时间的' : '所有问题');
+      const issueSqlTxt = getCondsTxt(query, options);
+      if (issueSqlTxt) {
+        sqlTxt += ' | ' + issueSqlTxt;
+      }
     }
 
     const { selectedIds } = this.state;
@@ -122,7 +137,7 @@ export default class TimeTracks extends Component {
       if ((selectedIds.length > 0 && selectedIds.indexOf(v.id) !== -1) || selectedIds.length <= 0) {
         total.origin_m += (v.origin_m || 0);
         total.spend_m += (v.spend_m || 0);
-        total.left_m += (v.origin ? (v.left_m || 0) : 0);
+        total.left_m += (v.left_m || 0);
       }
     });
 
@@ -150,9 +165,12 @@ export default class TimeTracks extends Component {
           </span>),
         name: (
           <div>
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.showDetail(collection[i]) } } style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
-              { collection[i].no + ' - ' + collection[i].title }
-            </a>
+            { collection[i].spend_m > 0 ?
+              <a href='#' onClick={ (e) => { e.preventDefault(); this.showDetail(collection[i]) } } style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+                <span>{ collection[i].no + ' - ' + collection[i].title }</span>
+              </a>
+              :
+              <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>{ collection[i].no + ' - ' + collection[i].title }</span> }
           </div>
         ),
         state: stateInd !== -1 ? <span className={ stateClassName }>{ states[stateInd].name || '-' }</span> : '-',
@@ -199,6 +217,38 @@ export default class TimeTracks extends Component {
             <Button bsStyle='link'>返回</Button>
           </Link>
         </div>
+        <Form horizontal className='report-filter-form'>
+          <FormGroup>
+            <Col sm={ 1 } componentClass={ ControlLabel }>
+              统计范围
+            </Col>
+            <Col sm={ 4 }>
+              <Select
+                simpleValue
+                clearable={ false }
+                placeholder='请选择'
+                value={ this.state.scale }
+                onChange={ (newValue) => { this.state.scale = newValue; this.search(); } }
+                options={ [ { value: 'all', label: '所有问题' }, { value: 'only', label: '仅包含有初始预估时间的' } ] }/>
+            </Col>
+            <Col sm={ 7 }>
+              <Button
+                bsStyle='link'
+                onClick={ () => { this.setState({ issueFilterShow: !this.state.issueFilterShow }) } }
+                style={ { float: 'right', marginTop: '0px' } }>
+                更多问题过滤 { this.state.issueFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
+              </Button>
+            </Col>
+          </FormGroup>
+        </Form>
+        <div>
+          <IssueFilterList
+            query={ query }
+            searchShow={ this.state.issueFilterShow }
+            notShowFields={ [ 'watcher' ] }
+            options={ options }
+            refresh={ refresh } />
+        </div>
         <div className='report-conds-style'>
           { sqlTxt &&
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
@@ -206,20 +256,6 @@ export default class TimeTracks extends Component {
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
-          <Button
-            bsStyle='link'
-            onClick={ () => { this.setState({ issueFilterShow: !this.state.issueFilterShow }) } }
-            style={ { float: 'right', marginTop: '0px', marginBottom: '10px' } }>
-            更多问题过滤 { this.state.issueFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
-          </Button>
-        </div>
-        <div style={ { marginTop: '-15px' } }>
-          <IssueFilterList
-            query={ query }
-            searchShow={ this.state.issueFilterShow }
-            notShowFields={ [ 'watcher' ] }
-            options={ options }
-            refresh={ refresh } />
         </div>
         { !indexLoading && collection.length > 0 && <Summary options={ options } values={ total }/> }
         <div style={ { marginBottom: '30px' } }>
@@ -228,10 +264,10 @@ export default class TimeTracks extends Component {
             <TableHeaderColumn dataField='type' width='50'>类型</TableHeaderColumn>
             <TableHeaderColumn dataField='state' width='100'>状态</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-            <TableHeaderColumn dataField='origin' width='150'>初始预估时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='spend' width='150'>耗费时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='left' width='150'>剩余时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='diff' width='100'>误差</TableHeaderColumn>
+            <TableHeaderColumn dataField='origin' width='120'>初始预估时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='spend' width='120'>耗费时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='left' width='120'>剩余时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='diff' width='120'>误差</TableHeaderColumn>
           </BootstrapTable>
         </div>
         { this.state.saveFilterShow &&

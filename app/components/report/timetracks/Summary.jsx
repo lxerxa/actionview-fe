@@ -21,7 +21,7 @@ export default class Summary extends Component {
 
     let progress = _.round(values.spend_m / (values.spend_m + values.left_m), 2);
     progress = _.max([ progress, 0 ]);
-    if (values.left_m > 0) {
+    if (values.spend_m > 0) {
       progress = _.max([ progress, 0.01 ]);
     }
     progress = _.min([ progress, 1 ]);
@@ -40,10 +40,10 @@ export default class Summary extends Component {
                 <table style={ { width: '100%', marginTop: '3px' } }>
                   <tbody>
                     <tr>
-                      <td style={ { width: progress * 100 + '%' } }>
+                      <td style={ { width: _.round(progress * 100) + '%' } }>
                         <div className='color-bar' style={ { borderTopColor: '#51a825' } }/>
                       </td>
-                      <td style={ { width: (1 - progress) * 100 + '%' } }>
+                      <td style={ { width: _.round((1 - progress) * 100) + '%' } }>
                         <div className='color-bar' style={ { borderTopColor: '#ec8e00' } }/>
                       </td>
                     </tr>
@@ -51,7 +51,7 @@ export default class Summary extends Component {
                 </table>
               </td>
               <td width='30%'>
-                <span>{ progress * 100 + '%' }</span>
+                <span>{ _.round(progress * 100) + '%' }</span>
                 <span style={ { marginLeft: '10px', fontWeight: 600 } }>{ values.spend } 比 { ttFormat(values.spend_m + values.left_m, w2m, d2m) }</span>
               </td>
             </tr>
@@ -61,10 +61,10 @@ export default class Summary extends Component {
                 <table style={ { width: '100%', marginTop: '3px' } }>
                   <tbody>
                     <tr>
-                      <td style={ { width: accuracy * 100 + '%' } }>
+                      <td style={ { width: _.round(accuracy * 100) + '%' } }>
                         <div className='color-bar'/>
                       </td>
-                      <td style={ { width: (1 - accuracy) * 100 + '%' } }>
+                      <td style={ { width: _.round((1 - accuracy) * 100) + '%' } }>
                         <div className='color-bar' style={ { borderTopColor: '#ccc' } }/>
                       </td>
                     </tr>
@@ -72,7 +72,7 @@ export default class Summary extends Component {
                 </table>
               </td>
               <td width='30%'>
-                <span>{ accuracy * 100 + '%' }</span>
+                <span>{ _.round(accuracy * 100) + '%' }</span>
                 <span style={ { marginLeft: '10px', fontWeight: 600 } }>{ values.diff_m < 0 ? ttFormat(values.origin_m, w2m, d2m) : ttFormat(values.spend_m + values.left_m, w2m, d2m) } 比 { values.diff_m < 0 ? ttFormat(values.spend_m + values.left_m, w2m, d2m) : ttFormat(values.origin_m, w2m, d2m) }</span>
               </td>
             </tr>

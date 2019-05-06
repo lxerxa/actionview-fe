@@ -217,7 +217,7 @@ export default class Worklog extends Component {
               <span>抱歉，暂无满足该检索条件的数据。</span>
             </div>
           </div> }
-          { data.length > 0 && <div style={ { marginLeft: '10px' } }>注：图表耗费时间值是以分钟(m)为单位</div> }
+          { data.length > 0 && <div style={ { marginLeft: '10px', float: 'right' } }>注：图表耗费时间值是以分钟(m)为单位</div> }
           { this.state.shape === 'pie' && data.length > 0 &&
           <div className='report-shape-container'>
             <PieChart 
