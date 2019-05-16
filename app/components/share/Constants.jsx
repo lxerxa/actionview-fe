@@ -54,3 +54,16 @@ export const Permissions = [
   //{ id: 'delete_worklog', name: '删除工作日志' },
   //{ id: 'delete_self_worklog', name: '删除自己的工作日志' }
 ];
+
+export const Dimensions = [
+  { id: 'type', name: '类型' },
+  { id: 'priority', name: '优先级' },
+  { id: 'resolve_version', name: '解决版本' },
+  { id: 'module', name: '模块' },
+  { id: 'reporter', name: '报告者' },
+  { id: 'resolver', name: '解决者' },
+  { id: 'closer', name: '关闭者' },
+  { id: 'epic', name: 'Epic' },
+  { id: 'sprint', name: 'Sprint' },
+  { id: 'label', name: '标签' }
+];

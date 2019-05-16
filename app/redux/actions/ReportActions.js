@@ -73,6 +73,13 @@ export function getTimetrackDetail(key, issue_id) {
   });
 }
 
+export function regressions(key, qs) {
+  return asyncFuncCreator({
+    constant: 'REPORT_REGRESSIONS_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/report/regressions' + (qs ? '?' + qs : '') })
+  });
+}
+
 export function getOptions(key) {
   return asyncFuncCreator({
     constant: 'REPORT_OPTIONS',

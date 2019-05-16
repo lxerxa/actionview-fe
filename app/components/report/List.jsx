@@ -82,7 +82,7 @@ export default class List extends Component {
       trend: '问题趋势图',
       worklog: '人员工作日志报告',
       timetracks: '时间跟踪报告',
-      compare: '创建问题和解决问题对比报告',
+      regressions: '问题解决回归分布',
       others: '其它报表'
     };
 
@@ -91,13 +91,13 @@ export default class List extends Component {
       trend: 'fa fa-line-chart',
       worklog: 'fa fa-bar-chart',
       timetracks: 'fa fa-clock-o',
-      compare: 'fa fa-area-chart',
-      others: 'fa fa-bar-chart'
+      regressions: 'fa fa-bar-chart',
+      others: 'fa fa-area-chart'
     };
 
     const blockHeaders = {};
     const blockItems = {};
-    const blocks = [ 'issue', 'trend', 'worklog', 'timetracks', 'compare', 'others' ];
+    const blocks = [ 'issue', 'trend', 'worklog', 'timetracks', 'regressions', 'others' ];
     _.forEach(blocks, (v, i) => {
       blockHeaders[v] = (
         <div className='report-list-header' key={ i }>
@@ -156,10 +156,10 @@ export default class List extends Component {
             </tbody>
           </Table>
         </Panel>
-        <Panel header={ blockHeaders['compare'] }>
+        <Panel header={ blockHeaders['regressions'] }>
           <Table responsive hover>
             <tbody>
-              { blockItems['compare'] }
+              { blockItems['regressions'] }
             </tbody>
           </Table>
         </Panel>

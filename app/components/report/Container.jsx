@@ -9,6 +9,7 @@ const List = require('./List');
 const Worklog = require('./worklog/Worklog');
 const Trend = require('./trend/Trend');
 const TimeTracks = require('./timetracks/TimeTracks');
+const Regressions = require('./regressions/Regressions');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -104,6 +105,11 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
+  async regressions(query) {
+    await this.props.actions.regressions(this.pid, qs.stringify(query || {}));
+    return this.props.report.ecode;
+  }
+
   render() {
     const { location: { query={} }, params: { mode } } = this.props;
     return (
@@ -152,6 +158,17 @@ export default class Container extends Component {
           itemLoading={ this.props.report.timetrackItemLoading }
           query={ query }
           refresh={ this.refresh.bind(this) }
+          { ...this.props.report }/> }
+        { mode == 'regressions' &&
+        <Regressions
+          i18n={ this.props.i18n }
+          layout={ this.props.layout }
+          saveFilter={ this.saveFilter.bind(this) }
+          project={ this.props.project.item }
+          index={ this.regressions.bind(this) }
+          query={ query }
+          refresh={ this.refresh.bind(this) }
+          gotoIssue={ this.gotoIssue.bind(this) }
           { ...this.props.report }/> }
       </div>
     );

@@ -269,6 +269,9 @@ export default class TimeTracks extends Component {
             <TableHeaderColumn dataField='left' width='120'>剩余时间</TableHeaderColumn>
             <TableHeaderColumn dataField='diff' width='120'>误差</TableHeaderColumn>
           </BootstrapTable>
+          <div>
+            <span>共计 { timetracks.length } 条</span>
+          </div>
         </div>
         { this.state.saveFilterShow &&
         <Summary

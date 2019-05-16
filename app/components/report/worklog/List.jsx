@@ -103,6 +103,9 @@ export default class List extends Component {
           <TableHeaderColumn dataField='state' width='100'>状态</TableHeaderColumn>
           <TableHeaderColumn dataField='total_value' width='100'>耗费时间</TableHeaderColumn>
         </BootstrapTable>
+        <div>
+          <span>共计 { worklogs.length } 条</span>
+        </div>
         { this.state.detailShow &&
         <DetailModal
           show

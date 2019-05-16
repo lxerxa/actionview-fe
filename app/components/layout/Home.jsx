@@ -21,7 +21,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ project, session }) => ({ project, session }), mapDispatchToProps)
+@connect(({ layout, project, session }) => ({ layout, project, session }), mapDispatchToProps)
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +36,7 @@ export default class Home extends Component {
     actions: PropTypes.object.isRequired,
     layoutActions: PropTypes.object.isRequired,
     sessionActions: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -99,7 +100,7 @@ export default class Home extends Component {
   }
 
   render() {
-    const { location: { pathname='' }, project, session } = this.props;
+    const { location: { pathname='' }, project, session, layout } = this.props;
 
     return (
       <div className='doc-main'>
@@ -113,6 +114,7 @@ export default class Home extends Component {
           cleanSelectedProject={ this.props.actions.cleanSelectedProject }
           entry={ this.entry.bind(this) }/>
         <Sidebar 
+          isHide={ layout.sidebarHide }
           resize={ this.props.layoutActions.resize }
           project={ project } 
           session={ session } 

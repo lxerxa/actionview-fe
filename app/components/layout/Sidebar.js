@@ -24,10 +24,12 @@ export default class Sidebar extends Component {
     project: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     resize: PropTypes.func.isRequired,
+    isHide: PropTypes.bool.isRequired,
     pathname: PropTypes.string
   }
 
   componentDidMount() {
+    const self = this;
     $('.toc-container').click(function(e) {
       if ([ 'I', 'A', 'SPAN' ].indexOf(e.target.nodeName) === -1) {
         e.stopPropagation();
@@ -40,7 +42,7 @@ export default class Sidebar extends Component {
     }
 
     $(document).click(function() {
-      if (storage && storage.getItem('sideBarHide') === '1') {
+      if (self.props.isHide) {
         $('.toc-container').animate({ left: '-20%' });
       }
     });
@@ -60,7 +62,7 @@ export default class Sidebar extends Component {
     $('#show-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
 
-    this.props.resize({ containerWidth: $('.doc-main').get(0).clientWidth });
+    this.props.resize({ containerWidth: $('.doc-main').get(0).clientWidth, sidebarHide: true });
 
     const storage = window.localStorage;
     if (storage) {
@@ -81,7 +83,7 @@ export default class Sidebar extends Component {
     $('#hide-bar').show();
     detailLeftFloat && $('.animate-dialog').css('left', $('.doc-container').offset().left);
 
-    this.props.resize({ containerWidth: $('.doc-main').get(0).clientWidth * 0.8 });
+    this.props.resize({ containerWidth: $('.doc-main').get(0).clientWidth * 0.8, sidebarHide: false });
 
     const storage = window.localStorage;
     if (storage) {

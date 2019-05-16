@@ -1122,8 +1122,8 @@ export default function(router) {
     	issue: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}], 
     	trend: [{id: '1111', name: '近一月的', query: { stat_time: '1m' }}], 
     	worklog: [{id: '1111', name: '近一月的', query: { recorded_at: '1m' }}, {id: '2222', name: '创建3个月外的', query: { created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}], 
-    	timetracks: [ {id: '1111', name: '近一月的', query: { state: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ], 
-    	compare: [], 
+    	timetracks: [ {id: '1111', name: '近一月的', query: { resolution: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ], 
+    	regressions: [ {id: '1111', name: '未解决的', query: { resolution: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ], 
     	others: [] } };
 
     return res.status(200).send(results);
@@ -1218,6 +1218,13 @@ export default function(router) {
     { no:102, id: 'd546762', type:'2222', title: '国拨类型的项目添加任务中责任人没有必选号22222', state:'546762', origin: '4d', origin_m: 1920, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
     { no:12, id: 'e546763', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号333333', state:'546763', origin: '3d', origin_m: 1440, spend: '3h', spend_m: 180, left: '2d 5h', left_m: 1260 }
     ], options:{d2h: 8, w2d: 5}, options2:{ progress: { percent: 0.8, spend: '1w 1d', total: '2w 2d' }, accuracy: { percent: 0.7, plan: '2w', real: '2d' }, total: { origin: '20d', spend: '2d, 4h', left: '3d', diff: '2w' } } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/report/regressions', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [ { category: '1111', ones: [1,2,3,4,5], gt_ones: [6] }, { category: '2222', ones: [5,2,4,5,23,45,66,53,51,52,59,90,98], gt_ones: [4,6,7] }, { category: '3333', ones: [18,16,17,13,23,24], gt_ones: [7,10] } , { category: '4444', ones: [4,5,6,7], gt_ones: [9,10] } ] };
     return res.status(200).send(results);
   });
 
