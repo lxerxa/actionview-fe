@@ -163,16 +163,15 @@ export default class Regressions extends Component {
             <Col sm={ 3 }>
               <Select
                 simpleValue
-                clearable={ false }
                 placeholder='请选择'
-                value={ this.state.stat_dimension }
+                value={ this.state.stat_dimension || null }
                 onChange={ (newValue) => { this.state.stat_dimension = newValue; this.search(); } }
                 options={ _.map(Dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
             <Col sm={ 1 } componentClass={ ControlLabel }>
               解决者
             </Col>
-            <Col sm={ 4 }>
+            <Col sm={ 3 }>
               <Select
                 simpleValue
                 multi
@@ -181,7 +180,7 @@ export default class Regressions extends Component {
                 onChange={ (newValue) => { this.state.his_resolvers = newValue; this.search(); } }
                 options={ _.map(users, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
-            <Col sm={ 2 }>
+            <Col sm={ 4 }>
               <Button
                 bsStyle='link'
                 onClick={ () => { this.setState({ issueFilterShow: !this.state.issueFilterShow }) } }
@@ -214,7 +213,16 @@ export default class Regressions extends Component {
         </div>
         :
         <div style={ { height: '565px' } }>
-          { shape === 'bar' && 
+          { data.length <= 0 &&
+          <div className='report-shape-container' style={ { paddingTop: '40px' } }>
+            <div style={ { textAlign: 'center' } }>
+              <span style={ { fontSize: '160px', color: '#FFC125' } } >
+                <i className='fa fa-warning'></i>
+              </span><br/>
+              <span>抱歉，暂无满足该检索条件的数据。</span>
+            </div>
+          </div> }
+          { shape === 'bar' && data.length > 0 && 
           <div className='report-shape-container'>
             <BarChart
               width={ layout.containerWidth - 60 }
@@ -231,7 +239,7 @@ export default class Regressions extends Component {
               <Bar dataKey='gt_ones_cnt' name='大于一次' stackId='a' fill='#AA4643' />
             </BarChart>
           </div> }
-          { shape === 'pie' && 
+          { shape === 'pie' && data.length > 0 &&
           <div className='report-shape-container'>
             <PieChart
               width={ 800 }
@@ -250,9 +258,10 @@ export default class Regressions extends Component {
               <Tooltip />
             </PieChart>
           </div> }
+          { data.length > 0 && 
           <div style={ { float: 'left', width: '100%', marginBottom: '30px' } }>
-            <span>注：该图表最多展示100条目。</span>
-            { this.state.stat_dimension ? 
+            <span>注：该图表最多统计满足当前检索条件下的1000条结果。</span>
+            { this.state.stat_dimension && 
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
@@ -272,7 +281,8 @@ export default class Regressions extends Component {
                       <td>{ _.round(v.ones_cnt / v.total_cnt * 100, 2) + '%' }</td>
                     </tr> ) }) }
               </tbody>
-            </Table> :
+            </Table> } 
+            { !this.state.stat_dimension && 
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
@@ -289,7 +299,7 @@ export default class Regressions extends Component {
                 </tr>
               </tbody>
             </Table> }
-          </div>
+          </div> }
         </div> }
         { this.state.saveFilterShow &&
         <SaveFilterModal

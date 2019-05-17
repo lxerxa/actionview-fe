@@ -30,9 +30,8 @@ const validate = (values, props) => {
     'resolved_at', 
     'closed_at', 
     'regression_times', 
-    'stat_time',
-    'interval',
-    'is_accu',
+    'his_resolvers', 
+    'resolved_logs', 
     'original_estimate_m',
     'no', 
     'schema', 
@@ -42,18 +41,12 @@ const validate = (values, props) => {
     'links', 
     'entry_id', 
     'definition_id', 
-    'page', 
-    'orderBy',
-    'from',
-    'from_kanban_id',
-    'export_fields',
     'comments_num',
     'worklogs_num',
     'gitcommits_num',
     'sprint',
     'sprints',
-    'filter',
-    'limit' ];
+    'filter' ];
 
   if (!values.key) {
     errors.key = '必填';
