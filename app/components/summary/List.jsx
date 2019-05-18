@@ -141,8 +141,8 @@ export default class List extends Component {
               <Tooltip/>
               <Legend />
               <Line type='monotone' dataKey='new' name='新建的' stroke='#4572A7' fill='#4572A7'/>
-              <Line type='monotone' dataKey='resolved' name='已解决的' stroke='#AA4643' fill='#AA4643'/>
-              <Line type='monotone' dataKey='closed' name='已关闭的' stroke='#89A54E' fill='#89A54E'/>
+              <Line type='monotone' dataKey='resolved' name='已解决的' stroke='#89A54E' fill='#89A54E'/>
+              <Line type='monotone' dataKey='closed' name='已关闭的' stroke='#AA4643' fill='#AA4643'/>
             </LineChart>
           </div> }
         </Panel>

@@ -406,8 +406,8 @@ export function getCondsTxt(query, options) {
   const queryConds = [];
   let index = -1;
 
-  if (query.no) { queryConds.push('编号～' + query.no); }
-  if (query.title) { queryConds.push('主题～' + query.title); }
+  if (query.no) { queryConds.push('NO～' + query.no); }
+  if (query.title) { queryConds.push('主题/NO～' + query.title); }
 
   const baseConds = [
     { key: 'type', name: '类型', values: types },

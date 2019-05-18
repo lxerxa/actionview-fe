@@ -244,7 +244,7 @@ export default class Worklog extends Component {
               width={ layout.containerWidth - 60 }
               height={ 380 }
               data={ data }
-              barSize={ 25 }
+              barSize={ 40 }
               style={ { margin: '25px auto' } }>
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis dataKey='name' />

@@ -30,8 +30,8 @@ export default class Sidebar extends Component {
 
   componentDidMount() {
     const self = this;
-    $('.toc-container').click(function(e) {
-      if ([ 'I', 'A', 'SPAN' ].indexOf(e.target.nodeName) === -1) {
+    $('.toc-container').unbind('click').bind('click', function(e) {
+      if ([ 'I', 'SPAN', 'A' ].indexOf(e.target.nodeName) === -1) {
         e.stopPropagation();
       }
     });
@@ -41,7 +41,10 @@ export default class Sidebar extends Component {
       this.hideBar();
     }
 
-    $(document).click(function() {
+    $(document).unbind('click').bind('click', function(e) {
+      if (e.target.parentElement == document.getElementById('hide-bar') || e.target.parentElement == document.getElementById('tack-bar')) {
+        return;
+      }
       if (self.props.isHide) {
         $('.toc-container').animate({ left: '-20%' });
       }

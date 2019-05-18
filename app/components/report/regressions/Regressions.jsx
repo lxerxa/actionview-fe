@@ -76,7 +76,7 @@ export default class Regressions extends Component {
 
   gotoIssue(nos) {
     const { gotoIssue } = this.props;
-    gotoIssue({ nos: nos.join(',') });
+    gotoIssue({ title: nos.join(',') });
   }
 
   render() {
@@ -114,7 +114,7 @@ export default class Regressions extends Component {
             resolverNames.push(users[index].name);
           }
         });
-        if (resolverNames.length > 1) {
+        if (resolverNames.length > 0) {
           sqlTxt = (sqlTxt ? (sqlTxt + ' | ') : '') + '解决者～' + resolverNames.join(',');
         }
       }
@@ -227,7 +227,7 @@ export default class Regressions extends Component {
             <BarChart
               width={ layout.containerWidth - 60 }
               height={ 380 }
-              barSize={ 25 }
+              barSize={ 40 }
               data={ data }
               style={ { margin: '25px auto' } }>
               <CartesianGrid strokeDasharray='3 3' />

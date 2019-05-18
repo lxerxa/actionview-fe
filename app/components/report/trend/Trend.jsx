@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, Checkbox } from 'react-bootstrap';
+import { Checkbox as Checkbox2, CheckboxGroup } from 'react-checkbox-group';
 import Select from 'react-select';
 import { Area, AreaChart, linearGradient, defs, stop, Legend, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
@@ -21,6 +22,7 @@ export default class Trend extends Component {
       notWorkingShow: true, 
       interval: 'day',
       is_accu: '0',
+      statItems: [ 'new', 'resolve', 'close' ],
       shape: 'bar' };
     this.gotoIssue = this.gotoIssue.bind(this);
   }
@@ -209,7 +211,19 @@ export default class Trend extends Component {
                 onChange={ (newValue) => { this.state.interval = newValue; this.search(); } }
                 options={ [ { value: 'day', label: '天' }, { value: 'week', label: '周' }, { value: 'month', label: '月' } ] }/>
             </Col>
-            <Col sm={ 9 }>
+            <Col sm={ 5 } componentClass={ ControlLabel }>
+              统计项 
+            </Col>
+            <Col sm={ 4 }>
+              <CheckboxGroup name='statItems' value={ this.state.statItems } onChange={ (newValue) => { this.setState({ statItems: newValue }) } } style={ { marginTop: '8px' } }>
+                <div style={ { float: 'left' } }><Checkbox2 value='new' style={ { float: 'left' } }/><span>新建的</span></div>
+                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='resolve'/><span>已解决的</span></div>
+                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='close'/><span >已关闭的</span></div>
+              </CheckboxGroup>
+            </Col>
+          </FormGroup>
+          <FormGroup>
+            <Col sm={ 12 }>
               <Button
                 bsStyle='link'
                 onClick={ () => { this.setState({ issueFilterShow: !this.state.issueFilterShow }) } }
@@ -274,7 +288,7 @@ export default class Trend extends Component {
             <BarChart
               width={ layout.containerWidth - 60 }
               height={ 380 }
-              barSize={ 25 }
+              barSize={ 40 }
               data={ data }
               style={ { margin: '25px auto' } }>
               <CartesianGrid strokeDasharray='3 3' />
@@ -282,9 +296,9 @@ export default class Trend extends Component {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey='new' name='新建的' stackId='a' fill='#4572A7' />
-              <Bar dataKey='resolved' name='已解决的' stackId='a' fill='#AA4643' />
-              <Bar dataKey='closed' name='已关闭的' stackId='a' fill='#89A54E' />
+              { this.state.statItems.indexOf('new') !== -1 && <Bar dataKey='new' name='新建的' stackId='a' fill='#4572A7' /> }
+              { this.state.statItems.indexOf('resolve') !== -1 && <Bar dataKey='resolved' name='已解决的' stackId='a' fill='#89A54E' /> }
+              { this.state.statItems.indexOf('close') !== -1 && <Bar dataKey='closed' name='已关闭的' stackId='a' fill='#AA4643' /> }
             </BarChart>
           </div> }
           { this.state.shape === 'line' && !hasErr &&
@@ -299,9 +313,9 @@ export default class Trend extends Component {
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              <Line dataKey='new' name='新建的' stroke='#4572A7'/>
-              <Line dataKey='resolved' name='已解决的' stroke='#AA4643'/>
-              <Line dataKey='closed' name='已关闭的' stroke='#89A54E'/>
+              { this.state.statItems.indexOf('new') !== -1 && <Line dataKey='new' name='新建的' stroke='#4572A7'/> }
+              { this.state.statItems.indexOf('resolve') !== -1 && <Line dataKey='resolved' name='已解决的' stroke='#89A54E'/> }
+              { this.state.statItems.indexOf('close') !== -1 && <Line dataKey='closed' name='已关闭的' stroke='#AA4643'/> }
             </LineChart>
           </div> }
           { this.state.shape === 'area' && !hasErr &&
@@ -312,27 +326,30 @@ export default class Trend extends Component {
               data={ data }
               style={ { margin: '25px auto' } }>
               <defs>
+                { this.state.statItems.indexOf('new') !== -1 &&
                 <linearGradient id='colorNew' x1='0' y1='0' x2='0' y2='1'>
                   <stop offset='5%' stopColor='#4572A7' stopOpacity={ 0.8 }/>
                   <stop offset='95%' stopColor='#4572A7' stopOpacity={ 0 }/>
-                </linearGradient>
+                </linearGradient> }
+                { this.state.statItems.indexOf('resolve') !== -1 &&
                 <linearGradient id='colorResolved' x1='0' y1='0' x2='0' y2='1'>
-                  <stop offset='5%' stopColor='#AA4643' stopOpacity={ 0.8 }/>
-                  <stop offset='95%' stopColor='#AA4643' stopOpacity={ 0 }/>
-                </linearGradient>
-                <linearGradient id='colorClosed' x1='0' y1='0' x2='0' y2='1'>
                   <stop offset='5%' stopColor='#89A54E' stopOpacity={ 0.8 }/>
                   <stop offset='95%' stopColor='#89A54E' stopOpacity={ 0 }/>
-                </linearGradient>
+                </linearGradient> }
+                { this.state.statItems.indexOf('close') !== -1 &&
+                <linearGradient id='colorClosed' x1='0' y1='0' x2='0' y2='1'>
+                  <stop offset='5%' stopColor='#AA4643' stopOpacity={ 0.8 }/>
+                  <stop offset='95%' stopColor='#AA4643' stopOpacity={ 0 }/>
+                </linearGradient> }
               </defs>
               <XAxis dataKey='category'/>
               <YAxis />
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              <Area dataKey='new' name='新建的' fillOpacity={ 1 } stroke='#4572A7' fill='url(#colorNew)' type='monotone'/>
-              <Area dataKey='resolved' name='已解决的' fillOpacity={ 1 } stroke='#AA4643' fill='url(#colorResolved)' type='monotone'/>
-              <Area dataKey='closed' name='已关闭的' fillOpacity={ 1 } stroke='#89A54E' fill='url(#colorClosed)' type='monotone'/>
+              { this.state.statItems.indexOf('new') !== -1 && <Area dataKey='new' name='新建的' fillOpacity={ 1 } stroke='#4572A7' fill='url(#colorNew)' type='monotone'/> }
+              { this.state.statItems.indexOf('resolve') !== -1 && <Area dataKey='resolved' name='已解决的' fillOpacity={ 1 } stroke='#89A54E' fill='url(#colorResolved)' type='monotone'/> }
+              { this.state.statItems.indexOf('close') !== -1 && <Area dataKey='closed' name='已关闭的' fillOpacity={ 1 } stroke='#AA4643' fill='url(#colorClosed)' type='monotone'/> }
             </AreaChart>
           </div> }
           { !hasErr &&
