@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { FormGroup, Col, Button, Label, Table, Panel } from 'react-bootstrap';
+import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import { LineChart, Line, XAxis, YAxis, Legend, CartesianGrid, Tooltip, Cell } from 'recharts';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
@@ -11,7 +12,12 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { pulseShowModel: 'charts', assigneeShowModel: 'percentage', priorityShowModel: 'percentage', moduleShowModel: 'percentage' };
+    this.state = { 
+      pulseShowModel: 'charts', 
+      pulseStatItems: [ 'new', 'resolve', 'close' ], 
+      assigneeShowModel: 'percentage', 
+      priorityShowModel: 'percentage', 
+      moduleShowModel: 'percentage' };
   }
 
   static propTypes = {
@@ -71,7 +77,7 @@ export default class List extends Component {
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?closed_at=2w' }>最近关闭的</Link></span>
         </div> }
         <Panel
-          style={ { height: '300px' } }
+          style={ { height: '320px' } }
           header={ 
             <div>
               <span>{ '问题动态：' + (options.twoWeeksAgo || '') + ' ~ 现在' }</span>
@@ -129,20 +135,32 @@ export default class List extends Component {
             </tbody>
           </Table> }
           { this.state.pulseShowModel == 'charts' &&
+          <div>
+            <CheckboxGroup 
+              name='statItems' 
+              value={ this.state.pulseStatItems } 
+              onChange={ (newValue) => { this.setState({ pulseStatItems: newValue }) } } 
+              style={ { float: 'right', margin: '5px 10px 0px 0px', height: '30px' } }>
+              <div style={ { float: 'left' } }><Checkbox value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>新建的</span></div>
+              <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox value='resolve'/><span style={ { marginLeft: '2px' } }>已解决的</span></div>
+              <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox value='close'/><span style={ { marginLeft: '2px' } }>已关闭的</span></div>
+            </CheckboxGroup>
+          </div> }
+          { this.state.pulseShowModel == 'charts' &&
           <div className='report-shape-container'>
             <LineChart
-              width={ layout.containerWidth - 60 }
+              width={ layout.containerWidth * 0.95 }
               height={ 200 }
               data={ data.trend || [] }
-              style={ { margin: '25px auto' } }>
+              style={ { margin: '35px auto' } }>
               <XAxis dataKey='day'/>
               <YAxis />
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              <Line type='monotone' dataKey='new' name='新建的' stroke='#4572A7' fill='#4572A7'/>
-              <Line type='monotone' dataKey='resolved' name='已解决的' stroke='#89A54E' fill='#89A54E'/>
-              <Line type='monotone' dataKey='closed' name='已关闭的' stroke='#AA4643' fill='#AA4643'/>
+              { this.state.pulseStatItems.indexOf('new') !== -1 && <Line type='monotone' dataKey='new' name='新建的' stroke='#4572A7' fill='#4572A7'/> }
+              { this.state.pulseStatItems.indexOf('resolve') !== -1 && <Line type='monotone' dataKey='resolved' name='已解决的' stroke='#89A54E' fill='#89A54E'/> }
+              { this.state.pulseStatItems.indexOf('close') !== -1 && <Line type='monotone' dataKey='closed' name='已关闭的' stroke='#AA4643' fill='#AA4643'/> }
             </LineChart>
           </div> }
         </Panel>

@@ -179,23 +179,14 @@ export default class Trend extends Component {
                 onChange={ (newValue) => { this.state.stat_time = newValue; this.search(); } }/>
             </Col>
             <Col sm={ 1 } componentClass={ ControlLabel }>
-             是否累计 
+              统计项
             </Col>
             <Col sm={ 4 }>
-              <Radio
-                inline
-                name='is_accu'
-                onClick={ () => { this.state.is_accu = '1'; this.search(); } }
-                checked={ this.state.is_accu === '1' }>
-                是
-              </Radio>
-              <Radio
-                inline
-                name='is_accu'
-                onClick={ () => { this.state.is_accu = '0'; this.search(); } }
-                checked={ this.state.is_accu !== '1' }>
-                否 
-              </Radio>
+              <CheckboxGroup name='statItems' value={ this.state.statItems } onChange={ (newValue) => { this.setState({ statItems: newValue }) } } style={ { marginTop: '8px' } }>
+                <div style={ { float: 'left' } }><Checkbox2 value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>新建的</span></div>
+                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='resolve'/><span style={ { marginLeft: '2px' } }>已解决的</span></div>
+                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='close'/><span style={ { marginLeft: '2px' } }>已关闭的</span></div>
+              </CheckboxGroup>
             </Col>
           </FormGroup>
           <FormGroup>
@@ -212,18 +203,25 @@ export default class Trend extends Component {
                 options={ [ { value: 'day', label: '天' }, { value: 'week', label: '周' }, { value: 'month', label: '月' } ] }/>
             </Col>
             <Col sm={ 5 } componentClass={ ControlLabel }>
-              统计项 
+             是否累计
             </Col>
-            <Col sm={ 4 }>
-              <CheckboxGroup name='statItems' value={ this.state.statItems } onChange={ (newValue) => { this.setState({ statItems: newValue }) } } style={ { marginTop: '8px' } }>
-                <div style={ { float: 'left' } }><Checkbox2 value='new' style={ { float: 'left' } }/><span>新建的</span></div>
-                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='resolve'/><span>已解决的</span></div>
-                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='close'/><span >已关闭的</span></div>
-              </CheckboxGroup>
+            <Col sm={ 2 }>
+              <Radio
+                inline
+                name='is_accu'
+                onClick={ () => { this.state.is_accu = '1'; this.search(); } }
+                checked={ this.state.is_accu === '1' }>
+                是
+              </Radio>
+              <Radio
+                inline
+                name='is_accu'
+                onClick={ () => { this.state.is_accu = '0'; this.search(); } }
+                checked={ this.state.is_accu !== '1' }>
+                否
+              </Radio>
             </Col>
-          </FormGroup>
-          <FormGroup>
-            <Col sm={ 12 }>
+            <Col sm={ 2 }>
               <Button
                 bsStyle='link'
                 onClick={ () => { this.setState({ issueFilterShow: !this.state.issueFilterShow }) } }
@@ -286,7 +284,7 @@ export default class Trend extends Component {
           { this.state.shape === 'bar' && !hasErr && 
           <div className='report-shape-container'>
             <BarChart
-              width={ layout.containerWidth - 60 }
+              width={ layout.containerWidth * 0.95 }
               height={ 380 }
               barSize={ 40 }
               data={ data }
@@ -304,7 +302,7 @@ export default class Trend extends Component {
           { this.state.shape === 'line' && !hasErr &&
           <div className='report-shape-container'>
             <LineChart
-              width={ layout.containerWidth - 60 }
+              width={ layout.containerWidth * 0.95 }
               height={ 380 }
               data={ data }
               style={ { margin: '25px auto' } }>
@@ -321,7 +319,7 @@ export default class Trend extends Component {
           { this.state.shape === 'area' && !hasErr &&
           <div className='report-shape-container'>
             <AreaChart 
-              width={ layout.containerWidth - 60 } 
+              width={ layout.containerWidth * 0.95 } 
               height={ 380 } 
               data={ data }
               style={ { margin: '25px auto' } }>

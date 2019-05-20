@@ -241,7 +241,7 @@ export default class Worklog extends Component {
           { this.state.shape === 'bar' && data.length > 0 && 
           <div className='report-shape-container'>
             <BarChart
-              width={ layout.containerWidth - 60 }
+              width={ layout.containerWidth * 0.95 }
               height={ 380 }
               data={ data }
               barSize={ 40 }
@@ -256,7 +256,7 @@ export default class Worklog extends Component {
           { this.state.shape === 'line' && data.length > 0 &&
           <div className='report-shape-container'>
             <LineChart 
-              width={ layout.containerWidth - 60 } 
+              width={ layout.containerWidth * 0.95 } 
               height={ 380 } 
               data={ data }
               style={ { margin: '25px auto' } }>

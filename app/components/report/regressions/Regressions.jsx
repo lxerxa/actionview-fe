@@ -225,7 +225,7 @@ export default class Regressions extends Component {
           { shape === 'bar' && data.length > 0 && 
           <div className='report-shape-container'>
             <BarChart
-              width={ layout.containerWidth - 60 }
+              width={ layout.containerWidth * 0.95 }
               height={ 380 }
               barSize={ 40 }
               data={ data }
