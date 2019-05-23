@@ -194,7 +194,6 @@ export default class Regressions extends Component {
           query={ query }
           searchShow={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
-          notShowBlocks={ [ 'time' ] }
           options={ options }
           refresh={ refresh } />
         <div className='report-conds-style'>
@@ -260,7 +259,7 @@ export default class Regressions extends Component {
           </div> }
           { data.length > 0 && 
           <div style={ { float: 'left', width: '100%', marginBottom: '30px' } }>
-            <span>注：该图表最多统计满足当前检索条件下的1000条结果。</span>
+            <span>注：该图表最多统计满足当前检索条件下的10000条结果。</span>
             { this.state.stat_dimension && 
             <Table responsive bordered={ true }>
               <thead>

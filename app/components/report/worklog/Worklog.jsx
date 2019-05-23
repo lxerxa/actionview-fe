@@ -86,7 +86,7 @@ export default class Worklog extends Component {
   }
 
   render() {
-    const COLORS = [ '#3b7fc4', '#815b3a', '#f79232', '#d39c3f', '#654982', '#4a6785', '#8eb021', '#f15c75', '#ac707a' ];
+    const COLORS = [ '#3b7fc4', '#815b3a', '#8eb021', '#d39c3f', '#654982', '#4a6785', '#f79232', '#f15c75', '#ac707a' ];
     const sortOptions = [ { value: 'default', label: '默认顺序' }, { value: 'total_asc', label: '总数升序' }, { value: 'total_desc', label: '总数降序' } ];
 
     const { 
@@ -248,7 +248,7 @@ export default class Worklog extends Component {
               style={ { margin: '25px auto' } }>
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis dataKey='name' />
-              <YAxis yAxisId='left' orientation='left' stroke='#8884d8' />
+              <YAxis />
               <Tooltip formatter={ (value) => { return ttFormat(value, w2m, d2m) } }/>
               <Bar name='工时' yAxisId='left' dataKey='value' fill='#3b7fc4'/>
             </BarChart>

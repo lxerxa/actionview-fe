@@ -78,7 +78,7 @@ export default class List extends Component {
     const { i18n, project, filters, loading, saveLoading, edit, reset } = this.props;
 
     const blockTitles = { 
-      issue: '问题分布图',
+      issues: '问题分布图',
       trend: '问题趋势图',
       worklog: '人员工作日志报告',
       timetracks: '时间跟踪报告',
@@ -87,7 +87,7 @@ export default class List extends Component {
     };
 
     const blockIcons = { 
-      issue: 'fa fa-pie-chart',
+      issues: 'fa fa-pie-chart',
       trend: 'fa fa-line-chart',
       worklog: 'fa fa-bar-chart',
       timetracks: 'fa fa-clock-o',
@@ -97,7 +97,7 @@ export default class List extends Component {
 
     const blockHeaders = {};
     const blockItems = {};
-    const blocks = [ 'issue', 'trend', 'worklog', 'timetracks', 'regressions', 'others' ];
+    const blocks = [ 'issues', 'trend', 'worklog', 'timetracks', 'regressions', 'others' ];
     _.forEach(blocks, (v, i) => {
       blockHeaders[v] = (
         <div className='report-list-header' key={ i }>
@@ -128,10 +128,10 @@ export default class List extends Component {
       </div>
       :
       <div style={ { marginTop: '15px', marginBottom: '30px' } } className='report-container'>
-        <Panel header={ blockHeaders['issue'] }>
+        <Panel header={ blockHeaders['issues'] }>
           <Table responsive>
             <tbody>
-              { blockItems['issue'] }
+              { blockItems['issues'] }
             </tbody>
           </Table>
         </Panel>

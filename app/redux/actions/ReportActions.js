@@ -80,6 +80,13 @@ export function regressions(key, qs) {
   });
 }
 
+export function issues(key, qs) {
+  return asyncFuncCreator({
+    constant: 'REPORT_ISSUES_INDEX',
+    promise: (client) => client.request({ url: '/project/' + key + '/report/issues' + (qs ? '?' + qs : '') })
+  });
+}
+
 export function getOptions(key) {
   return asyncFuncCreator({
     constant: 'REPORT_OPTIONS',

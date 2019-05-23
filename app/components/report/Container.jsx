@@ -6,6 +6,7 @@ import * as ReportActions from 'redux/actions/ReportActions';
 
 const qs = require('qs');
 const List = require('./List');
+const Issues = require('./issues/Issues');
 const Worklog = require('./worklog/Worklog');
 const Trend = require('./trend/Trend');
 const TimeTracks = require('./timetracks/TimeTracks');
@@ -110,6 +111,11 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
+  async issues(query) {
+    await this.props.actions.issues(this.pid, qs.stringify(query || {}));
+    return this.props.report.ecode;
+  }
+
   render() {
     const { location: { query={} }, params: { mode } } = this.props;
     return (
@@ -166,6 +172,17 @@ export default class Container extends Component {
           saveFilter={ this.saveFilter.bind(this) }
           project={ this.props.project.item }
           index={ this.regressions.bind(this) }
+          query={ query }
+          refresh={ this.refresh.bind(this) }
+          gotoIssue={ this.gotoIssue.bind(this) }
+          { ...this.props.report }/> }
+        { mode == 'issues' &&
+        <Issues
+          i18n={ this.props.i18n }
+          layout={ this.props.layout }
+          saveFilter={ this.saveFilter.bind(this) }
+          project={ this.props.project.item }
+          index={ this.issues.bind(this) }
           query={ query }
           refresh={ this.refresh.bind(this) }
           gotoIssue={ this.gotoIssue.bind(this) }

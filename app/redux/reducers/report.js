@@ -21,7 +21,9 @@ const initialState = {
   timetrackItem: [], 
   timetrackItemLoading: false,
   regressions: [],
-  regressionsLoading: false };
+  regressionsLoading: false,
+  issues: [],
+  issuesLoading: false };
 
 export default function report(state = initialState, action) {
   switch (action.type) {
@@ -160,6 +162,19 @@ export default function report(state = initialState, action) {
 
     case t.REPORT_REGRESSIONS_INDEX_FAIL:
       return { ...state, regressionsLoading: false, error: action.error };
+
+    case t.REPORT_ISSUES_INDEX:
+      return { ...state, issuesLoading: true, issues: [] };
+
+    case t.REPORT_ISSUES_INDEX_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.issues = action.result.data;
+        state.options = _.assign({}, state.options, action.result.options);
+      }
+      return { ...state, issuesLoading: false, ecode: action.result.ecode };
+
+    case t.REPORT_ISSUES_INDEX_FAIL:
+      return { ...state, issuesLoading: false, error: action.error }
 
     default:
       return state;
