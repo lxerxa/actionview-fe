@@ -65,5 +65,5 @@ export const Dimensions = [
   { id: 'closer', name: '关闭者' },
   { id: 'epic', name: 'Epic' },
   { id: 'sprint', name: 'Sprint' },
-  { id: 'label', name: '标签' }
+  { id: 'labels', name: '标签' }
 ];

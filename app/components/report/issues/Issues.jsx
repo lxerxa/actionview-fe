@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, Checkbox } from 'react-bootstrap';
 import Select from 'react-select';
-import { PieChart, Pie, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
+import { LineChart, Line, PieChart, Pie, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
 import { Dimensions } from '../../share/Constants';
 import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
@@ -11,12 +11,14 @@ import SaveFilterModal from '../SaveFilterModal';
 const moment = require('moment');
 const img = require('../../../assets/images/loading.gif');
 
-export default class Regressions extends Component {
+export default class Issues extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      stat_dimension: '', 
-      his_resolvers: '', 
+      stat_x: '', 
+      stat_y: '', 
+      shape: 'pie',
+      sort: 'default',
       issueFilterShow: false, 
       saveFilterShow: false };
     this.gotoIssue = this.gotoIssue.bind(this);
@@ -30,8 +32,8 @@ export default class Regressions extends Component {
     options: PropTypes.object.isRequired,
     optionsLoading: PropTypes.bool.isRequired,
     query: PropTypes.object,
-    regressions: PropTypes.array.isRequired,
-    regressionsLoading: PropTypes.bool.isRequired,
+    issues: PropTypes.array.isRequired,
+    issuesLoading: PropTypes.bool.isRequired,
     refresh: PropTypes.func.isRequired,
     gotoIssue: PropTypes.func.isRequired,
     saveFilter: PropTypes.func.isRequired,
@@ -50,8 +52,8 @@ export default class Regressions extends Component {
       index(newQuery);
     }
     this.setState({ 
-      stat_dimension: newQuery.stat_dimension || '', 
-      his_resolvers: newQuery.his_resolvers || '' 
+      stat_x: newQuery.stat_x || 'type', 
+      stat_y: newQuery.stat_y || '' 
     });
   }
 
@@ -59,24 +61,24 @@ export default class Regressions extends Component {
     const { query={}, refresh } = this.props;
 
     const newQuery = _.assign({}, query);
-    if (this.state.stat_dimension) {
-      newQuery.stat_dimension = this.state.stat_dimension; 
+    if (this.state.stat_x) {
+      newQuery.stat_x = this.state.stat_x; 
     } else {
-      delete newQuery.stat_dimension;
+      delete newQuery.stat_x;
     }
 
-    if (this.state.his_resolvers) {
-      newQuery.his_resolvers = this.state.his_resolvers;
+    if (this.state.stat_y) {
+      newQuery.stat_y = this.state.stat_y;
     } else {
-      delete newQuery.his_resolvers;
+      delete newQuery.stat_y;
     }
 
     refresh(newQuery);
   }
 
-  gotoIssue(nos) {
-    const { gotoIssue } = this.props;
-    gotoIssue({ title: nos.join(',') });
+  gotoIssue(q) {
+    const { query, gotoIssue } = this.props;
+    gotoIssue(_.assign({}, _.omit(query, [ 'stat_x', 'stat_y' ]), q));
   }
 
   render() {
@@ -88,35 +90,29 @@ export default class Regressions extends Component {
       filters, 
       options, 
       optionsLoading, 
-      regressions, 
-      regressionsLoading, 
+      issues, 
+      issuesLoading, 
       refresh, 
       query, 
       saveFilter } = this.props;
 
-    const users = options.users || [];
+    const { stat_x, stat_y, shape, sort } = this.state;
+
+    const COLORS = [ '#3b7fc4', '#815b3a', '#8eb021', '#d39c3f', '#654982', '#4a6785', '#f79232', '#f15c75', '#ac707a' ];
+    const sortOptions = [ { value: 'default', label: '默认顺序' }, { value: 'total_asc', label: '总数升序' }, { value: 'total_desc', label: '总数降序' } ];
 
     let sqlTxt = '';
     if (!optionsLoading) {
-      const stat_dimension = query['stat_dimension'];
-      if (stat_dimension) {
-        const ind = _.findIndex(Dimensions, { id: stat_dimension });
-        sqlTxt = '统计维度～' + (ind !== -1 ? Dimensions[ind].name : '');
+      const stat_x = query['stat_x'];
+      if (stat_x) {
+        const ind = _.findIndex(Dimensions, { id: stat_x });
+        sqlTxt = 'X轴～' + (ind !== -1 ? Dimensions[ind].name : '');
       }
 
-      const his_resolvers = query['his_resolvers'];
-      if (his_resolvers) {
-        const resolvers = his_resolvers.split(',');
-        const resolverNames = [];
-        _.forEach(resolvers, (resolver) => {
-          let index = -1;
-          if ((index = _.findIndex(users, { id: resolver })) !== -1) {
-            resolverNames.push(users[index].name);
-          }
-        });
-        if (resolverNames.length > 0) {
-          sqlTxt = (sqlTxt ? (sqlTxt + ' | ') : '') + '历史解决者～' + resolverNames.join(',');
-        }
+      const stat_y = query['stat_y'];
+      if (stat_y) {
+        const ind = _.findIndex(Dimensions, { id: stat_y });
+        sqlTxt += (stat_x ? ' | ' : '') + 'Y轴～' + (ind !== -1 ? Dimensions[ind].name : '');
       }
 
       const issueSqlTxt = getCondsTxt(query, options);
@@ -125,32 +121,38 @@ export default class Regressions extends Component {
       }
     }
 
-    let shape = '';
-    const data = [];
-    if (this.state.stat_dimension) {
-      shape = 'bar';
-      _.forEach(regressions, (v) => { 
-        const tmp = {};
-        tmp.category = v.category;
-        tmp.ones = v.ones || [];
-        tmp.gt_ones = v.gt_ones || [];
-        tmp.ones_cnt = v.ones.length;
-        tmp.gt_ones_cnt = v.gt_ones.length;
-        tmp.total_cnt = tmp.ones_cnt + tmp.gt_ones_cnt;
-        data.push(tmp);
+    let showShape = shape;
+    if (stat_x != stat_y && stat_y && shape == 'pie') {
+      showShape = 'bar';
+    }
+
+    let data = [];
+    if (sort == 'total_asc') {
+      data = _.sortBy(issues, (v) => { return v.cnt });
+    } else if (sort == 'total_desc') {
+      data = _.sortBy(issues, (v) => { return -v.cnt });
+    } else {
+      data = issues;
+    }
+
+    if (stat_x != stat_y) {
+      _.forEach(data, (v) => {
+        _.forEach(v.y || [], (v2, i) => {
+          v['y_' + i + '_cnt' ] = v2.cnt;
+        });
       });
     } else {
-      shape = 'pie';
-      if (regressions.length > 0) {
-        data.push({ name: '一次通过', nos: regressions[0].ones, cnt: regressions[0].ones.length });
-        data.push({ name: '大于一次', nos: regressions[0].gt_ones, cnt: regressions[0].gt_ones.length });
-      }
+      _.forEach(data, (v) => {
+        if (v.y) {
+          delete v.y;
+        }
+      });
     }
 
     return ( 
       <div className='project-report-container'>
         <div className='report-title'>
-          问题解决回归分布 
+          问题分布图
           <Link to={ '/project/' + project.key + '/report' }>
             <Button bsStyle='link'>返回</Button>
           </Link>
@@ -158,27 +160,27 @@ export default class Regressions extends Component {
         <Form horizontal className='report-filter-form'>
           <FormGroup>
             <Col sm={ 1 } componentClass={ ControlLabel }>
-              统计维度
+              X轴
             </Col>
             <Col sm={ 3 }>
               <Select
                 simpleValue
                 placeholder='请选择'
-                value={ this.state.stat_dimension || null }
-                onChange={ (newValue) => { this.state.stat_dimension = newValue; this.search(); } }
+                clearable={ false }
+                value={ stat_x || null }
+                onChange={ (newValue) => { this.state.stat_x = newValue; this.search(); } }
                 options={ _.map(Dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
             <Col sm={ 1 } componentClass={ ControlLabel }>
-              历史解决者
+              Y轴
             </Col>
             <Col sm={ 3 }>
               <Select
                 simpleValue
-                multi
-                placeholder='选择解决者'
-                value={ this.state.his_resolvers }
-                onChange={ (newValue) => { this.state.his_resolvers = newValue; this.search(); } }
-                options={ _.map(users, (v) => { return { value: v.id, label: v.name } }) }/>
+                placeholder='请选择'
+                value={ this.state.stat_y || null }
+                onChange={ (newValue) => { this.state.stat_y = newValue; this.search(); } }
+                options={ _.map(Dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
             <Col sm={ 4 }>
               <Button
@@ -203,8 +205,24 @@ export default class Regressions extends Component {
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
+          <ButtonGroup className='report-shape-buttongroup'>
+            { (stat_x === stat_y || !stat_y) &&
+            <Button title='饼状图' style={ { height: '36px', backgroundColor: showShape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button> }
+            <Button title='柱状图' style={ { height: '36px', backgroundColor: showShape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
+            <Button title='折线图' style={ { height: '36px', backgroundColor: showShape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图
+</Button>
+          </ButtonGroup>
+          <div className='report-select-sort'>
+            <Select
+              simpleValue
+              clearable={ false }
+              placeholder='选择顺序'
+              value={ this.state.sort || 'default' }
+              onChange={ (newValue) => { this.setState({ sort: newValue }); } }
+              options={ sortOptions }/>
+          </div>
         </div>
-        { regressionsLoading ?
+        { issuesLoading ?
         <div style={ { height: '550px', paddingTop: '40px' } }>
           <div style={ { textAlign: 'center' } }>
             <img src={ img } className='loading'/>
@@ -221,7 +239,7 @@ export default class Regressions extends Component {
               <span>抱歉，暂无满足该检索条件的数据。</span>
             </div>
           </div> }
-          { shape === 'bar' && data.length > 0 && 
+          { showShape === 'bar' && data.length > 0 && 
           <div className='report-shape-container'>
             <BarChart
               width={ layout.containerWidth * 0.95 }
@@ -230,15 +248,33 @@ export default class Regressions extends Component {
               data={ data }
               style={ { margin: '25px auto' } }>
               <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='category' />
+              <XAxis dataKey='name' />
               <YAxis />
               <Tooltip />
-              <Legend />
-              <Bar dataKey='ones_cnt' name='一次回归' stackId='a' fill='#4572A7' />
-              <Bar dataKey='gt_ones_cnt' name='大于一次' stackId='a' fill='#AA4643' />
+              { stat_x !== stat_y && stat_y && <Legend /> }
+              { stat_x !== stat_y && stat_y ? 
+                _.map(data[0].y || [], (v, i) => <Bar key={ i } dataKey={ 'y_' + i + '_cnt' } stackId='a' name={ v.name } fill={ COLORS[i % COLORS.length] } /> ) : 
+                <Bar dataKey='cnt' name='个数' fill='#3b7fc4' /> }
             </BarChart>
           </div> }
-          { shape === 'pie' && data.length > 0 &&
+          { showShape === 'line' && data.length > 0 &&
+          <div className='report-shape-container'>
+            <LineChart
+              width={ layout.containerWidth * 0.95 }
+              height={ 380 }
+              data={ data }
+              style={ { margin: '25px auto' } }>
+              <XAxis dataKey='name' />
+              <YAxis/>
+              <CartesianGrid strokeDasharray='3 3'/>
+              <Tooltip />
+              { stat_x !== stat_y && stat_y && <Legend /> }
+              { stat_x !== stat_y && stat_y ? 
+                _.map(data[0].y || [], (v, i) => <Line key={ i } dataKey={ 'y_' + i + '_cnt' } name={ v.name } stroke={ COLORS[i % COLORS.length] } /> ) : 
+                <Line dataKey='cnt' name='个数' stroke='#d04437' /> }
+            </LineChart>
+          </div> }
+          { showShape === 'pie' && data.length > 0 &&
           <div className='report-shape-container'>
             <PieChart
               width={ 800 }
@@ -251,8 +287,7 @@ export default class Regressions extends Component {
                 cy={ 200 }
                 outerRadius={ 130 }
                 label>
-                <Cell fill='#3b7fc4'/>
-                <Cell fill='#f79232'/>
+                { _.map(data, (v, i) => <Cell key={ i } fill={ COLORS[i % COLORS.length] } /> ) }
               </Pie>
               <Tooltip />
             </PieChart>
@@ -260,42 +295,39 @@ export default class Regressions extends Component {
           { data.length > 0 && 
           <div style={ { float: 'left', width: '100%', marginBottom: '30px' } }>
             <span>注：该图表最多统计满足当前检索条件下的10000条结果。</span>
-            { this.state.stat_dimension && 
+            { (stat_x == stat_y || !stat_y) ? 
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
-                  <th>{ _.find(Dimensions, { id: this.state.stat_dimension }).name }</th>
-                  <th>一次回归</th>
-                  <th>大于一次</th>
-                  <th>一次通过率</th>
+                  <th>{ stat_x ? _.find(Dimensions, { id: stat_x }).name : '' }</th>
+                  <th>个数</th>
                 </tr>
               </thead>
               <tbody>
                 { _.map(data, (v, i) => {
                   return (
                     <tr key={ i }>
-                      { this.state.stat_dimension && <td>{ v.category }</td> }
-                      <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue(v.ones); } }>{ v.ones_cnt }</a></td>
-                      <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue(v.gt_ones); } }>{ v.gt_ones_cnt }</a></td>
-                      <td>{ _.round(v.ones_cnt / v.total_cnt * 100, 2) + '%' }</td>
+                      <td>{ v.name }</td>
+                      <td><a href='#' onClick={ (e) => { e.preventDefault(); const query = {}; query[stat_x] = v.id; this.gotoIssue(query); } }>{ v.cnt }</a></td>
                     </tr> ) }) }
               </tbody>
-            </Table> } 
-            { !this.state.stat_dimension && 
+            </Table> 
+            : 
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
-                  <th>一次回归</th>
-                  <th>大于一次</th>
-                  <th>一次通过率</th>
+                  <th>维度</th>
+                  { _.map(data[0].y, (v, i) => <th key={ i }>{ v.name }</th>) }
+                  {/*<th>合计</th>*/}
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue(data[0].nos); } }>{ data[0].cnt }</a></td>
-                  <td><a href='#' onClick={ (e) => { e.preventDefault(); this.gotoIssue(data[1].nos); } }>{ data[1].cnt }</a></td>
-                  <td>{ _.round(data[0].cnt / (data[0].cnt + data[1].cnt) * 100, 2) + '%' }</td>
-                </tr>
+                { _.map(data, (v, i) => 
+                <tr key={ i }>
+                  <td>{ v.name }</td>
+                  { _.map(v.y, (v2, i) => <td key={ i }><a href='#' onClick={ (e) => { e.preventDefault(); const query = {}; query[stat_x] = v.id; query[stat_y] = v2.id; this.gotoIssue(query); } }>{ v2.cnt }</a></td>) }
+                  {/*<td><a href='#' onClick={ (e) => { e.preventDefault(); const query = {}; query[stat_x] = v.id; this.gotoIssue(query); } }>{ _.reduce(v.y, (sum, v) => { return sum + v.cnt }, 0) }</a></td>*/}
+                </tr>) }
               </tbody>
             </Table> }
           </div> }
