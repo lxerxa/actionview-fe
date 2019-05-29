@@ -240,18 +240,6 @@ export class IssueFilterList extends Component {
         { this.state.memberFilterShow &&
         <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
-            经办人
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择经办人'
-              value={ this.state.assignee }
-              onChange={ (newValue) => { this.state.assignee = newValue; this.search(); } }
-              options={ userOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
             报告人
           </Col>
           <Col sm={ 3 }>
@@ -261,6 +249,18 @@ export class IssueFilterList extends Component {
               placeholder='选择报告人'
               value={ this.state.reporter }
               onChange={ (newValue) => { this.state.reporter = newValue; this.search(); } }
+              options={ userOptions }/>
+          </Col>
+          <Col sm={ 1 } componentClass={ ControlLabel }>
+            经办人
+          </Col>
+          <Col sm={ 3 }>
+            <Select
+              simpleValue
+              multi
+              placeholder='选择经办人'
+              value={ this.state.assignee }
+              onChange={ (newValue) => { this.state.assignee = newValue; this.search(); } }
               options={ userOptions }/>
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -439,8 +439,8 @@ export function getCondsTxt(query, options) {
   }
 
   const memberConds = [
-    { key: 'assignee', name: '经办人' },
     { key: 'reporter', name : '报告人' },
+    { key: 'assignee', name: '经办人' },
     { key: 'watcher', name : '关注者' },
     { key: 'resolver', name : '解决者' },
     { key: 'closer', name : '关闭者' }

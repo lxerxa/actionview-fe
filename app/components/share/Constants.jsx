@@ -61,6 +61,7 @@ export const Dimensions = [
   { id: 'resolve_version', name: '解决版本' },
   { id: 'module', name: '模块' },
   { id: 'reporter', name: '报告者' },
+  { id: 'assignee', name: '经办人' },
   { id: 'resolver', name: '解决者' },
   { id: 'closer', name: '关闭者' },
   { id: 'epic', name: 'Epic' },

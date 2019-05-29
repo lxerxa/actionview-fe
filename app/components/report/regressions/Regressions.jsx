@@ -168,7 +168,7 @@ export default class Regressions extends Component {
                 onChange={ (newValue) => { this.state.stat_dimension = newValue; this.search(); } }
                 options={ _.map(Dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               历史解决者
             </Col>
             <Col sm={ 3 }>
@@ -180,7 +180,7 @@ export default class Regressions extends Component {
                 onChange={ (newValue) => { this.state.his_resolvers = newValue; this.search(); } }
                 options={ _.map(users, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
-            <Col sm={ 4 }>
+            <Col sm={ 3 }>
               <Button
                 bsStyle='link'
                 onClick={ () => { this.setState({ issueFilterShow: !this.state.issueFilterShow }) } }

@@ -10,6 +10,7 @@ import { notify } from 'react-notify-toast';
 const $ = require('$');
 const moment = require('moment');
 const DelNotify = require('./DelNotify');
+const CheckoutNotify = require('./CheckoutNotify');
 const CreateModal = require('./CreateModal');
 const CopyModal = require('./CopyModal');
 const MoveModal = require('./MoveModal');
@@ -26,6 +27,7 @@ export default class List extends Component {
     this.state = { 
       copyModalShow: false,
       moveModalShow: false,
+      checkoutNotifyShow: false, 
       delNotifyShow: false, 
       operateShow: false, 
       hoverRowId: '', 
@@ -37,6 +39,7 @@ export default class List extends Component {
       name: '' };
 
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.checkoutNotifyClose = this.checkoutNotifyClose.bind(this);
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.reload = this.reload.bind(this);
@@ -94,6 +97,10 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
+  checkoutNotifyClose() {
+    this.setState({ checkoutNotifyShow: false });
+  }
+
   createModalClose() {
     this.setState({ createModalShow: false });
   }
@@ -130,7 +137,7 @@ export default class List extends Component {
 
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { select, project_key, checkin, checkout } = this.props;
+    const { select, project_key, checkin, checkout, user } = this.props;
     await select(hoverRowId);
 
     if (eventKey === 'checkin') {
@@ -141,11 +148,16 @@ export default class List extends Component {
         notify.show('已加锁。', 'success', 2000);
       }
     } else if (eventKey === 'checkout') {
-      const ecode = await checkout(hoverRowId);
-      if (ecode !== 0) {
-        notify.show('文档解锁失败。', 'error', 2000);
+      const { selectedItem } = this.props;
+      if (selectedItem.checkin && selectedItem.checkin.user.id !== user.id) {
+        this.setState({ checkoutNotifyShow: true });
       } else {
-        notify.show('已解锁。', 'success', 2000);
+        const ecode = await checkout(hoverRowId);
+        if (ecode !== 0) {
+          notify.show('文档解锁失败。', 'error', 2000);
+        } else {
+          notify.show('已解锁。', 'success', 2000);
+        }
       }
     } else if (eventKey === 'edit') {
       this.setState({ editModalShow: true });
@@ -192,6 +204,7 @@ export default class List extends Component {
       itemLoading, 
       reload, 
       checkin,
+      checkout,
       show,
       create, 
       del, 
@@ -321,7 +334,7 @@ export default class List extends Component {
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === files[i].id && !itemLoading && !(!_.isEmpty(files[i].checkin) && files[i].checkin.user.id !== user.id) &&
+          { operateShow && hoverRowId === files[i].id && !itemLoading && (!(!_.isEmpty(files[i].checkin) && files[i].checkin.user.id !== user.id) || options.permissions && options.permissions.indexOf('manage_project') !== -1) &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -333,7 +346,7 @@ export default class List extends Component {
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='edit'>编辑</MenuItem>
               { _.isEmpty(files[i].checkin) && <MenuItem eventKey='checkin'>加锁</MenuItem> }
-              { !_.isEmpty(files[i].checkin) && files[i].checkin.user.id == user.id && <MenuItem eventKey='checkout'>解锁</MenuItem> }
+              { !_.isEmpty(files[i].checkin) && (files[i].checkin.user.id == user.id || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) && <MenuItem eventKey='checkout'>解锁</MenuItem> }
               <MenuItem eventKey='copy'>复制</MenuItem>
               <MenuItem eventKey='move'>移动</MenuItem>
               <MenuItem eventKey='del'>删除</MenuItem>
@@ -419,6 +432,12 @@ export default class List extends Component {
               close={ this.delNotifyClose }
               data={ selectedItem }
               del={ del }/> }
+          { this.state.checkoutNotifyShow &&
+            <CheckoutNotify
+              show
+              close={ this.checkoutNotifyClose }
+              data={ selectedItem }
+              checkout={ checkout }/> }
           { this.state.createModalShow &&
             <CreateModal
               i18n={ i18n }
