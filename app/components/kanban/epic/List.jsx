@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-// import { Link } from 'react-router';
+import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 
@@ -19,6 +19,7 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
+    stateOptions: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
@@ -82,7 +83,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, options, collection, selectedItem, indexLoading, loading, del, update, index } = this.props;
+    const { i18n, options, stateOptions, collection, selectedItem, indexLoading, loading, del, update, index } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -99,9 +100,9 @@ export default class List extends Component {
         bgColor: ( <div className='epic-label' style={ { backgroundColor: collection[i].bgColor || '#ccc' } } /> ),
         issues: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
-            <li>已完成 - <strong>{ collection[i].completed || 0 }</strong></li>
-            <li>未完成 - <strong>{ collection[i].incompleted || 0 }</strong></li>
-            <li>不明确 - <strong>{ collection[i].inestimable || 0 }</strong></li>
+            <li>已完成 - <Link to={ '/project/' + collection[i].project_key + '/issue?' + 'epic=' + collection[i].id + '&state=' + (stateOptions.completed_states || []).join(',') }>{ collection[i].completed || 0 }</Link></li>
+            <li>未完成 - <Link to={ '/project/' + collection[i].project_key + '/issue?' + 'epic=' + collection[i].id + '&state=' + (stateOptions.incompleted_states || []).join(',') }><span style={ { color: 'red' } }>{ collection[i].incompleted || 0 }</span></Link></li>
+            <li>不明确 - { collection[i].inestimable || 0 }</li>
           </ul>
         ),
         operation: (

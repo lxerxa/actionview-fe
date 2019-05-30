@@ -524,6 +524,7 @@ export default class Container extends Component {
           indexLoading={ this.props.kanban.indexEpicLoading }
           loading={ this.props.kanban.epicLoading }
           collection={ this.props.kanban.epics }
+          stateOptions={ this.props.kanban.epicStates }
           selectedItem={ this.props.kanban.selectedEpicItem }
           gotoBacklog={ this.gotoBacklog.bind(this) }
           gotoIssueList={ this.gotoIssueList.bind(this) }

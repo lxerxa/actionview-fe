@@ -166,10 +166,10 @@ export default class List extends Component {
         <Panel header={ blockHeaders['others'] }>
           <Table responsive hover>
             <thead><tr>
-              <td>延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率延误率</td>
-              <td>完成率</td>
-              <td>bb</td>
-              <td>bb</td>
+              <td>待定</td>
+              <td>待定</td>
+              <td>待定</td>
+              <td>待定</td>
             </tr></thead>
           </Table>
         </Panel>

@@ -12,6 +12,7 @@ const initialState = {
   epicLoading: false,
   selectedEpicItem: {},
   epics: [],
+  epicStates: [],
   versions: [],
   loading: false, 
   rankLoading: false, 
@@ -161,6 +162,7 @@ export default function kanban(state = initialState, action) {
     case t.KANBAN_EPIC_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.epics = action.result.data;
+        state.epicStates = action.result.options;
       }
       return { ...state, indexEpicLoading: false, ecode: action.result.ecode };
     case t.KANBAN_EPIC_INDEX_FAIL:
