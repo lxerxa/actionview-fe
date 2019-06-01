@@ -676,8 +676,8 @@ export default class List extends Component {
         { this.state.resetModalShow &&
           <ResetStateModal show
             close={ () => { this.setState({ resetModalShow: false }); } }
+            options={ options }
             resetState={ resetState }
-            loading={ itemLoading }
             issue={ selectedItem }
             i18n={ i18n }/> }
         { this.state.copyModalShow &&

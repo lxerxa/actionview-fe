@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-//import { Link } from 'react-router';
+import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { FormGroup, FormControl, ButtonGroup, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
@@ -240,7 +240,7 @@ export default class List extends Component {
             <span className='table-td-title'>{ collection[i].name || '-' }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
-        count: collection[i].users ? collection[i].users.length : 0,
+        count: collection[i].users ? <Link to={ '/admin/user?group=' + collection[i].id }>{ collection[i].users.length }</Link> : 0,
         directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
         operation: (
           <div>

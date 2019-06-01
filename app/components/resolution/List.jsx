@@ -94,7 +94,7 @@ export default class List extends Component {
         description: collection[i].description ? collection[i].description : '-', 
         operation: !isGlobal ? (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading && collection[i].key != 'Unresolved' &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 

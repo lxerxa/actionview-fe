@@ -1234,8 +1234,8 @@ export default class DetailBar extends Component {
           <ResetStateModal 
             show
             close={ () => { this.setState({ resetModalShow: false }); } }
+            options={ options }
             resetState={ resetState }
-            loading={ itemLoading }
             issue={ data }
             i18n={ i18n }/> }
         { this.state.delNotifyShow &&

@@ -228,10 +228,10 @@ export function watch(key, id, flag) {
   });
 }
 
-export function resetState(key, id) {
+export function resetState(key, id, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_STATE_RESET',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/reset' })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id + '/reset', method: 'post', data: values })
   });
 }
 

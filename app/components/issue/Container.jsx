@@ -220,8 +220,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async resetState(id) {
-    await this.props.actions.resetState(this.pid, id);
+  async resetState(id, values) {
+    await this.props.actions.resetState(this.pid, id, values);
     return this.props.issue.ecode;
   }
 

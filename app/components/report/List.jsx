@@ -168,8 +168,8 @@ export default class List extends Component {
             <thead><tr>
               <td>待定</td>
               <td>待定</td>
-              <td>待定</td>
-              <td>待定</td>
+              <td/>
+              <td/>
             </tr></thead>
           </Table>
         </Panel>

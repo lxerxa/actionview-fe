@@ -9,6 +9,26 @@ const DelNotify = require('./DelNotify');
 const ConfigModal = require('./ConfigModal');
 const img = require('../../assets/images/loading.gif');
 
+const sysEvents = [
+  'create_issue',
+  'edit_issue',
+  'del_issue',
+  'add_comments',
+  'edit_comments',
+  'del_comments',
+  'add_worklog',
+  'edit_worklog',
+  'del_worklog',
+  'resolve_issue',
+  'close_issue',
+  'start_progress_issue',
+  'stop_progress_issue',
+  'assign_issue',
+  'move_issue',
+  'reopen_issue',
+  'normal'
+];
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -191,10 +211,10 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { !isGlobal && sysEvents.indexOf(collection[i].key || '') === -1 && <MenuItem eventKey='1'>编辑</MenuItem> }
               <MenuItem eventKey='2'>通知设置</MenuItem>
               { isGlobal && <MenuItem eventKey='3'>重置通知</MenuItem> }
-              { !isGlobal && <MenuItem eventKey='4'>删除</MenuItem> }
+              { !isGlobal && sysEvents.indexOf(collection[i].key || '') === -1 && <MenuItem eventKey='4'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
