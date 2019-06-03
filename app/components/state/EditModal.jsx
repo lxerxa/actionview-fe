@@ -4,7 +4,7 @@ import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from '
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
-import { stateCategories } from '../share/Constants';
+import { StateCategories } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -79,7 +79,7 @@ export default class EditModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { id, name, category, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
-    const categoryOptions = _.map(stateCategories, (v) => {
+    const categoryOptions = _.map(StateCategories, (v) => {
       return {
         value: v.id,
         label: v.name

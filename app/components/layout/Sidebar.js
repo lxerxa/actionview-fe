@@ -39,6 +39,8 @@ export default class Sidebar extends Component {
     const storage = window.localStorage;
     if (storage && storage.getItem('sideBarHide') === '1') {
       this.hideBar();
+    } else {
+      this.tackBar();
     }
 
     $(document).unbind('click').bind('click', function(e) {

@@ -12,7 +12,7 @@ const img = require('../../assets/images/loading.gif');
 export default class ConfigHeader extends Component {
   constructor(props) {
     super(props);
-    this.state = { createStepModalShow: false, saveNotify: false, previewModalShow: false, errMsg: '' };
+    this.state = { isChanged: false, createStepModalShow: false, saveNotify: false, previewModalShow: false };
     this.createStepModalClose = this.createStepModalClose.bind(this);
     this.saveNotifyClose = this.saveNotifyClose.bind(this);
     this.cancelNotifyClose = this.cancelNotifyClose.bind(this);
@@ -29,6 +29,7 @@ export default class ConfigHeader extends Component {
     collection2JSON: PropTypes.string.isRequired,
     saveLoading: PropTypes.bool.isRequired,
     options: PropTypes.object.isRequired,
+    setConfigChanged: PropTypes.func.isRequired,
     save: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired,
     createStep: PropTypes.func.isRequired
@@ -120,17 +121,20 @@ export default class ConfigHeader extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ errMsg: '', ecode: 0 });
+    const newCollection2JSON = JSON.stringify(nextProps.collection);
+    const { collection2JSON, setConfigChanged } = this.props;
+
+    const isChanged = (newCollection2JSON != nextProps.collection2JSON);
+    this.setState({ isChanged });
+    setConfigChanged(isChanged);
   }
 
   render() {
-    const { createStep, options, pathname, collection, collection2JSON, workflowName, saveLoading, ecode } = this.props;
-
-    const newCollection2JSON = JSON.stringify(collection);
+    const { createStep, options, pathname, collection, collection2JSON, workflowName, saveLoading } = this.props;
 
     return (
       <div>
-        { newCollection2JSON !== collection2JSON && collection.length > 0 && 
+        { this.state.isChanged && collection.length > 0 && 
         <div className='workflow-config-notice'>
           <span><i className='fa fa-exclamation-triangle'></i>&nbsp;&nbsp;配置已修改，需保存后才能生效。</span>
           <Button 

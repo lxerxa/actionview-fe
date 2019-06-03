@@ -36,9 +36,9 @@ export class IssueFilterList extends Component {
     super(props);
     this.state = { 
       baseFilterShow: true,
-      memberFilterShow: true,
-      timeFilterShow: true,
-      agileFilterShow: true
+      memberFilterShow: false,
+      timeFilterShow: false,
+      agileFilterShow: false 
     }
 
     _.forEach(filters, (v) => {
@@ -110,8 +110,8 @@ export class IssueFilterList extends Component {
     return (
       <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } } className={ !searchShow && 'hide' }>
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          基本字段
           <span className='direct-button' onClick={ () => this.setState({ baseFilterShow: !this.state.baseFilterShow }) } title={ this.state.baseFilterShow ? '收缩' : '展开' }>
+            <span style={ { marginRight: '2px' } }>基本字段</span>
             { this.state.baseFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
           </span>
         </div>
@@ -232,8 +232,8 @@ export class IssueFilterList extends Component {
           </Col>
         </FormGroup> }
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          人员
           <span className='direct-button' onClick={ () => this.setState({ memberFilterShow: !this.state.memberFilterShow }) } title={ this.state.memberFilterShow ? '收缩' : '展开' }>
+            <span style={ { marginRight: '2px' } }>人员</span>
             { this.state.memberFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
           </span>
         </div>
@@ -307,8 +307,8 @@ export class IssueFilterList extends Component {
         </FormGroup> }
         { notShowBlocks.indexOf('time') === -1 &&
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          时间 
           <span className='direct-button' onClick={ () => this.setState({ timeFilterShow: !this.state.timeFilterShow }) } title={ this.state.timeFilterShow ? '收缩' : '展开' }>
+            <span style={ { marginRight: '2px' } }>时间</span>
             { this.state.timeFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
           </span>
         </div> }
@@ -362,13 +362,14 @@ export class IssueFilterList extends Component {
               onChange={ (newValue) => { this.setState({ expect_complete_time: newValue }); this.search(); } }/>
           </Col>
         </FormGroup> }
+        { notShowBlocks.indexOf('agile') === -1 &&
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          敏捷迭代 
           <span className='direct-button' onClick={ () => this.setState({ agileFilterShow: !this.state.agileFilterShow }) } title={ this.state.agileFilterShow ? '收缩' : '展开' }>
+            <span style={ { marginRight: '2px' } }>敏捷迭代</span> 
             { this.state.agileFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
           </span>
-        </div>
-        { this.state.agileFilterShow &&
+        </div> }
+        { this.state.agileFilterShow && notShowBlocks.indexOf('agile') === -1 &&
         <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             Epic 

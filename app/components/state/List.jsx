@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
+import { StateCategories } from '../share/Constants';
 
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -80,8 +81,6 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const categoryMap = { new: '新建', inprogress: '进行中', completed: '完成' };
-
     const states = [];
     const stateNum = collection.length;
     for (let i = 0; i < stateNum; i++) {
@@ -97,14 +96,14 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
-        category: categoryMap[collection[i].category] ? categoryMap[collection[i].category] : '-',
+        category: _.find(StateCategories, { id: collection[i].category }) ? _.find(StateCategories, { id: collection[i].category }).name : '-',
         workflow: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             { _.isEmpty(collection[i].workflows) ? '-' : _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }
           </ul> ),
         operation: !isGlobal ? (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading && collection[i].key !== 'Open' &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 

@@ -87,7 +87,7 @@ export default class Header extends Component {
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'>新建问题的解决结果初始值是未解决。<br/>只能删除没有应用到项目问题中的解决结果。</div>
+          <div className='info-content'>新建问题时如果没有指定解决结果，默认初始值是未解决。<br/>只能删除没有应用到项目问题中的解决结果。</div>
         </div>
         { this.state.createModalShow && 
           <CreateModal 
