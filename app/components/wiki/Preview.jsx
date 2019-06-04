@@ -11,6 +11,7 @@ const loadingImg = require('../../assets/images/loading.gif');
 const SimpleMDE = require('SimpleMDE');
 
 const DelNotify = require('./DelNotify');
+const CheckoutNotify = require('./CheckoutNotify');
 const DelFileModal = require('./DelFileModal');
 const EditModal = require('./EditModal');
 const VersionView = require('./VersionView');
@@ -24,6 +25,7 @@ export default class Preview extends Component {
       operate: '', 
       version: '', 
       delNotifyShow: false, 
+      checkoutNotifyShow: false, 
       editModalShow: false, 
       versionViewShow: false, 
       selectedFile: {},
@@ -76,12 +78,17 @@ export default class Preview extends Component {
 
   async checkout() {
     this.state.operate = 'checkout';
-    const { checkout, wid } = this.props;
-    const ecode = await checkout(wid);
-    if (ecode !== 0) {
-      notify.show('文档解锁失败。', 'error', 2000);
+
+    const { checkout, item, user } = this.props;
+    if (item.checkin && item.checkin.user.id !== user.id) {
+      this.setState({ checkoutNotifyShow: true });
     } else {
-      notify.show('已解锁。', 'success', 2000);
+      const ecode = await checkout(item.id);
+      if (ecode !== 0) {
+        notify.show('文档解锁失败。', 'error', 2000);
+      } else {
+        notify.show('已解锁。', 'success', 2000);
+      }
     }
   }
 
@@ -109,6 +116,10 @@ export default class Preview extends Component {
 
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
+  }
+
+  checkoutNotifyClose() {
+    this.setState({ checkoutNotifyShow: false });
   }
 
   editModalClose() {
@@ -154,6 +165,7 @@ export default class Preview extends Component {
       del, 
       delFile,
       checkin,
+      checkout,
       show, 
       reload } = this.props;
 
@@ -252,7 +264,7 @@ export default class Preview extends Component {
           </span>
           :
           <span>
-            { item.checkin && !_.isEmpty(item.checkin) && item.checkin.user && item.checkin.user.id == user.id && 
+            { !_.isEmpty(item.checkin) && ((item.checkin.user && item.checkin.user.id === user.id) || options.permissions && options.permissions.indexOf('manage_project') !== -1) &&
             <span style={ { marginLeft: '8px' } }><a href='#' title='解锁' onClick={ (e) => { e.preventDefault(); this.checkout(); } }><i className='fa fa-unlock'></i></a></span> } 
             { _.isEmpty(item.checkin) && 
             <span style={ { marginLeft: '8px' } }><a href='#' title='锁定' onClick={ (e) => { e.preventDefault(); this.checkin(); } }><i className='fa fa-lock'></i></a></span> }
@@ -313,6 +325,12 @@ export default class Preview extends Component {
           data={ item }
           reload = { reload }
           del={ del }/> }
+        { this.state.checkoutNotifyShow &&
+          <CheckoutNotify
+            show
+            close={ this.checkoutNotifyClose.bind(this) }
+            data={ item }
+            checkout={ checkout }/> }
         { this.state.versionViewShow &&
         <VersionView
           show

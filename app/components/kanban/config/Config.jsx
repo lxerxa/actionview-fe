@@ -48,7 +48,17 @@ export default class Config extends Component {
 
   condsTxt(query) {
     const { options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
-    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }, { label: '一月外', value: '-1m' }];
+    const dateOptions = [
+      { label: '1周内', value: '1w' },
+      { label: '2周内', value: '2w' },
+      { label: '1个月内', value: '1m' },
+      { label: '2个月内', value: '2m' },
+      { label: '3个月内', value: '3m' },
+      { label: '4个月内', value: '4m' },
+      { label: '5个月内', value: '5m' },
+      { label: '6个月内', value: '6m' },
+      { label: '1年内', value: '1y' }
+    ];
 
     const errorMsg = ' 检索值解析失败，条件无法正常显示。建议删除，或重新编辑保存。';
     const queryConds = [];

@@ -3,6 +3,7 @@ import { Modal, Button, Form, FormControl, FormGroup, ControlLabel, Col } from '
 import Select from 'react-select';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
 
 const img = require('../../../assets/images/loading.gif');
 
@@ -130,9 +131,19 @@ export default class FilterConfigModal extends Component {
     const stateOptions = _.map(states, (val) => { return { label: <span className={ 'state-' + val.category + '-label' }>{ val.name }</span>, value: val.id } });
     const priorityOptions = _.map(priorities, (val) => { return { label: val.name, value: val.id } });
     const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });
-    const dateOptions = [{ label: '一周内', value: '1w' }, { label: '两周内', value: '2w' }, { label: '一月内', value: '1m' }];
     const moduleOptions = _.map(modules, (val) => { return { label: val.name, value: val.id } });
     const labelOptions = _.map(labels.sort((a, b) => a.localeCompare(b)), (val) => { return { label: val, value: val } });
+    const dateOptions = [
+      { label: '1周内', value: '1w' }, 
+      { label: '2周内', value: '2w' }, 
+      { label: '1个月内', value: '1m' }, 
+      { label: '2个月内', value: '2m' }, 
+      { label: '3个月内', value: '3m' }, 
+      { label: '4个月内', value: '4m' }, 
+      { label: '5个月内', value: '5m' }, 
+      { label: '6个月内', value: '6m' },
+      { label: '1年内', value: '1y' }
+    ];
 
     return (
       <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
@@ -212,6 +223,32 @@ export default class FilterConfigModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsLabel'>
             <Col sm={ 2 } componentClass={ ControlLabel }>
+              模块
+            </Col>
+            <Col sm={ 4 }>
+              <Select
+                simpleValue
+                multi
+                placeholder='选择模块'
+                value={ this.state.module }
+                onChange={ (newValue) => { this.setState({ module: newValue }); } }
+                options={ moduleOptions }/>
+            </Col>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
+              标签
+            </Col>
+            <Col sm={ 4 }>
+              <Select
+                simpleValue
+                multi
+                placeholder='选择标签'
+                value={ this.state.labels }
+                onChange={ (newValue) => { this.setState({ labels: newValue }); } }
+                options={ labelOptions }/>
+            </Col>
+          </FormGroup>
+          <FormGroup controlId='formControlsLabel'>
+            <Col sm={ 2 } componentClass={ ControlLabel }>
               报告人 
             </Col>
             <Col sm={ 4 }>
@@ -258,32 +295,6 @@ export default class FilterConfigModal extends Component {
                 value={ this.state.updated_at }
                 onChange={ (newValue) => { this.setState({ updated_at: newValue }); } }
                 options={ dateOptions }/>
-            </Col>
-          </FormGroup>
-          <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              模块 
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择模块'
-                value={ this.state.module }
-                onChange={ (newValue) => { this.setState({ module: newValue }); } }
-                options={ moduleOptions }/>
-            </Col>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              标签 
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择标签'
-                value={ this.state.labels }
-                onChange={ (newValue) => { this.setState({ labels: newValue }); } }
-                options={ labelOptions }/>
             </Col>
           </FormGroup>
         </Modal.Body>

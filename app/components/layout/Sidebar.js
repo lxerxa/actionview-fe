@@ -118,6 +118,11 @@ export default class Sidebar extends Component {
     } else {
       $('#admin-workflow').removeClass('menu-active');
     }
+    if (/^\/project\/(\w+)\/report(\/\w+)?$/.test(pathname)) {
+      $('#report').addClass('menu-active');
+    } else {
+      $('#report').removeClass('menu-active');
+    }
     if (/^\/project\/(\w+)\/document(\/\w+)?$/.test(pathname)) {
       $('#document').addClass('menu-active');
     } else {
@@ -223,7 +228,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/activity' } activeClassName='menu-active'>活动</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/module' } activeClassName='menu-active'>模块</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/version' } activeClassName='menu-active'>版本</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/report' } activeClassName='menu-active'>报告</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/report' } activeClassName='menu-active' id='report'>报告</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/document' } activeClassName='menu-active' id='document'>文档</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/wiki' } activeClassName='menu-active' id='wiki'>Wiki</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/team' } activeClassName='menu-active'>成员</Link></li>

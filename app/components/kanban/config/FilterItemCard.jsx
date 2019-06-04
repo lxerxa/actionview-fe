@@ -100,7 +100,7 @@ export default class FilterItemCard extends Component {
   render() {
     const { id, name, condsTxt, isAllowedEdit, isDragging, connectDragSource, connectDropTarget, editFilter, delFilter } = this.props;
     const opacity = isDragging ? 0 : 1;
-    const styles = { float: 'right', cursor: 'pointer' };
+    const styles = { float: 'right', cursor: 'pointer', marginLeft: '5px' };
 
     return connectDragSource(connectDropTarget(
       <div style={ { opacity } } className='filter-dragcard dragcard'>
