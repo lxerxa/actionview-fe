@@ -250,7 +250,7 @@ export default class Worklog extends Component {
               <XAxis dataKey='name' />
               <YAxis />
               <Tooltip formatter={ (value) => { return ttFormat(value, w2m, d2m) } }/>
-              <Bar name='工时' yAxisId='left' dataKey='value' fill='#3b7fc4'/>
+              <Bar name='工时' stackId='a' dataKey='value' fill='#3b7fc4'/>
             </BarChart>
           </div> }
           { this.state.shape === 'line' && data.length > 0 &&
