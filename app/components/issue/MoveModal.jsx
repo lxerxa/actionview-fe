@@ -91,13 +91,13 @@ export default class MoveModal extends Component {
     const { i18n: { errMsg }, fields: { parent_id }, handleSubmit, invalid, submitting, issue } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '移动子任务 - ' + issue.no }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ parent_id.touched && parent_id.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ parent_id.touched && parent_id.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>移动到</ControlLabel>
             <Select.Async 
               clearable={ false } 

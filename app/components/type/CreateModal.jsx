@@ -101,18 +101,18 @@ export default class CreateModal extends Component {
     const typeOptions = [{ label: '标准', value: 'standard' }, { label: '子任务', value: 'subtask' }]; 
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>创建问题类型</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题类型名'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
             { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }

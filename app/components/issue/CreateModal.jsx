@@ -384,12 +384,12 @@ class CreateModal extends Component {
 
     return (
       <Modal 
+        show
         id='create-issue-dialog'
         backdrop='static'
         aria-labelledby='contained-modal-title-sm'
         onHide={ close } 
-        bsSize={ isFromWorkflow ? 'middle' : 'large' } 
-        { ...this.props }>
+        bsSize={ isFromWorkflow ? 'middle' : 'large' }>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : ('编辑问题' + ' - ' + data.no)) : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
@@ -433,7 +433,7 @@ class CreateModal extends Component {
 
               if (v.type === 'Text') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl 
@@ -450,7 +450,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'Number') { 
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 4 }>
                     <FormControl
@@ -467,7 +467,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'TextArea') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl
@@ -501,7 +501,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if ([ 'Select', 'MultiSelect', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ].indexOf(v.type) !== -1) {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 7 }>
                     <Select 
@@ -525,7 +525,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'CheckboxGroup') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <CheckboxGroup
@@ -560,7 +560,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 4 }>
                     <DateTime 
@@ -602,7 +602,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'Url') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 7 }>
                     <FormControl
@@ -619,7 +619,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'TimeTracking') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] && 'error' }>
+                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 4 }>
                     <FormControl

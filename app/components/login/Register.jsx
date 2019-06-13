@@ -100,15 +100,15 @@ class Register extends Component {
           </div>
           { this.state.emailShow ?
           <form onSubmit={ handleSubmit(this.handleSubmit) }>
-            <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
+            <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : null }>
               <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱'/>
               { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
             </FormGroup>
-            <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+            <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
               <FormControl disabled={ submitting } type='text' { ...name } placeholder='姓名'/>
               { name.touched && name.error && <HelpBlock style={ { marginLeft: '5px' } }>{ name.error }</HelpBlock> }
             </FormGroup>
-            <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : '' }>
+            <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : null }>
               <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>

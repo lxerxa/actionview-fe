@@ -88,18 +88,18 @@ export default class CreateModal extends Component {
     let colorStyle = { backgroundColor: color.value || '#cccccc', marginTop: '10px', marginRight: '8px' };
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } } onClick={ this.handlerHideColorPicker.bind(this) }>
           <Modal.Title id='contained-modal-title-la'>创建优先级</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body onClick={ this.handlerHideColorPicker.bind(this) } >
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='优先级名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : null }>
             <ControlLabel>图案颜色</ControlLabel>
             <FormControl disabled={ submitting } onClick={ this.handlerShowColorPicker.bind(this) } type='text' { ...color } value={ color.value } placeholder='#cccccc'/>
             <FormControl.Feedback>

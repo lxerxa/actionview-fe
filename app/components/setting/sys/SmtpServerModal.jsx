@@ -105,18 +105,18 @@ export default class SmtpServerModal extends Component {
       data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>SMPT服务器设置</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup validationState={ host.touched && host.error ? 'error' : '' }>
+          <FormGroup validationState={ host.touched && host.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>服务器</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...host } placeholder='主机名称或IP地址'/>
             { host.touched && host.error && <HelpBlock style={ { float: 'right' } }>{ host.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup validationState={ port.touched && port.error ? 'error' : '' }>
+          <FormGroup validationState={ port.touched && port.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>端口</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...port } placeholder='端口'/>
             { port.touched && port.error && <HelpBlock style={ { float: 'right' } }>{ port.error }</HelpBlock> }
@@ -132,12 +132,12 @@ export default class SmtpServerModal extends Component {
               onChange={ newValue => { encryption.onChange(newValue) } }
               placeholder='请选择'/>
           </FormGroup>
-          <FormGroup validationState={ username.touched && username.error ? 'error' : '' }>
+          <FormGroup validationState={ username.touched && username.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>帐号</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...username } placeholder='输入帐号'/>
             { username.touched && username.error && <HelpBlock style={ { float: 'right' } }>{ username.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup validationState={ !has_old_password.value && password.touched && password.error ? 'error' : '' }>
+          <FormGroup validationState={ !has_old_password.value && password.touched && password.error ? 'error' : null }>
             <ControlLabel>
               { !has_old_password.value ? <span className='txt-impt'>*</span> : <span/> }
               密码 

@@ -104,13 +104,13 @@ export default class CopyModal extends Component {
     const { i18n: { errMsg }, fields: { id, dest_path }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } bsSize='large' onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show bsSize='large' onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>移动{ data.d === 1 ? '目录' : '文档' } - { data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup validationState={ dest_path.touched && dest_path.error ? 'error' : '' }>
+          <FormGroup validationState={ dest_path.touched && dest_path.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>移动到</ControlLabel>
             <Select.Async
               clearable={ false }

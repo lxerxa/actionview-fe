@@ -66,7 +66,7 @@ export default class MultiOperateNotify extends Component {
     const operateTitle = operate === 'reopen' ? '重新打开' : (operate === 'create_index' ? '重新索引' : '关闭');
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>批处理项目 - { operateTitle }</Modal.Title>
         </Modal.Header>

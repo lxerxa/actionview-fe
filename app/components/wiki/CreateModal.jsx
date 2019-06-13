@@ -70,12 +70,12 @@ export default class CreateModal extends Component {
     const { i18n: { errMsg }, loading, path } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>新建文档</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
-          <FormGroup style={ { marginTop: '0px' } } validationState={ this.state.touched && !this.state.name && 'error' || '' }>
+          <FormGroup style={ { marginTop: '0px' } } validationState={ this.state.touched && !this.state.name && 'error' || null }>
             <InputGroup>
               <InputGroup.Button>
                 <Button> / { _.map(path, (v) => v.id === '0' ? '' : (v.name + ' / ')) }</Button>

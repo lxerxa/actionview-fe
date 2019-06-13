@@ -77,14 +77,14 @@ export default class CopyModal extends Component {
     const { i18n: { errMsg }, fields: { id, title }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '复制问题 - ' + data.no }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormControl type='hidden' { ...id }/>
-          <FormGroup controlId='formControlsText' validationState={ title.touched && title.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ title.touched && title.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>主题</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...title } placeholder='主题'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }

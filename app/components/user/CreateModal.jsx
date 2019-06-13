@@ -75,23 +75,23 @@ export default class CreateModal extends Component {
     const { i18n: { errMsg }, fields: { first_name, email, phone }, handleSubmit, invalid, submitting } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>添加用户</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>姓名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='姓名'/>
             { first_name.touched && first_name.error && <HelpBlock style={ { float: 'right' } }>{ first_name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>邮箱</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...email } placeholder='Email'/>
             { email.touched && email.error && <HelpBlock style={ { float: 'right' } }>{ email.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ phone.touched && phone.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ phone.touched && phone.error ? 'error' : null }>
             <ControlLabel>手机</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...phone } placeholder='手机号'/>
             { phone.touched && phone.error && <HelpBlock style={ { float: 'right' } }>{ phone.error }</HelpBlock> }

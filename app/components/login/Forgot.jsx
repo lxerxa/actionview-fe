@@ -91,7 +91,7 @@ class Forgot extends Component {
           </div>
           { this.state.emailShow ?
           <form onSubmit={ handleSubmit(this.handleSubmit) }>
-            <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : '' }>
+            <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : null }>
               <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱'/>
               { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
             </FormGroup>

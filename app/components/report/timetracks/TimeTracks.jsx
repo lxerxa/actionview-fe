@@ -275,7 +275,7 @@ export default class TimeTracks extends Component {
           </div> }
         </div>
         { this.state.saveFilterShow &&
-        <Summary
+        <SaveFilterModal
           show
           close={ () => { this.setState({ saveFilterShow: false }) } }
           filters={ filters.data || [] }

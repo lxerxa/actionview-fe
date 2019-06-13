@@ -68,18 +68,18 @@ export default class ResetPwdModal extends Component {
     const { i18n: { errMsg }, fields: { to, subject, contents }, handleSubmit, invalid, submitting } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>发送测试邮件</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ to.touched && to.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ to.touched && to.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>收件人</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...to } placeholder='收件人'/>
             { to.touched && to.error && <HelpBlock style={ { float: 'right' } }>{ to.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ subject.touched && subject.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ subject.touched && subject.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>主题</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...subject } placeholder='主题'/>
             { subject.touched && subject.error && <HelpBlock style={ { float: 'right' } }>{ subject.error }</HelpBlock> }

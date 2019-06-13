@@ -47,8 +47,7 @@ export default class CopyModal extends Component {
 
   componentWillMount() {
     const { initializeForm, data } = this.props;
-    const copyData = _.clone(data);
-    _.extend(copyData, { name: '复制 - ' + data.name });
+    const copyData = _.assign({}, data, { name: '复制 - ' + data.name });
     initializeForm(copyData);
   }
 
@@ -103,13 +102,13 @@ export default class CopyModal extends Component {
     const { i18n: { errMsg }, fields: { name, dest_path }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } bsSize='large' onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show bsSize='large' onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>复制{ data.d === 1 ? '目录' : '文档' } - { data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='名称'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }

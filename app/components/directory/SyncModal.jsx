@@ -42,7 +42,7 @@ export default class SyncModal extends Component {
     const { loading, syncInfo={}, data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>用户同步 - { data.name }</Modal.Title>
         </Modal.Header>

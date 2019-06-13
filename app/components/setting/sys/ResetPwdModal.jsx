@@ -63,13 +63,13 @@ export default class ResetPwdModal extends Component {
     const { i18n: { errMsg }, fields: { send_auth_pwd }, handleSubmit, invalid, submitting } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>密码设置</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ send_auth_pwd.touched && send_auth_pwd.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ send_auth_pwd.touched && send_auth_pwd.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>验证密码</ControlLabel>
             <FormControl disabled={ submitting } type='password' { ...send_auth_pwd } placeholder='新确认密码'/>
             { send_auth_pwd.touched && send_auth_pwd.error && <HelpBlock style={ { float: 'right' } }>{ send_auth_pwd.error }</HelpBlock> }

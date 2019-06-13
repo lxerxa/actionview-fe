@@ -83,7 +83,7 @@ export default class EditModal extends Component {
     const { i18n: { errMsg }, itemLoading, loading, path } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>编辑文档</Modal.Title>
         </Modal.Header>
@@ -93,7 +93,7 @@ export default class EditModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Body style={ { height: '580px', overflow: 'auto', display: itemLoading ? 'none' : '' } }>
-          <FormGroup style={ { marginTop: '0px' } } validationState={ this.state.touched && !this.state.name && 'error' || '' }>
+          <FormGroup style={ { marginTop: '0px' } } validationState={ this.state.touched && !this.state.name && 'error' || null }>
             <InputGroup>
               <InputGroup.Button>
                 <Button> / { _.map(path, (v) => v.id === '0' ? '' : (v.name + ' / ')) }</Button>

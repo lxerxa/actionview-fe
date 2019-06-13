@@ -77,7 +77,7 @@ export default class CopyModal extends Component {
     const { i18n: { errMsg }, fields: { id, name, description }, handleSubmit, invalid, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>复制界面</Modal.Title>
         </Modal.Header>
@@ -87,7 +87,7 @@ export default class CopyModal extends Component {
           onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormControl type='hidden' { ...id }/>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>新界面名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='界面名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }

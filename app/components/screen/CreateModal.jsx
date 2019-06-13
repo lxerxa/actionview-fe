@@ -135,7 +135,7 @@ export default class CreateModal extends Component {
     });
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>新建界面</Modal.Title>
         </Modal.Header>
@@ -146,7 +146,7 @@ export default class CreateModal extends Component {
             onChange={ this.onTabChange.bind(this) } >
             <TabPane tab='基本' key='1'>
               <div style={ { paddingTop: '15px' } }>
-                <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>界面名</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...name } placeholder='界面名'/>
                   { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }

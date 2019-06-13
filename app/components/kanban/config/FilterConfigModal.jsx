@@ -146,14 +146,14 @@ export default class FilterConfigModal extends Component {
     ];
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ model == 'global' ? '全局过滤器' : ( no === -1 ? '添加快速过滤器' : '编辑快速过滤器' ) }</Modal.Title>
         </Modal.Header>
         <Form horizontal onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           { model === 'filter' &&
-          <FormGroup controlId='formControlsLabel' style={ { height: '50px', borderBottom: '1px solid #ddd' } } validationState={ this.state.touched.name && this.state.errors.name && 'error' || '' }>
+          <FormGroup controlId='formControlsLabel' style={ { height: '50px', borderBottom: '1px solid #ddd' } } validationState={ this.state.touched.name && this.state.errors.name && 'error' || null }>
             <Col sm={ 2 } componentClass={ ControlLabel }>
              <span className='txt-impt'>*</span>过滤器名称 
             </Col>

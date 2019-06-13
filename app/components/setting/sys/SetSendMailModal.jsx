@@ -81,13 +81,13 @@ export default class SetSendMailModal extends Component {
       data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>发送邮件设置</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ from.touched && from.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ from.touched && from.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>发信地址</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...from } placeholder='输入邮箱'/>
             { from.touched && from.error && <HelpBlock style={ { float: 'right' } }>{ from.error }</HelpBlock> }

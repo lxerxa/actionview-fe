@@ -339,7 +339,7 @@ export default class Issues extends Component {
           filters={ filters.data || [] }
           options={ options }
           save={ saveFilter }
-          mode={ 'regressions' }
+          mode={ 'issues' }
           query={ query }
           sqlTxt={ sqlTxt }
           i18n={ i18n }/> }

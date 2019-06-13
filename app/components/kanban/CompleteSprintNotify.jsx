@@ -43,7 +43,7 @@ export default class CompleteNotify extends Component {
     const { i18n: { errMsg }, total, completedIssues, loading } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>
             完成Sprint

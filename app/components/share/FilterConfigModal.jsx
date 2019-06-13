@@ -81,7 +81,7 @@ export default class FilterConfigModal extends Component {
     const { i18n: { errMsg }, loading, title } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ title ? title : '过滤器管理' }</Modal.Title>
         </Modal.Header>

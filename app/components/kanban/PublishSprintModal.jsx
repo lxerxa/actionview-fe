@@ -106,13 +106,13 @@ export default class PublishModal extends Component {
       submitting } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>发布 - Sprint{ sprintNo }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ start_time.value && start_time.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ start_time.value && start_time.error ? 'error' : null }>
             <ControlLabel>开始时间</ControlLabel>
             <DateTime 
               locale='zh-cn' 
@@ -125,7 +125,7 @@ export default class PublishModal extends Component {
             { start_time.value && start_time.error && 
               <HelpBlock style={ { float: 'right' } }>{ start_time.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ complete_time.value && complete_time.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ complete_time.value && complete_time.error ? 'error' : null }>
             <ControlLabel>结束时间</ControlLabel>
             <DateTime 
               locale='zh-cn' 

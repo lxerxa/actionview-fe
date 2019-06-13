@@ -59,7 +59,7 @@ export default class MultiOperateNotify extends Component {
     const { i18n: { errMsg }, loading, ids, collection } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>批处理用户组 - 用户组删除</Modal.Title>
         </Modal.Header>

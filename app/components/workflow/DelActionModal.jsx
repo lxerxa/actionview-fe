@@ -56,7 +56,7 @@ export default class DelActionModal extends Component {
     const actionOptions = _.map(stepData.actions || [], (val) => { return { label: val.name, value: val.id } });
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ stepData.name } - 删除动作</Modal.Title>
         </Modal.Header>

@@ -96,7 +96,7 @@ export default class UsersConfigModal extends Component {
     });
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel.bind(this) } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel.bind(this) } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '用户配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>

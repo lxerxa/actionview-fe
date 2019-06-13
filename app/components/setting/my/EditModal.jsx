@@ -73,13 +73,13 @@ export default class EditModal extends Component {
     const { i18n: { errMsg }, fields: { id, first_name, department, position }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>编辑个人资料</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl type='hidden' { ...id }/>
             <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='姓名'/>

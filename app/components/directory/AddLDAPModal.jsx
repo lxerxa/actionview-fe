@@ -194,7 +194,7 @@ export default class AddLDAPModal extends Component {
       data } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ !data.id ? '添加LDAP' : ('编辑LDAP - ' + data.name) }</Modal.Title>
         </Modal.Header>
@@ -206,17 +206,17 @@ export default class AddLDAPModal extends Component {
             onChange={ this.onTabChange.bind(this) } >
             <TabPane tab='服务器' key='1'>
               <div style={ { paddingTop: '15px' } }>
-                <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>目录名</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...name } placeholder='目录名'/>
                   { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ host.touched && host.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ host.touched && host.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>主机名</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...host } placeholder='主机名'/>
                   { host.touched && host.error && <HelpBlock style={ { float: 'right' } }>{ host.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ port.touched && port.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ port.touched && port.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>端口</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...port } placeholder='端口'/>
                   { port.touched && port.error && <HelpBlock style={ { float: 'right' } }>{ port.error }</HelpBlock> }
@@ -232,12 +232,12 @@ export default class AddLDAPModal extends Component {
                     onChange={ newValue => { encryption.onChange(newValue) } }
                     placeholder='请选择'/>
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ admin_username.touched && admin_username.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ admin_username.touched && admin_username.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>用户名</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...admin_username } placeholder='用户名(如：cn=admin,dc=actionview,dc=cn)'/>
                   { admin_username.touched && admin_username.error && <HelpBlock style={ { float: 'right' } }>{ admin_username.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ !id.value && admin_password.touched && admin_password.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ !id.value && admin_password.touched && admin_password.error ? 'error' : null }>
                   <ControlLabel>
                     { !id.value ? <span className='txt-impt'>*</span> : <span/> }
                     密码
@@ -254,7 +254,7 @@ export default class AddLDAPModal extends Component {
             </TabPane>
             <TabPane tab='DN' key='2'>
               <div style={ { paddingTop: '15px' } }>
-                <FormGroup controlId='formControlsText' validationState={ base_dn.touched && base_dn.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ base_dn.touched && base_dn.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>Base DN</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...base_dn } placeholder='base DN(如：dc=actionview,dc=cn)'/>
                   { base_dn.touched && base_dn.error && <HelpBlock style={ { float: 'right' } }>{ base_dn.error }</HelpBlock> }
@@ -271,22 +271,22 @@ export default class AddLDAPModal extends Component {
             </TabPane>
             <TabPane tab='用户' key='3'>
               <div style={ { paddingTop: '15px' } }>
-                <FormGroup controlId='formControlsText' validationState={ user_object_class.touched && user_object_class.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ user_object_class.touched && user_object_class.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>对象类</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...user_object_class } placeholder='对象类'/>
                   { user_object_class.touched && user_object_class.error && <HelpBlock style={ { float: 'right' } }>{ user_object_class.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ user_object_filter.touched && user_object_filter.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ user_object_filter.touched && user_object_filter.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>对象过滤</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...user_object_filter } placeholder='对象过滤'/>
                   { user_object_filter.touched && user_object_filter.error && <HelpBlock style={ { float: 'right' } }>{ user_object_filter.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ user_name_attr.touched && user_name_attr.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ user_name_attr.touched && user_name_attr.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>用户名属性</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...user_name_attr } placeholder='用户名属性'/>
                   { user_name_attr.touched && user_name_attr.error && <HelpBlock style={ { float: 'right' } }>{ user_name_attr.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ user_email_attr.touched && user_email_attr.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ user_email_attr.touched && user_email_attr.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>邮箱属性</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...user_email_attr } placeholder='邮箱属性'/>
                   { user_email_attr.touched && user_email_attr.error && <HelpBlock style={ { float: 'right' } }>{ user_email_attr.error }</HelpBlock> }
@@ -295,22 +295,22 @@ export default class AddLDAPModal extends Component {
             </TabPane>
             <TabPane tab='用户组' key='4'>
               <div style={ { paddingTop: '15px' } }>
-                <FormGroup controlId='formControlsText' validationState={ group_object_class.touched && group_object_class.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ group_object_class.touched && group_object_class.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>对象类</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...group_object_class } placeholder='对象类'/>
                   { group_object_class.touched && group_object_class.error && <HelpBlock style={ { float: 'right' } }>{ group_object_class.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ group_object_filter.touched && group_object_filter.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ group_object_filter.touched && group_object_filter.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>对象过滤</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...group_object_filter } placeholder='对象过滤'/>
                   { group_object_filter.touched && group_object_filter.error && <HelpBlock style={ { float: 'right' } }>{ group_object_filter.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ group_name_attr.touched && group_name_attr.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ group_name_attr.touched && group_name_attr.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>组名属性</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...group_name_attr } placeholder='组名属性'/>
                   { group_name_attr.touched && group_name_attr.error && <HelpBlock style={ { float: 'right' } }>{ group_name_attr.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ group_membership_attr.touched && group_membership_attr.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ group_membership_attr.touched && group_membership_attr.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>组成员属性</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...group_membership_attr } placeholder='组成员属性'/>
                   { group_membership_attr.touched && group_membership_attr.error && <HelpBlock style={ { float: 'right' } }>{ group_membership_attr.error }</HelpBlock> }

@@ -33,7 +33,7 @@ export default class MergeModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    versions: PropTypes.object.isRequired,
+    versions: PropTypes.array.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -70,7 +70,7 @@ export default class MergeModal extends Component {
     const versionOptions = _.map(versions || [], (val) => { return { label: val.name, value: val.id } });
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>合并版本</Modal.Title>
         </Modal.Header>
@@ -80,7 +80,7 @@ export default class MergeModal extends Component {
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>版本合并后，将无法还原，请谨慎合并。</div>
           </div>
-          <FormGroup controlId='formControlsText' validationState={ source.touched && source.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ source.touched && source.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>要合并版本</ControlLabel>
             <Select 
               simpleValue 
@@ -92,7 +92,7 @@ export default class MergeModal extends Component {
               placeholder='选择版本'/>
             { source.touched && source.error && <HelpBlock style={ { float: 'right' } }>{ source.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ dest.touched && dest.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ dest.touched && dest.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>合并至</ControlLabel>
             <Select
               simpleValue

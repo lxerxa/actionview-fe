@@ -176,13 +176,13 @@ export default class AddWorklogModal extends Component {
     const err_styles = { display: 'inline-block', width: '40%', borderColor: '#a94442' };
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑工作日志' : ('添加工作日志' + (issue.no ? (' - ' + issue.no) : '')) }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form horizontal style={ { marginTop: '15px' } }>
-            <FormGroup validationState={ this.state.touched.started_at && this.state.errors.started_at && 'error' }>
+            <FormGroup validationState={ this.state.touched.started_at && this.state.errors.started_at ? 'error' : null }>
               <Col sm={ 3 } componentClass={ ControlLabel }>
                 <span className='txt-impt'>*</span> 开始时间 
               </Col>
@@ -200,7 +200,7 @@ export default class AddWorklogModal extends Component {
                  { this.state.touched.started_at && (this.state.errors.started_at || '') }
               </Col>
             </FormGroup>
-            <FormGroup controlId='formControlsLabel' validationState={ this.state.touched.spend && this.state.errors.spend && 'error' }>
+            <FormGroup controlId='formControlsLabel' validationState={ this.state.touched.spend && this.state.errors.spend ? 'error' : null }>
               <Col sm={ 3 } componentClass={ ControlLabel }>
                 <span className='txt-impt'>*</span> 耗费时间
               </Col>

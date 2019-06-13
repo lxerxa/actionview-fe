@@ -112,13 +112,13 @@ export default class ColumnConfigModal extends Component {
     });
     
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ no >= 0 ? '编辑列' : '添加列' }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='列名'/ >
             { name.touched && name.error &&
@@ -136,7 +136,7 @@ export default class ColumnConfigModal extends Component {
               onChange={ (newValue) => { states.onChange(newValue) } } 
               placeholder='选择状态'/>
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ max.touched && max.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ max.touched && max.error ? 'error' : null }>
             <ControlLabel>最大问题数（Max）</ControlLabel>
             <FormControl 
               disabled={ submitting } 
@@ -146,7 +146,7 @@ export default class ColumnConfigModal extends Component {
             { max.touched && max.error &&
               <HelpBlock style={ { float: 'right' } }>{ max.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ min.touched && min.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ min.touched && min.error ? 'error' : null }>
             <ControlLabel>最小问题数（Min）</ControlLabel>
             <FormControl 
               disabled={ submitting } 

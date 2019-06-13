@@ -115,7 +115,7 @@ export default class OptionValuesConfigModal extends Component {
     const { i18n: { errMsg }, loading } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '字段可选值配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
@@ -155,7 +155,7 @@ export default class OptionValuesConfigModal extends Component {
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
-          <Button disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -37,7 +37,7 @@ export default class DelNotify extends Component {
     const obj = data.d == 1 ? '目录' : '文档';
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>删除{ obj }</Modal.Title>
         </Modal.Header>

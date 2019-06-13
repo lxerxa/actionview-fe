@@ -108,13 +108,13 @@ export default class PropertiesModal extends Component {
     ];
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>通用设置</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ login_mail_domain.touched && login_mail_domain.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ login_mail_domain.touched && login_mail_domain.error ? 'error' : null }>
             <ControlLabel>默认登陆邮箱域名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...login_mail_domain } placeholder='邮箱域名'/>
             { login_mail_domain.touched && login_mail_domain.error && <HelpBlock style={ { float: 'right' } }>{ login_mail_domain.error }</HelpBlock> }
@@ -131,7 +131,7 @@ export default class PropertiesModal extends Component {
               onChange={ newValue => { allow_create_project.onChange(newValue) } }
               placeholder='请选择'/>
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ http_host.touched && http_host.error ? 'error' : '' }>
+          <FormGroup controlId='formControlsText' validationState={ http_host.touched && http_host.error ? 'error' : null }>
             <ControlLabel>系统域名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...http_host } placeholder='如:http://www.actionview.cn:8080'/>
             { http_host.touched && http_host.error && <HelpBlock style={ { float: 'right' } }>{ http_host.error }</HelpBlock> }

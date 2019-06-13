@@ -261,7 +261,7 @@ export default class AddActionModal extends Component {
     const selectDisabledStyles = { width: '125px', height: '25px', verticalAlign: 'middle', marginLeft: '10px', backgroundColor: '#f5f5f5', borderRadius: '4px' }; 
 
     return (
-      <Modal { ...this.props } onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ data.id ? ('编辑查看动作 - ' + data.name) : '添加动作' } </Modal.Title>
         </Modal.Header>
@@ -277,7 +277,7 @@ export default class AddActionModal extends Component {
                   <ControlLabel>起始步骤</ControlLabel>
                   <FormControl type='text' value={ stepData.name } disabled={ true }/>
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : '' }>
+                <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>动作名</ControlLabel>
                   <FormControl disabled={ submitting } type='text' { ...name } placeholder='动作名'/>
                   { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }

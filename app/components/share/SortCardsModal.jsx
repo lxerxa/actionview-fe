@@ -77,7 +77,7 @@ export default class SortCardsModal extends Component {
     const { model, i18n: { errMsg }, sortLoading } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '编辑' + model + '顺序' }</Modal.Title>
         </Modal.Header>

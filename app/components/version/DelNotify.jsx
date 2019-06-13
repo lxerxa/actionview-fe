@@ -45,7 +45,7 @@ export default class DelNotify extends Component {
     const { i18n: { errMsg }, data, versions, loading } = this.props;
 
     return (
-      <Modal { ...this.props } onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>删除版本 - { data.name }</Modal.Title>
         </Modal.Header>
