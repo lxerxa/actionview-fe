@@ -74,7 +74,7 @@ export default class Header extends Component {
                 <img src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>
                 <div className={ defaultLoading ? 'hide' : 'edit-field-content' }>
                   <Button className='edit-ok-button' onClick={ this.setDefaultValue }><i className='fa fa-check'></i></Button>
-                  <Button className='edit-ok-button' onClick={ () => { this.setState({ defaultSetShow: false }); } }><i className='fa fa-close'></i></Button>
+                  <Button className='edit-cancel-button' onClick={ () => { this.setState({ defaultSetShow: false }); } }><i className='fa fa-close'></i></Button>
                 </div>
               </div>
               :

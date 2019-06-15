@@ -288,7 +288,7 @@ export default class List extends Component {
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }>
+                <Button className='edit-cancel-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }>
                   <i className='fa fa-close'></i>
                 </Button>
               </div>

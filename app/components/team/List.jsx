@@ -220,7 +220,7 @@ export default class List extends Component {
                 placeholder='请输入用户'/>
               <div className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setUsers.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetUsers.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
+                <Button className='edit-cancel-button' onClick={ this.cancelSetUsers.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
               </div>
             </div> 
           }
@@ -277,7 +277,7 @@ export default class List extends Component {
                 placeholder='请输入用户组'/>
               <div className={ _.indexOf(settingGroupRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setGroups.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetGroups.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
+                <Button className='edit-cancel-button' onClick={ this.cancelSetGroups.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
               </div>
             </div> 
           }

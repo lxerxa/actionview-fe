@@ -578,7 +578,7 @@ export default class DetailBar extends Component {
                 <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
                   { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button> }
                   { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
-                    data.wfactions && data.wfactions.length <= 3 ?
+                    data.wfactions && data.wfactions.length <= 4 ?
                     <ButtonGroup style={ { marginLeft: '10px' } }>
                     { _.map(data.wfactions || [], (v, i) => {
                       return ( <Button key={ v.id } onClick={ this.doAction.bind(this, v.id) }>{ v.name }</Button> ); 
@@ -707,7 +707,7 @@ export default class DetailBar extends Component {
                         placeholder='选择经办人'/>
                       <div style={ { float: 'right' } }>
                         <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
-                        <Button className='edit-ok-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
+                        <Button className='edit-cancel-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
                       </div>
                     </div> }
                   </Col>

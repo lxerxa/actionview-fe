@@ -259,7 +259,7 @@ export default class List extends Component {
                 <Button className='edit-ok-button' onClick={ this.setScreen.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetScreen.bind(this, collection[i].id) }>
+                <Button className='edit-cancel-button' onClick={ this.cancelSetScreen.bind(this, collection[i].id) }>
                   <i className='fa fa-close'></i>
                 </Button>
               </div>
@@ -298,7 +298,7 @@ export default class List extends Component {
                 <Button className='edit-ok-button' onClick={ this.setWorkflow.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>
-                <Button className='edit-ok-button' onClick={ this.cancelSetWorkflow.bind(this, collection[i].id) }>
+                <Button className='edit-cancel-button' onClick={ this.cancelSetWorkflow.bind(this, collection[i].id) }>
                   <i className='fa fa-close'></i>
                 </Button>
               </div>

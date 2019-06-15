@@ -121,6 +121,12 @@
 }
 
 .edit-ok-button {
+  margin-right: -1px;
+  border-radius: 2px;
+}
+
+.edit-cancel-button {
+  margin-left: -1px;
   border-radius: 2px;
 }
 
