@@ -8,6 +8,11 @@ const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 const img = require('../../assets/images/loading.gif');
 
+//const sysResolutions = [
+//  'Unresolved',
+//  'Fixed'
+//];
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -92,9 +97,9 @@ export default class List extends Component {
             { collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }
           </span> ),
         description: collection[i].description ? collection[i].description : '-', 
-        operation: !isGlobal ? (
+        operation: !isGlobal && !collection[i].key ? (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading && collection[i].key != 'Unresolved' &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 

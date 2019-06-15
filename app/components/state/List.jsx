@@ -9,6 +9,14 @@ const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 const img = require('../../assets/images/loading.gif');
 
+//const sysStates = [
+//  'Open',
+//  'In Progess',
+//  'Resolved',
+//  'Closed',
+//  'Reopened'
+//];
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -101,9 +109,9 @@ export default class List extends Component {
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             { _.isEmpty(collection[i].workflows) ? '-' : _.map(collection[i].workflows, function(v, i) { return (<li key={ i }>{ v.name }</li>) }) }
           </ul> ),
-        operation: !isGlobal ? (
+        operation: !isGlobal && !collection[i].key ? (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading && collection[i].key !== 'Open' &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 

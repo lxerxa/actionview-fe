@@ -94,7 +94,7 @@ export default class List extends Component {
           </span> ),
         color: ( <div className='circle' style={ { backgroundColor: collection[i].color || '#ccc' } } /> ),
         description: collection[i].description ? collection[i].description : '-',
-        operation: !isGlobal ? (
+        operation: !isGlobal && !collection[i].key ? (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
