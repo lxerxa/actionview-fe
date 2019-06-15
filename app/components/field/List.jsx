@@ -15,7 +15,6 @@ const sysFields = [
   'title', 
   'priority', 
   'resolution', 
-  'state', 
   'assignee', 
   'module', 
   'comments', 
