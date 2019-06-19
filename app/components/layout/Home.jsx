@@ -72,6 +72,10 @@ export default class Home extends Component {
     this.onWindowResize();
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
+  }
+
   onWindowResize() {
     const { layoutActions } = this.props;
 

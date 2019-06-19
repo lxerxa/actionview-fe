@@ -31,7 +31,7 @@ export default function session(state = initialState, action) {
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.SESSION_GET_FAIL:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, loading: false, invalid: true, error: action.error };
 
     case t.SESSION_DESTROY:
       return { ...state, loading: true };
