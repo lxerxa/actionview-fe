@@ -4,9 +4,9 @@ import { Modal, Button, Form, FormGroup, ControlLabel, FormControl, Col } from '
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
-import Card from '../share/Card';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import Card from './EditCard';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -14,14 +14,14 @@ const img = require('../../assets/images/loading.gif');
 export default class OptionValuesConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.moveCard = this.moveCard.bind(this);
     this.add = this.add.bind(this);
-    this.state = { cards: [], ecode: 0, enableAdd: false };
+    this.state = { cards: [], editingCards: [], ecode: 0, enableAdd: false };
     const optionValues = this.props.data.optionValues || [];
     const optionNum = optionValues.length;
     for (let i = 0; i < optionNum; i++) {
       this.state.cards.push({
         id: optionValues[i].id,
+        old_text: optionValues[i].name,
         text: optionValues[i].name
       });
     }
@@ -39,7 +39,7 @@ export default class OptionValuesConfigModal extends Component {
   async save() {
     const { close, config, data } = this.props;
     let ecode = 0;
-    const values = { id: data.id, optionValues: _.map(this.state.cards, (val) => { return { id: val.text, name: val.text } }) };
+    const values = { id: data.id, optionValues: _.map(this.state.cards, (val) => { return { id: val.id, name: val.text } }) };
     ecode = await config(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -61,6 +61,35 @@ export default class OptionValuesConfigModal extends Component {
   sort() {
     const cards = this.state.cards;
     this.setState(cards.sort(function(a, b) { return a.text.localeCompare(b.text); } ));
+  }
+
+  addEditingCards(i) {
+    this.state.editingCards.push(i);
+    this.setState({ editingCards: this.state.editingCards });
+  }
+
+  undoCard(i) {
+    if (this.state.cards[i] && this.state.cards[i].old_text) {
+      const index = _.findIndex(this.state.cards, { text: this.state.cards[i].old_text });
+      if (index === i || index === -1) {
+        this.state.cards[i].text = this.state.cards[i].old_text;
+        this.setState({ cards: this.state.cards });
+      } else {
+        notify.show('重置失败，可选值可能重复。', 'error', 2000);
+      }
+    }
+  }
+
+  editCard(i, newText) {
+    const index = _.findIndex(this.state.cards, { text: newText });
+    if (index === i || index === -1) {
+      this.state.editingCards = _.reject(this.state.editingCards, (v) => v === i);
+      this.state.cards[i].text = newText;
+      this.setState({ cards: this.state.cards, editingCards: this.state.editingCards });
+      return true;
+    } else {
+      return false;
+    }
   }
 
   deleteCard(i) {
@@ -111,7 +140,7 @@ export default class OptionValuesConfigModal extends Component {
   }
 
   render() {
-    const { cards, strCards, enableAdd } = this.state;
+    const { cards, editingCards, strCards, enableAdd } = this.state;
     const { i18n: { errMsg }, loading } = this.props;
 
     return (
@@ -140,12 +169,18 @@ export default class OptionValuesConfigModal extends Component {
           { cards.length > 0 ?
             cards.map((op, i) => {
               return (
-                <Card key={ op.id }
+                <Card 
+                  key={ i }
+                  all={ this.state.cards }
                   index={ i }
                   id={ op.id }
                   text={ op.text }
-                  moveCard={ this.moveCard }
-                  deleteCard={ this.deleteCard.bind(this, i) }/>
+                  isEdited={ op.old_text && op.text !== op.old_text }
+                  addEditingCards={ this.addEditingCards.bind(this) }
+                  move={ this.moveCard.bind(this) }
+                  undo={ this.undoCard.bind(this) }
+                  edit={ this.editCard.bind(this) }
+                  del={ this.deleteCard.bind(this, i) }/>
               );
             }) :
             <p>可选值列表为空</p>
@@ -154,7 +189,7 @@ export default class OptionValuesConfigModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
+          <Button disabled={ !_.isEmpty(editingCards) || loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
         </Modal.Footer>
       </Modal>

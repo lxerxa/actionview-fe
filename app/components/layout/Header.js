@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropdownButton, MenuItem, Button } from 'react-bootstrap';
 import _ from 'lodash';
 
+const About = require('./AboutModal');
 const logo = require('../../assets/images/brand.png');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const $ = require('$');
@@ -9,6 +10,7 @@ const $ = require('$');
 export default class Header extends Component {
   constructor(props) {
     super(props);
+    this.state = { aboutShow: false };
   }
 
   static propTypes = {
@@ -56,6 +58,8 @@ export default class Header extends Component {
 
     if (eventKey === 'setting') {
       entry('/mysetting');
+    } else if (eventKey === 'about') {
+      this.setState({ aboutShow: true });
     } else if (eventKey === 'logout') {
       logout();
     }
@@ -192,6 +196,8 @@ export default class Header extends Component {
             onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
+            <MenuItem eventKey='about'>关于</MenuItem>
+            <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
             <MenuItem eventKey='logout'>退出</MenuItem>
           </DropdownButton>
@@ -249,6 +255,11 @@ export default class Header extends Component {
             height='20px'>
           </iframe>
         </span> */}
+        { this.state.aboutShow &&
+        <About
+          show
+          close={ () => { this.setState({ aboutShow: false }) } }/>
+        }
       </div>
     );
   }

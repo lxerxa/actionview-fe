@@ -6,30 +6,6 @@ import _ from 'lodash';
 import Duration from '../share/Duration';
 
 const $ = require('$');
-const filters = [
-  'type',
-  'assignee',
-  'reporter',
-  'watcher',
-  'resolver',
-  'closer',
-  'state',
-  'resolution',
-  'priority',
-  'module',
-  'resolve_version',
-  'effect_versions',
-  'epic',
-  'sprint',
-  'labels',
-  'created_at',
-  'updated_at',
-  'resolved_at',
-  'closed_at',
-  'expect_complete_time',
-  'title',
-  'orderBy'
-];
 
 export class IssueFilterList extends Component {
   constructor(props) {
@@ -38,14 +14,14 @@ export class IssueFilterList extends Component {
       baseFilterShow: true,
       memberFilterShow: false,
       timeFilterShow: false,
-      agileFilterShow: false 
+      agileFilterShow: false, 
+      otherFilterShow: false 
     }
 
-    _.forEach(filters, (v) => {
-      this.state[v] = '';
-    });
+    this.state.query = {};
 
     this.search = this.search.bind(this);
+    this.groupFields = this.groupFields.bind(this);
   }
 
   static propTypes = {
@@ -59,33 +35,89 @@ export class IssueFilterList extends Component {
 
   componentWillReceiveProps(nextProps) {
     const newQuery = nextProps.query || {};
-    _.forEach(filters, (v) => {
-      this.state[v] = newQuery[v] ? newQuery[v] : '';
-    });
-  }
-
-  componentDidMount() {
-    const self = this;
-    $('#title').bind('keypress',function(event){
-      if(event.keyCode == '13') {
-        self.search();
-      }
-    });
+    if (_.isEmpty(newQuery)) {
+      this.state.query = {};
+    } else {
+      _.forEach(newQuery, (v, key) => {
+        this.state.query[key] = newQuery[key] ? newQuery[key] : '';
+      });
+    }
   }
 
   search() {
     const { query={}, refresh } = this.props;
 
     const newQuery = _.assign({}, query);
-    _.forEach(filters, (v) => {
-      if (this.state[v]) {
-        newQuery[v] = this.state[v];
+    _.forEach(this.state.query, (v, key) => {
+      if (v) {
+        newQuery[key] = v;
       } else {
-        delete newQuery[v];
+        delete newQuery[key];
       }
     });
 
     refresh(newQuery);
+  }
+
+  groupFields(fields, columns=3) {
+    const filters = [];
+
+    _.forEach(fields, (v) => {
+      if (v.type === 'Text') {
+        filters.push(
+          <div>
+            <Col sm={ 1 } componentClass={ ControlLabel }>
+              { v.name }
+            </Col>
+            <Col sm={ 12 / columns - 1 }>
+              <FormControl
+                type='text'
+                value={ this.state.query[v.key] || '' }
+                onKeyPress={ (e) => { if (e.charCode == '13') { this.search(); } } }
+                onChange={ (e) => { this.setState({ query: _.assign({}, this.state.query, { [v.key]: e.target.value }) }) } }
+                placeholder={ '输入' + (v.desc || v.name) } />
+            </Col>
+          </div> );
+      } else if (v.type === 'Select' || v.type === 'MultiSelect') {
+        filters.push(
+          <div>
+            <Col sm={ 1 } componentClass={ ControlLabel }>
+              { v.name }
+            </Col>
+            <Col sm={ 12 / columns - 1 }>
+              <Select
+                simpleValue
+                multi={ v.type === 'MultiSelect' ? true : false }
+                value={ this.state.query[v.key] || null }
+                onChange={ (newValue) => { this.state.query[v.key] = newValue; this.search(); } }
+                options={ v.optionValues }
+                placeholder={ '选择' +  v.name }/>
+            </Col>
+          </div> );
+      } else if (v.type === 'Duration') {
+        filters.push(
+          <div>
+            <Col sm={ 1 } componentClass={ ControlLabel }>
+              { v.name }
+            </Col>
+            <Col sm={ 12 / columns - 1 }>
+              <Duration
+                mode={ v.mode || '' }
+                value={ this.state.query[v.key] }
+                onChange={ (newValue) => { this.state.query[v.key] = newValue; this.search(); } }/>
+            </Col>
+          </div> );
+      }
+    });
+
+    const res = [];
+    const len = filters.length;
+    for (let i = 0; i < len; ) {
+      const section = filters.slice(i, i + columns);
+      res.push(section);
+      i += columns;
+    }
+    return res;
   }
 
   render() {
@@ -93,7 +125,7 @@ export class IssueFilterList extends Component {
       searchShow=false, 
       notShowFields=[],
       notShowBlocks=[],
-      options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[] } } = this.props;
+      options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[], fields=[] } } = this.props;
 
     const typeOptions = _.map(types, (val) => { return { label: val.name, value: val.id } });
     const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
@@ -107,294 +139,149 @@ export class IssueFilterList extends Component {
     const sprintOptions = _.map(sprints, (val) => { return { label: 'Sprint ' + val, value: val } });
     const labelOptions = _.map(labels, (val) => { return { label: val, value: val } });
 
+    const baseFields = [
+      { key: 'title', name: '主题/NO', type: 'Text', desc: '主题关键字或编号' },
+      { key: 'type', name: '类型', type: 'MultiSelect', optionValues: typeOptions },
+      { key: 'priority', name: '优先级', type: 'MultiSelect', optionValues: priorityOptions },
+      { key: 'state', name: '状态', type: 'MultiSelect', optionValues: stateOptions },
+      { key: 'resolution', name: '解决结果', type: 'MultiSelect', optionValues: resolutionOptions },
+      { key: 'module', name: '模块', type: 'MultiSelect', optionValues: moduleOptions },
+      { key: 'resolve_version', name: '解决版本', type: 'MultiSelect', optionValues: versionOptions },
+      { key: 'effect_versions', name: '影响版本', type: 'MultiSelect', optionValues: versionOptions },
+      { key: 'labels', name: '标签', type: 'MultiSelect', optionValues: labelOptions },
+      { key: 'description', name: '描述', type: 'Text', desc: '描述关键字' }
+    ];
+    const baseFilterSections = this.groupFields(_.reject(baseFields, (v) => notShowFields.indexOf(v.key) !== -1));
+
+    const memberFields = [
+      { key: 'reporter', name: '报告者', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'assignee', name: '经办人', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'resolver', name: '解决者', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'closer', name: '关闭者', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'watcher', name: '关注者', type: 'MultiSelect', optionValues: [ { value: 'me', label: '当前用户' } ] }
+    ];
+    const memberFilterSections = this.groupFields(_.reject(memberFields, (v) => notShowFields.indexOf(v.key) !== -1));
+
+    const timeFields = [
+      { key: 'created_at', name: '创建时间', type: 'Duration' },
+      { key: 'updated_at', name: '更新时间', type: 'Duration' },
+      { key: 'resolved_at', name: '解决时间', type: 'Duration' },
+      { key: 'closed_at', name: '关闭时间', type: 'Duration' },
+      { key: 'expect_complete_time', name: '期望完成', type: 'Duration', mode: 'fix_duration' }
+    ];
+    const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), 2);
+
+    const agileFields = [
+      { key: 'epic', name: 'Epic', type: 'MultiSelect', optionValues: epicOptions },
+      { key: 'sprint', name: 'Sprint', type: 'Select', optionValues: sprintOptions  }
+    ];
+    const agileFilterSections = this.groupFields(_.reject(agileFields, (v) => notShowFields.indexOf(v.key) !== -1), 3);
+
+    const usedFieldKeys = _.reduce([ baseFields, memberFields, timeFields, agileFields ], (res, val) => { _.forEach(val, (v) => { res.push(v.key) }); return res; }, []);
+    const othersFields = _.reject(fields, (v) => usedFieldKeys.indexOf(v.key) !== -1);
+    _.forEach(othersFields, (v) => { 
+      if (v.optionValues) { 
+        v.optionValues = _.map(v.optionValues, (val) => { return { label: val.label || val.name, value: val.value || val.id } }) 
+      }
+    });
+    const othersFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1), 2);
+
     return (
-      <Form horizontal style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 1px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } } className={ !searchShow && 'hide' }>
-        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          <span className='direct-button' onClick={ () => this.setState({ baseFilterShow: !this.state.baseFilterShow }) } title={ this.state.baseFilterShow ? '收缩' : '展开' }>
-            <span style={ { marginRight: '2px' } }>基本字段</span>
-            { this.state.baseFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
-          </span>
-        </div>
-        { this.state.baseFilterShow &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            主题/NO
-          </Col>
-          <Col sm={ 3 }>
-            <FormControl
-              id='title'
-              type='text'
-              value={ this.state.title }
-              onChange={ (e) => { this.setState({ title: e.target.value }) } }
-              placeholder={ '输入关键字或编号' } />
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            类型 
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择类型'
-              value={ this.state.type }
-              onChange={ (newValue) => { this.state.type = newValue; this.search(); } }
-              options={ typeOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            优先级
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择优先级'
-              value={ this.state.priority }
-              onChange={ (newValue) => { this.state.priority = newValue; this.search(); } }
-              options={ priorityOptions }/>
-          </Col>
-        </FormGroup> }
-        { this.state.baseFilterShow &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            状态
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择状态'
-              value={ this.state.state }
-              onChange={ (newValue) => { this.state.state = newValue; this.search(); } }
-              options={ stateOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            解决结果
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择解决结果'
-              value={ this.state.resolution }
-              onChange={ (newValue) => { this.state.resolution = newValue; this.search(); } }
-              options={ resolutionOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            模块
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择模块'
-              value={ this.state.module }
-              onChange={ (newValue) => { this.state.module = newValue; this.search(); } }
-              options={ moduleOptions }/>
-          </Col>
-        </FormGroup> }
-        { this.state.baseFilterShow &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            解决版本
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择解决版本'
-              value={ this.state.resolve_version }
-              onChange={ (newValue) => { this.state.resolve_version = newValue; this.search(); } }
-              options={ versionOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            影响版本
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择影响版本'
-              value={ this.state.effect_versions }
-              onChange={ (newValue) => { this.state.effect_versions = newValue; this.search(); } }
-              options={ versionOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            标签
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择标签'
-              value={ this.state.labels }
-              onChange={ (newValue) => { this.state.labels = newValue; this.search(); } }
-              options={ labelOptions }/>
-          </Col>
-        </FormGroup> }
-        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          <span className='direct-button' onClick={ () => this.setState({ memberFilterShow: !this.state.memberFilterShow }) } title={ this.state.memberFilterShow ? '收缩' : '展开' }>
-            <span style={ { marginRight: '2px' } }>人员</span>
-            { this.state.memberFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
-          </span>
-        </div>
-        { this.state.memberFilterShow &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            报告人
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择报告人'
-              value={ this.state.reporter }
-              onChange={ (newValue) => { this.state.reporter = newValue; this.search(); } }
-              options={ userOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            经办人
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择经办人'
-              value={ this.state.assignee }
-              onChange={ (newValue) => { this.state.assignee = newValue; this.search(); } }
-              options={ userOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            解决者
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择解决者'
-              value={ this.state.resolver }
-              onChange={ (newValue) => { this.state.resolver = newValue; this.search(); } }
-              options={ userOptions }/>
-          </Col>
-        </FormGroup> }
-        { this.state.memberFilterShow &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            关闭者
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择关闭者'
-              value={ this.state.closer }
-              onChange={ (newValue) => { this.state.closer = newValue; this.search(); } }
-              options={ userOptions }/>
-          </Col>
-          { notShowFields.indexOf('watcher') === -1 &&
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            关注者
-          </Col> }
-          { notShowFields.indexOf('watcher') === -1 &&
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择关注者'
-              value={ this.state.watcher }
-              onChange={ (newValue) => { this.state.watcher = newValue; this.search(); } }
-              options={ [ { value: 'me', label: '当前用户' } ] }/>
-          </Col> }
-        </FormGroup> }
+      <Form 
+        id='search-form'
+        horizontal 
+        style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 10px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } } 
+        className={ !searchShow && 'hide' }>
+        { notShowBlocks.indexOf('base') === -1 &&
+        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px' } }>
+          <div style={ { color: '#aaa' } }>
+            <span 
+              className='direct-button' 
+              onClick={ () => this.setState({ baseFilterShow: !this.state.baseFilterShow }) } 
+              title={ this.state.baseFilterShow ? '收缩' : '展开' }>
+              <span style={ { marginRight: '2px' } }>基本字段</span>
+              { this.state.baseFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
+            </span>
+          </div>
+          { _.map(baseFilterSections, (v, i) => {
+            return (
+              <FormGroup key={ i } style={ { display: !this.state.baseFilterShow ? 'none' : '' } }>
+                { v }
+              </FormGroup> )
+          }) }
+        </div> }
+        { notShowBlocks.indexOf('member') === -1 &&
+        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px' } }>
+          <div style={ { color: '#aaa' } }>
+            <span 
+              className='direct-button' 
+              onClick={ () => this.setState({ memberFilterShow: !this.state.memberFilterShow }) } 
+              title={ this.state.memberFilterShow ? '收缩' : '展开' }>
+              <span style={ { marginRight: '2px' } }>人员</span>
+              { this.state.memberFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
+            </span>
+          </div>
+          { _.map(memberFilterSections, (v, i) => {
+            return (
+              <FormGroup key={ i } style={ { display: !this.state.memberFilterShow ? 'none' : '' } }>
+                { v }
+              </FormGroup> )
+          }) }
+        </div> }
         { notShowBlocks.indexOf('time') === -1 &&
-        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          <span className='direct-button' onClick={ () => this.setState({ timeFilterShow: !this.state.timeFilterShow }) } title={ this.state.timeFilterShow ? '收缩' : '展开' }>
-            <span style={ { marginRight: '2px' } }>时间</span>
-            { this.state.timeFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
-          </span>
+        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px' } }>
+          <div style={ { color: '#aaa' } }>
+            <span 
+              className='direct-button' 
+              onClick={ () => this.setState({ timeFilterShow: !this.state.timeFilterShow }) } 
+              title={ this.state.timeFilterShow ? '收缩' : '展开' }>
+              <span style={ { marginRight: '2px' } }>时间</span>
+              { this.state.timeFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
+            </span>
+          </div>
+          { _.map(timeFilterSections, (v, i) => {
+            return (
+              <FormGroup key={ i } style={ { display: !this.state.timeFilterShow ? 'none' : '' } }>
+                { v }
+              </FormGroup> )
+          }) }
         </div> }
-        { this.state.timeFilterShow && notShowBlocks.indexOf('time') === -1 &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            创建时间
-          </Col>
-          <Col sm={ 5 }>
-            <Duration
-              value={ this.state.created_at }
-              onChange={ (newValue) => { this.setState({ created_at: newValue }); this.search(); } }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            更新时间
-          </Col>
-          <Col sm={ 5 }>
-            <Duration
-              value={ this.state.updated_at }
-              onChange={ (newValue) => { this.setState({ updated_at: newValue }); this.search(); } }/>
-          </Col>
-        </FormGroup> }
-        { this.state.timeFilterShow && notShowBlocks.indexOf('time') === -1 &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            解决时间
-          </Col>
-          <Col sm={ 5 }>
-            <Duration
-              value={ this.state.resolved_at }
-              onChange={ (newValue) => { this.setState({ resolved_at: newValue }); this.search(); } }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            关闭时间
-          </Col>
-          <Col sm={ 5 }>
-            <Duration
-              value={ this.state.closed_at }
-              onChange={ (newValue) => { this.setState({ closed_at: newValue }); this.search(); } }/>
-          </Col>
-        </FormGroup> }
-        { this.state.timeFilterShow && notShowBlocks.indexOf('time') === -1 &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            期望完成 
-          </Col>
-          <Col sm={ 5 }>
-            <Duration
-              mode='fix_duration'
-              value={ this.state.expect_complete_time }
-              onChange={ (newValue) => { this.setState({ expect_complete_time: newValue }); this.search(); } }/>
-          </Col>
-        </FormGroup> }
         { notShowBlocks.indexOf('agile') === -1 &&
-        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px', color: '#aaa' } }>
-          <span className='direct-button' onClick={ () => this.setState({ agileFilterShow: !this.state.agileFilterShow }) } title={ this.state.agileFilterShow ? '收缩' : '展开' }>
-            <span style={ { marginRight: '2px' } }>敏捷迭代</span> 
-            { this.state.agileFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
-          </span>
+        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px' } }>
+          <div style={ { color: '#aaa' } }>
+            <span 
+              className='direct-button' 
+              onClick={ () => this.setState({ agileFilterShow: !this.state.agileFilterShow }) } 
+              title={ this.state.agileFilterShow ? '收缩' : '展开' }>
+              <span style={ { marginRight: '2px' } }>敏捷迭代</span> 
+              { this.state.agileFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
+            </span>
+          </div>
+          { _.map(agileFilterSections, (v, i) => {
+            return (
+              <FormGroup key={ i } style={ { display: !this.state.agileFilterShow ? 'none' : '' } }>
+                { v }
+              </FormGroup> )
+          }) }
         </div> }
-        { this.state.agileFilterShow && notShowBlocks.indexOf('agile') === -1 &&
-        <FormGroup>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            Epic 
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              multi
-              placeholder='选择Epic'
-              value={ this.state.epic }
-              onChange={ (newValue) => { this.state.epic = newValue; this.search(); } }
-              options={ epicOptions }/>
-          </Col>
-          <Col sm={ 1 } componentClass={ ControlLabel }>
-            Sprint
-          </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              placeholder='选择Sprint'
-              value={ this.state.sprint || null }
-              onChange={ (newValue) => { this.state.sprint = newValue; this.search(); } }
-              options={ sprintOptions }/>
-          </Col>
-        </FormGroup> }
+        { notShowBlocks.indexOf('others') === -1 &&
+        <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px' } }>
+          <div style={ { color: '#aaa' } }>
+            <span
+              className='direct-button'
+              onClick={ () => this.setState({ othersFilterShow: !this.state.othersFilterShow }) }
+              title={ this.state.othersFilterShow ? '收缩' : '展开' }>
+              <span style={ { marginRight: '2px' } }>其它字段</span>
+              { this.state.othersFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
+            </span>
+          </div>
+          { _.map(othersFilterSections, (v, i) => {
+            return (
+              <FormGroup key={ i } style={ { display: !this.state.othersFilterShow ? 'none' : '' } }>
+                { v }
+              </FormGroup> )
+          }) }
+        </div> }
       </Form>
     );
   }

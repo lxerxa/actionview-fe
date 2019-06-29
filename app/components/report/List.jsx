@@ -40,7 +40,7 @@ export default class List extends Component {
     const len = data.length;
     for (let i = 0; i < len; ) {
       const section = data.slice(i, i + columns);
-      for (let j = section.length; j <= 4; j++) {
+      for (let j = section.length; j <= columns; j++) {
         section.push({});
       }
       tmp.push(section);
