@@ -585,7 +585,7 @@ export default class List extends Component {
         { !indexLoading && options.total && options.total > 0 ? 
           <PaginationList 
             total={ options.total || 0 } 
-            curPage={ query.page || 1 } 
+            curPage={ query.page ? (query.page - 0) : 1 } 
             sizePerPage={ options.sizePerPage || 50 } 
             paginationSize={ 4 } 
             query={ query } 

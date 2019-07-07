@@ -15,7 +15,7 @@ export default class OptionValuesConfigModal extends Component {
   constructor(props) {
     super(props);
     this.add = this.add.bind(this);
-    this.state = { cards: [], editingCards: [], ecode: 0, enableAdd: false };
+    this.state = { cards: [], editingCards: [], ecode: 0, enableAdd: false, addErr: false };
     const optionValues = this.props.data.optionValues || [];
     const optionNum = optionValues.length;
     for (let i = 0; i < optionNum; i++) {
@@ -63,8 +63,8 @@ export default class OptionValuesConfigModal extends Component {
     this.setState(cards.sort(function(a, b) { return a.text.localeCompare(b.text); } ));
   }
 
-  addEditingCards(i) {
-    this.state.editingCards.push(i);
+  addEditingCards(id) {
+    this.state.editingCards.push(id);
     this.setState({ editingCards: this.state.editingCards });
   }
 
@@ -80,10 +80,10 @@ export default class OptionValuesConfigModal extends Component {
     }
   }
 
-  editCard(i, newText) {
+  editCard(i, id, newText) {
     const index = _.findIndex(this.state.cards, { text: newText });
-    if (index === i || index === -1) {
-      this.state.editingCards = _.reject(this.state.editingCards, (v) => v === i);
+    if (index === -1 || this.state.cards[index].id === id) {
+      this.state.editingCards = _.reject(this.state.editingCards, (v) => v === id);
       this.state.cards[i].text = newText;
       this.setState({ cards: this.state.cards, editingCards: this.state.editingCards });
       return true;
@@ -98,10 +98,11 @@ export default class OptionValuesConfigModal extends Component {
   }
 
   handleChange(e) {
+    this.setState({ addErr: false });
     const optionValue = e.target.value;
     if (optionValue.trim() === '') {
       this.setState({ enableAdd: false });
-    } else if (_.findIndex(this.state.cards, function(o) { return o.id === optionValue }) !== -1) {
+    } else if (_.findIndex(this.state.cards, (o) => o.id === optionValue) !== -1) {
       this.setState({ enableAdd: false });
     }else {
       this.setState({ enableAdd: true });
@@ -110,18 +111,13 @@ export default class OptionValuesConfigModal extends Component {
 
   add() {
     const optionValue = findDOMNode(this.refs.addOpt).value;
-    this.state.cards.push({ id: optionValue, text: optionValue });
-    this.setState({ cards: this.state.cards });
-    findDOMNode(this.refs.addOpt).value = '';
-    this.setState({ enableAdd: false });
-  }
-
-  handlerKeyUp(event) {
-    if (event.keyCode === 13) {
-      if (!this.state.enableAdd) {
-        return false;
-      }
-      this.add();      
+    if (optionValue && this.state.enableAdd) {
+      this.state.cards.push({ id: optionValue, text: optionValue });
+      this.setState({ cards: this.state.cards });
+      findDOMNode(this.refs.addOpt).value = '';
+      this.setState({ enableAdd: false });
+    } else {
+      this.setState({ addErr: true });
     }
   }
 
@@ -150,19 +146,18 @@ export default class OptionValuesConfigModal extends Component {
         </Modal.Header>
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <Form horizontal>
-            <FormGroup controlId='formControlsText'>
-              <Col sm={ 11 }>
+            <FormGroup controlId='formControlsText' validationState={ this.state.addErr ? 'error' : null }>
+              <Col sm={ 12 }>
                 <FormControl 
                   type='text' 
                   ref='addOpt' 
-                  placeholder='输入可选值'
+                  placeholder='输入可选值，回车即可添加'
                   onChange={ this.handleChange.bind(this) } 
-                  onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } } 
-                  onKeyUp={ this.handlerKeyUp.bind(this) }/>
+                  onKeyPress={ (e) => { if (e.charCode == '13') { e.preventDefault(); this.add(); } } }/>
               </Col>
-              <Col sm={ 1 }>
+              {/* <Col sm={ 1 }>
                 <Button bsStyle='link' style={ { marginLeft: '-25px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
-              </Col>
+              </Col> */}
             </FormGroup>
           </Form>
           { cards.length > 0 && <div>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></div> }
@@ -170,7 +165,7 @@ export default class OptionValuesConfigModal extends Component {
             cards.map((op, i) => {
               return (
                 <Card 
-                  key={ i }
+                  key={ op.id }
                   all={ this.state.cards }
                   index={ i }
                   id={ op.id }

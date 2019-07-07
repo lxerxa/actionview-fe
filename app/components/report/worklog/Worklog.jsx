@@ -4,7 +4,7 @@ import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button } from '
 import Select from 'react-select';
 import { PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
-import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
+import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
 import Duration from '../../share/Duration';
 import SaveFilterModal from '../SaveFilterModal';
 import List from './List';
@@ -136,7 +136,7 @@ export default class Worklog extends Component {
           sqlTxt = '填报时间～' + recorded_at;
         }
       }
-      const issueSqlTxt = getCondsTxt(query, options);
+      const issueSqlTxt = parseQuery(query, options);
       if (sqlTxt && issueSqlTxt) {
         sqlTxt += ' | ' + issueSqlTxt;
       } else if (issueSqlTxt) {

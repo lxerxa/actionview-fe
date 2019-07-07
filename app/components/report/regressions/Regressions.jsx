@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { PieChart, Pie, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
 import { Dimensions } from '../../share/Constants';
-import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
+import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
 import SaveFilterModal from '../SaveFilterModal';
 
 const moment = require('moment');
@@ -119,7 +119,7 @@ export default class Regressions extends Component {
         }
       }
 
-      const issueSqlTxt = getCondsTxt(query, options);
+      const issueSqlTxt = parseQuery(query, options);
       if (issueSqlTxt) {
         sqlTxt += (sqlTxt ? ' | ' : '') + issueSqlTxt;
       }

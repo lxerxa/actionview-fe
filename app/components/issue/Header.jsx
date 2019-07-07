@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { Link } from 'react-router';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
-import { IssueFilterList, getCondsTxt } from './IssueFilterList';
+import { IssueFilterList, parseQuery } from './IssueFilterList';
 
 const $ = require('$');
 const CreateModal = require('./CreateModal');
@@ -139,7 +139,7 @@ export default class Header extends Component {
       project } = this.props;
 
     const standardTypes = _.reject(_.reject(options.types || [], { type: 'subtask' }) || [], { disabled: true }) || [];
-    const sqlTxt = optionsLoading ? '' : getCondsTxt(query, options);
+    const sqlTxt = optionsLoading ? '' : parseQuery(query, options);
 
     return (
       <div>

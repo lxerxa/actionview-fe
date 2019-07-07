@@ -5,7 +5,7 @@ import { Checkbox as Checkbox2, CheckboxGroup } from 'react-checkbox-group';
 import Select from 'react-select';
 import { Area, AreaChart, linearGradient, defs, stop, Legend, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
-import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
+import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
 import Duration from '../../share/Duration';
 import SaveFilterModal from '../SaveFilterModal';
 
@@ -145,7 +145,7 @@ export default class Trend extends Component {
       const interval = query['interval'] || 'day';
       sqlTxt += ' | 时间间隔～' + intervals[interval];
 
-      const issueSqlTxt = getCondsTxt(query, options);
+      const issueSqlTxt = parseQuery(query, options);
       if (sqlTxt && issueSqlTxt) {
         sqlTxt += ' | ' + issueSqlTxt;
       } else if (issueSqlTxt) {

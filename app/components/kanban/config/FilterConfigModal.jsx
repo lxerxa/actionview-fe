@@ -3,7 +3,7 @@ import { Modal, Button, Form, FormControl, FormGroup, ControlLabel, Col } from '
 import Select from 'react-select';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
-import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
+import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
 
 const img = require('../../../assets/images/loading.gif');
 

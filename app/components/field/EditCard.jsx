@@ -92,8 +92,8 @@ export default class Card extends Component {
   };
 
   save() {
-    const { edit, index } = this.props;
-    const res = edit(index, this.state.text);
+    const { edit, index, id } = this.props;
+    const res = edit(index, id, this.state.text);
     if (res) {
       this.setState({ editing: false, hasErr: false });
     } else {
@@ -101,8 +101,9 @@ export default class Card extends Component {
     }
   } 
 
-  async edit(index, text) {
-    this.props.addEditingCards(index);
+  async edit() {
+    const { index, id, text } = this.props;
+    this.props.addEditingCards(id);
     await this.setState({ text: text, touched: true, hasErr: false, editing: true });
     $('#input-optionvalue-' + index).select(); 
   }
@@ -122,6 +123,7 @@ export default class Card extends Component {
               style={ { height: '21px', fontSize: '10px' } }
               type='text'
               value={ this.state.text }
+              onKeyPress={ (e) => { if (e.charCode == '13') { this.setState({ touched: true }); this.save(); } } }
               onChange={ (e) => { this.setState({ text: e.target.value, touched: false }) } }
               onBlur={ () => { this.setState({ touched: true }); this.save(); } }
               placeholder='输入可选值'/>
@@ -138,7 +140,7 @@ export default class Card extends Component {
           <i className='fa fa-undo'></i>
         </span> }
         { !!edit && !this.state.editing && 
-        <span style={ styles } onClick={ this.edit.bind(this, index, text) } title='编辑' className='rm-icon'>
+        <span style={ styles } onClick={ this.edit.bind(this) } title='编辑' className='rm-icon'>
           <i className='fa fa-pencil'></i>
         </span> }
       </div>

@@ -4,7 +4,7 @@ import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, 
 import Select from 'react-select';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import _ from 'lodash';
-import { IssueFilterList, getCondsTxt } from '../../issue/IssueFilterList';
+import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
 import { ttFormat } from '../../share/Funcs'
 import SaveFilterModal from '../SaveFilterModal';
 import Summary from './Summary';
@@ -121,7 +121,7 @@ export default class TimeTracks extends Component {
     let sqlTxt = '';
     if (!optionsLoading) {
       sqlTxt = '统计范围～' + (query.scale === 'only' ? '仅包含有初始预估时间的' : '所有问题');
-      const issueSqlTxt = getCondsTxt(query, options);
+      const issueSqlTxt = parseQuery(query, options);
       if (issueSqlTxt) {
         sqlTxt += ' | ' + issueSqlTxt;
       }

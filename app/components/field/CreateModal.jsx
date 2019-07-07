@@ -19,8 +19,6 @@ const validate = (values, props) => {
     'type', 
     'state', 
     'assignee', 
-    'priority', 
-    'resolution', 
     'reporter', 
     'modifier',
     'resolver',
@@ -32,7 +30,6 @@ const validate = (values, props) => {
     'regression_times', 
     'his_resolvers', 
     'resolved_logs', 
-    'original_estimate_m',
     'no', 
     'schema', 
     'parent_id', 
@@ -50,8 +47,18 @@ const validate = (values, props) => {
 
   if (!values.key) {
     errors.key = '必填';
-  } else if (_.findIndex(props.collection || [], { key: values.key }) !== -1 || _.indexOf(usedKeys, values.key) !== -1) {
-    errors.key = '该键值已存在或已被系统使用';
+  } else {
+    _.forEach(props.collection, (v) => {
+      usedKeys.push(v.key);
+      if (v.type === 'TimeTracking') {
+        usedKeys.push(v.key + '_m');
+      } else if (v.type === 'MultiUser') {
+        usedKeys.push(v.key + '_ids');
+      }
+    });
+    if (usedKeys.indexOf(values.key) !== -1) {
+      errors.key = '该键值已存在或已被系统使用';
+    }
   }
 
   if (!values.type) {
