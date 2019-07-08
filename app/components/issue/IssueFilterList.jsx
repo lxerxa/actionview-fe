@@ -154,8 +154,7 @@ export class IssueFilterList extends Component {
       { key: 'module', name: '模块', type: 'MultiSelect', optionValues: modules },
       { key: 'resolve_version', name: '解决版本', type: 'MultiSelect', optionValues: versions },
       { key: 'effect_versions', name: '影响版本', type: 'MultiSelect', optionValues: versions },
-      { key: 'labels', name: '标签', type: 'MultiSelect', optionValues: labelOptions },
-      { key: 'description', name: '描述', type: 'Text', desc: '描述关键字' }
+      { key: 'labels', name: '标签', type: 'MultiSelect', optionValues: labelOptions }
     ];
     const baseFilterSections = this.groupFields(_.reject(baseFields, (v) => notShowFields.indexOf(v.key) !== -1));
 
