@@ -511,7 +511,7 @@ export default class List extends Component {
               { mainOrder.field === 'resolution' && 
                 (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
             </span>
-           </TableHeaderColumn>
+          </TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.barShow &&

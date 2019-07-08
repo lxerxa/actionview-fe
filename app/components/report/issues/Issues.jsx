@@ -49,7 +49,7 @@ export default class Issues extends Component {
     const newQuery = nextProps.query || {};
     const { index, query } = this.props;
     if (!_.isEqual(newQuery, query)) {
-      index(newQuery);
+      index(_.assign({}, { stat_x: 'type' }, newQuery));
     }
     this.setState({ 
       stat_x: newQuery.stat_x || 'type', 

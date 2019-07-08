@@ -58,6 +58,15 @@ class CreateModal extends Component {
           if (v.key == 'assignee' && data[v.key].id) {
             values[v.key] = data[v.key].id; // assignee
             oldValues[v.key] = data[v.key].id; // assignee
+          } else if (v.type == 'SingleUser' && data[v.key].id) {
+            values[v.key] = data[v.key].id;
+            oldValues[v.key] = data[v.key].id;
+          } else if (v.type == 'MultiUser' && _.isArray(data[v.key])) {
+            values[v.key] = _.map(data[v.key], (v) => v.id).join(',');
+            oldValues[v.key] = _.map(data[v.key], (v) => v.id).join(',');
+          } else if ((v.type == 'MultiSelect' || v.type == 'MultiVersion') && _.isArray(data[v.key])) {
+            values[v.key] = data[v.key].join(',');
+            oldValues[v.key] = data[v.key].join(',');
           } else if (v.key == 'labels') {
             if (options.permissions && options.permissions.indexOf('manage_project') !== -1) {
               values[v.key] = _.map(data[v.key] || [], (v) => { return { value: v, label: v } });
@@ -66,12 +75,6 @@ class CreateModal extends Component {
               values[v.key] = (data[v.key] || []).join(',');
               oldValues[v.key] = (data[v.key] || []).join(','); 
             }
-          } else if (v.type == 'SingleUser' && data[v.key].id) {
-            values[v.key] = data[v.key].id; // singleuser 
-            oldValues[v.key] = data[v.key].id; // singleuser 
-          } else if (v.type == 'MultiUser' && _.isArray(data[v.key])) {
-            values[v.key] = _.map(data[v.key], (v) => v.id).join(','); // files
-            oldValues[v.key] = _.map(data[v.key], (v) => v.id).join(','); // files
           } else if (v.type == 'File' && _.isArray(data[v.key])) {
             values[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
             oldValues[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
@@ -222,6 +225,8 @@ class CreateModal extends Component {
           } else {
             submitData[key] = val.split(',');
           }
+        } else if ([ 'MultiSelect', 'MultiVersion', 'MultiUser' ].indexOf(field.type) !== -1) {
+          submitData[key] = val.split(',');
         } else if (field.type === 'DatePicker') {
           submitData[key] = parseInt(moment(val).startOf('day').format('X')); 
         } else if (field.type === 'DateTimePicker') {
