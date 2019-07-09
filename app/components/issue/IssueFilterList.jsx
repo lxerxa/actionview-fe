@@ -331,7 +331,7 @@ export function parseQuery(query, options) {
     { key: 'closed_at', name : '关闭时间', type: 'Duration' },
     { key: 'expect_complete_time', name : '期望完成时间', type: 'Duration' },
     { key: 'epic', type: 'MultiSelect', name: 'Epic', optionValues: epics },
-    { key: 'sprint', type: 'MultiSelect', name: 'Sprint', optionValues: sprints }
+    { key: 'sprint', type: 'MultiSelect', name: 'Sprint' }
   ];
 
   _.forEach(fields, (v) => {
@@ -352,7 +352,7 @@ export function parseQuery(query, options) {
   for(let i = 0; i < sections.length; i++) {
     const v = sections[i];
     if (query[v.key]) {
-      if (v.key === 'labels' || [ 'Text', 'TextArea', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
+      if ([ 'labels', 'sprint' ].indexOf(v.key) !== -1 || [ 'Text', 'TextArea', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
         queryConds.push(v.name + '～' + query[v.key]);
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
         const queryNames = [];
