@@ -24,7 +24,7 @@ export class IssueFilterList extends Component {
   }
 
   static propTypes = {
-    refresh: PropTypes.func.isRequired,
+    refresh: PropTypes.func,
     query: PropTypes.object,
     searchShow: PropTypes.bool,
     notShowFields: PropTypes.array,
@@ -55,7 +55,9 @@ export class IssueFilterList extends Component {
       }
     });
 
-    refresh(newQuery);
+    if (refresh) {
+      refresh(newQuery);
+    }
   }
 
   groupFields(fields, columns=3) {
@@ -101,7 +103,7 @@ export class IssueFilterList extends Component {
             </Col>
             <Col sm={ 12 / columns - 1 }>
               <Duration
-                mode={ (v.type === 'DatePicker' || v.type === 'DateTimePicker') ? 'fix_duration' : (v.mode || '') }
+                mode={ (v.type === 'DatePicker' || v.type === 'DateTimePicker') ? 'fixed' : (v.mode || '') }
                 value={ this.state.query[v.key] }
                 onChange={ (newValue) => { this.state.query[v.key] = newValue; this.search(); } }/>
             </Col>
@@ -172,7 +174,7 @@ export class IssueFilterList extends Component {
       { key: 'updated_at', name: '更新时间', type: 'Duration' },
       { key: 'resolved_at', name: '解决时间', type: 'Duration' },
       { key: 'closed_at', name: '关闭时间', type: 'Duration' },
-      { key: 'expect_complete_time', name: '期望完成', type: 'Duration', mode: 'fix_duration' }
+      { key: 'expect_complete_time', name: '期望完成', type: 'Duration', mode: 'fixed' }
     ];
     const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), 2);
 
