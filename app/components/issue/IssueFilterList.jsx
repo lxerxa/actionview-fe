@@ -14,7 +14,7 @@ export class IssueFilterList extends Component {
       memberFilterShow: false,
       timeFilterShow: false,
       agileFilterShow: false, 
-      otherFilterShow: false 
+      othersFilterShow: false 
     }
 
     this.state.query = {};
@@ -25,6 +25,7 @@ export class IssueFilterList extends Component {
 
   static propTypes = {
     refresh: PropTypes.func,
+    columns: PropTypes.number,
     query: PropTypes.object,
     searchShow: PropTypes.bool,
     notShowFields: PropTypes.array,
@@ -136,6 +137,7 @@ export class IssueFilterList extends Component {
 
   render() {
     const { 
+      columns,
       query,
       searchShow=false, 
       notShowFields=[],
@@ -158,7 +160,7 @@ export class IssueFilterList extends Component {
       { key: 'effect_versions', name: '影响版本', type: 'MultiSelect', optionValues: versions },
       { key: 'labels', name: '标签', type: 'MultiSelect', optionValues: labelOptions }
     ];
-    const baseFilterSections = this.groupFields(_.reject(baseFields, (v) => notShowFields.indexOf(v.key) !== -1));
+    const baseFilterSections = this.groupFields(_.reject(baseFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
 
     const memberFields = [
       { key: 'reporter', name: '报告者', type: 'MultiSelect', optionValues: userOptions },
@@ -167,7 +169,7 @@ export class IssueFilterList extends Component {
       { key: 'closer', name: '关闭者', type: 'MultiSelect', optionValues: userOptions },
       { key: 'watcher', name: '关注者', type: 'MultiSelect', optionValues: [ { value: 'me', label: '当前用户' } ] }
     ];
-    const memberFilterSections = this.groupFields(_.reject(memberFields, (v) => notShowFields.indexOf(v.key) !== -1));
+    const memberFilterSections = this.groupFields(_.reject(memberFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
 
     const timeFields = [
       { key: 'created_at', name: '创建时间', type: 'Duration' },
@@ -176,13 +178,13 @@ export class IssueFilterList extends Component {
       { key: 'closed_at', name: '关闭时间', type: 'Duration' },
       { key: 'expect_complete_time', name: '期望完成', type: 'Duration', mode: 'fixed' }
     ];
-    const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), 2);
+    const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 2);
 
     const agileFields = [
       { key: 'epic', name: 'Epic', type: 'MultiSelect', optionValues: epics },
       { key: 'sprint', name: 'Sprint', type: 'Select', optionValues: sprintOptions  }
     ];
-    const agileFilterSections = this.groupFields(_.reject(agileFields, (v) => notShowFields.indexOf(v.key) !== -1), 3);
+    const agileFilterSections = this.groupFields(_.reject(agileFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
 
     const usedFieldKeys = _.reduce([ baseFields, memberFields, timeFields, agileFields ], (res, val) => { _.forEach(val, (v) => { res.push(v.key) }); return res; }, []);
     const othersFields = _.reject(fields, (v) => v.type === 'File' || usedFieldKeys.indexOf(v.key) !== -1);
@@ -193,7 +195,7 @@ export class IssueFilterList extends Component {
         v.optionValues = versions; 
       }
     });
-    const othersFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1), 2);
+    const othersFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 2);
 
     return (
       <Form 

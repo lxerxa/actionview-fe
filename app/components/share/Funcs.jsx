@@ -30,19 +30,28 @@ export function getAgoAt(stamptime, current_time) {
 }
 
 export function getFileIconCss(fileName) {
-  const newFileName = (fileName || '').toLowerCase();
-  if (_.endsWith(newFileName, 'doc') || _.endsWith(newFileName, 'docx')) {
-    return 'fa fa-file-word-o';
-  } else if (_.endsWith(newFileName, 'xls') || _.endsWith(newFileName, 'xlsx')) {
-    return 'fa fa-file-excel-o';
-  } else if (_.endsWith(newFileName, 'ppt') || _.endsWith(newFileName, 'pptx')) {
-    return 'fa fa-file-powerpoint-o';
-  } else if (_.endsWith(newFileName, 'pdf')) {
-    return 'fa fa-file-pdf-o';
-  } else if (_.endsWith(newFileName, 'txt')) {
-    return 'fa fa-file-text-o';
-  } else if (_.endsWith(newFileName, 'zip') || _.endsWith(newFileName, 'rar') || _.endsWith(newFileName, '7z') || _.endsWith(newFileName, 'gz') || _.endsWith(newFileName, 'bz')) {
-    return 'fa fa-file-zip-o';
+  const newFileName = fileName.toLowerCase();
+  const index = newFileName.lastIndexOf('.');
+  if (index === -1) {
+    return 'fa fa-file-o';
+  }
+
+  const docTypes = { 
+    doc: 'word', docx: 'word', 
+    xls: 'excel', 'xlsx': 'excel', 
+    ppt: 'powerpoint', pptx: 'powerpoint',
+    bmp: 'image', jpg: 'image', jpeg: 'image', png: 'image', gif: 'image',
+    c: 'code', cpp: 'code', h: 'code', hpp: 'code', js: 'code', jsx: 'code', php: 'code', tpl: 'code', py: 'code', java: 'code', sh: 'code', pl: 'code', perl: 'code', go: 'code',cs: 'code', rb: 'code', html: 'code', asp: 'code', aspx: 'code', jsp: 'code', 
+    pdf: 'pdf',
+    txt: 'text',
+    zip: 'zip', rar: 'zip', '7z': 'zip', gz: 'zip', bz: 'zip',
+    avi: 'movie', mpg: 'movie', mov: 'movie', swf: 'movie', mp4: 'movie',
+    wav: 'sound', aif: 'sound', mp3: 'sound', wma: 'sound', aac: 'sound'
+  };
+
+  const suffix = newFileName.substr(index + 1);
+  if (docTypes[suffix]) {
+    return 'fa fa-file-' + docTypes[suffix] + '-o';
   } else {
     return 'fa fa-file-o';
   }

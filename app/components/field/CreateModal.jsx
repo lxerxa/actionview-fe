@@ -59,6 +59,9 @@ const validate = (values, props) => {
     if (usedKeys.indexOf(values.key) !== -1) {
       errors.key = '该键值已存在或已被系统使用';
     }
+    if (values.type && ((values.type === 'TimeTracking' && usedKeys.indexOf(values.key + '_m') !== -1) || (values.type === 'MultiUser' && usedKeys.indexOf(values.key + '_m') !== -1))) {
+      errors.key = '该键值已存在或已被系统使用';
+    }
   }
 
   if (!values.type) {

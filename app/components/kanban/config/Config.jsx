@@ -252,7 +252,7 @@ export default class Config extends Component {
           { isAllowedEdit &&
           <Button onClick={ () => { this.setState({ editModalShow: true }) } }>编辑</Button> }
           { isAllowedEdit &&
-          <Button style={ { marginLeft: '20px' } } bsStyle='link' onClick={ () => { this.setState({ delNotifyShow: true }) } }>删除</Button> }
+          <Button style={ { marginLeft: '15px' } } bsStyle='link' onClick={ () => { this.setState({ delNotifyShow: true }) } }>删除</Button> }
         </div>
       )
     });
