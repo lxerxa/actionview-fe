@@ -193,7 +193,7 @@ export default class Issues extends Component {
           </FormGroup>
         </Form>
         <IssueFilterList
-          query={ query }
+          values={ query }
           searchShow={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           options={ options }

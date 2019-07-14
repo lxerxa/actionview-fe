@@ -232,7 +232,7 @@ export default class Trend extends Component {
           </FormGroup>
         </Form>
         <IssueFilterList
-          query={ query }
+          values={ query }
           searchShow={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           notShowBlocks={ [ 'time' ] }

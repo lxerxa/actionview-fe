@@ -4,7 +4,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 
 import Duration from '../share/Duration';
-import NumberInterval from '../share/Interval';
+import Interval from '../share/Interval';
 
 export class IssueFilterList extends Component {
   constructor(props) {
@@ -17,38 +17,39 @@ export class IssueFilterList extends Component {
       othersFilterShow: false 
     }
 
-    this.state.query = {};
+    this.state.values = {};
 
-    this.search = this.search.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.groupFields = this.groupFields.bind(this);
   }
 
   static propTypes = {
-    refresh: PropTypes.func,
+    onChange: PropTypes.func,
     columns: PropTypes.number,
-    query: PropTypes.object,
+    values: PropTypes.object,
     searchShow: PropTypes.bool,
     notShowFields: PropTypes.array,
     notShowBlocks: PropTypes.array,
+    notShowTypes: PropTypes.array,
     options: PropTypes.object
   }
 
   componentWillReceiveProps(nextProps) {
-    const newQuery = nextProps.query || {};
+    const newQuery = nextProps.values || {};
     if (_.isEmpty(newQuery)) {
-      this.state.query = {};
+      this.state.values = {};
     } else {
       _.forEach(newQuery, (v, key) => {
-        this.state.query[key] = newQuery[key] ? newQuery[key] : '';
+        this.state.values[key] = newQuery[key] ? newQuery[key] : '';
       });
     }
   }
 
-  search() {
-    const { query={}, refresh } = this.props;
+  onChange() {
+    const { values={}, onChange } = this.props;
 
-    const newQuery = _.assign({}, query);
-    _.forEach(this.state.query, (v, key) => {
+    const newQuery = _.assign({}, values);
+    _.forEach(this.state.values, (v, key) => {
       if (v) {
         newQuery[key] = v;
       } else {
@@ -56,14 +57,12 @@ export class IssueFilterList extends Component {
       }
     });
 
-    if (refresh) {
-      refresh(newQuery);
-    }
+    onChange && onChange(newQuery);
   }
 
   groupFields(fields, columns=3) {
-    const filters = [];
 
+    const filters = [];
     _.forEach(fields, (v) => {
       if (v.type === 'Text' || v.type === 'TextArea' || v.type === 'Url') {
         filters.push(
@@ -74,9 +73,9 @@ export class IssueFilterList extends Component {
             <Col sm={ 12 / columns - 1 }>
               <FormControl
                 type='text'
-                value={ this.state.query[v.key] || '' }
-                onKeyPress={ (e) => { if (e.charCode == '13') { this.search(); } } }
-                onChange={ (e) => { this.setState({ query: _.assign({}, this.state.query, { [v.key]: e.target.value }) }) } }
+                value={ this.state.values[v.key] || '' }
+                onKeyPress={ (e) => { if (e.charCode == '13') { this.onChange(); } } }
+                onChange={ (e) => { this.setState({ values: _.assign({}, this.state.values, { [v.key]: e.target.value }) }); } }
                 placeholder={ '输入' + (v.desc || v.name) } />
             </Col>
           </div> );
@@ -90,8 +89,8 @@ export class IssueFilterList extends Component {
               <Select
                 simpleValue
                 multi
-                value={ this.state.query[v.key] || null }
-                onChange={ (newValue) => { this.state.query[v.key] = newValue; this.search(); } }
+                value={ this.state.values[v.key] || null }
+                onChange={ (newValue) => { this.state.values[v.key] = newValue; this.onChange(); } }
                 options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } }) }
                 placeholder={ '选择' +  v.name }/>
             </Col>
@@ -105,8 +104,8 @@ export class IssueFilterList extends Component {
             <Col sm={ 12 / columns - 1 }>
               <Duration
                 mode={ (v.type === 'DatePicker' || v.type === 'DateTimePicker') ? 'fixed' : (v.mode || '') }
-                value={ this.state.query[v.key] }
-                onChange={ (newValue) => { this.state.query[v.key] = newValue; this.search(); } }/>
+                value={ this.state.values[v.key] }
+                onChange={ (newValue) => { this.state.values[v.key] = newValue; this.onChange(); } }/>
             </Col>
           </div> );
       } else if (v.type === 'Number' || v.type === 'TimeTracking') {
@@ -116,10 +115,10 @@ export class IssueFilterList extends Component {
               { v.name }
             </Col>
             <Col sm={ 12 / columns - 1 }>
-              <NumberInterval
-                search={ this.search }
-                value={ this.state.query[v.key] }
-                onChange={ (newValue) => { this.state.query[v.key] = newValue; } }/>
+              <Interval
+                value={ this.state.values[v.key] }
+                keyPress={ (e) => { if (e.charCode == '13') { this.onChange(); } } }
+                onChange={ (newValue) => { this.state.values[v.key] = newValue; } }/>
             </Col>
           </div> );
       }
@@ -138,10 +137,11 @@ export class IssueFilterList extends Component {
   render() {
     const { 
       columns,
-      query,
+      values,
       searchShow=false, 
       notShowFields=[],
       notShowBlocks=[],
+      notShowTypes=[],
       options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[], fields=[] } } = this.props;
 
     const userOptions = _.map(users, (val) => { return { name: val.name + '(' + val.email + ')', id: val.id } });
@@ -160,14 +160,14 @@ export class IssueFilterList extends Component {
       { key: 'effect_versions', name: '影响版本', type: 'MultiSelect', optionValues: versions },
       { key: 'labels', name: '标签', type: 'MultiSelect', optionValues: labelOptions }
     ];
-    const baseFilterSections = this.groupFields(_.reject(baseFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
+    const baseFilterSections = this.groupFields(_.reject(baseFields, (v) => notShowFields.indexOf(v.key) !== -1 || notShowTypes.indexOf(v.type) !== -1), columns || 3);
 
     const memberFields = [
       { key: 'reporter', name: '报告者', type: 'MultiSelect', optionValues: userOptions },
       { key: 'assignee', name: '经办人', type: 'MultiSelect', optionValues: userOptions },
       { key: 'resolver', name: '解决者', type: 'MultiSelect', optionValues: userOptions },
       { key: 'closer', name: '关闭者', type: 'MultiSelect', optionValues: userOptions },
-      { key: 'watcher', name: '关注者', type: 'MultiSelect', optionValues: [ { value: 'me', label: '当前用户' } ] }
+      { key: 'watcher', name: '关注者', type: 'MultiSelect', optionValues: [ { id: 'me', name: '当前用户' } ] }
     ];
     const memberFilterSections = this.groupFields(_.reject(memberFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
 
@@ -195,7 +195,7 @@ export class IssueFilterList extends Component {
         v.optionValues = versions; 
       }
     });
-    const othersFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 2);
+    const othersFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1 || notShowTypes.indexOf(v.type) !== -1), columns || 2);
 
     return (
       <Form 
@@ -211,7 +211,7 @@ export class IssueFilterList extends Component {
               onClick={ () => this.setState({ baseFilterShow: !this.state.baseFilterShow }) } 
               title={ this.state.baseFilterShow ? '收缩' : '展开' }>
               <span style={ { marginRight: '2px' } }>基本字段</span>
-              { _.intersection(_.keys(query), _.map(baseFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
+              { _.intersection(_.keys(values), _.map(baseFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.baseFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
           </div>
@@ -230,7 +230,7 @@ export class IssueFilterList extends Component {
               onClick={ () => this.setState({ memberFilterShow: !this.state.memberFilterShow }) } 
               title={ this.state.memberFilterShow ? '收缩' : '展开' }>
               <span style={ { marginRight: '2px' } }>人员</span>
-              { _.intersection(_.keys(query), _.map(memberFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
+              { _.intersection(_.keys(values), _.map(memberFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.memberFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
           </div>
@@ -249,7 +249,7 @@ export class IssueFilterList extends Component {
               onClick={ () => this.setState({ timeFilterShow: !this.state.timeFilterShow }) } 
               title={ this.state.timeFilterShow ? '收缩' : '展开' }>
               <span style={ { marginRight: '2px' } }>时间</span>
-              { _.intersection(_.keys(query), _.map(timeFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
+              { _.intersection(_.keys(values), _.map(timeFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.timeFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
           </div>
@@ -268,7 +268,7 @@ export class IssueFilterList extends Component {
               onClick={ () => this.setState({ agileFilterShow: !this.state.agileFilterShow }) } 
               title={ this.state.agileFilterShow ? '收缩' : '展开' }>
               <span style={ { marginRight: '2px' } }>敏捷迭代</span> 
-              { _.intersection(_.keys(query), _.map(agileFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
+              { _.intersection(_.keys(values), _.map(agileFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.agileFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
           </div>
@@ -287,7 +287,7 @@ export class IssueFilterList extends Component {
               onClick={ () => this.setState({ othersFilterShow: !this.state.othersFilterShow }) }
               title={ this.state.othersFilterShow ? '收缩' : '展开' }>
               <span style={ { marginRight: '2px' } }>其它字段</span>
-              { _.intersection(_.keys(query), _.map(othersFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
+              { _.intersection(_.keys(values), _.map(othersFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.othersFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
           </div>

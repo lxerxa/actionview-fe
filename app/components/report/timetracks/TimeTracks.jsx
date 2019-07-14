@@ -243,7 +243,7 @@ export default class TimeTracks extends Component {
         </Form>
         <div>
           <IssueFilterList
-            query={ query }
+            values={ query }
             searchShow={ this.state.issueFilterShow }
             notShowFields={ [ 'watcher' ] }
             options={ options }

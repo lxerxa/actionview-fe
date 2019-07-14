@@ -191,7 +191,7 @@ export default class Regressions extends Component {
           </FormGroup>
         </Form>
         <IssueFilterList
-          query={ query }
+          values={ query }
           searchShow={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           options={ options }

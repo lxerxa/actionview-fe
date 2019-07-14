@@ -12,18 +12,9 @@ export default class FilterConfigModal extends Component {
     super(props);
     this.state = {
       name: '', 
-      type: '', 
-      assignee: '', 
-      reporter: '', 
-      state: '', 
-      priority: '', 
-      resolution: '', 
-      module: '', 
-      labels: '', 
-      created_at: null, 
-      updated_at: null,
       touched: {},
-      errors: {} };
+      errors: {},
+      query: {} };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -31,33 +22,19 @@ export default class FilterConfigModal extends Component {
   componentWillMount() {
     const { data: { query={}, filters=[] }, model, no=-1 } = this.props;
     if (model == 'global') {
-      this.state.type = query.type && query.type.join(',') || ''; 
-      this.state.assignee = query.assignee && query.assignee.join(',') || ''; 
-      this.state.reporter = query.reporter && query.reporter.join(',') || ''; 
-      this.state.state = query.state && query.state.join(',') || ''; 
-      this.state.resolution = query.resolution && query.resolution.join(',') || ''; 
-      this.state.priority = query.priority && query.priority.join(',') || ''; 
-      this.state.module = query.module && query.module.join(',') || ''; 
-      this.state.labels = query.labels && query.labels.join(',') || ''; 
-      this.state.created_at = query.created_at || null; 
-      this.state.updated_at = query.updated_at || null; 
+      _.forEach(query, (v, k) => {
+        this.state.query[k] = v && _.isArray(v) ? v.join(',') : (v || '');
+      });
     } else if (model == 'filter' && no >= 0) {
       const filter = _.find(filters, { no: no });
       if (!filter) {
         return;
       }
-      const filterQuery = filter.query; 
       this.state.name = filter.name;
-      this.state.type = filterQuery.type && filterQuery.type.join(',') || '';
-      this.state.assignee = filterQuery.assignee && filterQuery.assignee.join(',') || '';
-      this.state.reporter = filterQuery.reporter && filterQuery.reporter.join(',') || '';
-      this.state.state = filterQuery.state && filterQuery.state.join(',') || '';
-      this.state.resolution = filterQuery.resolution && filterQuery.resolution.join(',') || '';
-      this.state.priority = filterQuery.priority && filterQuery.priority.join(',') || '';
-      this.state.module = filterQuery.module && filterQuery.module.join(',') || '';
-      this.state.labels = filterQuery.labels && filterQuery.labels.join(',') || '';
-      this.state.created_at = filterQuery.created_at || null;
-      this.state.updated_at = filterQuery.updated_at || null;
+      const filterQuery = filter.query; 
+      _.forEach(filter.query, (v, k) => {
+        this.state.query[k] = v && _.isArray(v) ? v.join(',') : (v || ''); 
+      });
     }
   }
 
@@ -75,17 +52,7 @@ export default class FilterConfigModal extends Component {
   async handleSubmit() {
     const { update, close, data:{ id, filters=[] }, model, no } = this.props;
 
-    const submitData = {};
-    if (this.state.type) { submitData.type = this.state.type.split(','); } 
-    if (this.state.state) { submitData.state = this.state.state.split(','); } 
-    if (this.state.priority) { submitData.priority = this.state.priority.split(','); } 
-    if (this.state.resolution) { submitData.resolution = this.state.resolution.split(','); } 
-    if (this.state.module) { submitData.module = this.state.module.split(','); } 
-    if (this.state.labels) { submitData.labels = this.state.labels.split(','); } 
-    if (this.state.assignee) { submitData.assignee = this.state.assignee.split(','); } 
-    if (this.state.reporter) { submitData.reporter = this.state.reporter.split(','); } 
-    if (this.state.created_at) { submitData.created_at = this.state.created_at; }
-    if (this.state.updated_at) { submitData.updated_at = this.state.updated_at; }
+    const submitData = this.state.query;
 
     let ecode = 0;
     if (model == 'global') {
@@ -123,27 +90,7 @@ export default class FilterConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, model, no, loading, options: { types=[], states=[], priorities=[], resolutions=[], modules=[], labels=[], users=[] } } = this.props;
-
-    const typeOptions = _.map(_.filter(types, (v) => { return v.type === 'standard' }), (val) => { return { label: val.name, value: val.id } });
-    const userOptions = _.map(users, (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
-    userOptions.unshift({ value: 'me', label: '当前用户' });
-    const stateOptions = _.map(states, (val) => { return { label: <span className={ 'state-' + val.category + '-label' }>{ val.name }</span>, value: val.id } });
-    const priorityOptions = _.map(priorities, (val) => { return { label: val.name, value: val.id } });
-    const resolutionOptions = _.map(resolutions, (val) => { return { label: val.name, value: val.id } });
-    const moduleOptions = _.map(modules, (val) => { return { label: val.name, value: val.id } });
-    const labelOptions = _.map(labels.sort((a, b) => a.localeCompare(b)), (val) => { return { label: val, value: val } });
-    const dateOptions = [
-      { label: '1周内', value: '1w' }, 
-      { label: '2周内', value: '2w' }, 
-      { label: '1个月内', value: '1m' }, 
-      { label: '2个月内', value: '2m' }, 
-      { label: '3个月内', value: '3m' }, 
-      { label: '4个月内', value: '4m' }, 
-      { label: '5个月内', value: '5m' }, 
-      { label: '6个月内', value: '6m' },
-      { label: '1年内', value: '1y' }
-    ];
+    const { i18n: { errMsg }, model, no, loading, options } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
@@ -151,9 +98,11 @@ export default class FilterConfigModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ model == 'global' ? '全局过滤器' : ( no === -1 ? '添加快速过滤器' : '编辑快速过滤器' ) }</Modal.Title>
         </Modal.Header>
         <Form horizontal onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body>
+        <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>
           { model === 'filter' &&
-          <FormGroup controlId='formControlsLabel' style={ { height: '50px', borderBottom: '1px solid #ddd' } } validationState={ this.state.touched.name && this.state.errors.name && 'error' || null }>
+          <FormGroup 
+            style={ { height: '50px', borderBottom: '1px solid #ddd' } } 
+            validationState={ this.state.touched.name && this.state.errors.name && 'error' || null }>
             <Col sm={ 2 } componentClass={ ControlLabel }>
              <span className='txt-impt'>*</span>过滤器名称 
             </Col>
@@ -169,134 +118,14 @@ export default class FilterConfigModal extends Component {
               { this.state.touched.name && (this.state.errors.name || '') }
             </Col>
           </FormGroup> }
-          <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              类型 
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择类型'
-                value={ this.state.type }
-                onChange={ (newValue) => { this.setState({ type: newValue }); } }
-                options={ typeOptions }/>
-            </Col>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              优先级 
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择优先级'
-                value={ this.state.priority }
-                onChange={ (newValue) => { this.setState({ priority: newValue }); } }
-                options={ priorityOptions }/>
-            </Col>
-          </FormGroup>
-          <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              状态
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择状态'
-                value={ this.state.state }
-                onChange={ (newValue) => { this.setState({ state: newValue }); } }
-                options={ stateOptions }/>
-            </Col>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              解决结果 
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择解决结果'
-                value={ this.state.resolution }
-                onChange={ (newValue) => { this.setState({ resolution: newValue }); } }
-                options={ resolutionOptions }/>
-            </Col>
-          </FormGroup>
-          <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              模块
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择模块'
-                value={ this.state.module }
-                onChange={ (newValue) => { this.setState({ module: newValue }); } }
-                options={ moduleOptions }/>
-            </Col>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              标签
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择标签'
-                value={ this.state.labels }
-                onChange={ (newValue) => { this.setState({ labels: newValue }); } }
-                options={ labelOptions }/>
-            </Col>
-          </FormGroup>
-          <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              报告人 
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择用户'
-                value={ this.state.reporter }
-                onChange={ (newValue) => { this.setState({ reporter: newValue }); } }
-                options={ userOptions }/>
-            </Col>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              经办人
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                multi
-                placeholder='选择用户'
-                value={ this.state.assignee }
-                onChange={ (newValue) => { this.setState({ assignee: newValue }); } }
-                options={ userOptions }/>
-            </Col>
-          </FormGroup>
-          <FormGroup controlId='formControlsLabel'>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              创建时间
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                placeholder='选择时间段'
-                value={ this.state.created_at }
-                onChange={ (newValue) => { this.setState({ created_at: newValue }); } }
-                options={ dateOptions }/>
-            </Col>
-            <Col sm={ 2 } componentClass={ ControlLabel }>
-              更新时间
-            </Col>
-            <Col sm={ 4 }>
-              <Select
-                simpleValue
-                placeholder='选择时间段'
-                value={ this.state.updated_at }
-                onChange={ (newValue) => { this.setState({ updated_at: newValue }); } }
-                options={ dateOptions }/>
-            </Col>
-          </FormGroup>
+          <IssueFilterList
+            values={ this.state.query }
+            onChange={ (newValue) => { this.setState({ query: newValue }) } }
+            columns={ 2 }
+            notShowFields={ [ 'title', 'resolved_at', 'closed_at', 'resolver', 'closer', 'watcher' ] }
+            notShowBlocks={ [ 'agile' ] }
+            searchShow={ true }
+            options={ options }/>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>

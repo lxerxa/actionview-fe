@@ -41,7 +41,7 @@ export function getFileIconCss(fileName) {
     xls: 'excel', 'xlsx': 'excel', 
     ppt: 'powerpoint', pptx: 'powerpoint',
     bmp: 'image', jpg: 'image', jpeg: 'image', png: 'image', gif: 'image',
-    c: 'code', cpp: 'code', h: 'code', hpp: 'code', js: 'code', jsx: 'code', php: 'code', tpl: 'code', py: 'code', java: 'code', sh: 'code', pl: 'code', perl: 'code', go: 'code',cs: 'code', rb: 'code', html: 'code', asp: 'code', aspx: 'code', jsp: 'code', 
+    c: 'code', cpp: 'code', h: 'code', hpp: 'code', js: 'code', jsx: 'code', php: 'code', tpl: 'code', py: 'code', java: 'code', sh: 'code', pl: 'code', perl: 'code', go: 'code',cs: 'code', rb: 'code', html: 'code', css: 'code', asp: 'code', aspx: 'code', jsp: 'code', 
     pdf: 'pdf',
     txt: 'text',
     zip: 'zip', rar: 'zip', '7z': 'zip', gz: 'zip', bz: 'zip',

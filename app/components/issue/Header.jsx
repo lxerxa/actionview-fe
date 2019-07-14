@@ -179,12 +179,11 @@ export default class Header extends Component {
           filters={ options.filters || [] } 
           i18n={ i18n }/> }
         <IssueFilterList 
-          className={ !this.state.searchShow && 'hide' } 
-          query={ query } 
+          values={ query } 
           searchShow={ this.state.searchShow } 
           indexLoading={ indexLoading } 
           options={ options } 
-          refresh={ refresh } />
+          onChange={ (newValue) => { refresh(newValue) } } />
         { this.state.createModalShow && 
         <CreateModal 
           show 

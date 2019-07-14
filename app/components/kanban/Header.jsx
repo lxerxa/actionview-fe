@@ -33,7 +33,6 @@ export default class Header extends Component {
       sortCardsModalShow: false,
       burndownModalShow: false,
       hisBurndownModalShow: false };
-    this.getQuery = this.getQuery.bind(this);
     this.changeModel = this.changeModel.bind(this);
     this.changeFilterMode = this.changeFilterMode.bind(this);
   }
@@ -43,7 +42,7 @@ export default class Header extends Component {
     if (this.props.curKanban.id != curKanban.id || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
       await changeModel('issue');
       await selectFilter('all');
-      index(this.getQuery(curKanban.query || {}));
+      index();
     }
   }
 
@@ -112,78 +111,10 @@ export default class Header extends Component {
     }
   }
 
-  getQuery(globalQuery, filterQuery) {
-    const gq = globalQuery || {};
-    const fq = filterQuery || {};
-
-    const multiValFields = [ 'type', 'priority', 'state', 'resolution', 'assignee', 'reporter', 'module' ];
-    const newQuery = {};
-    _.forEach(multiValFields, (val) => {
-      if (fq[val] && fq[val].length > 0 && gq[val] && gq[val].length > 0) {
-        newQuery[val] = _.intersection(fq[val], gq[val]);
-        if (newQuery[val].length <= 0) {
-          newQuery[val] = [ 'notexists' ];
-        }
-      } else {
-        if (gq[val] && gq[val].length > 0) {
-          newQuery[val] = gq[val];
-        }
-        if (fq[val] && fq[val].length > 0) {
-          newQuery[val] = fq[val];
-        }
-      }
-    });
-
-    if (newQuery.type && _.head(newQuery.type) !== 'notexists' && gq.subtask) {
-      const subtaskTypes = _.map(_.filter(this.props.options.types, { type: 'subtask' }), (v) => v.id);
-      if (subtaskTypes.length > 0) {
-        newQuery.type = _.union(newQuery.type, subtaskTypes); 
-      }
-    }
-
-    if (gq.created_at && fq.created_at) {
-      if (gq.created_at == '1w' || fq.created_at == '1w') {
-        newQuery['created_at'] = '1w';
-      } else if (gq.created_at == '2w' || fq.created_at == '2w') {
-        newQuery['created_at'] = '2w';
-      } else {
-        newQuery['created_at'] = '1m';
-      }
-    } else {
-      newQuery['created_at'] = gq.created_at || fq.created_at;
-    }
-
-    if (gq.updated_at && fq.updated_at) {
-      if (gq.updated_at == '1w' || fq.updated_at == '1w') {
-        newQuery['updated_at'] = '1w';
-      } else if (gq.updated_at == '2w' || fq.updated_at == '2w') {
-        newQuery['updated_at'] = '2w';
-      } else {
-        newQuery['updated_at'] = '1m';
-      }
-    } else {
-      newQuery['updated_at'] = gq.updated_at || fq.updated_at;
-    }
-
-    if (fq.epic) {
-      newQuery['epic'] = fq.epic;
-    }
-
-    if (fq.resolve_version) {
-      newQuery['resolve_version'] = fq.resolve_version;
-    }
-
-    if (fq.sprint) {
-      newQuery['sprint'] = fq.sprint;
-    }
-
-    return _.mapValues(newQuery, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
-  }
-
   async handleSelect(selectedKey) {
     const { index, curKanban, selectFilter } = this.props;
     await selectFilter(selectedKey);
-    index(this.getQuery(curKanban.query || {}, selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query || {}));
+    index(selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query);
   }
 
   showHeader() {
@@ -203,10 +134,10 @@ export default class Header extends Component {
     await changeModel(model);
     if (model == 'issue' || model == 'backlog') {
       await selectFilter('all');
-      index(this.getQuery(curKanban.query || {}, {}));
+      index();
     } else if (model == 'history') {
       await selectFilter(completedSprintNum + '');
-      index(this.getQuery(curKanban.query || {}, { sprint: completedSprintNum }));
+      index({ sprint: completedSprintNum });
       getSprint(completedSprintNum);
     }
   }
@@ -217,13 +148,13 @@ export default class Header extends Component {
     }
     const { index, curKanban, selectFilter } = this.props;
     await selectFilter(key || 'all');
-    index(this.getQuery(curKanban.query || {}, key ? (this.state.backlogFilterMode === 'epic' ? { epic: key } : { resolve_version: key }) : {}));
+    index(key ? (this.state.backlogFilterMode === 'epic' ? { epic: key } : { resolve_version: key }) : {});
   }
 
   async handleSelectSprint(key) {
     const { index, curKanban, selectFilter, completedSprintNum, getSprint } = this.props;
     await selectFilter(key || completedSprintNum);
-    index(this.getQuery(curKanban.query || {}, { sprint : key }));
+    index({ sprint : key });
     getSprint(key);
   }
 
@@ -239,7 +170,7 @@ export default class Header extends Component {
 
     await selectFilter('all');
     if (selectedFilter != 'all') {
-      index(this.getQuery(curKanban.query || {}) , {});
+      index();
     }
   }
 

@@ -70,13 +70,13 @@ export default class PreviewModal extends Component {
           <Modal.Title id='contained-modal-title-la'>燃尽图{ ' - ' + 'Sprint ' + no }</Modal.Title>
         </Modal.Header>
         { loading &&
-        <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
-          <div style={ { textAlign: 'center', marginTop: '150px' } }>
+        <Modal.Body style={ { height: '500px', overflow: 'auto' } }>
+          <div style={ { textAlign: 'center', marginTop: '180px' } }>
             <img src={ img } className='loading'/>
           </div>
         </Modal.Body> }
         { !loading &&
-        <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
+        <Modal.Body style={ { height: '500px', overflow: 'auto' } }>
           <ButtonGroup style={ { float: 'right', marginRight: '110px' } }>
             <Button title='问题数' style={ { backgroundColor: this.state.mode == 'issueCount' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'issueCount' }) } }>问题数</Button>
             <Button title='故事点' style={ { backgroundColor: this.state.mode == 'storyPoints' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'storyPoints' }) } }>故事点数</Button>
@@ -85,7 +85,7 @@ export default class PreviewModal extends Component {
             <Checkbox value='notWorkingShow'/>
             <span style={ { marginLeft: '3px' } }>显示非工作日</span>
           </CheckboxGroup>
-          <LineChart width={ 760 } height={ 340 } style={ { marginTop: '45px' } }>
+          <LineChart width={ 760 } height={ 420 } style={ { marginTop: '45px' } }>
             <XAxis dataKey='day' type='category' allowDuplicatedCategory={ false } />
             <YAxis dataKey='value'/>
             <CartesianGrid strokeDasharray='3 3'/>

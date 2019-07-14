@@ -85,35 +85,30 @@ export default class Container extends Component {
 
     this.refs.list && this.refs.list.closeDetail();
 
-    _.extend(query || {}, {});
+    const newQuery = _.mapValues(query || {}, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
 
     const curKanban = _.find(this.props.kanban.list, { id: this.kanban_id }) || {};
     if (curKanban.type === 'kanban') {
-      _.extend(query, { from: 'kanban' });
+      _.extend(newQuery, { from: 'kanban' });
     } else {
-      //const lastColumn = _.last(curKanban.columns) || {};
-      //if (!_.isEmpty(lastColumn)) {
-      //  _.extend(query, { not_in_states: (lastColumn.states || []).join(',') });
-      //}
       if (this.state.model === 'issue') {
-        _.extend(query, { from: 'active_sprint' });
+        _.extend(newQuery, { from: 'active_sprint' });
       } else if (this.state.model === 'backlog') {
-        _.extend(query, { from: 'backlog' });
+        _.extend(newQuery, { from: 'backlog' });
       } else if (this.state.model === 'history') {
-        _.extend(query, { from: 'his_sprint' });
+        _.extend(newQuery, { from: 'his_sprint' });
       } else {
         return;
       }
     }
 
-    _.extend(query, { from_kanban_id: this.kanban_id });
+    newQuery.from_kanban_id = this.kanban_id;
     if (this.state.filter == 'all') {
-      _.extend(query, { filter: 'all' });
+      newQuery.filter = 'all';
     }
-    _.extend(query, { limit: 10000 });
+    newQuery.limit = 10000;
 
-    await this.props.issueActions.index(this.pid, qs.stringify(query));
-
+    await this.props.issueActions.index(this.pid, qs.stringify(newQuery));
     return this.props.issue.ecode;
   }
 

@@ -105,7 +105,7 @@ export default class Duration extends Component {
     return (
       <div style={ { display: 'inline' } }>
         { this.state.isModeChanged &&
-        <div style={ { width: '25%', display: 'inline-block', float: 'left', marginRight: '5px' } }>
+        <div style={ { width: '26%', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
           <Select
             options={ modeOptions }
             disabled={ false }
@@ -143,7 +143,7 @@ export default class Duration extends Component {
         </div> }
         { this.state.mode === 'inside_variable' && <span style={ { float: 'left', marginTop: '8px', marginLeft: '2px' } }>之内</span> }
         { this.state.mode === 'fixed' &&
-        <div style={ { width: '33%', display: 'inline-block', float: 'left' } }>
+        <div style={ { width: this.state.isModeChanged ? '34%' : '47%', display: 'inline-block', float: 'left' } }>
           <DateTime
             mode='date'
             locale='zh-cn'
@@ -154,9 +154,9 @@ export default class Duration extends Component {
             value={ this.state.start_time }
             onChange={ (newValue) => { this.onChange({ start_time: newValue }); } }/>
         </div> }
-        { this.state.mode === 'fixed' && <div style={ { float: 'left', width: '5%', marginTop: '8px', textAlign: 'center' } }>～</div> }
+        { this.state.mode === 'fixed' && <div style={ { float: 'left', width: '6%', marginTop: '8px', textAlign: 'center' } }>～</div> }
         { this.state.mode === 'fixed' &&  
-        <div style={ { width: '33%', display: 'inline-block', float: 'left' } }>
+        <div style={ { width: this.state.isModeChanged ? '34%' : '47%', display: 'inline-block', float: 'right' } }>
           <DateTime
             mode='date'
             locale='zh-cn'

@@ -16,7 +16,7 @@ export default class Interval extends Component {
   }
 
   static propTypes = {
-    search: PropTypes.func,
+    keyPress: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.string
   }
@@ -46,24 +46,24 @@ export default class Interval extends Component {
   }
 
   render() {
-    const { search } = this.props;
+    const { keyPress } = this.props;
 
     return (
       <div style={ { display: 'inline' } }>
-        <div style={ { width: '33%', display: 'inline-block', float: 'left' } }>
+        <div style={ { width: '47%', display: 'inline-block', float: 'left' } }>
           <FormControl
             type='text'
             value={ this.state.min }
-            onKeyPress={ (e) => { if (search && e.charCode == '13') { search(); } } }
+            onKeyPress={ (e) => { keyPress(e); } }
             onChange={ (e) => { this.onChange({ min: e.target.value }) } }
             placeholder={ '输入开始值' }/>
         </div>
-        <div style={ { float: 'left', width: '5%', marginTop: '8px', textAlign: 'center' } }>～</div>
-        <div style={ { width: '33%', display: 'inline-block', float: 'left', marginRight: '5px' } }>
+        <div style={ { float: 'left', width: '6%', marginTop: '8px', textAlign: 'center' } }>～</div>
+        <div style={ { width: '47%', display: 'inline-block', float: 'right' } }>
           <FormControl
             type='text'
             value={ this.state.max }
-            onKeyPress={ (e) => { if (search && e.charCode == '13') { search(); } } }
+            onKeyPress={ (e) => { keyPress(e); } }
             onChange={ (e) => { this.onChange({ max: e.target.value }) } }
             placeholder={ '输入结束值' }/>
         </div>
