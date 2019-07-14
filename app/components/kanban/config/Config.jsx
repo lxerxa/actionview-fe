@@ -3,6 +3,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import { parseQuery } from '../../issue/IssueFilterList';
 
 const img = require('../../../assets/images/loading.gif');
 const EditModal = require('./EditModal');
@@ -47,127 +48,9 @@ export default class Config extends Component {
   }
 
   condsTxt(query) {
-    const { options: { types=[], states=[], priorities=[], resolutions=[], modules=[], users=[] } } = this.props;
-    const dateOptions = [
-      { label: '1周内', value: '1w' },
-      { label: '2周内', value: '2w' },
-      { label: '1个月内', value: '1m' },
-      { label: '2个月内', value: '2m' },
-      { label: '3个月内', value: '3m' },
-      { label: '4个月内', value: '4m' },
-      { label: '5个月内', value: '5m' },
-      { label: '6个月内', value: '6m' },
-      { label: '1年内', value: '1y' }
-    ];
-
-    const errorMsg = ' 检索值解析失败，条件无法正常显示。建议删除，或重新编辑保存。';
-    const queryConds = [];
-    let index = -1;
-
-    if (query.type) { 
-      const typeQuery = query.type;
-      const typeQueryNames = [];
-      for (let i = 0; i < typeQuery.length; i++) {
-        if ((index = _.findIndex(types, { id: typeQuery[i] })) !== -1) {
-          typeQueryNames.push(types[index].name);
-        } else {
-          return '类型' + errorMsg;
-        }
-      }
-      queryConds.push('类型：' + typeQueryNames.join('，'));
-    }
-    if (query.assignee) {
-      const assigneeQuery = query.assignee;
-      const assigneeQueryNames = [];
-      for (let i = 0; i < assigneeQuery.length; i++) {
-        if (assigneeQuery[i] == 'me') {
-          assigneeQueryNames.push('当前用户');
-        } else if ((index = _.findIndex(users, { id: assigneeQuery[i] })) !== -1) {
-          assigneeQueryNames.push(users[index].name);
-        } else {
-          return '经办人' + errorMsg;
-        }
-      }
-      queryConds.push('经办人：' + assigneeQueryNames.join('，'));
-    }
-    if (query.reporter) {
-      const reporterQuery = query.reporter;
-      const reporterQueryNames = [];
-      for (let i = 0; i < reporterQuery.length; i++) {
-        if (reporterQuery[i] == 'me') {
-          reporterQueryNames.push('当前用户');
-        } else if ((index = _.findIndex(users, { id: reporterQuery[i] })) !== -1) {
-          reporterQueryNames.push(users[index].name);
-        } else {
-          return '报告人' + errorMsg;
-        }
-      }
-      queryConds.push('报告人：' + reporterQueryNames.join('，'));
-    }
-    if (query.watcher) {
-      const watcherQuery = query.watcher;
-      const watcherQueryNames = [];
-      for (let i = 0; i < watcherQuery.length; i++) {
-        if (watcherQuery[i] == 'me') {
-          watcherQueryNames.push('当前用户');
-        }
-      }
-      queryConds.push('关注者：' + watcherQueryNames.join('，'));
-    }
-    if (query.state) {
-      const stateQuery = query.state;
-      const stateQueryNames = [];
-      for (let i = 0; i < stateQuery.length; i++) {
-        if ((index = _.findIndex(states, { id: stateQuery[i] })) !== -1) {
-          stateQueryNames.push(states[index].name);
-        } else {
-          return '状态' + errorMsg;
-        }
-      }
-      queryConds.push('状态：' + stateQueryNames.join('，'));
-    }
-    if (query.resolution) {
-      const resolutionQuery = query.resolution;
-      const resolutionQueryNames = [];
-      for (let i = 0; i < resolutionQuery.length; i++) {
-        if ((index = _.findIndex(resolutions, { id: resolutionQuery[i] })) !== -1) {
-          resolutionQueryNames.push(resolutions[index].name);
-        } else {
-          return '解决结果' + errorMsg;
-        }
-      }
-      queryConds.push('解决结果：' + resolutionQueryNames.join('，'));
-    }
-    if (query.priority) {
-      const priorityQuery = query.priority;
-      const priorityQueryNames = [];
-      for (let i = 0; i < priorityQuery.length; i++) {
-        if ((index = _.findIndex(priorities, { id: priorityQuery[i] })) !== -1) {
-          priorityQueryNames.push(priorities[index].name);
-        } else {
-          return '优先级' + errorMsg;
-        }
-      }
-      queryConds.push('优先级：' + priorityQueryNames.join('，'));
-    }
-    if (query.module) {
-      const moduleQuery = query.module;
-      const moduleQueryNames = [];
-      for (let i = 0; i < moduleQuery.length; i++) {
-        if ((index = _.findIndex(modules, { id: moduleQuery[i] })) !== -1) {
-          moduleQueryNames.push(modules[index].name);
-        } else {
-          return '模块' + errorMsg;
-        }
-      }
-      queryConds.push('模块：' + moduleQueryNames.join('，'));
-    }
-    if (query.created_at) { queryConds.push('创建时间：' + ((index = _.findIndex(dateOptions, { value: query.created_at })) !== -1 ? dateOptions[index].label : query.created_at)); }
-    if (query.updated_at) { queryConds.push('更新时间：' + ((index = _.findIndex(dateOptions, { value: query.updated_at })) !== -1 ? dateOptions[index].label : query.updated_at)); }
-
-    if (queryConds.length <= 0) { return '全部问题'; }
-
-    return queryConds.join(' | ');
+    const { options } = this.props;
+    const newQuery = _.mapValues(query || {}, (v) => { if (_.isArray(v)) { return v.join(','); } else { return v; } });
+    return parseQuery(newQuery, options);
   }
 
   editModalClose() {
