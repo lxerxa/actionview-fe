@@ -39,6 +39,7 @@ export class IssueFilterList extends Component {
     if (_.isEmpty(newQuery)) {
       this.state.values = {};
     } else {
+      this.state.values = {};
       _.forEach(newQuery, (v, key) => {
         this.state.values[key] = newQuery[key] ? newQuery[key] : '';
       });
