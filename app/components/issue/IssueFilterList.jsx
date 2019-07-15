@@ -16,7 +16,6 @@ export class IssueFilterList extends Component {
       agileFilterShow: false, 
       othersFilterShow: false 
     }
-
     this.state.values = {};
 
     this.onChange = this.onChange.bind(this);
@@ -24,6 +23,7 @@ export class IssueFilterList extends Component {
   }
 
   static propTypes = {
+    textInputChange: PropTypes.bool,
     onChange: PropTypes.func,
     columns: PropTypes.number,
     values: PropTypes.object,
@@ -62,6 +62,7 @@ export class IssueFilterList extends Component {
   }
 
   groupFields(fields, columns=3) {
+    const { textInputChange=false } = this.props;
 
     const filters = [];
     _.forEach(fields, (v) => {
@@ -76,7 +77,7 @@ export class IssueFilterList extends Component {
                 type='text'
                 value={ this.state.values[v.key] || '' }
                 onKeyPress={ (e) => { if (e.charCode == '13') { this.onChange(); } } }
-                onChange={ (e) => { this.setState({ values: _.assign({}, this.state.values, { [v.key]: e.target.value }) }); } }
+                onChange={ (e) => { this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }
                 placeholder={ '输入' + (v.desc || v.name) } />
             </Col>
           </div> );
@@ -119,7 +120,7 @@ export class IssueFilterList extends Component {
               <Interval
                 value={ this.state.values[v.key] }
                 keyPress={ (e) => { if (e.charCode == '13') { this.onChange(); } } }
-                onChange={ (newValue) => { this.state.values[v.key] = newValue; } }/>
+                onChange={ (newValue) => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }/>
             </Col>
           </div> );
       }

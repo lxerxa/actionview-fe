@@ -120,6 +120,7 @@ export default class FilterConfigModal extends Component {
           </FormGroup> }
           <IssueFilterList
             values={ this.state.query }
+            textInputChange={ true }
             onChange={ (newValue) => { this.setState({ query: newValue }) } }
             columns={ 2 }
             notShowFields={ [ 'title', 'resolved_at', 'closed_at', 'resolver', 'closer', 'watcher' ] }
