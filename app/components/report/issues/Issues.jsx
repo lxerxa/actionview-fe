@@ -197,7 +197,7 @@ export default class Issues extends Component {
           searchShow={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           options={ options }
-          refresh={ refresh } />
+          onChange={ (newValue) => { refresh(newValue) } } />
         <div className='report-conds-style'>
           { sqlTxt &&
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>

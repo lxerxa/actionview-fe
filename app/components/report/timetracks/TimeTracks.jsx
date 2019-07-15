@@ -247,7 +247,7 @@ export default class TimeTracks extends Component {
             searchShow={ this.state.issueFilterShow }
             notShowFields={ [ 'watcher' ] }
             options={ options }
-            refresh={ refresh } />
+            onChange={ (newValue) => { refresh(newValue) } } />
         </div>
         <div className='report-conds-style'>
           { sqlTxt &&
