@@ -4,6 +4,7 @@ import Select from 'react-select';
 import ApiClient from '../../../shared/api-client';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { IssueRelations } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -17,6 +18,7 @@ export default class LinkIssueModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     types: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -83,16 +85,17 @@ export default class LinkIssueModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, loading } = this.props;
+    const { i18n: { errMsg }, loading, options: { relations=[] } } = this.props;
 
-    const relationOptions = [ 
-      { value: 'blocks', label: 'blocks' }, 
-      { value: 'is blocked by', label: 'is blocked by' }, 
-      { value: 'clones', label: 'clones' }, 
-      { value: 'is cloned by', label: 'is cloned by' }, 
-      { value: 'duplicates', label: 'duplicates' }, 
-      { value: 'is duplicated by', label: 'is duplicated by' }, 
-      { value: 'relates to', label: 'relates to' } ];
+    const relationOptions = [];
+    _.forEach(relations, (v) => {
+      if (v.out == v.in) {
+        relationOptions.push({ value: v.out, label: v.out });
+      } else {
+        relationOptions.push({ value: v.out, label: v.out });
+        relationOptions.push({ value: v.in, label: v.in });
+      }
+    });
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

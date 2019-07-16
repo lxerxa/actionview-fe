@@ -836,18 +836,13 @@ export default class DetailBar extends Component {
                         } else if (val.dest.id == data.id) {
                           linkedIssue = val.src;
                           relation = val.relation;
-                          if (relation == 'is blocked by') {
-                            relation = 'blocks';
-                          } else if (relation == 'blocks') {
-                            relation = 'is blocked by';
-                          } else if (relation == 'is cloned by') {
-                            relation = 'clones';
-                          } else if (relation == 'clones') {
-                            relation = 'is cloned by';
-                          } else if (relation == 'is duplicated by') {
-                            relation = 'duplicates';
-                          } else if (relation == 'duplicates') {
-                            relation = 'is duplicated by';
+                          const relationOutIndex = _.findIndex(options.relations || [], { out: relation });
+                          if (relationOutIndex !== -1) {
+                            relation = options.relations[relationOutIndex].in || '';
+                          }
+                          const relationInIndex = _.findIndex(options.relations || [], { in: relation });
+                          if (relationInIndex !== -1) {
+                            relation = options.relations[relationInIndex].out || '';
                           }
                           linkIssueId = val.src.id;
                         }
@@ -1164,6 +1159,7 @@ export default class DetailBar extends Component {
           <LinkIssueModal 
             show 
             close={ () => { this.setState({ linkIssueModalShow: false }); } } 
+            options={ options } 
             loading={ linkLoading } 
             createLink={ createLink } 
             issue={ data } 

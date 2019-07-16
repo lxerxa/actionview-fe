@@ -247,8 +247,12 @@ export default class Header extends Component {
           <div style={ { display: 'inline-block', fontSize: '19px', marginTop: '5px' } }>
             { loading && <img src={ img } className='loading'/> } 
             { !loading && !_.isEmpty(curKanban) && curKanban.name || '' } 
-            { !loading && _.isEmpty(curKanban) && kanbans.length > 0 && '该看板不存在。' } 
-            { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && '该项目未定义看板。' } 
+            { !loading && _.isEmpty(curKanban) && kanbans.length > 0 && <span style={ { fontSize: '14px' } }>该看板不存在，请重试或选择其它看板。</span> } 
+            { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && 
+            <span style={ { fontSize: '14px' } }>
+              该项目暂未定义看板，
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 ? <span>请点击<a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createKanbanModalShow: true }); } }>创建看板</a>。</span> : '请联系项目管理员创建。' }
+            </span> } 
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>
             { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) && ((curKanban.type == 'kanban' && model === 'issue') || model === 'backlog') &&
@@ -262,7 +266,7 @@ export default class Header extends Component {
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
               <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
             </ButtonGroup> }
-            { (kanbans.length > 0 || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) && 
+            { kanbans.length > 0 && 
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
             { _.map(kanbans, (v, i) => ( 
               <MenuItem key={ i } eventKey={ v.id }>
@@ -271,7 +275,7 @@ export default class Header extends Component {
                 </div>
                 <span>{ v.name }</span>
               </MenuItem> ) ) }
-            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && kanbans.length > 0 && <MenuItem divider/> }
+            { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
               <MenuItem eventKey='create'>
                 { kanbans.length > 0 && <div style={ { display: 'inline-block', width: '20px' } }/> }
