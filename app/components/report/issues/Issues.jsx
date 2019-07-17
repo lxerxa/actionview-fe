@@ -21,6 +21,8 @@ export default class Issues extends Component {
       sort: 'default',
       issueFilterShow: false, 
       saveFilterShow: false };
+    this.state.stat_dimensions = Dimensions;
+
     this.gotoIssue = this.gotoIssue.bind(this);
   }
 
@@ -82,7 +84,6 @@ export default class Issues extends Component {
   }
 
   render() {
-
     const { 
       i18n, 
       layout,
@@ -101,18 +102,26 @@ export default class Issues extends Component {
     const COLORS = [ '#3b7fc4', '#815b3a', '#8eb021', '#d39c3f', '#654982', '#4a6785', '#f79232', '#f15c75', '#ac707a' ];
     const sortOptions = [ { value: 'default', label: '默认顺序' }, { value: 'total_asc', label: '总数升序' }, { value: 'total_desc', label: '总数降序' } ];
 
+    const stat_dimensions = _.clone(Dimensions);
+    const stat_field_types = [ 'Select', 'MultiSelect', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ];
+    _.forEach(options.fields || [], (v) => {
+      if (_.findIndex(Dimensions, { id: v.id }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
+        stat_dimensions.push(_.pick(v, [ 'id', 'name' ]));
+      }
+    });
+
     let sqlTxt = '';
     if (!optionsLoading) {
       const stat_x = query['stat_x'];
       if (stat_x) {
-        const ind = _.findIndex(Dimensions, { id: stat_x });
-        sqlTxt = 'X轴～' + (ind !== -1 ? Dimensions[ind].name : '');
+        const ind = _.findIndex(stat_dimensions, { id: stat_x });
+        sqlTxt = 'X轴～' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
       const stat_y = query['stat_y'];
       if (stat_y) {
-        const ind = _.findIndex(Dimensions, { id: stat_y });
-        sqlTxt += (stat_x ? ' | ' : '') + 'Y轴～' + (ind !== -1 ? Dimensions[ind].name : '');
+        const ind = _.findIndex(stat_dimensions, { id: stat_y });
+        sqlTxt += (stat_x ? ' | ' : '') + 'Y轴～' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
       const issueSqlTxt = parseQuery(query, options);
@@ -169,7 +178,7 @@ export default class Issues extends Component {
                 clearable={ false }
                 value={ stat_x || null }
                 onChange={ (newValue) => { this.state.stat_x = newValue; this.search(); } }
-                options={ _.map(Dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
+                options={ _.map(stat_dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
             <Col sm={ 1 } componentClass={ ControlLabel }>
               Y轴
@@ -180,7 +189,7 @@ export default class Issues extends Component {
                 placeholder='请选择'
                 value={ this.state.stat_y || null }
                 onChange={ (newValue) => { this.state.stat_y = newValue; this.search(); } }
-                options={ _.map(Dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
+                options={ _.map(stat_dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
             <Col sm={ 4 }>
               <Button
@@ -299,7 +308,7 @@ export default class Issues extends Component {
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
-                  <th>{ stat_x ? _.find(Dimensions, { id: stat_x }).name : '' }</th>
+                  <th>{ stat_x ? _.find(stat_dimensions, { id: stat_x }).name : '' }</th>
                   <th>个数</th>
                 </tr>
               </thead>

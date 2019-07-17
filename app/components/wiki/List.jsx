@@ -221,7 +221,7 @@ export default class List extends Component {
     const filepreviewDOM = document.getElementById('homepreview');
     if (filepreviewDOM && options.home && options.home.contents) {
       simplemde = new SimpleMDE({ element: filepreviewDOM, autoDownloadFontAwesome: false });
-      contents = simplemde.markdown(options.home.contents);
+      contents = simplemde.markdown(_.escape(options.home.contents));
       homeHeader = (
         <span style={ { fontWeight: 400, fontSize: '14px' } }>
           <i className='fa fa-file-text-o'></i>

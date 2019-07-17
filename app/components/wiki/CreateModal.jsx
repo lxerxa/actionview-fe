@@ -57,7 +57,8 @@ export default class CreateModal extends Component {
     const fileeditDOM = document.getElementById('fileedit');
     if (fileeditDOM) {
       simplemde = new SimpleMDE({ 
-        element: fileeditDOM, 
+        element: fileeditDOM,
+        previewRender: (text) => simplemde.markdown(_.escape(text)), 
         autoDownloadFontAwesome: false, 
         showIcons: ['table'], 
         hideIcons: ['side-by-side', 'fullscreen'], 

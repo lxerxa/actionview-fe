@@ -190,7 +190,7 @@ export default class Preview extends Component {
     const filepreviewDOM = document.getElementById('filepreview');
     if (filepreviewDOM && item.contents) {
       simplemde = new SimpleMDE({ element: filepreviewDOM, autoDownloadFontAwesome: false });
-      contents = simplemde.markdown(item.contents);
+      contents = simplemde.markdown(_.escape(item.contents));
     }
 
     let isNewestVer = true;

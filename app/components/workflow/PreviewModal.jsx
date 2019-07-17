@@ -26,7 +26,7 @@ export default class PreviewModal extends Component {
 
     let graphTxt = 'graph LR;S(( ))-->' + (collection.length > 0 ? (collection[0].id + '["' + collection[0].name + '"]') : '-') + ';';
     for (let i = 0; i < stepNum; i++) {
-      const stepname = collection[i].name.replace(/"/g, '&quot;');
+      const stepname = _.escape(collection[i].name);
 
       if (collection[i].actions && collection[i].actions.length <= 0) {
         graphTxt += collection[i].id + '["' + stepname + '"];';
@@ -36,9 +36,9 @@ export default class PreviewModal extends Component {
       _.map(collection[i].actions, function(v) {
         _.map(v.results, function(v2) {
           graphTxt += collection[i].id + '["' + stepname + '"]';
-          graphTxt += '--"' + v.name.replace(/"/g, '&quot;') + '(' + v.id + ')' + '"-->';
+          graphTxt += '--"' + _.escape(v.name) + '(' + v.id + ')' + '"-->';
           const destStep = _.find(collection, { id: v2.step });
-          graphTxt += destStep.id + '["' + destStep.name.replace(/"/g, '&quot;') + '"];';
+          graphTxt += destStep.id + '["' + _.escape(destStep.name) + '"];';
         });
       });
     }

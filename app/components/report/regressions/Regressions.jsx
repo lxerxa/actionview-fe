@@ -96,12 +96,20 @@ export default class Regressions extends Component {
 
     const users = options.users || [];
 
+    const stat_dimensions = _.clone(Dimensions);
+    const stat_field_types = [ 'Select', 'MultiSelect', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ];
+    _.forEach(options.fields || [], (v) => {
+      if (_.findIndex(Dimensions, { id: v.id }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
+        stat_dimensions.push(_.pick(v, [ 'id', 'name' ]));
+      }
+    });
+
     let sqlTxt = '';
     if (!optionsLoading) {
       const stat_dimension = query['stat_dimension'];
       if (stat_dimension) {
-        const ind = _.findIndex(Dimensions, { id: stat_dimension });
-        sqlTxt = '统计维度～' + (ind !== -1 ? Dimensions[ind].name : '');
+        const ind = _.findIndex(stat_dimensions, { id: stat_dimension });
+        sqlTxt = '统计维度～' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
       const his_resolvers = query['his_resolvers'];
@@ -166,7 +174,7 @@ export default class Regressions extends Component {
                 placeholder='请选择'
                 value={ this.state.stat_dimension || null }
                 onChange={ (newValue) => { this.state.stat_dimension = newValue; this.search(); } }
-                options={ _.map(Dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
+                options={ _.map(stat_dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
             </Col>
             <Col sm={ 2 } componentClass={ ControlLabel }>
               历史解决者
@@ -264,7 +272,7 @@ export default class Regressions extends Component {
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
-                  <th>{ _.find(Dimensions, { id: this.state.stat_dimension }).name }</th>
+                  <th>{ _.find(stat_dimensions, { id: this.state.stat_dimension }).name }</th>
                   <th>一次回归</th>
                   <th>大于一次</th>
                   <th>一次通过率</th>

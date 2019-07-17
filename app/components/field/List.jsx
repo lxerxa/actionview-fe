@@ -126,18 +126,6 @@ export default class List extends Component {
     for (let i = 0; i < fieldNum; i++) {
       const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
 
-      let screens = '';
-      if (_.isEmpty(collection[i].screens))
-      {
-        screens = '-';
-      }
-      else
-      {
-        _.forEach(collection[i].screens, function(val) {
-          screens += val.name + '<br/>';
-        });
-      }
-      
       fields.push({
         id: collection[i].id,
         name: (
@@ -148,7 +136,10 @@ export default class List extends Component {
         ),
         key: collection[i].key,
         type: _.find(FieldTypes, { value: collection[i].type }).label,
-        screen: ( <span dangerouslySetInnerHTML={ { __html: screens } }/> ),
+        screen: ( 
+          <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+            { _.isEmpty(collection[i].screens) ? '-' : _.map(collection[i].screens, (v) => <li key={ i }>{ v.name }</li>) } 
+          </ul> ),
         operation: !isGlobal && sysFields.indexOf(collection[i].key) === -1 ? (
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&

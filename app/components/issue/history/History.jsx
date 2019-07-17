@@ -66,12 +66,12 @@ export default class History extends Component {
                         <td> 
                           <div 
                             style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '190px' } } 
-                            dangerouslySetInnerHTML = { { __html: _.isString(v.before_value) ? v.before_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.before_value } }/>
+                            dangerouslySetInnerHTML = { { __html: _.isString(v.before_value) ? _.escape(v.before_value).replace(/(\r\n)|(\n)/g, '<br/>') : v.before_value } }/>
                         </td>
                         <td> 
                           <div 
                             style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '190px' } } 
-                            dangerouslySetInnerHTML = { { __html: _.isString(v.after_value) ? v.after_value.replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value } }/>
+                            dangerouslySetInnerHTML = { { __html: _.isString(v.after_value) ? _.escape(v.after_value).replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value } }/>
                         </td>
                       </tr> ) }
                     </tbody>
