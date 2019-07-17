@@ -251,7 +251,7 @@ export default class Header extends Component {
             { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && 
             <span style={ { fontSize: '14px' } }>
               该项目暂未定义看板，
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 ? <span>请点击<a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createKanbanModalShow: true }); } }>创建看板</a>。</span> : '请联系项目管理员创建。' }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 ? <span>请点击 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createKanbanModalShow: true }); } }>创建看板</a>。</span> : '请联系项目管理员创建。' }
             </span> } 
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>

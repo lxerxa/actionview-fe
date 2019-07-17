@@ -138,7 +138,7 @@ export default class List extends Component {
         type: _.find(FieldTypes, { value: collection[i].type }).label,
         screen: ( 
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
-            { _.isEmpty(collection[i].screens) ? '-' : _.map(collection[i].screens, (v) => <li key={ i }>{ v.name }</li>) } 
+            { _.isEmpty(collection[i].screens) ? '-' : _.map(collection[i].screens, (v, i) => <li key={ i }>{ v.name }</li>) } 
           </ul> ),
         operation: !isGlobal && sysFields.indexOf(collection[i].key) === -1 ? (
           <div>
