@@ -55,6 +55,24 @@ export const Permissions = [
   //{ id: 'delete_self_worklog', name: '删除自己的工作日志' }
 ];
 
+export const BaseColumnFields = [
+  { key: 'priority', name: '优先级', type: 'Select' },
+  { key: 'state', name: '状态', type: 'Select' },
+  { key: 'resolution', name: '解决结果', type: 'Select' },
+  { key: 'module', name: '模块', type: 'MultiSelect' },
+  { key: 'resolve_version', name: '解决版本', type: 'Select' },
+  { key: 'effect_versions', name: '影响版本', type: 'MultiSelect' },
+  { key: 'labels', name: '标签', type: 'MultiSelect' },
+  { key: 'assignee', name: '经办人', type: 'SingleUser' },
+  { key: 'resolver', name: '解决者', type: 'SingleUser' },
+  { key: 'closer', name: '关闭者', type: 'SingleUser' },
+  { key: 'updated_at', name: '更新日', type: 'DatePicker' },
+  { key: 'resolved_at', name: '解决日', type: 'DatePicker' },
+  { key: 'closed_at', name: '关闭日', type: 'DatePicker' },
+  { key: 'epic', name: 'Epic', type: 'Select' },
+  { key: 'sprints', name: 'Sprint', type: 'MultiSelect' }
+];
+
 export const Dimensions = [
   { id: 'type', name: '类型' },
   { id: 'priority', name: '优先级' },

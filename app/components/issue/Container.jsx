@@ -118,6 +118,16 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async setColumns(values) {
+    await this.props.actions.resetColumns(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
+  async resetColumns() {
+    await this.props.actions.resetColumns(this.pid);
+    return this.props.issue.ecode;
+  }
+
   async setAssignee(id, values, modalFlag) {
     await this.props.actions.setAssignee(this.pid, id, values, modalFlag);
     return this.props.issue.ecode;
@@ -259,6 +269,8 @@ export default class Container extends Component {
           addLabels={ this.props.actions.addLabels } 
           saveFilter={ this.saveFilter.bind(this) } 
           resetFilters={ this.resetFilters.bind(this) } 
+          setColumns={ this.setColumns.bind(this) } 
+          resetColumns={ this.resetColumns.bind(this) } 
           configFilters={ this.configFilters.bind(this) } 
           getOptions={ this.getOptions.bind(this) } 
           query={ query } 

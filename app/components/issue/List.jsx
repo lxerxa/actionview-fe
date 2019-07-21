@@ -4,6 +4,7 @@ import { Button, DropdownButton, MenuItem, Label, Nav, NavItem } from 'react-boo
 import { Link } from 'react-router';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { BaseColumnFields } from '../share/Constants';
 
 const $ = require('$');
 const moment = require('moment');
@@ -41,7 +42,8 @@ export default class List extends Component {
       resetModalShow: false,
       copyModalShow: false,
       selectedItem: {},
-      hoverRowId: ''
+      hoverRowId: '',
+      display_columns: []
     };
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
@@ -349,6 +351,37 @@ export default class List extends Component {
     const { operateShow, hoverRowId, selectedItem } = this.state;
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
+    const fields = _.clone(BaseColumnFields);
+    _.forEach(options && options.fields || [], (v) => {
+      const index = _.findIndex(fields, { key: v.key });
+      if (index === -1) {
+        fields.push(v);
+      }
+    });
+
+    const display_columns = [];
+    _.forEach(options && options.display_columns || [], (v) => {
+      const field = _.find(fields, { key: v.key });
+      if (!field || field.type === 'File') {
+        return;
+      }
+
+      const newField = field;
+      field.sortKey = field.key;
+      if ([ 'MultiVersion', 'MultiSelect', 'MultiUser', 'CheckboxGroup' ].indexOf(v.type) !== -1) {
+        field.sortKey = '';
+      } else if ([ 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
+        field.sortKey = v.key + '_m';
+      } else if (v.key === 'resolution') {
+        field.optionValues = options && options.resolutions || [];
+      } else if (v.key === 'module') {
+        field.optionValues = options && options.modules || [];
+      } else if (v.type === 'SingleVersion' || v.type === 'MultiVersion') {
+        field.optionValues = options && options.versions || [];
+      }
+      display_columns.push(field);
+    });
+
     const mainOrder = {};
     if (!_.isEmpty(query) && query.orderBy) {
       let strFirstOrder = _.trim(query.orderBy.toLowerCase()).split(',').shift();
@@ -365,89 +398,112 @@ export default class List extends Component {
     });
 
     const issues = [];
-    const issueNum = collection.length;
-    for (let i = 0; i < issueNum; i++) {
+    _.forEach(collection, (item) => {
+      const issue = {};
+      issue.id = item.id;
+      issue.type = (
+        <span className='type-abb' title={ _.findIndex(options.types, { id: item.type }) !== -1 ? _.find(options.types, { id: item.type }).name : '' }>
+          { _.findIndex(options.types, { id: item.type }) !== -1 ? _.find(options.types, { id: item.type }).abb : '-' }
+        </span> );
+      issue.no = ( <a href='#' onClick={ (e) => { e.preventDefault(); this.show(item.id) } }>{ item.no }</a> );
+      issue.name = ( 
+        <div>
+          { item.parent &&
+          <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+            { item.parent.title ? item.parent.title + ' / ' : '- / ' }
+          </span> }
+          <a href='#' onClick={ (e) => { e.preventDefault(); this.show(item.id) } } style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+            { item.title ? item.title : '-' }
+          </a>
+          { item.watching &&
+          <span title='点击取消关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(item.id, false) } }><i className='fa fa-eye'></i></span> }
+           <span className='table-td-issue-desc'>
+             { item.reporter &&
+             <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
+               { item.reporter.name + '  ' + moment.unix(item.created_at).format('YY/MM/DD HH:mm') }
+             </span> }
+             { _.map(item.labels || [], (val, i) => <Link to={ '/project/' + project.key + '/issue?labels=' + val } key={ i }><span title={ val } className='issue-label'>{ val }</span></Link>) }
+           </span>
+         </div> );
+      issue.operation = (
+        <div>
+          { operateShow && hoverRowId === item.id && !itemLoading &&
+            <DropdownButton
+              id={ item.id }
+              pullRight
+              bsStyle='link'
+              style={ { textDecoration: 'blink' ,color: '#000' } }
+              title={ node }
+              onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='view'>查看</MenuItem>
+              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
+              { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
+              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
+              <MenuItem divider/>
+              <MenuItem eventKey='watch'>{ item.watching ? '取消关注' : '关注' }</MenuItem>
+              <MenuItem eventKey='share'>分享链接</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
+              { !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('edit_issue') !== -1 && !item.hasSubtasks)) && <MenuItem divider/> }
+              { !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+              { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+              { item.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
+              { item.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
+              { options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('move_issue') !== -1 && item.parent_id)) && <MenuItem divider/> }
+              { options.permissions && options.permissions.indexOf('move_issue') !== -1 && item.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+              { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
+              { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
+              { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
+              { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+            </DropdownButton> }
+          </div> );
 
-      const priorityInd = collection[i].priority ? _.findIndex(options.priorities, { id: collection[i].priority }) : -1;
-      const priorityStyle = { marginLeft: '14px' };
-      if (priorityInd !== -1) {
-        _.extend(priorityStyle, { backgroundColor: options.priorities[priorityInd].color });
-      }
-
-      const stateInd = collection[i].state ? _.findIndex(options.states, { id: collection[i].state }) : -1;
-      let stateClassName = '';
-      if (stateInd !== -1) {
-        stateClassName = 'state-' + (options.states[stateInd].category || '') + '-label';
-      }
-
-      issues.push({
-        id: collection[i].id,
-        type: (
-          <span className='type-abb' title={ _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).name : '' }>
-            { _.findIndex(options.types, { id: collection[i].type }) !== -1 ? _.find(options.types, { id: collection[i].type }).abb : '-' }
-          </span>),
-        no: ( <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } }>{ collection[i].no }</a> ),
-        name: (
-          <div>
-            { collection[i].parent &&
-            <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
-              { collection[i].parent.title ? collection[i].parent.title + ' / ' : '- / ' }
-            </span> }
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.show(collection[i].id) } } style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
-              { collection[i].title ? collection[i].title : '-' }
-            </a>
-            { collection[i].watching &&
-            <span title='点击取消关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(collection[i].id, false) } }><i className='fa fa-eye'></i></span> }
-            <span className='table-td-issue-desc'>
-              { collection[i].reporter &&
-              <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
-                { collection[i].reporter.name + '  ' + moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm') }
-              </span> }
-              { _.map(collection[i].labels || [], (v, i) => <Link to={ '/project/' + project.key + '/issue?labels=' + v } key={ i }><span title={ v } className='issue-label'>{ v }</span></Link>) }
-            </span>
-          </div>
-        ), 
-        assignee: !_.isEmpty(collection[i].assignee) ? collection[i].assignee.name : '-',
-        priority: priorityInd !== -1 ? <div className='circle' style={ priorityStyle } title={ options.priorities[priorityInd].name }/> : <div style={ priorityStyle }>-</div>,
-        state: stateInd !== -1 ? <span className={ stateClassName }>{ options.states[stateInd].name || '-' }</span> : '-', 
-        resolution: _.findIndex(options.resolutions, { id: collection[i].resolution }) !== -1 ? _.find(options.resolutions, { id: collection[i].resolution }).name : '-', 
-        operation: (
-          <div>
-            { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-              <DropdownButton 
-                pullRight 
-                bsStyle='link' 
-                style={ { textDecoration: 'blink' ,color: '#000' } } 
-                title={ node } 
-                key={ i } 
-                id={ `dropdown-basic-${i}` } 
-                onSelect={ this.operateSelect.bind(this) }>
-                <MenuItem eventKey='view'>查看</MenuItem>
-                { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
-                { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
-                { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
-                <MenuItem divider/>
-                <MenuItem eventKey='watch'>{ collection[i].watching ? '取消关注' : '关注' }</MenuItem>
-                <MenuItem eventKey='share'>分享链接</MenuItem>
-                <MenuItem divider/>
-                <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('edit_issue') !== -1 && !collection[i].hasSubtasks)) && <MenuItem divider/> }
-                { !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                { !collection[i].hasSubtasks && !collection[i].parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
-                { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
-                { collection[i].parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
-                { options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('move_issue') !== -1 && collection[i].parent_id)) && <MenuItem divider/> }
-                { options.permissions && options.permissions.indexOf('move_issue') !== -1 && collection[i].parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
-                { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
-                { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
-                { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
-              </DropdownButton>
+      _.forEach(display_columns, (val) => {
+        if (!item[val.key]) {
+          issue[val.key] = '-';
+          return;
+        }
+        if (val.key === 'priority') {
+          const priorityInd = _.findIndex(options.priorities, { id: item.priority });
+          const priorityStyle = { marginLeft: '14px' };
+          if (priorityInd !== -1) {
+            priorityStyle.backgroundColor = options.priorities[priorityInd].color;
+          }
+          issue.priority = priorityInd !== -1 ? <div className='circle' style={ priorityStyle } title={ options.priorities[priorityInd].name }/> : <div style={ priorityStyle }>-</div>;
+        } else if (val.key === 'state') {
+          const stateInd = _.findIndex(options.states, { id: item.state });
+          let stateClassName = '';
+          if (stateInd !== -1) {
+            stateClassName = 'state-' + (options.states[stateInd].category || '') + '-label';
+          }
+          issue.state = stateInd !== -1 ? <span className={ stateClassName }>{ options.states[stateInd].name || '-' }</span> : '-';
+        } else if (val.type === 'SingleUser') {
+          issue[val.key] = item[val.key].name; 
+        } else if (val.type === 'MultiUser') {
+          issue[val.key] = _.join(_.map(item[val.key], (v) => v.name), ','); 
+        } else if ([ 'Select', 'RadioGroup', 'SingleVersion' ].indexOf(val.type) !== -1) {
+          issue[val.key] = _.findIndex(val.optionValues || [], { id: item[val.key] }) === -1 ? '-' : _.find(val.optionValues, { id: item[val.key] }).name;
+        } else if ([ 'MultiSelect', 'CheckboxGroup', 'MultiVersion' ].indexOf(val.type) !== -1) {
+          const ids = _.isArray(item[val.key]) ? item[val.key].split(',') : item[val.key];
+          const names = []; 
+          _.forEach(ids, (id) => {
+            const tmp = _.findIndex(val.optionValues || [], { id }) !== -1 ? _.find(val.optionValues, { id }).name : '';
+            if (tmp) {
+              names.push(tmp);
             }
-          </div>
-        )
+          });
+          issue[val.key] = names.length > 0 ? _.join(_.uniq(names), ',') : '-';
+        } else if (val.type === 'DatePicker') {
+          issue[val.key] = moment.unix(item[val.key]).format('YYYY/MM/DD');
+        } else if (val.type === 'DateTimePicker') {
+          issue[val.key] = moment.unix(item[val.key]).format('YYYY/MM/DD HH:mm');
+        } else if (val.type === 'TextArea') {
+          const contents = item[val.key] ? _.escape(item[val.key]).replace(/(\r\n)|(\n)/g, '<br/>') : '-';
+          issue[val.key] = <span dangerouslySetInnerHTML={ { __html: contents } }/>;
+        }
       });
-    }
+      issues.push(issue);
+    });
 
     const opts = {};
     if (indexLoading) {
@@ -484,34 +540,16 @@ export default class List extends Component {
                 (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
             </span>
           </TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='assignee'>
-            <span className='table-header' onClick={ this.orderBy.bind(this, 'assignee') }>
-              经办人 
-              { mainOrder.field === 'assignee' && 
-                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
-            </span>
-          </TableHeaderColumn>
-          <TableHeaderColumn width='70' dataField='priority'>
-            <span className='table-header' onClick={ this.orderBy.bind(this, 'priority') }>
-              优先级 
-              { mainOrder.field === 'priority' && 
-                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
-            </span>
-          </TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='state'>
-            <span className='table-header' onClick={ this.orderBy.bind(this, 'state') }>
-              状态 
-              { mainOrder.field === 'state' && 
-                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
-            </span>
-          </TableHeaderColumn>
-          <TableHeaderColumn width='100' dataField='resolution'>
-            <span className='table-header' onClick={ this.orderBy.bind(this, 'resolution') }>
-              解决结果 
-              { mainOrder.field === 'resolution' && 
-                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
-            </span>
-          </TableHeaderColumn>
+          { _.map(display_columns, (val) => {
+            return (
+              <TableHeaderColumn width={ val.width || '100' } dataField={ val.key }>
+                <span className='table-header' onClick={ val.sortKey ? this.orderBy.bind(this, val.sortKey) : null }>
+                  { val.name }
+                  { mainOrder.field === val.key && 
+                  (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+                </span>
+              </TableHeaderColumn>);
+          }) }
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.barShow &&

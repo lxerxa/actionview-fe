@@ -12,6 +12,7 @@ const initialState = {
   optionsLoading: false, 
   searchLoading: false, 
   filterLoading: false, 
+  columnsLoading: false, 
   loading: false, 
   itemLoading: false, 
   fileLoading: false, 
@@ -184,6 +185,21 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_FILTERS_CONFIG_FAIL:
     case t.ISSUE_FILTERS_RESET_FAIL:
       return { ...state, filterLoading: false, error: action.error };
+
+    case t.ISSUE_LIST_COLUMNS_SET:
+    case t.ISSUE_LIST_COLUMNS_RESET:
+      return { ...state, columnsLoading: true };
+
+    case t.ISSUE_LIST_COLUMNS_SET_SUCCESS:
+    case t.ISSUE_LIST_COLUMNS_RESET_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.options.display_columns = action.result.data;
+      }
+      return { ...state, columnsLoading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_LIST_COLUMNS_SET_FAIL:
+    case t.ISSUE_LIST_COLUMNS_RESET_FAIL:
+      return { ...state, columnsLoading: false, error: action.error };
 
     case t.ISSUE_FILE_DELETE:
       return { ...state, fileLoading: true, historyLoaded: false };

@@ -3,7 +3,6 @@ import { Modal, Button, Checkbox as Checkbox2 } from 'react-bootstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
-
 export default class ConfigModal extends Component {
   constructor(props) {
     super(props);

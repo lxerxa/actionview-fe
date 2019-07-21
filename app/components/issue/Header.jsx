@@ -11,6 +11,8 @@ const CreateModal = require('./CreateModal');
 const SaveFilterModal = require('./SaveFilterModal');
 const ResetFiltersNotify = require('./ResetFiltersNotify');
 const FilterConfigModal = require('../share/FilterConfigModal');
+const ResetColumnsNotify = require('./ResetColumnsNotify');
+const ColumnsConfigModal = require('./ColumnsConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
 const img = require('../../assets/images/loading.gif');
 
@@ -23,12 +25,16 @@ export default class Header extends Component {
       searchShow: false, 
       saveFilterShow: false,
       resetFiltersShow: false,
+      setColumnsShow: false,
+      resetColumnsShow: false,
       exportConfigShow: false };
 
     this.createModalClose = this.createModalClose.bind(this);
     this.saveFilterModalClose = this.saveFilterModalClose.bind(this);
     this.resetFiltersNotifyClose = this.resetFiltersNotifyClose.bind(this);
     this.filterConfigModalClose = this.filterConfigModalClose.bind(this);
+    this.setColumnsNotifyClose = this.setColumnsNotifyClose.bind(this);
+    this.resetColumnsNotifyClose = this.resetColumnsNotifyClose.bind(this);
     this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
   }
 
@@ -38,6 +44,8 @@ export default class Header extends Component {
     addLabels: PropTypes.func.isRequired,
     saveFilter: PropTypes.func.isRequired,
     resetFilters: PropTypes.func.isRequired,
+    setColumns: PropTypes.func.isRequired,
+    resetColumns: PropTypes.func.isRequired,
     configFilters: PropTypes.func.isRequired,
     closeDetailBar: PropTypes.func,
     index: PropTypes.func,
@@ -50,6 +58,7 @@ export default class Header extends Component {
     loading: PropTypes.bool.isRequired,
     optionsLoading: PropTypes.bool.isRequired,
     filterLoading: PropTypes.bool.isRequired,
+    columnsLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired
   }
 
@@ -70,6 +79,14 @@ export default class Header extends Component {
     this.setState({ resetFiltersShow: false });
   }
 
+  setColumnsNotifyClose() {
+    this.setState({ setColumnsShow: false });
+  }
+
+  resetColumnsNotifyClose() {
+    this.setState({ resetColumnsShow: false });
+  }
+
   filterConfigModalClose() {
     this.setState({ filterConfigShow: false });
   }
@@ -80,13 +97,17 @@ export default class Header extends Component {
 
   operateSelect(eventKey) {
     const { refresh, index, query } = this.props;
-    if (eventKey === '1') {
+    if (eventKey === 'refresh') {
       if (query.page > 1) {
         refresh(_.extend(query, { page: 1 }));
       } else {
         index(query);
       }
-    } else if (eventKey === '2') {
+    } else if (eventKey === 'set_columns') {
+      this.setState({ setColumnsShow: true });
+    } else if (eventKey === 'reset_columns') {
+      this.setState({ resetColumnsShow: true });
+    } else if (eventKey === 'export') {
       this.setState({ exportConfigShow: true });
     }
   }
@@ -128,9 +149,12 @@ export default class Header extends Component {
       saveFilter, 
       resetFilters, 
       configFilters, 
+      setColumns, 
+      resetColumns, 
       indexLoading, 
       optionsLoading, 
       filterLoading, 
+      columnsLoading, 
       options={}, 
       closeDetailBar,
       refresh, 
@@ -158,9 +182,12 @@ export default class Header extends Component {
           <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton id='more' pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>刷新</MenuItem>
+              <MenuItem eventKey='refresh'>刷新</MenuItem>
               <MenuItem divider/>
-              <MenuItem eventKey='2'>导出</MenuItem>
+              <MenuItem eventKey='set_columns'>显示列配置</MenuItem>
+              <MenuItem eventKey='reset_columns'>显示列重置</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='export'>导出</MenuItem>
             </DropdownButton>
           </div>
           { sqlTxt &&
@@ -210,6 +237,22 @@ export default class Header extends Component {
             close={ this.resetFiltersNotifyClose }
             reset={ resetFilters }
             loading={ filterLoading }
+            i18n={ i18n }/> }
+        { this.state.setColumnsShow &&
+          <ColumnsConfigModal
+            show
+            close={ this.setColumnsNotifyClose }
+            options={ options }
+            data={ options.display_columns || [] }
+            set={ setColumns }
+            loading={ columnsLoading }
+            i18n={ i18n }/> }
+        { this.state.resetColumnsShow &&
+          <ResetColumnsNotify
+            show
+            close={ this.resetColumnsNotifyClose }
+            reset={ resetColumns }
+            loading={ columnsLoading }
             i18n={ i18n }/> }
         { this.state.exportConfigShow &&
         <ExportConfigModal

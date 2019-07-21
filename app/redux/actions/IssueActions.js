@@ -49,6 +49,20 @@ export function configFilters(key, values) {
   });
 }
 
+export function setColumns(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_LIST_COLUMNS_SET',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/columns', method: 'post', data: values })
+  });
+}
+
+export function resetColumns(key) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_LIST_COLUMNS_RESET',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/columns/reset' })
+  });
+}
+
 export function delFile(key, issue_id, field_key, file_id) {
   return asyncFuncCreator({
     constant: 'ISSUE_FILE_DELETE',
