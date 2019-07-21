@@ -3,7 +3,7 @@ import { Modal, Button, Form, FormGroup, ControlLabel, FormControl, Col } from '
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
-import Card from '../share/Card';
+import Card from './ColumnCard';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
@@ -67,6 +67,14 @@ export default class ColumnsConfigModal extends Component {
     this.setState({ cards: this.state.cards });
   }
 
+  editWidth(i, width) {
+    if (this.state.cards[i]) {
+      this.state.cards[i].width = width;
+      this.setState({ cards: this.state.cards });
+    }
+  }
+
+
   handleChange(fields) {
     if (fields !== '') {
       this.setState({ addFieldIds: fields, enableAdd: true });
@@ -125,7 +133,7 @@ export default class ColumnsConfigModal extends Component {
     const newFields = _.map(fields, (v) => { return { value: v.key, label: v.name } });
 
     return (
-      <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel.bind(this) } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>显示列配置</Modal.Title>
         </Modal.Header>
@@ -160,7 +168,9 @@ export default class ColumnsConfigModal extends Component {
                         index={ i }
                         id={ op.id }
                         text={ op.text }
+                        width={ op.width }
                         moveCard={ this.moveCard }
+                        editWidth={ this.editWidth.bind(this) }
                         deleteCard={ this.deleteCard.bind(this, i) }/>
                     );
                   }) 

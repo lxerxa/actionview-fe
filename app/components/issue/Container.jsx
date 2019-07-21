@@ -119,7 +119,7 @@ export default class Container extends Component {
   }
 
   async setColumns(values) {
-    await this.props.actions.resetColumns(this.pid, values);
+    await this.props.actions.setColumns(this.pid, values);
     return this.props.issue.ecode;
   }
 
