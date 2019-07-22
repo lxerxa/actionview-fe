@@ -17,16 +17,25 @@ export default class ColumnsConfigModal extends Component {
     super(props);
     this.moveCard = this.moveCard.bind(this);
     this.state = { cards: [], ecode: 0, addFieldIds: '', enableAdd: false };
-    const fields = this.props.data || [];
-    _.forEach(fields, (v) => {
-      const index = _.findIndex(props.options.fields || [], { key: v.key });
+
+    const fields = _.clone(BaseColumnFields);
+    _.forEach(props.options.fields || [], (v) => {
+      const index = _.findIndex(fields, { key: v.key });
+      if (index === -1) {
+        fields.push(v);
+      }
+    });
+
+    const columns = props.data || [];
+    _.forEach(columns, (v) => {
+      const index = _.findIndex(fields || [], { key: v.key });
       if (index === -1) {
         return;
       }
       this.state.cards.push({
         id: v.key,
         width: v.wdith || '100',
-        text: props.options.fields[index].name || ''
+        text: fields[index].name || ''
       });
     });
     this.state.strCards = JSON.stringify(this.state.cards);

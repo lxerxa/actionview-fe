@@ -352,7 +352,7 @@ export default class List extends Component {
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const fields = _.clone(BaseColumnFields);
-    _.forEach(options && options.fields || [], (v) => {
+    _.forEach(options.fields || [], (v) => {
       const index = _.findIndex(fields, { key: v.key });
       if (index === -1) {
         fields.push(v);
@@ -360,26 +360,27 @@ export default class List extends Component {
     });
 
     const display_columns = [];
-    _.forEach(options && options.display_columns || [], (v) => {
+    _.forEach(options.display_columns || [], (v) => {
       const field = _.find(fields, { key: v.key });
       if (!field || field.type === 'File') {
         return;
       }
 
-      const newField = field;
-      field.sortKey = field.key;
-      if ([ 'MultiVersion', 'MultiSelect', 'MultiUser', 'CheckboxGroup' ].indexOf(v.type) !== -1) {
-        field.sortKey = '';
+      const newField = _.clone(field);
+
+      newField.sortKey = field.key;
+      if ([ 'MultiVersion', 'MultiSelect', 'MultiUser', 'CheckboxGroup' ].indexOf(field.type) !== -1) {
+        newField.sortKey = '';
       } else if ([ 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
-        field.sortKey = v.key + '_m';
+        newField.sortKey = v.key + '_m';
       } else if (v.key === 'resolution') {
-        field.optionValues = options && options.resolutions || [];
+        newField.optionValues = options && options.resolutions || [];
       } else if (v.key === 'module') {
-        field.optionValues = options && options.modules || [];
+        newField.optionValues = options && options.modules || [];
       } else if (v.type === 'SingleVersion' || v.type === 'MultiVersion') {
-        field.optionValues = options && options.versions || [];
+        newField.optionValues = options && options.versions || [];
       }
-      display_columns.push(field);
+      display_columns.push(newField);
     });
 
     const mainOrder = {};
