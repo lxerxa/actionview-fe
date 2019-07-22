@@ -155,11 +155,10 @@ export default class ColumnsConfigModal extends Component {
                   disabled={ !enableAdd }>添加至列表 >> 
                 </Button>
                 <div style={ { float: 'right', marginTop: '15px' } }>
-                  注意：除问题列表的前三列（编号、类型和主题）外，其它列支持动态配置。
+                  注意：<br/>1. 问题列表除前三列（编号、类型和主题）外，其它列支持动态配置。<br/>2. 通过上下拖拽改变列的显示顺序，修改文本框数值(单位：px)调整列的显示宽度。
                 </div>
               </Col>
               <Col sm={ 6 }>
-                { cards.length > 0 && <div style={ { marginBottom: '8px' } }>通过上下拖拽改变显示顺序。</div> }
                 { cards.length > 0 ?
                   cards.map((op, i) => {
                     return (
@@ -175,7 +174,7 @@ export default class ColumnsConfigModal extends Component {
                     );
                   }) 
                   :
-                  <p>界面列表为空。</p>
+                  <p>显示列表为空。</p>
                 }  
               </Col>
             </FormGroup>

@@ -500,6 +500,8 @@ export default class List extends Component {
         } else if (val.type === 'TextArea') {
           const contents = item[val.key] ? _.escape(item[val.key]).replace(/(\r\n)|(\n)/g, '<br/>') : '-';
           issue[val.key] = <span dangerouslySetInnerHTML={ { __html: contents } }/>;
+        } else {
+          issue[val.key] = item[val.key];
         }
       });
       issues.push(issue);
