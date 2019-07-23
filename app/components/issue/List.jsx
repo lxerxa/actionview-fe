@@ -352,33 +352,39 @@ export default class List extends Component {
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const fields = _.clone(BaseColumnFields);
-    _.forEach(options.fields || [], (v) => {
+    _.forEach(options.fields|| [], (v) => {
+      if (v.type === 'File') {
+        return;
+      }
       const index = _.findIndex(fields, { key: v.key });
       if (index === -1) {
         fields.push(v);
       }
     });
 
+    const textStyle = { whiteSpace: 'pre-wrap', overflowWrap: 'break-word' };
+
     const display_columns = [];
     _.forEach(options.display_columns || [], (v) => {
       const field = _.find(fields, { key: v.key });
-      if (!field || field.type === 'File') {
+      if (!field) {
         return;
       }
 
       const newField = _.clone(field);
-
+      newField.width = v.width || '100';
       newField.sortKey = field.key;
       if ([ 'MultiVersion', 'MultiSelect', 'MultiUser', 'CheckboxGroup' ].indexOf(field.type) !== -1) {
         newField.sortKey = '';
       } else if ([ 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
         newField.sortKey = v.key + '_m';
-      } else if (v.key === 'resolution') {
-        newField.optionValues = options && options.resolutions || [];
-      } else if (v.key === 'module') {
-        newField.optionValues = options && options.modules || [];
-      } else if (v.type === 'SingleVersion' || v.type === 'MultiVersion') {
-        newField.optionValues = options && options.versions || [];
+      } 
+      if (field.key === 'resolution') {
+        newField.optionValues = options.resolutions || [];
+      } else if (field.key === 'module') {
+        newField.optionValues = options.modules || [];
+      } else if (field.type === 'SingleVersion' || field.type === 'MultiVersion') {
+        newField.optionValues = options.versions || [];
       }
       display_columns.push(newField);
     });
@@ -478,31 +484,37 @@ export default class List extends Component {
             stateClassName = 'state-' + (options.states[stateInd].category || '') + '-label';
           }
           issue.state = stateInd !== -1 ? <span className={ stateClassName }>{ options.states[stateInd].name || '-' }</span> : '-';
-        } else if (val.type === 'SingleUser') {
-          issue[val.key] = item[val.key].name; 
-        } else if (val.type === 'MultiUser') {
-          issue[val.key] = _.join(_.map(item[val.key], (v) => v.name), ','); 
-        } else if ([ 'Select', 'RadioGroup', 'SingleVersion' ].indexOf(val.type) !== -1) {
-          issue[val.key] = _.findIndex(val.optionValues || [], { id: item[val.key] }) === -1 ? '-' : _.find(val.optionValues, { id: item[val.key] }).name;
-        } else if ([ 'MultiSelect', 'CheckboxGroup', 'MultiVersion' ].indexOf(val.type) !== -1) {
-          const ids = _.isArray(item[val.key]) ? item[val.key].split(',') : item[val.key];
-          const names = []; 
-          _.forEach(ids, (id) => {
-            const tmp = _.findIndex(val.optionValues || [], { id }) !== -1 ? _.find(val.optionValues, { id }).name : '';
-            if (tmp) {
-              names.push(tmp);
-            }
-          });
-          issue[val.key] = names.length > 0 ? _.join(_.uniq(names), ',') : '-';
-        } else if (val.type === 'DatePicker') {
-          issue[val.key] = moment.unix(item[val.key]).format('YYYY/MM/DD');
-        } else if (val.type === 'DateTimePicker') {
-          issue[val.key] = moment.unix(item[val.key]).format('YYYY/MM/DD HH:mm');
         } else if (val.type === 'TextArea') {
           const contents = item[val.key] ? _.escape(item[val.key]).replace(/(\r\n)|(\n)/g, '<br/>') : '-';
-          issue[val.key] = <span dangerouslySetInnerHTML={ { __html: contents } }/>;
+          issue[val.key] = <span style={ textStyle } dangerouslySetInnerHTML={ { __html: contents } }/>;
         } else {
-          issue[val.key] = item[val.key];
+          let contents = '';
+          if (val.key === 'sprints') {
+            contents = item['sprints'] && item['sprints'].length > 0 ? item['sprints'].join(',') : '-'; 
+          } else if (val.type === 'SingleUser') {
+            contents = item[val.key].name; 
+          } else if (val.type === 'MultiUser') {
+            contents = _.map(item[val.key], (v) => v.name).join(','); 
+          } else if ([ 'Select', 'RadioGroup', 'SingleVersion' ].indexOf(val.type) !== -1) {
+            contents = _.findIndex(val.optionValues || [], { id: item[val.key] }) === -1 ? '-' : _.find(val.optionValues, { id: item[val.key] }).name;
+          } else if ([ 'MultiSelect', 'CheckboxGroup', 'MultiVersion' ].indexOf(val.type) !== -1) {
+            const ids = !_.isArray(item[val.key]) ? item[val.key].split(',') : item[val.key];
+            const names = []; 
+            _.forEach(ids, (id) => {
+              const tmp = _.findIndex(val.optionValues || [], { id }) !== -1 ? _.find(val.optionValues, { id }).name : '';
+              if (tmp) {
+                names.push(tmp);
+              }
+            });
+            contents = names.length > 0 ? _.uniq(names).join(',') : '-';
+          } else if (val.type === 'DatePicker') {
+            contents = moment.unix(item[val.key]).format('YYYY/MM/DD');
+          } else if (val.type === 'DateTimePicker') {
+            contents = moment.unix(item[val.key]).format('YYYY/MM/DD HH:mm');
+          } else {
+            contents = item[val.key];
+          }
+          issue[val.key] = <span style={ textStyle }>{ contents }</span>;
         }
       });
       issues.push(issue);

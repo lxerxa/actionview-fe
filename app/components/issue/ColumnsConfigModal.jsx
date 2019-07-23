@@ -34,7 +34,7 @@ export default class ColumnsConfigModal extends Component {
       }
       this.state.cards.push({
         id: v.key,
-        width: v.wdith || '100',
+        width: v.width || '100',
         text: fields[index].name || ''
       });
     });
@@ -53,7 +53,7 @@ export default class ColumnsConfigModal extends Component {
   async save() {
     const { close, set, data } = this.props;
     const values = _.map(this.state.cards, (v) => { return { key: v.id, width: v.width || '100' } });
-    const ecode = await set(values);
+    const ecode = await set({ columns: values });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
