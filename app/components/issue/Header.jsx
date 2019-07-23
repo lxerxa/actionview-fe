@@ -99,7 +99,7 @@ export default class Header extends Component {
     const { refresh, index, query } = this.props;
     if (eventKey === 'refresh') {
       if (query.page > 1) {
-        refresh(_.extend(query, { page: 1 }));
+        refresh(_.extend(query, { page: undefined }));
       } else {
         index(query);
       }
@@ -210,7 +210,7 @@ export default class Header extends Component {
           searchShow={ this.state.searchShow } 
           indexLoading={ indexLoading } 
           options={ options } 
-          onChange={ (newValue) => { refresh(newValue) } } />
+          onChange={ (newValue) => { refresh(_.assign({}, newValue, { page: undefined })) } } />
         { this.state.createModalShow && 
         <CreateModal 
           show 

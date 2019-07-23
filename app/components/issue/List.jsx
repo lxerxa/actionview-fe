@@ -223,7 +223,7 @@ export default class List extends Component {
   orderBy(field) {
     const { query={}, refresh } = this.props;
     if (_.isEmpty(query) || !query.orderBy) {
-      refresh(_.assign(query, { orderBy: field + ' asc', page: 1 }));
+      refresh(_.assign(query, { orderBy: field + ' asc', page: undefined }));
       return;
     }
 
@@ -242,7 +242,7 @@ export default class List extends Component {
       newOrders.push(val);
     });
 
-    refresh(_.assign(query, { orderBy: newOrders.join(','), page: 1 })); 
+    refresh(_.assign(query, { orderBy: newOrders.join(','), page: undefined })); 
   }
 
   async show(id) {
