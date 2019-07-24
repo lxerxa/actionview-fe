@@ -103,10 +103,10 @@ export default class Issues extends Component {
     const sortOptions = [ { value: 'default', label: '默认顺序' }, { value: 'total_asc', label: '总数升序' }, { value: 'total_desc', label: '总数降序' } ];
 
     const stat_dimensions = _.clone(Dimensions);
-    const stat_field_types = [ 'Select', 'MultiSelect', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ];
+    const stat_field_types = [ 'Select', 'MultiSelect', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion', 'SingleUser' ];
     _.forEach(options.fields || [], (v) => {
-      if (_.findIndex(Dimensions, { id: v.id }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
-        stat_dimensions.push(_.pick(v, [ 'id', 'name' ]));
+      if (_.findIndex(Dimensions, { id: v.key }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
+        stat_dimensions.push({ id: v.key, name: v.name });
       }
     });
 

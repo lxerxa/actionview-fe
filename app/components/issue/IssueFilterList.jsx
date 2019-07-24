@@ -410,9 +410,9 @@ export function parseQuery(query, options) {
           return;
         }
         if (tmp[1].toLowerCase() === 'asc') {
-          orderName = '升序';
+          orderName = '↑';
         } else if (tmp[1].toLowerCase() === 'desc') {
-          orderName = '降序';
+          orderName = '↓';
         } else {
           return;
         }

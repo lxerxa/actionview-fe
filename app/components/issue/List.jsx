@@ -376,8 +376,8 @@ export default class List extends Component {
       newField.sortKey = field.key;
       if ([ 'MultiVersion', 'MultiSelect', 'MultiUser', 'CheckboxGroup' ].indexOf(field.type) !== -1) {
         newField.sortKey = '';
-      } else if (v.type === 'TimeTracking') {
-        newField.sortKey = v.key + '_m';
+      } else if (field.type === 'TimeTracking') {
+        newField.sortKey = field.key + '_m';
       } 
       if (field.key === 'resolution') {
         newField.optionValues = options.resolutions || [];
@@ -560,7 +560,7 @@ export default class List extends Component {
               <TableHeaderColumn width={ val.width || '100' } dataField={ val.key }>
                 <span className='table-header' onClick={ val.sortKey ? this.orderBy.bind(this, val.sortKey) : null }>
                   { val.name }
-                  { mainOrder.field === val.key && 
+                  { mainOrder.field === val.sortKey && 
                   (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
                 </span>
               </TableHeaderColumn>);
