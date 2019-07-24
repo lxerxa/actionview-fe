@@ -387,5 +387,42 @@ export function parseQuery(query, options) {
     }
   }
 
+  const sections2 = []; 
+  _.forEach(sections, (v) => { 
+    if (v.type === 'TimeTracking') { 
+      sections2.push(_.assign({}, v, { key: v.key + '_m' }));  
+    } else { 
+      sections2.push(v); 
+    } 
+  });
+  const orderby = query['orderBy'];
+  if (orderby) {
+    const orderItems = [];
+    const orderSections = orderby.split(',');
+    _.forEach((orderSections), (v) => {
+      let orderName = '';
+      let orderField = '';
+      const tmp = _.trim(v).replace(/\s+/g, ' ').split(' ');
+      if (tmp.length === 2) {
+        if (_.findIndex(sections2, { key: tmp[0] }) !== -1) {
+          orderField = _.find(sections2, { key: tmp[0] }).name;
+        } else {
+          return;
+        }
+        if (tmp[1].toLowerCase() === 'asc') {
+          orderName = '升序';
+        } else if (tmp[1].toLowerCase() === 'desc') {
+          orderName = '降序';
+        } else {
+          return;
+        }
+        orderItems.push(orderField + orderName);
+      } 
+    });
+    if (orderItems.length > 0) {
+      queryConds.push(orderItems.join(','));
+    }
+  }
+
   return queryConds.length > 0 ? queryConds.join(' | ') : '';
 }

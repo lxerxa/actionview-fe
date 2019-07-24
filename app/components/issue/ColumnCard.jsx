@@ -89,7 +89,7 @@ export default class Card extends Component {
       <div style={ { opacity } } className='dragcard'>
         <span>{ text }</span>
         { !!deleteCard && <span className='comments-button' style={ { float: 'right' } } onClick={ deleteCard } title='删除'><i className='fa fa-remove'></i></span> }
-        <span style={ { width: '100px', marginRight: '25px', float: 'right' } }>
+        <span style={ { width: '75px', marginRight: '25px', float: 'right' } }>
           <FormGroup style={ { marginBottom: '0px' } }>
             <FormControl
               style={ { height: '21px', fontSize: '10px' } }

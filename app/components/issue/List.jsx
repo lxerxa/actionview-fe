@@ -376,7 +376,7 @@ export default class List extends Component {
       newField.sortKey = field.key;
       if ([ 'MultiVersion', 'MultiSelect', 'MultiUser', 'CheckboxGroup' ].indexOf(field.type) !== -1) {
         newField.sortKey = '';
-      } else if ([ 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
+      } else if (v.type === 'TimeTracking') {
         newField.sortKey = v.key + '_m';
       } 
       if (field.key === 'resolution') {
