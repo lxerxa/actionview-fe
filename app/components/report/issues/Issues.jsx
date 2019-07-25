@@ -105,8 +105,8 @@ export default class Issues extends Component {
     const stat_dimensions = _.clone(Dimensions);
     const stat_field_types = [ 'Select', 'MultiSelect', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion', 'SingleUser' ];
     _.forEach(options.fields || [], (v) => {
-      if (_.findIndex(Dimensions, { id: v.key }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
-        stat_dimensions.push({ id: v.key, name: v.name });
+      if (_.findIndex(Dimensions, { key: v.key }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
+        stat_dimensions.push(_.pick(v, [ 'key', 'name' ]));
       }
     });
 
@@ -114,13 +114,13 @@ export default class Issues extends Component {
     if (!optionsLoading) {
       const stat_x = query['stat_x'];
       if (stat_x) {
-        const ind = _.findIndex(stat_dimensions, { id: stat_x });
+        const ind = _.findIndex(stat_dimensions, { key: stat_x });
         sqlTxt = 'X轴～' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
       const stat_y = query['stat_y'];
       if (stat_y) {
-        const ind = _.findIndex(stat_dimensions, { id: stat_y });
+        const ind = _.findIndex(stat_dimensions, { key: stat_y });
         sqlTxt += (stat_x ? ' | ' : '') + 'Y轴～' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
@@ -178,7 +178,7 @@ export default class Issues extends Component {
                 clearable={ false }
                 value={ stat_x || null }
                 onChange={ (newValue) => { this.state.stat_x = newValue; this.search(); } }
-                options={ _.map(stat_dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
+                options={ _.map(stat_dimensions, (v) => { return { value: v.key, label: v.name } }) }/>
             </Col>
             <Col sm={ 1 } componentClass={ ControlLabel }>
               Y轴
@@ -189,7 +189,7 @@ export default class Issues extends Component {
                 placeholder='请选择'
                 value={ this.state.stat_y || null }
                 onChange={ (newValue) => { this.state.stat_y = newValue; this.search(); } }
-                options={ _.map(stat_dimensions, (v) => { return { value: v.id, label: v.name } }) }/>
+                options={ _.map(stat_dimensions, (v) => { return { value: v.key, label: v.name } }) }/>
             </Col>
             <Col sm={ 4 }>
               <Button
@@ -308,7 +308,7 @@ export default class Issues extends Component {
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
-                  <th>{ stat_x ? _.find(stat_dimensions, { id: stat_x }).name : '' }</th>
+                  <th>{ stat_x ? _.find(stat_dimensions, { key: stat_x }).name : '' }</th>
                   <th>个数</th>
                 </tr>
               </thead>

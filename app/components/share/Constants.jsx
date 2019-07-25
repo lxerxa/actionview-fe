@@ -73,15 +73,15 @@ export const BaseColumnFields = [
 ];
 
 export const Dimensions = [
-  { id: 'type', name: '类型' },
-  { id: 'priority', name: '优先级' },
-  { id: 'resolve_version', name: '解决版本' },
-  { id: 'module', name: '模块' },
-  { id: 'reporter', name: '报告者' },
-  { id: 'assignee', name: '经办人' },
-  { id: 'resolver', name: '解决者' },
-  { id: 'closer', name: '关闭者' },
-  { id: 'epic', name: 'Epic' },
-  { id: 'sprint', name: 'Sprint' },
-  { id: 'labels', name: '标签' }
+  { key: 'type', name: '类型' },
+  { key: 'priority', name: '优先级' },
+  { key: 'resolve_version', name: '解决版本' },
+  { key: 'module', name: '模块' },
+  { key: 'reporter', name: '报告者' },
+  { key: 'assignee', name: '经办人' },
+  { key: 'resolver', name: '解决者' },
+  { key: 'closer', name: '关闭者' },
+  { key: 'epic', name: 'Epic' },
+  { key: 'sprint', name: 'Sprint' },
+  { key: 'labels', name: '标签' }
 ];
