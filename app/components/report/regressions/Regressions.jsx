@@ -4,7 +4,6 @@ import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, 
 import Select from 'react-select';
 import { PieChart, Pie, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
-import { Dimensions } from '../../share/Constants';
 import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
 import SaveFilterModal from '../SaveFilterModal';
 
@@ -96,13 +95,8 @@ export default class Regressions extends Component {
 
     const users = options.users || [];
 
-    const stat_dimensions = _.clone(Dimensions);
     const stat_field_types = [ 'Select', 'MultiSelect', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion', 'SingleUser' ];
-    _.forEach(options.fields || [], (v) => {
-      if (_.findIndex(Dimensions, { key: v.key }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
-        stat_dimensions.push(_.pick(v, [ 'key', 'name' ]));
-      }
-    });
+    const stat_dimensions = _.filter(_.filter(options.fields || [], (v) => [ 'state', 'resolution' ].indexOf(v.key) === -1), (v) => stat_field_types.indexOf(v.type) !== -1);
 
     let sqlTxt = '';
     if (!optionsLoading) {

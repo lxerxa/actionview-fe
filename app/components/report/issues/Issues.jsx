@@ -4,7 +4,6 @@ import { Form, FormGroup, ControlLabel, Col, Table, ButtonGroup, Button, Radio, 
 import Select from 'react-select';
 import { LineChart, Line, PieChart, Pie, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import _ from 'lodash';
-import { Dimensions } from '../../share/Constants';
 import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
 import SaveFilterModal from '../SaveFilterModal';
 
@@ -21,7 +20,6 @@ export default class Issues extends Component {
       sort: 'default',
       issueFilterShow: false, 
       saveFilterShow: false };
-    this.state.stat_dimensions = Dimensions;
 
     this.gotoIssue = this.gotoIssue.bind(this);
   }
@@ -102,13 +100,8 @@ export default class Issues extends Component {
     const COLORS = [ '#3b7fc4', '#815b3a', '#8eb021', '#d39c3f', '#654982', '#4a6785', '#f79232', '#f15c75', '#ac707a' ];
     const sortOptions = [ { value: 'default', label: '默认顺序' }, { value: 'total_asc', label: '总数升序' }, { value: 'total_desc', label: '总数降序' } ];
 
-    const stat_dimensions = _.clone(Dimensions);
     const stat_field_types = [ 'Select', 'MultiSelect', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion', 'SingleUser' ];
-    _.forEach(options.fields || [], (v) => {
-      if (_.findIndex(Dimensions, { key: v.key }) === -1 && _.indexOf(stat_field_types, v.type) !== -1) {
-        stat_dimensions.push(_.pick(v, [ 'key', 'name' ]));
-      }
-    });
+    const stat_dimensions = _.filter(options.fields || [], (v) => stat_field_types.indexOf(v.type) !== -1);
 
     let sqlTxt = '';
     if (!optionsLoading) {

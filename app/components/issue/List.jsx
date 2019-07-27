@@ -4,7 +4,6 @@ import { Button, DropdownButton, MenuItem, Label, Nav, NavItem } from 'react-boo
 import { Link } from 'react-router';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
-import { BaseColumnFields } from '../share/Constants';
 
 const $ = require('$');
 const moment = require('moment');
@@ -351,23 +350,12 @@ export default class List extends Component {
     const { operateShow, hoverRowId, selectedItem } = this.state;
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
-    const fields = _.clone(BaseColumnFields);
-    _.forEach(options.fields|| [], (v) => {
-      if (v.type === 'File') {
-        return;
-      }
-      const index = _.findIndex(fields, { key: v.key });
-      if (index === -1) {
-        fields.push(v);
-      }
-    });
-
     const textStyle = { whiteSpace: 'pre-wrap', overflowWrap: 'break-word' };
 
     const display_columns = [];
     _.forEach(options.display_columns || [], (v) => {
-      const field = _.find(fields, { key: v.key });
-      if (!field) {
+      const field = _.find(options.fields || [], { key: v.key });
+      if (!field || field.type == 'File') {
         return;
       }
 
@@ -379,13 +367,7 @@ export default class List extends Component {
       } else if (field.type === 'TimeTracking') {
         newField.sortKey = field.key + '_m';
       } 
-      if (field.key === 'resolution') {
-        newField.optionValues = options.resolutions || [];
-      } else if (field.key === 'module') {
-        newField.optionValues = options.modules || [];
-      } else if (field.type === 'SingleVersion' || field.type === 'MultiVersion') {
-        newField.optionValues = options.versions || [];
-      }
+
       display_columns.push(newField);
     });
 

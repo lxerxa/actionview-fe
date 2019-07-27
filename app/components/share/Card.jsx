@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import ItemTypes from '../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
+import { CardTypes } from '../share/Constants';
 
 const cardSource = {
   beginDrag(props) {
@@ -59,10 +59,10 @@ const cardTarget = {
   }
 };
 
-@DropTarget(ItemTypes.CARD, cardTarget, connect => ({
+@DropTarget(CardTypes.CARD, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
-@DragSource(ItemTypes.CARD, cardSource, (connect, monitor) => ({
+@DragSource(CardTypes.CARD, cardSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import ItemTypes from '../../../redux/constants/ItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
+import { CardTypes } from '../../share/Constants';
 import _ from 'lodash';
 
 const cardSource = {
@@ -66,7 +66,7 @@ const cardTarget = {
   }
 };
 
-@DropTarget(ItemTypes.KANBAN_COLUMN, cardTarget, connect => ({
+@DropTarget(CardTypes.KANBAN_COLUMN, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
 @DragSource(
@@ -74,7 +74,7 @@ const cardTarget = {
     if (!props.isAllowedEdit) {
       return '';
     } else {
-      return ItemTypes.KANBAN_COLUMN;
+      return CardTypes.KANBAN_COLUMN;
     }
   },
   cardSource, 

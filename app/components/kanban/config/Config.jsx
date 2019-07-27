@@ -12,6 +12,7 @@ const FilterList = require('./FilterList');
 const FilterConfigModal = require('./FilterConfigModal');
 const ColumnList = require('./ColumnList');
 const ColumnConfigModal = require('./ColumnConfigModal');
+const DisplayFieldsConfigModal = require('./DisplayFieldsConfigModal');
 const DelNotify = require('./DelNotify');
 
 export default class Config extends Component {
@@ -23,6 +24,7 @@ export default class Config extends Component {
       globalFilterModalShow: false,
       quickFilterModalShow: false,
       delFilterNotifyShow: false,
+      displayFieldsModalShow: false,
       columnModalShow: false,
       delColumnNotifyShow: false,
       filterNo: -1,
@@ -33,9 +35,11 @@ export default class Config extends Component {
     this.globalFilterModalClose = this.globalFilterModalClose.bind(this);
     this.quickFilterModalClose = this.quickFilterModalClose.bind(this);
     this.delFilterNotifyClose = this.delFilterNotifyClose.bind(this);
+    this.displayFieldsModalClose = this.displayFieldsModalClose.bind(this);
     this.columnModalClose = this.columnModalClose.bind(this);
     this.delColumnNotifyClose = this.delColumnNotifyClose.bind(this);
     this.condsTxt = this.condsTxt.bind(this);
+    this.getDisplayFields = this.getDisplayFields.bind(this);
   }
 
   static propTypes = {
@@ -69,6 +73,10 @@ export default class Config extends Component {
     this.setState({ quickFilterModalShow: false });
   }
 
+  displayFieldsModalClose() {
+    this.setState({ displayFieldsModalShow: false });
+  }
+
   columnModalClose() {
     this.setState({ columnModalShow: false });
   }
@@ -95,6 +103,19 @@ export default class Config extends Component {
 
   delColumn(no) {
     this.setState({ delColumnNotifyShow: true, columnNo: no });
+  }
+
+  getDisplayFields(fields) {
+    const { options } = this.props;
+
+    const fieldNames = [];
+    _.forEach(fields || [], (v) => {
+      const ind = _.findIndex(options.fields, { key: v });
+      if (ind !== -1) {
+        fieldNames.push(options.fields[ind].name);
+      }
+    });
+    return fieldNames.join(',') || '-';
   }
 
   render() {
@@ -199,7 +220,16 @@ export default class Config extends Component {
       ),  
       contents: (
         <div style={ styles }>
-          <div>暂不支持</div>
+          { _.isEmpty(config.display_fields) ?
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0, marginBottom: '10px' } }>
+            <li>未定义</li>
+          </ul>
+          :
+          <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0, marginBottom: '10px' } }>
+            <li>{ this.getDisplayFields(config.display_fields || []) }</li>
+          </ul> }
+          { isAllowedEdit &&
+          <Button onClick={ () => { this.setState({ displayFieldsModalShow: true }) } }>设置</Button> }
         </div>
       )
     });
@@ -277,6 +307,15 @@ export default class Config extends Component {
             loading={ loading }
             data={ config }
             options={ options }
+            i18n={ i18n }/> }
+        { this.state.displayFieldsModalShow &&
+          <DisplayFieldsConfigModal
+            show
+            close={ this.displayFieldsModalClose }
+            options={ options }
+            data={ config }
+            update={ edit }
+            loading={ loading }
             i18n={ i18n }/> }
         { this.state.delFilterNotifyShow &&
           <DelNotify

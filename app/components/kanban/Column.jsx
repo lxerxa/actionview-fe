@@ -19,6 +19,7 @@ export default class Column extends Component {
   static propTypes = {
     isSubtaskCol: PropTypes.bool,
     subtaskShow: PropTypes.bool,
+    displayFields: PropTypes.array,
     epicShow: PropTypes.bool,
     inSprint: PropTypes.bool,
     inHisSprint: PropTypes.bool,
@@ -142,6 +143,7 @@ export default class Column extends Component {
       colNo,
       isSubtaskCol=false,
       subtaskShow=false,
+      displayFields=[],
       epicShow=false,
       inSprint=false,
       inHisSprint=false,
@@ -173,6 +175,7 @@ export default class Column extends Component {
           issue={ v }
           pkey={ pkey }
           subtasks={ classifiedSubtasks[v.no] || [] }
+          displayFields={ displayFields }
           epicShow={ epicShow }
           inSprint={ inSprint }
           inHisSprint={ inHisSprint }

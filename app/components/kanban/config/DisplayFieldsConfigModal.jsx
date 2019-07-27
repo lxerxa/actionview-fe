@@ -1,31 +1,28 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, Form, FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
 import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
-import Card from './ColumnCard';
+import Card from '../../share/Card';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
-const img = require('../../assets/images/loading.gif');
+const img = require('../../../assets/images/loading.gif');
 
-@DragDropContext(HTML5Backend)
-export default class ColumnsConfigModal extends Component {
+export default class DisplayFieldsConfigModal extends Component {
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
     this.state = { cards: [], ecode: 0, addFieldIds: '', enableAdd: false };
 
-    const { data=[], options:{ fields=[] } } = this.props;
-    _.forEach(data, (v) => {
-      const index = _.findIndex(fields || [], { key: v.key });
+    const { data: { display_fields=[] }, options: { fields=[] } } = this.props;
+    _.forEach(display_fields, (v) => {
+      const index = _.findIndex(fields, { key: v });
       if (index === -1) {
         return;
       }
       this.state.cards.push({
-        id: v.key,
-        width: v.width || '100',
+        id: v,
         text: fields[index].name || ''
       });
     });
@@ -35,16 +32,17 @@ export default class ColumnsConfigModal extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     loading: PropTypes.bool,
-    set: PropTypes.func.isRequired,
-    data: PropTypes.array.isRequired,
+    update: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired
   }
 
   async save() {
-    const { close, set, data } = this.props;
-    const values = _.map(this.state.cards, (v) => { return { key: v.id, width: v.width || '100' } });
-    const ecode = await set({ columns: values });
+    const { close, update, data } = this.props;
+
+    const values = _.map(this.state.cards, (v) => v.id);
+    const ecode = await update({ display_fields: values, id: data.id });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -67,14 +65,6 @@ export default class ColumnsConfigModal extends Component {
     this.setState({ cards: this.state.cards });
   }
 
-  editWidth(i, width) {
-    if (this.state.cards[i]) {
-      this.state.cards[i].width = width;
-      this.setState({ cards: this.state.cards });
-    }
-  }
-
-
   handleChange(fields) {
     if (fields !== '') {
       this.setState({ addFieldIds: fields, enableAdd: true });
@@ -89,7 +79,7 @@ export default class ColumnsConfigModal extends Component {
     const fids = this.state.addFieldIds.split(',');
     for (let i = 0; i < fids.length; i++) {
       const field = _.find(fields || [], function(o) { return o.key === fids[i]; });
-      this.state.cards.push({ id: field.key, text: field.name, width: '100' });
+      this.state.cards.push({ id: field.key, text: field.name });
     }
     this.setState({ cards: this.state.cards, addFieldIds: '', enableAdd: false });
   }
@@ -112,13 +102,13 @@ export default class ColumnsConfigModal extends Component {
     const { cards, strCards, enableAdd } = this.state;
     const { i18n: { errMsg }, loading, options } = this.props;
 
-    const fields = _.reject(options.fields || [], (v) => v.type === 'File' || [ 'type', 'title', 'labels' ].indexOf(v.key) !== -1);
+    const fields = _.reject(options.fields, (v) => v.type === 'File' || v.type === 'TextArea' || [ 'type', 'title', 'resolve_version', 'epic', 'sprints' ].indexOf(v.key) !== -1);
     const newFields = _.map(fields, (v) => { return { value: v.key, label: v.name } });
 
     return (
-      <Modal show onHide={ this.cancel.bind(this) } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>显示列配置</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>显示字段配置</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <Form horizontal>
@@ -137,11 +127,9 @@ export default class ColumnsConfigModal extends Component {
                   onClick={ this.add.bind(this) } 
                   disabled={ !enableAdd }>添加至列表 >> 
                 </Button>
-                <div style={ { float: 'right', marginTop: '15px' } }>
-                  注意：<br/>1. 问题列表除前三列（编号、类型和主题）外，其它列支持动态配置。<br/>2. 通过上下拖拽改变列的显示顺序，修改文本框数值(单位：px)调整列的显示宽度。
-                </div>
               </Col>
               <Col sm={ 6 }>
+                { cards.length > 0 && <div style={ { marginBottom: '8px' } }>通过上下拖拽改变显示顺序。</div> }
                 { cards.length > 0 ?
                   cards.map((op, i) => {
                     return (
@@ -150,14 +138,12 @@ export default class ColumnsConfigModal extends Component {
                         index={ i }
                         id={ op.id }
                         text={ op.text }
-                        width={ op.width }
                         moveCard={ this.moveCard }
-                        editWidth={ this.editWidth.bind(this) }
                         deleteCard={ this.deleteCard.bind(this, i) }/>
                     );
                   }) 
                   :
-                  <p>显示列表为空。</p>
+                  <p>显示字段为空。</p>
                 }  
               </Col>
             </FormGroup>

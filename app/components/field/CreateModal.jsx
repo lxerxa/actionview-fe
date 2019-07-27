@@ -43,7 +43,15 @@ const validate = (values, props) => {
     'gitcommits_num',
     'sprint',
     'sprints',
-    'filter' ];
+    'filter',
+    'from',
+    'from_kanban_id',
+    'limit',
+    'page',
+    'orderBy',
+    'stat_x',
+    'stat_y'
+  ];
 
   if (!values.key) {
     errors.key = '必填';

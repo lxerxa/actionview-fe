@@ -55,33 +55,8 @@ export const Permissions = [
   //{ id: 'delete_self_worklog', name: '删除自己的工作日志' }
 ];
 
-export const BaseColumnFields = [
-  { key: 'priority', name: '优先级', type: 'Select' },
-  { key: 'state', name: '状态', type: 'Select' },
-  { key: 'resolution', name: '解决结果', type: 'Select' },
-  { key: 'module', name: '模块', type: 'MultiSelect' },
-  { key: 'resolve_version', name: '解决版本', type: 'SingleVersion' },
-  { key: 'effect_versions', name: '影响版本', type: 'MultiVersion' },
-  { key: 'assignee', name: '经办人', type: 'SingleUser' },
-  { key: 'resolver', name: '解决者', type: 'SingleUser' },
-  { key: 'closer', name: '关闭者', type: 'SingleUser' },
-  { key: 'updated_at', name: '更新日', type: 'DatePicker' },
-  { key: 'resolved_at', name: '解决日', type: 'DatePicker' },
-  { key: 'closed_at', name: '关闭日', type: 'DatePicker' },
-  { key: 'epic', name: 'Epic', type: 'Select' },
-  { key: 'sprints', name: 'Sprint', type: 'MultiSelect' }
-];
-
-export const Dimensions = [
-  { key: 'type', name: '类型' },
-  { key: 'priority', name: '优先级' },
-  { key: 'resolve_version', name: '解决版本' },
-  { key: 'module', name: '模块' },
-  { key: 'reporter', name: '报告者' },
-  { key: 'assignee', name: '经办人' },
-  { key: 'resolver', name: '解决者' },
-  { key: 'closer', name: '关闭者' },
-  { key: 'epic', name: 'Epic' },
-  { key: 'sprint', name: 'Sprint' },
-  { key: 'labels', name: '标签' }
-];
+export const CardTypes = {
+  CARD: 'card',
+  KANBAN_COLUMN: 'kanban_column',
+  KANBAN_FILTER: 'kanban_filter'
+};

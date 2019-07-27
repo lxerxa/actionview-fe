@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Column from './Column';
 import RightClickMenu from './RightClickMenu';
 
+const moment = require('moment');
 const $ = require('$');
 const no_avatar = require('../../assets/images/no_avatar.png');
 
@@ -133,6 +134,7 @@ export default class Card extends Component {
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
     pkey: PropTypes.string.isRequired,
+    displayFields: PropTypes.array,
     epicShow: PropTypes.bool,
     inSprint: PropTypes.bool,
     inHisSprint: PropTypes.bool,
@@ -226,6 +228,7 @@ export default class Card extends Component {
       rankLoading,
       closeDetail,
       subtasks=[],
+      displayFields=[],
       epicShow,
       inSprint,
       inHisSprint,
@@ -249,6 +252,7 @@ export default class Card extends Component {
               index={ index }
               issue={ issue }
               pkey={ pkey }
+              displayFields={ displayFields }
               epicShow={ epicShow }
               inSprint={ inSprint }
               inHisSprint={ inHisSprint }
@@ -268,6 +272,7 @@ export default class Card extends Component {
               moveCard={ moveCard }/> }
           <Column 
             isSubtaskCol={ true }
+            displayFields={ displayFields }
             epicShow={ epicShow }
             inSprint={ inSprint }
             inHisSprint={ inHisSprint }
@@ -324,9 +329,57 @@ export default class Card extends Component {
               { pkey } - { issue.no }
             </a>
           </div>
-          <div style={ { hiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+          <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
             { issue.title || '' }
           </div>
+          { displayFields.length > 0 && 
+          <div style={ { marginTop: '5px' } }>
+            { _.map(displayFields, (v) => {
+              if (!issue[v]) {
+                return;
+              }
+              if (v == 'labels') {
+                return (
+                  <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+                    { _.map(issue[v] || [], (lv) => <span title={ lv } className='issue-label' style={ { marginTop: '5px', float: 'unset' } }>{ lv }</span>) }
+                  </div>);
+              } else {
+                const field = _.find(options.fields || [] , { key: v });
+                if (!field) { 
+                  return;
+                }
+
+                let contents = '';
+                if (field.type === 'SingleUser') {
+                  contents = issue[v].name;
+                } else if (field.type === 'MultiUser') {
+                  contents = _.map(issue[v], (v) => v.name).join(',');
+                } else if ([ 'Select', 'RadioGroup', 'SingleVersion' ].indexOf(field.type) !== -1) {
+                  contents = _.findIndex(field.optionValues || [], { id: issue[v] }) === -1 ? '-' : _.find(field.optionValues, { id: issue[v] }).name;
+                } else if ([ 'MultiSelect', 'CheckboxGroup', 'MultiVersion' ].indexOf(field.type) !== -1) {
+                  const ids = !_.isArray(issue[v]) ? issue[v].split(',') : issue[v];
+                  const names = [];
+                  _.forEach(ids, (id) => {
+                    const tmp = _.findIndex(field.optionValues || [], { id }) !== -1 ? _.find(field.optionValues, { id }).name : '';
+                    if (tmp) {
+                      names.push(tmp);
+                    }
+                  });
+                  contents = names.length > 0 ? _.uniq(names).join(',') : '-';
+                } else if (field.type === 'DatePicker') {
+                  contents = moment.unix(issue[v]).format('YYYY/MM/DD');
+                } else if (field.type === 'DateTimePicker') {
+                  contents = moment.unix(issue[v]).format('YYYY/MM/DD HH:mm');
+                } else {
+                  contents = issue[v];
+                }
+                return (
+                  <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontSize: '12px' } }>
+                    <span style={ { marginRight: '3px', float: 'left' } }><b>{ field.name }</b>:</span><span>{ contents }</span> 
+                  </div>);
+              }
+            }) }
+          </div> }
           { epicShow && !_.isEmpty(selectedEpic) && 
           <div className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px' } } title={ selectedEpic.name || '-' }>
             { selectedEpic.name || '-' }

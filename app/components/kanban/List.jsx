@@ -477,6 +477,7 @@ export default class List extends Component {
               <Column 
                 key={ i }
                 colNo={ i }
+                displayFields={ curKanban.display_fields || [] }
                 epicShow={ model == 'backlog' || model == 'history' }
                 inSprint={ model == 'issue' && curKanban.type == 'scrum' }
                 inHisSprint={ model == 'history' }
