@@ -15,6 +15,7 @@ export function arrange(options) {
     { key: 'assignee', name: '经办人', type: 'SingleUser' },
     { key: 'resolver', name: '解决者', type: 'SingleUser' },
     { key: 'closer', name: '关闭者', type: 'SingleUser' },
+    { key: 'created_at', name: '创建时间', type: 'DateTimePicker' },
     { key: 'updated_at', name: '更新时间', type: 'DateTimePicker' },
     { key: 'resolved_at', name: '解决时间', type: 'DateTimePicker' },
     { key: 'closed_at', name: '关闭时间', type: 'DateTimePicker' },
