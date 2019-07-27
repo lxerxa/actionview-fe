@@ -22,7 +22,7 @@ export function arrange(options) {
     { key: 'sprints', name: 'Sprint', type: 'MultiSelect' }
   ];
 
-  _.forEach(options.fields|| [], (v) => {
+  _.forEach(options.fields || [], (v) => {
     const index = _.findIndex(fields, { key: v.key });
     if (index === -1) {
       fields.push(v);

@@ -61,7 +61,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_OPTIONS_SUCCESS:
       if (action.result.ecode === 0) {
-        state.options = action.result.data || {};
+        _.assign(state.options, action.result.data || {});
         state.options.fields = arrange(state.options);
       }
       return { ...state, optionsLoading: false, ecode: action.result.ecode };
