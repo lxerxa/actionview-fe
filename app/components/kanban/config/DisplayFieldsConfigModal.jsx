@@ -150,6 +150,7 @@ export default class DisplayFieldsConfigModal extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
+          <Button bsStyle='link' style={ { float: 'left' } } disabled={ loading } onClick={ () => { this.setState({ cards: [] }) } }>清空字段</Button>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>

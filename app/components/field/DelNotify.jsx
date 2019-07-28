@@ -40,6 +40,7 @@ export default class DelNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>删除字段 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          该字段被删除后，问题中相关字段信息都将被删除，且不可恢复，请慎重。<br/>
           确认要删除此字段？
         </Modal.Body>
         <Modal.Footer>

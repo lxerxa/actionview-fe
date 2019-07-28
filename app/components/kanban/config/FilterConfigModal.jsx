@@ -52,6 +52,7 @@ export default class FilterConfigModal extends Component {
   async handleSubmit() {
     const { update, close, data:{ id, filters=[] }, model, no } = this.props;
 
+    const newFilters = _.clone(filters);
     const submitData = this.state.query;
 
     let ecode = 0;
@@ -60,16 +61,16 @@ export default class FilterConfigModal extends Component {
     } else if (model == 'filter') {
       if (no >= 0) {
         const index = _.findIndex(filters, { no: no });
-        filters[index].query = submitData;
-        filters[index].name = this.state.name;
+        newFilters[index].query = submitData;
+        newFilters[index].name = this.state.name;
       } else {
         let no = 0;
         if (filters.length > 0) {
           no = _.max(_.map(filters, (v) => v.no)) + 1;
         }
-        filters.push({ query: submitData, name: this.state.name, no });
+        newFilters.push({ query: submitData, name: this.state.name, no });
       }
-      ecode = await update(_.extend({ filters }, { id }));
+      ecode = await update(_.extend({ filters: newFilters }, { id }));
     }
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -129,9 +130,10 @@ export default class FilterConfigModal extends Component {
             options={ options }/>
         </Modal.Body>
         <Modal.Footer>
+          <Button bsStyle='link' style={ { float: 'left' } } disabled={ loading } onClick={ () => { this.setState({ query: {} }) } }>清空条件</Button>
           <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ (model === 'filter' && !this.state.name) || loading } onClick={ this.handleSubmit }>确定</Button>
+          <Button disabled={ (model === 'filter' && !this.state.name) || loading || _.isEmpty(this.state.query) } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </Form>

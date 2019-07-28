@@ -394,7 +394,7 @@ class CreateModal extends Component {
         backdrop='static'
         aria-labelledby='contained-modal-title-sm'
         onHide={ close } 
-        bsSize={ isFromWorkflow ? 'middle' : 'large' }>
+        bsSize='large'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : ('编辑问题' + ' - ' + data.no)) : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
