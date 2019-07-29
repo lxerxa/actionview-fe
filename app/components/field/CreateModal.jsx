@@ -50,7 +50,13 @@ const validate = (values, props) => {
     'page',
     'orderBy',
     'stat_x',
-    'stat_y'
+    'stat_y',
+    'stat_time',
+    'stat_dimension',
+    'is_accu',
+    'interval',
+    'recorded_at',
+    'scale'
   ];
 
   if (!values.key) {

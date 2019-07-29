@@ -170,7 +170,7 @@ export default class Config extends Component {
       ),
       contents: (
         <div style={ styles }>
-          { _.isEmpty(config.query) ?
+          { _.isEmpty(_.omit(config.query, [ 'subtask' ])) ?
           <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0, marginBottom: '10px' } }>
             <li>全部</li>
           </ul>
