@@ -90,7 +90,7 @@ export class IssueFilterList extends Component {
             <Col sm={ 12 / columns - 1 }>
               <Select
                 simpleValue
-                multi={ v.key !== 'sprint' && true }
+                multi={ v.key !== 'sprints' && true }
                 value={ this.state.values[v.key] || null }
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.onChange(); } }
                 options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } }) }
@@ -184,7 +184,7 @@ export class IssueFilterList extends Component {
 
     const agileFields = [
       { key: 'epic', name: 'Epic', type: 'MultiSelect', optionValues: epics },
-      { key: 'sprint', name: 'Sprint', type: 'Select', optionValues: sprintOptions  }
+      { key: 'sprints', name: 'Sprint', type: 'Select', optionValues: sprintOptions  }
     ];
     const agileFilterSections = this.groupFields(_.reject(agileFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
 
@@ -335,7 +335,7 @@ export function parseQuery(query, options) {
     { key: 'closed_at', name : '关闭时间', type: 'Duration' },
     { key: 'expect_complete_time', name : '期望完成时间', type: 'Duration' },
     { key: 'epic', type: 'MultiSelect', name: 'Epic', optionValues: epics },
-    { key: 'sprint', type: 'Select', name: 'Sprint' }
+    { key: 'sprints', type: 'Select', name: 'Sprint' }
   ];
 
   _.forEach(fields, (v) => {
@@ -356,7 +356,7 @@ export function parseQuery(query, options) {
   for(let i = 0; i < sections.length; i++) {
     const v = sections[i];
     if (query[v.key]) {
-      if ([ 'labels', 'sprint' ].indexOf(v.key) !== -1 || [ 'Text', 'TextArea', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
+      if ([ 'labels', 'sprints' ].indexOf(v.key) !== -1 || [ 'Text', 'TextArea', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
         queryConds.push(v.name + '～' + query[v.key]);
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
         const queryNames = [];

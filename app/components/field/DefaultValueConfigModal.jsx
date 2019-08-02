@@ -66,7 +66,7 @@ export default class DefaultValueConfigModal extends Component {
 
   async handleSubmit() {
     const { values, config, close, data } = this.props;
-    if (data.type === 'DatePicker' && values.defaultValue) {
+    if (values.defaultValue && data.type === 'DatePicker') {
       values.defaultValue = parseInt(moment(values.defaultValue).startOf('day').format('X')); 
     }
     //alert(JSON.stringify(values));
@@ -94,7 +94,7 @@ export default class DefaultValueConfigModal extends Component {
 
     let optionValues = [];
     let defaultComponent = {};
-    if (data.type === 'Select' || data.type === 'MultiSelect' || data.type === 'CheckboxGroup' || data.type === 'RadioGroup') {
+    if ([ 'Select', 'MultiSelect', 'CheckboxGroup' , 'RadioGroup' ].indexOf(data.type) !== -1) {
       if (data.optionValues) {
         optionValues = _.map(data.optionValues || [], function(val) {
           return { label: val.name, value: val.id };

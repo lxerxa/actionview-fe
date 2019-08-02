@@ -67,6 +67,9 @@ class CreateModal extends Component {
           } else if ((v.type == 'MultiSelect' || v.type == 'MultiVersion') && _.isArray(data[v.key])) {
             values[v.key] = data[v.key].join(',');
             oldValues[v.key] = data[v.key].join(',');
+          } else if (v.type == 'CheckboxGroup' && _.isString(data[v.key])) {
+            values[v.key] = data[v.key].split(',');
+            oldValues[v.key] = data[v.key].split(',');
           } else if (v.key == 'labels') {
             if (options.permissions && options.permissions.indexOf('manage_project') !== -1) {
               values[v.key] = _.map(data[v.key] || [], (v) => { return { value: v, label: v } });
@@ -116,7 +119,13 @@ class CreateModal extends Component {
       }
       _.map(schema || [], (v) => {
         if (v.defaultValue) {
-          values[v.key] = v.defaultValue;
+          if (v.type === 'MultiSelect' && _.isArray(v.defaultValue)) {
+            values[v.key] = v.defaultValue.join(',');
+          } else if (v.type === 'CheckboxGroup' && _.isString(v.defaultValue)) {
+            values[v.key] = v.defaultValue.split(',');
+          } else {
+            values[v.key] = v.defaultValue;
+          }
         }
         if (v.required && !v.defaultValue) {
           errors[v.key] = '必填';
@@ -299,7 +308,13 @@ class CreateModal extends Component {
       if (this.state.errors[v.key]) {
         values[v.key] = '';
       } else if (!this.state.values[v.key] && v.defaultValue) {
-        values[v.key] = v.defaultValue;
+        if (v.type === 'MultiSelect' && _.isArray(v.defaultValue)) {
+          values[v.key] = v.defaultValue.join(',');
+        } else if (v.type === 'CheckboxGroup' && _.isString(v.defaultValue)) {
+          values[v.key] = v.defaultValue.split(',');
+        } else {
+          values[v.key] = v.defaultValue;
+        }
       } else if (this.state.values[v.key]) {
         values[v.key] = this.state.values[v.key];
       }
@@ -536,7 +551,7 @@ class CreateModal extends Component {
                     <CheckboxGroup
                       style={ { marginTop: '7px' } }
                       name={ v.name }
-                      value={ this.state.values[v.key] && _.isString(this.state.values[v.key]) ? this.state.values[v.key].split(',') : this.state.values[v.key] }
+                      value={ this.state.values[v.key] }
                       onChange={ newValue => { v.required && newValue.length <= 0 ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } }>
                       { _.map(v.optionValues || [], (val, i) => 
                         <span style={ { marginLeft: '6px' } } key={ i }><Checkbox disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
