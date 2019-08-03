@@ -123,8 +123,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async resetColumns() {
-    await this.props.actions.resetColumns(this.pid);
+  async resetColumns(values) {
+    await this.props.actions.resetColumns(this.pid, values);
     return this.props.issue.ecode;
   }
 

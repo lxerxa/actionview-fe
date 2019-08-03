@@ -251,6 +251,7 @@ export default class Header extends Component {
           <ResetColumnsNotify
             show
             close={ this.resetColumnsNotifyClose }
+            options={ options }
             reset={ resetColumns }
             loading={ columnsLoading }
             i18n={ i18n }/> }

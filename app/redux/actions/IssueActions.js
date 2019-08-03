@@ -56,10 +56,10 @@ export function setColumns(key, values) {
   });
 }
 
-export function resetColumns(key) {
+export function resetColumns(key, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_LIST_COLUMNS_RESET',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/columns/reset' })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/columns/reset', method: 'post', data: values })
   });
 }
 

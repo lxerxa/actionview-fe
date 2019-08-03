@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, Form, FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
+import { Modal, Button, Form, FormGroup, ControlLabel, FormControl, Col, Checkbox } from 'react-bootstrap';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'react/lib/update';
@@ -15,7 +15,7 @@ export default class ColumnsConfigModal extends Component {
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
-    this.state = { cards: [], ecode: 0, addFieldIds: '', enableAdd: false };
+    this.state = { cards: [], ecode: 0, addFieldIds: '', enableAdd: false, saveForProject: false };
 
     const { data=[], options:{ fields=[] } } = this.props;
     _.forEach(data, (v) => {
@@ -44,7 +44,7 @@ export default class ColumnsConfigModal extends Component {
   async save() {
     const { close, set, data } = this.props;
     const values = _.map(this.state.cards, (v) => { return { key: v.id, width: v.width || '100' } });
-    const ecode = await set({ columns: values });
+    const ecode = await set({ columns: values, save_for_project: this.state.saveForProject });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -166,7 +166,15 @@ export default class ColumnsConfigModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
+          { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          <Checkbox
+            disabled={ loading }
+            checked={ this.state.saveForProject }
+            onClick={ () => { this.setState({ saveForProject: !this.state.saveForProject }) } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            保存作为该项目默认显示列
+          </Checkbox> }
+          <Button disabled={ loading || (strCards == JSON.stringify(cards) && !this.state.saveForProject) } onClick={ this.save.bind(this) }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
         </Modal.Footer>
       </Modal>
