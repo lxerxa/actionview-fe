@@ -229,8 +229,8 @@ class CreateModal extends Component {
       if (val) {
         if (field.key === 'labels') {
           if (_.isArray(val)) {
-            newLabels = _.map(_.filter(val, (v) => !!v.className), (v) => v.value);
-            submitData[key] = _.map(val, (v) => v.value);
+            newLabels = _.uniq(_.map(_.filter(val, (v) => !!v.className), (v) => _.trim(v.value)));
+            submitData[key] = _.uniq(_.map(val, (v) => _.trim(v.value)));
           } else {
             submitData[key] = val.split(',');
           }

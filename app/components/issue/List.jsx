@@ -514,7 +514,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ issues } bordered={ false } hover options={ opts } trClassName='tr-top'>
+        <BootstrapTable data={ issues } bordered={ false } hover options={ opts } trClassName='tr-top' headerStyle={ { overflow: 'unset' } }>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn width='50' dataField='type'> 
             <span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>

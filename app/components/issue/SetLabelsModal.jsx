@@ -41,8 +41,8 @@ export default class SetLabelsModal extends Component {
     let newLabels = [];
     let submitLabels = [];
     if (_.isArray(values.labels)) {
-      newLabels = _.map(_.filter(values.labels, (v) => !!v.className), (v) => v.value);
-      submitLabels = _.map(values.labels, (v) => v.value); 
+      newLabels = _.uniq(_.map(_.filter(values.labels, (v) => !!v.className), (v) => _.trim(v.value)));
+      submitLabels = _.uniq(_.map(values.labels, (v) => _.trim(v.value))); 
     } else {
       submitLabels = values.labels ? values.labels.split(',') : [];
     }
