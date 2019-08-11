@@ -46,3 +46,11 @@ export function setDefault(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/priority/batch', method: 'post', data: values })
   });
 }
+
+export function viewUsed(key, id) {
+  return asyncFuncCreator({
+    constant: 'PRIORITY_VIEW_USED',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/priority/' + id + '/used' })
+  });
+}

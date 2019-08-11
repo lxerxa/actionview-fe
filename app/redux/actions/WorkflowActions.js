@@ -44,3 +44,11 @@ export function preview(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + id + '/preview' })
   });
 }
+
+export function viewUsed(key, id) {
+  return asyncFuncCreator({
+    constant: 'WORKFLOW_VIEW_USED',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/workflow/' + id + '/used' })
+  });
+}

@@ -5,6 +5,7 @@ import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 
 const EditModal = require('./EditModal');
+const ViewUsedModal = require('./ViewUsedModal');
 const DelNotify = require('./DelNotify');
 const img = require('../../assets/images/loading.gif');
 
@@ -16,9 +17,10 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, operateShow: false, hoverRowId: '' };
+    this.state = { editModalShow: false, viewUsedShow: false, delNotifyShow: false, operateShow: false, hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.viewUsedClose = this.viewUsedClose.bind(this);
   }
 
   static propTypes = {
@@ -26,11 +28,14 @@ export default class List extends Component {
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    viewUsed: PropTypes.func.isRequired,
+    usedProjects: PropTypes.array.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -47,6 +52,10 @@ export default class List extends Component {
     this.setState({ delNotifyShow: false });
   }
 
+  viewUsedClose() {
+    this.setState({ viewUsedShow: false });
+  }
+
   edit(id) {
     this.setState({ editModalShow: true });
     const { select } = this.props;
@@ -59,12 +68,20 @@ export default class List extends Component {
     select(id);
   }
 
+  viewUsed(id) {
+    this.setState({ viewUsedShow: true });
+    const { select } = this.props;
+    select(id);
+  }
+
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId);
+    } else if (eventKey === '3') {
+      this.viewUsed(hoverRowId);
     }
   }
 
@@ -79,7 +96,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, pkey, collection, selectedItem, indexLoading, itemLoading, del, update } = this.props;
+    const { i18n, pkey, collection, selectedItem, indexLoading, itemLoading, loading, del, update, viewUsed, usedProjects } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -109,6 +126,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
+              { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='3'>查看项目应用</MenuItem> }
               { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
@@ -142,6 +160,15 @@ export default class List extends Component {
             update={ update } 
             data={ selectedItem } 
             collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.viewUsedShow &&
+          <ViewUsedModal
+            show
+            close={ this.viewUsedClose }
+            view={ viewUsed }
+            loading={ loading }
+            data={ selectedItem }
+            projects={ usedProjects }
             i18n={ i18n }/> }
         { this.state.delNotifyShow && 
           <DelNotify 

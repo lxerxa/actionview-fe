@@ -1,7 +1,16 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], indexLoading: false, loading: false, itemLoading: false, sortLoading: false, defaultLoading: false, selectedItem: {} };
+const initialState = { 
+  ecode: 0, 
+  collection: [], 
+  indexLoading: false, 
+  loading: false, 
+  itemLoading: false, 
+  sortLoading: false, 
+  defaultLoading: false, 
+  selectedItem: {},
+  usedProjects: [] };
 
 export default function resolution(state = initialState, action) {
   switch (action.type) {
@@ -98,6 +107,18 @@ export default function resolution(state = initialState, action) {
 
     case t.RESOLUTION_SET_DEFAULT_FAIL:
       return { ...state, defaultLoading: false, error: action.error };
+
+    case t.RESOLUTION_VIEW_USED:
+      return { ...state, loading: true, usedProjects: [] };
+
+    case t.RESOLUTION_VIEW_USED_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.usedProjects = action.result.data;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.RESOLUTION_VIEW_USED_FAIL:
+      return { ...state, loading: false, error: action.error };
 
     default:
       return state;

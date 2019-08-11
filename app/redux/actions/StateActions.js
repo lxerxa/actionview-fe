@@ -39,3 +39,11 @@ export function setSort(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/state/batch', method: 'post', data: values })
   });
 }
+
+export function viewUsed(key, id) {
+  return asyncFuncCreator({
+    constant: 'STATE_VIEW_USED',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/state/' + id + '/used' })
+  });
+}

@@ -46,3 +46,11 @@ export function setDefault(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/resolution/batch', method: 'post', data: values })
   });
 }
+
+export function viewUsed(key, id) {
+  return asyncFuncCreator({
+    constant: 'RESOLUTION_VIEW_USED',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/resolution/' + id + '/used' })
+  });
+}

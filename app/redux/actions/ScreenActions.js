@@ -32,3 +32,11 @@ export function del(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/screen/' + id, method: 'delete' })
   });
 }
+
+export function viewUsed(key, id) {
+  return asyncFuncCreator({
+    constant: 'SCREEN_VIEW_USED',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/screen/' + id + '/used' })
+  });
+}

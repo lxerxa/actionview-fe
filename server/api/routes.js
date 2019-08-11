@@ -672,12 +672,19 @@ export default function(router) {
   router.get('/project/:key/resolution', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '开发中', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: '已关闭', description: 'ddddddddddd' }]};
+    const results = { ecode: 0, data: [{ id: '546761', name: '开发中', project_key: '$_sys_$', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: '已关闭', description: 'ddddddddddd' }]};
     return res.status(200).send(results);
   });
 
   router.post('/project/:key/resolution', function(req, res) {
     const results = { ecode: 0, data: { id: 'were', name: '5C问题', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程1'}} };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/resolution/:id/used', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ key: 'demo', name: 'demo1', status: 'active', issue_count: 23 }, { key: 'demo2', name: 'demo2', status: 'active', issue_count: 3 }, { key: 'demo3', name: 'demo3', issue_count: 2 }] };
     return res.status(200).send(results);
   });
 
