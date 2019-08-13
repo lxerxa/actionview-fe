@@ -54,7 +54,7 @@ export default class ViewUsedModal extends Component {
             <thead>
               <tr>
                 <th>项目名称</th>
-                <th>问题个数</th>
+                <th>界面</th>
               </tr>
             </thead>
             <tbody>
@@ -69,9 +69,17 @@ export default class ViewUsedModal extends Component {
                   </td>
                   <td>
                     { v.status === 'active' ?
-                    <span><Link to={ '/project/' + v.key + '/issue?resolution=' + data.id }>{ v.issue_count || 0 }</Link></span>
+                    <span>
+                      <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+                        { _.isEmpty(v.screens) ? '-' : _.map(v.screens, (s, i) => <li key={ i }><Link to={ '/project/' + v.key + '/screen' }>{ s.name }</Link></li>) }
+                      </ul>
+                    </span>
                     :
-                    <span>{ v.issue_count || 0 }</span> } 
+                    <span> 
+                      <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+                        { _.isEmpty(v.screens) ? '-' : _.map(v.screens, (s, i) => <li key={ i }>{ s.name }</li>) }
+                      </ul>
+                    </span> }
                   </td>
                 </tr> ); 
             }) }

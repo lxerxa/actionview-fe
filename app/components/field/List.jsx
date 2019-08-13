@@ -9,6 +9,7 @@ const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 const OptionValuesConfigModal = require('./OptionValuesConfigModal');
 const DefaultValueConfigModal = require('./DefaultValueConfigModal');
+const ViewUsedModal = require('./ViewUsedModal');
 const img = require('../../assets/images/loading.gif');
 
 const sysFields = [ 
@@ -35,6 +36,7 @@ export default class List extends Component {
     this.state = { 
       editModalShow: false, 
       delNotifyShow: false, 
+      viewUsedShow: false,
       optionValuesConfigShow: false, 
       defaultValueConfigShow: false, 
       operateShow: false, 
@@ -42,6 +44,7 @@ export default class List extends Component {
     };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.viewUsedClose = this.viewUsedClose.bind(this);
     this.optionValuesConfigClose = this.optionValuesConfigClose.bind(this);
     this.defaultValueConfigClose = this.defaultValueConfigClose.bind(this);
   }
@@ -59,6 +62,8 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    viewUsed: PropTypes.func.isRequired,
+    usedProjects: PropTypes.array.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -73,6 +78,10 @@ export default class List extends Component {
 
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
+  }
+
+  viewUsedClose() {
+    this.setState({ viewUsedShow: false });
   }
 
   optionValuesConfigClose() {
@@ -92,6 +101,7 @@ export default class List extends Component {
     eventKey === '2' && this.setState({ delNotifyShow : true });
     eventKey === '3' && this.setState({ defaultValueConfigShow: true });
     eventKey === '4' && this.setState({ optionValuesConfigShow: true });
+    eventKey === '6' && this.setState({ viewUsedShow: true });
   }
 
   onRowMouseOver(rowData) {
@@ -116,6 +126,8 @@ export default class List extends Component {
       itemLoading, 
       del, 
       update, 
+      viewUsed,
+      usedProjects,
       options } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
@@ -151,10 +163,11 @@ export default class List extends Component {
                 key={ i } 
                 id={ `dropdown-basic-${i}` } 
                 onSelect={ this.operateSelect.bind(this) }>
-                { (collection[i].type === 'Select' || collection[i].type === 'MultiSelect' || collection[i].type === 'RadioGroup' || collection[i].type === 'CheckboxGroup') && <MenuItem eventKey='4'>可选值配置</MenuItem> }
+                { [ 'Select', 'MultiSelect', 'RadioGroup', 'CheckboxGroup' ].indexOf(collection[i].type) !== -1 && <MenuItem eventKey='4'>可选值配置</MenuItem> }
                 { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
                 { collection[i].type !== 'File' && collection[i].type !== 'SingleVersion' && collection[i].type !== 'MultiVersion' && collection[i].type !== 'SingleUser' && collection[i].type !== 'MultiUser' && collection[i].type !== 'TimeTracking' && collection[i].type !== 'DateTimePicker' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
                 <MenuItem eventKey='1'>编辑</MenuItem>
+                { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='6'>查看项目应用</MenuItem> }
                 { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }
@@ -192,6 +205,15 @@ export default class List extends Component {
             update={ update } 
             data={ selectedItem } 
             options={ options } 
+            i18n={ i18n }/> }
+        { this.state.viewUsedShow &&
+          <ViewUsedModal
+            show
+            close={ this.viewUsedClose }
+            view={ viewUsed }
+            loading={ loading }
+            data={ selectedItem }
+            projects={ usedProjects }
             i18n={ i18n }/> }
         { this.state.delNotifyShow && 
           <DelNotify 

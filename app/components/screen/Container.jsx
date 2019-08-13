@@ -49,6 +49,11 @@ export default class Container extends Component {
     return this.props.screen.ecode;
   }
 
+  async viewUsed(id) {
+    await this.props.actions.viewUsed(this.pid, id);
+    return this.props.screen.ecode;
+  }
+
   componentWillMount() {
     const { location: { pathname='' } } = this.props;
     if (/^\/admin\/scheme/.test(pathname)) {
@@ -76,6 +81,7 @@ export default class Container extends Component {
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           delNotify={ this.props.actions.delNotify } 
+          viewUsed={ this.viewUsed.bind(this) } 
           i18n={ this.props.i18n }
           { ...this.props.screen }/>
       </div>

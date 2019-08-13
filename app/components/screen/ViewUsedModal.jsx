@@ -33,7 +33,7 @@ export default class ViewUsedModal extends Component {
     const { projects, data, loading } = this.props;
 
     return (
-      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show bsSize='large' onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ '查看项目应用 - ' + data.name }</Modal.Title>
         </Modal.Header>
@@ -54,7 +54,8 @@ export default class ViewUsedModal extends Component {
             <thead>
               <tr>
                 <th>项目名称</th>
-                <th>问题个数</th>
+                <th>问题类型</th>
+                <th>工作流</th>
               </tr>
             </thead>
             <tbody>
@@ -69,9 +70,31 @@ export default class ViewUsedModal extends Component {
                   </td>
                   <td>
                     { v.status === 'active' ?
-                    <span><Link to={ '/project/' + v.key + '/issue?resolution=' + data.id }>{ v.issue_count || 0 }</Link></span>
+                    <span>
+                      <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+                        { _.isEmpty(v.types) ? '-' : _.map(v.types, (s, i) => <li key={ i }><Link to={ '/project/' + v.key + '/type' }>{ s.name }</Link></li>) }
+                      </ul>
+                    </span>
                     :
-                    <span>{ v.issue_count || 0 }</span> } 
+                    <span> 
+                      <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+                        { _.isEmpty(v.types) ? '-' : _.map(v.types, (s, i) => <li key={ i }>{ s.name }</li>) }
+                      </ul>
+                    </span> }
+                  </td>
+                  <td>
+                    { v.status === 'active' ?
+                    <span>
+                      <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+                        { _.isEmpty(v.workflows) ? '-' : _.map(v.workflows, (s, i) => <li key={ i }><Link to={ '/project/' + v.key + '/workflow' }>{ s.name }</Link></li>) }
+                      </ul>
+                    </span>
+                    :
+                    <span>
+                      <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+                        { _.isEmpty(v.workflows) ? '-' : _.map(v.workflows, (s, i) => <li key={ i }>{ s.name }</li>) }
+                      </ul>
+                    </span> }
                   </td>
                 </tr> ); 
             }) }

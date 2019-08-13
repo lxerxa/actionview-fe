@@ -5,6 +5,7 @@ import { Button, DropdownButton, MenuItem, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
 const PreviewModal = require('./PreviewModal');
+const ViewUsedModal = require('./ViewUsedModal');
 const EditModal = require('./EditModal');
 const CopyModal = require('./CopyModal');
 const DelNotify = require('./DelNotify');
@@ -17,6 +18,7 @@ export default class List extends Component {
     super(props);
     this.state = { 
       previewModalShow: false, 
+      viewUsedShow: false,
       editModalShow: false, 
       copyModalShow: false, 
       delNotifyShow: false, 
@@ -31,6 +33,7 @@ export default class List extends Component {
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.layoutConfigClose = this.layoutConfigClose.bind(this);
     this.layoutFieldConfigClose = this.layoutFieldConfigClose.bind(this);
+    this.viewUsedClose = this.viewUsedClose.bind(this);
   }
 
   static propTypes = {
@@ -43,9 +46,13 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
+    viewUsed: PropTypes.func.isRequired,
+    usedProjects: PropTypes.array.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
+    viewUsed: PropTypes.func.isRequired,
+    usedProjects: PropTypes.array.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -78,6 +85,10 @@ export default class List extends Component {
     this.setState({ layoutFieldConfigShow: false });
   }
 
+  viewUsedClose() {
+    this.setState({ viewUsedShow: false });
+  }
+
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     const { select } = this.props;
@@ -89,6 +100,7 @@ export default class List extends Component {
     eventKey === '4' && this.setState({ layoutFieldConfigShow: true });
     eventKey === '5' && this.setState({ copyModalShow: true });
     eventKey === '6' && this.setState({ previewModalShow: true });
+    eventKey === '7' && this.setState({ viewUsedShow: true });
   }
 
   onRowMouseOver(rowData) {
@@ -102,7 +114,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, pkey, collection, selectedItem, options, loading, indexLoading, itemLoading, del, update, create } = this.props;
+    const { i18n, pkey, collection, selectedItem, options, loading, indexLoading, itemLoading, del, update, create, viewUsed, usedProjects } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -139,6 +151,7 @@ export default class List extends Component {
                 { !isGlobal && <MenuItem eventKey='4'>字段配置</MenuItem> }
                 <MenuItem eventKey='5'>复制</MenuItem>
                 { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+                { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='7'>查看项目应用</MenuItem> }
                 { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }
@@ -172,6 +185,15 @@ export default class List extends Component {
             close={ this.previewModalClose } 
             name={ selectedItem.name || '' } 
             data={ selectedItem.schema || [] }/> }
+        { this.state.viewUsedShow &&
+          <ViewUsedModal
+            show
+            close={ this.viewUsedClose }
+            view={ viewUsed }
+            loading={ loading }
+            data={ selectedItem }
+            projects={ usedProjects }
+            i18n={ i18n }/> }
         { this.state.editModalShow && 
           <EditModal 
             show 

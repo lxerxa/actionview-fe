@@ -1,7 +1,15 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], indexLoading: false, loading: false, itemLoading: false, selectedItem: {}, itemSteps: [] };
+const initialState = { 
+  ecode: 0, 
+  collection: [], 
+  indexLoading: false, 
+  loading: false, 
+  itemLoading: false, 
+  selectedItem: {}, 
+  itemSteps: [],
+  usedProjects: [] };
 
 export default function workflow(state = initialState, action) {
   switch (action.type) {
@@ -68,6 +76,18 @@ export default function workflow(state = initialState, action) {
 
     case t.WORKFLOW_PREVIEW_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.WORKFLOW_VIEW_USED:
+      return { ...state, loading: true, usedProjects: [] };
+
+    case t.WORKFLOW_VIEW_USED_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.usedProjects = action.result.data;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.WORKFLOW_VIEW_USED_FAIL:
+      return { ...state, loading: false, error: action.error };
 
     default:
       return state;

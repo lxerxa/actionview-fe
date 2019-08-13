@@ -391,8 +391,8 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-      { id: '546761', name: '主题', type: 'Text', screens: [{id:'111', name:'界面1'}], key:'title'},
-      { id: '546763', name: '描述', type:'Text', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
+      { id: '546761', name: '主题', type: 'Text', project_key: '$_sys_$', screens: [{id:'111', name:'界面1'}], key:'title'},
+      { id: '546763', name: '描述', type:'Text', project_key: '$_sys_$', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
       { id: '546762', name: '优先级', type:'Select', screens: [], key:'priority'},
       { id: '546764', name: '开始时间', type:'DatePicker', screens: [{id:'111', name:'界面1'}], key:'starttime'},
       { id: '2323', name: '附件', type:'CheckboxGroup', screens: [{id:'111', name:'界面1'}], key:'attachment'}],
@@ -439,12 +439,19 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/field/:id/used', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ key: 'demo', name: 'demo1', status: 'active', screens: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }] }, { key: 'demo2', name: 'demo2', status: 'active', screens: [{ id: '3333', name: '3333' }, { id: '4444', name: '4444' }] }, { key: 'demo3', name: 'demo3', screens: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }] }] };
+    return res.status(200).send(results);
+  });
+
   /************** screen *****************/
   router.get('/project/:key/screen', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-      { id: '546761', name: '测试界面1', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}]},
+      { id: '546761', name: '测试界面1', workflows: [{id:'111', name:'流程A' }, {id:'222', name:'流程B'}], project_key: '$_sys_$'},
       { id: '546763', name: '测试界面2', workflows: [{id:'222', name:'流程B' }, {id:'333', name:'流程C'}]},
       { id: '546762', name: '测试界面3', workflows: []},
       { id: '546764', name: '测试界面5', workflows: [{id:'111', name:'流程C' }]}],
@@ -482,6 +489,13 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/screen/:id/used', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ key: 'demo', name: 'demo1', status: 'active', workflows: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }], types: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }] }, { key: 'demo2', name: 'demo2', status: 'active', workflows: [{ id: '3333', name: '3333' }, { id: '4444', name: '4444' }], types: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }] }, { key: 'demo3', name: 'demo3', workflows: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }], issue_count: 7 }] };
     return res.status(200).send(results);
   });
 
@@ -665,6 +679,13 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { id: req.params.id }};
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/state/:id/used', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ key: 'demo', name: 'demo1', status: 'active', workflows: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }] }, { key: 'demo2', name: 'demo2', status: 'active', workflows: [{ id: '3333', name: '3333' }, { id: '4444', name: '4444' }] }, { key: 'demo3', name: 'demo3', workflows: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }], issue_count: 7 }] };
     return res.status(200).send(results);
   });
 

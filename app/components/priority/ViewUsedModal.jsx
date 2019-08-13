@@ -69,9 +69,9 @@ export default class ViewUsedModal extends Component {
                   </td>
                   <td>
                     { v.status === 'active' ?
-                    <span><Link to={ '/project/' + v.key + '/issue?priority=' + data.id }>{ v.issue_count }</Link></span>
+                    <span><Link to={ '/project/' + v.key + '/issue?priority=' + data.id }>{ v.issue_count || 0 }</Link></span>
                     :
-                    <span>{ v.issue_count }</span> } 
+                    <span>{ v.issue_count || 0 }</span> } 
                   </td>
                 </tr> ); 
             }) }
