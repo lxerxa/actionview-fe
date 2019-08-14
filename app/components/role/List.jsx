@@ -89,6 +89,12 @@ export default class List extends Component {
     select(id);
   }
 
+  viewUsed(id) {
+    this.setState({ viewUsedShow: true });
+    const { select } = this.props;
+    select(id);
+  }
+
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
 
@@ -98,6 +104,8 @@ export default class List extends Component {
       this.delNotify(hoverRowId);
     } else if (eventKey === '3') {
       this.resetNotify(hoverRowId);
+    } else if (eventKey === '4') {
+      this.viewUsed(hoverRowId);
     }
   }
 
