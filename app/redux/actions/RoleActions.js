@@ -68,3 +68,11 @@ export function reset(key, id) {
     promise: (client) => client.request({ url: '/project/' + key + '/role/' + id + '/reset' })
   });
 }
+
+export function viewUsed(key, id) {
+  return asyncFuncCreator({
+    constant: 'ROLE_VIEW_USED',
+    id,
+    promise: (client) => client.request({ url: '/project/' + key + '/role/' + id + '/used' })
+  });
+}

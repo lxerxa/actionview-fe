@@ -7,6 +7,7 @@ import _ from 'lodash';
 const EditModal = require('./EditModal');
 const CopyModal = require('./CopyModal');
 const DelNotify = require('./DelNotify');
+const ViewUsedModal = require('./ViewUsedModal');
 const PreviewModal = require('../workflow/PreviewModal');
 const img = require('../../assets/images/loading.gif');
 
@@ -17,6 +18,7 @@ export default class List extends Component {
       editModalShow: false, 
       copyModalShow: false, 
       delNotifyShow: false, 
+      viewUsedShow: false,
       previewShow: false,
       operateShow: false,
       hoverRowId: ''
@@ -24,6 +26,7 @@ export default class List extends Component {
     this.editModalClose = this.editModalClose.bind(this);
     this.copyModalClose = this.copyModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
+    this.viewUsedClose = this.viewUsedClose.bind(this);
     this.previewModalClose = this.previewModalClose.bind(this);
   }
 
@@ -41,6 +44,8 @@ export default class List extends Component {
     update: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
+    viewUsed: PropTypes.func.isRequired,
+    usedProjects: PropTypes.array.isRequired,
     preview: PropTypes.func.isRequired,
     goConfig: PropTypes.func.isRequired
   }
@@ -60,6 +65,10 @@ export default class List extends Component {
 
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
+  }
+
+  viewUsedClose() {
+    this.setState({ viewUsedShow: false });
   }
 
   previewModalClose() {
@@ -83,6 +92,7 @@ export default class List extends Component {
       eventKey === '1' && this.setState({ editModalShow: true });
       eventKey === '2' && this.setState({ delNotifyShow: true });
       eventKey === '4' && this.setState({ copyModalShow: true });
+      eventKey === '6' && this.setState({ viewUsedShow: true });
     }
   }
 
@@ -106,6 +116,8 @@ export default class List extends Component {
       indexLoading, 
       itemLoading, 
       itemSteps, 
+      usedProjects,
+      viewUsed,
       del, 
       update, 
       create } = this.props;
@@ -146,6 +158,7 @@ export default class List extends Component {
                 { !isGlobal && <MenuItem eventKey='3'>配置</MenuItem> }
                 <MenuItem eventKey='4'>复制</MenuItem>
                 { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+                { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='6'>查看项目应用</MenuItem> }
                 { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }
@@ -193,6 +206,15 @@ export default class List extends Component {
             close={ this.delNotifyClose } 
             data={ selectedItem } 
             del={ del }/> }
+        { this.state.viewUsedShow &&
+          <ViewUsedModal
+            show
+            close={ this.viewUsedClose }
+            view={ viewUsed }
+            loading={ loading }
+            data={ selectedItem }
+            projects={ usedProjects }
+            i18n={ i18n }/> }
         { this.state.previewModalShow && 
           <PreviewModal 
             show 

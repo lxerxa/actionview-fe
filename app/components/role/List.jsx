@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { Permissions } from '../share/Constants';
 
+const ViewUsedModal = require('./ViewUsedModal');
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 
@@ -18,6 +19,7 @@ export default class List extends Component {
     this.state = { 
       editModalShow: false, 
       delNotifyShow: false, 
+      viewUsedShow: false,
       resetNotifyShow: false,
       willSetPermissionRoleIds: [], 
       settingPermissionRoleIds: [], 
@@ -27,6 +29,7 @@ export default class List extends Component {
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.resetNotifyClose = this.resetNotifyClose.bind(this);
+    this.viewUsedClose = this.viewUsedClose.bind(this);
   }
 
   static propTypes = {
@@ -34,6 +37,7 @@ export default class List extends Component {
     pkey: PropTypes.string.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
@@ -41,6 +45,8 @@ export default class List extends Component {
     update: PropTypes.func.isRequired,
     setPermission: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
+    viewUsed: PropTypes.func.isRequired,
+    usedProjects: PropTypes.array.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -59,6 +65,10 @@ export default class List extends Component {
 
   resetNotifyClose() {
     this.setState({ resetNotifyShow: false });
+  }
+
+  viewUsedClose() {
+    this.setState({ viewUsedShow: false });
   }
 
   edit(id) {
@@ -145,7 +155,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { i18n, pkey, collection, selectedItem, indexLoading, itemLoading, del, reset, update } = this.props;
+    const { i18n, pkey, collection, selectedItem, loading, indexLoading, itemLoading, del, reset, update, viewUsed, usedProjects } = this.props;
     const { willSetPermissionRoleIds, settingPermissionRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -220,6 +230,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='4'>查看项目应用</MenuItem> }
               { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               { isGlobal && <MenuItem eventKey='3'>重置权限</MenuItem> }
             </DropdownButton> }
@@ -260,6 +271,15 @@ export default class List extends Component {
             close={ this.delNotifyClose } 
             data={ selectedItem } 
             del={ del }/> }
+        { this.state.viewUsedShow &&
+          <ViewUsedModal
+            show
+            close={ this.viewUsedClose }
+            view={ viewUsed }
+            loading={ loading }
+            data={ selectedItem }
+            projects={ usedProjects }
+            i18n={ i18n }/> }
         { this.state.resetNotifyShow &&
           <DelNotify
             show

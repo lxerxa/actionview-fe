@@ -1,7 +1,15 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], options: {}, indexLoading: false, loading: false, itemLoading: false, selectedItem: {} };
+const initialState = { 
+  ecode: 0, 
+  collection: [], 
+  options: {}, 
+  indexLoading: false, 
+  loading: false, 
+  itemLoading: false, 
+  selectedItem: {},
+  usedProjects: [] };
 
 export default function role(state = initialState, action) {
   switch (action.type) {
@@ -83,6 +91,18 @@ export default function role(state = initialState, action) {
 
     case t.ROLE_DELETE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
+
+    case t.ROLE_VIEW_USED:
+      return { ...state, loading: true, usedProjects: [] };
+
+    case t.ROLE_VIEW_USED_SUCCESS:
+      if ( action.result.ecode === 0 ) {
+        state.usedProjects = action.result.data;
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.ROLE_VIEW_USED_FAIL:
+      return { ...state, loading: false, error: action.error };
 
     default:
       return state;

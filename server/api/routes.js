@@ -504,7 +504,7 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-      { id: '546761', name: '测试流程1', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '1111', name: '张三' }, steps: 5 },
+      { id: '546761', name: '测试流程1', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '1111', name: '张三' }, steps: 5, project_key: '$_sys_$' },
       { id: '546763', name: '测试流程2', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '1111', name: '张三' }, steps: 5 },
       { id: '546762', name: '测试流程3', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '2222', name: '李四' }, steps: 6 },
       { id: '546764', name: '测试流程5', latest_modified_time: '2016-03-02 12:09:08', latest_modifier: { id: '2222', name: '李四' }, steps: 4 }]
@@ -634,6 +634,12 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/project/:key/workflow/:id/used', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ key: 'demo', name: 'demo1', status: 'active', types: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }] }, { key: 'demo2', name: 'demo2', status: 'active', types: [{ id: '1111', name: '1111' }, { id: '2222', name: '2222' }] }, { key: 'demo3', name: 'demo3' }] };
+    return res.status(200).send(results);
+  });
 
   /*******************state*****************/
   router.get('/project/:key/state', function(req, res) {
