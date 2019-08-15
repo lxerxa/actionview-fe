@@ -86,7 +86,7 @@ export default class ViewUsedModal extends Component {
                     { v.status === 'active' ?
                     <span>
                       <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
-                        { _.isEmpty(v.workflows) ? '-' : _.map(v.workflows, (s, i) => <li key={ i }><Link to={ '/project/' + v.key + '/workflow' }>{ s.name }</Link></li>) }
+                        { _.isEmpty(v.workflows) ? '-' : _.map(v.workflows, (s, i) => <li key={ i }><Link to={ '/project/' + v.key + '/workflow/' + s.id }>{ s.name }</Link></li>) }
                       </ul>
                     </span>
                     :

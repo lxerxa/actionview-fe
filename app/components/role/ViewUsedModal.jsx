@@ -62,7 +62,7 @@ export default class ViewUsedModal extends Component {
                 <tr key={ key }>
                   <td>
                     { v.status === 'active' ?
-                    <span><Link to={ '/project/' + v.key }>{ v.name }</Link></span>
+                    <span><Link to={ '/project/' + v.key + '/team' }>{ v.name }</Link></span>
                     :
                     <span>{ v.name }(已关闭)</span> }
                   </td>
