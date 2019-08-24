@@ -562,6 +562,15 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_KANBAN_RELEASE_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
+    case t.ISSUE_IMPORTS:
+      return { ...state, loading: true };
+
+    case t.ISSUE_IMPORTS_SUCCESS:
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_IMPORTS_FAIL:
+      return { ...state, loading: false, error: action.error };
+
     default:
       return state;
   }

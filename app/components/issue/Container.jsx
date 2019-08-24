@@ -250,6 +250,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async imports(values) {
+    await this.props.actions.imports(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -277,6 +282,7 @@ export default class Container extends Component {
           refresh={ this.refresh.bind(this) } 
           index={ this.index.bind(this) } 
           exportExcel={ this.exportExcel.bind(this) } 
+          imports={ this.imports.bind(this) } 
           project={ this.props.project.item } 
           closeDetailBar={ this.closeDetailBar.bind(this) }
           i18n={ this.props.i18n }

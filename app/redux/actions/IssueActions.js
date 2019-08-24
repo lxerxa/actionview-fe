@@ -287,3 +287,10 @@ export function release(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/release', method: 'post', data: values || {} })
   });
 }
+
+export function imports(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_IMPORTS',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/imports', method: 'post', data: values || {} })
+  });
+}

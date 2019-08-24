@@ -537,9 +537,9 @@ export default class List extends Component {
                 (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
             </span>
           </TableHeaderColumn>
-          { _.map(display_columns, (val) => {
+          { _.map(display_columns, (val, i) => {
             return (
-              <TableHeaderColumn width={ val.width || '100' } dataField={ val.key }>
+              <TableHeaderColumn width={ val.width || '100' } dataField={ val.key } key={ i }>
                 <span className='table-header' onClick={ val.sortKey ? this.orderBy.bind(this, val.sortKey) : null }>
                   { val.name }
                   { mainOrder.field === val.sortKey && 

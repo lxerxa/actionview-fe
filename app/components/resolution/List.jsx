@@ -131,7 +131,7 @@ export default class List extends Component {
             { collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }
           </span> ),
         description: collection[i].description ? collection[i].description : '-', 
-        operation: !isGlobal && !collection[i].key ? (
+        operation: !isGlobal && (!collection[i].key || ['Unresolved', 'Fixed'].indexOf(collection[i].key) === -1) ? (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
@@ -142,7 +142,7 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
+              { !collection[i].key && <MenuItem eventKey='1'>编辑</MenuItem> }
               { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='3'>查看项目应用</MenuItem> }
               { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
             </DropdownButton> }

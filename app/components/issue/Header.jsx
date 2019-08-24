@@ -14,6 +14,7 @@ const FilterConfigModal = require('../share/FilterConfigModal');
 const ResetColumnsNotify = require('./ResetColumnsNotify');
 const ColumnsConfigModal = require('./ColumnsConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
+const ImportModal = require('./ImportModal');
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
@@ -27,7 +28,8 @@ export default class Header extends Component {
       resetFiltersShow: false,
       setColumnsShow: false,
       resetColumnsShow: false,
-      exportConfigShow: false };
+      exportConfigShow: false,
+      importModalShow: false };
 
     this.createModalClose = this.createModalClose.bind(this);
     this.saveFilterModalClose = this.saveFilterModalClose.bind(this);
@@ -36,6 +38,7 @@ export default class Header extends Component {
     this.setColumnsNotifyClose = this.setColumnsNotifyClose.bind(this);
     this.resetColumnsNotifyClose = this.resetColumnsNotifyClose.bind(this);
     this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
+    this.importModalClose = this.importModalClose.bind(this);
   }
 
   static propTypes = {
@@ -51,6 +54,7 @@ export default class Header extends Component {
     index: PropTypes.func,
     refresh: PropTypes.func,
     exportExcel: PropTypes.func,
+    imports: PropTypes.func,
     getOptions: PropTypes.func,
     query: PropTypes.object,
     project: PropTypes.object,
@@ -95,6 +99,10 @@ export default class Header extends Component {
     this.setState({ exportConfigShow: false });
   }
 
+  importModalClose() {
+    this.setState({ importModalShow: false });
+  }
+
   operateSelect(eventKey) {
     const { refresh, index, query } = this.props;
     if (eventKey === 'refresh') {
@@ -107,6 +115,8 @@ export default class Header extends Component {
       this.setState({ setColumnsShow: true });
     } else if (eventKey === 'reset_columns') {
       this.setState({ resetColumnsShow: true });
+    } else if (eventKey === 'import') {
+      this.setState({ importModalShow: true });
     } else if (eventKey === 'export') {
       this.setState({ exportConfigShow: true });
     }
@@ -144,6 +154,7 @@ export default class Header extends Component {
   render() {
     const { 
       i18n, 
+      index,
       create, 
       addLabels, 
       saveFilter, 
@@ -151,6 +162,7 @@ export default class Header extends Component {
       configFilters, 
       setColumns, 
       resetColumns, 
+      imports,
       indexLoading, 
       optionsLoading, 
       filterLoading, 
@@ -186,6 +198,8 @@ export default class Header extends Component {
               <MenuItem divider/>
               <MenuItem eventKey='set_columns'>显示列配置</MenuItem>
               <MenuItem eventKey='reset_columns'>显示列重置</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='import'>导入</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='export'>导出</MenuItem>
             </DropdownButton>
@@ -256,12 +270,20 @@ export default class Header extends Component {
             loading={ columnsLoading }
             i18n={ i18n }/> }
         { this.state.exportConfigShow &&
-        <ExportConfigModal
-          show
-          close={ this.exportConfigModalClose }
-          options={ options } 
-          exportExcel={ this.exportExcel.bind(this) }
-          i18n={ i18n }/> }
+          <ExportConfigModal
+            show
+            close={ this.exportConfigModalClose }
+            options={ options } 
+            exportExcel={ this.exportExcel.bind(this) }
+            i18n={ i18n }/> }
+        { this.state.importModalShow &&
+          <ImportModal
+            show
+            close={ this.importModalClose }
+            imports={ imports }
+            loading={ loading }
+            index={ index }
+            i18n={ i18n }/> }
       </div>
     );
   }

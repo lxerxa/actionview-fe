@@ -59,7 +59,7 @@ export default class ImportModal extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: '/api/user/fileupload'
+      postUrl: '/api/issue/fileupload'
     };
     const djsConfig = {
       addRemoveLinks: true,
@@ -74,22 +74,22 @@ export default class ImportModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>批量导入</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>批量导入(开发中)</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>选择上传导入用户文件（CSV）<a href='/api/downloadusertpl' style={ { fontWeight: 200 } } download='import-user-template.csv'>模版下载</a></ControlLabel>
+            <ControlLabel>选择上传导入用户文件（Excel）<a href='/api/downloadissuetpl' style={ { fontWeight: 200 } } download='import-issue-template.xlsx'>模版下载</a></ControlLabel>
             <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
           </FormGroup>
           <FormGroup>
-            <ControlLabel>导入冲突时处理方式</ControlLabel>
+            <ControlLabel>导入模式</ControlLabel>
             <RadioGroup
               disabled ={ loading }
               name='pattern'
               selectedValue={ this.state.pattern }
               onChange={ (newValue) => { this.setState({ pattern: newValue }) } }>
-              <span><Radio value='1'/> 保持原有用户不变</span>
-              <span style={ { marginLeft: '12px' } }><Radio value='2'/> 覆盖原有用户信息</span>
+              <span><Radio value='1'/> 严格模式(推荐)</span>
+              <span style={ { marginLeft: '12px' } }><Radio value='2'/> 强制模式</span>
             </RadioGroup>
           </FormGroup>
         </Modal.Body>
