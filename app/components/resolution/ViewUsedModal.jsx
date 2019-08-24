@@ -21,7 +21,7 @@ export default class ViewUsedModal extends Component {
 
   componentWillMount() {
     const { view, data } = this.props;
-    view(data.id);
+    view(data.key || data.id);
   }
 
   handleCancel() {
@@ -69,7 +69,7 @@ export default class ViewUsedModal extends Component {
                   </td>
                   <td>
                     { v.status === 'active' ?
-                    <span><Link to={ '/project/' + v.key + '/issue?resolution=' + data.id }>{ v.issue_count || 0 }</Link></span>
+                    <span><Link to={ '/project/' + v.key + '/issue?resolution=' + (data.key || data.id) }>{ v.issue_count || 0 }</Link></span>
                     :
                     <span>{ v.issue_count || 0 }</span> } 
                   </td>
