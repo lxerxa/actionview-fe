@@ -59,7 +59,7 @@ export default class ImportModal extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: '/api/issue/fileupload'
+      postUrl: '/api/datafile'
     };
     const djsConfig = {
       addRemoveLinks: true,
@@ -78,10 +78,10 @@ export default class ImportModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>选择上传导入用户文件（Excel）<a href='/api/downloadissuetpl' style={ { fontWeight: 200 } } download='import-issue-template.xlsx'>模版下载</a></ControlLabel>
+            <ControlLabel>选择问题导入文件（Excel）<a href='/api/downloadissuetpl' style={ { fontWeight: 200 } } download='import-issue-template.xlsx'>模版下载</a></ControlLabel>
             <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
           </FormGroup>
-          <FormGroup>
+          {/* <FormGroup>
             <ControlLabel>导入模式</ControlLabel>
             <RadioGroup
               disabled ={ loading }
@@ -91,7 +91,7 @@ export default class ImportModal extends Component {
               <span><Radio value='1'/> 严格模式(推荐)</span>
               <span style={ { marginLeft: '12px' } }><Radio value='2'/> 强制模式</span>
             </RadioGroup>
-          </FormGroup>
+          </FormGroup> */}
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

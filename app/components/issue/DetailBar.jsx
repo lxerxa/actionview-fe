@@ -202,6 +202,8 @@ export default class DetailBar extends Component {
     const ecode = await viewWorkflow(data.definition_id);
     if (ecode === 0) {
       this.setState({ previewModalShow: true });
+    } else {
+      notify.show('预览失败。', 'error', 2000);
     }
   }
 
