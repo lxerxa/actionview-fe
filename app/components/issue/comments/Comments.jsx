@@ -27,6 +27,7 @@ export default class Comments extends Component {
       contents:  '',  
       atWho: [] };
     this.addAtWho = this.addAtWho.bind(this);
+    this.addComments = this.addComments.bind(this);
   }
 
   static propTypes = {
@@ -210,11 +211,12 @@ export default class Comments extends Component {
                 style={ { height: '150px' } }
                 onChange={ (e) => { this.setState({ contents: e.target.value }) } }
                 value={ this.state.contents } 
-                placeholder='输入备注' />
+                onKeyPress={ (e) => { if (e.charCode == '13' && e.ctrlKey && !_.isEmpty(_.trim(this.state.contents))) { this.addComments(); } } }
+                placeholder='支持@项目成员，Ctrl+Enter发布备注。' />
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
-              <Button style={ { marginLeft: '10px' } } onClick={ this.addComments.bind(this) } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
+              <Button style={ { marginLeft: '10px' } } onClick={ this.addComments } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
               <Button bsStyle='link' style={ { marginRight: '5px' } } onClick={ () => { this.setState({ addCommentsShow: false }) } } disabled={ loading }>取消</Button>
             </div>
           </Col>
