@@ -11,7 +11,7 @@ const img = require('../../assets/images/loading.gif');
 export default class ImportModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, fid: '', pattern: '1' };
+    this.state = { ecode: 0, fid: '', fname: '', pattern: '1' };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -47,11 +47,12 @@ export default class ImportModal extends Component {
   }
 
   success(file, res) {
-    this.setState({ fid: res.data && res.data.fid || '' });
+    this.setState({ fid: res.data && res.data.fid || '', fname: res.data && res.data.fname || '' });
+    this.dropzone.removeFile(file);
   }
 
   removedfile() {
-    this.setState({ fid: '' });
+    this.setState({ fid: '', fname:'' });
   }
 
   render() {
@@ -59,7 +60,7 @@ export default class ImportModal extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: '/api/user/fileupload'
+      postUrl: '/api/tmpfile'
     };
     const djsConfig = {
       addRemoveLinks: true,
@@ -68,6 +69,7 @@ export default class ImportModal extends Component {
     const eventHandlers = {
       init: dz => this.dropzone = dz,
       success: this.success.bind(this),
+      sending: this.removedfile.bind(this),
       removedfile: this.removedfile.bind(this)
     }
 
@@ -78,7 +80,10 @@ export default class ImportModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>选择上传导入用户文件（CSV）<a href='/api/downloadusertpl' style={ { fontWeight: 200 } } download='import-user-template.csv'>模版下载</a></ControlLabel>
+            { this.state.fid ?
+            <ControlLabel>{ this.state.fname }</ControlLabel>
+            :
+            <ControlLabel>选择导入Excel文件<a href='/api/downloadtpl?type=user' style={ { fontWeight: 200, marginLeft: '15px' } } download='import-user-template.csv'>模版下载</a></ControlLabel> }
             <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
           </FormGroup>
           <FormGroup>
