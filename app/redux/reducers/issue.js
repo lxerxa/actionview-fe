@@ -4,6 +4,7 @@ import { arrange } from '../funcs/fields';
 
 const initialState = { 
   ecode: 0, 
+  emsg: '',
   collection: [], 
   itemData: {}, 
   options: {}, 
@@ -39,6 +40,7 @@ const initialState = {
   worklogLoaded: false, 
   linkLoading: false,
   rankLoading: false,
+  importResult: '',
   detailFloatStyle: {} };
 
 export default function issue(state = initialState, action) {
@@ -563,9 +565,12 @@ export default function issue(state = initialState, action) {
       return { ...state, itemLoading: false, error: action.error };
 
     case t.ISSUE_IMPORTS:
-      return { ...state, loading: true };
+      return { ...state, loading: true, emsg: '' };
 
     case t.ISSUE_IMPORTS_SUCCESS:
+      if (action.result.ecode !== 0) {
+        state.emsg = action.result.emsg;
+      }
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.ISSUE_IMPORTS_FAIL:

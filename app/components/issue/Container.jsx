@@ -252,7 +252,7 @@ export default class Container extends Component {
 
   async imports(values) {
     await this.props.actions.imports(this.pid, values);
-    return this.props.issue.ecode;
+    return { ecode: this.props.issue.ecode, emsg: this.props.issue.emsg };
   }
 
   componentWillMount() {
