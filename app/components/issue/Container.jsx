@@ -50,8 +50,9 @@ export default class Container extends Component {
   async index(query) {
     this.closeDetailBar();
 
+    query = query || {};
     if (!query.page) { query.page = 1; }
-    await this.props.actions.index(this.pid, qs.stringify(query || {}));
+    await this.props.actions.index(this.pid, qs.stringify(query));
     return this.props.issue.ecode;
   }
 

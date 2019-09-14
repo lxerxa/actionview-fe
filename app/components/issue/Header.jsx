@@ -198,8 +198,10 @@ export default class Header extends Component {
               <MenuItem divider/>
               <MenuItem eventKey='set_columns'>显示列配置</MenuItem>
               <MenuItem eventKey='reset_columns'>显示列重置</MenuItem>
-              <MenuItem divider/>
-              <MenuItem eventKey='import'>导入</MenuItem>
+              { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
+                <MenuItem divider/> }
+              { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
+                <MenuItem eventKey='import'>导入</MenuItem> }
               <MenuItem divider/>
               <MenuItem eventKey='export'>导出</MenuItem>
             </DropdownButton>

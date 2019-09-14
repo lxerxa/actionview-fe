@@ -33,7 +33,7 @@ const validate = (values, props) => {
     'no', 
     'schema', 
     'parent_id', 
-    'parents', 
+    'parent', 
     'subtasks', 
     'links', 
     'entry_id', 

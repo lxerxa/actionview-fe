@@ -47,12 +47,8 @@ export default class ImportModal extends Component {
   }
 
   success(file, res) {
-    this.setState({ fid: res.data && res.data.fid || '', fname: res.data && res.data.fname || '' });
+    this.setState({ fid: res.data && res.data.fid || '', fname: res.data && res.data.fname || '', ecode: 0, emsg: '' });
     this.dropzone.removeFile(file);
-  }
-
-  removedfile() {
-    this.setState({ fid: '', fname:'' });
   }
 
   render() {
@@ -68,9 +64,7 @@ export default class ImportModal extends Component {
     };
     const eventHandlers = {
       init: dz => this.dropzone = dz,
-      success: this.success.bind(this),
-      sending: this.removedfile.bind(this),
-      removedfile: this.removedfile.bind(this)
+      success: this.success.bind(this)
     }
 
     return (
@@ -81,9 +75,9 @@ export default class ImportModal extends Component {
         <Modal.Body>
           <FormGroup>
             { this.state.fid ?
-            <ControlLabel>{ this.state.fname }</ControlLabel>
+            <ControlLabel>文件：{ this.state.fname }</ControlLabel>
             :
-            <ControlLabel>选择导入Excel文件<a href='/api/downloadtpl?type=user' style={ { fontWeight: 200, marginLeft: '15px' } } download='import-user-template.csv'>模版下载</a></ControlLabel> }
+            <ControlLabel>选择导入Excel文件</ControlLabel> }
             <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
           </FormGroup>
           <FormGroup>
@@ -99,6 +93,7 @@ export default class ImportModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
+          <a href='/template/import_user_tpl.xlsx' style={ { float: 'left', marginTop: '5px', marginLeft: '5px' } } download='import_user_tpl.xlsx'>模版下载</a>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ loading || !this.state.fid } onClick={ this.handleSubmit }>确定</Button>
