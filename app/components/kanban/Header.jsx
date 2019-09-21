@@ -137,7 +137,7 @@ export default class Header extends Component {
       index();
     } else if (model == 'history') {
       await selectFilter(completedSprintNum + '');
-      index({ sprint: completedSprintNum });
+      index({ sprints: completedSprintNum });
       getSprint(completedSprintNum);
     }
   }
@@ -154,7 +154,7 @@ export default class Header extends Component {
   async handleSelectSprint(key) {
     const { index, curKanban, selectFilter, completedSprintNum, getSprint } = this.props;
     await selectFilter(key || completedSprintNum);
-    index({ sprint : key });
+    index({ sprints: key });
     getSprint(key);
   }
 
