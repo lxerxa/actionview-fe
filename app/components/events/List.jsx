@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-// import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';

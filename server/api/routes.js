@@ -906,6 +906,13 @@ export default function(router) {
     return res.status(200).send({ecode: 0, data: { field:'attachments', file: {id: '546761'}}});
   });
 
+  router.get('/tmpfile', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { fid: 'aaaa', fname: 'zzzz.xlxs' } };
+    return results;
+  });
+
   /*******************events*****************/
   router.get('/project/:key/events', function(req, res) {
     const startTime = new Date().getTime();
@@ -1270,6 +1277,22 @@ export default function(router) {
   });
 
   /******************report*****************/
+
+  /******************integrations*****************/
+  router.get('/project/:key/integrations', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [ { user: 'github', pwd: 'aaaa', status: 'disabled' } ] };
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/integrations', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { user: 'github', pwd: 'aaaa', status: 'enabled' } };
+    return res.status(200).send(results);
+  });
+  /******************integrations*****************/
 
   router.get('/project/:key/issue/:id/gitcommits', function(req, res) {
     const startTime = new Date().getTime();

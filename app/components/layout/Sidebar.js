@@ -12,11 +12,12 @@ export default class Sidebar extends Component {
       projectPanelShow: false,
       projectSummaryShow: false, 
       projectConfigShow: false, 
+      projectSettingsShow: false, 
       adminPanelShow: false,
       adminSchemeShow: false, 
       adminUserManageShow: false, 
       adminProjectManageShow: false, 
-      adminSysSettingShow: false, 
+      adminSysSettingsShow: false, 
       tackFlag: true };
   }
 
@@ -144,6 +145,10 @@ export default class Sidebar extends Component {
       this.state.adminPanelShow = false;
       this.state.projectPanelShow = true;
       this.state.projectConfigShow = true;
+    } else if (/^\/project\/(\w+)\/(settings|hooks|integrations)(\/\w+)?$/.test(nextProps.pathname)){
+      this.state.adminPanelShow = false;
+      this.state.projectPanelShow = true;
+      this.state.projectSettingsShow = true;
     } else if (/^\/admin\/scheme/.test(nextProps.pathname)) {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
@@ -159,7 +164,7 @@ export default class Sidebar extends Component {
     } else if (/^\/admin\/syssetting$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
-      this.state.adminSysSettingShow = true;
+      this.state.adminSysSettingsShow = true;
     }
   }
 
@@ -200,8 +205,8 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.adminProjectManageShow && 'hide' }>
               <li><Link to='/admin/project' activeClassName='menu-active'>项目</Link></li>
             </ul>
-            <h4><i className={ this.state.adminSysSettingShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingShow: !this.state.adminSysSettingShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>
-            <ul className={ !this.state.adminSysSettingShow && 'hide' }>
+            <h4><i className={ this.state.adminSysSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingsShow: !this.state.adminSysSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>
+            <ul className={ !this.state.adminSysSettingsShow && 'hide' }>
               <li><Link to='/admin/syssetting' activeClassName='menu-active'>配置</Link></li>
             </ul>
           </div> }
@@ -233,7 +238,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/wiki' } activeClassName='menu-active' id='wiki'>Wiki</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/team' } activeClassName='menu-active'>成员</Link></li>
             </ul> }
-            <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>配置管理</h4>
+            <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li>
@@ -250,6 +255,13 @@ export default class Sidebar extends Component {
             { project.options.permissions && project.options.permissions.length > 0 && project.options.permissions.indexOf('manage_project') === -1 &&
             <ul className={ !this.state.projectConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li> 
+            </ul> }
+            <h4><i className={ this.state.projectSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSettingsShow: !this.state.projectSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目设置</h4>
+            { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
+            <ul className={ !this.state.projectSettingsShow && 'hide' }>
+              <li><Link to={ '/project/' + project.item.key + '/settings' } activeClassName='menu-active'>选项</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/integrations' } activeClassName='menu-active'>外部用户</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/hooks' } activeClassName='menu-active'>Webhooks</Link></li>
             </ul> }
             <h4>&nbsp;</h4><h4>&nbsp;</h4>
           </div>

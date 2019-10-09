@@ -26,6 +26,7 @@ export { default as syssetting } from './syssetting';
 export { default as document } from './document';
 export { default as wiki } from './wiki';
 export { default as report } from './report';
+export { default as integrations } from './integrations';
 export { default as layout } from './layout';
 export { reducer as form } from 'redux-form';
 export { routerReducer as routing } from 'react-router-redux';

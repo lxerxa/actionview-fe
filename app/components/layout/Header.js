@@ -120,7 +120,10 @@ export default class Header extends Component {
       { key: 'priority', name: '优先级' },
       { key: 'state', name: '状态' },
       { key: 'role', name: '角色权限' },
-      { key: 'events', name: '通知事件' }
+      { key: 'events', name: '通知事件' },
+      { key: 'options', name: '选项' },
+      { key: 'integrations', name: '外部用户' },
+      { key: 'webhooks', name: 'Webhooks' }
     ];
 
     const patten0 = new RegExp('^/myproject$');
