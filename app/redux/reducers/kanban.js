@@ -21,7 +21,8 @@ const initialState = {
   wfLoading: false, 
   sprintLog: {},
   sprintLogLoading: false,
-  draggedIssue: '' };
+  draggedIssue: '' 
+};
 
 export default function kanban(state = initialState, action) {
   switch (action.type) {

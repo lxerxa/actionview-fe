@@ -1,7 +1,12 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, emsg: '', invalid: false, user: {} };
+const initialState = { 
+  ecode: 0, 
+  emsg: '', 
+  invalid: false, 
+  user: {} 
+};
 
 export default function session(state = initialState, action) {
   switch (action.type) {

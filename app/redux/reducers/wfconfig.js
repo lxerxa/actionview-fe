@@ -1,7 +1,14 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], collection2JSON: '', options: {}, indexLoading: false, saveLoading: false };
+const initialState = { 
+  ecode: 0, 
+  collection: [], 
+  collection2JSON: '', 
+  options: {}, 
+  indexLoading: false, 
+  saveLoading: false 
+};
 
 export default function wfconfig(state = initialState, action) {
   const { collection } = state;

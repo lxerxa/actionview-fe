@@ -10,7 +10,8 @@ const initialState = {
   sortLoading: false, 
   defaultLoading: false, 
   selectedItem: {},
-  usedProjects: [] };
+  usedProjects: [] 
+};
 
 export default function resolution(state = initialState, action) {
   switch (action.type) {

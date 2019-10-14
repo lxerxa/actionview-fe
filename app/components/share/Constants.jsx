@@ -55,6 +55,16 @@ export const Permissions = [
   //{ id: 'delete_self_worklog', name: '删除自己的工作日志' }
 ];
 
+export const webhookEvents = [
+  { id: 'create_issue', name: '创建问题' },
+  { id: 'edit_issue', name: '编辑问题' },
+  { id: 'del_issue', name: '删除问题' },
+  { id: 'create_version', name: '创建版本' },
+  { id: 'edit_version', name: '编辑版本' },
+  { id: 'del_version', name: '删除版本' },
+  { id: 'add_worklog', name: '添加工作日志' }
+];
+
 export const CardTypes = {
   CARD: 'card',
   KANBAN_COLUMN: 'kanban_column',

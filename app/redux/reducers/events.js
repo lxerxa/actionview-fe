@@ -8,7 +8,8 @@ const initialState = {
   indexLoading: false, 
   loading: false, 
   itemLoading: false, 
-  selectedItem: {} };
+  selectedItem: {} 
+};
 
 export default function resolution(state = initialState, action) {
   switch (action.type) {

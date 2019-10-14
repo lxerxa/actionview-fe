@@ -43,13 +43,13 @@ export default class List extends Component {
       itemLoading, 
       handle } = this.props;
 
-    const statusMap = { 
+    const statusStyles = { 
       unused: { style: 'danger', name: '未开通' }, 
       enabled: { style: 'success', name: '已启用' }, 
       disabled: { style: 'danger', name: '已禁用' } 
     };
 
-    const usersMap = {
+    const users = {
       github: { key: 'github', name: 'GitHub' },
       gitlab: { key: 'gitlab', name: 'GitLab' }
     };
@@ -59,11 +59,11 @@ export default class List extends Component {
 
     const gitHubHeader = (
       <span style={ { fontWeight: 600 } }>
-        GitHub { !indexLoading && <Label bsStyle={ statusMap[github.status] && statusMap[github.status].style || 'default' }>{ statusMap[github.status] && statusMap[github.status].name || '未开通' }</Label> }
+        GitHub { !indexLoading && <Label bsStyle={ statusStyles[github.status] && statusStyles[github.status].style || 'default' }>{ statusStyles[github.status] && statusStyles[github.status].name || '未开通' }</Label> }
       </span>);
     const gitLabHeader = (
       <span style={ { fontWeight: 600 } }>
-        GitLab { !indexLoading && <Label bsStyle={ statusMap[gitlab.status] && statusMap[gitlab.status].style || 'default' }>{ statusMap[gitlab.status] && statusMap[gitlab.status].name || '未开通' }</Label> }
+        GitLab { !indexLoading && <Label bsStyle={ statusStyles[gitlab.status] && statusStyles[gitlab.status].style || 'default' }>{ statusStyles[gitlab.status] && statusStyles[gitlab.status].name || '未开通' }</Label> }
       </span>);
 
     return (
@@ -78,10 +78,10 @@ export default class List extends Component {
           </div>
           :
           <div style={ { marginTop: '10px' } }>
-            { (!github.status || github.status === 'unused') && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'use', user: usersMap['github'], pwdModalShow: true }) } }>开通</Button> }
-            { github.status === 'disabled' && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'enable', user: usersMap['github'], enableNotifyShow: true }) } }>启用</Button> }
-            { github.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'resetPwd', user: usersMap['github'], pwdModalShow: true }) } }>重置密码</Button> }
-            { github.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'disable', user: usersMap['github'], enableNotifyShow: true }) } }>禁用</Button> }
+            { (!github.status || github.status === 'unused') && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'use', user: users['github'], pwdModalShow: true }) } }>开通</Button> }
+            { github.status === 'disabled' && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'enable', user: users['github'], enableNotifyShow: true }) } }>启用</Button> }
+            { github.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'resetPwd', user: users['github'], pwdModalShow: true }) } }>重置密码</Button> }
+            { github.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'disable', user: users['github'], enableNotifyShow: true }) } }>禁用</Button> }
           </div> }
         </Panel>
         <Panel header={ gitLabHeader } style={ { textAlign: 'center' } }>
@@ -94,10 +94,10 @@ export default class List extends Component {
           </div>
           :
           <div style={ { marginTop: '10px' } }>
-            { (!gitlab.status || gitlab.status === 'unused') && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'use', user: usersMap['gitlab'], pwdModalShow: true }) } }>开通</Button> }
-            { gitlab.status === 'disabled' && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'enable', user: usersMap['gitlab'], enableNotifyShow: true }) } }>启用</Button> }
-            { gitlab.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'resetPwd', user: usersMap['gitlab'], pwdModalShow: true }) } }>重置密码</Button> }
-            { gitlab.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'disable', user: usersMap['gitlab'], enableNotifyShow: true }) } }>禁用</Button> }
+            { (!gitlab.status || gitlab.status === 'unused') && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'use', user: users['gitlab'], pwdModalShow: true }) } }>开通</Button> }
+            { gitlab.status === 'disabled' && <Button bsStyle='primary' onClick={ () => { this.setState({ mode: 'enable', user: users['gitlab'], enableNotifyShow: true }) } }>启用</Button> }
+            { gitlab.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'resetPwd', user: users['gitlab'], pwdModalShow: true }) } }>重置密码</Button> }
+            { gitlab.status === 'enabled' && <Button bsStyle='link' onClick={ () => { this.setState({ mode: 'disable', user: users['gitlab'], enableNotifyShow: true }) } }>禁用</Button> }
           </div> }
         </Panel>
         { this.state.pwdModalShow &&

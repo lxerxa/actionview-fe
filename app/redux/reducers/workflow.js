@@ -9,7 +9,8 @@ const initialState = {
   itemLoading: false, 
   selectedItem: {}, 
   itemSteps: [],
-  usedProjects: [] };
+  usedProjects: [] 
+};
 
 export default function workflow(state = initialState, action) {
   switch (action.type) {

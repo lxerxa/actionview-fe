@@ -41,7 +41,8 @@ const initialState = {
   linkLoading: false,
   rankLoading: false,
   importResult: '',
-  detailFloatStyle: {} };
+  detailFloatStyle: {} 
+};
 
 export default function issue(state = initialState, action) {
   switch (action.type) {

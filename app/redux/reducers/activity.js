@@ -1,7 +1,14 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, current_time: 1, collection: [], increaseCollection: [], indexLoading: false, moreLoading: false };
+const initialState = { 
+  ecode: 0, 
+  current_time: 1, 
+  collection: [], 
+  increaseCollection: [], 
+  indexLoading: false, 
+  moreLoading: false 
+};
 
 export default function activity(state = initialState, action) {
   switch (action.type) {

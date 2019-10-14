@@ -1294,6 +1294,33 @@ export default function(router) {
   });
   /******************integrations*****************/
 
+  /******************integrations*****************/
+  router.get('/project/:key/webhooks', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [ { id: '1111', request_url: 'http://aaa.com/aa/bb', events: [ 'create_issue', 'edit_issue', 'del_issue', 'create_version', 'release_version', 'del_version' ], status: 'enabled', ssl: 1 }, { id: '2222', request_url: 'http://bbb.com/aa/bb', events: [ 'create_issue', 'edit_issue', 'del_issue' ], status: 'disabled' } ] };
+    return res.status(200).send(results);
+  });
+  router.post('/project/:key/webhooks', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '1111', request_url: 'http://aaa.com/aa/bb', events: [ 'create_issue', 'edit_issue', 'del_issue', 'create_version', 'release_version', 'del_version' ], status: 'enabled' } };
+    return res.status(200).send(results);
+  });
+  router.put('/project/:key/webhooks/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { id: '1111', request_url: 'http://aaa.com/aa/bb', events: [ 'create_issue', 'edit_issue', 'del_issue', 'create_version', 'release_version', 'del_version' ], status: 'enabled' } };
+    return res.status(200).send(results);
+  });
+  router.delete('/project/:key/webhooks/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: '1111' };
+    return res.status(200).send(results);
+  });
+  /******************integrations*****************/
+
   router.get('/project/:key/issue/:id/gitcommits', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

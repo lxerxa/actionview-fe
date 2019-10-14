@@ -24,7 +24,8 @@ const initialState = {
   regressions: [],
   regressionsLoading: false,
   issues: [],
-  issuesLoading: false };
+  issuesLoading: false 
+};
 
 export default function report(state = initialState, action) {
   switch (action.type) {

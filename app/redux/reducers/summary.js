@@ -1,6 +1,11 @@
 import * as t from '../constants/ActionTypes';
 
-const initialState = { ecode: 0, data: {}, options: {}, loading: false };
+const initialState = { 
+  ecode: 0, 
+  data: {}, 
+  options: {}, 
+  loading: false 
+};
 
 export default function summary(state = initialState, action) {
   switch (action.type) {

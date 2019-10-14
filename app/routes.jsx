@@ -176,6 +176,12 @@ const IntegrationsContainer = (location, cb) => {
   }, 'wiki')
 };
 
+const WebhooksContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/webhooks/Container'))
+  }, 'webhooks')
+};
+
 export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Login }/>
@@ -211,7 +217,7 @@ export default (
         <Route path='wiki(/:dir)(/:wid)' getComponent={ WikiContainer }/>
         <Route path='settings' getComponent={ ActivityContainer }/>
         <Route path='integrations' getComponent={ IntegrationsContainer }/>
-        <Route path='hooks' getComponent={ ActivityContainer }/>
+        <Route path='webhooks' getComponent={ WebhooksContainer }/>
       </Route>
       <Route path='/admin/project' getComponent={ ProjectContainer }/>
       <Route path='/admin/user' getComponent={ UserContainer }/>

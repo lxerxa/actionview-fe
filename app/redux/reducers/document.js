@@ -1,7 +1,17 @@
 import * as t from '../constants/ActionTypes';
 import _ from 'lodash';
 
-const initialState = { ecode: 0, collection: [], optionsLoading: false, indexLoading: false, itemLoading: false, item: {}, loading: false, options: {}, selectedItem: {} };
+const initialState = { 
+  ecode: 0, 
+  collection: [], 
+  optionsLoading: false, 
+  indexLoading: false, 
+  itemLoading: false, 
+  item: {}, 
+  loading: false, 
+  options: {}, 
+  selectedItem: {} 
+};
 
 export default function document(state = initialState, action) {
   switch (action.type) {

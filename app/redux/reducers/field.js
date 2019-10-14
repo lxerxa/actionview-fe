@@ -9,7 +9,8 @@ const initialState = {
   loading: false, 
   itemLoading: false, 
   selectedItem: {},
-  usedProjects: [] };
+  usedProjects: [] 
+};
 
 export default function field(state = initialState, action) {
   switch (action.type) {
