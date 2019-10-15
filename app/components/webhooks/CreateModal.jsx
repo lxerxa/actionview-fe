@@ -17,7 +17,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'webhooks',
-  fields: [ 'request_url', 'token', 'ssl' ],
+  fields: [ 'request_url', 'token', 'ssl', 'events' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -41,7 +41,7 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
-    const ecode = await create(values);
+    const ecode = await create(_.assign({}, values, { ssl: _.isArray(values.ssl) && values.ssl.length > 0 ? 1 : 0 }));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -61,7 +61,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { request_url, token, ssl }, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { request_url, token, ssl, events }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -80,8 +80,63 @@ export default class CreateModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...token }/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
+            <ControlLabel>事件</ControlLabel>
+            <CheckboxGroup 
+              name='events' 
+              value={ events.value || [] } 
+              onChange={ (newValue) => { events.onChange(newValue) } } 
+              style={ { marginLeft: '10px' } }>
+              <ui className='list-unstyled clearfix'>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='create_issue'/>
+                    <span> 创建问题</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='edit_issue'/>
+                    <span> 编辑问题</span>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='del_issue'/>
+                    <span> 删除问题</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='add_worklog'/>
+                    <span> 添加工作日志</span>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='create_version'/>
+                    <span> 新建版本</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='edit_version'/>
+                    <span> 编辑版本</span>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='release_version'/>
+                    <span> 发布版本</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='del_version'/>
+                    <span> 删除版本</span>
+                  </div>
+                </li>
+              </ui>
+            </CheckboxGroup>
+          </FormGroup>
+          <FormGroup controlId='formControlsText'>
             <ControlLabel>SSL安全验证</ControlLabel>
-            <CheckboxGroup name='ssl' value={ ssl.value || [] } onChange={ (newValue) => { ssl.onChange(newValue) } }>
+            <CheckboxGroup 
+              name='ssl' 
+              value={ ssl.value || [] } 
+              onChange={ (newValue) => { ssl.onChange(newValue) } } 
+              style={ { marginLeft: '10px' } }>
               <Checkbox value='1' disabled={ submitting }/>
               <span> 启用</span>
             </CheckboxGroup>
