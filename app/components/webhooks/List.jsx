@@ -182,8 +182,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='request_url'>请求Url</TableHeaderColumn>
             <TableHeaderColumn dataField='events'>事件</TableHeaderColumn>
-            <TableHeaderColumn dataField='ssl'>是否启用SSL</TableHeaderColumn>
-            <TableHeaderColumn dataField='status'>状态</TableHeaderColumn>
+            <TableHeaderColumn dataField='status' width='100'>状态</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.createModalShow && 

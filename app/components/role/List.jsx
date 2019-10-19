@@ -9,6 +9,7 @@ import { Permissions } from '../share/Constants';
 
 const ViewUsedModal = require('./ViewUsedModal');
 const EditModal = require('./EditModal');
+const ConfigModal = require('./ConfigModal');
 const DelNotify = require('./DelNotify');
 
 const img = require('../../assets/images/loading.gif');
@@ -21,12 +22,10 @@ export default class List extends Component {
       delNotifyShow: false, 
       viewUsedShow: false,
       resetNotifyShow: false,
-      willSetPermissionRoleIds: [], 
-      settingPermissionRoleIds: [], 
-      permissions: {}, 
       operateShow: false, 
       hoverRowId: '' };
     this.editModalClose = this.editModalClose.bind(this);
+    this.configModalClose = this.configModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.resetNotifyClose = this.resetNotifyClose.bind(this);
     this.viewUsedClose = this.viewUsedClose.bind(this);
@@ -59,6 +58,10 @@ export default class List extends Component {
     this.setState({ editModalShow: false });
   }
 
+  configModalClose() {
+    this.setState({ configModalShow: false });
+  }
+
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
   }
@@ -71,41 +74,21 @@ export default class List extends Component {
     this.setState({ viewUsedShow: false });
   }
 
-  edit(id) {
-    this.setState({ editModalShow: true });
-    const { select } = this.props;
-    select(id);
-  }
-
-  delNotify(id) {
-    this.setState({ delNotifyShow: true });
-    const { select } = this.props;
-    select(id);
-  }
-
-  resetNotify(id) {
-    this.setState({ resetNotifyShow: true });
-    const { select } = this.props;
-    select(id);
-  }
-
-  viewUsed(id) {
-    this.setState({ viewUsedShow: true });
-    const { select } = this.props;
-    select(id);
-  }
-
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
+    const { select } = this.props;
+    select(hoverRowId);
 
     if (eventKey === '1') {
-      this.edit(hoverRowId);
+      this.setState({ editModalShow: true });
     } else if (eventKey === '2') {
-      this.delNotify(hoverRowId);
+      this.setState({ delNotifyShow: true });
     } else if (eventKey === '3') {
-      this.resetNotify(hoverRowId);
+      this.setState({ resetNotifyShow: true });
     } else if (eventKey === '4') {
-      this.viewUsed(hoverRowId);
+      this.setState({ viewUsedShow: true });
+    } else if (eventKey === '5') {
+      this.setState({ configModalShow: true });
     }
   }
 
@@ -119,55 +102,26 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
-  willSetPermissions(roleId) {
-    this.state.willSetPermissionRoleIds.push(roleId);
-    this.setState({ willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
-  }
-
-  cancelSetPermissions(roleId) {
-    const index = this.state.willSetPermissionRoleIds.indexOf(roleId);
-    this.state.willSetPermissionRoleIds.splice(index, 1);
-    // clean permission in the state
-    this.state.permissions[roleId] = undefined;
-
-    this.setState({ willSetPermissionRoleIds: this.state.willSetPermissionRoleIds, permissions: this.state.permissions });
-  }
-
-  async setPermissions(roleId) {
-    this.state.settingPermissionRoleIds.push(roleId);
-    this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds });
-
-    const { setPermission, collection } = this.props;
-    const ecode = await setPermission({ permissions: _.map(this.state.permissions[roleId] || _.map(_.find(collection, { id: roleId }).permissions || [], (v) => { return { value: v } }), _.iteratee('value')), id: roleId });
-    if (ecode === 0) {
-      const willSetIndex = _.indexOf(this.state.willSetPermissionRoleIds, roleId);
-      this.state.willSetPermissionRoleIds.splice(willSetIndex, 1);
-
-      const settingIndex = _.indexOf(this.state.settingPermissionRoleIds, roleId);
-      this.state.settingPermissionRoleIds.splice(settingIndex, 1);
-
-      this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
-      notify.show('配置完成。', 'success', 2000);
-    }else {
-      const settingIndex = _.indexOf(this.state.settingPermissionRoleIds, roleId);
-      this.state.settingPermissionRoleIds.splice(settingIndex, 1);
-
-      this.setState({ settingPermissionRoleIds: this.state.settingPermissionRoleIds, willSetPermissionRoleIds: this.state.willSetPermissionRoleIds });
-      notify.show('配置失败。', 'error', 2000);
-    }
-  }
-
-  handlePermissionSelectChange(roleId, value) {
-    this.state.permissions[roleId] = value;
-    this.setState({ permissions: this.state.permissions });
-  }
-
   render() {
-    const { i18n, pkey, collection, selectedItem, loading, indexLoading, itemLoading, del, reset, update, viewUsed, usedProjects } = this.props;
+    const { 
+      i18n, 
+      pkey, 
+      collection, 
+      selectedItem, 
+      loading, 
+      indexLoading, 
+      itemLoading, 
+      del, 
+      reset, 
+      update, 
+      setPermission,
+      viewUsed, 
+      usedProjects } = this.props;
+
     const { willSetPermissionRoleIds, settingPermissionRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
-    const somePermissions = _.clone(Permissions); somePermissions.shift();
+    const somePermissions = _.clone(Permissions); 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const roles = [];
@@ -186,45 +140,20 @@ export default class List extends Component {
           </div>
         ),
         permissions: (
-          <div>
-          { _.indexOf(willSetPermissionRoleIds, collection[i].id) === -1 && _.indexOf(settingPermissionRoleIds, collection[i].id) === -1 ?
-            <div className='editable-list-field'>
-              <div style={ { display: 'table', width: '100%' } }>
-              { permissions.length > 0 ?
-                <span>
-                { _.map(permissions, function(v) { 
-                  return (
-                    <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
-                      <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label>
-                   </div> ) }) }
-                </span>
-                :
-                <span>
-                  <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
-                </span> }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPermissions.bind(this, collection[i].id) }>
-                  <i className='fa fa-pencil'></i>
-                </span>
-              </div>
-            </div> 
+          <div style={ { display: 'table', width: '100%' } }>
+          { permissions.length > 0 ?
+            <span>
+            { _.map(permissions, function(v) { 
+              return (
+                <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
+                  <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label>
+               </div> ) }) }
+            </span>
             :
-            <div>
-              <Select 
-                multi 
-                clearable={ false } 
-                searchable={ false } 
-                disabled={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 && true } 
-                options={ _.map(somePermissions, function(v) { return { value: v.id, label: v.name }; }) } value={ this.state.permissions[collection[i].id] || collection[i].permissions } 
-                onChange={ this.handlePermissionSelectChange.bind(this, collection[i].id) } 
-                placeholder='请选择相应权限'/>
-              <div className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
-                <Button className='edit-ok-button' onClick={ this.setPermissions.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-cancel-button' onClick={ this.cancelSetPermissions.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
-              </div>
-            </div> 
-          }
-          <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPermissionRoleIds, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
-          </div>
+            <span>
+              <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
+            </span> }
+          </div> 
         ), 
         operation:(
           <div>
@@ -238,7 +167,8 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='4'>查看项目应用</MenuItem> }
+              <MenuItem eventKey='5'>配置</MenuItem>
+              { pkey === '$_sys_$' && <MenuItem eventKey='4'>查看项目应用</MenuItem> }
               { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               { isGlobal && <MenuItem eventKey='3'>重置权限</MenuItem> }
             </DropdownButton> }
@@ -294,6 +224,13 @@ export default class List extends Component {
             close={ this.resetNotifyClose }
             data={ selectedItem }
             reset={ reset }/> }
+        { this.state.configModalShow &&
+          <ConfigModal
+            show
+            data={ selectedItem }
+            close={ this.configModalClose }
+            setPermission={ setPermission }
+            i18n={ i18n }/> }
       </div>
     );
   }

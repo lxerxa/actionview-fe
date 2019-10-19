@@ -145,7 +145,7 @@ export default class Sidebar extends Component {
       this.state.adminPanelShow = false;
       this.state.projectPanelShow = true;
       this.state.projectConfigShow = true;
-    } else if (/^\/project\/(\w+)\/(settings|webhooks|integrations)(\/\w+)?$/.test(nextProps.pathname)){
+    } else if (/^\/project\/(\w+)\/(webhooks|integrations)(\/\w+)?$/.test(nextProps.pathname)){
       this.state.adminPanelShow = false;
       this.state.projectPanelShow = true;
       this.state.projectSettingsShow = true;
@@ -260,7 +260,6 @@ export default class Sidebar extends Component {
             <h4><i className={ this.state.projectSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSettingsShow: !this.state.projectSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目设置</h4> }
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectSettingsShow && 'hide' }>
-              <li><Link to={ '/project/' + project.item.key + '/settings' } activeClassName='menu-active'>选项</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/integrations' } activeClassName='menu-active'>外部用户</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/webhooks' } activeClassName='menu-active'>Webhooks</Link></li>
             </ul> }

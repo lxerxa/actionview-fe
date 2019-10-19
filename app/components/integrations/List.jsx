@@ -68,6 +68,14 @@ export default class List extends Component {
 
     return (
       <div style={ { marginTop: '15px', marginBottom: '30px' } }>
+        <div className='info-col' style={ { marginBottom: '15px' } }>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'>
+            <span>
+              目前外部用户仅支持：GitHub、GitLab。
+            </span>
+          </div>
+        </div>
         <Panel header={ gitHubHeader } style={ { textAlign: 'center' } }>
           <div>
             <b>Request Url:</b> { 'http://www.example.com/api/webhook/github/project/' + pkey }

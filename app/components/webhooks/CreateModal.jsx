@@ -17,7 +17,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'webhooks',
-  fields: [ 'request_url', 'token', 'ssl', 'events' ],
+  fields: [ 'request_url', 'token', 'events' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -41,7 +41,7 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
-    const ecode = await create(_.assign({}, values, { ssl: _.isArray(values.ssl) && values.ssl.length > 0 ? 1 : 0 }));
+    const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -61,7 +61,7 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { request_url, token, ssl, events }, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { request_url, token, events }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -130,7 +130,7 @@ export default class CreateModal extends Component {
               </ui>
             </CheckboxGroup>
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
+          {/*<FormGroup controlId='formControlsText'>
             <ControlLabel>SSL安全验证</ControlLabel>
             <CheckboxGroup 
               name='ssl' 
@@ -140,7 +140,7 @@ export default class CreateModal extends Component {
               <Checkbox value='1' disabled={ submitting }/>
               <span> 启用</span>
             </CheckboxGroup>
-          </FormGroup>
+          </FormGroup>*/}
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>

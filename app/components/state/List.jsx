@@ -156,7 +156,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
-              { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='3'>查看项目应用</MenuItem> }
+              { pkey === '$_sys_$' && <MenuItem eventKey='3'>查看项目应用</MenuItem> }
               { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>

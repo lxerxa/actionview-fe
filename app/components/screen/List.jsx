@@ -151,7 +151,7 @@ export default class List extends Component {
                 { !isGlobal && <MenuItem eventKey='4'>字段配置</MenuItem> }
                 <MenuItem eventKey='5'>复制</MenuItem>
                 { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
-                { collection[i].project_key === '$_sys_$' && <MenuItem eventKey='7'>查看项目应用</MenuItem> }
+                { pkey === '$_sys_$' && <MenuItem eventKey='7'>查看项目应用</MenuItem> }
                 { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }

@@ -55,7 +55,7 @@ export default class Project extends Component {
       return (<div/>);
     } else if (_.isEmpty(item) || pathname.indexOf('/project/' + item.key) === -1) {
       return (<div/>);
-    } else if ((/^\/project\/(\w+)(\/(summary|issue|kanban|activity|version|module|team|config|document|wiki))?$/.test(pathname) && options.permissions.indexOf('view_project') === -1) || ((/^\/project\/(\w+)\/(type|workflow|field|screen|priority|state|resolution|role|events|integrations|options)(\/\w+)*$/).test(pathname) && options.permissions.indexOf('manage_project') === -1)) {
+    } else if ((/^\/project\/(\w+)(\/(summary|issue|kanban|activity|version|module|team|config|document|wiki))?$/.test(pathname) && options.permissions.indexOf('view_project') === -1) || ((/^\/project\/(\w+)\/(type|workflow|field|screen|priority|state|resolution|role|events|integrations|webhooks)(\/\w+)*$/).test(pathname) && options.permissions.indexOf('manage_project') === -1)) {
       notify.show(errMsg[-10002], 'warning', 2000);
       return (<div/>);
     }
