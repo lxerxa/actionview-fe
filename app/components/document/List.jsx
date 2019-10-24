@@ -286,7 +286,7 @@ export default class List extends Component {
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === v.id && !itemLoading && options.permissions && (options.permissions.indexOf('download_file') !== -1 || options.permissions.indexOf('manage_project') !== -1) &&
+          { operateShow && hoverRowId === v.id && !itemLoading &&
             <DropdownButton
               pullRight
               bsStyle='link'
@@ -296,7 +296,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` }
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
+              <MenuItem eventKey='download'>下载</MenuItem>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
@@ -352,7 +352,7 @@ export default class List extends Component {
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === files[i].id && !itemLoading && options.permissions && (options.permissions.indexOf('download_file') !== -1 || options.permissions.indexOf('remove_file') !== -1 || options.permissions.indexOf('upload_file') !== -1) &&
+          { operateShow && hoverRowId === files[i].id && !itemLoading &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -362,10 +362,10 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('download_file') !== -1 && <MenuItem eventKey='download'>下载</MenuItem> }
-              { options.permissions && options.permissions.indexOf('download_file') !== -1 && options.permissions.indexOf('upload_file') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
-              { options.permissions && options.permissions.indexOf('download_file') !== -1 && options.permissions.indexOf('upload_file') !== -1 && options.permissions.indexOf('remove_file') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
-              { options.permissions && options.permissions.indexOf('remove_file') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+              <MenuItem eventKey='download'>下载</MenuItem>
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -431,13 +431,12 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
-          { !indexLoading && options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
-            <div style={ { marginTop: '15px' } }>
-              <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
-            </div> }
+          <div style={ { marginTop: '15px' } }>
+            <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+          </div>
           <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
             { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
-            { collection.length > 1 && options.permissions && options.permissions.indexOf('download_file') !== -1 && _.isEmpty(query) && options.path.length > 1 && 
+            { collection.length > 1 && _.isEmpty(query) && options.path.length > 1 && 
             <span style={ { marginLeft: '10px' } }>
               <i className='fa fa-download'></i>
               <a href='#' onClick={ (e) => { e.preventDefault(); this.downloadAll(); } }>下载全部</a>

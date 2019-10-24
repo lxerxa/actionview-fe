@@ -24,6 +24,10 @@ export default class List extends Component {
       resetNotifyShow: false,
       operateShow: false, 
       hoverRowId: '' };
+
+    this.allPermissions = [];
+    _.forEach(Permissions, (v) => { this.allPermissions = this.allPermissions.concat(v); });
+
     this.editModalClose = this.editModalClose.bind(this);
     this.configModalClose = this.configModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
@@ -102,6 +106,34 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
+  classifyPermissions(permissions) {
+    const results = [];
+    const categories = [ 
+      { key: 'project', name: '项目' }, 
+      { key: 'issue', name: '问题' }, 
+      { key: 'files', name: '附件' }, 
+      { key: 'comments', name: '备注' }, 
+      { key: 'worklogs', name: '工作日志' } 
+    ];
+
+    _.forEach(categories, (category) => {
+      const localPermissions = _.filter(Permissions[category.key], (v) => _.findIndex(permissions, { id: v.id }) !== -1);
+      if (localPermissions.length <= 0) {
+        return;
+      }
+      const somePermissions = (
+        <li style={ { display: 'table', marginBottom: '5px' } }>
+          <div style={ { marginLeft: '5px' } }>{ category.name }</div>
+          { _.map(localPermissions, (v) =>
+            <div style={ { float: 'left', margin: '3px 3px 6px 3px' } }>
+              <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label>
+            </div> ) }
+        </li> ); 
+      results.push(somePermissions);
+    });
+    return (<ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>{ results.length <= 0 ? '-' : results }</ul>);
+  }
+
   render() {
     const { 
       i18n, 
@@ -121,14 +153,13 @@ export default class List extends Component {
     const { willSetPermissionRoleIds, settingPermissionRoleIds } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
-    const somePermissions = _.clone(Permissions); 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
     const roles = [];
     const roleNum = collection.length;
     for (let i = 0; i < roleNum; i++) {
       const isGlobal = pkey !== '$_sys_$' && collection[i].project_key === '$_sys_$';
-      const permissions = _.filter(somePermissions, function(o) { return _.indexOf(collection[i].permissions || [], o.id) !== -1; });
+      const permissions = _.filter(this.allPermissions, function(o) { return _.indexOf(collection[i].permissions || [], o.id) !== -1; });
       roles.push({
         id: collection[i].id,
         name:  (
@@ -142,13 +173,7 @@ export default class List extends Component {
         permissions: (
           <div style={ { display: 'table', width: '100%' } }>
           { permissions.length > 0 ?
-            <span>
-            { _.map(permissions, function(v) { 
-              return (
-                <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }>
-                  <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label>
-               </div> ) }) }
-            </span>
+            this.classifyPermissions(permissions)
             :
             <span>
               <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>

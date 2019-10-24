@@ -291,24 +291,22 @@ export default class Preview extends Component {
               <tr key={ i }>
                 <td>
                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span>
-                  { options.permissions && options.permissions.indexOf('download_file') !== -1 ?
                   <a href={ '/api/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
-                  :
-                  f.name }
                  </td>
                  <td width='10%'>
                    <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YY/MM/DD HH:mm') }</div>
                  </td>
+                 { ((options.permissions && options.permissions.indexOf('manage_project') !== -1) || user.id === f.uploader.id) &&
                  <td width='2%'>
                    <span className='remove-icon' onClick={ this.delFileNotify.bind(this, f.id, f.name) }>
                      <i className='fa fa-trash'></i>
                    </span>
-                 </td>
+                 </td> }
               </tr>) }
             </tbody>
           </Table>
         </div> }
-        { item.id && options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
+        { item.id &&
         <div style={ { marginTop: '0px' } }>
           <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
         </div> }

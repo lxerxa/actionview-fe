@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, FormGroup, Checkbox as BootstrapCheckbox } from 'react-bootstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
@@ -18,6 +18,9 @@ export default class ConfigModal extends Component {
     this.state = { ecode: 0 };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+
+    this.allPermissions = [];
+    _.forEach(Permissions, (v) => { this.allPermissions = this.allPermissions.concat(v); });
   }
 
   static propTypes = {
@@ -64,11 +67,11 @@ export default class ConfigModal extends Component {
       rows.push(
         <li>
           <div style={ { width: '50%', display: 'inline-block' } }>
-            <Checkbox value={ fields[i].key }/>
+            <Checkbox value={ fields[i].id }/>
             <span> { fields[i].name || '' }</span>
           </div>
           <div style={ { width: '50%', display: 'inline-block' } }>
-            { fields[i + 1] && <Checkbox value={ fields[i + 1].key }/> }
+            { fields[i + 1] && <Checkbox value={ fields[i + 1].id }/> }
             <span> { fields[i + 1] && fields[i + 1].name || '' }</span>
           </div>
         </li>);
@@ -116,6 +119,18 @@ export default class ConfigModal extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
+          <BootstrapCheckbox
+            checked={ permissions.value && this.allPermissions.length == permissions.value.length }
+            onClick={ () => {
+              if (this.allPermissions.length === permissions.value.length) {
+                permissions.onChange([]);
+              } else {
+                permissions.onChange(_.map(this.allPermissions, (v) => v.id));
+              }
+            } }
+            style={ { float: 'left', margin: '5px 5px' } }>
+            全部选择
+          </BootstrapCheckbox>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
           <Button disabled={ submitting } type='submit'>确定</Button>

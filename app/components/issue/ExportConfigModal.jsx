@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, Checkbox as Checkbox2 } from 'react-bootstrap';
+import { Modal, Button, Checkbox as BootstrapCheckbox } from 'react-bootstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import _ from 'lodash';
 
@@ -113,14 +113,14 @@ export default class ConfigModal extends Component {
     const rows = [];
     for(let i = 0; i < fields.length; i = i + 2) {
       rows.push(
-        <li>
+        <li style={ { height: '30px' } }>
           <div style={ { width: '50%', display: 'inline-block' } }>
             <Checkbox value={ fields[i].key }/>
-            <span>{ fields[i].name || '' }</span>
+            <span> { fields[i].name || '' }</span>
           </div>
           <div style={ { width: '50%', display: 'inline-block' } }>
             { fields[i + 1] && <Checkbox value={ fields[i + 1].key }/> }
-            <span>{ fields[i + 1] && fields[i + 1].name || '' }</span>
+            <span> { fields[i + 1] && fields[i + 1].name || '' }</span>
           </div>
         </li>);
     }
@@ -128,34 +128,31 @@ export default class ConfigModal extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>导出列配置</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>导出列选择</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
-          <div style={ { paddingTop: '10px', paddingBottom: '0px', paddingLeft: '5px' } }>
+        <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>
+          <div>请选择以下导出列：</div>
+          <div style={ { padding: '5px 0px 0px 5px' } }>
             <CheckboxGroup name='field' value={ this.state.fields } onChange={ this.fieldsChanged.bind(this) }>
-              <ui className='list-unstyled clearfix cond-list'>
-                <li style={ { height: '40px' } } >
-                  请选择以下导出列：
-                </li>
+              <ui className='list-unstyled clearfix'>
                 { _.map(rows, (v) => v) }
               </ui>
             </CheckboxGroup>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Checkbox2
+          <BootstrapCheckbox
             checked={ fields.length == this.state.fields.length }
-            onClick={ () => 
-            { 
+            onClick={ () => { 
               if (this.state.fields.length === fields.length) { 
                 this.setState({ fields: [] });
               } else { 
                 this.setState({ fields: _.map(fields, (v) => v.key) }); 
-              } 
-            } }
-            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+              } } 
+            }
+            style={ { float: 'left', margin: '5px 5px' } }>
             全部选择
-          </Checkbox2>
+          </BootstrapCheckbox>
           <Button onClick={ this.confirm } disabled={ this.state.fields.length <= 0 }>导出</Button>
           <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
         </Modal.Footer>

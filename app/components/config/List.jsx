@@ -19,7 +19,11 @@ export default class List extends Component {
       screenName: '', 
       wfPreviewModalShow: false, 
       wfSteps: [], 
-      wfName: '' };
+      wfName: '' 
+    };
+
+    this.allPermissions = [];
+    _.forEach(Permissions, (v) => { this.allPermissions = this.allPermissions.concat(v); });
   }
 
   static propTypes = {
@@ -28,6 +32,34 @@ export default class List extends Component {
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired
+  }
+
+  classifyPermissions(permissions) {
+    const results = [];
+    const categories = [
+      { key: 'project', name: '项目' },
+      { key: 'issue', name: '问题' },
+      { key: 'files', name: '附件' },
+      { key: 'comments', name: '备注' },
+      { key: 'worklogs', name: '工作日志' }
+    ];
+
+    _.forEach(categories, (category) => {
+      const localPermissions = _.filter(Permissions[category.key], (v) => _.findIndex(permissions, { id: v.id }) !== -1);
+      if (localPermissions.length <= 0) {
+        return;
+      }
+      const somePermissions = (
+        <li style={ { display: 'table', marginBottom: '5px' } }>
+          <div style={ { marginLeft: '5px' } }>{ category.name }</div>
+          { _.map(localPermissions, (v) =>
+            <div style={ { float: 'left', margin: '3px 3px 6px 3px' } }>
+              <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label>
+            </div> ) }
+        </li> );
+      results.push(somePermissions);
+    });
+    return (<ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>{ results.length <= 0 ? '-' : results }</ul>);
   }
 
   render() {
@@ -129,13 +161,11 @@ export default class List extends Component {
                     <td>
                       <div style={ { display: 'table', width: '100%' } }>
                       { v.permissions && v.permissions.length > 0 ?
+                        this.classifyPermissions(v.permissions)
+                        :
                         <span>
-                        { _.map(_.filter(Permissions, function(o) { return _.indexOf(v.permissions, o.id) !== -1 }), function(val, i) { return <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }><Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ i }>{ val.name || '' }</Label></div> }) }
-                       </span>
-                       :
-                       <span>
-                         <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
-                       </span> }
+                          <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
+                        </span> }
                       </div>
                     </td>
                   </tr>

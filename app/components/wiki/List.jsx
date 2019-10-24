@@ -334,7 +334,10 @@ export default class List extends Component {
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === files[i].id && !itemLoading && (!(!_.isEmpty(files[i].checkin) && files[i].checkin.user.id !== user.id) || options.permissions && options.permissions.indexOf('manage_project') !== -1) &&
+          { operateShow 
+            && hoverRowId === files[i].id 
+            && !itemLoading 
+            && (!(!_.isEmpty(files[i].checkin) && files[i].checkin.user.id !== user.id) || options.permissions && options.permissions.indexOf('manage_project') !== -1) &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 

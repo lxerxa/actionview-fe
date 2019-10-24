@@ -138,7 +138,6 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='test'>测试</MenuItem>
               { collection[i].status == 'enabled' ? <MenuItem eventKey='disable'>禁用</MenuItem> : <MenuItem eventKey='enable'>启用</MenuItem> }
               <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
