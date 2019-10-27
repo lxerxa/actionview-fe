@@ -68,10 +68,16 @@ export const webhookEvents = [
   { id: 'create_issue', name: '创建问题' },
   { id: 'edit_issue', name: '编辑问题' },
   { id: 'del_issue', name: '删除问题' },
+  { id: 'resolve_issue', name: '解决问题' },
+  { id: 'close_issue', name: '关闭问题' },
+  { id: 'reopen_issue', name: '重新打开问题' },
   { id: 'create_version', name: '创建版本' },
   { id: 'edit_version', name: '编辑版本' },
+  { id: 'release_version', name: '发布版本' },
+  { id: 'merge_version', name: '合并版本' },
   { id: 'del_version', name: '删除版本' },
-  { id: 'add_worklog', name: '添加工作日志' }
+  { id: 'add_worklog', name: '添加工作日志' },
+  { id: 'edit_worklog', name: '编辑工作日志' }
 ];
 
 export const CardTypes = {

@@ -103,8 +103,18 @@ export default class CreateModal extends Component {
                     <span> 删除问题</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='execute_workflow'/>
-                    <span> 执行流程</span>
+                    <Checkbox value='resolve_issue'/>
+                    <span> 解决问题</span>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='close_issue'/>
+                    <span> 关闭问题</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='reopen_issue'/>
+                    <span> 重新打开</span>
                   </div>
                 </li>
                 <li>
@@ -132,6 +142,12 @@ export default class CreateModal extends Component {
                     <Checkbox value='release_version'/>
                     <span> 发布版本</span>
                   </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='merge_version'/>
+                    <span> 合并版本</span>
+                  </div>
+                </li>
+                <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='del_version'/>
                     <span> 删除版本</span>
