@@ -103,8 +103,18 @@ export default class CreateModal extends Component {
                     <span> 删除问题</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='execute_workflow'/>
+                    <span> 执行流程</span>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='add_worklog'/>
                     <span> 添加工作日志</span>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <Checkbox value='edit_worklog'/>
+                    <span> 编辑工作日志</span>
                   </div>
                 </li>
                 <li>

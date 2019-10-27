@@ -59,12 +59,14 @@ export default class List extends Component {
 
     const gitHubHeader = (
       <span style={ { fontWeight: 600 } }>
-        GitHub { !indexLoading && <Label bsStyle={ statusStyles[github.status] && statusStyles[github.status].style || 'default' }>{ statusStyles[github.status] && statusStyles[github.status].name || '未开通' }</Label> }
-      </span>);
+        GitHub 
+      </span>
+    );
     const gitLabHeader = (
       <span style={ { fontWeight: 600 } }>
-        GitLab { !indexLoading && <Label bsStyle={ statusStyles[gitlab.status] && statusStyles[gitlab.status].style || 'default' }>{ statusStyles[gitlab.status] && statusStyles[gitlab.status].name || '未开通' }</Label> }
-      </span>);
+        GitLab
+      </span>
+    );
 
     return (
       <div style={ { marginTop: '15px', marginBottom: '30px' } }>
@@ -78,7 +80,7 @@ export default class List extends Component {
         </div>
         <Panel header={ gitHubHeader } style={ { textAlign: 'center' } }>
           <div>
-            <b>Request Url:</b> { 'http://www.example.com/api/webhook/github/project/' + pkey }
+            <b>Request Url:</b> { 'http://www.example.com/api/webhook/github/project/' + pkey } { !indexLoading && <Label bsStyle={ statusStyles[github.status] && statusStyles[github.status].style || 'default' }>{ statusStyles[github.status] && statusStyles[github.status].name || '未开通' }</Label> }
           </div>
           { indexLoading || (itemLoading && this.state.user.key == 'github' && (this.state.mode == 'enable' || this.state.mode == 'disable')) ?
           <div style={ { marginTop: '10px' } }>
@@ -94,7 +96,7 @@ export default class List extends Component {
         </Panel>
         <Panel header={ gitLabHeader } style={ { textAlign: 'center' } }>
           <div>
-            <b>Request Url:</b> { 'http://www.example.com/api/webhook/gitlab/project/' + pkey }
+            <b>Request Url:</b> { 'http://www.example.com/api/webhook/gitlab/project/' + pkey } { !indexLoading && <Label bsStyle={ statusStyles[gitlab.status] && statusStyles[gitlab.status].style || 'default' }>{ statusStyles[gitlab.status] && statusStyles[gitlab.status].name || '未开通' }</Label> }
           </div>
           { indexLoading || (itemLoading && this.state.user.key == 'gitlab' && (this.state.mode == 'enable' || this.state.mode == 'disable')) ?
           <div style={ { marginTop: '10px' } }>
