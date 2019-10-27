@@ -169,14 +169,6 @@ export default class List extends Component {
           </FormGroup>
         </div>
         <div>
-          <div className='info-col'>
-            <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-            <div className='info-content'>
-             <span>
-               禁用目录后，用户将不会自动同步，登录认证也将无效。
-             </span>
-            </div>
-          </div>
           <BootstrapTable data={ directories } bordered={ false } hover options={ opts } trClassName='tr-top'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='request_url'>请求Url</TableHeaderColumn>
