@@ -111,10 +111,10 @@ export default class List extends Component {
     for (let i = 0; i < directoryNum; i++) {
 
       const events = [];
-      _.map(collection[i].events || [], (v) => {
-        const ind = _.findIndex(webhookEvents, { id: v });
+      _.forEach(webhookEvents, (v) => {
+        const ind = _.indexOf(collection[i].events, v.id);
         if (ind !== -1) {
-          events.push(webhookEvents[ind].name);
+          events.push(v.name);
         }
       });
 

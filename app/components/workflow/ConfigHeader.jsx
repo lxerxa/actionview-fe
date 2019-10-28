@@ -101,7 +101,7 @@ export default class ConfigHeader extends Component {
   async save() {
     const { save, collection } = this.props;
 
-    const initialActions = { id : 0, name: 'initial_action', results: [{ step: collection[0].id, status: 'Underway' }] };
+    const initialActions = { id : 0, name: 'initial_action', results: [{ step: collection[0].id, status: 'Finished' }] };
 
     const ecode = await save({ contents : { initial_action: initialActions, steps: collection } });
     if (ecode === 0) {

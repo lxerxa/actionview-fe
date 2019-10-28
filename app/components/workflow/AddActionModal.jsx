@@ -112,22 +112,23 @@ export default class AddActionModal extends Component {
   }
 
   handleSubmit() {
-    const { values, create, edit, close, stepData, steps, options:{ states=[] } } = this.props;
+    const { values, create, edit, close, stepData, steps } = this.props;
 
     const addedAction = {};
     addedAction.id = values.id;
     addedAction.name = values.name;
     addedAction.screen = values.screen;
 
-    const srcState = _.find(states, { id: stepData.state });
-    const srcStateCategory = srcState ? srcState.category : 'new'; 
+    //const srcState = _.find(states, { id: stepData.state });
+    //const srcStateCategory = srcState ? srcState.category : 'new'; 
 
-    const destStep = _.find(steps, { id: values.destStep });
-    const destState = _.find(states, { id: destStep.state });
-    const destStateCategory = destState ? destState.category : srcStateCategory;
+    //const destStep = _.find(steps, { id: values.destStep });
+    //const destState = _.find(states, { id: destStep.state });
+    //const destStateCategory = destState ? destState.category : srcStateCategory;
 
-    const statusMap = { new: 'Queued', inprogress: 'Underway', completed: 'Finished' };
-    addedAction.results = [ { step: values.destStep, old_status: statusMap[srcStateCategory], status: statusMap[destStateCategory] } ];
+    //const statusMap = { new: 'Queued', inprogress: 'Underway', completed: 'Finished' };
+    //addedAction.results = [ { step: values.destStep, old_status: statusMap[srcStateCategory], status: statusMap[destStateCategory] } ];
+    addedAction.results = [ { step: values.destStep, status: 'Finished' } ];
 
     const postFunctions = [];
     const postFuncsLength = this.state.postFunctions.length;

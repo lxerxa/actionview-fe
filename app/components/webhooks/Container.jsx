@@ -66,14 +66,7 @@ export default class Container extends Component {
   }
 
   render() {
-    const { i18n, session, location: { pathname, query={} } } = this.props;
-
-    if (_.isEmpty(session.user)) {
-      return (<div/>);
-    } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
-      notify.show(i18n.errMsg[-10002], 'warning', 2000);
-      return (<div/>);
-    }
+    const { i18n } = this.props;
 
     return (
       <List 

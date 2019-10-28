@@ -172,7 +172,7 @@ const WikiContainer = (location, cb) => {
 
 const IntegrationsContainer = (location, cb) => {
   require.ensure([], require => {
-    cb(null, require('./components/Integrations/Container'))
+    cb(null, require('./components/integrations/Container'))
   }, 'wiki')
 };
 

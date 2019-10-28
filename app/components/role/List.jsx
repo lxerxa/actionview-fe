@@ -125,7 +125,7 @@ export default class List extends Component {
         <li style={ { display: 'table', marginBottom: '5px' } }>
           <div style={ { marginLeft: '5px' } }>{ category.name }</div>
           { _.map(localPermissions, (v) =>
-            <div style={ { float: 'left', margin: '3px 3px 6px 3px' } }>
+            <div style={ { float: 'left', margin: '0px 3px 6px 3px' } }>
               <Label style={ { color: '#007eff', border: '1px solid #c2e0ff', backgroundColor: '#ebf5ff', fontWeight: 'normal' } } key={ v.id }>{ v.name }</Label>
             </div> ) }
         </li> ); 

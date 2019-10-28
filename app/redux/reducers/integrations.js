@@ -29,8 +29,12 @@ export default function resolution(state = initialState, action) {
 
     case t.INTEGRATIONS_HANDLE_SUCCESS:
       if (action.result.ecode === 0) {
-        const ind = _.findIndex(state.collection, { user: action.user });
-        state.collection[ind] = action.result.data;
+        const ind = _.findIndex(state.collection, { user: action.result.data.user });
+        if (ind !== -1) {
+          state.collection[ind] = action.result.data;
+        } else {
+          state.collection.push(action.result.data);
+        }
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
