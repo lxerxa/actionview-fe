@@ -71,7 +71,7 @@
     "axios": "0.7.0",
     "babel": "5.8.35",
     "body-parser": "1.15.0",
-    "bootstrap": "3.3.6",
+    "bootstrap": "3.4.1",
     "classnames": "2.2.3",
     "compression": "1.6.2",
     "debug": "2.2.0",
