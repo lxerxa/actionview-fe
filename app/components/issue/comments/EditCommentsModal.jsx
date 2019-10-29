@@ -106,8 +106,7 @@ export default class EditCommentsModal extends Component {
         });
       });
     }
-
-    $('.edit-comments-inputor textarea').focus();
+    this.moveEnd();
   }
 
   componentDidUpdate() {
@@ -136,6 +135,25 @@ export default class EditCommentsModal extends Component {
     $('.edit-comments-inputor textarea').one('inserted.atwho', function(event, flag, query) {
       self.setState({ contents: event.target.value });
     });
+  }
+
+  moveEnd() {
+    const obj = $('.edit-comments-inputor textarea').get(0); 
+    obj.focus();
+
+    const len = obj.value.length;
+    if (len <= 0) {
+      return;
+    }
+
+    if (document.selection) {
+      var sel = obj.createTextRange();
+      sel.moveStart('character',len);
+      sel.collapse();
+      sel.select();
+    } else if (typeof obj.selectionStart == 'number' && typeof obj.selectionEnd == 'number') {
+      obj.selectionStart = obj.selectionEnd = len;
+    }
   }
 
   render() {
