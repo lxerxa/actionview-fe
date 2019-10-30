@@ -360,7 +360,7 @@ export default class Header extends Component {
           </span> }
           { !_.isEmpty(selectedSprint) &&
           <span style={ { float: 'left', marginTop: '7px', marginLeft: '15px' } }>
-            完成时间：{ selectedSprint.complete_time && moment.unix(selectedSprint.complete_time).format('YYYY/MM/DD HH:mm') }
+            完成时间：{ selectedSprint.real_complete_time && moment.unix(selectedSprint.real_complete_time).format('YYYY/MM/DD HH:mm') }
           </span> }
           <span style={ { float: 'right' } } title='隐藏看板头'>
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>

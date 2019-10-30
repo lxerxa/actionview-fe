@@ -5,7 +5,6 @@ import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
 import { notify } from 'react-notify-toast';
-import { Permissions } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -18,8 +17,8 @@ const validate = (values) => {
 };
 
 @reduxForm({
-  form: 'state',
-  fields: ['name', 'description', 'permissions'],
+  form: 'role',
+  fields: ['name', 'description'],
   validate
 })
 export default class CreateModal extends Component {
@@ -45,14 +44,6 @@ export default class CreateModal extends Component {
 
   async handleSubmit() {
     const { values, create, close } = this.props;
-    if (values.permissions)
-    {
-      values.permissions = _.map(values.permissions, _.iteratee('value'));
-    }
-    //if (values.users)
-    //{
-    //  values.users = _.map(values.users, _.iteratee('value'));
-    //}
     const ecode = await create(values);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -84,12 +75,7 @@ export default class CreateModal extends Component {
   //}
 
   render() {
-    const { i18n: { errMsg }, fields: { name, description, permissions }, values, handleSubmit, invalid, submitting } = this.props;
-
-    let permissionOptions = _.map(Permissions, function(v) { return { value: v.id, label: v.name }; });
-    if (_.findIndex(permissions.value, { value: 'all' }) !== -1) {
-      values.permissions = permissions.value = permissionOptions = _.reject(permissionOptions, { value: 'all' });
-    }
+    const { i18n: { errMsg }, fields: { name, description }, values, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -101,18 +87,6 @@ export default class CreateModal extends Component {
           <FormGroup controlId='formControlsText'>
             <ControlLabel><span className='txt-impt'>*</span>角色名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='角色名'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>权限集</ControlLabel>
-            <Select 
-              multi
-              disabled={ submitting } 
-              clearable={ false } 
-              searchable={ false } 
-              options={ permissionOptions } 
-              value={ permissions.value } 
-              onChange={ newValue => { permissions.onChange(newValue) } } 
-              placeholder='请选择权限'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
