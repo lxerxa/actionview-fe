@@ -50,7 +50,7 @@ export default class History extends Component {
               <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortHistory() } }><i className='fa fa-sort'></i> 排序</span>
               <span style={ { marginRight: '20px', float: 'right' } }>
                 <Checkbox
-                  style={ { paddingTop: '0px' } }
+                  style={ { paddingTop: '0px', minHeight: '18px' } }
                   checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
                   disabled={ indexLoading }
                   onClick={ this.swapTime.bind(this) }>

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 // import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem } from 'react-bootstrap';
+import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem, Checkbox } from 'react-bootstrap';
 import { getAgoAt } from '../share/Funcs';
 import _ from 'lodash';
 
@@ -13,7 +13,12 @@ const DetailBar = require('../issue/DetailBar');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 50, category: 'all', barShow: false, hoverRowId: '' };
+    this.state = { 
+      limit: 50, 
+      category: 'all', 
+      barShow: false 
+    };
+    this.state.displayTimeFormat = window.localStorage && window.localStorage.getItem('activity-displayTimeFormat') || 'relative';
   }
 
   static propTypes = {
@@ -128,6 +133,20 @@ export default class List extends Component {
     }
   }
 
+  swapTime() {
+    if (this.state.displayTimeFormat == 'relative') {
+      if (window.localStorage) {
+        window.localStorage.setItem('activity-displayTimeFormat', 'absolute');
+      }
+      this.setState({ displayTimeFormat: 'absolute' });
+    } else {
+      if (window.localStorage) {
+        window.localStorage.setItem('activity-displayTimeFormat', 'relative');
+      }
+      this.setState({ displayTimeFormat: 'relative' });
+    }
+  }
+
   render() {
     const { 
       i18n,
@@ -202,15 +221,13 @@ export default class List extends Component {
       user
     } = this.props;
 
-    const { hoverRowId } = this.state;
-
     const ltStyles = { textDecoration: 'line-through', marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' };
 
     const activities = [];
     const activityNum = collection.length;
     for (let i = 0; i < activityNum; i++) {
 
-      const agoAt = getAgoAt(collection[i].created_at, current_time);
+      const agoAt = this.state.displayTimeFormat == 'absolute' ? moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm:ss') : getAgoAt(collection[i].created_at, current_time);
 
       const wfEventFlag =
          collection[i].event_key === 'close_issue' 
@@ -356,11 +373,19 @@ export default class List extends Component {
           <NavItem eventKey='worklog' href='#'>工作日志</NavItem>
         </Nav>
         <Button style={ { float: 'right' } } onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i>&nbsp;刷新</Button>
+        <span style={ { marginRight: '20px', float: 'right' } }>
+          <Checkbox
+            style={ { paddingTop: '0px', marginBottom: '0px' } }
+            checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
+            onClick={ this.swapTime.bind(this) }>
+            显示绝对时间
+          </Checkbox>
+        </span>
         <BootstrapTable data={ activities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='avatar' width='40'/>
           <TableHeaderColumn dataField='summary'/>
-          <TableHeaderColumn dataField='time' width='100'/>
+          <TableHeaderColumn dataField='time' width={ this.state.displayTimeFormat == 'absolute' ? '150' : '100' }/>
         </BootstrapTable>
         { increaseCollection.length > 0 && increaseCollection.length % this.state.limit === 0 && 
         <ButtonGroup vertical block>

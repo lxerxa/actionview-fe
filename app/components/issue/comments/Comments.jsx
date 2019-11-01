@@ -26,8 +26,8 @@ export default class Comments extends Component {
       delReplyShow: false, 
       selectedComments: {}, 
       contents:  '',  
-      atWho: [] };
-
+      atWho: [] 
+    };
     this.state.displayTimeFormat = window.localStorage && window.localStorage.getItem('comments-displayTimeFormat') || 'relative';
 
     this.addAtWho = this.addAtWho.bind(this);
@@ -222,7 +222,7 @@ export default class Comments extends Component {
               <span className='comments-button' title='添加' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</span> }
               <span style={ { marginRight: '20px', float: 'right' } }>
                 <Checkbox 
-                  style={ { paddingTop: '0px' } }
+                  style={ { paddingTop: '0px', minHeight: '18px' } }
                   checked={ this.state.displayTimeFormat == 'absolute' ? true : false } 
                   onClick={ this.swapTime.bind(this) }>
                   显示绝对时间 
