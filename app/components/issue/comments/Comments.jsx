@@ -261,7 +261,8 @@ export default class Comments extends Component {
                 { ((val.creator && currentUser.id === val.creator.id && permissions.indexOf('edit_self_comments') !== -1) 
                   || permissions.indexOf('edit_comments') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) } title='编辑'><i className='fa fa-pencil'></i></span> }
-                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, {}) } title='回复'><i className='fa fa-reply'></i></span>
+                { permissions.indexOf('add_comments') !== -1 && 
+                <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, {}) } title='回复'><i className='fa fa-reply'></i></span> }
               </div> ); 
               let contents = val.contents ? _.escape(val.contents) : '-';
 
@@ -358,7 +359,8 @@ export default class Comments extends Component {
                            { ((v.creator && currentUser.id === v.creator.id && permissions.indexOf('edit_self_comments') !== -1) 
                              || permissions.indexOf('edit_comments') !== -1) && 
                            <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) } title='编辑'><i className='fa fa-pencil'></i></span> }
-                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, v.creator) } title='回复'><i className='fa fa-reply'></i></span>
+                           { permissions.indexOf('add_comments') !== -1 && 
+                           <span className='comments-button comments-edit-button' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, v.creator) } title='回复'><i className='fa fa-reply'></i></span> }
                          </div>
                          <div 
                            onClick={ this.previewInlineImg.bind(this) }
