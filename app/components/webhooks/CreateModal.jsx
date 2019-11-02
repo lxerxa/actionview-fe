@@ -72,7 +72,7 @@ export default class CreateModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ request_url.touched && request_url.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>请求Url</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...request_url } placeholder='http://example.com/trigger-ci'/>
+            <FormControl disabled={ submitting } type='text' { ...request_url } placeholder='http://example.com/postreceive'/>
             { request_url.touched && request_url.error && <HelpBlock style={ { float: 'right' } }>{ request_url.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>

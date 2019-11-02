@@ -168,6 +168,14 @@ export default class List extends Component {
             </Button>
           </FormGroup>
         </div>
+        <div className='info-col' style={ { marginBottom: '15px' } }>
+          <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+          <div className='info-content'>
+            <span>
+              请求Header Content-Type为：application/json，请求方法为：POST；Token附加在Header中的X-ACTIONVIEW-TOKEN里。
+            </span>
+          </div>
+        </div>
         <div>
           <BootstrapTable data={ directories } bordered={ false } hover options={ opts } trClassName='tr-top'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>

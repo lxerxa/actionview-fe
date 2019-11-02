@@ -76,6 +76,16 @@ export default class List extends Component {
             <span>
               目前外部用户仅支持：GitHub、GitLab。
             </span>
+            <span>
+              <br/>
+              <b>配置提交说明：</b>
+              <br/>
+              <span style={ { marginLeft: '15px' } }>触发事件请选择：Push Event;</span>
+              <br/>
+              <span style={ { marginLeft: '15px' } }>Git提交代码备注形式有两种：git commit -m 'xx-yy dddd' 和 git commit -m 'xx-yy-zz dddd'，后者可改变问题状态。</span>
+              <br/>
+              <span style={ { marginLeft: '15px' } }>其中，xx: 项目健值，yy: 问题编号， zz: 动作ID（流程预览图可查看）, dddd: 描述文字。</span>
+            </span>
           </div>
         </div>
         <Panel header={ gitHubHeader } style={ { textAlign: 'center' } }>
