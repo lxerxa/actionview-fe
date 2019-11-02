@@ -60,6 +60,7 @@ export default function issue(state = initialState, action) {
       return { ...state, indexLoading: false, error: action.error };
 
     case t.ISSUE_OPTIONS:
+      state.options.display_columns = [];
       return { ...state, optionsLoading: true };
 
     case t.ISSUE_OPTIONS_SUCCESS:

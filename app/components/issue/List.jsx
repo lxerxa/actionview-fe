@@ -265,6 +265,13 @@ export default class List extends Component {
         }
       });
     }
+
+    if (parseInt($('.react-bs-table-container th').eq(3).css('width')) < 300) {
+      $('.react-bs-table-container th').eq(3).css('width', '300px');
+      $('.react-bs-table-container th').eq(3).css('min-width', '300px');
+      $('.react-bs-table-container col').eq(3).css('width', '300px');
+      $('.react-bs-table-container col').eq(3).css('min-width', '300px');
+    }
   }
 
   closeDetail() {
@@ -514,7 +521,13 @@ export default class List extends Component {
 
     return (
       <div>
-        <BootstrapTable data={ issues } bordered={ false } hover options={ opts } trClassName='tr-top' headerStyle={ { overflow: 'unset' } }>
+        <BootstrapTable 
+          hover
+          data={ issues } 
+          bordered={ false } 
+          options={ opts } 
+          trClassName='tr-top' 
+          headerStyle={ { overflow: 'unset' } }>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn width='50' dataField='type'> 
             <span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>
