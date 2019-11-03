@@ -932,7 +932,7 @@ export default class DetailBar extends Component {
                                     <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }
                                 </td>
-                                { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 || f.uploader.id == user.id)) && 
+                                { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 && f.uploader.id == user.id)) && 
                                   <td width='2%'>
                                     <span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }>
                                       <i className='fa fa-trash'></i>
@@ -953,7 +953,7 @@ export default class DetailBar extends Component {
                                 </div>
                                 <div className='attachment-title-container'>
                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>
-                                   { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 || f.uploader.id == user.id)) && 
+                                   { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 && f.uploader.id == user.id)) && 
                                      <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
                                 </div>
                               </div>

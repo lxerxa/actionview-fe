@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ i18n, project, document }) => ({ i18n, project, document }), mapDispatchToProps)
+@connect(({ i18n, session, project, document }) => ({ i18n, session, project, document }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +32,7 @@ export default class Container extends Component {
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     document: PropTypes.object.isRequired
   }
@@ -95,6 +96,7 @@ export default class Container extends Component {
 
     return (
       <List 
+        user={ this.props.session.user }
         project_key={ this.pid }
         directory={ this.directory }
         index={ this.index.bind(this) } 
