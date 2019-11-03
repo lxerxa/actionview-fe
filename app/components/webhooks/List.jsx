@@ -172,7 +172,7 @@ export default class List extends Component {
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>
             <span>
-              请求Header Content-Type为：application/json，请求方法为：POST；Token附加在Header中的X-ACTIONVIEW-TOKEN里。
+              请求Header Content-Type为：application/json；Token附加在Header中的X_ACTIONVIEW_TOKEN里。
             </span>
           </div>
         </div>
