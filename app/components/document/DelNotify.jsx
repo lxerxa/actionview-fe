@@ -10,19 +10,20 @@ export default class DelNotify extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, del, data } = this.props;
+    const { i18n: { errMsg } close, del, data } = this.props;
     close();
     const ecode = await del(data.id);
     if (ecode === 0) {
       notify.show((data.d == 1 ? '目录' : '文档') + '已删除。', 'success', 2000);    
     } else {
-      notify.show('删除失败。', 'error', 2000);    
+      notify.show(errMsg[ecode] + '，删除失败。', 'error', 2000);    
     }
   }
 

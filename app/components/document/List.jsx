@@ -463,7 +463,8 @@ export default class List extends Component {
             show
             close={ this.delNotifyClose }
             data={ selectedItem }
-            del={ del }/> }
+            del={ del }
+            i18n={ i18n }/> }
         </div>
       </div>
     );
