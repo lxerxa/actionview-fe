@@ -97,6 +97,10 @@ export default class MoveModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
+          <div className='info-col' style={ { marginBottom: '15px', marginTop: '5px' } }>
+            <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+            <div className='info-content'>仅支持子项目在不同父项目间的移动。</div>
+          </div>
           <FormGroup controlId='formControlsText' validationState={ parent_id.touched && parent_id.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>移动到</ControlLabel>
             <Select.Async 

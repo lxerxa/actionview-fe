@@ -1,15 +1,31 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Table, Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel } from 'react-bootstrap';
+import { Table, Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Checkbox } from 'react-bootstrap';
 import _ from 'lodash';
 import { getAgoAt } from '../../share/Funcs';
 
 const img = require('../../../assets/images/loading.gif');
+const moment = require('moment');
 
 export default class GitCommits extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
+    this.state.displayTimeFormat = window.localStorage && window.localStorage.getItem('gitcommits-displayTimeFormat') || 'relative';
+  }
+
+  swapTime() {
+    if (this.state.displayTimeFormat == 'relative') {
+      if (window.localStorage) {
+        window.localStorage.setItem('gitcommits-displayTimeFormat', 'absolute');
+      }
+      this.setState({ displayTimeFormat: 'absolute' });
+    } else {
+      if (window.localStorage) {
+        window.localStorage.setItem('gitcommits-displayTimeFormat', 'relative');
+      }
+      this.setState({ displayTimeFormat: 'relative' });
+    }
   }
 
   static propTypes = {
@@ -32,6 +48,14 @@ export default class GitCommits extends Component {
             <div>
               <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexGitCommits(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
               <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortGitCommits() } }><i className='fa fa-sort'></i> 排序</span>
+              <span style={ { marginRight: '20px', float: 'right' } }>
+                <Checkbox
+                  style={ { paddingTop: '0px', minHeight: '18px' } }
+                  checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
+                  onClick={ this.swapTime.bind(this) }>
+                  显示绝对时间
+                </Checkbox>
+              </span>
             </div>
           </Col>
           <Col sm={ 12 }>
@@ -41,7 +65,7 @@ export default class GitCommits extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.author && (val.author.name + '(' + val.author.email + ')')) + '">' + (val.author && val.author.id === currentUser.id ? '我' : val.author.name) + '</a> 提交代码 - ' + getAgoAt(val.committed_at, currentTime) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.author && (val.author.name + '(' + val.author.email + ')')) + '">' + (val.author && val.author.id === currentUser.id ? '我' : val.author.name) + '</a> 提交代码 - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.committed_at).format('YY/MM/DD HH:mm:ss') : getAgoAt(val.committed_at, currentTime)) } } />
               </div> ); 
 
               return (

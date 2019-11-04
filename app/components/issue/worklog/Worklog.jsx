@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label, Table } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Panel, Label, Table, Checkbox } from 'react-bootstrap';
 import _ from 'lodash';
 import { getAgoAt } from '../../share/Funcs';
 
@@ -16,6 +16,8 @@ export default class Worklog extends Component {
     this.state = { ecode: 0 };
     this.m2t = this.m2t.bind(this);
     this.t2m = this.t2m.bind(this);
+
+    this.state.displayTimeFormat = window.localStorage && window.localStorage.getItem('worklogs-displayTimeFormat') || 'relative';
   }
 
   static propTypes = {
@@ -125,6 +127,20 @@ export default class Worklog extends Component {
     return newTT.join(' ');
   }
 
+  swapTime() {
+    if (this.state.displayTimeFormat == 'relative') {
+      if (window.localStorage) {
+        window.localStorage.setItem('worklogs-displayTimeFormat', 'absolute');
+      }
+      this.setState({ displayTimeFormat: 'absolute' });
+    } else {
+      if (window.localStorage) {
+        window.localStorage.setItem('worklogs-displayTimeFormat', 'relative');
+      }
+      this.setState({ displayTimeFormat: 'relative' });
+    }
+  }
+
   render() {
     const { 
       i18n, 
@@ -187,6 +203,14 @@ export default class Worklog extends Component {
               <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
               { permissions.indexOf('add_worklog') !== -1 &&
               <span className='comments-button' title='添加' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span> }
+              <span style={ { marginRight: '20px', float: 'right' } }>
+                <Checkbox
+                  style={ { paddingTop: '0px', minHeight: '18px' } }
+                  checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
+                  onClick={ this.swapTime.bind(this) }>
+                  显示绝对时间
+                </Checkbox>
+              </span>
             </div>
           </Col>
           <Col sm={ 12 } className={ indexLoading && 'hide' }>
@@ -214,7 +238,7 @@ export default class Worklog extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML={ { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder.id === currentUser.id ? '我' : val.recorder.name) + '</a> - ' + getAgoAt(val.recorded_at, currentTime) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML={ { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder.id === currentUser.id ? '我' : val.recorder.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss') : getAgoAt(val.recorded_at, currentTime)) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 { ((val.recorder && currentUser.id === val.recorder.id && permissions.indexOf('delete_self_worklog') !== -1) 
                   || permissions.indexOf('delete_worklog') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }

@@ -17,7 +17,7 @@ export default class DelNotify extends Component {
   }
 
   async confirm() {
-    const { i18n: { errMsg } close, del, data } = this.props;
+    const { i18n: { errMsg }, close, del, data } = this.props;
     close();
     const ecode = await del(data.id);
     if (ecode === 0) {
