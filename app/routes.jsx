@@ -182,6 +182,12 @@ const WebhooksContainer = (location, cb) => {
   }, 'webhooks')
 };
 
+const LogsContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/logs/Container'))
+  }, 'logs')
+};
+
 export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Login }/>
@@ -223,6 +229,7 @@ export default (
       <Route path='/admin/group' getComponent={ GroupContainer }/>
       <Route path='/admin/directory' getComponent={ DirectoryContainer }/>
       <Route path='/admin/syssetting' getComponent={ SyssettingContainer }/>
+      <Route path='/admin/logs' getComponent={ LogsContainer }/>
       <Route path='/admin/scheme' component={ Scheme }>
         <IndexRoute getComponent={ TypeContainer }/>
         <Route path='type' getComponent={ TypeContainer }/>

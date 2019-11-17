@@ -4,7 +4,6 @@ import _ from 'lodash';
 
 const CreateModal = require('./CreateModal');
 const SortCardsModal = require('../share/SortCardsModal');
-const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
   constructor(props) {

@@ -120,8 +120,8 @@ export default class List extends Component {
       index(newQuery);
     }
 
-    this.state.name = query.name || '';
-    this.state.directory = query.directory || null;
+    this.state.name = newQuery.name || '';
+    this.state.directory = newQuery.directory || null;
   }
 
   operateNotify(id) {

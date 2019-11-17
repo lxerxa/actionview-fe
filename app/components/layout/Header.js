@@ -79,6 +79,8 @@ export default class Header extends Component {
       entry('/admin/scheme/type');
     } else if (eventKey === 'setting') {
       entry('/admin/syssetting');
+    } else if (eventKey === 'logs') {
+      entry('/admin/logs');
     }
   }
 
@@ -138,6 +140,7 @@ export default class Header extends Component {
     const patten9 = new RegExp('^/mysetting$');
     const patten10 = new RegExp('^/admin/group$');
     const patten11 = new RegExp('^/admin/directory$');
+    const patten12 = new RegExp('^/admin/logs$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -176,6 +179,8 @@ export default class Header extends Component {
       modulename = '系统设置';
     } else if (patten9.exec(pathname)) {
       modulename = '个人设置';
+    } else if (patten12.exec(pathname)) {
+      modulename = '日志';
     } else {
       modulename = '其他';
     }
@@ -220,6 +225,8 @@ export default class Header extends Component {
             <MenuItem eventKey='group'>用户组</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='project'>项目管理</MenuItem>
+            <MenuItem divider />
+            <MenuItem eventKey='logs'>日志</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>系统设置</MenuItem>
           </DropdownButton>

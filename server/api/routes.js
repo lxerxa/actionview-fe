@@ -96,6 +96,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/user/:id', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: {id: '1111', first_name: '刘老幺111', email: 'liulaoyao@aaa.com'} };
+    return res.status(200).send(results);
+  });
+
   router.get('/group/search', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
@@ -138,6 +145,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/logs', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', user: { id: '1111', name: '1111' }, method: 'GET', request_url: '/aa/bb', requested_start_at: 1533636586000, requested_end_at: 1533636586020, exec_time: 20, request_source_ip: '6.7.8.9', request_user_agent: 'xxxx', response_status: 200, project_key: 'demo', module: 'login', request_body: { aa: 'aa', bb: 'bb', cc: 'cc' } }, { id: '2222', user: { id: '1111', name: '1111' }, method: 'POST', request_url: '/aa/bb', requested_start_at: 1533636586000, requested_end_at: 1533636586020, exec_time: 20, request_source_ip: '6.7.8.9', request_user_agent: 'xxxx', response_status: 200, project_key: 'demo', module: 'login', request_body: { aa: 'aa', bb: 'bb', cc: 'cc' } }, { id: '3333', user: { id: '1111', name: '1111' }, method: 'PUT', request_url: '/aa/bb', requested_start_at: 1533636586000, requested_end_at: 1533636586050, exec_time: 50, request_source_ip: '10.1.5.6', request_user_agent: 'xxxx', response_status: 200, project_key: 'demo', module: 'login', request_body: { aa: 'aa', bb: 'bb', cc: 'cc' } } ], options: { 'total': 8, sizePerPage: 100 }};
+    return res.status(200).send(results);
+  });
+
   router.get('/myproject', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
@@ -171,6 +185,13 @@ export default function(router) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: { flag : 1 } };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/search', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', key: 'demo1', name: '演示实例一'}, { id: '2', key: 'demo2', name: '演示实例二'} ] };
     return res.status(200).send(results);
   });
 

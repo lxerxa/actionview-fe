@@ -18,6 +18,7 @@ export default class Sidebar extends Component {
       adminUserManageShow: false, 
       adminProjectManageShow: false, 
       adminSysSettingsShow: false, 
+      adminAccessLogsShow: false, 
       tackFlag: true };
   }
 
@@ -165,6 +166,10 @@ export default class Sidebar extends Component {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminSysSettingsShow = true;
+    } else if (/^\/admin\/logs$/.test(nextProps.pathname)) {
+      this.state.adminPanelShow = true;
+      this.state.projectPanelShow = false;
+      this.state.adminAccessLogsShow = true;
     }
   }
 
@@ -204,6 +209,10 @@ export default class Sidebar extends Component {
             <h4><i className={ this.state.adminProjectManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminProjectManageShow: !this.state.adminProjectManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目管理</h4>
             <ul className={ !this.state.adminProjectManageShow && 'hide' }>
               <li><Link to='/admin/project' activeClassName='menu-active'>项目</Link></li>
+            </ul>
+            <h4><i className={ this.state.adminAccessLogsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminAccessLogsShow: !this.state.adminAccessLogsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>日志管理</h4>
+            <ul className={ !this.state.adminAccessLogsShow && 'hide' }>
+              <li><Link to='/admin/logs' activeClassName='menu-active'>日志</Link></li>
             </ul>
             <h4><i className={ this.state.adminSysSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingsShow: !this.state.adminSysSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>
             <ul className={ !this.state.adminSysSettingsShow && 'hide' }>

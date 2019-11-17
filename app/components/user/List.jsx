@@ -3,7 +3,6 @@ import React, { PropTypes, Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { FormGroup, FormControl, ButtonGroup, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
-import ApiClient from '../../../shared/api-client';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -122,9 +121,9 @@ export default class List extends Component {
       index(newQuery);
     }
 
-    this.state.name = query.name || '';
-    this.state.group = query.group || null;
-    this.state.directory = query.directory || null;
+    this.state.name = newQuery.name || '';
+    this.state.group = newQuery.group || null;
+    this.state.directory = newQuery.directory || null;
   }
 
   operateNotify(id) {
