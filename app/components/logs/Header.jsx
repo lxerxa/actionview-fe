@@ -193,13 +193,13 @@ export default class Header extends Component {
 
   userChange(newValue) {
     this.state.user = newValue;
-    this.state.uid = newValue.id;
+    this.state.uid = newValue && newValue.id || '';
     this.refresh();
   }
 
   projectChange(newValue) {
     this.state.project = newValue;
-    this.state.project_key = newValue.key;
+    this.state.project_key = newValue && newValue.key || '';
     this.refresh();
   }
 
