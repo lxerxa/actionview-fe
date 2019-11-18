@@ -21,6 +21,7 @@ export default class Header extends Component {
       user: null,
       method: null,
       request_source_ip: '',
+      request_url: '',
       start_time: '',
       end_time: '',
       exec_time: null
@@ -69,8 +70,14 @@ export default class Header extends Component {
     }
     if (query.request_time) {
       const sections = query.request_time.split('~');
-      newQuery.start_time = sections[0] ? moment(sections[0]) : '';
-      newQuery.end_time = sections[1] ? moment(sections[1]) : '';
+      if (sections[0]) {
+        newQuery.start_time = sections[0];
+        this.state.start_time = moment(sections[0]);
+      }
+      if (sections[1]) {
+        newQuery.end_time = sections[1];
+        this.state.end_time = moment(sections[1]);
+      }
     }
 
     index(newQuery);
@@ -82,6 +89,7 @@ export default class Header extends Component {
     if (!_.isEqual(newQuery, query)) {
       index(newQuery);
     }
+    this.state.request_url = newQuery.request_url || '';
     this.state.request_source_ip = newQuery.request_source_ip || '';
     this.state.method = newQuery.method || null;
     this.state.exec_time = newQuery.exec_time || null;
@@ -145,6 +153,9 @@ export default class Header extends Component {
     }
     if (this.state.exec_time) {
       query.exec_time = this.state.exec_time;
+    }
+    if (this.state.request_url) {
+      query.request_url = this.state.request_url;
     }
     if (this.state.request_source_ip) {
       query.request_source_ip = this.state.request_source_ip;
@@ -210,7 +221,7 @@ export default class Header extends Component {
   render() {
     const moduleOptions = [
       { value: 'login', label: '登录' },
-      { value: 'issue', label: '问题列表' },
+      { value: 'issue', label: '问题' },
       { value: 'activity', label: '活动' },
       { value: 'kanban', label: '看板' },
       { value: 'version', label: '版本' },
@@ -286,7 +297,7 @@ export default class Header extends Component {
           </Col>
           <Col sm={ 5 }>
             <Select.Async
-              clearable={ false }
+              clearable={ true }
               options={ [] }
               value={ this.state.user }
               onChange={ this.userChange.bind(this) }
@@ -303,7 +314,7 @@ export default class Header extends Component {
           </Col>
           <Col sm={ 5 }>
             <Select.Async
-              clearable={ false }
+              clearable={ true }
               options={ [] }
               value={ this.state.project }
               onChange={ this.projectChange.bind(this) }
@@ -315,7 +326,7 @@ export default class Header extends Component {
           <Col sm={ 1 } componentClass={ ControlLabel }>
             模块
           </Col>
-          <Col sm={ 5 }>
+          <Col sm={ 2 }>
             <Select
               simpleValue
               placeholder='模块'
@@ -323,13 +334,10 @@ export default class Header extends Component {
               onChange={ this.moduleChange.bind(this) }
               options={ moduleOptions }/>
           </Col>
-        </FormGroup> }
-        { this.state.isExtended &&
-        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             方法
           </Col>
-          <Col sm={ 3 }>
+          <Col sm={ 2 }>
             <Select
               simpleValue
               placeholder='选择方法'
@@ -337,21 +345,24 @@ export default class Header extends Component {
               onChange={ this.methodChange.bind(this) }
               options={ methodOptions }/>
           </Col>
+        </FormGroup> }
+        { this.state.isExtended &&
+        <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
-            请求时长
+            Url
           </Col>
-          <Col sm={ 3 }>
-            <Select
-              simpleValue
-              placeholder='选择请求时长'
-              value={ this.state.exec_time }
-              onChange={ this.execChange.bind(this) }
-              options={ execOptions }/>
+          <Col sm={ 5 }>
+            <FormControl
+              type='text'
+              value={ this.state.request_url }
+              onKeyPress={ (e) => { if (e.charCode == '13') { this.refresh(); } } }
+              onChange={ (e) => { this.state.request_url = e.target.value; this.setState({ request_url: this.state.request_url }); } }
+              placeholder={ '输入Url' } />
           </Col>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             来源IP 
           </Col>
-          <Col sm={ 3 }>
+          <Col sm={ 2 }>
             <FormControl
               type='text'
               value={ this.state.request_source_ip }
@@ -359,15 +370,26 @@ export default class Header extends Component {
               onChange={ (e) => { this.state.request_source_ip = e.target.value; this.setState({ request_source_ip: this.state.request_source_ip }); } }
               placeholder={ '输入IP地址' } />
           </Col>
+          <Col sm={ 1 } componentClass={ ControlLabel }>
+            请求时长
+          </Col>
+          <Col sm={ 2 }>
+            <Select
+              simpleValue
+              placeholder='选择请求时长'
+              value={ this.state.exec_time }
+              onChange={ this.execChange.bind(this) }
+              options={ execOptions }/>
+          </Col>
         </FormGroup> }
         <FormGroup>
           <Col sm={ 12 }>
-            <div style={ { float: 'right', marginBottom: '5px' } }>
+            <div style={ { float: 'right', marginBottom: '5px', marginTop: '-10px' } }>
               <Button bsStyle='link' onClick={ () => { this.reset(); } }>重置 <i className='fa fa-undo'></i></Button>
               { this.state.isExtended ? 
                 <Button bsStyle='link' onClick={ () => { this.setState({ isExtended: false }) } }>收起 <i className='fa fa-angle-double-up'></i></Button>
                 :
-                <Button bsStyle='link' onClick={ () => { this.setState({ isExtended: true }) } }>展开 <i className='fa fa-angle-double-down'></i></Button> }
+                <Button bsStyle='link' onClick={ () => { this.setState({ isExtended: true }) } }>更多 <i className='fa fa-angle-double-down'></i></Button> }
             </div>
           </Col>
         </FormGroup>

@@ -4,12 +4,14 @@ import { Button } from 'react-bootstrap';
 import _ from 'lodash';
 
 const moment = require('moment');
+const DetailModal = require('./DetailModal');
 const PaginationList = require('../share/PaginationList');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
+    this.state = { detailShow: false, data: {} };
   }
 
   static propTypes = {
@@ -18,6 +20,10 @@ export default class List extends Component {
     query: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     refresh: PropTypes.func.isRequired
+  }
+
+  show(data) {
+    this.setState({ detailShow: true, data });
   }
 
   render() {
@@ -35,12 +41,12 @@ export default class List extends Component {
       logs.push({
         id: collection[i].id,
         user: collection[i].user && collection[i].user.name || '', 
-        url: collection[i].request_url || '', 
+        url: (<span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>{ collection[i].request_url || '' }</span>), 
         at: collection[i].requested_start_at ? moment(collection[i].requested_start_at).format('YYYY/MM/DD HH:mm') : '', 
-        method: collection[i].method || '-',
+        method: collection[i].request_method || '-',
         ip: collection[i].request_source_ip || '-',
         operation: (
-          <Button bsStyle='link'>详情</Button>
+          <Button bsStyle='link' onClick={ this.show.bind(this, collection[i]) }>详情</Button>
         )
       });
     }
@@ -79,6 +85,10 @@ export default class List extends Component {
             query={ query }
             refresh={ refresh }/>
           : '' }
+        { this.state.detailShow &&
+          <DetailModal
+            data={ this.state.data }
+            close={ () => { this.setState({ detailShow: false }) } } /> }
       </div>
     );
   }
