@@ -19,7 +19,7 @@ export default class WorkflowCommentsModal extends Component {
 
   async confirm() {
     const { close, data, doAction, action_id } = this.props;
-    const ecode = await doAction(data.id, data.entry_id, action_id, { comments: this.state.comments });
+    const ecode = await doAction(data.id, data.entry_id, { action_id, comments: this.state.comments });
     if (ecode === 0) {
       close();
       notify.show('提交完成。', 'success', 2000);
