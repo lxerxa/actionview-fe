@@ -374,7 +374,7 @@ export default class DetailBar extends Component {
       //}
       this.setState({ workflowScreenShow: true, action_id });
     } else {
-      const ecode = await doAction(data.id, data.entry_id, action_id);
+      const ecode = await doAction(data.id, data.entry_id, { action_id });
       if (ecode === 0) {
         notify.show('提交完成。', 'success', 2000);
       } else {

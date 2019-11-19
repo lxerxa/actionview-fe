@@ -250,7 +250,7 @@ export default class Header extends Component {
     ];
 
     const execOptions = [
-      { value: '-5ms', label: '< 0.5s' },
+      { value: '-0.5s', label: '< 0.5s' },
       { value: '-1s', label: '< 1s' },
       { value: '-2s', label: '< 2s' },
       { value: '+2s', label: '> 2s' },

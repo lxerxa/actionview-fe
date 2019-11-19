@@ -256,7 +256,7 @@ class CreateModal extends Component {
     if (!_.isEmpty(data) && data.id) {
 
       if (doAction && action_id) {
-        ecode = await doAction(data.id, data.entry_id, action_id, { comments: submitData.comments || '' }, true);
+        ecode = await doAction(data.id, data.entry_id, { action_id, comments: submitData.comments || '' }, true);
         if (ecode !== 0) {
           this.setState({ ecode: ecode });
           return;
