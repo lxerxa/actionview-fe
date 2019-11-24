@@ -5,6 +5,7 @@ import Home from './components/layout/Home';
 import Error from './components/layout/Error';
 import Login from './components/login/Login';
 import Forgot from './components/login/Forgot';
+import ResetPwd from './components/login/ResetPwd';
 import Register from './components/login/Register';
 import Project from './components/project/Project';
 import Scheme from './components/scheme/Scheme';
@@ -193,6 +194,7 @@ export default (
     <IndexRoute component={ Login }/>
     <Route path='/login' component={ Login }/>
     <Route path='/forgot' component={ Forgot }/>
+    <Route path='/resetpwd' component={ ResetPwd }/>
     <Route path='/register' component={ Register }/>
     <Route path='/home' component={ Home }>
       <Route path='/myproject' getComponent={ ProjectContainer }/>

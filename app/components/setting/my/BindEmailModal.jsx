@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
-import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -9,19 +8,20 @@ const img = require('../../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
-  if (!values.first_name) {
-    errors.first_name = '必填';
+  if (!values.email) {
+    errors.email = '邮箱不能为空';
+  } else if (!/^(\w-*\.*)+@(\w+[\w|-]*)+(\.\w+[\w|-]*)*(\.\w{2,})+$/.test(values.email)) {
+    errors.email = '输入格式有误';
   }
-
   return errors;
 };
 
 @reduxForm({
-  form: 'mysetting',
-  fields: ['first_name', 'department', 'position'],
+  form: 'bindemail',
+  fields: ['email'],
   validate
 })
-export default class EditModal extends Component {
+export default class BindEmailModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -33,28 +33,20 @@ export default class EditModal extends Component {
     i18n: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
-    dirty: PropTypes.bool,
     values: PropTypes.object,
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
-    initializeForm: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired
-  }
-
-  componentWillMount() {
-    const { initializeForm, data } = this.props;
-    initializeForm(data);
   }
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update(values);
+    const ecode = await update({ bind_email: values.email });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('更新完成。', 'success', 2000);
+      notify.show('已设置。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -70,33 +62,25 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { first_name, department, position }, handleSubmit, invalid, dirty, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { email }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>编辑个人资料</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>邮箱绑定</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='姓名'/>
-            { first_name.touched && first_name.error && <HelpBlock style={ { float: 'right' } }>{ first_name.error }</HelpBlock> }
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>部所</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...department } placeholder='所属部所'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>职位</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...position } placeholder='职位'/>
+          <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : null }>
+            <ControlLabel><span className='txt-impt'>*</span>关联邮箱</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...email } placeholder='关联邮箱'/>
+            { email.touched && email.error && <HelpBlock style={ { float: 'right' } }>{ email.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
+          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
           <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </form>

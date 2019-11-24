@@ -74,6 +74,7 @@ export default class Container extends Component {
             setAvatar={ this.setAvatar.bind(this) }
             updAvatar={ this.updAvatar.bind(this) }
             getUser={ this.getUser.bind(this) }
+            updAccount={ this.updAccount.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }
             i18n={ i18n }
             { ...this.props.mysetting }/>
