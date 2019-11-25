@@ -54,10 +54,24 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.post('/user/resetpwdsendmail', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { resetLinkToMail: 'ggg@aa.com' } };
+    return res.status(200).send(results);
+  });
+
   router.get('/user/resetpwd', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { account: 'aa@bb.com' } };
+    return res.status(200).send(results);
+  });
+
+  router.post('/user/resetpwd', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: '' };
+    const results = { ecode: 0, data: {} };
     return res.status(200).send(results);
   });
 

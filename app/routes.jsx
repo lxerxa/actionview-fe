@@ -5,9 +5,12 @@ import Home from './components/layout/Home';
 import Error from './components/layout/Error';
 import Login from './components/login/Login';
 import Forgot from './components/login/Forgot';
+import ResetPwd from './components/login/ResetPwd';
 import Register from './components/login/Register';
 import Project from './components/project/Project';
 import Scheme from './components/scheme/Scheme';
+
+const suffix = ' - ActionView';
 
 //const SummaryContainer = require('./components/summary/Container');
 const SummaryContainer = (location, cb) => {
@@ -191,13 +194,32 @@ const LogsContainer = (location, cb) => {
 export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Login }/>
-    <Route path='/login' component={ Login }/>
-    <Route path='/forgot' component={ Forgot }/>
-    <Route path='/register' component={ Register }/>
+    <Route 
+      onEnter={ ()=> { document.title = '登录' + suffix; } } 
+      path='/login' component={ Login }/>
+    <Route 
+      path='/forgot' 
+      onEnter={ ()=> { document.title = '找回密码' + suffix; } } 
+      component={ Forgot }/>
+    <Route 
+      path='/resetpwd' 
+      onEnter={ ()=> { document.title = '重置密码' + suffix; } } 
+      component={ ResetPwd }/>
+    <Route 
+      path='/register' 
+      component={ Register }/>
     <Route path='/home' component={ Home }>
-      <Route path='/myproject' getComponent={ ProjectContainer }/>
-      <Route path='/mysetting' getComponent={ MysettingContainer }/>
-      <Route path='/project/:key' component={ Project }>
+      <Route 
+        path='/myproject' 
+        onEnter={ ()=> { document.title = '项目中心' + suffix; } } 
+        getComponent={ ProjectContainer }/>
+      <Route 
+        path='/mysetting' 
+        onEnter={ ()=> { document.title = '个人设置' + suffix; } } 
+        getComponent={ MysettingContainer }/>
+      <Route 
+        path='/project/:key' 
+        component={ Project }>
         <IndexRoute getComponent={ SummaryContainer }/>
         <Route path='summary' getComponent={ SummaryContainer }/>
         <Route path='issue' getComponent={ IssueContainer }/>
@@ -224,13 +246,33 @@ export default (
         <Route path='integrations' getComponent={ IntegrationsContainer }/>
         <Route path='webhooks' getComponent={ WebhooksContainer }/>
       </Route>
-      <Route path='/admin/project' getComponent={ ProjectContainer }/>
-      <Route path='/admin/user' getComponent={ UserContainer }/>
-      <Route path='/admin/group' getComponent={ GroupContainer }/>
-      <Route path='/admin/directory' getComponent={ DirectoryContainer }/>
-      <Route path='/admin/syssetting' getComponent={ SyssettingContainer }/>
-      <Route path='/admin/logs' getComponent={ LogsContainer }/>
-      <Route path='/admin/scheme' component={ Scheme }>
+      <Route 
+        path='/admin/project' 
+        onEnter={ ()=> { document.title = '项目列表' + suffix; } } 
+        getComponent={ ProjectContainer }/>
+      <Route 
+        path='/admin/user' 
+        onEnter={ ()=> { document.title = '用户' + suffix; } } 
+        getComponent={ UserContainer }/>
+      <Route 
+        path='/admin/group' 
+        onEnter={ ()=> { document.title = '用户组' + suffix; } } 
+        getComponent={ GroupContainer }/>
+      <Route 
+        path='/admin/directory' 
+        onEnter={ ()=> { document.title = '用户目录' + suffix; } } 
+        getComponent={ DirectoryContainer }/>
+      <Route 
+        path='/admin/syssetting' 
+        onEnter={ ()=> { document.title = '系统设置' + suffix; } } 
+        getComponent={ SyssettingContainer }/>
+      <Route 
+        path='/admin/logs' 
+        onEnter={ ()=> { document.title = '日志' + suffix; } } 
+        getComponent={ LogsContainer }/>
+      <Route 
+        path='/admin/scheme' 
+        component={ Scheme }>
         <IndexRoute getComponent={ TypeContainer }/>
         <Route path='type' getComponent={ TypeContainer }/>
         <Route path='field' getComponent={ FieldContainer }/>
