@@ -27,8 +27,9 @@ export default class Scheme extends Component {
   }
 
   render() {
-    const { session } = this.props;
+    document.title = '全局配置方案 - ActionView';
 
+    const { session } = this.props;
     if (_.isEmpty(session.user)) {
       return (<div/>);
     } else if (!session.user.permissions || !session.user.permissions.sys_admin) {

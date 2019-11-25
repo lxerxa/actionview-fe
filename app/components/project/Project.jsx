@@ -50,6 +50,12 @@ export default class Project extends Component {
   render() {
     const { project: { ecode, item, options }, location: { pathname }, i18n: { errMsg } } = this.props;
 
+    if (item.name) {
+      document.title = item.name + ' - ActionView';
+    } else {
+      document.title = this.key + ' - ActionView';
+    }
+
     if (ecode !== 0) {
       notify.show(errMsg[ecode], 'warning', 2000);
       return (<div/>);
