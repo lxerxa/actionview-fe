@@ -217,6 +217,15 @@ export default class Header extends Component {
     refresh({});
   }
 
+  refresh2() {
+    const { index, query, refresh } = this.props;
+    if (query.page) {
+      refresh(_.assign({}, query, { page: undefined }));
+    } else {
+      index(query);
+    }
+  }
+
   render() {
     const moduleOptions = [
       { value: 'login', label: '登录' },
@@ -384,7 +393,7 @@ export default class Header extends Component {
         <FormGroup>
           <Col sm={ 12 }>
             <div style={ { float: 'right', marginBottom: '10px', marginTop: '-5px' } }>
-              <Button bsStyle='link' onClick={ this.refresh.bind(this) }>刷新 <i className='fa fa-refresh'></i></Button>
+              <Button bsStyle='link' onClick={ this.refresh2.bind(this) }>刷新 <i className='fa fa-refresh'></i></Button>
               <Button bsStyle='link' onClick={ this.reset.bind(this) }>重置 <i className='fa fa-undo'></i></Button>
               { this.state.isExtended ? 
                 <Button bsStyle='link' onClick={ () => { this.setState({ isExtended: false }) } }>收起 <i className='fa fa-angle-double-up'></i></Button>

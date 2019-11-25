@@ -46,8 +46,7 @@ export default class Container extends Component {
 
   async index(query) {
     if (!query) { query = {} }
-    if (!query.page) { query.page = 1; }
-    await this.props.actions.index(qs.stringify(query));
+    await this.props.actions.index(qs.stringify(_.assign({}, query, { page: query.page || 1 })));
     return this.props.logs.ecode;
   }
 
