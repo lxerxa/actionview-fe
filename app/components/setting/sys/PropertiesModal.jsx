@@ -119,59 +119,63 @@ export default class PropertiesModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...login_mail_domain } placeholder='邮箱域名'/>
             { login_mail_domain.touched && login_mail_domain.error && <HelpBlock style={ { float: 'right' } }>{ login_mail_domain.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>是否允许用户创建项目</ControlLabel>
-            <Select
-              simpleValue
-              disabled={ submitting }
-              clearable={ false }
-              searchable={ false }
-              options={ [ { value: 1, label: '是' }, { value: 0, label: '否' } ] }
-              value={ allow_create_project.value || 0 }
-              onChange={ newValue => { allow_create_project.onChange(newValue) } }
-              placeholder='请选择'/>
-          </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ http_host.touched && http_host.error ? 'error' : null }>
             <ControlLabel>系统域名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...http_host } placeholder='如:http://www.actionview.cn:8080'/>
             { http_host.touched && http_host.error && <HelpBlock style={ { float: 'right' } }>{ http_host.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>启用安全登录保护</ControlLabel>
-            <Select
-              simpleValue
-              disabled={ submitting }
-              clearable={ false }
-              searchable={ false }
-              options={ [ { value: 1, label: '是' }, { value: 0, label: '否' } ] }
-              value={ enable_login_protection.value || 0 }
-              onChange={ newValue => { enable_login_protection.onChange(newValue) } }
-              placeholder='请选择'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>每周有效工作日(天)</ControlLabel>
-            <Select
-              simpleValue
-              disabled={ submitting }
-              clearable={ false }
-              searchable={ false }
-              options={ dayOptions }
-              value={ week2day.value }
-              onChange={ newValue => { week2day.onChange(newValue) } }
-              placeholder='请选择'/>
-          </FormGroup>
-          <FormGroup controlId='formControlsText'>
-            <ControlLabel>每天有效工作时间(小时)</ControlLabel>
-            <Select
-              simpleValue
-              disabled={ submitting }
-              clearable={ false }
-              searchable={ false }
-              options={ hourOptions }
-              value={ day2hour.value }
-              onChange={ newValue => { day2hour.onChange(newValue) } }
-              placeholder='请选择'/>
-          </FormGroup>
+          <div>
+            <FormGroup controlId='formControlsText' style={ { width: '45%', display: 'inline-block' } }>
+              <ControlLabel>是否允许用户创建项目</ControlLabel>
+              <Select
+                simpleValue
+                disabled={ submitting }
+                clearable={ false }
+                searchable={ false }
+                options={ [ { value: 1, label: '是' }, { value: 0, label: '否' } ] }
+                value={ allow_create_project.value || 0 }
+                onChange={ newValue => { allow_create_project.onChange(newValue) } }
+                placeholder='请选择'/>
+            </FormGroup>
+            <FormGroup controlId='formControlsText' style={ { width: '45%', display: 'inline-block', float: 'right' } }>
+              <ControlLabel>启用安全登录保护</ControlLabel>
+              <Select
+                simpleValue
+                disabled={ submitting }
+                clearable={ false }
+                searchable={ false }
+                options={ [ { value: 1, label: '是' }, { value: 0, label: '否' } ] }
+                value={ enable_login_protection.value || 0 }
+                onChange={ newValue => { enable_login_protection.onChange(newValue) } }
+                placeholder='请选择'/>
+            </FormGroup>
+          </div>
+          <div>
+            <FormGroup style={ { width: '45%', display: 'inline-block' } }>
+              <ControlLabel>每周有效工作日(天)</ControlLabel>
+              <Select
+                simpleValue
+                disabled={ submitting }
+                clearable={ false }
+                searchable={ false }
+                options={ dayOptions }
+                value={ week2day.value }
+                onChange={ newValue => { week2day.onChange(newValue) } }
+                placeholder='请选择'/>
+            </FormGroup>
+            <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } }>
+              <ControlLabel>每天有效工作时间(小时)</ControlLabel>
+              <Select
+                simpleValue
+                disabled={ submitting }
+                clearable={ false }
+                searchable={ false }
+                options={ hourOptions }
+                value={ day2hour.value }
+                onChange={ newValue => { day2hour.onChange(newValue) } }
+                placeholder='请选择'/>
+            </FormGroup>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
