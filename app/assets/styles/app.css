@@ -531,14 +531,10 @@ table tr:hover .remove-icon{
 
 .login-footer {
   border-top: 1px #e8edf3 solid;
-  padding: 20px;
+  padding: 20px 0px;
   text-align: center;
   line-height: 14px;
   margin-top: 15px;
-}
-
-.login-footer a {
-  color: #6f6e6b;
 }
 
 .login-footer .split {
@@ -589,10 +585,9 @@ table tr:hover .remove-icon{
 
 .reset-pwd-msg {
   height: 120px;
-  font-size: 19px;
   width: 100%;
   text-align: center;
-  padding-top: 30px;
+  padding-top: 50px;
 }
 
 .brand {

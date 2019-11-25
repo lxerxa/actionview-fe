@@ -9,19 +9,22 @@ const no_avatar = require('../../../assets/images/no_avatar.png');
 const img = require('../../../assets/images/loading.gif');
 const AvatarEditModal = require('./AvatarEditModal');
 const ResetPwdModal = require('./ResetPwdModal');
+const BindEmailModal = require('./BindEmailModal');
 
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { avatarEditModalShow: false, resetPwdModalShow: false };
+    this.state = { avatarEditModalShow: false, resetPwdModalShow: false, bindEmailModalShow: false };
     this.avatarEditModalClose = this.avatarEditModalClose.bind(this);
     this.resetPwdModalClose = this.resetPwdModalClose.bind(this);
+    this.bindEmailModalClose = this.bindEmailModalClose.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     setAvatar: PropTypes.func.isRequired,
     updAvatar: PropTypes.func.isRequired,
+    updAccount: PropTypes.func.isRequired,
     avatarLoading: PropTypes.bool.isRequired,
     accounts: PropTypes.object.isRequired,
     getUser: PropTypes.func.isRequired,
@@ -36,6 +39,10 @@ export default class List extends Component {
     this.setState({ resetPwdModalShow: false });
   }
 
+  bindEmailModalClose() {
+    this.setState({ bindEmailModalShow: false });
+  }
+
   componentWillMount() {
     const { getUser } = this.props;
     getUser();
@@ -44,7 +51,7 @@ export default class List extends Component {
   render() {
 
     const styles = { marginLeft: '20px', marginTop: '10px', marginBottom: '10px' };
-    const { i18n, accounts, setAvatar, updAvatar, avatarLoading, resetPwd } = this.props;
+    const { i18n, accounts, updAccount, setAvatar, updAvatar, avatarLoading, resetPwd } = this.props;
 
     const accountItems = [];
     accountItems.push({
@@ -91,6 +98,25 @@ export default class List extends Component {
       )
     });
 
+    accountItems.push({
+      id: 'bindemail',
+      title: (
+        <div>
+          <span className='table-td-title'>关联邮箱</span>
+          <span className='table-td-issue-desc'>密码找回时重置链接将会发送至该邮箱。</span>
+        </div>
+      ),
+      contents: (
+        <div style={ styles }>
+          { accounts.bind_email ?
+          <div>当前绑定邮箱为：{ accounts.bind_email }</div>
+          :
+          <div style={ { color: 'red' } }>强烈建议配置该邮箱, 方便密码找回时使用。</div> }
+          <Button style={ { marginLeft: '15px', marginTop: '10px' } } onClick={ () => { this.setState({ bindEmailModalShow: true }) } }>绑定邮箱</Button>
+        </div>
+      )
+    });
+
     return (
       <div>
         <Nav bsStyle='pills' style={ { marginTop: '10px', float: 'left', lineHeight: '1.0' } } activeKey='account'>
@@ -116,6 +142,12 @@ export default class List extends Component {
             show 
             close={ this.resetPwdModalClose } 
             resetPwd={ resetPwd }
+            i18n={ i18n } /> }
+        { this.state.bindEmailModalShow &&
+          <BindEmailModal
+            show
+            close={ this.bindEmailModalClose }
+            update={ updAccount }
             i18n={ i18n } /> }
       </div>
     );

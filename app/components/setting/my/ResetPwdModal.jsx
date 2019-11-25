@@ -26,7 +26,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'mysetting',
-  fields: ['id', 'password', 'new_password', 'new_password2'],
+  fields: ['password', 'new_password', 'new_password2'],
   validate
 })
 export default class ResetPwdModal extends Component {
@@ -70,7 +70,7 @@ export default class ResetPwdModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, password, new_password, new_password2 }, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { password, new_password, new_password2 }, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -81,7 +81,6 @@ export default class ResetPwdModal extends Component {
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>原密码</ControlLabel>
-            <FormControl type='hidden' { ...id }/>
             <FormControl disabled={ submitting } type='password' { ...password } placeholder='原密码'/>
             { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
           </FormGroup>
@@ -92,7 +91,7 @@ export default class ResetPwdModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ new_password2.touched && new_password2.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>确认密码</ControlLabel>
-            <FormControl disabled={ submitting } type='password' { ...new_password2 } placeholder='新确认密码'/>
+            <FormControl disabled={ submitting } type='password' { ...new_password2 } placeholder='确认密码'/>
             { new_password2.touched && new_password2.error && <HelpBlock style={ { float: 'right' } }>{ new_password2.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>

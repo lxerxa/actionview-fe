@@ -16,7 +16,7 @@ const validate = (values) => {
   const errors = {};
   if (!values.email) {
     errors.email = '邮箱不能为空';
-  } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email)) {
+  } else if (!/^(\w-*\.*)+@(\w+[\w|-]*)+(\.\w+[\w|-]*)*(\.\w{2,})+$/.test(values.email)) {
     errors.email = '输入格式有误';
   }
   return errors;
@@ -28,7 +28,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ user }) => ({ user }), mapDispatchToProps)
+@connect(({ i18n, user }) => ({ i18n, user }), mapDispatchToProps)
 @reduxForm({
   form: 'forgot',
   fields: [ 'email' ],
@@ -37,12 +37,13 @@ function mapDispatchToProps(dispatch) {
 class Forgot extends Component {
   constructor(props) {
     super(props);
-    this.state = { alertShow: false, emailShow: true };
+    this.state = { ecode: 0, alertShow: false, emailShow: true };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
@@ -68,47 +69,47 @@ class Forgot extends Component {
   async handleSubmit() {
     this.setState({ alertShow: false });
 
-    notify.show('试用版暂不支持此功能。', 'warning', 2000);
-    return;
-
-    const { values, actions, user } = this.props;
-    await actions.resetpwd(values.email);
+    const { values, actions } = this.props;
+    await actions.resetpwdSendmail(values);
+    const { user } = this.props;
     if (user.ecode === 0) {
-      this.setState({ emailShow: false });
+      this.setState({ emailShow: false, ecode: 0 });
     } else {
-      this.setState({ alertShow: true });
+      this.setState({ alertShow: true, ecode: user.ecode });
     }
   }
 
   render() {
-    const { fields: { email }, handleSubmit, invalid, submitting } = this.props;
+    const {  i18n: { errMsg }, fields: { email }, handleSubmit, invalid, submitting, user } = this.props;
 
     return (
       <div className='login-panel'>
         <div className='login-form'>
-          <div className='brand'>
-            <img src={ brand } width={ 200 }/>
+          <div style={ { textAlign: 'center', marginTop: '15px', fontSize: '19px', marginBottom: '20px' } }>
+            找回密码 
           </div>
           { this.state.emailShow ?
           <form onSubmit={ handleSubmit(this.handleSubmit) }>
             <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : null }>
-              <FormControl disabled={ submitting } type='text' { ...email } placeholder='邮箱'/>
+              <FormControl disabled={ submitting } type='text' { ...email } placeholder='请输入用户邮箱'/>
               { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
             </FormGroup>
-            <Button bsStyle='success' disabled={ invalid || submitting } type='submit'>发送重置密码的邮件</Button>
+            <Button bsStyle='success' disabled={ invalid || submitting } type='submit'>{ submitting ? '正在发送 ...' : '发送重置密码邮件' }</Button>
           </form>
           :
           <div className='reset-pwd-msg'>
-            <span>重置密码链接已发送至邮箱。</span>
+            <span>重置密码链接已发送至邮箱 { user.item && user.item.sendto_email || '' }，有效期24小时。</span>
           </div> }
-          <div style={ { textAlign: 'center', height: '40px' } }>
-            <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-            { this.state.alertShow && !submitting && <div style={ { marginTop: '10px', color: '#a94442' } }>抱歉，此邮箱未被注册。</div> }
+          <div style={ { textAlign: 'center', marginBottom: '25px' } }>
+            { this.state.alertShow && !submitting && errMsg[this.state.ecode] && <div style={ { marginTop: '10px', color: '#a94442' } }>抱歉，{ errMsg[this.state.ecode] }。</div> }
+          </div>
+          <div style={ { textAlign: 'left', marginLeft: '5px', marginBottom: '25px' } }>
+          1. 系统管理员请输入：admin@action.view，重置密码链接将发送至已配置的关联邮箱。
+          <br/>
+          2. 仅限本系统内部维护账号的密码找回，不支持外部同步账号。
           </div>
           <div className='login-footer'>
             <Link to='/login'>返回登录</Link>
-            <span className='split'/>
-            <Link to='/register'>用户注册</Link>
           </div>
         </div>
       </div>

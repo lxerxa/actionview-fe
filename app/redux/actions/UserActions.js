@@ -1,9 +1,23 @@
 import { asyncFuncCreator } from '../utils';
 
-export function resetpwd(email) {
+export function resetpwdSendmail(values) {
+  return asyncFuncCreator({
+    constant: 'USER_PWD_RESET_SENDMAIL',
+    promise: (client) => client.request({ url: '/user/resetpwdsendmail', data: values, method: 'post' })
+  });
+}
+
+export function resetpwdAccess(code) {
+  return asyncFuncCreator({
+    constant: 'USER_PWD_RESET_ACCESS',
+    promise: (client) => client.request({ url: '/user/resetpwd?code=' + code })
+  });
+}
+
+export function resetpwd(values) {
   return asyncFuncCreator({
     constant: 'USER_PWD_RESET',
-    promise: (client) => client.request({ url: '/user/resetpwd?email=' + email })
+    promise: (client) => client.request({ url: '/user/resetpwd', data: values, method: 'post' })
   });
 }
 

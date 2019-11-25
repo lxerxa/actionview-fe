@@ -69,13 +69,12 @@ export default class Header extends Component {
       newQuery.request_source_ip = this.state.request_source_ip = query.request_source_ip;
     }
     if (query.request_time) {
+      newQuery.request_time = query.request_time;
       const sections = query.request_time.split('~');
       if (sections[0]) {
-        newQuery.start_time = sections[0];
         this.state.start_time = moment(sections[0]);
       }
       if (sections[1]) {
-        newQuery.end_time = sections[1];
         this.state.end_time = moment(sections[1]);
       }
     }

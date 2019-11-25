@@ -13,7 +13,7 @@ const initialState = {
   options: {}, 
   recents: [], 
   recentsLoading: false, 
-  selectedItem: {} 
+  selectedItem: {}
 };
 
 export default function user(state = initialState, action) {
@@ -62,12 +62,20 @@ export default function user(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.USER_PWD_RESET:
+    case t.USER_PWD_RESET_SENDMAIL:
+      return { ...state, loading: false };
+
+    case t.USER_PWD_RESET_ACCESS:
       return { ...state, loading: true };
 
     case t.USER_PWD_RESET_SUCCESS:
-      return { ...state, ecode: action.result.ecode, loading: false };
+    case t.USER_PWD_RESET_ACCESS_SUCCESS:
+    case t.USER_PWD_RESET_SENDMAIL_SUCCESS:
+      return { ...state, ecode: action.result.ecode, item: action.result.data || {}, loading: false };
 
     case t.USER_PWD_RESET_FAIL:
+    case t.USER_PWD_RESET_ACCESS_FAIL:
+    case t.USER_PWD_RESET_SENDMAIL_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.USER_UPDATE:

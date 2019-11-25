@@ -170,9 +170,9 @@ class Login extends Component {
                 </div> }
             </div>
             <div className='login-footer'>
-              若非该系统用户，请联系系统管理员创建。
-              {/*<Link to='/forgot'>忘记密码</Link>
-              <span className='split'/>
+              <span>若非该系统用户，请联系系统管理员创建。</span>
+              <Link to='/forgot' style={ { marginLeft: '5px' } }>忘记密码</Link>
+              {/*<span className='split'/>
               <Link to='/register'>用户注册</Link> */}
             </div>
           </form>
