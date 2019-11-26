@@ -78,7 +78,7 @@ export default class List extends Component {
             </span>
             <span>
               <br/>
-              <b>配置提交说明：</b>
+              <b>提交说明：</b>
               <br/>
               <span style={ { marginLeft: '15px' } }>触发事件请选择：Push Event;</span>
               <br/>

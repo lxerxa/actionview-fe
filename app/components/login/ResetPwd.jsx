@@ -21,7 +21,7 @@ const validate = (values) => {
   if (!values.new_password2) {
     errors.new_password2 = '必填';
   }
-  if (values.new_password != values.new_password2) {
+  if ((values.new_password || values.new_password2) && values.new_password != values.new_password2) {
     errors.new_password2 = '密码不一致';
   }
 
@@ -68,7 +68,7 @@ class ResetPwd extends Component {
     if (user.ecode === 0) {
       this.setState({ emailShow: true, ecode: 0 });
     } else {
-      this.setState({ alertShow: true, ecode: user.ecode });
+      this.setState({ ecode: user.ecode });
     }
   }
 
@@ -115,10 +115,9 @@ class ResetPwd extends Component {
           </form>
           :
           <div className='reset-pwd-msg'>
-            { user.loading ?
-            <img src={ img } className={ 'loading' }/>
-            :
-            <span>密码已重置，请重新 <Link to='/login'>登录</Link>。</span> }
+            <img src={ img } className={ user.loading ? 'loading' : 'hide' }/>
+            { this.state.ecode === 0 && !user.loading && <span>密码已重置，请重新 <Link to='/login'>登录</Link>。</span> }
+            { this.state.ecode !== 0 && !user.loading && errMsg[this.state.ecode] && <span style={ { marginTop: '10px', color: '#a94442' } }>抱歉，{ errMsg[this.state.ecode] }。</span> }
           </div> }
           <div style={ { textAlign: 'center', marginBottom: '25px' } }>
             { this.state.alertShow && !submitting && errMsg[this.state.ecode] && <div style={ { marginTop: '10px', color: '#a94442' } }>抱歉，{ errMsg[this.state.ecode] }。</div> }
