@@ -178,7 +178,7 @@ export default class EditCommentsModal extends Component {
               disabled={ loading }
               style={ { height: '150px' } }
               onChange={ (e) => { this.setState({ contents: e.target.value }) } }
-              onKeyPress={ (e) => { if (e.charCode == '13' && e.ctrlKey && this.state.oldContents != this.state.contents) { this.confirm(); } } }
+              onKeyDown={ (e) => { if (e.keyCode == '13' && e.ctrlKey && this.state.oldContents != this.state.contents) { this.confirm(); } } }
               value={ this.state.contents } 
               placeholder='支持@项目成员，Ctrl+Enter发布备注。'/>
           </div>

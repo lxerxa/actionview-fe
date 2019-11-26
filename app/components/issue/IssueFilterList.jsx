@@ -76,7 +76,7 @@ export class IssueFilterList extends Component {
               <FormControl
                 type='text'
                 value={ this.state.values[v.key] || '' }
-                onKeyPress={ (e) => { if (e.charCode == '13') { this.onChange(); } } }
+                onKeyDown={ (e) => { if (e.keyCode == '13') { this.onChange(); } } }
                 onChange={ (e) => { this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }
                 placeholder={ '输入' + (v.desc || v.name) } />
             </Col>
@@ -119,7 +119,7 @@ export class IssueFilterList extends Component {
             <Col sm={ 12 / columns - 1 }>
               <Interval
                 value={ this.state.values[v.key] }
-                keyPress={ (e) => { if (e.charCode == '13') { this.onChange(); } } }
+                keyPress={ (e) => { if (e.keyCode == '13') { this.onChange(); } } }
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }/>
             </Col>
           </div> );

@@ -54,7 +54,7 @@ export default class Interval extends Component {
           <FormControl
             type='text'
             value={ this.state.min }
-            onKeyPress={ (e) => { keyPress(e); } }
+            onKeyDown={ (e) => { keyPress(e); } }
             onChange={ (e) => { this.onChange({ min: e.target.value }) } }
             placeholder={ '输入开始值' }/>
         </div>
@@ -63,7 +63,7 @@ export default class Interval extends Component {
           <FormControl
             type='text'
             value={ this.state.max }
-            onKeyPress={ (e) => { keyPress(e); } }
+            onKeyDown={ (e) => { keyPress(e); } }
             onChange={ (e) => { this.onChange({ max: e.target.value }) } }
             placeholder={ '输入结束值' }/>
         </div>

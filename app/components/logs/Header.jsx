@@ -363,7 +363,7 @@ export default class Header extends Component {
             <FormControl
               type='text'
               value={ this.state.request_url }
-              onKeyPress={ (e) => { if (e.charCode == '13') { this.refresh(); } } }
+              onKeyDown={ (e) => { if (e.keyCode == '13') { this.refresh(); } } }
               onChange={ (e) => { this.state.request_url = e.target.value; this.setState({ request_url: this.state.request_url }); } }
               placeholder={ '输入Url' } />
           </Col>
@@ -374,7 +374,7 @@ export default class Header extends Component {
             <FormControl
               type='text'
               value={ this.state.request_source_ip }
-              onKeyPress={ (e) => { if (e.charCode == '13') { this.refresh(); } } }
+              onKeyDown={ (e) => { if (e.keyCode == '13') { this.refresh(); } } }
               onChange={ (e) => { this.state.request_source_ip = e.target.value; this.setState({ request_source_ip: this.state.request_source_ip }); } }
               placeholder={ '输入IP地址' } />
           </Col>
