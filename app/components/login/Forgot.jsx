@@ -100,7 +100,7 @@ class Forgot extends Component {
           <div className='reset-pwd-msg'>
             <span>重置密码链接已发送至邮箱 { user.item && user.item.sendto_email || '' }，有效期24小时。</span>
           </div> }
-          <div style={ { textAlign: 'center', marginBottom: '25px' } }>
+          <div style={ { textAlign: 'center', marginBottom: '30px' } }>
             { this.state.alertShow && !submitting && errMsg[this.state.ecode] && <div style={ { marginTop: '10px', color: '#a94442' } }>抱歉，{ errMsg[this.state.ecode] }。</div> }
           </div>
           <div style={ { textAlign: 'left', marginLeft: '5px', marginBottom: '25px' } }>

@@ -238,7 +238,7 @@ export default class Comments extends Component {
                 style={ { height: '150px' } }
                 onChange={ (e) => { this.setState({ contents: e.target.value }) } }
                 value={ this.state.contents } 
-                onKeyPress={ (e) => { if (e.charCode == '13' && e.ctrlKey && !_.isEmpty(_.trim(this.state.contents))) { this.addComments(); } } }
+                onKeyDown={ (e) => { if (e.keyCode == '13' && e.ctrlKey && !_.isEmpty(_.trim(this.state.contents))) { this.addComments(); } } }
                 placeholder='支持@项目成员，Ctrl+Enter发布备注。' />
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>

@@ -123,7 +123,7 @@ export default class Card extends Component {
               style={ { height: '21px', fontSize: '10px' } }
               type='text'
               value={ this.state.text }
-              onKeyPress={ (e) => { if (e.charCode == '13') { this.setState({ touched: true }); this.save(); } } }
+              onKeyDown={ (e) => { if (e.keyCode == '13') { this.setState({ touched: true }); this.save(); } } }
               onChange={ (e) => { this.setState({ text: e.target.value, touched: false }) } }
               onBlur={ () => { this.setState({ touched: true }); this.save(); } }
               placeholder='输入可选值'/>

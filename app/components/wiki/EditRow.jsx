@@ -91,7 +91,7 @@ export default class EditRow extends Component {
           id='input_nm' 
           disabled={ loading }
           value={ this.state.name } 
-          onKeyPress={ (e) => { if (e.charCode == '13' && !(this.state.name === this.state.oldname || !this.state.name)) { this.confirm(); } } }
+          onKeyDown={ (e) => { if (e.keyCode == '13' && !(this.state.name === this.state.oldname || !this.state.name)) { this.confirm(); } } }
           onChange={ (e) => { this.setState({ name: _.trim(e.target.value) }) } }
           style={ { height: '30px', width: '250px', display: 'inline-block' } }/>
         { !loading &&

@@ -153,7 +153,7 @@ export default class OptionValuesConfigModal extends Component {
                   ref='addOpt' 
                   placeholder='输入可选值，回车即可添加'
                   onChange={ this.handleChange.bind(this) } 
-                  onKeyPress={ (e) => { if (e.charCode == '13') { e.preventDefault(); this.add(); } } }/>
+                  onKeyDown={ (e) => { if (e.keyCode == '13') { e.preventDefault(); this.add(); } } }/>
               </Col>
               {/* <Col sm={ 1 }>
                 <Button bsStyle='link' style={ { marginLeft: '-25px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>

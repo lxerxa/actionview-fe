@@ -78,13 +78,15 @@ export default class List extends Component {
             </span>
             <span>
               <br/>
-              <b>配置提交说明：</b>
+              <b>提交说明：</b>
               <br/>
               <span style={ { marginLeft: '15px' } }>触发事件请选择：Push Event;</span>
               <br/>
               <span style={ { marginLeft: '15px' } }>Git提交代码备注形式有两种：git commit -m 'xx-yy dddd' 和 git commit -m 'xx-yy-zz dddd'，后者可改变问题状态。</span>
               <br/>
-              <span style={ { marginLeft: '15px' } }>其中，xx: 项目健值，yy: 问题编号， zz: 动作ID（流程预览图可查看）, dddd: 描述文字。</span>
+              <span style={ { marginLeft: '15px' } }>其中，xx: 项目健值，yy: 问题编号， zz: 动作ID（流程预览图可查看），dddd: 描述文字。</span>
+              <br/>
+              <span style={ { marginLeft: '15px' } }>Push代码后，在问题的详细页面将会出现"Git提交"页签，可看到相应的提交记录，其中ActionView侧显示的操作用户是通过代码提交者的Email识别的。</span>
             </span>
           </div>
         </div>
