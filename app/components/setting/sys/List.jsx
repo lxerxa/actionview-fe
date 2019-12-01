@@ -172,8 +172,8 @@ export default class List extends Component {
       contents: (
         <div>
           <ul className='list-unstyled clearfix' style={ { lineHeight: 2.0 } }>
-            <li>每周有效工作日：{ properties.week2day || '-' }</li>
-            <li>每天有效工作时间：{ properties.day2hour || '-' }</li>
+            <li>每周有效工作日：{ properties.week2day ? (properties.week2day + '天') : '-' }</li>
+            <li>每天有效工作时间：{ properties.day2hour ? (properties.day2hour + '小时') : '-' }</li>
           </ul>
         </div>
       )
