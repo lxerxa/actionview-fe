@@ -188,7 +188,7 @@ export default class List extends Component {
         </div>
       ),
       contents: (
-        <div>{ properties.log_save_duration && logsSaveOptions[properties.log_save_duration] || '6个月' }</div>
+        <div>{ properties.logs_save_duration && logsSaveOptions[properties.logs_save_duration] || '6个月' }</div>
       )
     });
 
