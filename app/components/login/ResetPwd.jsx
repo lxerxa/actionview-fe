@@ -21,7 +21,7 @@ const validate = (values) => {
   if (!values.new_password2) {
     errors.new_password2 = '必填';
   }
-  if (values.new_password != values.new_password2) {
+  if ((values.new_password || values.new_password2) && values.new_password != values.new_password2) {
     errors.new_password2 = '密码不一致';
   }
 

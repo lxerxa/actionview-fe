@@ -82,6 +82,7 @@ export default class List extends Component {
     const { i18n, update, resetPwd, sendTestMail, loading, settings: { properties={}, timetrack={}, mailserver={}, sysroles={} } } = this.props;
 
     const styles = { marginTop: '10px', marginBottom: '10px' };
+    const logsSaveOptions = { '3m': '3个月', '6m': '6个月', '1y': '1年', '2y': '2年' }; 
  
     const propertyItems = [];
     propertyItems.push({
@@ -175,6 +176,19 @@ export default class List extends Component {
             <li>每天有效工作时间：{ properties.day2hour || '-' }</li>
           </ul>
         </div>
+      )
+    });
+
+    propertyItems.push({
+      id: 'logssave',
+      title: (
+        <div>
+          <span className='table-td-title'>日志保存</span>
+          <span className='table-td-issue-desc'>不建议保存时间过长，日志保存占用磁盘空间较大。</span>
+        </div>
+      ),
+      contents: (
+        <div>{ properties.log_save_duration && logsSaveOptions[properties.log_save_duration] || '6个月' }</div>
       )
     });
 

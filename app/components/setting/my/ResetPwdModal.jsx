@@ -17,7 +17,7 @@ const validate = (values, props) => {
   if (!values.new_password2) {
     errors.new_password2 = '必填';
   }
-  if (values.new_password != values.new_password2) {
+  if ((values.new_password || values.new_password2) && values.new_password != values.new_password2) {
     errors.new_password2 = '密码不一致';
   }
 
@@ -50,7 +50,7 @@ export default class ResetPwdModal extends Component {
 
   async handleSubmit() {
     const { values, resetPwd, close } = this.props;
-    const ecode = await resetPwd(values);
+    const ecode = await resetPwd(_.pick(values, [ 'password', 'new_password' ]));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -79,17 +79,17 @@ export default class ResetPwdModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ password.touched && password.error ? 'error' : null }>
+          <FormGroup controlId='formControlsSrc' validationState={ password.touched && password.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>原密码</ControlLabel>
             <FormControl disabled={ submitting } type='password' { ...password } placeholder='原密码'/>
             { password.touched && password.error && <HelpBlock style={ { float: 'right' } }>{ password.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ new_password.touched && new_password.error ? 'error' : null }>
+          <FormGroup controlId='formControlsNew' validationState={ new_password.touched && new_password.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>新密码</ControlLabel>
             <FormControl disabled={ submitting } type='password' { ...new_password } placeholder='新密码'/>
             { new_password.touched && new_password.error && <HelpBlock style={ { float: 'right' } }>{ new_password.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ new_password2.touched && new_password2.error ? 'error' : null }>
+          <FormGroup controlId='formControlsNew2' validationState={ new_password2.touched && new_password2.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>确认密码</ControlLabel>
             <FormControl disabled={ submitting } type='password' { ...new_password2 } placeholder='确认密码'/>
             { new_password2.touched && new_password2.error && <HelpBlock style={ { float: 'right' } }>{ new_password2.error }</HelpBlock> }

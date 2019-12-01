@@ -20,7 +20,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'login_mail_domain', 'allow_create_project', 'http_host', 'enable_login_protection', 'week2day', 'day2hour' ],
+  fields: [ 'login_mail_domain', 'allow_create_project', 'http_host', 'enable_login_protection', 'week2day', 'day2hour', 'logs_save_duration' ],
   validate
 })
 export default class PropertiesModal extends Component {
@@ -52,7 +52,7 @@ export default class PropertiesModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'allow_create_project', 'http_host', 'enable_login_protection', 'week2day', 'day2hour' ]) });
+    const ecode = await update({ properties: _.pick(values, [ 'login_mail_domain', 'allow_create_project', 'http_host', 'enable_login_protection', 'week2day', 'day2hour', 'logs_save_duration' ]) });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -80,7 +80,8 @@ export default class PropertiesModal extends Component {
         http_host,
         enable_login_protection,
         week2day, 
-        day2hour }, 
+        day2hour,
+        logs_save_duration }, 
       handleSubmit, 
       invalid, 
       dirty, 
@@ -105,6 +106,13 @@ export default class PropertiesModal extends Component {
       { value: 7, label: '7' },
       { value: 6.5, label: '6.5' },
       { value: 6, label: '6' }
+    ];
+
+    const logsSaveOptions = [
+      { value: '3m', label: '3个月' },
+      { value: '6m', label: '6个月' },
+      { value: '1y', label: '1年' },
+      { value: '2y', label: '2年' }
     ];
 
     return (
@@ -173,6 +181,20 @@ export default class PropertiesModal extends Component {
                 options={ hourOptions }
                 value={ day2hour.value }
                 onChange={ newValue => { day2hour.onChange(newValue) } }
+                placeholder='请选择'/>
+            </FormGroup>
+          </div>
+          <div>
+            <FormGroup style={ { width: '45%', display: 'inline-block' } }>
+              <ControlLabel>日志保存</ControlLabel>
+              <Select
+                simpleValue
+                disabled={ submitting }
+                clearable={ false }
+                searchable={ false }
+                options={ logsSaveOptions }
+                value={ logs_save_duration.value || '6m' }
+                onChange={ newValue => { logs_save_duration.onChange(newValue) } }
                 placeholder='请选择'/>
             </FormGroup>
           </div>
