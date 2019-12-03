@@ -50,6 +50,23 @@ export default class Container extends Component {
     return this.props.logs.ecode;
   }
 
+  exportExcel(query) {
+    const newQuery = _.clone(query);
+    newQuery.from = 'export';
+    newQuery.page = 1;
+    newQuery.limit = 1000000;
+
+    const eleLink = document.createElement('a');
+    eleLink.style.display = 'none';
+    eleLink.href = '/api/logs?' + qs.stringify(newQuery || {});
+    eleLink.target = '_blank';
+    // 触发点击
+    document.body.appendChild(eleLink);
+    eleLink.click();
+    // 然后移除
+    document.body.removeChild(eleLink);
+  }
+
   render() {
     const { i18n, session, location: { pathname, query={} } } = this.props;
 
@@ -68,7 +85,9 @@ export default class Container extends Component {
           query={ query }
           { ...this.props.logs }/>
         <List 
+          index={ this.index.bind(this) }
           refresh={ this.refresh.bind(this) } 
+          exportExcel={ this.exportExcel.bind(this) }
           query={ query }
           { ...this.props.logs }/>
       </div>

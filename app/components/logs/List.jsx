@@ -19,11 +19,27 @@ export default class List extends Component {
     collection: PropTypes.array.isRequired,
     query: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
+    index: PropTypes.func.isRequired,
+    exportExcel: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired
   }
 
   show(data) {
     this.setState({ detailShow: true, data });
+  }
+
+  refresh() {
+    const { index, query, refresh } = this.props;
+    if (query.page) {
+      refresh(_.assign({}, query, { page: undefined }));
+    } else {
+      index(query);
+    }
+  }
+
+  export() {
+    const { exportExcel, query } = this.props;
+    exportExcel(query);
   }
 
   render() {
@@ -60,6 +76,10 @@ export default class List extends Component {
 
     return (
       <div>
+        <div style={ { textAlign: 'right' } }>
+          <Button bsStyle='link' onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i> 刷新</Button>
+          <Button bsStyle='link' onClick={ this.export.bind(this) }><i className='fa fa-download'></i> 导出</Button>
+        </div>
         <div>
           <BootstrapTable 
             hover
