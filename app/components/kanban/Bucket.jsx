@@ -11,7 +11,7 @@ const bucketTarget = {
     if (dragAction.screen) {
       workflowScreenShow(card.id, dragAction.id);
     } else {
-      doAction(card.id, card.entry_id, dragAction.id);
+      doAction(card.id, card.entry_id, { action_id: dragAction.id });
     }
   }
 }
