@@ -29,6 +29,7 @@ export { default as report } from './report';
 export { default as integrations } from './integrations';
 export { default as webhooks } from './webhooks';
 export { default as logs } from './logs';
+export { default as calendar } from './calendar';
 export { default as layout } from './layout';
 export { reducer as form } from 'redux-form';
 export { routerReducer as routing } from 'react-router-redux';

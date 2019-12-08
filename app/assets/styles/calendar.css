@@ -1,0 +1,101 @@
+.canlendarcontent {
+}
+
+.canlendarcontent .canlendaritem {
+  position: relative;
+  margin: 10px 2px;
+}
+
+.canlendarcontent .canlendaritem .month {
+  position: absolute;
+  top: 55%;
+  left: 49%;
+  z-index: 999;
+  height: 100%;
+  font-size: 200px;
+  transform: translate(-50%, -50%);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.canlendarcontent .canlendaritem .table {
+  width: 100%;
+  max-width: 100%;
+  background: #fff;
+  border: 1px solid #eee;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.canlendarcontent .canlendaritem .table th {
+  text-align: center;
+  height: 46px;
+  padding: 3px 0;
+  line-height: 37px;
+  border: 1px solid #eee;
+}
+
+.canlendarcontent .canlendaritem .table td {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border: 1px solid #eee;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.canlendarcontent .canlendaritem .table font {
+  display: inline-block;
+  font-size: 12px;
+}
+
+.canlendarcontent .canlendaritem .table font:first-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.canlendarcontent .canlendaritem .table font:last-child {
+  width: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #bfbfbf;
+}
+
+.canlendarcontent .canlendaritem .table span {
+  color: hsl(0, 0%, 40%);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.canlendarcontent .canlendaritem .table .danger {
+  color: #fff;
+  background: #f35458;
+}
+
+.canlendarcontent .canlendaritem .table .textdanger {
+  color: #f43;
+}
+
+.canlendarcontent .canlendaritem .table .holiday-mark {
+  background: #f43;
+  color: #fff;
+  font-size: 12px;
+}
+
+.canlendarcontent .canlendaritem .table .holiday-bg {
+  background: #fff0f0;
+}
+
+.canlendarcontent .canlendaritem .table .workday-mark {
+  background: #969799;
+  color: #fff;
+  font-size: 12px;
+}
+
+.canlendarcontent .canlendaritem .table .workday-bg {
+  background: #f5f5f5;
+}

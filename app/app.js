@@ -23,6 +23,7 @@ if (BROWSER) {
   require('assets/styles/layout.css');
   require('assets/styles/app.css');
   require('assets/styles/board.css');
+  require('assets/styles/calendar.css');
   require('assets/styles/jquery.atwho.css');
   require('mermaid/dist/mermaid.css');
   require('react-dropzone-component/styles/filepicker.css');

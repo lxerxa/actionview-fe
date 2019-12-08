@@ -122,30 +122,32 @@ export default class EditModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='版本名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ start_time.value && start_time.error ? 'error' : null }>
-            <ControlLabel>开始时间</ControlLabel>
-            <DateTime 
-              locale='zh-cn' 
-              mode='date' 
-              closeOnSelect 
-              dateFormat='YYYY/MM/DD' 
-              timeFormat={ false } 
-              value={ start_time.value } 
-              onChange={ newValue => { start_time.onChange(newValue) } }/>
-            { start_time.value && start_time.error && <HelpBlock style={ { float: 'right' } }>{ start_time.error }</HelpBlock> }
-          </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ end_time.value && end_time.error ? 'error' : null }>
-            <ControlLabel>发布时间</ControlLabel>
-            <DateTime 
-              locale='zh-cn' 
-              mode='date' 
-              closeOnSelect 
-              dateFormat='YYYY/MM/DD' 
-              timeFormat={ false } 
-              value={ end_time.value } 
-              onChange={ newValue => { end_time.onChange(newValue) } }/>
-            { end_time.value && end_time.error && <HelpBlock style={ { float: 'right' } }>{ end_time.error }</HelpBlock> }
-          </FormGroup>
+          <div>
+            <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ start_time.value && start_time.error ? 'error' : null }>
+              <ControlLabel>开始时间</ControlLabel>
+              <DateTime 
+                locale='zh-cn' 
+                mode='date' 
+                closeOnSelect 
+                dateFormat='YYYY/MM/DD' 
+                timeFormat={ false } 
+                value={ start_time.value } 
+                onChange={ newValue => { start_time.onChange(newValue) } }/>
+              { start_time.value && start_time.error && <HelpBlock style={ { float: 'right' } }>{ start_time.error }</HelpBlock> }
+            </FormGroup>
+            <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } } validationState={ end_time.value && end_time.error ? 'error' : null }>
+              <ControlLabel>发布时间</ControlLabel>
+              <DateTime 
+                locale='zh-cn' 
+                mode='date' 
+                closeOnSelect 
+                dateFormat='YYYY/MM/DD' 
+                timeFormat={ false } 
+                value={ end_time.value } 
+                onChange={ newValue => { end_time.onChange(newValue) } }/>
+              { end_time.value && end_time.error && <HelpBlock style={ { float: 'right' } }>{ end_time.error }</HelpBlock> }
+            </FormGroup>
+          </div>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>

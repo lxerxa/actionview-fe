@@ -162,7 +162,7 @@ export default class Sidebar extends Component {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminProjectManageShow = true;
-    } else if (/^\/admin\/syssetting$/.test(nextProps.pathname)) {
+    } else if (/^\/admin\/(syssetting|calendar)$/.test(nextProps.pathname)) {
       this.state.adminPanelShow = true;
       this.state.projectPanelShow = false;
       this.state.adminSysSettingsShow = true;
@@ -216,7 +216,8 @@ export default class Sidebar extends Component {
             </ul>
             <h4><i className={ this.state.adminSysSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingsShow: !this.state.adminSysSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>
             <ul className={ !this.state.adminSysSettingsShow && 'hide' }>
-              <li><Link to='/admin/syssetting' activeClassName='menu-active'>配置</Link></li>
+              <li><Link to='/admin/syssetting' activeClassName='menu-active'>系统配置</Link></li>
+              <li><Link to='/admin/calendar' activeClassName='menu-active'>日历管理</Link></li>
             </ul>
           </div> }
         </div>

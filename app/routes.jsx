@@ -191,6 +191,12 @@ const LogsContainer = (location, cb) => {
   }, 'logs')
 };
 
+const CalendarContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/calendar/Container'))
+  }, 'calendar')
+};
+
 export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Login }/>
@@ -270,6 +276,10 @@ export default (
         path='/admin/logs' 
         onEnter={ ()=> { document.title = '日志' + suffix; } } 
         getComponent={ LogsContainer }/>
+      <Route
+        path='/admin/calendar'
+        onEnter={ ()=> { document.title = '日历管理' + suffix; } }
+        getComponent={ CalendarContainer }/>
       <Route 
         path='/admin/scheme' 
         component={ Scheme }>

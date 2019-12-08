@@ -141,6 +141,7 @@ export default class Header extends Component {
     const patten10 = new RegExp('^/admin/group$');
     const patten11 = new RegExp('^/admin/directory$');
     const patten12 = new RegExp('^/admin/logs$');
+    const patten13 = new RegExp('^/admin/calendar$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -181,6 +182,8 @@ export default class Header extends Component {
       modulename = '个人设置';
     } else if (patten12.exec(pathname)) {
       modulename = '日志';
+    } else if (patten13.exec(pathname)) {
+      modulename = '日历管理';
     } else {
       modulename = '其他';
     }

@@ -1363,4 +1363,73 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  /******************calendar****************/
+  router.get('/calendar', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [
+      { year: 2019, month: 1, day: 1, week: 2, lunar: { day: '初三', text: '' }, type: 'holiday', text: '元旦' },
+      { year: 2019, month: 1, day: 2, week: 3, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 3, week: 4, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 4, week: 5, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 5, week: 6, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 6, week: 7, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 7, week: 1, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 8, week: 2, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 9, week: 3, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 10, week: 4, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 11, week: 5, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 12, week: 6, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 13, week: 7, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 14, week: 1, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 15, week: 2, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 16, week: 3, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 17, week: 4, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 18, week: 5, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 19, week: 6, lunar: { day: '初三', text: '' }, type: 'workday'},
+      { year: 2019, month: 1, day: 20, week: 7, lunar: { day: '初三', text: '' }, type: 'workday'},
+      { year: 2019, month: 1, day: 21, week: 1, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 22, week: 2, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 23, week: 3, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 1, day: 24, week: 4, lunar: { day: '初三', text: '' }, text: '春节', type: 'holiday' },
+      { year: 2019, month: 1, day: 25, week: 5, lunar: { day: '初三', text: '' }, type: 'holiday'},
+      { year: 2019, month: 1, day: 26, week: 6, lunar: { day: '初三', text: '' }, type: 'holiday'},
+      { year: 2019, month: 1, day: 27, week: 7, lunar: { day: '初三', text: '' }, type: 'holiday'},
+      { year: 2019, month: 1, day: 28, week: 1, lunar: { day: '初三', text: '' }, type: 'holiday'},
+      { year: 2019, month: 1, day: 29, week: 2, lunar: { day: '初三', text: '' }, type: 'holiday'},
+      { year: 2019, month: 1, day: 30, week: 3, lunar: { day: '初三', text: '' }, type: 'holiday'},
+      { year: 2019, month: 1, day: 31, week: 4, lunar: { day: '初三', text: '' } },
+      { year: 2019, month: 2, day: 1, week: 5, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 2, week: 6, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 3, week: 7, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 4, week: 1, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 5, week: 2, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 6, week: 3, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 7, week: 4, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 8, week: 5, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 9, week: 6, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 10, week: 7, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 11, week: 1, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 12, week: 2, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 13, week: 3, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 14, week: 4, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 15, week: 5, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 16, week: 6, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 17, week: 7, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 18, week: 1, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 19, week: 2, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 20, week: 3, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 21, week: 4, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 22, week: 5, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 23, week: 6, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 24, week: 7, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 25, week: 1, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 26, week: 2, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 27, week: 3, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 28, week: 4, lunar: { day: '初四', text: '' }, text: '' },
+      { year: 2019, month: 2, day: 29, week: 5, lunar: { day: '初四', text: '' }, text: '' }
+    ], options: { year: 2019 }};
+    return res.status(200).send(results);
+  });
+
 }
