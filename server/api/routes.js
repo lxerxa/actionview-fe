@@ -1364,14 +1364,14 @@ export default function(router) {
   });
 
   /******************calendar****************/
-  router.get('/calendar', function(req, res) {
+  router.get('/calendar/:year', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-      { year: 2019, month: 1, day: 1, week: 2, lunar: { day: '初三', text: '' }, type: 'holiday', text: '元旦' },
-      { year: 2019, month: 1, day: 2, week: 3, lunar: { day: '初三', text: '' } },
-      { year: 2019, month: 1, day: 3, week: 4, lunar: { day: '初三', text: '' } },
-      { year: 2019, month: 1, day: 4, week: 5, lunar: { day: '初三', text: '' } },
+      { date: '20190101', year: 2019, month: 1, day: 1, week: 2, lunar: { day: '初三', text: '' }, type: 'holiday', text: '元旦' },
+      { date: '20190102', year: 2019, month: 1, day: 2, week: 3, lunar: { day: '初三', text: '' } },
+      { date: '20190103', year: 2019, month: 1, day: 3, week: 4, lunar: { day: '初三', text: '' } },
+      { date: '20190104', year: 2019, month: 1, day: 4, week: 5, lunar: { day: '初三', text: '' } },
       { year: 2019, month: 1, day: 5, week: 6, lunar: { day: '初三', text: '' } },
       { year: 2019, month: 1, day: 6, week: 7, lunar: { day: '初三', text: '' } },
       { year: 2019, month: 1, day: 7, week: 1, lunar: { day: '初三', text: '' } },
@@ -1428,7 +1428,7 @@ export default function(router) {
       { year: 2019, month: 2, day: 27, week: 3, lunar: { day: '初四', text: '' }, text: '' },
       { year: 2019, month: 2, day: 28, week: 4, lunar: { day: '初四', text: '' }, text: '' },
       { year: 2019, month: 2, day: 29, week: 5, lunar: { day: '初四', text: '' }, text: '' }
-    ], options: { year: 2019 }};
+    ], options: { year: 2019, date: '20190103' }};
     return res.status(200).send(results);
   });
 

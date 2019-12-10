@@ -10,16 +10,22 @@ export default class MonthCard extends Component {
     super(props);
     this.state = { ecode: 0 };
     this.arrange = this.arrange.bind(this);
+    this.tdStyle = this.tdStyle.bind(this);
   }
 
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     month: PropTypes.number.isRequired,
+    today: PropTypes.string.isRequired,
     dates: PropTypes.array.isRequired
   }
 
-  tdStyle(type) {
-    if (type == 'workday') {
+  tdStyle(type, date) {
+    const { today } = this.props;
+
+    if (date === today) {
+      return 'today-bg';
+    } else if (type == 'workday') {
       return 'workday-bg';
     } else if (type == 'holiday') {
       return 'holiday-bg';
@@ -85,7 +91,6 @@ export default class MonthCard extends Component {
     const { dates, month, loading } = this.props;
 
     const data = this.arrange();
-    console.log(data);
 
     return (
       <div className='canlendaritem'>
@@ -108,7 +113,7 @@ export default class MonthCard extends Component {
               <tr key={ key }>
                 { _.map(val, (val2, key2) => {
                   return (
-                    <td className={ this.tdStyle(val2.type) } key={ key2 }>
+                    <td className={ this.tdStyle(val2.type, val2.date) } key={ key2 }>
                       <font className={ this.typeStyle(val2.type) }>{ this.typeText(val2.type) }</font>
                       <span className={ this.dayStyle(val2) }>{ val2.day || '' }</span>
                       <br/>

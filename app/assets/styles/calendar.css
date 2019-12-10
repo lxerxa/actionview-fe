@@ -37,6 +37,7 @@
 
 .canlendarcontent .canlendaritem .table td {
   position: relative;
+  padding: 12px 0px 5px 0px;
   width: 54px;
   height: 54px;
   border: 1px solid #eee;
@@ -98,4 +99,8 @@
 
 .canlendarcontent .canlendaritem .table .workday-bg {
   background: #f5f5f5;
+}
+
+.canlendarcontent .canlendaritem .table .today-bg {
+  background: #ffffe0;
 }

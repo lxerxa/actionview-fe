@@ -3,7 +3,7 @@ import { asyncFuncCreator } from '../utils';
 export function index(year) {
   return asyncFuncCreator({
     constant: 'CALENDAR_INDEX',
-    promise: (client) => client.request({ url: '/calendar?year=' + (year || 'current') })
+    promise: (client) => client.request({ url: '/calendar/' + (year || 'current') })
   });
 }
 
@@ -14,9 +14,9 @@ export function sync(year) {
   });
 }
 
-export function set(values) {
+export function update(values) {
   return asyncFuncCreator({
-    constant: 'CALENDAR_SETTING',
+    constant: 'CALENDAR_UPDATE',
     promise: (client) => client.request({ url: '/calendar', method: 'post', data: values })
   });
 }

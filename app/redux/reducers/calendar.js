@@ -24,11 +24,11 @@ export default function calendar(state = initialState, action) {
       return { ...state, indexLoading: false, error: action.error };
 
     case t.CALENDAR_SYNC:
-    case t.CALENDAR_SETTING:
+    case t.CALENDAR_UPDATE:
       return { ...state, loading: true, collection: [] };
 
     case t.CALENDAR_SYNC_SUCCESS:
-    case t.CALENDAR_SETTING_SUCCESS:
+    case t.CALENDAR_UPDATE_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
         state.options = action.result.options;
@@ -36,7 +36,7 @@ export default function calendar(state = initialState, action) {
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.CALENDAR_SYNC_FAIL:
-    case t.CALENDAR_SETTING_FAIL:
+    case t.CALENDAR_UPDATE_FAIL:
       return { ...state, loading: false, error: action.error };
 
     default:

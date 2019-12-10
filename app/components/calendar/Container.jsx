@@ -32,8 +32,8 @@ export default class Container extends Component {
     return this.props.calendar.ecode;
   }
 
-  async set(values) {
-    await this.props.actions.set(values);
+  async update(values) {
+    await this.props.actions.update(values);
     return this.props.calendar.ecode;
   }
 
@@ -43,7 +43,7 @@ export default class Container extends Component {
         <List 
           index={ this.index.bind(this) } 
           sync={ this.sync.bind(this) } 
-          set={ this.set.bind(this) } 
+          update={ this.update.bind(this) } 
           { ...this.props.calendar }/>
       </div>
     );

@@ -16,6 +16,8 @@ export default class List extends Component {
       setModalShow: false, 
       syncNotifyShow: false 
     };
+    this.switch = this.switch.bind(this);
+    this.arrange = this.arrange.bind(this);
   }
 
   static propTypes = {
@@ -24,14 +26,15 @@ export default class List extends Component {
     loading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     sync: PropTypes.func.isRequired,
-    set: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
-    const { index, options } = this.props;
-    index(options.year);
-    this.state.year = options.year; 
+  async componentWillMount() {
+    const { index } = this.props;
+    await index();
+    const { options } = this.props;
+    this.setState({ year: options.year }); 
   }
 
   switch(year) {
@@ -46,60 +49,56 @@ export default class List extends Component {
     this.setState({ year: this.state.year, syncNotifyShow: true });
   }
 
-  render() {
-    const { sync, collection, loading } = this.props;
+  arrange() {
+    const { collection } = this.props;
 
-    if (collection.length <= 0) {
-      return (<div/>);
+    const data = []; 
+    for (let i = 1; i <= 12; i++) {
+      const dates = _.filter(collection, { month : i });
+      if (dates.length > 0) {
+        data.push(dates);
+      }
+    }
+    return data;
+  }
+
+  render() {
+    const { options, sync, indexLoading, collection, loading } = this.props;
+
+    let data = [];
+    if (collection.length > 0) {
+      data = this.arrange();
     }
 
     return (
       <div style={ { marginTop: '25px', height: '40px' } }>
+        { this.state.year &&
         <div style={ { textAlign: 'center' } }>
-          <Button><span style={ { padding: '0px 5px' } } title='上一年'><i className='fa fa-angle-left fa-lg'></i></span></Button>
-          <span style={ { margin: '0px 15px', fontWeight: 600 } }>2019</span>
-          <Button><span style={ { padding: '0px 5px' } }><i className='fa fa-angle-right fa-lg'></i></span></Button>
-        </div> 
+          <Button title='上一年' onClick={ () => { this.switch(this.state.year - 1) } }>
+            <span style={ { padding: '0px 5px' } }><i className='fa fa-angle-left fa-lg'></i></span>
+          </Button>
+          <span style={ { margin: '0px 15px', fontWeight: 600 } }>{ this.state.year }</span>
+          <Button title='下一年' onClick={ () => { this.switch(_.add(this.state.year, 1)) } }><span style={ { padding: '0px 5px' } }>
+            <i className='fa fa-angle-right fa-lg'></i></span>
+          </Button>
+        </div> } 
+        { indexLoading && 
+        <div style={ { textAlign: 'center', paddingTop: '50px' } }>
+         <img src={ img } className='loading'/> 
+        </div> }
+        { !indexLoading && data.length > 0 &&
         <div>
           <FormGroup>
-            <Col sm={ 4 } className='canlendarcontent'>
-              <MonthCard
-                loading={ loading }
-                month={ 1 }
-                dates={ _.filter(collection, { month: 1 }) }/> 
-            </Col>
-            <Col sm={ 4 } className='canlendarcontent'>
-              <MonthCard
-                loading={ loading }
-                month={ 1 }
-                dates={ _.filter(collection, { month: 1 }) }/> 
-            </Col>
-            <Col sm={ 4 } className='canlendarcontent'>
-              <MonthCard
-                loading={ loading }
-                month={ 1 }
-                dates={ _.filter(collection, { month: 1 }) }/> 
-            </Col>
-            <Col sm={ 4 } className='canlendarcontent'>
-              <MonthCard
-                loading={ loading }
-                month={ 1 }
-                dates={ _.filter(collection, { month: 1 }) }/> 
-            </Col>
-            <Col sm={ 4 } className='canlendarcontent'>
-              <MonthCard
-                loading={ loading }
-                month={ 1 }
-                dates={ _.filter(collection, { month: 1 }) }/> 
-            </Col>
-            <Col sm={ 4 } className='canlendarcontent'>
-              <MonthCard
-                loading={ loading }
-                month={ 1 }
-                dates={ _.filter(collection, { month: 1 }) }/> 
-            </Col>
+            { _.map(data, (val, key) => 
+              <Col sm={ 4 } className='canlendarcontent'>
+                <MonthCard
+                  loading={ loading }
+                  month={ _.add(key, 1) }
+                  today={ options.date || '' }
+                  dates={ val }/> 
+              </Col> ) }
           </FormGroup>
-        </div>
+        </div> }
         { this.state.syncNotifyShow &&
         <SyncNotify
           show
