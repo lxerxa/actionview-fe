@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { FormGroup, Col, Button, Label, Table, Panel } from 'react-bootstrap';
+import { Form, FormGroup, Col, Button } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
@@ -52,11 +52,16 @@ export default class List extends Component {
   arrange() {
     const { collection } = this.props;
 
-    const data = []; 
+    const data = [];
+    let tmp = [];
     for (let i = 1; i <= 12; i++) {
       const dates = _.filter(collection, { month : i });
       if (dates.length > 0) {
-        data.push(dates);
+        tmp.push(dates);
+      }
+      if (i % 3 === 0) {
+        data.push(tmp);
+        tmp = [];
       }
     }
     return data;
@@ -87,18 +92,19 @@ export default class List extends Component {
          <img src={ img } className='loading'/> 
         </div> }
         { !indexLoading && data.length > 0 &&
-        <div>
-          <FormGroup>
-            { _.map(data, (val, key) => 
-              <Col sm={ 4 } className='canlendarcontent'>
-                <MonthCard
-                  loading={ loading }
-                  month={ _.add(key, 1) }
-                  today={ options.date || '' }
-                  dates={ val }/> 
-              </Col> ) }
-          </FormGroup>
-        </div> }
+        <Form horizontal> 
+          { _.map(data, (qdata, q) =>
+            <FormGroup>
+              { _.map(qdata, (mdata, k) =>
+                <Col sm={ 4 } className='canlendarcontent'>
+                  <MonthCard
+                    loading={ loading }
+                    month={ _.add(q * 3, _.add(k, 1)) }
+                    today={ options.date || '' }
+                    dates={ mdata }/>
+                </Col> ) }
+            </FormGroup> ) }
+        </Form> }
         { this.state.syncNotifyShow &&
         <SyncNotify
           show

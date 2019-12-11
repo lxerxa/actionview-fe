@@ -87,15 +87,19 @@ export default class MonthCard extends Component {
     return data;
   }
 
-  footerTxt(val) {
+  footerText(val) {
     if (val.target) {
       return val.target;
-    } else if (val.lunar.target) {
-      return val.lunar.target;
-    } else if (val.lunar.day == '初一'){
-      return val.lunar.month;
+    } else if (val.lunar) {
+      if (val.lunar.target) {
+        return val.lunar.target;
+      } else if (val.lunar.day == '初一'){
+        return val.lunar.month;
+      } else {
+        return val.lunar.day;
+      }
     } else {
-      return val.lunar.day;
+      return '';
     }
   }
 
