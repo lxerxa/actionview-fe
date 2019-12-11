@@ -87,6 +87,18 @@ export default class MonthCard extends Component {
     return data;
   }
 
+  footerTxt(val) {
+    if (val.target) {
+      return val.target;
+    } else if (val.lunar.target) {
+      return val.lunar.target;
+    } else if (val.lunar.day == '初一'){
+      return val.lunar.month;
+    } else {
+      return val.lunar.day;
+    }
+  }
+
   render() {
     const { dates, month, loading } = this.props;
 
@@ -117,7 +129,7 @@ export default class MonthCard extends Component {
                       <font className={ this.typeStyle(val2.type) }>{ this.typeText(val2.type) }</font>
                       <span className={ this.dayStyle(val2) }>{ val2.day || '' }</span>
                       <br/>
-                      <font>{ val2.text ? val2.text : val2.lunar && val2.lunar.day || '' }</font> 
+                      <font>{ this.footerText(val2) }</font> 
                     </td>
                   );
                 }) }

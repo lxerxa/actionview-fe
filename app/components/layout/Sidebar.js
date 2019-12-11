@@ -210,7 +210,7 @@ export default class Sidebar extends Component {
             <ul className={ !this.state.adminProjectManageShow && 'hide' }>
               <li><Link to='/admin/project' activeClassName='menu-active'>项目</Link></li>
             </ul>
-            <h4><i className={ this.state.adminAccessLogsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminAccessLogsShow: !this.state.adminAccessLogsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>日志管理</h4>
+            <h4><i className={ this.state.adminAccessLogsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminAccessLogsShow: !this.state.adminAccessLogsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>日志查看</h4>
             <ul className={ !this.state.adminAccessLogsShow && 'hide' }>
               <li><Link to='/admin/logs' activeClassName='menu-active'>日志</Link></li>
             </ul>
