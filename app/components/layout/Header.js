@@ -162,7 +162,7 @@ export default class Header extends Component {
       const moduleKey = RegExp.$1;
       const module = _.find(Modules, { key: moduleKey });
       if (module) {
-        modulename = '方案配置 - ' + module.name;
+        modulename = '全局方案配置 - ' + module.name;
       } else {
         modulename = '其他';
       }

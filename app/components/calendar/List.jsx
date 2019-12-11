@@ -6,6 +6,7 @@ import _ from 'lodash';
 const img = require('../../assets/images/loading.gif');
 
 const SyncNotify = require('./SyncNotify');
+const ConfigSetModal = require('./ConfigSetModal');
 const MonthCard = require('./MonthCard');
 
 export default class List extends Component {
@@ -13,6 +14,7 @@ export default class List extends Component {
     super(props);
     this.state = { 
       year: '',
+      selectedDay: '',
       setModalShow: false, 
       syncNotifyShow: false 
     };
@@ -49,6 +51,10 @@ export default class List extends Component {
     this.setState({ year: this.state.year, syncNotifyShow: true });
   }
 
+  selectDay(day) {
+    this.setState({ selectedDay: day, setModalShow: true });
+  }
+
   arrange() {
     const { collection } = this.props;
 
@@ -68,7 +74,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { options, sync, indexLoading, collection, loading } = this.props;
+    const { options, sync, indexLoading, collection, update, loading } = this.props;
 
     let data = [];
     if (collection.length > 0) {
@@ -78,7 +84,7 @@ export default class List extends Component {
     return (
       <div style={ { marginTop: '25px', height: '40px' } }>
         { this.state.year &&
-        <div style={ { textAlign: 'center' } }>
+        <div style={ { textAlign: 'center', marginBottom: '15px' } }>
           <Button title='上一年' onClick={ () => { this.switch(this.state.year - 1) } }>
             <span style={ { padding: '0px 5px' } }><i className='fa fa-angle-left fa-lg'></i></span>
           </Button>
@@ -86,6 +92,10 @@ export default class List extends Component {
           <Button title='下一年' onClick={ () => { this.switch(_.add(this.state.year, 1)) } }><span style={ { padding: '0px 5px' } }>
             <i className='fa fa-angle-right fa-lg'></i></span>
           </Button>
+          { options.year && this.state.year >= options.year && 
+          <Button bsStyle='link' style={ { float: 'right' } } onClick={ () => { this.setState({ syncNotifyShow: true }) } }>
+            日历同步
+          </Button> }
         </div> } 
         { indexLoading && 
         <div style={ { textAlign: 'center', paddingTop: '50px' } }>
@@ -98,13 +108,20 @@ export default class List extends Component {
               { _.map(qdata, (mdata, k) =>
                 <Col sm={ 4 } className='canlendarcontent'>
                   <MonthCard
-                    loading={ loading }
+                    select={ this.selectDay.bind(this) }
                     month={ _.add(q * 3, _.add(k, 1)) }
                     today={ options.date || '' }
                     dates={ mdata }/>
                 </Col> ) }
             </FormGroup> ) }
         </Form> }
+        { this.state.setModalShow &&
+        <ConfigSetModal
+          show
+          close={ () => { this.setState({ setModalShow: false }) } }
+          day={ this.state.selectedDay }
+          loading={ loading }
+          update={ update }/> }
         { this.state.syncNotifyShow &&
         <SyncNotify
           show

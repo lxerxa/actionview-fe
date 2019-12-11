@@ -40,9 +40,8 @@ export default class SyncNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>同步日历 - { year }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          同步数据来至接口：<a href={ 'http://timor.tech/api/holiday/year' + year }>{ 'http://timor.tech/api/holiday/' + year }</a>。<br/>
-          同步后，该年度原有设置的日历将会被覆盖。<br/>
-          确认要同步吗？
+          <br/>同步数据来至接口：<a href={ 'http://www.actionview.cn:8080/api/holiday/' + year } target='_blank'>{ 'http://www.actionview.cn:8080/api/holiday/' + year }</a><br/><br/>
+          同步后，该年度原有设置的日历将会被覆盖，确认要同步吗？<br/><br/>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={ this.confirm }>确定</Button>

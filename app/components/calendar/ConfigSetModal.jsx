@@ -9,7 +9,7 @@ const loadimg = require('../../assets/images/loading.gif');
 export default class ConfigSetModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, operate_flg: '0', type: '' };
+    this.state = { ecode: 0, mode: '', type: '' };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -17,14 +17,14 @@ export default class ConfigSetModal extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
-    set: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
     day: PropTypes.string.isRequired
   }
 
   async confirm() {
-    const { close, set, year } = this.props;
-    const ecode = await set(_.extend({}, { operate_flg: this.state.operate_flg, type: this.state.type }));
+    const { close, update } = this.props;
+    const ecode = await update(_.extend({}, { mode: this.state.mode, type: this.state.type }));
     if (ecode === 0) {
       close();
       notify.show('配置完成。', 'success', 2000);
@@ -56,15 +56,15 @@ export default class ConfigSetModal extends Component {
                 <Radio 
                   inline
                   name='swap' 
-                  onClick={ () => { this.setState({ operate_flg : '1' }) } }
-                  checked={ this.state.operate_flg === '1' }> 
+                  onClick={ () => { this.setState({ mode : 'set' }) } }
+                  checked={ this.state.mode === '1' }> 
                   修改日历为 
                 </Radio>
                 <div style={ { width: '300px', margin: '5px 5px 10px 18px' } }>
                   <Select
                     simpleValue
                     clearable={ false }
-                    disabled={ this.state.operate_flg !== '1' }
+                    disabled={ this.state.mode !== 'set' }
                     options={ [ { value: 'holiday', label: '假期' }, { value: 'workday', label: '工作日' } ] }
                     value={ this.state.type }
                     onChange={ (newValue) => { this.setState({ type: newValue }) } }
@@ -73,8 +73,8 @@ export default class ConfigSetModal extends Component {
                 <Radio 
                   inline
                   name='remove' 
-                  onClick={ () => { this.setState({ operate_flg : '2' }) } }
-                  checked={ this.state.operate_flg === '2' }> 
+                  onClick={ () => { this.setState({ mode : 'cancel' }) } }
+                  checked={ this.state.mode === 'del' }> 
                   移除配置
                 </Radio>
               </FormGroup>
@@ -86,7 +86,7 @@ export default class ConfigSetModal extends Component {
           <img src={ loadimg } className={ loading ? 'loading' : 'hide' }/>
           <Button 
             onClick={ this.confirm } 
-            disabled={ loading || (this.state.operate_flg === '1' && !this.state.type) }>
+            disabled={ loading || (this.state.mode === 'set' && !this.state.type) }>
             确定
           </Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

@@ -14,7 +14,6 @@ export default class MonthCard extends Component {
   }
 
   static propTypes = {
-    loading: PropTypes.bool.isRequired,
     month: PropTypes.number.isRequired,
     today: PropTypes.string.isRequired,
     dates: PropTypes.array.isRequired
@@ -104,7 +103,7 @@ export default class MonthCard extends Component {
   }
 
   render() {
-    const { dates, month, loading } = this.props;
+    const { dates, month } = this.props;
 
     const data = this.arrange();
 
