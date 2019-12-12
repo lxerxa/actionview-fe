@@ -11,13 +11,14 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ calendar }) => ({ calendar }), mapDispatchToProps)
+@connect(({ i18n, calendar }) => ({ i18n, calendar }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     calendar: PropTypes.object.isRequired
   }
@@ -44,6 +45,7 @@ export default class Container extends Component {
           index={ this.index.bind(this) } 
           sync={ this.sync.bind(this) } 
           update={ this.update.bind(this) } 
+          i18n={ this.props.i18n }
           { ...this.props.calendar }/>
       </div>
     );

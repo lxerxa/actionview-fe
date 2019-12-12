@@ -15,6 +15,7 @@ export default class MonthCard extends Component {
 
   static propTypes = {
     month: PropTypes.number.isRequired,
+    select: PropTypes.func.isRequired,
     today: PropTypes.string.isRequired,
     dates: PropTypes.array.isRequired
   }
@@ -103,7 +104,7 @@ export default class MonthCard extends Component {
   }
 
   render() {
-    const { dates, month } = this.props;
+    const { dates, month, select } = this.props;
 
     const data = this.arrange();
 
@@ -130,7 +131,7 @@ export default class MonthCard extends Component {
                   return (
                     <td className={ this.tdStyle(val2.type, val2.date) } key={ key2 }>
                       <font className={ this.typeStyle(val2.type) }>{ this.typeText(val2.type) }</font>
-                      <span className={ this.dayStyle(val2) }>{ val2.day || '' }</span>
+                      <span className={ this.dayStyle(val2) } onClick={ () =>  { select(val2.date) } }>{ val2.day || '' }</span>
                       <br/>
                       <font>{ this.footerText(val2) }</font> 
                     </td>

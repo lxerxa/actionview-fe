@@ -31,7 +31,7 @@ const validate = (values, props) => {
 
   if (values.start_time && values.end_time) {
     if (values.start_time > values.end_time) {
-      errors.start_time = '开始时间要早于结束时间';
+      errors.start_time = '开始时间要早于发布时间';
     }
   }
 

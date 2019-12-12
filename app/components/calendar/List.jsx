@@ -23,6 +23,7 @@ export default class List extends Component {
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -74,7 +75,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { options, sync, indexLoading, collection, update, loading } = this.props;
+    const { i18n, options, sync, indexLoading, collection, update, loading } = this.props;
 
     let data = [];
     if (collection.length > 0) {
@@ -93,8 +94,8 @@ export default class List extends Component {
             <i className='fa fa-angle-right fa-lg'></i></span>
           </Button>
           { options.year && this.state.year >= options.year && 
-          <Button bsStyle='link' style={ { float: 'right' } } onClick={ () => { this.setState({ syncNotifyShow: true }) } }>
-            日历同步
+          <Button bsStyle='link' style={ { position: 'absolute', right: 0, top: 0 } } onClick={ () => { this.setState({ syncNotifyShow: true }) } }>
+            同步日历 
           </Button> }
         </div> } 
         { indexLoading && 
@@ -104,9 +105,9 @@ export default class List extends Component {
         { !indexLoading && data.length > 0 &&
         <Form horizontal> 
           { _.map(data, (qdata, q) =>
-            <FormGroup>
+            <FormGroup key={ q }>
               { _.map(qdata, (mdata, k) =>
-                <Col sm={ 4 } className='canlendarcontent'>
+                <Col sm={ 4 } className='canlendarcontent' key={ k }>
                   <MonthCard
                     select={ this.selectDay.bind(this) }
                     month={ _.add(q * 3, _.add(k, 1)) }
@@ -121,7 +122,8 @@ export default class List extends Component {
           close={ () => { this.setState({ setModalShow: false }) } }
           day={ this.state.selectedDay }
           loading={ loading }
-          update={ update }/> }
+          update={ update }
+          i18n={ i18n }/> }
         { this.state.syncNotifyShow &&
         <SyncNotify
           show
