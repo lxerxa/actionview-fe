@@ -25,13 +25,12 @@ export default function calendar(state = initialState, action) {
 
     case t.CALENDAR_SYNC:
     case t.CALENDAR_UPDATE:
-      return { ...state, loading: true, collection: [] };
+      return { ...state, loading: true };
 
     case t.CALENDAR_SYNC_SUCCESS:
     case t.CALENDAR_UPDATE_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
-        state.options = action.result.options;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

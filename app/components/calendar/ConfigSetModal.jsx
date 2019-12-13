@@ -29,8 +29,8 @@ export default class ConfigSetModal extends Component {
     const ecode = await update(_.extend({}, { 
       mode: this.state.mode, 
       type: this.state.type, 
-      start_time: moment(this.state.start_time).format('YYYYMMDD'), 
-      end_time: moment(this.state.end_time).format('YYYYMMDD') 
+      start_date: moment(this.state.start_time).format('YYYYMMDD'), 
+      end_date: moment(this.state.end_time).format('YYYYMMDD') 
     }));
     if (ecode === 0) {
       close();
@@ -125,7 +125,7 @@ export default class ConfigSetModal extends Component {
           <img src={ loadimg } className={ loading ? 'loading' : 'hide' }/>
           <Button 
             onClick={ this.confirm } 
-            disabled={ loading || (this.state.mode === 'set' && !this.state.type) || !moment(this.state.start_time).isValid() || !moment(this.state.end_time).isValid() }>
+            disabled={ loading || (this.state.mode === 'set' && !this.state.type) || !moment(this.state.start_time).isValid() || !moment(this.state.end_time).isValid() || moment(this.state.start_time) > moment(this.state.end_time) }>
             确定
           </Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>

@@ -129,7 +129,9 @@ export default class List extends Component {
           show
           close={ () => { this.setState({ syncNotifyShow: false }) } }
           year={ this.state.year }
-          sync={ sync }/> }
+          loading={ loading }
+          sync={ sync }
+          i18n={ i18n }/> }
       </div>
     );
   }
