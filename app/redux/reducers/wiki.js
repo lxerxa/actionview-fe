@@ -163,7 +163,7 @@ export default function wiki(state = initialState, action) {
 
     case t.WIKI_ATTACHMENT_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.item.attachments = _.reject(state.item.attachements || [], { id: action.id });
+        state.item.attachments = _.reject(state.item.attachments || [], { id: action.id });
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

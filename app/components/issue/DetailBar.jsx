@@ -910,8 +910,7 @@ export default class DetailBar extends Component {
                     const djsConfig = {
                       parallelUploads: 1,
                       addRemoveLinks: false,
-                      paramName: field.key,
-                      maxFilesize: 50
+                      paramName: field.key
                     };
                     const eventHandlers = {
                       init: dz => this.dropzone = dz,

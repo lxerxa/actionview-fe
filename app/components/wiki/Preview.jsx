@@ -178,8 +178,7 @@ export default class Preview extends Component {
       postUrl: '/api/project/' + project_key + '/wiki/' + item.id + '/upload'
     };
     const djsConfig = {
-      addRemoveLinks: true,
-      maxFilesize: 50
+      addRemoveLinks: true
     };
     const eventHandlers = {
       init: dz => this.dropzone = dz,
