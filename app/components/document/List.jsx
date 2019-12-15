@@ -177,6 +177,8 @@ export default class List extends Component {
     const { addFile } = this.props;
     if (res.ecode === 0 && res.data) {
       addFile(res.data);
+    } else {
+      notify.show('文档上传失败。', 'error', 2000);
     }
   }
 
@@ -225,7 +227,8 @@ export default class List extends Component {
     };
     const eventHandlers = {
       init: dz => this.dropzone = dz,
-      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); } 
+      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); }, 
+      error: (localfile) => { notify.show('文档上传失败。', 'error', 2000); this.dropzone.removeFile(localfile); }
     }
 
     const node = ( <span><i className='fa fa-cog'></i></span> );

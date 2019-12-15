@@ -329,6 +329,11 @@ class CreateModal extends Component {
   }
 
   success(localfile, res) {
+    if (res.ecode !== 0) {
+      notify.show('文档上传失败。', 'error', 2000);
+      return;
+    }
+
     const { field = '', file = {} } = res.data;
     this.state.values[field] = this.state.values[field] || [];
     this.state.values[field].push(file.id); 
@@ -608,6 +613,7 @@ class CreateModal extends Component {
                 const eventHandlers = {
                   init: dz => this.dropzone = dz,
                   success: this.success.bind(this),
+                  error: (localfile) => { this.dropzone.removeFile(localfile); },
                   removedfile: this.removedfile.bind(this)
                 }
                 return (
