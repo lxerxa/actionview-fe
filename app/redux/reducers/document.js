@@ -18,13 +18,11 @@ function sort(collection, sortkey='') {
     sortkey = window.localStorage && window.localStorage.getItem('document-sortkey') || 'create_time_desc';
   }
 
-  console.log(collection);
-
   collection.sort(function(a, b) { 
     if (a.d == b.d || (!a.d && !b.d)) {
-      if (sortkey == 'create_time_asc') {
+      if (sortkey == 'create_time_desc') {
         return (b.created_at || b.uploaded_at) - (a.created_at || a.uploaded_at);
-      } else if (sortkey == 'create_time_desc') {
+      } else if (sortkey == 'create_time_asc') {
         return (a.created_at || a.uploaded_at) - (b.created_at || b.uploaded_at);
       } else if (sortkey == 'name_asc') {
         return a.name.localeCompare(b.name);
@@ -126,7 +124,12 @@ export default function document(state = initialState, action) {
       state.collection.push(action.file);
       return { ...state };
 
+    case t.DOCUMENT_SORT:
+      sort(state.collection, action.key);
+      return { ...state };
+
     default:
       return state;
   }
+
 }

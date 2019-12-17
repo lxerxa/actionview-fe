@@ -99,6 +99,7 @@ html.docs .doc-main .head {
 html.docs .doc-main .head .show-bar-icon {
   cursor: pointer;
   margin-right: 15px;
+  font-size: 19px;
   color: #5f5f5f;
 }
 

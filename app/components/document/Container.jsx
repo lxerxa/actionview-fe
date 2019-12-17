@@ -104,6 +104,7 @@ export default class Container extends Component {
         createFolder={ this.createFolder.bind(this) } 
         select={ this.props.actions.select } 
         addFile={ this.props.actions.addFile } 
+        sort={ this.props.actions.sort } 
         update={ this.update.bind(this) } 
         copy={ this.copy.bind(this) } 
         move={ this.move.bind(this) } 
