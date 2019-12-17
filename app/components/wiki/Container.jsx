@@ -151,6 +151,7 @@ export default class Container extends Component {
         create={ this.create.bind(this) } 
         show={ this.show.bind(this) }
         select={ this.props.actions.select } 
+        sort={ this.props.actions.sort } 
         checkin={ this.checkin.bind(this) }
         checkout={ this.checkout.bind(this) }
         copy={ this.copy.bind(this) } 

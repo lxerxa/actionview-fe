@@ -75,6 +75,10 @@ export function addAttachment(file) {
   return { type: 'WIKI_ATTACHMENT_ADD', file };
 }
 
+export function sort(key) {
+  return { type: 'WIKI_SORT', key: key };
+}
+
 export function delFile(key, wid, fid) {
   return asyncFuncCreator({
     constant: 'WIKI_ATTACHMENT_DELETE',

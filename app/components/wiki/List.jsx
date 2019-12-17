@@ -38,6 +38,8 @@ export default class List extends Component {
       editeModalShow: false,
       name: '' };
 
+    this.state.sortkey = window.localStorage && window.localStorage.getItem('wiki-sortkey') || 'create_time_desc';
+
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.checkoutNotifyClose = this.checkoutNotifyClose.bind(this);
     this.createModalClose = this.createModalClose.bind(this);
@@ -63,6 +65,7 @@ export default class List extends Component {
     index: PropTypes.func.isRequired,
     reload: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
+    sort: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
@@ -191,6 +194,15 @@ export default class List extends Component {
     reload(query);
   }
 
+  sortChange(newValue) {
+    if (window.localStorage) {
+      window.localStorage.setItem('wiki-sortkey', newValue);
+    }
+    this.setState({ sortkey: newValue });
+    const { sort } = this.props;
+    sort(newValue);
+  }
+
   render() {
     const { 
       i18n, 
@@ -215,6 +227,13 @@ export default class List extends Component {
       user, 
       query } = this.props;
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
+
+    const sortOptions = [
+      { value: 'create_time_asc', label: '创建时间升序' },
+      { value: 'create_time_desc', label: '创建时间降序' },
+      { value: 'name_asc', label: '名称升序' },
+      { value: 'name_desc', label: '名称降序' }
+    ];
 
     let contents = '';
     let homeHeader = '';
@@ -386,6 +405,15 @@ export default class List extends Component {
                   }
                 }) }
               </Breadcrumb>
+            </span>
+            <span style={ { float: 'right', width: '12%', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='默认顺序'
+                value={ this.state.sortkey }
+                onChange={ this.sortChange.bind(this) }
+                clearable={ false }
+                options={ sortOptions }/>
             </span>
             <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
               <FormControl

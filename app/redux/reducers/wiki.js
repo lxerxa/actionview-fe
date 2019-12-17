@@ -12,6 +12,28 @@ const initialState = {
   selectedItem: {} 
 };
 
+function sort(collection, sortkey='') {
+  if (!sortkey) {
+    sortkey = window.localStorage && window.localStorage.getItem('wiki-sortkey') || 'create_time_desc';
+  }
+
+  collection.sort(function(a, b) {
+    if (a.d == b.d || (!a.d && !b.d)) {
+      if (sortkey == 'create_time_desc') {
+        return b.created_at - a.created_at;
+      } else if (sortkey == 'create_time_asc') {
+        return a.created_at - b.created_at;
+      } else if (sortkey == 'name_asc') {
+        return a.name.localeCompare(b.name);
+      } else if (sortkey == 'name_desc') {
+        return -a.name.localeCompare(b.name);
+      }
+    } else {
+      return (b.d || 0) - (a.d || 0);
+    }
+  });
+}
+
 export default function wiki(state = initialState, action) {
   switch (action.type) {
     case t.WIKI_INDEX:
@@ -169,6 +191,10 @@ export default function wiki(state = initialState, action) {
 
     case t.WIKI_ATTACHMENT_DELETE_FAIL:
       return { ...state, loading: false, error: action.error };
+
+    case t.WIKI_SORT:
+      sort(state.collection, action.key);
+      return { ...state };
 
     default:
       return state;

@@ -275,6 +275,7 @@ export default generateConstants([
   'WIKI_INDEX(ASYNC)',
   'WIKI_SHOW(ASYNC)',
   'WIKI_SELECT',
+  'WIKI_SORT',
   'WIKI_CREATE(ASYNC)',
   'WIKI_UPDATE(ASYNC)',
   'WIKI_DELETE(ASYNC)',
