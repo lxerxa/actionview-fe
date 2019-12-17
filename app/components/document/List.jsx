@@ -187,6 +187,8 @@ export default class List extends Component {
     const { addFile } = this.props;
     if (res.ecode === 0 && res.data) {
       addFile(res.data);
+    } else {
+      notify.show('文档上传失败。', 'error', 2000);
     }
   }
 
@@ -240,12 +242,12 @@ export default class List extends Component {
       postUrl: '/api/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
     };
     const djsConfig = {
-      addRemoveLinks: true,
-      maxFilesize: 50
+      addRemoveLinks: true
     };
     const eventHandlers = {
       init: dz => this.dropzone = dz,
-      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); } 
+      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); }, 
+      error: (localfile) => { notify.show('文档上传失败。', 'error', 2000); this.dropzone.removeFile(localfile); }
     }
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -355,12 +357,9 @@ export default class List extends Component {
         name: ( 
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
-            { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
-              <a href={ '/api/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
-                { files[i].name }
-              </a>
-              :
-              files[i].name }
+            <a href={ '/api/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
+              { files[i].name }
+            </a>
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
               <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }

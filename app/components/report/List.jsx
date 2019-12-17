@@ -113,7 +113,7 @@ export default class List extends Component {
             className='report-button report-edit-button'
             onClick={ () => { this.setState({ selectedBlock: v, resetShow: true }) } }
             title='重置'>
-            <i className='fa fa-repeat'></i>
+            <i className='fa fa-undo'></i>
           </span>
         </div>
       );

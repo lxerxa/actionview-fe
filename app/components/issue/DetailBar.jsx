@@ -180,9 +180,13 @@ export default class DetailBar extends Component {
   }
 
   uploadSuccess(localfile, res) {
-    const { field = '', file = {} } = res.data;
     const { addFile } = this.props;
-    addFile(field, file); 
+    if (res.ecode === 0 && res.data) {
+      const { field = '', file = {} } = res.data;
+      addFile(field, file); 
+    } else {
+      notify.show('文档上传失败。', 'error', 2000);
+    }
   }
 
   openPreview(index, fieldkey) {
@@ -910,12 +914,12 @@ export default class DetailBar extends Component {
                     const djsConfig = {
                       parallelUploads: 1,
                       addRemoveLinks: false,
-                      paramName: field.key,
-                      maxFilesize: 50
+                      paramName: field.key
                     };
                     const eventHandlers = {
                       init: dz => this.dropzone = dz,
-                      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); }
+                      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); },
+                      error: (localfile) => { notify.show('文档上传失败。', 'error', 2000); this.dropzone.removeFile(localfile); }
                     };
 
                     const imgFiles = _.filter(data[field.key], (f) => { return _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) !== -1 });

@@ -142,6 +142,8 @@ export default class Preview extends Component {
     const { addAttachment } = this.props;
     if (res.ecode === 0 && res.data) {
       addAttachment(res.data);
+    } else {
+      notify.show('文档上传失败。', 'error', 2000);
     }
   }
 
@@ -178,12 +180,12 @@ export default class Preview extends Component {
       postUrl: '/api/project/' + project_key + '/wiki/' + item.id + '/upload'
     };
     const djsConfig = {
-      addRemoveLinks: true,
-      maxFilesize: 50
+      addRemoveLinks: true
     };
     const eventHandlers = {
       init: dz => this.dropzone = dz,
-      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); }
+      success: (localfile, response) => { this.uploadSuccess(localfile, response); this.dropzone.removeFile(localfile); },
+      error: (localfile) => { notify.show('文档上传失败。', 'error', 2000); this.dropzone.removeFile(localfile); }
     }
 
     let contents = '';

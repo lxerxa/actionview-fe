@@ -60,8 +60,7 @@ export default class ImportModal extends Component {
       postUrl: '/api/tmpfile'
     };
     const djsConfig = {
-      addRemoveLinks: true,
-      maxFilesize: 50
+      addRemoveLinks: true
     };
     const eventHandlers = {
       init: dz => this.dropzone = dz,
