@@ -42,6 +42,7 @@ export default function wiki(state = initialState, action) {
     case t.WIKI_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
+        sort(state.collection);
         _.extend(state.options, action.result.options);
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
