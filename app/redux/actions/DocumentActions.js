@@ -58,3 +58,7 @@ export function select(id) {
 export function addFile(file) {
   return { type: 'DOCUMENT_ADD', file };
 }
+
+export function sort(key) {
+  return { type: 'DOCUMENT_SORT', key: key };
+}

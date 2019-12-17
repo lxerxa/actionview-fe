@@ -13,6 +13,30 @@ const initialState = {
   selectedItem: {} 
 };
 
+function sort(collection, sortkey='') {
+  if (!sortkey) {
+    sortkey = window.localStorage && window.localStorage.getItem('document-sortkey') || 'create_time_desc';
+  }
+
+  console.log(collection);
+
+  collection.sort(function(a, b) { 
+    if (a.d == b.d || (!a.d && !b.d)) {
+      if (sortkey == 'create_time_asc') {
+        return (b.created_at || b.uploaded_at) - (a.created_at || a.uploaded_at);
+      } else if (sortkey == 'create_time_desc') {
+        return (a.created_at || a.uploaded_at) - (b.created_at || b.uploaded_at);
+      } else if (sortkey == 'name_asc') {
+        return a.name.localeCompare(b.name);
+      } else if (sortkey == 'name_desc') {
+        return -a.name.localeCompare(b.name);
+      }
+    } else {
+      return (b.d || 0) - (a.d || 0);
+    }
+  });
+}
+
 export default function document(state = initialState, action) {
   switch (action.type) {
     case t.DOCUMENT_INDEX:
@@ -21,6 +45,7 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection = action.result.data;
+        sort(state.collection);
         _.extend(state.options, action.result.options);
       }
       return { ...state, indexLoading: false, ecode: action.result.ecode };
