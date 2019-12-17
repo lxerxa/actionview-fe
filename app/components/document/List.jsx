@@ -57,6 +57,7 @@ export default class List extends Component {
     refresh: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
+    sort: PropTypes.func.isRequired,
     createFolder: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
@@ -181,6 +182,8 @@ export default class List extends Component {
       window.localStorage.setItem('document-sortkey', newValue);
     }
     this.setState({ sortkey: newValue });
+    const { sort } = this.props;
+    sort(newValue);
   }
 
   uploadSuccess(localfile, res) {
@@ -232,9 +235,7 @@ export default class List extends Component {
       { value: 'create_time_asc', label: '创建时间升序' },
       { value: 'create_time_desc', label: '创建时间降序' },
       { value: 'name_asc', label: '名称升序' },
-      { value: 'name_desc', label: '名称降序' },
-      { value: 'change_time_asc', label: '修改时间升序' },
-      { value: 'change_time_desc', label: '修改时间降序' }
+      { value: 'name_desc', label: '名称降序' }
     ];
 
     const componentConfig = {
