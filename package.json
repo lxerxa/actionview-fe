@@ -17,7 +17,7 @@
   "homepage": "https://github.com/lxerxa/actionview-fe",
   "bugs": "https://github.com/lxerxa/actionview-fe/issues",
   "author": "lxerxa",
-  "license": "gplv3",
+  "license": "Apache-2.0",
   "devDependencies": {
     "autoprefixer": "6.3.3",
     "babel-core": "5.8.35",
