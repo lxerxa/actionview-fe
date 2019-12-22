@@ -107,6 +107,7 @@ export default class Header extends Component {
       { key: 'issue', name: '问题' }, 
       { key: 'activity', name: '活动' },
       { key: 'kanban', name: '看板' },
+      { key: 'gantt', name: '甘特图' },
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
       { key: 'report', name: '报告' },

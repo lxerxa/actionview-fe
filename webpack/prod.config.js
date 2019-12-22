@@ -16,17 +16,17 @@ export default {
     ...baseConfig.module,
     loaders: [
       ...baseConfig.module.loaders,
-        {
+	        {
           test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)(\?v=[0-9].[0-9].[0-9])?$/,
           loaders: [
             'url?limit=1000&name=[sha512:hash:base64:7].[ext]'
           ],
-          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass|react-bootstrap-table|react-dropzone-component)/
+          exclude: /node_modules\/(?!font-awesome|bootstrap|jackblog-sass|react-bootstrap-table|react-dropzone-component|dropzone)/
         },
         {
           test: /\.css$/,
           loader: 'style!css!postcss',
-          exclude: /node_modules\/(?!font-awesome|react-select|bootstrap|jackblog-sass|react-bootstrap-table|react-datetime|rc-tabs|mermaid|react-dropzone-component|simplemde)/
+          exclude: /node_modules\/(?!font-awesome|cropper|react-select|bootstrap|jackblog-sass|react-bootstrap-table|react-datetime|rc-tabs|mermaid|react-dropzone-component|dropzone|simplemde)/
         }
     ]
   },

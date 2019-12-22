@@ -247,6 +247,7 @@ export default (
         <Route path='events' getComponent={ EventsContainer }/>
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
+        <Route path='gantt' getComponent={ IssueContainer }/>
         <Route path='document(/:id)' getComponent={ DocumentContainer }/>
         <Route path='wiki(/:dir)(/:wid)' getComponent={ WikiContainer }/>
         <Route path='integrations' getComponent={ IntegrationsContainer }/>
