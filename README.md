@@ -18,8 +18,10 @@ http://www.actionview.cn
 > cd actionview-fe  
 > npm install  
 
-修改代码：  
-> node_modules下的react-image-lightbox.js: 830行去掉close class。  
+依赖包：  
+> 1. 修改node_modules/react-image-lightbox下的react-image-lightbox.js: 830行去掉close class。  
+> 2. 确认node_modules下是否有dropzone文件夹，若没有请将react-dropzone-component/node_modules下的dropzone拷贝值该node_modules下。    
+> 3. 确认node_modules下是否有cropperjs文件夹，若没有请将react-cropper/node_modules下的cropperjs拷贝值该node_modules下。  
 
 运行Demo：  
 > npm run dev  
