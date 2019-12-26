@@ -61,7 +61,7 @@ export default class PreviewModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>工作流预览{ name ? (' - ' + name) : '' }</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>
           <div className='mermaid' id='chart'/>
         </Modal.Body>
         <Modal.Footer>

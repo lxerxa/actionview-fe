@@ -169,21 +169,21 @@ export default function(router) {
   router.get('/myproject', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', status: 'active', name: '项目管理系统', description: 'aaaabbbbccc测试测试测试测试测试测试测测试时测试测试测试测试测试测试', key: 'PMS', creator: '卢十三', create_time: 144444, principal: { id: 'nhy67ujm', nameAndEmail:'liulaoyao@aa.com', name: '刘老幺' } },{ id: '2222', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '刘老幺' } },{ id: '3333', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444, principal: { id: 'zzz', name: '刘老幺' } },{ id: '4444', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '王二小' }}] };
+    const results = { ecode: 0, data: [{ id: '1111', status: 'active', name: '演示项目一', description: 'aaaabbbbccc测试测试测试测试测试测试测测试时测试测试测试测试测试测试', key: 'demo', creator: '卢十三', create_time: 144444, principal: { id: 'nhy67ujm', nameAndEmail:'liulaoyao@aa.com', name: '刘老幺' } },{ id: '2222', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '刘老幺' } },{ id: '3333', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444, principal: { id: 'zzz', name: '刘老幺' } },{ id: '4444', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '王二小' }}] };
     return res.status(200).send(results);
   });
 
   router.get('/project/recent', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444 },{ id: '54676i2', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444 },{ id: '5s46761', name: '项目管理系统', key: 'BOBA', creator: '卢十三', create_time: 144444 },{ id: '54r676i2', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444 },{ id: '5i46761', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444 },{ id: '54aa676i2', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444 },{ id: '54bgg6761', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444 }], options: { 'total': 8 } };
+    const results = { ecode: 0, data: [{ id: '546761', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444 },{ id: '54676i2', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444 },{ id: '5s46761', name: '演示项目一', key: 'BOBA', creator: '卢十三', create_time: 144444 },{ id: '54r676i2', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444 },{ id: '5i46761', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444 },{ id: '54aa676i2', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444 },{ id: '54bgg6761', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444 }], options: { 'total': 8 } };
     return res.status(200).send(results);
   });
 
   router.get('/project', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444 },{ id: '54676i2', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444 },{ id: '5s46761', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444 },{ id: '54r676i2', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444 },{ id: '5i46761', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444 },{ id: '54aa676i2', name: '企业网盘', key: 'DISK', creator: '王二小', create_time: 144444 },{ id: '54bgg6761', name: '项目管理系统', key: 'PMS', creator: '卢十三', create_time: 144444 }], options: { 'total': 8 } };
+    const results = { ecode: 0, data: [{ id: '546761', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444 },{ id: '54676i2', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444 },{ id: '5s46761', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444 },{ id: '54r676i2', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444 },{ id: '5i46761', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444 },{ id: '54aa676i2', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444 },{ id: '54bgg6761', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444 }], options: { 'total': 8 } };
 
     return res.status(200).send(results);
   });
@@ -210,7 +210,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '视频网站', key: 'BOBA', principal: { id:'xxx', name: '刘老幺' }, creator: '刘老幺', create_time: 144444 }, options: { permissions: [ 'manage_project', 'edit_comments', 'delete_comments', 'edit_worklog', 'delete_worklog', 'reset_issue', 'create_issue', 'edit_issue', 'exec_workflow', 'link_issue', 'view_project', 'download_file', 'remove_file', 'upload_file', 'assign_issue' ] }};
+    const results = { ecode: 0, data: { id: '546761', name: '演示事例一', key: 'BOBA', principal: { id:'xxx', name: '刘老幺' }, creator: '刘老幺', create_time: 144444 }, options: { permissions: [ 'manage_project', 'edit_comments', 'delete_comments', 'edit_worklog', 'delete_worklog', 'reset_issue', 'create_issue', 'edit_issue', 'exec_workflow', 'link_issue', 'view_project', 'download_file', 'remove_file', 'upload_file', 'assign_issue' ] }};
     return res.status(200).send(results);
   });
 
@@ -224,14 +224,14 @@ export default function(router) {
   router.post('/project', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { id: '546761', name: '视频网站', key: 'BOBA', principal: { id: 'zzz', name: '王二小' }, creator: '刘老幺', create_time: 144444 }};
+    const results = { ecode: 0, data: { id: '546761', name: '演示事例一', key: 'BOBA', principal: { id: 'zzz', name: '王二小' }, creator: '刘老幺', create_time: 144444 }};
     return res.status(200).send(results);
   });
 
   router.put('/project/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { id: '546761', name: '视频网站', key: 'BOBA', principal: { id: 'zzz', name: '王二小' }, creator: '刘老幺', create_time: 144444 }};
+    const results = { ecode: 0, data: { id: '546761', name: '演示事例一', key: 'BOBA', principal: { id: 'zzz', name: '王二小' }, creator: '刘老幺', create_time: 144444 }};
     return res.status(200).send(results);
   });
 
@@ -266,7 +266,7 @@ export default function(router) {
   router.get('/project/:key/issue', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, options: { 'total': 8 }, data: [{ no:1555, id: '546761', type:'1111', labels:['视频转码', '管理员'],title: '国拨类型的项目添加任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'546761', epic: '1111', resolve_version: '1111', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', watching: true },{ no:9999, id: '546763', type:'1111', labels:['视频转码', '管理员'], title: 'PMS首页“项目周月报”未填写的本月月报显示为本月待填', assignee:{id:'aaa', name:'刘老幺'}, priority:'2222', state:'546761', epic: '2222', created_at: '1533636586', rank: 98 },{ no:3, id: '546762', type:'2222', assignee: {id:'xxxx', name:'liulaoyao'}, title: 'PMS首页右上角新建报工窗口，提交成功后窗口关闭没有提示信息', priority:'3333', state:'546762', epic: '1111', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', rank: 49},{ no:4, id: '2323', title: 'PMS首页-我的日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', rank: 88 },{ no:1, id: '5426761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'546763', epic: '2222', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', rank: 21 },{ no:2, id: '5462763', type:'1111', labels:['视频转码', '管理员'], title: 'PMS首页“项目周月报”未填写的本月月报显示为本月待填', assignee:{id:'aaa', name:'刘老幺'}, priority:'2222', state:'546762', epic: '2222', created_at: '1533636586', rank: 35 },{ no:365, id: '5467621', type:'2222', assignee: {id:'xxxx', name:'liulaoyao'}, title: 'PMS首页右上角新建报工窗口，提交成功后窗口关闭没有提示信息', priority:'3333', state:'546761', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', rank: 23},{ no:8, type: '1111', id: '22323', title: 'PMS首页-我的日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', priority:'1111', state: '546762', parent: { no: 2, title: 'tttt', id: '54624763', state: '546762' }, rank : 100}, { no:7, type: '1111', id: '2232dd3', title: 'PMS首页-我>的日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', priority:'1111', state: '546762', parent: { no: 2, title: 'tttt', id: '5462763', state: '546762' }, rank : 100}] };
+    const results = { ecode: 0, options: { 'total': 8 }, data: [{ no:1555, id: '546761', type:'1111', labels:['视频转码', '管理员'],title: '国拨类型的项目添加任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'546761', epic: '1111', resolve_version: '1111', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', watching: true },{ no:9999, id: '546763', type:'1111', labels:['视频转码', '管理员'], title: 'demo首页“项目周月报”未填写的本月月报显示为本月待填', assignee:{id:'aaa', name:'刘老幺'}, priority:'2222', state:'546761', epic: '2222', created_at: '1533636586', rank: 98 },{ no:3, id: '546762', type:'2222', assignee: {id:'xxxx', name:'liulaoyao'}, title: 'demo首页右上角新建报工窗口，提交成功后窗口关闭没有提示信息', priority:'3333', state:'546762', epic: '1111', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', rank: 49},{ no:4, id: '2323', title: 'demo首页-我的日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', rank: 88 },{ no:1, id: '5426761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'546763', epic: '2222', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', rank: 21 },{ no:2, id: '5462763', type:'1111', labels:['视频转码', '管理员'], title: 'demo首页“项目周月报”未填写的本月月报显示为本月待填', assignee:{id:'aaa', name:'刘老幺'}, priority:'2222', state:'546762', epic: '2222', created_at: '1533636586', rank: 35 },{ no:365, id: '5467621', type:'2222', assignee: {id:'xxxx', name:'liulaoyao'}, title: 'demo首页右上角新建报工窗口，提交成功后窗口关闭没有提示信息', priority:'3333', state:'546761', reporter: {id:'aaa', name:'刘老幺'}, created_at: '1533636586', rank: 23},{ no:8, type: '1111', id: '22323', title: 'demo首页-我的日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', priority:'1111', state: '546762', parent: { no: 2, title: 'tttt', id: '54624763', state: '546762' }, rank : 100}, { no:7, type: '1111', id: '2232dd3', title: 'demo首页-我>的日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', priority:'1111', state: '546762', parent: { no: 2, title: 'tttt', id: '5462763', state: '546762' }, rank : 100}] };
     return res.status(200).send(results);
   });
 

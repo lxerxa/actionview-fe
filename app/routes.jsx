@@ -24,6 +24,11 @@ const IssueContainer = (location, cb) => {
     cb(null, require('./components/issue/Container'))
   }, 'issue')
 };
+const GanttContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/gantt/Container'))
+  }, 'gantt')
+};
 //const KanbanContainer = require('./components/kanban/Container');
 const KanbanContainer = (location, cb) => {
   require.ensure([], require => {
@@ -247,7 +252,7 @@ export default (
         <Route path='events' getComponent={ EventsContainer }/>
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
-        <Route path='gantt' getComponent={ IssueContainer }/>
+        <Route path='gantt' getComponent={ GanttContainer }/>
         <Route path='document(/:id)' getComponent={ DocumentContainer }/>
         <Route path='wiki(/:dir)(/:wid)' getComponent={ WikiContainer }/>
         <Route path='integrations' getComponent={ IntegrationsContainer }/>

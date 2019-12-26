@@ -53,7 +53,7 @@ div.ganttview-hzheader-day {
 
 div.ganttview-vtheader {
 	margin-top: 41px;
-	width: 240px;
+	width: 400px;
 	overflow: hidden;
 	background-color: #fff;
 }
@@ -71,11 +71,14 @@ div.ganttview-vtheader-item-name {
 }
 
 div.ganttview-vtheader-series-name {
-	width: 130px;
+	width: 400px;
 	height: 31px;
 	border-top: 1px solid #d0d0d0;
-	line-height: 16px;
+	line-height: 31px;
 	padding-left: 5px;
+	text-overflow: ellipsis;
+        overflow: hidden;
+	white-space: nowrap;
 }
 
 
@@ -84,6 +87,10 @@ div.ganttview-vtheader-series-name {
 div.ganttview-slide-container {
 	overflow: auto;
 	border-left: 1px solid #999;
+}
+
+div.ganttview-hzheader-day.ganttview-weekend {
+	background-color: #fff0f0;
 }
 
 
@@ -97,7 +104,7 @@ div.ganttview-grid-row-cell {
 }
 
 div.ganttview-grid-row-cell.ganttview-weekend {
-	background-color: #fafafa;
+	background-color: #fff0f0;
 }
 
 
