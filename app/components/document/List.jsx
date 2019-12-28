@@ -232,10 +232,10 @@ export default class List extends Component {
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
 
     const sortOptions = [
-      { value: 'create_time_asc', label: '创建时间升序' },
-      { value: 'create_time_desc', label: '创建时间降序' },
-      { value: 'name_asc', label: '名称升序' },
-      { value: 'name_desc', label: '名称降序' }
+      { value: 'create_time_asc', label: '创建时间 ↑' },
+      { value: 'create_time_desc', label: '创建时间 ↓' },
+      { value: 'name_asc', label: '名称 ↑' },
+      { value: 'name_desc', label: '名称 ↓' }
     ];
 
     const componentConfig = {
@@ -421,7 +421,7 @@ export default class List extends Component {
                 }) }
               </Breadcrumb>
             </span>
-            <span style={ { float: 'right', width: '12%', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '120px', marginRight: '10px' } }>
               <Select
                 simpleValue
                 placeholder='默认顺序'

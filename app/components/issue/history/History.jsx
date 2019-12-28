@@ -66,7 +66,7 @@ export default class History extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && (val.operator.name + '(' + val.operator.email + ')')) + '">' + (val.operator && val.operator.id === currentUser.id ? '我' : val.operator.name) + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.operated_at).format('YY/MM/DD HH:mm:ss') : getAgoAt(val.operated_at, currentTime)) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && (val.operator.name + '(' + val.operator.email + ')')) + '">' + (val.operator && val.operator.id === currentUser.id ? '我' : val.operator.name) + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.operated_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.operated_at, currentTime)) } } />
               </div> ); 
 
               return (
