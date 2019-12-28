@@ -227,7 +227,7 @@ export default class List extends Component {
     const activityNum = collection.length;
     for (let i = 0; i < activityNum; i++) {
 
-      const agoAt = this.state.displayTimeFormat == 'absolute' ? moment.unix(collection[i].created_at).format('YY/MM/DD HH:mm:ss') : getAgoAt(collection[i].created_at, current_time);
+      const agoAt = this.state.displayTimeFormat == 'absolute' ? moment.unix(collection[i].created_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(collection[i].created_at, current_time);
 
       const wfEventFlag =
          collection[i].event_key === 'close_issue' 
@@ -340,7 +340,7 @@ export default class List extends Component {
             { collection[i].event_key == 'del_worklog'    && <span> 删除了工作日志</span> }
             { collection[i].event_key.indexOf('worklog') !== -1 &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              { collection[i].data && collection[i].data.started_at       && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>开始时间: { moment.unix(collection[i].data.started_at).format('YY/MM/DD') }</li> }
+              { collection[i].data && collection[i].data.started_at       && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>开始时间: { moment.unix(collection[i].data.started_at).format('YYYY/MM/DD') }</li> }
               { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
               { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
               { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }

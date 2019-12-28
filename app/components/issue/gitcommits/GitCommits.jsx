@@ -65,7 +65,7 @@ export default class GitCommits extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.author && (val.author.name + '(' + val.author.email + ')')) + '">' + (val.author && val.author.id === currentUser.id ? '我' : val.author.name) + '</a> 提交代码 - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.committed_at).format('YY/MM/DD HH:mm:ss') : getAgoAt(val.committed_at, currentTime)) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.author && (val.author.name + '(' + val.author.email + ')')) + '">' + (val.author && val.author.id === currentUser.id ? '我' : val.author.name) + '</a> 提交代码 - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.committed_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.committed_at, currentTime)) } } />
               </div> ); 
 
               return (

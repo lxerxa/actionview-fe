@@ -416,7 +416,7 @@ export default class List extends Component {
            <span className='table-td-issue-desc'>
              { item.reporter &&
              <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
-               { item.reporter.name + '  ' + moment.unix(item.created_at).format('YY/MM/DD HH:mm') }
+               { item.reporter.name + '  ' + moment.unix(item.created_at).format('YYYY/MM/DD HH:mm') }
              </span> }
              { _.map(item.labels || [], (val, i) => <Link to={ '/project/' + project.key + '/issue?labels=' + val } key={ i }><span title={ val } className='issue-label'>{ val }</span></Link>) }
            </span>

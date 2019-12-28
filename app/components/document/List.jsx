@@ -366,7 +366,7 @@ export default class List extends Component {
               <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
               { files[i].uploader &&
               <span style={ { marginRight: '15px', float: 'left' } }>
-                { files[i].uploader.name + '  ' + moment.unix(files[i].uploaded_at).format('YY/MM/DD HH:mm') }
+                { files[i].uploader.name + '  ' + moment.unix(files[i].uploaded_at).format('YYYY/MM/DD HH:mm') }
               </span> }
               <span style={ { float: 'left' } }>{ this.getFileSize(files[i].size) }</span>
             </span>

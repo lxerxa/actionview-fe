@@ -238,7 +238,7 @@ export default class Worklog extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML={ { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder.id === currentUser.id ? '我' : val.recorder.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.recorded_at).format('YY/MM/DD HH:mm:ss') : getAgoAt(val.recorded_at, currentTime)) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML={ { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder.id === currentUser.id ? '我' : val.recorder.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.recorded_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.recorded_at, currentTime)) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
                 { ((val.recorder && currentUser.id === val.recorder.id && permissions.indexOf('delete_self_worklog') !== -1) 
                   || permissions.indexOf('delete_worklog') !== -1) &&  
                 <span className='comments-button comments-edit-button' style={ { float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }
@@ -261,7 +261,7 @@ export default class Worklog extends Component {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{ moment.unix(val.started_at).format('YY/MM/DD HH:mm:ss') }</td>
+                        <td>{ moment.unix(val.started_at).format('YYYY/MM/DD HH:mm:ss') }</td>
                         <td>{ val.spend || '-' }</td>
                         <td>{ val.leave_estimate_m === undefined ? '-' : this.m2t(val.leave_estimate_m) }</td>
                       </tr>

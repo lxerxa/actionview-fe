@@ -347,7 +347,7 @@ export default class List extends Component {
               <Link to={ '/project/' + project_key + '/wiki' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
               { files[i].creator &&
               <span style={ { marginRight: '15px', float: 'left' } }>
-                { files[i].creator.name + '  ' + moment.unix(files[i].created_at).format('YY/MM/DD HH:mm') }
+                { files[i].creator.name + '  ' + moment.unix(files[i].created_at).format('YYYY/MM/DD HH:mm') }
               </span> }
             </span>
           </div> ),

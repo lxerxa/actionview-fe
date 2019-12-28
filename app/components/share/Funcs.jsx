@@ -4,7 +4,7 @@ const moment = require('moment');
 export function getAgoAt(stamptime, current_time) {
 
   if (!stamptime) { return ''; }
-  if (!current_time) { return moment.unix(stamptime).format('YY/MM/DD HH:mm:ss'); }
+  if (!current_time) { return moment.unix(stamptime).format('YYYY/MM/DD HH:mm:ss'); }
 
   const points = [
     { value: 365 * 24 * 60 * 60, suffix: '年前', max: 2 },

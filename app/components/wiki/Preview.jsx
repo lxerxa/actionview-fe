@@ -296,7 +296,7 @@ export default class Preview extends Component {
                   <a href={ '/api/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
                  </td>
                  <td width='10%'>
-                   <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YY/MM/DD HH:mm') }</div>
+                   <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YYYY/MM/DD HH:mm') }</div>
                  </td>
                  { ((options.permissions && options.permissions.indexOf('manage_project') !== -1) || user.id === f.uploader.id) &&
                  <td width='2%'>
