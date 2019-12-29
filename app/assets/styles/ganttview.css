@@ -40,7 +40,7 @@ div.ganttview-hzheader-month {
 }
 
 div.ganttview-hzheader-day {
-	width: 20px;
+	width: 25px;
 	height: 20px;
 	border-right: 1px solid #f0f0f0;
 	border-top: 1px solid #d0d0d0;
@@ -52,14 +52,13 @@ div.ganttview-hzheader-day {
 /* Vertical Header */
 
 div.ganttview-vtheader {
-	margin-top: 41px;
-	width: 400px;
+	width: 430px;
 	overflow: hidden;
 	background-color: #fff;
 }
 
 div.ganttview-vtheader-item {
-	overflow: hidden;
+	overflow: auto;
 	color: #666;
 }
 
@@ -70,8 +69,7 @@ div.ganttview-vtheader-item-name {
 	line-height: 16px;
 }
 
-div.ganttview-vtheader-series-name {
-	width: 400px;
+div.ganttview-vtheader-series-item-cell {
 	height: 31px;
 	border-top: 1px solid #d0d0d0;
 	line-height: 31px;
@@ -79,8 +77,35 @@ div.ganttview-vtheader-series-name {
 	text-overflow: ellipsis;
         overflow: hidden;
 	white-space: nowrap;
+	float: left;
+	text-align: center;
 }
 
+div.ganttview-vtheader-series-header-item {
+  height: 40px;
+}
+
+div.ganttview-vtheader-series-header-item-cell {
+	height: 40px;
+	border-right: 1px solid #d0d0d0;
+	line-height: 31px;
+	padding-left: 5px;
+	padding-top: 6px;
+	text-overflow: ellipsis;
+        overflow: hidden;
+	white-space: nowrap;
+	color: #a6a6a6;
+	float: left;
+	text-align: center;
+}
+
+div.ganttview-vtheader-series-item {
+  height: 31px;
+}
+
+div.ganttview-vtheader-series-item:hover {
+  background-color: #f5f5f5;
+}
 
 /* Slider */
 
@@ -97,7 +122,7 @@ div.ganttview-hzheader-day.ganttview-weekend {
 /* Grid */
 
 div.ganttview-grid-row-cell {
-	width: 20px;
+	width: 25px;
 	height: 31px;
 	border-right: 1px solid #f0f0f0;
 	border-top: 1px solid #f0f0f0;
@@ -115,18 +140,18 @@ div.ganttview-blocks {
 }
 
 div.ganttview-block-container {
-	height: 28px;
+	height: 31px;
 	padding-top: 4px;
 }
 
 div.ganttview-block {
 	position: relative;
 	height: 25px;
-	background-color: #E5ECF9;
-	border: 1px solid #c0c0c0;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+	background-color: #ddd;
+}
+
+div.ganttview-block-movable {
+	cursor: move;
 }
 
 div.ganttview-block-text {
