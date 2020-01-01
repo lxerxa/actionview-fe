@@ -212,28 +212,55 @@ export default class Header extends Component {
     }
 
     let popoverSprint = '';
+    let hisPopoverSprint = '';
     let activeSprint = {};
     if (curKanban.type == 'scrum' && model == 'issue') {
       activeSprint = _.find(sprints || [], { status: 'active' });
       if (activeSprint) {
         popoverSprint = (
-          <Popover id='popover-trigger-click'>
+          <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
             <Grid>
               <Row>
-                <Col sm={ 6 } componentClass={ ControlLabel }>名称</Col>
-                <Col sm={ 6 }>Sprint { activeSprint.no || '' }</Col>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>名称</Col>
+                <Col sm={ 9 }>Sprint { activeSprint.no || '' }</Col>
               </Row>
               <Row>
-                <Col sm={ 6 } componentClass={ ControlLabel }>开始时间</Col>
-                <Col sm={ 6 }>{ moment.unix(activeSprint.start_time).format('YYYY/MM/DD') }</Col>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
+                <Col sm={ 9 }>{ moment.unix(activeSprint.start_time).format('YYYY/MM/DD') }</Col>
               </Row>
               <Row>
-                <Col sm={ 6 } componentClass={ ControlLabel }>结束时间</Col>
-                <Col sm={ 6 }>{ moment.unix(activeSprint.complete_time).format('YYYY/MM/DD') }</Col>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>结束时间</Col>
+                <Col sm={ 9 }>{ moment.unix(activeSprint.complete_time).format('YYYY/MM/DD') }</Col>
+              </Row>
+              <Row>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>描述</Col>
+                <Col sm={ 9 } dangerouslySetInnerHTML={ { __html: _.escape(activeSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
               </Row>
             </Grid>
           </Popover>);
       }
+    } else if (curKanban.type == 'scrum' && model == 'history') {
+      hisPopoverSprint = (
+        <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
+          <Grid>
+            <Row>
+              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>期间</Col>
+              <Col sm={ 9 }>
+                { selectedSprint.start_time && moment.unix(selectedSprint.start_time).format('YYYY/MM/DD') }
+                <span style={ { margin: '0 4px' } }>～</span>
+                { selectedSprint.complete_time && moment.unix(selectedSprint.complete_time).format('YYYY/MM/DD') }
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>实际完成时间</Col>
+              <Col sm={ 9 }>{ selectedSprint.real_complete_time && moment.unix(selectedSprint.real_complete_time).format('YYYY/MM/DD HH:mm') }</Col>
+            </Row>
+            <Row>
+              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>描述</Col>
+              <Col sm={ 9 } dangerouslySetInnerHTML={ { __html: _.escape(selectedSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
+            </Row>
+          </Grid>
+        </Popover>);
     }
 
     return (
@@ -352,16 +379,11 @@ export default class Header extends Component {
               placeholder='选择Sprint'/>
           </div>
           { !_.isEmpty(selectedSprint) &&
-          <span style={ { float: 'left', marginTop: '7px', marginLeft: '15px' } }>
-            期间：
-            { selectedSprint.start_time && moment.unix(selectedSprint.start_time).format('YYYY/MM/DD') }
-            <span style={ { margin: '0 4px' } }>～</span> 
-            { selectedSprint.complete_time && moment.unix(selectedSprint.complete_time).format('YYYY/MM/DD') }
-          </span> }
-          { !_.isEmpty(selectedSprint) &&
-          <span style={ { float: 'left', marginTop: '7px', marginLeft: '15px' } }>
-            完成时间：{ selectedSprint.real_complete_time && moment.unix(selectedSprint.real_complete_time).format('YYYY/MM/DD HH:mm') }
-          </span> }
+          <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ hisPopoverSprint }>
+            <div style={ { float: 'left', margin: '7px 10px', cursor: 'pointer' } }>
+              <i className='fa fa-info-circle' aria-hidden='true'></i>
+            </div>
+          </OverlayTrigger> }
           <span style={ { float: 'right' } } title='隐藏看板头'>
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
