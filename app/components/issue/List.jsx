@@ -671,7 +671,7 @@ export default class List extends Component {
             create={ create } 
             loading={ loading } 
             project={ project } 
-            parent_id={ selectedItem.id } 
+            parent={ selectedItem } 
             isSubtask={ true }
             i18n={ i18n }/> }
         { this.state.convertTypeModalShow &&
@@ -731,6 +731,7 @@ export default class List extends Component {
         { this.state.copyModalShow &&
           <CopyModal show
             close={ () => { this.setState({ copyModalShow: false }); } }
+            options={ options }
             loading={ loading }
             copy={ copy }
             data={ selectedItem }

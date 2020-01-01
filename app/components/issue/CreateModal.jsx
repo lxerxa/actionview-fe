@@ -184,7 +184,7 @@ class CreateModal extends Component {
     options: PropTypes.object,
     loading: PropTypes.bool,
     isSubtask: PropTypes.bool,
-    parent_id: PropTypes.string,
+    parent: PropTypes.object,
     create: PropTypes.func,
     edit: PropTypes.func,
     doAction: PropTypes.func,
@@ -210,7 +210,7 @@ class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { create, edit, addLabels, close, options, data={}, parent_id='', doAction=undefined, action_id='' } = this.props;
+    const { create, edit, addLabels, close, options, data={}, parent={}, doAction=undefined, action_id='' } = this.props;
     //const schema = _.find(options.types, { id: this.state.values['type'] }).schema;
     const { schema } = this.state;
 
@@ -273,8 +273,8 @@ class CreateModal extends Component {
         }
       }
     } else {
-      if (parent_id) {
-        _.extend(submitData, { parent_id });
+      if (parent.id) {
+        _.extend(submitData, { parent_id: parent.id });
       }
       ecode = await create(submitData);
       if (ecode === 0) {
@@ -388,7 +388,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, options, close, loading, project, data={}, isSubtask=false, isFromWorkflow=false } = this.props;
+    const { i18n: { errMsg }, options, close, loading, project, data={}, parent={}, isSubtask=false, isFromWorkflow=false } = this.props;
     const { schema } = this.state;
 
     const typeOptions = _.map(this.state.typeOptions, function(val) {
@@ -420,13 +420,22 @@ class CreateModal extends Component {
         </Modal.Header>
         <Form horizontal>
           <Modal.Body style={ bodyStyles } ref='createModal'>
-            { !isFromWorkflow &&
+            { !isFromWorkflow && !isSubtask &&
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>
                 项目名称
               </Col>
               <Col sm={ 9 }>
                 <div style={ { marginTop: '7px', marginBottom: '6px' } }><span>{ project.name || '-' }</span></div>
+              </Col>
+            </FormGroup> }
+            { !isFromWorkflow && isSubtask &&
+            <FormGroup controlId='formControlsLabel'>
+              <Col sm={ 2 } componentClass={ ControlLabel }>
+                父任务 
+              </Col>
+              <Col sm={ 9 }>
+                <div style={ { marginTop: '7px', marginBottom: '6px' } }><span>{ parent.title ? (parent.no + '-' + parent.title) : (data.parent && data.parent.title ? (data.parent.no + '-' + data.parent.title) : '-') }</span></div>
               </Col>
             </FormGroup> }
             { !isFromWorkflow &&

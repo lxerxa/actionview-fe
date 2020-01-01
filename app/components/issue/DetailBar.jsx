@@ -1153,7 +1153,7 @@ export default class DetailBar extends Component {
             create={ create } 
             loading={ loading } 
             project={ project } 
-            parent_id={ data.id } 
+            parent={ data } 
             isSubtask={ true }
             i18n={ i18n }/> }
         { this.state.previewModalShow && 
@@ -1253,6 +1253,7 @@ export default class DetailBar extends Component {
           <CopyModal 
             show
             close={ () => { this.setState({ copyModalShow: false }); } }
+            options={ options }
             loading={ loading }
             copy={ copy }
             data={ data }
