@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -17,7 +18,7 @@ const validate = (values) => {
 
 @reduxForm({
   form: 'copy_issue',
-  fields: [ 'id', 'title' ],
+  fields: [ 'id', 'title', 'assignee', 'resolution' ],
   validate
 })
 export default class CopyModal extends Component {
@@ -30,6 +31,7 @@ export default class CopyModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -44,7 +46,7 @@ export default class CopyModal extends Component {
   componentWillMount() {
     const { initializeForm, data } = this.props;
     const copyData = _.clone(data);
-    _.extend(copyData, { title: '复制 - ' + data.title });
+    _.extend(copyData, { title: '复制 - ' + data.title, assignee: data.assignee && data.assignee.id || null });
     initializeForm(copyData);
   }
 
@@ -74,7 +76,10 @@ export default class CopyModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, title }, handleSubmit, invalid, submitting, data } = this.props;
+    const { i18n: { errMsg }, fields: { id, title, assignee, resolution }, options, handleSubmit, invalid, submitting, data } = this.props;
+
+    const assigneeOptions = _.map(options.assignees || [], (val) => { return { label: val.name + '(' + val.email + ')', value: val.id } });
+    const resolutionOptions = _.map(options.resolutions, (val) => { return { label: val.name, value: val.id } });
 
     return (
       <Modal show onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -88,6 +93,30 @@ export default class CopyModal extends Component {
             <ControlLabel><span className='txt-impt'>*</span>主题</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...title } placeholder='主题'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ assignee.touched && assignee.error ? 'error' : null }>
+            <ControlLabel><span className='txt-impt'>*</span>分配给</ControlLabel>
+            <Select
+              simpleValue
+              clearable={ false }
+              disabled={ submitting }
+              options={ assigneeOptions }
+              value={ assignee.value || null }
+              onChange={ (newValue) => { assignee.onChange(newValue) } }
+              placeholder='选择经办人'/>
+            { assignee.touched && assignee.error && <HelpBlock style={ { float: 'right' } }>{ assignee.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ resolution.touched && resolution.error ? 'error' : null }>
+            <ControlLabel>解决结果</ControlLabel>
+            <Select
+              simpleValue
+              clearable={ false }
+              disabled={ submitting }
+              options={ resolutionOptions }
+              value={ resolution.value || null }
+              onChange={ (newValue) => { resolution.onChange(newValue) } }
+              placeholder='选择解决结果'/>
+            { assignee.touched && assignee.error && <HelpBlock style={ { float: 'right' } }>{ assignee.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
