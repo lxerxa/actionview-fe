@@ -234,7 +234,7 @@ export default class Header extends Component {
               </Row>
               <Row>
                 <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>描述</Col>
-                <Col sm={ 9 } dangerouslySetInnerHTML={ { __html: _.escape(activeSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
+                <Col sm={ 9 } style={ { overflowY: 'scroll', maxHeight: '450px' } } dangerouslySetInnerHTML={ { __html: _.escape(activeSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
               </Row>
             </Grid>
           </Popover>);
@@ -243,6 +243,10 @@ export default class Header extends Component {
       hisPopoverSprint = (
         <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
           <Grid>
+            <Row>
+              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>名称</Col>
+              <Col sm={ 9 }>Sprint { selectedSprint.no || '' }</Col>
+            </Row>
             <Row>
               <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>期间</Col>
               <Col sm={ 9 }>
@@ -257,7 +261,7 @@ export default class Header extends Component {
             </Row>
             <Row>
               <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>描述</Col>
-              <Col sm={ 9 } dangerouslySetInnerHTML={ { __html: _.escape(selectedSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
+              <Col sm={ 9 } style={ { overflowY: 'scroll', maxHeight: '450px' } } dangerouslySetInnerHTML={ { __html: _.escape(selectedSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
             </Row>
           </Grid>
         </Popover>);
