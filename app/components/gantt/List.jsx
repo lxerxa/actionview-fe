@@ -5,6 +5,10 @@ import _ from 'lodash';
 
 const moment = require('moment');
 const $ = require('$');
+const img = require('../../assets/images/loading.gif');
+
+const EditModal = require('./EditModal');
+const DetailBar = require('../issue/DetailBar');
 
 export default class List extends Component {
   constructor(props) {
@@ -13,7 +17,14 @@ export default class List extends Component {
       cellWidth: 25, 
       minDays: 75
     };
-    this.state = { range: [], dates: [] };
+    this.state = { 
+      range: [], 
+      dates: [], 
+      collection: [], 
+      selectedIssue: {}, 
+      barShow: false,
+      editModalShow: false
+    };
     this.addVtHeader = this.addVtHeader.bind(this);
     this.addHzHeader = this.addHzHeader.bind(this);
     this.addGrid = this.addGrid.bind(this);
@@ -21,6 +32,10 @@ export default class List extends Component {
     this.setBoundaryDatesFromData = this.setBoundaryDatesFromData.bind(this);
     this.setDates = this.setDates.bind(this);
     this.updateData = this.updateData.bind(this);
+    this.arrangeData = this.arrangeData.bind(this);
+    this.clickBar = this.clickBar.bind(this);
+    this.show = this.show.bind(this);
+    this.closeDetail = this.closeDetail.bind(this);
   }
 
   static propTypes = {
@@ -96,59 +111,150 @@ export default class List extends Component {
     user: PropTypes.object.isRequired
   };
 
+  async show(id) {
+    this.setState({ barShow: true });
+    const { show, record } = this.props;
+    const ecode = await show(id);  //fix me
+    if (ecode == 0) {
+      record();
+    }
+  }
+
   async componentWillMount() {
     const { index, query={} } = this.props;
-    let ecode = await index(query);
+    await index(query);
   }
 
   componentWillReceiveProps(nextProps) {
+    const { index, query } = this.props;
+    const newQuery = nextProps.query || {};
+    if (!_.isEqual(newQuery, query)) {
+      index(newQuery);
+    }
+
     const { options: { singulars=[] } } = nextProps;
     if (nextProps.collection.length > 0) {
+      this.arrangeData(nextProps.collection);
       this.setBoundaryDatesFromData(nextProps.collection);
       this.setDates(singulars);
     }
   }
 
+  arrangeData(collection) {
+    //this.state.collection = collection;
+    const sortkey = this.state.sortkey;
+
+    const standardIssues = _.filter(collection, (v) => !v.parent || !v.parent.id);
+    const subtaskIssues = _.filter(collection, (v) => v.parent && v.parent.id);
+
+    const parentIssues = [];
+    const classifiedSubtasks = {};
+    _.forEach(subtaskIssues, (v) => {
+      if (classifiedSubtasks[v.parent.id]) {
+        classifiedSubtasks[v.parent.id].push(v);
+      } else {
+        classifiedSubtasks[v.parent.id] = [ v ];
+      }
+
+      if (parentIssues.indexOf(v.parent.id) === -1) {
+        parentIssues.push(v.parent);
+      }
+    });
+
+    _.forEach(parentIssues, (v) => {
+      this.sort(classifiedSubtasks[v.id], sortkey);
+      const boundary = this.getBoundaryDatesFromData(classifiedSubtasks[v.id]);
+
+      const i = _.findIndex(standardIssues, (v2) => v2.id == v.id);
+      let p = v;
+      if (i !== -1) {
+        p = standardIssues[i];
+      }
+      p.expect_start_time = boundary[0]; 
+      p.expect_end_time = boundary[1]; 
+      if (i === -1) {
+        standardIssues.push(p);
+      }
+    });
+
+    this.sort(standardIssues, sortkey);
+
+    const newIssues = [];
+    _.forEach(standardIssues, (v, k) => {
+      newIssues.push(v);
+      if (classifiedSubtasks[v.id]) {
+        _.forEach(classifiedSubtasks[v.id], (v2) => {
+          newIssues.push(v2);
+        });
+      }
+    });
+
+    this.state.collection = newIssues;
+  }
+
+  sort(data, sortkey) {
+    data.sort((a, b) => {
+      if (sortkey == 'start_time_desc') {
+        return (b.expect_start_time || b.expect_complete_time || b.created_at) - (a.expect_start_time || a.expect_complete_time || a.created_at);
+      } else if (sortkey == 'start_time_asc') {
+        return (a.expect_start_time || a.expect_complete_time || a.created_at) - (b.expect_start_time || b.expect_complete_time || b.created_at);
+      } else if (sortkey == 'create_time_desc') {
+        return b.no - a.no;
+      } else if (sortkey == 'create_time_asc') {
+        return a.no - b.no;
+      }
+    });
+  }
+
   addVtHeader() {
-    const { collection } = this.props;
+    const { collection } = this.state;
 
     return (
       <div className='ganttview-vtheader'>
         <div className='ganttview-vtheader-item'>
-          <div className='ganttview-vtheader-series' style={ { width: '720px' } }>
+          <div className='ganttview-vtheader-series' style={ { width: '780px' } }>
             <div className='ganttview-vtheader-series-header-item'>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
-	        标题
-	      </div>
+                标题
+              </div>
+              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '60px' } }>
+                NO 
+              </div>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-	        经办人 
-	      </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-	        开始时间 
-	      </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-	        完成时间 
-	      </div>
+                经办人 
+              </div>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }>
-	        进度 
-	      </div>
-	    </div>
+                进度 
+              </div>
+              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
+                开始时间 
+              </div>
+              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
+                完成时间 
+              </div>
+            </div>
             { _.map(collection, (v, key) => (
-            <div className='ganttview-vtheader-series-item' key={ key }>
+            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
-                <a href='#'>{ v.title }</a>
+                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '10px' : '2px', visibility: (collection[_.add(key,1)] && collection[_.add(key,1)].parent && !v.parent) ? 'visible' : 'hidden', cursor: 'pointer' } }>
+                  <a href='#'><i className='fa fa-caret-down'></i></a>
+                </span>
+                <a href='#' onClick={ (e) => { e.preventDefault(); this.show(v.id) } }>{ v.title }</a>
+              </div>
+              <div className='ganttview-vtheader-series-item-cell' style={ { width: '60px' } }>
+                { v.no } 
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
                 { v.assignee && v.assignee.name || '-' } 
               </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                2019/08/09
-              </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                2019/08/09
-              </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '50px' } }>
-                80% 
+                { (v.progress || 0) + '%' } 
+              </div>
+              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
+                { moment.unix(v.expect_start_time || v.expect_complete_time || v.created_at).format('YYYY/MM/DD') } 
+              </div>
+              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
+                { moment.unix(v.expect_complete_time || v.expect_start_time || v.created_at).format('YYYY/MM/DD') }
               </div>
             </div> ) ) }
           </div>
@@ -180,8 +286,7 @@ export default class List extends Component {
 
   addGrid() {
     const cellWidth = this.configs.cellWidth;
-    const { collection } = this.props;
-    const { dates } = this.state;
+    const { collection, dates } = this.state;
 
     const dates2 = _.flatten(_.values(dates));
     return (
@@ -202,16 +307,15 @@ export default class List extends Component {
 
   addBlocks() {
     const cellWidth = this.configs.cellWidth;
-    const { collection } = this.props;
-    const { range } = this.state;
+    const { collection, range } = this.state;
     const origin = range[0];
 
     return (
       <div className='ganttview-blocks'>
       { _.map(collection, (v, key) => {
 
-        const start = moment.unix(v.expect_start_time || v.created_at).startOf('day').format('X');
-        const end = moment.unix(v.expect_complete_time || v.created_at).startOf('day').format('X');
+        const start = moment.unix(v.expect_start_time || v.expect_complete_time || v.created_at).startOf('day').format('X');
+        const end = moment.unix(v.expect_complete_time || v.expect_start_time || v.created_at).startOf('day').format('X');
         const size = (end - start) / 3600 / 24 + 1;
         const offset = (start - origin) / 3600 / 24;
 
@@ -223,7 +327,7 @@ export default class List extends Component {
               id={ v.id }
               title='aabb' 
               style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor: '#ddd' } }>
-              <div style={ { height: '25px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#65c16f' } }/>
+              <div style={ { height: '23px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#65c16f' } }/>
             </div>
           </div> ) } ) }
       </div> );
@@ -286,25 +390,33 @@ export default class List extends Component {
     this.state.dates = dates;
   }
 
-  setBoundaryDatesFromData(data) {
-    const minDays = this.configs.minDays;
-
-    let start = moment.unix(data[0].expect_start_time || data[0].created_at).startOf('day').format('X');
-    let end = moment.unix(data[0].expect_complete_time || data[0].created_at).startOf('day').format('X'); 
+  getBoundaryDatesFromData(data) {
+    let start = moment.unix(data[0].expect_start_time || data[0].expect_complete_time || data[0].created_at).startOf('day').format('X');
+    let end = moment.unix(data[0].expect_complete_time || data[0].expect_start_time || data[0].created_at).startOf('day').format('X'); 
     _.forEach(data, (v) => {
-      const expect_start_time = v.expect_start_time || v.created_at;
+      const expect_start_time = v.expect_start_time || v.expect_complete_time || v.created_at;
       if (start > expect_start_time) {
         start = expect_start_time;
       }
 
-      const expect_complete_time = v.expect_complete_time || v.created_at;
+      const expect_complete_time = v.expect_complete_time || v.expect_start_time || v.created_at;
       if (end < expect_complete_time) {
         end = expect_complete_time;
       }
     });
 
-    start = moment.unix(start).subtract(1, 'days').startOf('day').format('X');
-    end = moment.unix(end).add(1, 'days').startOf('day').format('X');
+    start = moment.unix(start).startOf('day').format('X');
+    end = moment.unix(end).startOf('day').format('X');
+
+    return [ start - 0, end - 0 ]; 
+  }
+
+  setBoundaryDatesFromData(data) {
+    const minDays = this.configs.minDays;
+
+    const boundary = this.getBoundaryDatesFromData(data);
+    let start = moment.unix(boundary[0]).subtract(1, 'days').format('X');
+    let end = moment.unix(boundary[1]).add(1, 'days').format('X');
 
     let days = (end - start) / 3600 / 24 + 1;
     if (days < minDays) {
@@ -315,13 +427,29 @@ export default class List extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { collection } = this.props;
+    const { collection, itemData } = this.props;
+
+    const self = this;
+    if (this.state.barShow) {
+      $('.ganttview-vtheader-series-item').each(function(i) {
+        if (itemData.id === $(this).attr('id')) {
+          $(this).css('background-color', '#eee');
+        } else {
+          $(this).css('background-color', '');
+        }
+      });
+    }
 
     if (prevProps.collection.length !== collection.length && collection.length > 0) {
       const self = this;
       const cellWidth = this.configs.cellWidth;
 
       $('.ganttview-block').unbind();
+
+      $('.ganttview-block').click(function() {
+        const block = $(this);
+        self.clickBar(block);
+      });
 
       $('.ganttview-block').resizable({
         grid: cellWidth, 
@@ -346,20 +474,194 @@ export default class List extends Component {
     }
   }
 
-  render() {
+  clickBar(block) {
     const { collection } = this.props;
 
-    if (collection.length <= 0) {
+    const id = block.attr('id')
+    const issue = _.find(collection, { id });
+
+    this.setState({ editModalShow: true, selectedIssue: issue });
+  }
+
+  closeDetail() {
+    this.setState({ barShow: false });
+    $('.ganttview-vtheader-series-item').css('background-color', '');
+    const { cleanRecord } = this.props;
+    cleanRecord();
+  }
+
+  render() {
+    const { 
+      i18n,
+      layout,
+      itemData={},
+      loading,
+      indexLoading,
+      itemLoading,
+      options={},
+      show,
+      record,
+      forward,
+      visitedIndex,
+      visitedCollection,
+      del,
+      edit,
+      create,
+      setAssignee,
+      setLabels,
+      addLabels,
+      query,
+      refresh,
+      project,
+      delFile,
+      addFile,
+      fileLoading,
+      wfCollection,
+      wfLoading,
+      viewWorkflow,
+      indexComments,
+      sortComments,
+      commentsCollection,
+      commentsIndexLoading,
+      commentsLoading,
+      commentsLoaded,
+      addComments,
+      editComments,
+      delComments,
+      commentsItemLoading,
+      indexWorklog,
+      worklogSort,
+      sortWorklog,
+      worklogCollection,
+      worklogIndexLoading,
+      worklogLoading,
+      worklogLoaded,
+      addWorklog,
+      editWorklog,
+      delWorklog,
+      indexHistory,
+      sortHistory,
+      historyCollection,
+      historyIndexLoading,
+      historyLoaded,
+      indexGitCommits,
+      sortGitCommits,
+      gitCommitsCollection,
+      gitCommitsIndexLoading,
+      gitCommitsLoaded,
+      createLink,
+      delLink,
+      linkLoading,
+      watch,
+      copy,
+      move,
+      convert,
+      resetState,
+      doAction,
+      user } = this.props;
+    const { collection, selectedIssue } = this.state;
+
+    if (indexLoading) {
+      return (
+        <div style={ { marginTop: '50px' } }>
+          <div className='detail-view-blanket' style={ { display: 'block' } }>
+            <img src={ img } className='loading'/>
+          </div>
+        </div>);
+    } else if (collection.length <= 0) {
       return <div/>;
     }
 
     return (
-      <div className='ganttview'>
-        { this.addVtHeader() }
-        <div className='ganttview-slide-container'>
-          { this.addHzHeader() }
-	  { this.addGrid() }
-	  { this.addBlocks() }
+      <div>
+        <div style={ { marginTop: '10px' } }>
+          <a href='#'><span style={ { marginLeft: '5px' } }><i className='fa fa-sort-amount-asc'></i> 开始时间</span></a>
+          <a href='#'><span style={ { marginLeft: '15px' } }><i className='fa fa-sort-amount-asc'></i> 创建时间</span></a>
+          <span style={ { marginLeft: '15px' } }>备注备注注备注注备注注备注注备注注备注</span>
+        </div>
+        <div className='ganttview'>
+          { this.addVtHeader() }
+          <div className='ganttview-slide-container'>
+            { this.addHzHeader() }
+            { this.addGrid() }
+            { this.addBlocks() }
+          </div>
+          { this.state.editModalShow &&
+          <EditModal
+            show
+            i18n={ i18n }
+            mode='progress'
+            close={ () => { this.setState({ editModalShow: false }) } }          
+            edit={ edit }
+            data={ selectedIssue }/> }
+          { this.state.barShow &&
+          <DetailBar
+            i18n={ i18n }
+            layout={ layout }
+            create={ create }
+            edit={ edit }
+            del={ del }
+            setAssignee={ setAssignee }
+            setLabels={ setLabels }
+            addLabels={ addLabels }
+            close={ this.closeDetail }
+            options={ options }
+            data={ itemData }
+            record={ record }
+            forward={ forward }
+            visitedIndex={ visitedIndex }
+            visitedCollection={ visitedCollection }
+            issueCollection={ collection }
+            show = { show }
+            itemLoading={ itemLoading }
+            loading={ loading }
+            fileLoading={ fileLoading }
+            project={ project }
+            delFile={ delFile }
+            addFile={ addFile }
+            wfCollection={ wfCollection }
+            wfLoading={ wfLoading }
+            viewWorkflow={ viewWorkflow }
+            indexComments={ indexComments }
+            sortComments={ sortComments }
+            commentsCollection={ commentsCollection }
+            commentsIndexLoading={ commentsIndexLoading }
+            commentsLoading={ commentsLoading }
+            commentsItemLoading={ commentsItemLoading }
+            commentsLoaded={ commentsLoaded }
+            addComments={ addComments }
+            editComments={ editComments }
+            delComments={ delComments }
+            indexWorklog={ indexWorklog }
+            worklogSort={ worklogSort }
+            sortWorklog={ sortWorklog }
+            worklogCollection={ worklogCollection }
+            worklogIndexLoading={ worklogIndexLoading }
+            worklogLoading={ worklogLoading }
+            worklogLoaded={ worklogLoaded }
+            addWorklog={ addWorklog }
+            editWorklog={ editWorklog }
+            delWorklog={ delWorklog }
+            indexHistory={ indexHistory }
+            sortHistory={ sortHistory }
+            historyCollection={ historyCollection }
+            historyIndexLoading={ historyIndexLoading }
+            historyLoaded={ historyLoaded }
+            indexGitCommits={ indexGitCommits }
+            sortGitCommits={ sortGitCommits }
+            gitCommitsCollection={ gitCommitsCollection }
+            gitCommitsIndexLoading={ gitCommitsIndexLoading }
+            gitCommitsLoaded={ gitCommitsLoaded }
+            linkLoading={ linkLoading }
+            createLink={ createLink }
+            delLink={ delLink }
+            watch={ watch }
+            copy={ copy }
+            move={ move }
+            convert={ convert }
+            resetState={ resetState }
+            doAction={ doAction }
+            user={ user }/> }
         </div>
       </div>);
   }

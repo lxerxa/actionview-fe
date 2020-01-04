@@ -9,6 +9,7 @@ import * as WorkflowActions from 'redux/actions/WorkflowActions';
 
 const qs = require('qs');
 const List = require('./List');
+const Header = require('./Header');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -42,7 +43,7 @@ export default class Container extends Component {
   }
 
   refresh(query) {
-    const pathname = '/project/' + this.pid + '/issue';
+    const pathname = '/project/' + this.pid + '/gantt';
     this.context.router.push({ pathname, query });
   }
 
@@ -54,24 +55,6 @@ export default class Container extends Component {
 
   closeDetailBar() {
     this.refs.list && this.refs.list.closeDetail();
-  }
-
-  exportExcel(query, fields) {
-    const newQuery = _.clone(query);
-    newQuery.from = 'export';
-    newQuery.export_fields = fields.join(',');
-    newQuery.page = 1;
-    newQuery.limit = 10000;
-
-    const eleLink = document.createElement('a');
-    eleLink.style.display = 'none';
-    eleLink.href = '/api/project/' + this.pid + '/issue?' + qs.stringify(newQuery || {});
-    eleLink.target = '_blank';
-    // 触发点击
-    document.body.appendChild(eleLink);
-    eleLink.click();
-    // 然后移除
-    document.body.removeChild(eleLink);
   }
 
   async create(values) {
@@ -256,6 +239,20 @@ export default class Container extends Component {
 
     return (
       <div>
+        <Header
+          create={ this.create.bind(this) }
+          addLabels={ this.props.actions.addLabels }
+          saveFilter={ this.saveFilter.bind(this) }
+          resetFilters={ this.resetFilters.bind(this) }
+          configFilters={ this.configFilters.bind(this) }
+          getOptions={ this.getOptions.bind(this) }
+          query={ query }
+          refresh={ this.refresh.bind(this) }
+          index={ this.index.bind(this) }
+          project={ this.props.project.item }
+          closeDetailBar={ this.closeDetailBar.bind(this) }
+          i18n={ this.props.i18n }
+          { ...this.props.issue }/>
         <List ref='list' 
           layout={ this.props.layout }
           index={ this.index.bind(this) } 

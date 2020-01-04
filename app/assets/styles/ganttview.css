@@ -141,12 +141,12 @@ div.ganttview-blocks {
 
 div.ganttview-block-container {
 	height: 31px;
-	padding-top: 4px;
+	padding-top: 5px;
 }
 
 div.ganttview-block {
 	position: relative;
-	height: 25px;
+	height: 23px;
 	background-color: #ddd;
 }
 
