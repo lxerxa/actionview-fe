@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, OverlayTrigger, Popover, Grid, Row, Col, ControlLabel } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 
@@ -20,8 +20,10 @@ export default class List extends Component {
     this.state = { 
       range: [], 
       dates: [], 
+      foldIssues: [],
       collection: [], 
       selectedIssue: {}, 
+      sortkey: 'create_time_desc', 
       barShow: false,
       editModalShow: false
     };
@@ -35,6 +37,9 @@ export default class List extends Component {
     this.arrangeData = this.arrangeData.bind(this);
     this.clickBar = this.clickBar.bind(this);
     this.show = this.show.bind(this);
+    this.fold = this.fold.bind(this);
+    this.refresh = this.refresh.bind(this);
+    this.setSort = this.setSort.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
   }
 
@@ -134,16 +139,15 @@ export default class List extends Component {
 
     const { options: { singulars=[] } } = nextProps;
     if (nextProps.collection.length > 0) {
-      this.arrangeData(nextProps.collection);
+      this.state.foldIssues = [];
+      this.arrangeData(nextProps.collection, [], this.state.sortkey);
       this.setBoundaryDatesFromData(nextProps.collection);
       this.setDates(singulars);
     }
   }
 
-  arrangeData(collection) {
+  arrangeData(collection, foldIssues, sortkey) {
     //this.state.collection = collection;
-    const sortkey = this.state.sortkey;
-
     const standardIssues = _.filter(collection, (v) => !v.parent || !v.parent.id);
     const subtaskIssues = _.filter(collection, (v) => v.parent && v.parent.id);
 
@@ -181,8 +185,15 @@ export default class List extends Component {
 
     const newIssues = [];
     _.forEach(standardIssues, (v, k) => {
-      newIssues.push(v);
       if (classifiedSubtasks[v.id]) {
+        v.hasChildren = true;
+        v.isFolded = false;
+      }
+      if (foldIssues.indexOf(v.id) !== -1) {
+        v.isFolded = true;
+      }
+      newIssues.push(v);
+      if (classifiedSubtasks[v.id] && !v.isFolded) {
         _.forEach(classifiedSubtasks[v.id], (v2) => {
           newIssues.push(v2);
         });
@@ -212,7 +223,7 @@ export default class List extends Component {
     return (
       <div className='ganttview-vtheader'>
         <div className='ganttview-vtheader-item'>
-          <div className='ganttview-vtheader-series' style={ { width: '780px' } }>
+          <div className='ganttview-vtheader-series' style={ { width: '870px' } }>
             <div className='ganttview-vtheader-series-header-item'>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
                 标题
@@ -232,12 +243,15 @@ export default class List extends Component {
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
                 完成时间 
               </div>
+              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
+                工期(天) 
+              </div>
             </div>
             { _.map(collection, (v, key) => (
             <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
-                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '10px' : '2px', visibility: (collection[_.add(key,1)] && collection[_.add(key,1)].parent && !v.parent) ? 'visible' : 'hidden', cursor: 'pointer' } }>
-                  <a href='#'><i className='fa fa-caret-down'></i></a>
+                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '10px' : '2px', visibility: v.hasChildren ? 'visible' : 'hidden', cursor: 'pointer' } }>
+                  { v.isFolded ? <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-caret-down'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-caret-up'></i></a> }
                 </span>
                 <a href='#' onClick={ (e) => { e.preventDefault(); this.show(v.id) } }>{ v.title }</a>
               </div>
@@ -251,10 +265,13 @@ export default class List extends Component {
                 { (v.progress || 0) + '%' } 
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                { moment.unix(v.expect_start_time || v.expect_complete_time || v.created_at).format('YYYY/MM/DD') } 
+                { v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : '-' } 
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                { moment.unix(v.expect_complete_time || v.expect_start_time || v.created_at).format('YYYY/MM/DD') }
+                { v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : '-' }
+              </div>
+              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
+                { v.expect_complete_time && v.expect_start_time ? (moment.unix(v.expect_complete_time).startOf('day').format('X') - moment.unix(v.expect_start_time).startOf('day').format('X')) / 3600 / 24 + 1 : '-' }
               </div>
             </div> ) ) }
           </div>
@@ -310,10 +327,32 @@ export default class List extends Component {
     const { collection, range } = this.state;
     const origin = range[0];
 
+
     return (
       <div className='ganttview-blocks'>
       { _.map(collection, (v, key) => {
 
+        const popover=(
+          <Popover id='popover-trigger-hover' style={ { maxWidth: '350px', padding: '15px 0px' } }>
+            <Grid>
+              <Row>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>标题</Col>
+                <Col sm={ 8 }>{ v.title }</Col>
+              </Row>
+              <Row>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
+                <Col sm={ 8 }>{ v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : '未指定' }</Col>
+              </Row>
+              <Row>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>结束时间</Col>
+                <Col sm={ 8 }>{ v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : '未指定' }</Col>
+              </Row>
+              <Row>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>进度</Col>
+                <Col sm={ 8 }>{ v.progress ? v.progress + '%' : '0%' }</Col>
+              </Row>
+            </Grid>
+          </Popover>);
         const start = moment.unix(v.expect_start_time || v.expect_complete_time || v.created_at).startOf('day').format('X');
         const end = moment.unix(v.expect_complete_time || v.expect_start_time || v.created_at).startOf('day').format('X');
         const size = (end - start) / 3600 / 24 + 1;
@@ -323,12 +362,13 @@ export default class List extends Component {
 
         return (
           <div className='ganttview-block-container' key={ key }>
-            <div className='ganttview-block ganttview-block-movable' 
-              id={ v.id }
-              title='aabb' 
-              style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor: '#ddd' } }>
-              <div style={ { height: '23px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#65c16f' } }/>
-            </div>
+            <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='bottom' overlay={ popover }>
+              <div className='ganttview-block ganttview-block-movable' 
+                id={ v.id }
+                style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor: '#ddd' } }>
+                <div style={ { height: '23px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#65c16f' } }/>
+              </div>
+            </OverlayTrigger>
           </div> ) } ) }
       </div> );
   }
@@ -446,7 +486,7 @@ export default class List extends Component {
 
       $('.ganttview-block').unbind();
 
-      $('.ganttview-block').click(function() {
+      $('.ganttview-block').dblclick(function() {
         const block = $(this);
         self.clickBar(block);
       });
@@ -488,6 +528,28 @@ export default class List extends Component {
     $('.ganttview-vtheader-series-item').css('background-color', '');
     const { cleanRecord } = this.props;
     cleanRecord();
+  }
+
+  fold(issueId) {
+    const index = this.state.foldIssues.indexOf(issueId);
+    if (index !== -1) {
+      this.state.foldIssues.splice(index, 1);
+    } else {
+      this.state.foldIssues.push(issueId);
+    }
+
+    this.arrangeData(this.props.collection, this.state.foldIssues, this.state.sortkey)
+    this.setState({ collection: this.state.collection });
+  }
+
+  async refresh() {
+    const { index, query={} } = this.props;
+    await index(query);
+  }
+
+  setSort(sortkey) {
+    this.arrangeData(this.props.collection, this.state.foldIssues, sortkey);
+    this.setState({ sortkey });
   }
 
   render() {
@@ -575,9 +637,18 @@ export default class List extends Component {
     return (
       <div>
         <div style={ { marginTop: '10px' } }>
-          <a href='#'><span style={ { marginLeft: '5px' } }><i className='fa fa-sort-amount-asc'></i> 开始时间</span></a>
-          <a href='#'><span style={ { marginLeft: '15px' } }><i className='fa fa-sort-amount-asc'></i> 创建时间</span></a>
+          <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'start_time_desc' ? 'start_time_asc' : 'start_time_desc') } }>
+            <span style={ { marginLeft: '5px', float: 'left' } }>
+              <i className={ this.state.sortkey == 'start_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> 开始时间
+            </span>
+          </a>
+          <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'create_time_desc' ? 'create_time_asc' : 'create_time_desc') } }>
+            <span style={ { marginLeft: '15px', float: 'left' } }>
+              <i className={ this.state.sortkey == 'create_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> 创建时间
+            </span>
+          </a>
           <span style={ { marginLeft: '15px' } }>备注备注注备注注备注注备注注备注注备注</span>
+          <a href='#' onClick={ (e) => { e.preventDefault(); this.refresh() } }><span style={ { marginRight: '5px', float: 'right' } }><i className='fa fa-refresh'></i> 刷新</span></a>
         </div>
         <div className='ganttview'>
           { this.addVtHeader() }

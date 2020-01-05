@@ -102,7 +102,7 @@ export default class EditModal extends Component {
     initializeForm({ 
       expect_start_time: moment.unix(data.expect_start_time || data.expect_complete_time || data.created_at), 
       expect_complete_time: moment.unix(data.expect_complete_time || data.expect_start_time || data.created_at),
-      progress: data.progress 
+      progress: data.progress || 0 
     });
   }
 
@@ -123,7 +123,7 @@ export default class EditModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>名称</ControlLabel>
+            <ControlLabel>标题</ControlLabel>
             <span style={ { marginLeft: '10px' } }>{ data.title }</span>
           </FormGroup>
           <div>
@@ -161,8 +161,7 @@ export default class EditModal extends Component {
               style={ { width: '80px', display: 'inline-block', marginLeft: '10px' } }
               { ...progress } 
               placeholder='进度'/> %
-            { progress.value && progress.error && 
-              <HelpBlock>{ progress.error }</HelpBlock> }
+            { progress.value && progress.touched && progress.error ? <HelpBlock>{ progress.error }</HelpBlock> : '' }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
