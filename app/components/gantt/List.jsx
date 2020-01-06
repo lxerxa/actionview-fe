@@ -40,6 +40,7 @@ export default class List extends Component {
     this.fold = this.fold.bind(this);
     this.refresh = this.refresh.bind(this);
     this.setSort = this.setSort.bind(this);
+    this.getDuration = this.getDuration.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
   }
 
@@ -175,7 +176,7 @@ export default class List extends Component {
         p = standardIssues[i];
       }
       p.expect_start_time = boundary[0]; 
-      p.expect_end_time = boundary[1]; 
+      p.expect_complete_time = boundary[1]; 
       if (i === -1) {
         standardIssues.push(p);
       }
@@ -226,7 +227,7 @@ export default class List extends Component {
           <div className='ganttview-vtheader-series' style={ { width: '870px' } }>
             <div className='ganttview-vtheader-series-header-item'>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
-                标题
+                主题
               </div>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '60px' } }>
                 NO 
@@ -250,10 +251,12 @@ export default class List extends Component {
             { _.map(collection, (v, key) => (
             <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
-                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '10px' : '2px', visibility: v.hasChildren ? 'visible' : 'hidden', cursor: 'pointer' } }>
-                  { v.isFolded ? <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-caret-down'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-caret-up'></i></a> }
+                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasChildren ? 'visible' : 'hidden', cursor: 'pointer' } }>
+                  { v.isFolded ? <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
                 </span>
-                <a href='#' onClick={ (e) => { e.preventDefault(); this.show(v.id) } }>{ v.title }</a>
+                <a href='#' onClick={ (e) => { e.preventDefault(); this.show(v.id) } } title={ v.title }>
+                  <span style={ { marginLeft: '3px' } }>{ v.title }</span>
+                </a>
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '60px' } }>
                 { v.no } 
@@ -271,12 +274,39 @@ export default class List extends Component {
                 { v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : '-' }
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                { v.expect_complete_time && v.expect_start_time ? (moment.unix(v.expect_complete_time).startOf('day').format('X') - moment.unix(v.expect_start_time).startOf('day').format('X')) / 3600 / 24 + 1 : '-' }
+                { v.expect_complete_time && v.expect_start_time ? this.getDuration(v.expect_start_time, v.expect_complete_time) : '-' }
               </div>
             </div> ) ) }
           </div>
         </div>
       </div>);
+  }
+
+  getDuration(start_time, complete_time) {
+    const { options: { singulars=[] } } = this.props;
+
+
+    const new_start_time = moment.unix(start_time).startOf('day').format('X') - 0; 
+    const new_complete_time = moment.unix(complete_time).startOf('day').format('X') - 0; 
+
+    let duration = 0;
+    for (let i = new_start_time; i <= new_complete_time; i = i + 3600 * 24) {
+      const m = moment.unix(i);
+      const date = m.format('YYYY/MM/DD');
+      const index = _.findIndex(singulars, { date });
+      if (index !== -1) {
+        if (singulars[index].notWorking !== 1) {
+          duration += 1;
+        }
+        continue;
+      }
+
+      const week = m.format('d'); 
+      if (week % 6 !== 0) {
+        duration += 1;
+      }
+    }
+    return duration;
   }
 
   addHzHeader() {  
@@ -336,16 +366,16 @@ export default class List extends Component {
           <Popover id='popover-trigger-hover' style={ { maxWidth: '350px', padding: '15px 0px' } }>
             <Grid>
               <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>标题</Col>
-                <Col sm={ 8 }>{ v.title }</Col>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>主题</Col>
+                <Col sm={ 8 }><div style={ { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' } }>{ v.title }</div></Col>
               </Row>
               <Row>
                 <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
-                <Col sm={ 8 }>{ v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : '未指定' }</Col>
+                <Col sm={ 8 }>{ v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : <span style={ { fontStyle: 'italic', color: '#aaa' } }>未指定</span> }</Col>
               </Row>
               <Row>
                 <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>结束时间</Col>
-                <Col sm={ 8 }>{ v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : '未指定' }</Col>
+                <Col sm={ 8 }>{ v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : <span style={ { fontStyle: 'italic', color: '#aaa' } }>未指定</span> }</Col>
               </Row>
               <Row>
                 <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>进度</Col>
@@ -353,6 +383,7 @@ export default class List extends Component {
               </Row>
             </Grid>
           </Popover>);
+
         const start = moment.unix(v.expect_start_time || v.expect_complete_time || v.created_at).startOf('day').format('X');
         const end = moment.unix(v.expect_complete_time || v.expect_start_time || v.created_at).startOf('day').format('X');
         const size = (end - start) / 3600 / 24 + 1;
@@ -362,12 +393,20 @@ export default class List extends Component {
 
         return (
           <div className='ganttview-block-container' key={ key }>
-            <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='bottom' overlay={ popover }>
+            <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='top' overlay={ popover }>
+              { v.hasChildren ?
+              <div className='ganttview-block-parent' 
+                id={ v.id }
+                style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px' } }>
+                <div className='ganttview-block-parent-left'/>
+                <div className='ganttview-block-parent-right'/>
+              </div>
+              :
               <div className='ganttview-block ganttview-block-movable' 
                 id={ v.id }
-                style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor: '#ddd' } }>
+                style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor: v.expect_start_time && v.expect_complete_time ? '#ddd' : '#777' } }>
                 <div style={ { height: '23px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#65c16f' } }/>
-              </div>
+              </div> }
             </OverlayTrigger>
           </div> ) } ) }
       </div> );
@@ -392,7 +431,7 @@ export default class List extends Component {
     const numberOfDays = _.round(width / cellWidth);
     const newEnd = _.add(newStart, (numberOfDays - 1) * 3600 * 24);
 
-    const ecode = edit(block.attr('id'), { expect_start_time: newStart, expect_end_time: newEnd });
+    const ecode = edit(block.attr('id'), { expect_start_time: newStart, expect_complete_time: newEnd });
     if (ecode === 0) {
       notify.show('已更新。', 'success', 2000);
     } else {
@@ -647,7 +686,7 @@ export default class List extends Component {
               <i className={ this.state.sortkey == 'create_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> 创建时间
             </span>
           </a>
-          <span style={ { marginLeft: '15px' } }>备注备注注备注注备注注备注注备注注备注</span>
+          <span style={ { marginLeft: '15px', fontSize: '12px', color: '#a6a6a6' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.refresh() } }><span style={ { marginRight: '5px', float: 'right' } }><i className='fa fa-refresh'></i> 刷新</span></a>
         </div>
         <div className='ganttview'>

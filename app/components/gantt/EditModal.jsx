@@ -72,7 +72,7 @@ export default class EditModal extends Component {
       submitValues.expect_start_time = parseInt(moment(values.expect_start_time).startOf('day').format('X'));
     }
     if (values.expect_complete_time) {
-      submitValues.expect_complete_time = parseInt(moment(values.expect_complete_time).endOf('day').format('X'));
+      submitValues.expect_complete_time = parseInt(moment(values.expect_complete_time).startOf('day').format('X'));
     }
     if (values.progress && mode == 'progress') {
       submitValues.progress = values.progress;
@@ -118,12 +118,12 @@ export default class EditModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>问题编辑</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '问题编辑 - ' + data.no }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>标题</ControlLabel>
+            <ControlLabel>主题</ControlLabel>
             <span style={ { marginLeft: '10px' } }>{ data.title }</span>
           </FormGroup>
           <div>
