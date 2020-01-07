@@ -118,6 +118,9 @@ div.ganttview-hzheader-day.ganttview-weekend {
 	background-color: #fff0f0;
 }
 
+div.ganttview-hzheader-day.ganttview-today {
+	background-color: yellow;
+}
 
 /* Grid */
 
@@ -153,7 +156,7 @@ div.ganttview-block {
 div.ganttview-block-parent {
 	position: relative;
 	height: 10px;
-	background-color: #3db9d3;
+	background-color: #65c16f;
 }
 
 div.ganttview-block-parent-left {
@@ -165,7 +168,7 @@ div.ganttview-block-parent-left {
     border-top-color: transparent;
     border-right-color: transparent!important;
     border-bottom-color: transparent!important;
-    border-left-color: #3db9d3!important;
+    border-left-color: #65c16f!important;
 }
 
 div.ganttview-block-parent-right {
@@ -177,7 +180,7 @@ div.ganttview-block-parent-right {
     border-top-color: transparent;
     border-left-color: transparent!important;
     border-bottom-color: transparent!important;
-    border-right-color: #3db9d3!important;
+    border-right-color: #65c16f!important;
 }
 
 div.ganttview-marker {

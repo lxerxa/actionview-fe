@@ -15,9 +15,11 @@ export default class List extends Component {
     super(props);
     this.configs = { 
       cellWidth: 25, 
+      blockHeight: 23, 
       minDays: 75
     };
     this.state = { 
+      mode: 'progress',
       range: [], 
       dates: [], 
       foldIssues: [],
@@ -219,12 +221,13 @@ export default class List extends Component {
   }
 
   addVtHeader() {
-    const { collection } = this.state;
+    const { collection, mode } = this.state;
+    const { options: { states=[] } } = this.props;
 
     return (
       <div className='ganttview-vtheader'>
         <div className='ganttview-vtheader-item'>
-          <div className='ganttview-vtheader-series' style={ { width: '870px' } }>
+          <div className='ganttview-vtheader-series' style={ { width: '900px' } }>
             <div className='ganttview-vtheader-series-header-item'>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
                 主题
@@ -235,9 +238,14 @@ export default class List extends Component {
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
                 经办人 
               </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }>
+              { mode == 'progress' &&
+              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
                 进度 
-              </div>
+              </div> }
+              { mode == 'status' &&
+              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
+                状态 
+              </div> }
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
                 开始时间 
               </div>
@@ -264,9 +272,14 @@ export default class List extends Component {
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
                 { v.assignee && v.assignee.name || '-' } 
               </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '50px' } }>
+              { mode == 'progress' &&
+              <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>
                 { (v.progress || 0) + '%' } 
-              </div>
+              </div> }
+              { mode == 'status' &&
+              <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>
+                { _.findIndex(states, { id: v.state }) !== -1 ? <span className={ 'state-' + _.find(states, { id: v.state }).category + '-label' }>{ _.find(states, { id: v.state }).name }</span> : '-' } 
+              </div> }
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
                 { v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : '-' } 
               </div>
@@ -284,7 +297,6 @@ export default class List extends Component {
 
   getDuration(start_time, complete_time) {
     const { options: { singulars=[] } } = this.props;
-
 
     const new_start_time = moment.unix(start_time).startOf('day').format('X') - 0; 
     const new_complete_time = moment.unix(complete_time).startOf('day').format('X') - 0; 
@@ -312,6 +324,7 @@ export default class List extends Component {
   addHzHeader() {  
     const cellWidth = this.configs.cellWidth; 
     const { dates } = this.state;
+    const { options: { today = '' } } = this.props;
 
     const w = _.flatten(_.values(dates)).length * cellWidth + 'px';
     return (
@@ -323,8 +336,8 @@ export default class List extends Component {
           </div> ) }
         </div>
         <div className='ganttview-hzheader-days' style={ { width: w } }>
-          { _.map(_.flatten(_.values(dates)), (v, key) =>
-            <div className={ v.notWorking === 1 ? 'ganttview-hzheader-day ganttview-weekend' : 'ganttview-hzheader-day' } key={ key }>
+          { _.map(_.flatten(_.values(dates)), (v) =>
+            <div className={ 'ganttview-hzheader-day ' + (v.date == today ? 'ganttview-today' : (v.notWorking === 1 ? 'ganttview-weekend' : '')) } key={ v.date }>
               { v.day }
             </div> ) }
         </div>
@@ -334,6 +347,7 @@ export default class List extends Component {
   addGrid() {
     const cellWidth = this.configs.cellWidth;
     const { collection, dates } = this.state;
+    const { options: { today = '' } } = this.props;
 
     const dates2 = _.flatten(_.values(dates));
     return (
@@ -346,7 +360,7 @@ export default class List extends Component {
           style={ { width: dates2.length * cellWidth + 'px' } } key={ key }>
         { _.map(dates2, (v2, key2) => 
           <div 
-            className={  v2.notWorking === 1 ? 'ganttview-grid-row-cell ganttview-weekend' : 'ganttview-grid-row-cell' } 
+            className={ 'ganttview-grid-row-cell ' + (v2.date == today ? 'ganttview-today' : (v2.notWorking === 1 ? 'ganttview-weekend' : '')) } 
             key={ key2 }/> ) }
         </div> ) ) }
       </div>);
@@ -354,14 +368,17 @@ export default class List extends Component {
 
   addBlocks() {
     const cellWidth = this.configs.cellWidth;
-    const { collection, range } = this.state;
+    const blockHeight = this.configs.blockHeight;
+
+    const { options: { states=[] } } = this.props;
+    const { mode, collection, range } = this.state;
     const origin = range[0];
 
+    const stateColors = { new : '#ccc', inprogress: '#ffe28c', completed: '#3c9445' };
 
     return (
       <div className='ganttview-blocks'>
       { _.map(collection, (v, key) => {
-
         const popover=(
           <Popover id='popover-trigger-hover' style={ { maxWidth: '350px', padding: '15px 0px' } }>
             <Grid>
@@ -377,10 +394,16 @@ export default class List extends Component {
                 <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>结束时间</Col>
                 <Col sm={ 8 }>{ v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : <span style={ { fontStyle: 'italic', color: '#aaa' } }>未指定</span> }</Col>
               </Row>
+              { mode == 'progress' &&
               <Row>
                 <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>进度</Col>
                 <Col sm={ 8 }>{ v.progress ? v.progress + '%' : '0%' }</Col>
-              </Row>
+              </Row> }
+              { mode == 'status' &&
+              <Row>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>状态</Col>
+                <Col sm={ 8 }>{ _.findIndex(states, { id: v.state }) != -1 ? <span className={ 'state-' + _.find(states, { id: v.state }).category + '-label' }>{ _.find(states, { id: v.state }).name }</span>: '-' }</Col>
+              </Row> }
             </Grid>
           </Popover>);
 
@@ -390,6 +413,20 @@ export default class List extends Component {
         const offset = (start - origin) / 3600 / 24;
 
         const width = size * cellWidth - 3;
+
+        let backgroundColor = '#ccc';
+        if (mode == 'progress') {
+          if (!v.expect_start_time || !v.expect_complete_time) {
+            backgroundColor = '#555';
+          } else {
+            backgroundColor = '#3db9d3';
+          }
+        } else if (mode == 'status') {
+          const stateInd = _.findIndex(states, { id: v.state });
+          if (stateInd !== -1) {
+            backgroundColor = stateColors[states[stateInd].category]; 
+          }
+        }
 
         return (
           <div className='ganttview-block-container' key={ key }>
@@ -404,8 +441,9 @@ export default class List extends Component {
               :
               <div className='ganttview-block ganttview-block-movable' 
                 id={ v.id }
-                style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor: v.expect_start_time && v.expect_complete_time ? '#ddd' : '#777' } }>
-                <div style={ { height: '23px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#65c16f' } }/>
+                style={ { width: width + 'px', height: blockHeight + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor } }>
+                { mode == 'progress' &&
+                <div style={ { height: blockHeight + 'px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#2898b0' } }/> }
               </div> }
             </OverlayTrigger>
           </div> ) } ) }
@@ -454,7 +492,7 @@ export default class List extends Component {
       const day = m.format('D');
       const week = m.format('d');
 
-      const d = { day, notWorking: week % 6 === 0 ? 1 : 0 };
+      const d = { date, day, notWorking: week % 6 === 0 ? 1 : 0 };
       const si = _.findIndex(singulars, { date });
       if (si !== -1) {
         d.notWorking = singulars[si].notWorking;
@@ -660,7 +698,7 @@ export default class List extends Component {
       resetState,
       doAction,
       user } = this.props;
-    const { collection, selectedIssue } = this.state;
+    const { mode, collection, selectedIssue } = this.state;
 
     if (indexLoading) {
       return (
@@ -672,6 +710,8 @@ export default class List extends Component {
     } else if (collection.length <= 0) {
       return <div/>;
     }
+
+    console.log(mode);
 
     return (
       <div>
@@ -687,7 +727,17 @@ export default class List extends Component {
             </span>
           </a>
           <span style={ { marginLeft: '15px', fontSize: '12px', color: '#a6a6a6' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span>
-          <a href='#' onClick={ (e) => { e.preventDefault(); this.refresh() } }><span style={ { marginRight: '5px', float: 'right' } }><i className='fa fa-refresh'></i> 刷新</span></a>
+          <span style={ { float: 'right', marginRight: '5px' } }>
+            { mode == 'progress' ?
+            <span>按任务进度</span>
+            :
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ mode: 'progress' }) } }>按任务进度</a> }
+            <span style={ { margin: '0px 5px' } }> | </span>
+            { mode == 'status' ?
+            <span>按问题状态</span>
+            :
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ mode: 'status' }) } }>按问题状态</a> }
+          </span>
         </div>
         <div className='ganttview'>
           { this.addVtHeader() }
