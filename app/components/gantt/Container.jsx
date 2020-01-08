@@ -42,8 +42,11 @@ export default class Container extends Component {
     issue: PropTypes.object.isRequired
   }
 
-  refresh(query) {
-    const pathname = '/project/' + this.pid + '/gantt';
+  refresh(query, module) {
+    let pathname = '/project/' + this.pid + '/gantt';
+    if (module == 'issuelist') {
+      pathname = '/project/' + this.pid + '/issue';
+    }
     this.context.router.push({ pathname, query });
   }
 

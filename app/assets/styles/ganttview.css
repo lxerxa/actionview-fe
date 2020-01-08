@@ -119,7 +119,7 @@ div.ganttview-hzheader-day.ganttview-weekend {
 }
 
 div.ganttview-hzheader-day.ganttview-today {
-	background-color: yellow;
+	background-color: #ffff00;
 }
 
 /* Grid */
@@ -135,6 +135,9 @@ div.ganttview-grid-row-cell.ganttview-weekend {
 	background-color: #fff0f0;
 }
 
+div.ganttview-grid-row-cell.ganttview-today {
+	background-color: #ffff00;
+}
 
 /* Blocks */
 

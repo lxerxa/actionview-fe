@@ -42,6 +42,7 @@ export default class List extends Component {
     this.fold = this.fold.bind(this);
     this.refresh = this.refresh.bind(this);
     this.setSort = this.setSort.bind(this);
+    this.locate = this.locate.bind(this);
     this.getDuration = this.getDuration.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
   }
@@ -227,7 +228,7 @@ export default class List extends Component {
     return (
       <div className='ganttview-vtheader'>
         <div className='ganttview-vtheader-item'>
-          <div className='ganttview-vtheader-series' style={ { width: '900px' } }>
+          <div className='ganttview-vtheader-series' style={ { width: '950px' } }>
             <div className='ganttview-vtheader-series-header-item'>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
                 主题
@@ -255,6 +256,7 @@ export default class List extends Component {
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
                 工期(天) 
               </div>
+              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }/>
             </div>
             { _.map(collection, (v, key) => (
             <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
@@ -288,6 +290,11 @@ export default class List extends Component {
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
                 { v.expect_complete_time && v.expect_start_time ? this.getDuration(v.expect_start_time, v.expect_complete_time) : '-' }
+              </div>
+              <div className='ganttview-vtheader-series-item-cell' style={ { width: '50px' } }>
+                <a href='#' onClick={ (e) => { e.preventDefault(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
+                  <i className='fa fa-dot-circle-o'></i>
+                </a> 
               </div>
             </div> ) ) }
           </div>
@@ -331,7 +338,7 @@ export default class List extends Component {
       <div className='ganttview-hzheader'>
         <div className='ganttview-hzheader-months' style={ { width: w } }>
         { _.map(dates, (v, key) =>
-          <div className='ganttview-hzheader-month' key={ key } style={ { width: v.length * cellWidth + 'px' } }>
+          <div className='ganttview-hzheader-month' key={ v.date } style={ { width: v.length * cellWidth + 'px' } }>
             { key }
           </div> ) }
         </div>
@@ -357,11 +364,12 @@ export default class List extends Component {
       { _.map(collection, (v, key) => (
         <div 
           className='ganttview-grid-row' 
-          style={ { width: dates2.length * cellWidth + 'px' } } key={ key }>
+          style={ { width: dates2.length * cellWidth + 'px' } } 
+          key={ v.id }>
         { _.map(dates2, (v2, key2) => 
           <div 
             className={ 'ganttview-grid-row-cell ' + (v2.date == today ? 'ganttview-today' : (v2.notWorking === 1 ? 'ganttview-weekend' : '')) } 
-            key={ key2 }/> ) }
+            key={ v2.date }/> ) }
         </div> ) ) }
       </div>);
   }
@@ -374,7 +382,7 @@ export default class List extends Component {
     const { mode, collection, range } = this.state;
     const origin = range[0];
 
-    const stateColors = { new : '#ccc', inprogress: '#ffe28c', completed: '#3c9445' };
+    const stateColors = { new : '#ccc', inprogress: '#3db9d3', completed: '#3c9445' };
 
     return (
       <div className='ganttview-blocks'>
@@ -416,22 +424,29 @@ export default class List extends Component {
 
         let backgroundColor = '#ccc';
         if (mode == 'progress') {
-          if (!v.expect_start_time || !v.expect_complete_time) {
+          if ((!v.expect_start_time || !v.expect_complete_time) && (!v.progress || v.progress < 100)) {
             backgroundColor = '#555';
           } else {
-            backgroundColor = '#3db9d3';
+            backgroundColor = v.hasChildren ? '#65c16f' : '#3db9d3';
           }
         } else if (mode == 'status') {
           const stateInd = _.findIndex(states, { id: v.state });
           if (stateInd !== -1) {
-            backgroundColor = stateColors[states[stateInd].category]; 
+            const category = states[stateInd].category;
+            if ((!v.expect_start_time || !v.expect_complete_time) && category !== 'completed') {
+              backgroundColor = '#555';
+            } else {
+              backgroundColor = stateColors[category]; 
+            }
           }
         }
 
+        const progressBGColor = v.hasChildren ? '#3c9445' : '#2898b0';
+
         return (
-          <div className='ganttview-block-container' key={ key }>
+          <div className='ganttview-block-container' key={ v.id }>
             <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='top' overlay={ popover }>
-              { v.hasChildren ?
+              { v.hasChildren && !v.isFolded ?
               <div className='ganttview-block-parent' 
                 id={ v.id }
                 style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px' } }>
@@ -439,15 +454,25 @@ export default class List extends Component {
                 <div className='ganttview-block-parent-right'/>
               </div>
               :
-              <div className='ganttview-block ganttview-block-movable' 
+              <div className={ 'ganttview-block ' + (v.hasChildren ? '' : 'ganttview-block-movable') } 
                 id={ v.id }
                 style={ { width: width + 'px', height: blockHeight + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor } }>
                 { mode == 'progress' &&
-                <div style={ { height: blockHeight + 'px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: '#2898b0' } }/> }
+                <div style={ { height: blockHeight + 'px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: progressBGColor } }/> }
               </div> }
             </OverlayTrigger>
           </div> ) } ) }
       </div> );
+  }
+
+  locate(target) {
+    const cellWidth = this.configs.cellWidth;
+    const { range } = this.state;
+    const start = range[0];
+
+    const offset = _.floor((target - start) / 3600 / 24) * cellWidth;
+    const container = $('div.ganttview-slide-container');
+    container.scrollLeft(offset);
   }
 
   updateData(block) {
@@ -711,8 +736,6 @@ export default class List extends Component {
       return <div/>;
     }
 
-    console.log(mode);
-
     return (
       <div>
         <div style={ { marginTop: '10px' } }>
@@ -732,7 +755,7 @@ export default class List extends Component {
             <span>按任务进度</span>
             :
             <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ mode: 'progress' }) } }>按任务进度</a> }
-            <span style={ { margin: '0px 5px' } }> | </span>
+            <span style={ { margin: '0px 3px' } }> | </span>
             { mode == 'status' ?
             <span>按问题状态</span>
             :

@@ -83,6 +83,19 @@ export default class Header extends Component {
     }
   }
 
+  operateSelect(eventKey) {
+    const { refresh, index, query } = this.props;
+    if (eventKey === 'refresh') {
+      if (query.page > 1) {
+        refresh(_.extend(query, { page: undefined }));
+      } else {
+        index(query);
+      }
+    } else if (eventKey === 'gotolist') {
+      refresh(_.extend(query, { page: undefined }), 'issuelist');
+    }
+  }
+
   render() {
     const { 
       i18n, 
@@ -120,6 +133,13 @@ export default class Header extends Component {
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { if (!this.state.searchShow) { closeDetailBar(); }  this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
           <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
+          <div style={ { marginTop: '8px', float: 'right' } }>
+            <DropdownButton id='more' pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='refresh'>刷新</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='gotolist'>跳至问题列表</MenuItem>
+            </DropdownButton>
+          </div>
           { sqlTxt &&
           <div className='cond-bar'>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
