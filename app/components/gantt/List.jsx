@@ -16,19 +16,19 @@ export default class List extends Component {
     this.configs = { 
       cellWidth: 25, 
       blockHeight: 23, 
-      minDays: 75
+      minDays: 30 
     };
     this.state = { 
-      mode: 'progress',
       range: [], 
       dates: [], 
       foldIssues: [],
       collection: [], 
       selectedIssue: {}, 
-      sortkey: 'create_time_desc', 
       barShow: false,
       editModalShow: false
     };
+    this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'create_time_desc';
+    this.state.mode = window.localStorage && window.localStorage.getItem('gantt-mode') || 'progress';
     this.addVtHeader = this.addVtHeader.bind(this);
     this.addHzHeader = this.addHzHeader.bind(this);
     this.addGrid = this.addGrid.bind(this);
@@ -42,7 +42,9 @@ export default class List extends Component {
     this.fold = this.fold.bind(this);
     this.refresh = this.refresh.bind(this);
     this.setSort = this.setSort.bind(this);
+    this.selectMode = this.selectMode.bind(this);
     this.locate = this.locate.bind(this);
+    this.locateToday = this.locateToday.bind(this);
     this.getDuration = this.getDuration.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
   }
@@ -465,12 +467,27 @@ export default class List extends Component {
       </div> );
   }
 
+  locateToday() {
+    const cellWidth = this.configs.cellWidth;
+    const { options: { today='' } } = this.props;
+    if (!today) {
+      return;
+    }
+
+    const containerWidth = $('div.ganttview-slide-container').width();
+    const cellNum = _.floor(containerWidth / cellWidth / 2);
+    console.log(containerWidth, cellNum);
+
+    const target = moment(today).subtract(cellNum, 'days').format('X');
+    this.locate(target);
+  }
+
   locate(target) {
     const cellWidth = this.configs.cellWidth;
     const { range } = this.state;
     const start = range[0];
 
-    const offset = _.floor((target - start) / 3600 / 24) * cellWidth;
+    const offset = _.floor((target - start) / 3600 / 24 - 1) * cellWidth;
     const container = $('div.ganttview-slide-container');
     container.scrollLeft(offset);
   }
@@ -558,12 +575,10 @@ export default class List extends Component {
 
     const boundary = this.getBoundaryDatesFromData(data);
     let start = moment.unix(boundary[0]).subtract(1, 'days').format('X');
-    let end = moment.unix(boundary[1]).add(1, 'days').format('X');
+    let end = moment.unix(boundary[1]).add(minDays, 'days').format('X');
 
-    let days = (end - start) / 3600 / 24 + 1;
-    if (days < minDays) {
-      end = moment.unix(start).add(minDays, 'days').format('X');
-    }
+    //let days = (end - start) / 3600 / 24 + 1;
+    //end = moment.unix(start).add(minDays, 'days').format('X');
 
     this.state.range = [ start - 0, end - 0 ];
   }
@@ -651,7 +666,17 @@ export default class List extends Component {
 
   setSort(sortkey) {
     this.arrangeData(this.props.collection, this.state.foldIssues, sortkey);
+    if (window.localStorage) {
+      window.localStorage.setItem('gantt-sortkey', sortkey);
+    }
     this.setState({ sortkey });
+  }
+
+  selectMode(mode) {
+    if (window.localStorage) {
+      window.localStorage.setItem('gantt-mode', mode);
+    }
+    this.setState({ mode });
   }
 
   render() {
@@ -733,33 +758,43 @@ export default class List extends Component {
           </div>
         </div>);
     } else if (collection.length <= 0) {
-      return <div/>;
+      return ( 
+        <div style={ { textAlign: 'center', marginTop: '50px' } }>
+          <span style={ { fontSize: '160px', color: '#FFC125' } } >
+            <i className='fa fa-warning'></i>
+          </span><br/>
+          <span>抱歉，暂无满足该检索条件的数据。</span>
+        </div>);
     }
 
     return (
       <div>
         <div style={ { marginTop: '10px' } }>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'start_time_desc' ? 'start_time_asc' : 'start_time_desc') } }>
-            <span style={ { marginLeft: '5px', float: 'left' } }>
-              <i className={ this.state.sortkey == 'start_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> 开始时间
+            <span style={ { marginLeft: '5px' } }>
+              { (this.state.sortkey == 'start_time_asc' || this.state.sortkey == 'start_time_desc') && <i className={ this.state.sortkey == 'start_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } 开始时间
             </span>
           </a>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'create_time_desc' ? 'create_time_asc' : 'create_time_desc') } }>
-            <span style={ { marginLeft: '15px', float: 'left' } }>
-              <i className={ this.state.sortkey == 'create_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> 创建时间
+            <span style={ { marginLeft: '15px' } }>
+              { (this.state.sortkey == 'create_time_asc' || this.state.sortkey == 'create_time_desc') && <i className={ this.state.sortkey == 'create_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } 创建时间
             </span>
           </a>
-          <span style={ { marginLeft: '15px', fontSize: '12px', color: '#a6a6a6' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span>
+          <a href='#' onClick={ (e) => { e.preventDefault(); this.locateToday(); } }>
+            <span style={ { marginLeft: '15px' } }>
+              <i className='fa fa-dot-circle-o'></i> 今天 
+            </span>
+          </a>
           <span style={ { float: 'right', marginRight: '5px' } }>
             { mode == 'progress' ?
             <span>按任务进度</span>
             :
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ mode: 'progress' }) } }>按任务进度</a> }
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('progress'); } }>按任务进度</a> }
             <span style={ { margin: '0px 3px' } }> | </span>
             { mode == 'status' ?
             <span>按问题状态</span>
             :
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ mode: 'status' }) } }>按问题状态</a> }
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按问题状态</a> }
           </span>
         </div>
         <div className='ganttview'>
@@ -769,82 +804,85 @@ export default class List extends Component {
             { this.addGrid() }
             { this.addBlocks() }
           </div>
-          { this.state.editModalShow &&
-          <EditModal
-            show
-            i18n={ i18n }
-            mode='progress'
-            close={ () => { this.setState({ editModalShow: false }) } }          
-            edit={ edit }
-            data={ selectedIssue }/> }
-          { this.state.barShow &&
-          <DetailBar
-            i18n={ i18n }
-            layout={ layout }
-            create={ create }
-            edit={ edit }
-            del={ del }
-            setAssignee={ setAssignee }
-            setLabels={ setLabels }
-            addLabels={ addLabels }
-            close={ this.closeDetail }
-            options={ options }
-            data={ itemData }
-            record={ record }
-            forward={ forward }
-            visitedIndex={ visitedIndex }
-            visitedCollection={ visitedCollection }
-            issueCollection={ collection }
-            show = { show }
-            itemLoading={ itemLoading }
-            loading={ loading }
-            fileLoading={ fileLoading }
-            project={ project }
-            delFile={ delFile }
-            addFile={ addFile }
-            wfCollection={ wfCollection }
-            wfLoading={ wfLoading }
-            viewWorkflow={ viewWorkflow }
-            indexComments={ indexComments }
-            sortComments={ sortComments }
-            commentsCollection={ commentsCollection }
-            commentsIndexLoading={ commentsIndexLoading }
-            commentsLoading={ commentsLoading }
-            commentsItemLoading={ commentsItemLoading }
-            commentsLoaded={ commentsLoaded }
-            addComments={ addComments }
-            editComments={ editComments }
-            delComments={ delComments }
-            indexWorklog={ indexWorklog }
-            worklogSort={ worklogSort }
-            sortWorklog={ sortWorklog }
-            worklogCollection={ worklogCollection }
-            worklogIndexLoading={ worklogIndexLoading }
-            worklogLoading={ worklogLoading }
-            worklogLoaded={ worklogLoaded }
-            addWorklog={ addWorklog }
-            editWorklog={ editWorklog }
-            delWorklog={ delWorklog }
-            indexHistory={ indexHistory }
-            sortHistory={ sortHistory }
-            historyCollection={ historyCollection }
-            historyIndexLoading={ historyIndexLoading }
-            historyLoaded={ historyLoaded }
-            indexGitCommits={ indexGitCommits }
-            sortGitCommits={ sortGitCommits }
-            gitCommitsCollection={ gitCommitsCollection }
-            gitCommitsIndexLoading={ gitCommitsIndexLoading }
-            gitCommitsLoaded={ gitCommitsLoaded }
-            linkLoading={ linkLoading }
-            createLink={ createLink }
-            delLink={ delLink }
-            watch={ watch }
-            copy={ copy }
-            move={ move }
-            convert={ convert }
-            resetState={ resetState }
-            doAction={ doAction }
-            user={ user }/> }
+        </div>
+        { this.state.editModalShow &&
+        <EditModal
+          show
+          i18n={ i18n }
+          mode='progress'
+          close={ () => { this.setState({ editModalShow: false }) } }          
+          edit={ edit }
+          data={ selectedIssue }/> }
+        { this.state.barShow &&
+        <DetailBar
+          i18n={ i18n }
+          layout={ layout }
+          create={ create }
+          edit={ edit }
+          del={ del }
+          setAssignee={ setAssignee }
+          setLabels={ setLabels }
+          addLabels={ addLabels }
+          close={ this.closeDetail }
+          options={ options }
+          data={ itemData }
+          record={ record }
+          forward={ forward }
+          visitedIndex={ visitedIndex }
+          visitedCollection={ visitedCollection }
+          issueCollection={ collection }
+          show = { show }
+          itemLoading={ itemLoading }
+          loading={ loading }
+          fileLoading={ fileLoading }
+          project={ project }
+          delFile={ delFile }
+          addFile={ addFile }
+          wfCollection={ wfCollection }
+          wfLoading={ wfLoading }
+          viewWorkflow={ viewWorkflow }
+          indexComments={ indexComments }
+          sortComments={ sortComments }
+          commentsCollection={ commentsCollection }
+          commentsIndexLoading={ commentsIndexLoading }
+          commentsLoading={ commentsLoading }
+          commentsItemLoading={ commentsItemLoading }
+          commentsLoaded={ commentsLoaded }
+          addComments={ addComments }
+          editComments={ editComments }
+          delComments={ delComments }
+          indexWorklog={ indexWorklog }
+          worklogSort={ worklogSort }
+          sortWorklog={ sortWorklog }
+          worklogCollection={ worklogCollection }
+          worklogIndexLoading={ worklogIndexLoading }
+          worklogLoading={ worklogLoading }
+          worklogLoaded={ worklogLoaded }
+          addWorklog={ addWorklog }
+          editWorklog={ editWorklog }
+          delWorklog={ delWorklog }
+          indexHistory={ indexHistory }
+          sortHistory={ sortHistory }
+          historyCollection={ historyCollection }
+          historyIndexLoading={ historyIndexLoading }
+          historyLoaded={ historyLoaded }
+          indexGitCommits={ indexGitCommits }
+          sortGitCommits={ sortGitCommits }
+          gitCommitsCollection={ gitCommitsCollection }
+          gitCommitsIndexLoading={ gitCommitsIndexLoading }
+          gitCommitsLoaded={ gitCommitsLoaded }
+          linkLoading={ linkLoading }
+          createLink={ createLink }
+          delLink={ delLink }
+          watch={ watch }
+          copy={ copy }
+          move={ move }
+          convert={ convert }
+          resetState={ resetState }
+          doAction={ doAction }
+          user={ user }/> }
+        <div>
+          共有问题 { collection.length } 条。<span style={ { color: 'red' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改；列表最多只能显示1000条。</span> 
         </div>
       </div>);
   }

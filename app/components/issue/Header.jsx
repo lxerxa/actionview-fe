@@ -1,12 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { Button, Label, DropdownButton, MenuItem, Form, FormControl, FormGroup, ControlLabel, Col } from 'react-bootstrap';
-import Select from 'react-select';
-import { Link } from 'react-router';
-import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 import { IssueFilterList, parseQuery } from './IssueFilterList';
 
-const $ = require('$');
 const CreateModal = require('./CreateModal');
 const SaveFilterModal = require('./SaveFilterModal');
 const ResetFiltersNotify = require('./ResetFiltersNotify');
@@ -111,6 +107,8 @@ export default class Header extends Component {
       } else {
         index(query);
       }
+    } else if (eventKey === 'gotogantt') {
+      refresh(_.extend(query, { page: undefined }), 'gantt');
     } else if (eventKey === 'set_columns') {
       this.setState({ setColumnsShow: true });
     } else if (eventKey === 'reset_columns') {
@@ -131,14 +129,6 @@ export default class Header extends Component {
       this.setState({ saveFilterShow : true });
     } else if(eventKey == 'resetFilters') {
       this.setState({ 'resetFiltersShow' : true });
-    } else if(eventKey == 'all') {
-      refresh({});
-    } else if(eventKey == 'todos') {
-      refresh({ assignee: 'me', resolution: 'Unresolved' });
-    } else if(eventKey == 'myreports') {
-      refresh({ reporter: 'me' });
-    } else if(eventKey == 'mywatches') {
-      refresh({ watcher: 'me' });
     } else {
       const filters = options.filters || [];
       const filter = _.find(filters, { id: eventKey }) || {};
@@ -195,6 +185,8 @@ export default class Header extends Component {
           <div style={ { marginTop: '8px', float: 'right' } }>
             <DropdownButton id='more' pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='refresh'>刷新</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='gotogantt'>跳至甘特图</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='set_columns'>显示列配置</MenuItem>
               <MenuItem eventKey='reset_columns'>显示列重置</MenuItem>
