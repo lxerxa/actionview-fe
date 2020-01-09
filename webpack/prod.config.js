@@ -16,7 +16,7 @@ export default {
     ...baseConfig.module,
     loaders: [
       ...baseConfig.module.loaders,
-        {
+	        {
           test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)(\?v=[0-9].[0-9].[0-9])?$/,
           loaders: [
             'url?limit=1000&name=[sha512:hash:base64:7].[ext]'

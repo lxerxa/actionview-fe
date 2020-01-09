@@ -36,7 +36,7 @@ export default {
         `webpack-hot-middleware/client?path=http://${HOST}:${PORT}/__webpack_hmr`,
         './app/index.js'
       ],
-      common: ['react', 'react-dom', 'redux', 'redux-form', 'react-redux', 'react-router', 'react-router-redux', 'react-bootstrap', 'react-bootstrap-table', 'react-dnd', 'react-dnd-html5-backend', 'recharts' ]
+      common: ['react', 'react-dom', 'redux', 'redux-form', 'react-redux', 'react-router', 'react-router-redux', 'react-bootstrap', 'react-image-lightbox', 'react-bootstrap-table', 'react-dnd', 'react-dnd-html5-backend', 'recharts' ]
     },
     output: {
       ...baseConfig.output,

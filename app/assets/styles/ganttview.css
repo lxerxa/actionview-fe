@@ -1,0 +1,217 @@
+/*
+jQuery.ganttView v.0.8.0
+Copyright (c) 2010 JC Grubbs - jc.grubbs@devmynd.com
+MIT License Applies
+*/
+
+div.ganttview-hzheader-month,
+div.ganttview-hzheader-day,
+div.ganttview-vtheader,
+div.ganttview-vtheader-item-name,
+div.ganttview-vtheader-series,
+div.ganttview-grid,
+div.ganttview-grid-row-cell {
+	float: left;
+}
+
+div.ganttview-hzheader-month,
+div.ganttview-hzheader-day {
+	text-align: center;
+}
+
+div.ganttview-grid-row-cell.last,
+div.ganttview-hzheader-day.last,
+div.ganttview-hzheader-month.last {
+	border-right: none;
+}
+
+div.ganttview {
+	border: 1px solid #999;
+}
+
+
+/* Horizontal Header */
+
+div.ganttview-hzheader-month {
+	width: 60px;
+	height: 20px;
+	border-right: 1px solid #d0d0d0;
+	line-height: 20px;
+}
+
+div.ganttview-hzheader-day {
+	width: 25px;
+	height: 20px;
+	border-right: 1px solid #f0f0f0;
+	border-top: 1px solid #d0d0d0;
+	line-height: 20px;
+	color: #777;
+}
+
+
+/* Vertical Header */
+
+div.ganttview-vtheader {
+	width: 430px;
+	overflow: hidden;
+	background-color: #fff;
+}
+
+div.ganttview-vtheader-item {
+	overflow: auto;
+	color: #666;
+}
+
+div.ganttview-vtheader-item-name {
+	width: 100px;
+	padding-left: 5px;
+	border-top: 1px solid #d0d0d0;
+	line-height: 16px;
+}
+
+div.ganttview-vtheader-series-item-cell {
+	height: 31px;
+	border-top: 1px solid #d0d0d0;
+	line-height: 31px;
+	padding-left: 5px;
+	text-overflow: ellipsis;
+        overflow: hidden;
+	white-space: nowrap;
+	float: left;
+	text-align: center;
+}
+
+div.ganttview-vtheader-series-header-item {
+  height: 40px;
+}
+
+div.ganttview-vtheader-series-header-item-cell {
+	height: 40px;
+	border-right: 1px solid #d0d0d0;
+	line-height: 31px;
+	padding-left: 5px;
+	padding-top: 6px;
+	text-overflow: ellipsis;
+        overflow: hidden;
+	white-space: nowrap;
+	color: #a6a6a6;
+	float: left;
+	text-align: center;
+}
+
+div.ganttview-vtheader-series-item {
+  height: 31px;
+}
+
+div.ganttview-vtheader-series-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* Slider */
+
+div.ganttview-slide-container {
+	overflow: auto;
+	border-left: 1px solid #999;
+}
+
+div.ganttview-hzheader-day.ganttview-weekend {
+	background-color: #fff0f0;
+}
+
+div.ganttview-hzheader-day.ganttview-today {
+	background-color: #ffff00;
+}
+
+/* Grid */
+
+div.ganttview-grid-row-cell {
+	width: 25px;
+	height: 31px;
+	border-right: 1px solid #f0f0f0;
+	border-top: 1px solid #f0f0f0;
+}
+
+div.ganttview-grid-row-cell.ganttview-weekend {
+	background-color: #fff0f0;
+}
+
+div.ganttview-grid-row-cell.ganttview-today {
+	background-color: #ffff00;
+}
+
+/* Blocks */
+
+div.ganttview-blocks {
+	margin-top: 40px;
+}
+
+div.ganttview-block-container {
+	height: 31px;
+	padding-top: 5px;
+}
+
+div.ganttview-block {
+	position: relative;
+	height: 23px;
+	background-color: #ddd;
+}
+
+div.ganttview-block-parent {
+	position: relative;
+	height: 10px;
+	background-color: #65c16f;
+}
+
+div.ganttview-block-parent-left {
+    left: 0px;
+    top: 10px;
+    position: absolute;
+    border-style: solid;
+    border-width: 0 0 8px 7px;
+    border-top-color: transparent;
+    border-right-color: transparent!important;
+    border-bottom-color: transparent!important;
+    border-left-color: #65c16f!important;
+}
+
+div.ganttview-block-parent-right {
+    right: 0px;
+    top: 10px;
+    position: absolute;
+    border-style: solid;
+    border-width: 0 7px 8px 0;
+    border-top-color: transparent;
+    border-left-color: transparent!important;
+    border-bottom-color: transparent!important;
+    border-right-color: #65c16f!important;
+}
+
+div.ganttview-marker {
+    left: 625px;
+    bottom: 0px;
+    width: 2px;
+    top: 20px;
+    position: absolute;
+    text-align: center;
+    background-color: rgba(255,0,0,.4);
+    box-sizing: border-box;
+}
+
+div.ganttview-block-movable {
+	cursor: move;
+}
+
+div.ganttview-block-text {
+	position: absolute;
+	height: 12px;
+	font-size: 0.8em;
+	color: #999;
+	padding: 2px 3px;
+}
+
+
+/* Adjustments for jQuery UI Styling */
+
+div.ganttview-block div.ui-resizable-handle.ui-resizable-s {
+	bottom: -0;
+}

@@ -25,6 +25,8 @@ if (BROWSER) {
   require('assets/styles/board.css');
   require('assets/styles/calendar.css');
   require('assets/styles/jquery.atwho.css');
+  require('assets/styles/jquery-ui.css');
+  require('assets/styles/ganttview.css');
   require('mermaid/dist/mermaid.css');
   require('react-dropzone-component/styles/filepicker.css');
   require('dropzone/dist/dropzone.css');
