@@ -19,6 +19,7 @@ export default class List extends Component {
       minDays: 30 
     };
     this.state = { 
+      limit: 100,
       range: [], 
       dates: [], 
       foldIssues: [],
@@ -145,11 +146,26 @@ export default class List extends Component {
 
     const { options: { singulars=[] } } = nextProps;
     if (nextProps.collection.length > 0) {
-      this.state.foldIssues = [];
-      this.arrangeData(nextProps.collection, [], this.state.sortkey);
-      this.setBoundaryDatesFromData(nextProps.collection);
-      this.setDates(singulars);
+      //this.state.foldIssues = [];
+      if (this.state.collection.length <= 0) {
+        this.arrangeData(nextProps.collection, this.state.foldIssues, this.state.sortkey);
+      } else {
+        this.arrangeData(this.arrangeCollection(nextProps.collection, this.state.collection), this.state.foldIssues);
+      }
+    } else {
+      this.state.collection = [];
     }
+  }
+
+  arrangeCollection(pc, sc) {
+    const data = [];
+    _.forEach(sc, (v) => {
+      const tmp = _.find(pc, { id: v.id });
+      if (tmp) {
+        data.push(tmp);
+      }
+    });
+    return data;
   }
 
   arrangeData(collection, foldIssues, sortkey) {
@@ -172,7 +188,9 @@ export default class List extends Component {
     });
 
     _.forEach(parentIssues, (v) => {
-      this.sort(classifiedSubtasks[v.id], sortkey);
+      if (sortkey) {
+        this.sort(classifiedSubtasks[v.id], sortkey);
+      } 
       const boundary = this.getBoundaryDatesFromData(classifiedSubtasks[v.id]);
 
       const i = _.findIndex(standardIssues, (v2) => v2.id == v.id);
@@ -187,7 +205,9 @@ export default class List extends Component {
       }
     });
 
-    this.sort(standardIssues, sortkey);
+    if (sortkey) {
+      this.sort(standardIssues, sortkey);
+    }
 
     const newIssues = [];
     _.forEach(standardIssues, (v, k) => {
@@ -224,7 +244,7 @@ export default class List extends Component {
   }
 
   addVtHeader() {
-    const { collection, mode } = this.state;
+    const { collection, mode, limit } = this.state;
     const { options: { states=[] } } = this.props;
 
     return (
@@ -260,7 +280,7 @@ export default class List extends Component {
               </div>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }/>
             </div>
-            { _.map(collection, (v, key) => (
+            { _.map(collection.slice(0, limit), (v, key) => (
             <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
                 <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasChildren ? 'visible' : 'hidden', cursor: 'pointer' } }>
@@ -355,7 +375,7 @@ export default class List extends Component {
 
   addGrid() {
     const cellWidth = this.configs.cellWidth;
-    const { collection, dates } = this.state;
+    const { collection, dates, limit } = this.state;
     const { options: { today = '' } } = this.props;
 
     const dates2 = _.flatten(_.values(dates));
@@ -363,7 +383,7 @@ export default class List extends Component {
       <div 
         className='ganttview-grid' 
         style={ { width: dates2.length * cellWidth + 'px' } }>
-      { _.map(collection, (v, key) => (
+      { _.map(collection.slice(0, limit), (v, key) => (
         <div 
           className='ganttview-grid-row' 
           style={ { width: dates2.length * cellWidth + 'px' } } 
@@ -381,14 +401,14 @@ export default class List extends Component {
     const blockHeight = this.configs.blockHeight;
 
     const { options: { states=[] } } = this.props;
-    const { mode, collection, range } = this.state;
+    const { mode, collection, range, limit } = this.state;
     const origin = range[0];
 
     const stateColors = { new : '#ccc', inprogress: '#3db9d3', completed: '#3c9445' };
 
     return (
       <div className='ganttview-blocks'>
-      { _.map(collection, (v, key) => {
+      { _.map(collection.slice(0, limit), (v, key) => {
         const popover=(
           <Popover id='popover-trigger-hover' style={ { maxWidth: '350px', padding: '15px 0px' } }>
             <Grid>
@@ -476,7 +496,6 @@ export default class List extends Component {
 
     const containerWidth = $('div.ganttview-slide-container').width();
     const cellNum = _.floor(containerWidth / cellWidth / 2);
-    console.log(containerWidth, cellNum);
 
     const target = moment(today).subtract(cellNum, 'days').format('X');
     this.locate(target);
@@ -487,12 +506,14 @@ export default class List extends Component {
     const { range } = this.state;
     const start = range[0];
 
+    this.closeDetail();
+
     const offset = _.floor((target - start) / 3600 / 24 - 1) * cellWidth;
     const container = $('div.ganttview-slide-container');
     container.scrollLeft(offset);
   }
 
-  updateData(block) {
+  async updateData(block) {
     const cellWidth = this.configs.cellWidth;
     const { edit } = this.props;
     const { range } = this.state;
@@ -511,7 +532,9 @@ export default class List extends Component {
     const numberOfDays = _.round(width / cellWidth);
     const newEnd = _.add(newStart, (numberOfDays - 1) * 3600 * 24);
 
-    const ecode = edit(block.attr('id'), { expect_start_time: newStart, expect_complete_time: newEnd });
+    //block.css('top', '').css('left', '').css('position', 'relative').css('margin-left', offset + 'px');
+
+    const ecode = await edit(block.attr('id'), { expect_start_time: newStart, expect_complete_time: newEnd });
     if (ecode === 0) {
       notify.show('已更新。', 'success', 2000);
     } else {
@@ -575,10 +598,12 @@ export default class List extends Component {
 
     const boundary = this.getBoundaryDatesFromData(data);
     let start = moment.unix(boundary[0]).subtract(1, 'days').format('X');
-    let end = moment.unix(boundary[1]).add(minDays, 'days').format('X');
+    let end = moment.unix(boundary[1]).add(15, 'days').format('X');
 
-    //let days = (end - start) / 3600 / 24 + 1;
-    //end = moment.unix(start).add(minDays, 'days').format('X');
+    let days = (end - start) / 3600 / 24 + 1;
+    if (days < minDays) {
+      end = moment.unix(start).add(minDays, 'days').format('X');
+    }
 
     this.state.range = [ start - 0, end - 0 ];
   }
@@ -748,7 +773,12 @@ export default class List extends Component {
       resetState,
       doAction,
       user } = this.props;
-    const { mode, collection, selectedIssue } = this.state;
+    const { mode, collection, limit, selectedIssue } = this.state;
+
+    if (this.props.collection.length > 0) {
+      this.setBoundaryDatesFromData(this.props.collection);
+      this.setDates(options.singulars || []);
+    }
 
     if (indexLoading) {
       return (
@@ -881,8 +911,8 @@ export default class List extends Component {
           resetState={ resetState }
           doAction={ doAction }
           user={ user }/> }
-        <div>
-          共有问题 { collection.length } 条。<span style={ { color: 'red' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改；列表最多只能显示1000条。</span> 
+        <div style={ { marginBottom: '30px', marginTop: '5px' } }>
+          显示问题 { limit < collection.length ? limit : collection.length } 条。{ limit < options.total && <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ limit: this.state.limit + 50 }) } }>更多<i className='fa fa-angle-double-down'></i></a> }<span style={ { color: 'red', float: 'right' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改；列表最多只能显示200条。</span> 
         </div>
       </div>);
   }

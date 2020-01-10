@@ -52,7 +52,7 @@ export default class Container extends Component {
 
   async index(query) {
     this.closeDetailBar();
-    await this.props.actions.index(this.pid, qs.stringify(_.assign({}, query || {}, { page: 1, limit: 1000, from: 'gantt' })));
+    await this.props.actions.index(this.pid, qs.stringify(_.assign({}, query || {}, { page: 1, limit: 200, from: 'gantt' })));
     return this.props.issue.ecode;
   }
 
