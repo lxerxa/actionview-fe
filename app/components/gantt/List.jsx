@@ -7,6 +7,7 @@ const moment = require('moment');
 const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 
+const PaginationList = require('../share/PaginationList');
 const EditModal = require('./EditModal');
 const DetailBar = require('../issue/DetailBar');
 
@@ -19,7 +20,6 @@ export default class List extends Component {
       minDays: 30 
     };
     this.state = { 
-      limit: 100,
       range: [], 
       dates: [], 
       foldIssues: [],
@@ -27,6 +27,12 @@ export default class List extends Component {
       selectedIssue: {}, 
       barShow: false,
       editModalShow: false
+    };
+    this.sortOptions = {
+      'start_time_asc': 'expect_start_time asc,expect_complete_time_asc,no desc',
+      'start_time_desc': 'expect_start_time desc,expect_complete_time desc,no desc',
+      'create_time_asc': 'no asc',
+      'create_time_desc': 'no desc'
     };
     this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'create_time_desc';
     this.state.mode = window.localStorage && window.localStorage.getItem('gantt-mode') || 'progress';
@@ -41,7 +47,6 @@ export default class List extends Component {
     this.clickBar = this.clickBar.bind(this);
     this.show = this.show.bind(this);
     this.fold = this.fold.bind(this);
-    this.refresh = this.refresh.bind(this);
     this.setSort = this.setSort.bind(this);
     this.selectMode = this.selectMode.bind(this);
     this.locate = this.locate.bind(this);
@@ -134,23 +139,24 @@ export default class List extends Component {
 
   async componentWillMount() {
     const { index, query={} } = this.props;
-    await index(query);
+    await index(_.assign({}, query, { 'orderBy': this.sortOptions[this.state.sortkey] || 'no desc' }));
   }
 
   componentWillReceiveProps(nextProps) {
     const { index, query } = this.props;
     const newQuery = nextProps.query || {};
     if (!_.isEqual(newQuery, query)) {
-      index(newQuery);
+      index(_.assign({}, newQuery, { 'orderBy': this.sortOptions[this.state.sortkey] || 'no desc' }));
     }
 
     const { options: { singulars=[] } } = nextProps;
     if (nextProps.collection.length > 0) {
-      //this.state.foldIssues = [];
+      this.setBoundaryDatesFromData(nextProps.collection);
+      this.setDates(singulars);
       if (this.state.collection.length <= 0) {
-        this.arrangeData(nextProps.collection, this.state.foldIssues, this.state.sortkey);
+        this.arrangeData(nextProps.collection, this.state.sortkey);
       } else {
-        this.arrangeData(this.arrangeCollection(nextProps.collection, this.state.collection), this.state.foldIssues);
+        this.arrangeData(this.arrangeCollection(nextProps.collection, this.state.collection));
       }
     } else {
       this.state.collection = [];
@@ -163,12 +169,15 @@ export default class List extends Component {
       const tmp = _.find(pc, { id: v.id });
       if (tmp) {
         data.push(tmp);
+      } else {
+        data.push(v);
       }
     });
     return data;
   }
 
-  arrangeData(collection, foldIssues, sortkey) {
+  arrangeData(collection, sortkey) {
+    const { foldIssues } = this.state;
     //this.state.collection = collection;
     const standardIssues = _.filter(collection, (v) => !v.parent || !v.parent.id);
     const subtaskIssues = _.filter(collection, (v) => v.parent && v.parent.id);
@@ -219,14 +228,14 @@ export default class List extends Component {
         v.isFolded = true;
       }
       newIssues.push(v);
-      if (classifiedSubtasks[v.id] && !v.isFolded) {
+      if (classifiedSubtasks[v.id]) {
         _.forEach(classifiedSubtasks[v.id], (v2) => {
           newIssues.push(v2);
         });
       }
     });
 
-    this.state.collection = newIssues;
+    this.state.collection = newIssues; 
   }
 
   sort(data, sortkey) {
@@ -244,7 +253,7 @@ export default class List extends Component {
   }
 
   addVtHeader() {
-    const { collection, mode, limit } = this.state;
+    const { collection, mode, foldIssues } = this.state;
     const { options: { states=[] } } = this.props;
 
     return (
@@ -280,7 +289,7 @@ export default class List extends Component {
               </div>
               <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }/>
             </div>
-            { _.map(collection.slice(0, limit), (v, key) => (
+            { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
             <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
                 <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasChildren ? 'visible' : 'hidden', cursor: 'pointer' } }>
@@ -375,7 +384,7 @@ export default class List extends Component {
 
   addGrid() {
     const cellWidth = this.configs.cellWidth;
-    const { collection, dates, limit } = this.state;
+    const { collection, dates, foldIssues } = this.state;
     const { options: { today = '' } } = this.props;
 
     const dates2 = _.flatten(_.values(dates));
@@ -383,7 +392,7 @@ export default class List extends Component {
       <div 
         className='ganttview-grid' 
         style={ { width: dates2.length * cellWidth + 'px' } }>
-      { _.map(collection.slice(0, limit), (v, key) => (
+      { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
         <div 
           className='ganttview-grid-row' 
           style={ { width: dates2.length * cellWidth + 'px' } } 
@@ -401,14 +410,14 @@ export default class List extends Component {
     const blockHeight = this.configs.blockHeight;
 
     const { options: { states=[] } } = this.props;
-    const { mode, collection, range, limit } = this.state;
+    const { mode, collection, range, foldIssues } = this.state;
     const origin = range[0];
 
     const stateColors = { new : '#ccc', inprogress: '#3db9d3', completed: '#3c9445' };
 
     return (
       <div className='ganttview-blocks'>
-      { _.map(collection.slice(0, limit), (v, key) => {
+      { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => {
         const popover=(
           <Popover id='popover-trigger-hover' style={ { maxWidth: '350px', padding: '15px 0px' } }>
             <Grid>
@@ -515,6 +524,7 @@ export default class List extends Component {
 
   async updateData(block) {
     const cellWidth = this.configs.cellWidth;
+    const blockHeight = this.configs.blockHeight;
     const { edit } = this.props;
     const { range } = this.state;
     const start = range[0];
@@ -532,14 +542,14 @@ export default class List extends Component {
     const numberOfDays = _.round(width / cellWidth);
     const newEnd = _.add(newStart, (numberOfDays - 1) * 3600 * 24);
 
-    //block.css('top', '').css('left', '').css('position', 'relative').css('margin-left', offset + 'px');
-
     const ecode = await edit(block.attr('id'), { expect_start_time: newStart, expect_complete_time: newEnd });
     if (ecode === 0) {
       notify.show('已更新。', 'success', 2000);
     } else {
       notify.show('更新失败。', 'error', 2000);
     }
+
+    block.css('top', '0px').css('left', '0px').css('height', blockHeight).css('position', 'relative');
     //console.log(daysFromStart, newStart, numberOfDays, newEnd, block.attr('id'));
   }
 
@@ -680,21 +690,18 @@ export default class List extends Component {
       this.state.foldIssues.push(issueId);
     }
 
-    this.arrangeData(this.props.collection, this.state.foldIssues, this.state.sortkey)
-    this.setState({ collection: this.state.collection });
+    this.setState({ foldIssues: this.state.foldIssues });
   }
 
-  async refresh() {
-    const { index, query={} } = this.props;
-    await index(query);
-  }
-
-  setSort(sortkey) {
-    this.arrangeData(this.props.collection, this.state.foldIssues, sortkey);
+  async setSort(sortkey) {
+    this.arrangeData(this.props.collection, sortkey);
     if (window.localStorage) {
       window.localStorage.setItem('gantt-sortkey', sortkey);
     }
     this.setState({ sortkey });
+
+    //const { index, query={} } = this.props;
+    //await index(_.assign({}, query, { 'orderBy': this.sortOptions[sortkey] || 'no desc' }));
   }
 
   selectMode(mode) {
@@ -773,29 +780,7 @@ export default class List extends Component {
       resetState,
       doAction,
       user } = this.props;
-    const { mode, collection, limit, selectedIssue } = this.state;
-
-    if (this.props.collection.length > 0) {
-      this.setBoundaryDatesFromData(this.props.collection);
-      this.setDates(options.singulars || []);
-    }
-
-    if (indexLoading) {
-      return (
-        <div style={ { marginTop: '50px' } }>
-          <div className='detail-view-blanket' style={ { display: 'block' } }>
-            <img src={ img } className='loading'/>
-          </div>
-        </div>);
-    } else if (collection.length <= 0) {
-      return ( 
-        <div style={ { textAlign: 'center', marginTop: '50px' } }>
-          <span style={ { fontSize: '160px', color: '#FFC125' } } >
-            <i className='fa fa-warning'></i>
-          </span><br/>
-          <span>抱歉，暂无满足该检索条件的数据。</span>
-        </div>);
-    }
+    const { mode, collection, selectedIssue } = this.state;
 
     return (
       <div>
@@ -827,6 +812,20 @@ export default class List extends Component {
             <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按问题状态</a> }
           </span>
         </div>
+        { indexLoading && 
+        <div style={ { marginTop: '100px' } }>
+          <div className='detail-view-blanket' style={ { display: 'block' } }>
+            <img src={ img } className='loading'/>
+          </div>
+        </div> }
+        { !indexLoading && collection.length <= 0 &&  
+        <div style={ { textAlign: 'center', marginTop: '50px' } }>
+          <span style={ { fontSize: '160px', color: '#FFC125' } } >
+            <i className='fa fa-warning'></i>
+          </span><br/>
+          <span>抱歉，暂无满足该检索条件的数据。</span>
+        </div> }
+        { !indexLoading && collection.length > 0 &&  
         <div className='ganttview'>
           { this.addVtHeader() }
           <div className='ganttview-slide-container'>
@@ -834,7 +833,7 @@ export default class List extends Component {
             { this.addGrid() }
             { this.addBlocks() }
           </div>
-        </div>
+        </div> }
         { this.state.editModalShow &&
         <EditModal
           show
@@ -911,9 +910,15 @@ export default class List extends Component {
           resetState={ resetState }
           doAction={ doAction }
           user={ user }/> }
-        <div style={ { marginBottom: '30px', marginTop: '5px' } }>
-          显示问题 { limit < collection.length ? limit : collection.length } 条。{ limit < options.total && <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ limit: this.state.limit + 50 }) } }>更多<i className='fa fa-angle-double-down'></i></a> }<span style={ { color: 'red', float: 'right' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改；列表最多只能显示200条。</span> 
-        </div>
+        { !indexLoading && options.total && options.total > 0 ?
+          <PaginationList
+            total={ options.total || 0 }
+            curPage={ query.page ? (query.page - 0) : 1 }
+            sizePerPage={ options.sizePerPage || 100 }
+            paginationSize={ 4 }
+            query={ query }
+            refresh={ refresh }/>
+          : '' }
       </div>);
   }
 }
