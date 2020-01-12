@@ -178,6 +178,7 @@ export class IssueFilterList extends Component {
       { key: 'updated_at', name: '更新时间', type: 'Duration' },
       { key: 'resolved_at', name: '解决时间', type: 'Duration' },
       { key: 'closed_at', name: '关闭时间', type: 'Duration' },
+      { key: 'expect_start_time', name: '期望开始', type: 'Duration', mode: 'fixed' },
       { key: 'expect_complete_time', name: '期望完成', type: 'Duration', mode: 'fixed' }
     ];
     const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 2);
@@ -333,6 +334,7 @@ export function parseQuery(query, options) {
     { key: 'updated_at', name : '更新时间', type: 'Duration' },
     { key: 'resolved_at', name : '解决时间', type: 'Duration' },
     { key: 'closed_at', name : '关闭时间', type: 'Duration' },
+    { key: 'expect_start_time', name : '期望开始时间', type: 'Duration' },
     { key: 'expect_complete_time', name : '期望完成时间', type: 'Duration' },
     { key: 'epic', type: 'MultiSelect', name: 'Epic', optionValues: epics },
     { key: 'sprints', type: 'Select', name: 'Sprint' }
