@@ -699,7 +699,7 @@ export default class List extends Component {
       window.localStorage.setItem('gantt-sortkey', sortkey);
     }
     this.setState({ sortkey });
-
+    this.closeDetail();
     //const { index, query={} } = this.props;
     //await index(_.assign({}, query, { 'orderBy': this.sortOptions[sortkey] || 'no desc' }));
   }

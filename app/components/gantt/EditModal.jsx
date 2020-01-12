@@ -75,7 +75,7 @@ export default class EditModal extends Component {
       submitValues.expect_complete_time = parseInt(moment(values.expect_complete_time).startOf('day').format('X'));
     }
     if (values.progress && mode == 'progress') {
-      submitValues.progress = values.progress;
+      submitValues.progress = values.progress - 0;
     }
 
     const ecode = await edit(data.id, submitValues);
