@@ -17,7 +17,7 @@ export default class List extends Component {
     this.configs = { 
       cellWidth: 25, 
       blockHeight: 23, 
-      minDays: 30 
+      minDays: 60 
     };
     this.state = { 
       range: [], 
@@ -34,7 +34,7 @@ export default class List extends Component {
       'create_time_asc': 'no asc',
       'create_time_desc': 'no desc'
     };
-    this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'create_time_desc';
+    this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'start_time_asc';
     this.state.mode = window.localStorage && window.localStorage.getItem('gantt-mode') || 'progress';
     this.addVtHeader = this.addVtHeader.bind(this);
     this.addHzHeader = this.addHzHeader.bind(this);
@@ -139,14 +139,14 @@ export default class List extends Component {
 
   async componentWillMount() {
     const { index, query={} } = this.props;
-    await index(_.assign({}, query, { 'orderBy': this.sortOptions[this.state.sortkey] || 'no desc' }));
+    await index(query);
   }
 
   componentWillReceiveProps(nextProps) {
     const { index, query } = this.props;
     const newQuery = nextProps.query || {};
     if (!_.isEqual(newQuery, query)) {
-      index(_.assign({}, newQuery, { 'orderBy': this.sortOptions[this.state.sortkey] || 'no desc' }));
+      index(newQuery);
     }
 
     const { options: { singulars=[] } } = nextProps;
@@ -813,10 +813,8 @@ export default class List extends Component {
           </span>
         </div>
         { indexLoading && 
-        <div style={ { marginTop: '100px' } }>
-          <div className='detail-view-blanket' style={ { display: 'block' } }>
-            <img src={ img } className='loading'/>
-          </div>
+        <div className='detail-view-blanket' style={ { display: 'block', paddingTop: '100px' } }>
+          <img src={ img } className='loading'/>
         </div> }
         { !indexLoading && collection.length <= 0 &&  
         <div style={ { textAlign: 'center', marginTop: '50px' } }>
