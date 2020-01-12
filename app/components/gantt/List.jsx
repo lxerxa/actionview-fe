@@ -222,10 +222,6 @@ export default class List extends Component {
     _.forEach(standardIssues, (v, k) => {
       if (classifiedSubtasks[v.id]) {
         v.hasChildren = true;
-        v.isFolded = false;
-      }
-      if (foldIssues.indexOf(v.id) !== -1) {
-        v.isFolded = true;
       }
       newIssues.push(v);
       if (classifiedSubtasks[v.id]) {
@@ -256,44 +252,48 @@ export default class List extends Component {
     const { collection, mode, foldIssues } = this.state;
     const { options: { states=[] } } = this.props;
 
+    const header = (
+      <div className='ganttview-vtheader-series-header-item'>
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
+          主题
+        </div>
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '60px' } }>
+          NO
+        </div>
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
+          经办人
+        </div>
+        { mode == 'progress' &&
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
+          进度
+        </div> }
+        { mode == 'status' &&
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
+          状态
+        </div> }
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
+          开始时间
+        </div>
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
+          完成时间
+        </div>
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
+          工期(天)
+        </div>
+        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }/>
+      </div>
+    );
+
     return (
       <div className='ganttview-vtheader'>
         <div className='ganttview-vtheader-item'>
           <div className='ganttview-vtheader-series' style={ { width: '950px' } }>
-            <div className='ganttview-vtheader-series-header-item'>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
-                主题
-              </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '60px' } }>
-                NO 
-              </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-                经办人 
-              </div>
-              { mode == 'progress' &&
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
-                进度 
-              </div> }
-              { mode == 'status' &&
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
-                状态 
-              </div> }
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-                开始时间 
-              </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-                完成时间 
-              </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-                工期(天) 
-              </div>
-              <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }/>
-            </div>
+            { header }
             { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
             <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
                 <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasChildren ? 'visible' : 'hidden', cursor: 'pointer' } }>
-                  { v.isFolded ? <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
+                  { foldIssues.indexOf(v.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
                 </span>
                 <a href='#' onClick={ (e) => { e.preventDefault(); this.show(v.id) } } title={ v.title }>
                   <span style={ { marginLeft: '3px' } }>{ v.title }</span>
@@ -477,7 +477,7 @@ export default class List extends Component {
         return (
           <div className='ganttview-block-container' key={ v.id }>
             <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='top' overlay={ popover }>
-              { v.hasChildren && !v.isFolded ?
+              { v.hasChildren && foldIssues.indexOf(v.id) === -1 ?
               <div className='ganttview-block-parent' 
                 id={ v.id }
                 style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px' } }>
@@ -800,6 +800,7 @@ export default class List extends Component {
               <i className='fa fa-dot-circle-o'></i> 今天 
             </span>
           </a>
+          <span style={ { marginLeft: '15px', fontSize: '12px', color: 'red' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span>
           <span style={ { float: 'right', marginRight: '5px' } }>
             { mode == 'progress' ?
             <span>按任务进度</span>
