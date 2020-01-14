@@ -165,12 +165,20 @@ export default class List extends Component {
 
   arrangeCollection(pc, sc) {
     const data = [];
+    // when creating the issue
+    const pcLength = pc.length;
+    for (let i = 0; i < pcLength; i++) {
+      const ind = _.findIndex(sc, { id: pc[i].id });
+      if (ind !== -1) {
+        break;
+      } else {
+        data.push(pc[i]);
+      }
+    }
     _.forEach(sc, (v) => {
       const tmp = _.find(pc, { id: v.id });
       if (tmp) {
         data.push(tmp);
-      } else {
-        data.push(v);
       }
     });
     return data;

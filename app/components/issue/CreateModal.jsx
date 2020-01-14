@@ -488,7 +488,7 @@ class CreateModal extends Component {
                   { title }
                   <Col sm={ 4 }>
                     <FormControl
-                      type='text'
+                      type='number'
                       disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }

@@ -101,6 +101,13 @@ export function setAssignee(key, id, values, modalFlag) {
   });
 }
 
+export function setProgress(key, id, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_SET_PROGRESS',
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/' + id, method: 'put', data: values })
+  });
+}
+
 export function setLabels(key, id, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_SET_LABELS',

@@ -27,12 +27,11 @@ const validate = (values, props) => {
     }
   }
 
-  if (props.mode == 'progress' && values.progress) {
+  if (values.progress) {
     if (isNaN(values.progress) || values.progress < 0) {
       errors.progress = '格式错误';
     }
   }
-
   return errors;
 };
 
@@ -51,7 +50,6 @@ export default class EditModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    mode: PropTypes.string.isRequired,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -64,7 +62,7 @@ export default class EditModal extends Component {
   }
 
   async handleSubmit() {
-    const { values, edit, close, mode, data } = this.props;
+    const { values, edit, close, data } = this.props;
     
     const submitValues = {};
 
@@ -74,7 +72,7 @@ export default class EditModal extends Component {
     if (values.expect_complete_time) {
       submitValues.expect_complete_time = parseInt(moment(values.expect_complete_time).startOf('day').format('X'));
     }
-    if (values.progress && mode == 'progress') {
+    if (values.progress) {
       submitValues.progress = values.progress - 0;
     }
 
@@ -100,7 +98,7 @@ export default class EditModal extends Component {
   componentWillMount() {
     const { initializeForm, data } = this.props;
     initializeForm({ 
-      expect_start_time: moment.unix(data.expect_start_time || data.expect_complete_time || data.created_at), 
+      expect_start_time: moment.unix(data.expect_start_time || data.expect_complete_time || data.created_at).startOf('day'), 
       expect_complete_time: moment.unix(data.expect_complete_time || data.expect_start_time || data.created_at),
       progress: data.progress || 0 
     });
@@ -136,7 +134,7 @@ export default class EditModal extends Component {
                 dateFormat='YYYY/MM/DD' 
                 timeFormat={ false } 
                 value={ expect_start_time.value } 
-                onChange={ newValue => { expect_start_time.onChange(newValue) } }/>
+                onChange={ newValue => { const startDay = newValue.startOf('day'); expect_start_time.onChange(startDay) } }/>
               { expect_start_time.value && expect_start_time.error && 
                 <HelpBlock style={ { float: 'right' } }>{ expect_start_time.error }</HelpBlock> }
             </FormGroup>

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, ControlLabel, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup, OverlayTrigger, Popover, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup, OverlayTrigger, Popover, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 import DropzoneComponent from 'react-dropzone-component';
 import Lightbox from 'react-image-lightbox';
@@ -42,7 +42,10 @@ export default class DetailBar extends Component {
       inlinePreviewShow: {}, 
       previewShow: {}, 
       photoIndex: 0, 
+      newAssignee: null,
       editAssignee: false, 
+      newProgress: 0,
+      editProgress: false, 
       settingAssignee: false, 
       editModalShow: false, 
       previewModalShow: false, 
@@ -235,7 +238,7 @@ export default class DetailBar extends Component {
     const { setAssignee, data } = this.props;
     const ecode = await setAssignee(data.id, { assignee: this.state.newAssignee });
     if (ecode === 0) {
-      this.setState({ settingAssignee: false, editAssignee: false, newAssignee: undefined });
+      this.setState({ settingAssignee: false, editAssignee: false, newAssignee: null });
       notify.show('问题已分配。', 'success', 2000);
     } else {
       this.setState({ settingAssignee: false });
@@ -244,7 +247,15 @@ export default class DetailBar extends Component {
   }
 
   cancelSetAssignee() {
-    this.setState({ editAssignee: false, newAssignee: undefined });
+    this.setState({ editAssignee: false, newAssignee: null });
+  }
+
+  async setProgress() {
+    console.log('aa');
+  }
+
+  cancelSetProgress() {
+    this.setState({ editProgress: false, newProgress: 0 });
   }
 
   handleAssigneeSelectChange(value) {
@@ -494,6 +505,7 @@ export default class DetailBar extends Component {
       newAssignee, 
       settingAssignee, 
       editAssignee, 
+      editProgress, 
       delFileShow, 
       selectedFile, 
       action_id } = this.state;
@@ -684,7 +696,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ editAssignee ? 7 : 3 }>
                     { !editAssignee ?
-                    <div style={ { marginTop: '7px' } }>
+                    <div style={ { marginTop: '4px' } }>
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                         <span>
@@ -695,14 +707,14 @@ export default class DetailBar extends Component {
                         <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
                       </div> 
                       : 
-                      <div>
+                      <div style={ { marginTop: '3px' } }>
                         <span>{ data['assignee'] && data['assignee'].name || '-' }</span>
                       </div> }
                       { (!data['assignee'] || data['assignee'].id !== user.id) && options.permissions && options.permissions.indexOf('assigned_issue') !== -1 &&
                       <span style={ { float: 'left' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span> }
                     </div>
                     :
-                    <div style={ { marginTop: '7px' } }>
+                    <div style={ { marginTop: '0px' } }>
                       <Select 
                         simpleValue 
                         clearable={ false } 
@@ -776,6 +788,65 @@ export default class DetailBar extends Component {
                     <div style={ { marginTop: '7px' } }>
                       Sprint { data.sprints.join(', ') }
                     </div>
+                  </Col>
+                </FormGroup> }
+                { (data.expect_start_time || data.expect_complete_time) &&
+                <FormGroup>
+                  { data.expect_start_time &&
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    期望开始时间
+                  </Col> }
+                  { data.expect_start_time &&
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { moment.unix(data.expect_start_time).format('YYYY/MM/DD') }
+                    </div>
+                  </Col> }
+                  { data.expect_complete_time &&
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    期望完成时间
+                  </Col> }
+                  { data.expect_complete_time &&
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { moment.unix(data.expect_complete_time).format('YYYY/MM/DD') }
+                    </div>
+                  </Col> }
+                </FormGroup> }
+                { _.isNumber(data.progress) &&
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    进度
+                  </Col>
+                  <Col sm={ 3 }>
+                    { !editProgress ?
+                    <div style={ { marginTop: '4px' } }>
+                      { options.permissions && options.permissions.indexOf('edit_issue') !== -1 ?
+                      <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
+                        <span>
+                          <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
+                            { (data['progress'] || '0') + '%' }
+                          </div>
+                        </span>
+                        <span className='edit-icon-zone edit-icon' onClick={ () => { this.setState({ editProgress: true, newProgress: data['progress'] || 0 }) } }><i className='fa fa-pencil'></i></span>
+                      </div> 
+                      : 
+                      <div style={ { marginTop: '3px' } }>
+                        <span>{ (data['progress'] || '0') + '%' }</span>
+                      </div> }
+                    </div>
+                    :
+                    <div style={ { marginTop: '0px' } }>
+                      <FormControl 
+                        type='number' 
+                        value={ this.state.newProgress } 
+                        onChange={ (e) => { this.state.newProgress = e.target.value; } }
+                        placeholder='输入进度值'/>
+                      <div style={ { float: 'right' } }>
+                        <Button className='edit-ok-button' onClick={ this.setProgress.bind(this) }><i className='fa fa-check'></i></Button>
+                        <Button className='edit-cancel-button' onClick={ this.cancelSetProgress.bind(this) }><i className='fa fa-close'></i></Button>
+                      </div>
+                    </div> }
                   </Col>
                 </FormGroup> }
                 { data.subtasks && data.subtasks.length > 0 &&
@@ -873,7 +944,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if (field.key == 'title' || field.key == 'resolution' || field.key == 'priority' || field.key == 'assignee' || field.key == 'epic' || field.key == 'labels' || field.key == 'resolve_version') {
+                  if ([ 'title', 'resolution', 'priority', 'assignee', 'epic', 'labels', 'resolve_version', 'expect_start_time', 'expect_complete_time', 'progress' ].indexOf(field.key) !== -1) {
                     return;
                   }
                   if (field.type === 'File') {
