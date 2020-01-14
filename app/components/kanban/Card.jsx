@@ -335,7 +335,7 @@ export default class Card extends Component {
           { displayFields.length > 0 && 
           <div style={ { marginTop: '5px' } }>
             { _.map(displayFields, (v) => {
-              if (!issue[v]) {
+              if (!issue[v] && !_.isNumber(issue[v])) {
                 return;
               }
               if (v == 'labels') {
@@ -371,7 +371,7 @@ export default class Card extends Component {
                 } else if (field.type === 'DateTimePicker') {
                   contents = moment.unix(issue[v]).format('YYYY/MM/DD HH:mm');
                 } else {
-                  contents = issue[v];
+                  contents = issue[v] + (field.key == 'progress' ? '%' : '');
                 }
                 return (
                   <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontSize: '12px' } }>

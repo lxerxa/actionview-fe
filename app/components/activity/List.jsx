@@ -78,6 +78,7 @@ export default class List extends Component {
     convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setProgress: PropTypes.func.isRequired,
     setLabels: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
@@ -198,6 +199,7 @@ export default class List extends Component {
       edit,
       create,
       setAssignee,
+      setProgress,
       setLabels,
       addLabels,
       fileLoading,
@@ -399,6 +401,7 @@ export default class List extends Component {
             create={ create }
             del={ del }
             setAssignee={ setAssignee }
+            setProgress={ setProgress }
             setLabels={ setLabels }
             addLabels={ addLabels }
             close={ this.closeDetail.bind(this) }

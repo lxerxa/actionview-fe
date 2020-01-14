@@ -105,6 +105,7 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setProgress: PropTypes.func.isRequired,
     setLabels: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
@@ -627,7 +628,7 @@ export default class List extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { collection, itemData } = this.props;
+    const { collection, itemData, options } = this.props;
 
     const self = this;
     if (this.state.barShow) {
@@ -640,18 +641,22 @@ export default class List extends Component {
       });
     }
 
+    if (options.permissions && options.permissions.indexOf('edit_issue') === -1) {
+      return;
+    }
+
     if (prevProps.collection.length !== collection.length && collection.length > 0) {
       const self = this;
       const cellWidth = this.configs.cellWidth;
 
-      $('.ganttview-block').unbind();
+      $('.ganttview-block-movable').unbind();
 
-      $('.ganttview-block').dblclick(function() {
+      $('.ganttview-block-movable').dblclick(function() {
         const block = $(this);
         self.clickBar(block);
       });
 
-      $('.ganttview-block').resizable({
+      $('.ganttview-block-movable').resizable({
         grid: cellWidth, 
         handles: 'e,w',
         stop: function () {
@@ -662,7 +667,7 @@ export default class List extends Component {
         }
       });
 
-      $('.ganttview-block').draggable({
+      $('.ganttview-block-movable').draggable({
         axis: 'x', 
         grid: [cellWidth, cellWidth],
         stop: function () {
@@ -737,6 +742,7 @@ export default class List extends Component {
       edit,
       create,
       setAssignee,
+      setProgress,
       setLabels,
       addLabels,
       query,
@@ -857,6 +863,7 @@ export default class List extends Component {
           edit={ edit }
           del={ del }
           setAssignee={ setAssignee }
+          setProgress={ setProgress }
           setLabels={ setLabels }
           addLabels={ addLabels }
           close={ this.closeDetail }

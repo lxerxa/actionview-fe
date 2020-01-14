@@ -46,7 +46,6 @@ export default class DetailBar extends Component {
       editAssignee: false, 
       newProgress: 0,
       editProgress: false, 
-      settingAssignee: false, 
       editModalShow: false, 
       previewModalShow: false, 
       subtaskShow: false, 
@@ -96,6 +95,7 @@ export default class DetailBar extends Component {
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setProgress: PropTypes.func.isRequired,
     setLabels: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
@@ -234,14 +234,12 @@ export default class DetailBar extends Component {
   }
 
   async setAssignee() {
-    this.setState({ settingAssignee: true });
     const { setAssignee, data } = this.props;
     const ecode = await setAssignee(data.id, { assignee: this.state.newAssignee });
     if (ecode === 0) {
-      this.setState({ settingAssignee: false, editAssignee: false, newAssignee: null });
+      this.setState({ editAssignee: false, newAssignee: null });
       notify.show('问题已分配。', 'success', 2000);
     } else {
-      this.setState({ settingAssignee: false });
       notify.show('问题分配失败。', 'error', 2000);
     }
   }
@@ -251,7 +249,14 @@ export default class DetailBar extends Component {
   }
 
   async setProgress() {
-    console.log('aa');
+    const { setProgress, data } = this.props;
+    const ecode = await setProgress(data.id, { progress: this.state.newProgress - 0 });
+    if (ecode === 0) {
+      this.setState({ editProgress: false, newProgress: 0 });
+      notify.show('已更新。', 'success', 2000);
+    } else {
+      notify.show('更新失败。', 'error', 2000);
+    }
   }
 
   cancelSetProgress() {
@@ -461,6 +466,7 @@ export default class DetailBar extends Component {
       move,
       convert,
       setAssignee,
+      setProgress,
       setLabels,
       addLabels,
       resetState,
@@ -503,7 +509,6 @@ export default class DetailBar extends Component {
       previewShow, 
       photoIndex, 
       newAssignee, 
-      settingAssignee, 
       editAssignee, 
       editProgress, 
       delFileShow, 
@@ -718,7 +723,6 @@ export default class DetailBar extends Component {
                       <Select 
                         simpleValue 
                         clearable={ false } 
-                        disabled={ settingAssignee } 
                         options={ assigneeOptions } 
                         value={ newAssignee || data['assignee'].id } 
                         onChange={ this.handleAssigneeSelectChange.bind(this) } 
@@ -797,13 +801,13 @@ export default class DetailBar extends Component {
                     期望开始时间
                   </Col> }
                   { data.expect_start_time &&
-                  <Col sm={ 3 }>
+                  <Col sm={ 2 }>
                     <div style={ { marginTop: '7px' } }>
                       { moment.unix(data.expect_start_time).format('YYYY/MM/DD') }
                     </div>
                   </Col> }
                   { data.expect_complete_time &&
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
                     期望完成时间
                   </Col> }
                   { data.expect_complete_time &&
@@ -840,8 +844,8 @@ export default class DetailBar extends Component {
                       <FormControl 
                         type='number' 
                         value={ this.state.newProgress } 
-                        onChange={ (e) => { this.state.newProgress = e.target.value; } }
-                        placeholder='输入进度值'/>
+                        onChange={ (e) => { this.setState({ newProgress: e.target.value }) } }
+                        placeholder='进度值'/>
                       <div style={ { float: 'right' } }>
                         <Button className='edit-ok-button' onClick={ this.setProgress.bind(this) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetProgress.bind(this) }><i className='fa fa-close'></i></Button>

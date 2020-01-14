@@ -100,6 +100,7 @@ export default class List extends Component {
     edit: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
+    setProgress: PropTypes.func.isRequired,
     setLabels: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
     fileLoading: PropTypes.bool.isRequired,
@@ -302,6 +303,7 @@ export default class List extends Component {
       edit, 
       create, 
       setAssignee, 
+      setProgress, 
       setLabels, 
       addLabels, 
       query, 
@@ -455,7 +457,7 @@ export default class List extends Component {
           </div> );
 
       _.forEach(display_columns, (val) => {
-        if (!item[val.key]) {
+        if (!item[val.key] && !_.isNumber(item[val.key])) {
           issue[val.key] = '-';
           return;
         }
@@ -501,7 +503,7 @@ export default class List extends Component {
           } else if (val.type === 'DateTimePicker') {
             contents = moment.unix(item[val.key]).format('YYYY/MM/DD HH:mm');
           } else {
-            contents = item[val.key];
+            contents = item[val.key] + (val.key == 'progress' ? '%' : '');
           }
           issue[val.key] = <span style={ textStyle }>{ contents }</span>;
         }
@@ -570,6 +572,7 @@ export default class List extends Component {
             edit={ edit } 
             del={ del } 
             setAssignee={ setAssignee } 
+            setProgress={ setProgress } 
             setLabels={ setLabels } 
             addLabels={ addLabels } 
             close={ this.closeDetail } 
