@@ -22,7 +22,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'releasekanban',
-  fields: [ 'name', 'end_time', 'description' ],
+  fields: [ 'name', 'description' ],
   validate
 })
 export default class ReleaseVersionModal extends Component {
@@ -50,17 +50,12 @@ export default class ReleaseVersionModal extends Component {
   async handleSubmit() {
     const { release, releasedIssues, values, close } = this.props;
 
-    let end_time = '';
-    if (values.end_time) {
-      end_time = parseInt(moment(values.end_time).endOf('day').format('X'));
-    }
-
     const ecode = await release({ 
       ids: _.map(releasedIssues, (v) => v.id), 
       isSendMsg: this.state.isSendMsg, 
       name: values.name, 
-      end_time, 
-      description: values.description });
+      description: values.description 
+    });
 
     if (ecode === 0) {
       this.setState({ ecode: 0 });
@@ -80,13 +75,8 @@ export default class ReleaseVersionModal extends Component {
     close();
   }
 
-  componentWillMount() {
-    const { initializeForm } = this.props;
-    initializeForm({ end_time: moment() });
-  }
-
   render() {
-    const { i18n: { errMsg }, fields: { name, end_time, description }, handleSubmit, invalid, submitting, options } = this.props;
+    const { i18n: { errMsg }, fields: { name, description }, handleSubmit, invalid, submitting, options } = this.props;
 
     const versionOptions = _.map(options.versions || [], (val) => { return { label: val.name, value: val.id } });
 
@@ -103,7 +93,7 @@ export default class ReleaseVersionModal extends Component {
             { name.touched && name.error &&
               <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ end_time.value && end_time.error ? 'error' : null }>
+          {/*<FormGroup controlId='formControlsText' validationState={ end_time.value && end_time.error ? 'error' : null }>
             <ControlLabel>发布时间</ControlLabel>
             <DateTime
               locale='zh-cn'
@@ -115,7 +105,7 @@ export default class ReleaseVersionModal extends Component {
               value={ end_time.value }
               onChange={ newValue => { end_time.onChange(newValue) } }/>
             { end_time.value && end_time.error && <HelpBlock style={ { float: 'right' } }>{ end_time.error }</HelpBlock> }
-          </FormGroup>
+          </FormGroup>*/}
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
