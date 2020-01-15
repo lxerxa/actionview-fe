@@ -22,11 +22,17 @@ export default class Container extends Component {
   }
 
   static propTypes = {
+    location: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     version: PropTypes.object.isRequired
+  }
+
+  refresh(query) {
+    let pathname = '/project/version';
+    this.context.router.push({ pathname, query });
   }
 
   async index() {
@@ -66,6 +72,8 @@ export default class Container extends Component {
   }
 
   render() {
+    const { location: { query={} } } = this.props;
+
     if (this.props.project.options) {
       _.assign(this.props.version.options, this.props.project.options);
     }
@@ -78,7 +86,9 @@ export default class Container extends Component {
           i18n={ this.props.i18n } 
           { ...this.props.version }/>
         <List 
+          query={ query }
           index={ this.index.bind(this) } 
+          refresh={ this.refresh.bind(this) }
           select={ this.props.actions.select } 
           release={ this.release.bind(this) } 
           update={ this.update.bind(this) } 

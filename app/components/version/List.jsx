@@ -7,6 +7,7 @@ import _ from 'lodash';
 const EditModal = require('./EditModal');
 const ReleaseModal = require('./ReleaseModal');
 const DelNotify = require('./DelNotify');
+const PaginationList = require('../share/PaginationList');
 
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -33,6 +34,8 @@ export default class List extends Component {
     itemLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
+    refresh: PropTypes.func.isRequired,
+    query: PropTypes.object,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     release: PropTypes.func.isRequired,
@@ -98,6 +101,8 @@ export default class List extends Component {
   render() {
     const { 
       i18n, 
+      query,
+      refresh,
       options={}, 
       collection, 
       selectedItem, 
@@ -186,12 +191,21 @@ export default class List extends Component {
         <BootstrapTable data={ versions } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='start_time'>开始时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='end_time'>发布时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='issues'>问题完成情况</TableHeaderColumn>
+          <TableHeaderColumn dataField='start_time' width='120'>开始时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='end_time' width='120'>发布时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='issues' width='150'>问题完成情况</TableHeaderColumn>
           <TableHeaderColumn dataField='status' width='100'>状态</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
+        { !indexLoading && options.total && options.total > 0 ?
+          <PaginationList
+            total={ options.total || 0 }
+            curPage={ query.page ? (query.page - 0) : 1 }
+            sizePerPage={ options.sizePerPage || 50 }
+            paginationSize={ 4 }
+            query={ query }
+            refresh={ refresh }/>
+          : '' }
         { this.state.editModalShow && 
           <EditModal 
             show 
