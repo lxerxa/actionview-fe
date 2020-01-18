@@ -140,7 +140,6 @@ export default class CreateModal extends Component {
                 closeOnSelect 
                 dateFormat='YYYY/MM/DD' 
                 timeFormat={ false } 
-                defaultValue={ moment() } 
                 value={ end_time.value } 
                 onChange={ newValue => { end_time.onChange(newValue) } }/>
               { end_time.value && end_time.error && <HelpBlock style={ { float: 'right' } }>{ end_time.error }</HelpBlock> }

@@ -21,6 +21,8 @@ const sysFields = [
   'comments', 
   'resolve_version', 
   'effect_versions',
+  'progress',
+  'expect_start_time',
   'expect_complete_time',
   'related_users',
   'descriptions', 

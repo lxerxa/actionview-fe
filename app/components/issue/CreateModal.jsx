@@ -486,9 +486,10 @@ class CreateModal extends Component {
                 return (
                 <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
-                  <Col sm={ 4 }>
+                  <Col sm={ 3 }>
                     <FormControl
                       type='number'
+                      min={ v.key == 'progress' ? '0' : '' }
                       disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }

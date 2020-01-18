@@ -152,13 +152,13 @@ export default class List extends Component {
 
     const { options: { singulars=[] } } = nextProps;
     if (nextProps.collection.length > 0) {
-      this.setBoundaryDatesFromData(nextProps.collection);
-      this.setDates(singulars);
       if (this.state.collection.length <= 0) {
         this.arrangeData(nextProps.collection, this.state.sortkey);
       } else {
         this.arrangeData(this.arrangeCollection(nextProps.collection, this.state.collection));
       }
+      this.setBoundaryDatesFromData(this.state.collection);
+      this.setDates(singulars);
     } else {
       this.state.collection = [];
     }
@@ -230,7 +230,7 @@ export default class List extends Component {
     const newIssues = [];
     _.forEach(standardIssues, (v, k) => {
       if (classifiedSubtasks[v.id]) {
-        v.hasChildren = true;
+        v.hasSubtasks = true;
       }
       newIssues.push(v);
       if (classifiedSubtasks[v.id]) {
@@ -301,7 +301,7 @@ export default class List extends Component {
             { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
             <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
-                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasChildren ? 'visible' : 'hidden', cursor: 'pointer' } }>
+                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasSubtasks ? 'visible' : 'hidden', cursor: 'pointer' } }>
                   { foldIssues.indexOf(v.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
                 </span>
                 <a href='#' onClick={ (e) => { e.preventDefault(); this.show(v.id) } } title={ v.title }>
@@ -316,7 +316,7 @@ export default class List extends Component {
               </div>
               { mode == 'progress' &&
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>
-                { (v.progress || 0) + '%' } 
+                { (v.progress + '') ? (v.progress + '%') : '-' } 
               </div> }
               { mode == 'status' &&
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>
@@ -467,7 +467,7 @@ export default class List extends Component {
           if ((!v.expect_start_time || !v.expect_complete_time) && (!v.progress || v.progress < 100)) {
             backgroundColor = '#555';
           } else {
-            backgroundColor = v.hasChildren ? '#65c16f' : '#3db9d3';
+            backgroundColor = v.hasSubtasks ? '#65c16f' : '#3db9d3';
           }
         } else if (mode == 'status') {
           const stateInd = _.findIndex(states, { id: v.state });
@@ -481,12 +481,12 @@ export default class List extends Component {
           }
         }
 
-        const progressBGColor = v.hasChildren ? '#3c9445' : '#2898b0';
+        const progressBGColor = v.hasSubtasks ? '#3c9445' : '#2898b0';
 
         return (
           <div className='ganttview-block-container' key={ v.id }>
             <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='top' overlay={ popover }>
-              { v.hasChildren && foldIssues.indexOf(v.id) === -1 ?
+              { v.hasSubtasks && foldIssues.indexOf(v.id) === -1 ?
               <div className='ganttview-block-parent' 
                 id={ v.id }
                 style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px' } }>
@@ -494,11 +494,11 @@ export default class List extends Component {
                 <div className='ganttview-block-parent-right'/>
               </div>
               :
-              <div className={ 'ganttview-block ' + (v.hasChildren ? '' : 'ganttview-block-movable') } 
+              <div className={ 'ganttview-block ' + (v.hasSubtasks ? '' : 'ganttview-block-movable') } 
                 id={ v.id }
                 style={ { width: width + 'px', height: blockHeight + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor } }>
                 { mode == 'progress' &&
-                <div style={ { height: blockHeight + 'px', width: (width * (v.progress || 0) / 100) + 'px', backgroundColor: progressBGColor } }/> }
+                <div style={ { height: blockHeight + 'px', width: (width * _.min([ v.progress || 0, 100 ]) / 100) + 'px', backgroundColor: progressBGColor } }/> }
               </div> }
             </OverlayTrigger>
           </div> ) } ) }
@@ -630,7 +630,6 @@ export default class List extends Component {
   componentDidUpdate(prevProps) {
     const { collection, itemData, options } = this.props;
 
-    const self = this;
     if (this.state.barShow) {
       $('.ganttview-vtheader-series-item').each(function(i) {
         if (itemData.id === $(this).attr('id')) {
@@ -645,18 +644,18 @@ export default class List extends Component {
       return;
     }
 
-    if (prevProps.collection.length !== collection.length && collection.length > 0) {
+    if (collection.length > 0) {
       const self = this;
       const cellWidth = this.configs.cellWidth;
 
-      $('.ganttview-block-movable').unbind();
+      //$('div.ganttview-block').unbind();
 
-      $('.ganttview-block-movable').dblclick(function() {
+      $('div.ganttview-block-movable').dblclick(function() {
         const block = $(this);
         self.clickBar(block);
       });
 
-      $('.ganttview-block-movable').resizable({
+      $('div.ganttview-block-movable').resizable({
         grid: cellWidth, 
         handles: 'e,w',
         stop: function () {
@@ -667,7 +666,7 @@ export default class List extends Component {
         }
       });
 
-      $('.ganttview-block-movable').draggable({
+      $('div.ganttview-block-movable').draggable({
         axis: 'x', 
         grid: [cellWidth, cellWidth],
         stop: function () {

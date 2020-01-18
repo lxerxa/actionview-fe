@@ -811,7 +811,7 @@ export default class DetailBar extends Component {
                     期望完成时间
                   </Col> }
                   { data.expect_complete_time &&
-                  <Col sm={ 4 }>
+                  <Col sm={ data.expect_start_time ? 2 : 4 }>
                     <div style={ { marginTop: '7px' } }>
                       { moment.unix(data.expect_complete_time).format('YYYY/MM/DD') }
                     </div>
@@ -843,6 +843,7 @@ export default class DetailBar extends Component {
                     <div style={ { marginTop: '0px' } }>
                       <FormControl 
                         type='number' 
+                        min='0'
                         value={ this.state.newProgress } 
                         onChange={ (e) => { this.setState({ newProgress: e.target.value }) } }
                         placeholder='进度值'/>

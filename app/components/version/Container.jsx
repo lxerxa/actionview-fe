@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import * as VersionActions from 'redux/actions/VersionActions';
 import _ from 'lodash';
 
+const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
 
@@ -21,6 +22,10 @@ export default class Container extends Component {
     this.pid = '';
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   static propTypes = {
     location: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
@@ -31,12 +36,14 @@ export default class Container extends Component {
   }
 
   refresh(query) {
-    let pathname = '/project/version';
+    let pathname = '/project/' + this.pid + '/version';
     this.context.router.push({ pathname, query });
   }
 
-  async index() {
-    await this.props.actions.index(this.pid);
+  async index(query) {
+    query = query || {};
+    if (!query.page) { query.page = 1; }
+    await this.props.actions.index(this.pid, qs.stringify(query));
     return this.props.version.ecode;
   }
 

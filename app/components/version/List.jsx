@@ -43,8 +43,16 @@ export default class List extends Component {
   }
 
   componentWillMount() {
-    const { index } = this.props;
-    index();
+    const { index, query } = this.props;
+    index(query);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const newQuery = nextProps.query || {};
+    const { index, query } = this.props;
+    if (!_.isEqual(newQuery, query)) {
+      index(newQuery);
+    }
   }
 
   editModalClose() {
@@ -129,20 +137,23 @@ export default class List extends Component {
         ),
         start_time: (
           <div style={ { display: 'table', width: '100%' } }>
-            <span>
-              <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> 
-                { collection[i].start_time ? moment.unix(collection[i].start_time).format('YYYY/MM/DD') : '-' }
-              </div>
-            </span> 
+            <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }> 
+              { collection[i].start_time ? moment.unix(collection[i].start_time).format('YYYY/MM/DD') : '-' }
+            </div>
           </div>
         ),
         end_time: (
           <div style={ { display: 'table', width: '100%' } }>
-            <span>
-              <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px', color: (collection[i].end_time && options.current_time > collection[i].end_time && collection[i].status !== 'released') ? 'red' : '#000' } }> 
-                { collection[i].end_time ? moment.unix(collection[i].end_time).format('YYYY/MM/DD') : '-' }
-              </div>
-            </span> 
+            <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px', color: (collection[i].end_time && options.current_time > collection[i].end_time && collection[i].status !== 'released') ? 'red' : '#000' } }> 
+              { collection[i].end_time ? moment.unix(collection[i].end_time).format('YYYY/MM/DD') : '-' }
+            </div>
+          </div>
+        ),
+        released_time: (
+          <div style={ { display: 'table', width: '100%' } }>
+            <div style={ { display: 'inline-block', float: 'left', margin: '3px', marginBottom: '6px' } }>
+              { collection[i].released_time ? moment.unix(collection[i].released_time).format('YYYY/MM/DD') : '-' }
+            </div>
           </div>
         ),
         issues: (
@@ -167,7 +178,8 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='edit'>编辑</MenuItem>
-              { collection[i].status == 'released' ? <MenuItem eventKey='unrelease'>取消发布</MenuItem> : <MenuItem eventKey='release'>发布</MenuItem> }
+              {/* collection[i].status == 'released' ? <MenuItem eventKey='unrelease'>取消发布</MenuItem> : <MenuItem eventKey='release'>发布</MenuItem> */}
+              { collection[i].status != 'released' && <MenuItem eventKey='release'>发布</MenuItem> }
               <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
@@ -192,7 +204,8 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='start_time' width='120'>开始时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='end_time' width='120'>发布时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='end_time' width='120'>完成时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='released_time' width='120'>发布时间</TableHeaderColumn>
           <TableHeaderColumn dataField='issues' width='150'>问题完成情况</TableHeaderColumn>
           <TableHeaderColumn dataField='status' width='100'>状态</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>

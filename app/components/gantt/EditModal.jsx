@@ -68,12 +68,18 @@ export default class EditModal extends Component {
 
     if (values.expect_start_time) {
       submitValues.expect_start_time = parseInt(moment(values.expect_start_time).startOf('day').format('X'));
+    } else {
+      submitValues.expect_start_time = '';
     }
     if (values.expect_complete_time) {
       submitValues.expect_complete_time = parseInt(moment(values.expect_complete_time).startOf('day').format('X'));
+    } else {
+      submitValues.expect_complete_time = '';
     }
     if (values.progress) {
       submitValues.progress = values.progress - 0;
+    } else {
+      submitValues.progress = '';
     }
 
     const ecode = await edit(data.id, submitValues);
@@ -134,7 +140,7 @@ export default class EditModal extends Component {
                 dateFormat='YYYY/MM/DD' 
                 timeFormat={ false } 
                 value={ expect_start_time.value } 
-                onChange={ newValue => { const startDay = newValue.startOf('day'); expect_start_time.onChange(startDay) } }/>
+                onChange={ newValue => { expect_start_time.onChange(newValue) } }/>
               { expect_start_time.value && expect_start_time.error && 
                 <HelpBlock style={ { float: 'right' } }>{ expect_start_time.error }</HelpBlock> }
             </FormGroup>
@@ -156,6 +162,7 @@ export default class EditModal extends Component {
             <FormControl 
               disabled={ submitting } 
               type='number' 
+              min='0'
               style={ { width: '80px', display: 'inline-block', marginLeft: '10px' } }
               { ...progress } 
               placeholder='进度'/> %
