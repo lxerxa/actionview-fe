@@ -316,7 +316,7 @@ export default class List extends Component {
               </div>
               { mode == 'progress' &&
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>
-                { (v.progress + '') ? (v.progress + '%') : '-' } 
+                { v.progress ? v.progress + '%' : '0%' } 
               </div> }
               { mode == 'status' &&
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>

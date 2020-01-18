@@ -163,6 +163,7 @@ export default class EditModal extends Component {
               disabled={ submitting } 
               type='number' 
               min='0'
+              max='100'
               style={ { width: '80px', display: 'inline-block', marginLeft: '10px' } }
               { ...progress } 
               placeholder='进度'/> %
