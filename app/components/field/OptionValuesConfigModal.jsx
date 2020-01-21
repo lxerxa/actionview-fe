@@ -81,10 +81,15 @@ export default class OptionValuesConfigModal extends Component {
   }
 
   editCard(i, id, newText) {
+    newText = _.trim(newText);
     const index = _.findIndex(this.state.cards, { text: newText });
     if (index === -1 || this.state.cards[index].id === id) {
       this.state.editingCards = _.reject(this.state.editingCards, (v) => v === id);
-      this.state.cards[i].text = newText;
+      if (newText) {
+        this.state.cards[i].text = newText;
+      } else {
+        this.state.cards.splice(i, 1);
+      }
       this.setState({ cards: this.state.cards, editingCards: this.state.editingCards });
       return true;
     } else {
@@ -99,10 +104,10 @@ export default class OptionValuesConfigModal extends Component {
 
   handleChange(e) {
     this.setState({ addErr: false });
-    const optionValue = e.target.value;
-    if (optionValue.trim() === '') {
+    const optionValue = _.trim(e.target.value);
+    if (optionValue === '') {
       this.setState({ enableAdd: false });
-    } else if (_.findIndex(this.state.cards, (o) => o.id === optionValue) !== -1) {
+    } else if (_.findIndex(this.state.cards, (o) => o.text === optionValue) !== -1) {
       this.setState({ enableAdd: false });
     }else {
       this.setState({ enableAdd: true });
@@ -110,7 +115,7 @@ export default class OptionValuesConfigModal extends Component {
   }
 
   add() {
-    const optionValue = findDOMNode(this.refs.addOpt).value;
+    const optionValue = _.trim(findDOMNode(this.refs.addOpt).value);
     if (optionValue && this.state.enableAdd) {
       this.state.cards.push({ id: optionValue, text: optionValue });
       this.setState({ cards: this.state.cards });
