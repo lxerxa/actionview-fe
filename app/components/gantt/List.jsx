@@ -648,9 +648,7 @@ export default class List extends Component {
       const self = this;
       const cellWidth = this.configs.cellWidth;
 
-      //$('div.ganttview-block').unbind();
-
-      $('div.ganttview-block-movable').dblclick(function() {
+      $('div.ganttview-block-movable').unbind('dblclick').bind('dblclick', function() {
         const block = $(this);
         self.clickBar(block);
       });
