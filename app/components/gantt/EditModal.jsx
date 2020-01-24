@@ -28,8 +28,10 @@ const validate = (values, props) => {
   }
 
   if (values.progress) {
-    if (isNaN(values.progress) || values.progress < 0) {
+    if (isNaN(values.progress)) {
       errors.progress = '格式错误';
+    } else if (values.progress < 0 || values.progress > 100) {
+      errors.progress = '数值必须在0～100之间';
     }
   }
   return errors;

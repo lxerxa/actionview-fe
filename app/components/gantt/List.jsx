@@ -28,6 +28,7 @@ export default class List extends Component {
       barShow: false,
       editModalShow: false
     };
+    this.scrollSide = '';
     this.sortOptions = {
       'start_time_asc': 'expect_start_time asc,expect_complete_time_asc,no desc',
       'start_time_desc': 'expect_start_time desc,expect_complete_time desc,no desc',
@@ -57,6 +58,8 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    isHeaderHidden: PropTypes.bool.isRequired,
+    toggleHeader: PropTypes.func.isRequired,
     layout: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     wfCollection: PropTypes.array.isRequired,
@@ -628,7 +631,8 @@ export default class List extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { collection, itemData, options } = this.props;
+    const { itemData, options, isHeaderHidden } = this.props;
+    const { collection } = this.state;
 
     if (this.state.barShow) {
       $('.ganttview-vtheader-series-item').each(function(i) {
@@ -647,6 +651,69 @@ export default class List extends Component {
     if (collection.length > 0) {
       const self = this;
       const cellWidth = this.configs.cellWidth;
+
+      let isIE = false; 
+      if (navigator.userAgent.indexOf('compatible') !== -1 || navigator.userAgent.indexOf('MSIE') !== -1 || navigator.userAgent.indexOf('Trident') !== -1) {
+        isIE = true;
+      }
+
+      $('div.ganttview').css('height', _.min([ document.body.clientHeight - (isHeaderHidden ? 150 : 200), collection.length * 31 + (isIE ? 59 : 53) ]));//?
+
+      //$('div.ganttview-slide-container').focus(function() {
+      //  self.scrollSide = 'right'; 
+      //});
+      //$('div.ganttview-vtheader-item').focus(function() {
+      //  self.scrollSide = 'left'; 
+      //});
+
+      $('div.ganttview-slide-container').scroll(function() {
+        setTimeout(function() {
+          $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
+          if ($('div.ganttview-vtheader-item').scrollTop() === $('div.ganttview-slide-container').scrollTop()) {
+            return false;
+          }
+          $('div.ganttview-vtheader-item').scrollTop($('div.ganttview-slide-container').scrollTop());
+        }, 200);
+      });
+
+      $('div.ganttview-vtheader-item').scroll(function() {
+        setTimeout(function() {
+          $('div.ganttview-vtheader-series-header-item').css('left', -$('div.ganttview-vtheader-item').scrollLeft() + 1);
+          if ($('div.ganttview-vtheader-item').scrollTop() === $('div.ganttview-slide-container').scrollTop()) {
+            return false;
+          }
+          $('div.ganttview-slide-container').scrollTop($('div.ganttview-vtheader-item').scrollTop());
+          $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
+        }, 200);
+      });
+
+      /*$('div.ganttview-slide-container').get(0).onmousewheel = function(e) {
+        if (e.wheelDelta > 0) {
+          $('div.ganttview-slide-container').scrollTop($('div.ganttview-slide-container').scrollTop() - 30);
+        } else {
+          $('div.ganttview-slide-container').scrollTop($('div.ganttview-slide-container').scrollTop() + 30);
+        }
+
+        $('div.ganttview-vtheader-item').scrollTop($('div.ganttview-slide-container').scrollTop());
+        $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
+        return false;
+      }
+
+      if (isFF) {
+        $('div.ganttview-vtheader-item').css('overflowY', 'auto');
+      }
+
+      $('div.ganttview-vtheader-item').get(0).onmousewheel = function(e) {
+        if (e.wheelDelta > 0) {
+          $('div.ganttview-vtheader-item').scrollTop($('div.ganttview-vtheader-item').scrollTop() - 30);
+        } else {
+          $('div.ganttview-vtheader-item').scrollTop($('div.ganttview-vtheader-item').scrollTop() + 30);
+        }
+
+        $('div.ganttview-slide-container').scrollTop($('div.ganttview-vtheader-item').scrollTop());
+        $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
+        return false;
+      }*/
 
       $('div.ganttview-block-movable').unbind('dblclick').bind('dblclick', function() {
         const block = $(this);
@@ -724,6 +791,8 @@ export default class List extends Component {
   render() {
     const { 
       i18n,
+      isHeaderHidden,
+      toggleHeader,
       layout,
       itemData={},
       loading,
@@ -817,11 +886,16 @@ export default class List extends Component {
             <span>按任务进度</span>
             :
             <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('progress'); } }>按任务进度</a> }
-            <span style={ { margin: '0px 3px' } }> | </span>
+            <span style={ { margin: '0px 2px' } }> | </span>
             { mode == 'status' ?
             <span>按问题状态</span>
             :
             <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按问题状态</a> }
+            <a href='#' onClick={ (e) => {  e.preventDefault(); toggleHeader(); } } style={ { marginLeft: '8px' } }>
+              <span style={ { border: '1px solid #ddd', borderRadius: '2px', padding: '0px 3px' } } title={ isHeaderHidden ? '展示头部' : '隐藏头部' }>
+                <i className={ isHeaderHidden ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up' }></i>
+              </span>
+            </a>
           </span>
         </div>
         { indexLoading && 

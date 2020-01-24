@@ -22,6 +22,7 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
+    this.state = { isHeaderHidden: false };
     this.pid = '';
   }
 
@@ -233,6 +234,10 @@ export default class Container extends Component {
     return { ecode: this.props.issue.ecode, emsg: this.props.issue.emsg };
   }
 
+  toggleHeader() {
+    this.setState({ isHeaderHidden: !this.state.isHeaderHidden });
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -247,6 +252,7 @@ export default class Container extends Component {
 
     return (
       <div>
+        { !this.state.isHeaderHidden &&
         <Header
           create={ this.create.bind(this) }
           addLabels={ this.props.actions.addLabels }
@@ -260,8 +266,10 @@ export default class Container extends Component {
           project={ this.props.project.item }
           closeDetailBar={ this.closeDetailBar.bind(this) }
           i18n={ this.props.i18n }
-          { ...this.props.issue }/>
+          { ...this.props.issue }/> }
         <List ref='list' 
+          toggleHeader={ this.toggleHeader.bind(this) }
+          isHeaderHidden={ this.state.isHeaderHidden }
           layout={ this.props.layout }
           index={ this.index.bind(this) } 
           show={ this.show.bind(this) } 

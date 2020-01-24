@@ -11,96 +11,123 @@ div.ganttview-vtheader-item-name,
 div.ganttview-vtheader-series,
 div.ganttview-grid,
 div.ganttview-grid-row-cell {
-	float: left;
+    float: left;
+}
+
+div.ganttview-hzheader {
+  position: absolute;
+  z-index: 2;
+  opacity: 1;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+div.ganttview-grid {
+  margin-top: 40px;
 }
 
 div.ganttview-hzheader-month,
 div.ganttview-hzheader-day {
-	text-align: center;
+    text-align: center;
 }
 
 div.ganttview-grid-row-cell.last,
 div.ganttview-hzheader-day.last,
 div.ganttview-hzheader-month.last {
-	border-right: none;
+    border-right: none;
 }
 
 div.ganttview {
-	border: 1px solid #999;
+    border: 1px solid #999;
+        overflow: hidden;
 }
 
 
 /* Horizontal Header */
 
 div.ganttview-hzheader-month {
-	width: 60px;
-	height: 20px;
-	border-right: 1px solid #d0d0d0;
-	line-height: 20px;
+    width: 60px;
+    height: 20px;
+    border-right: 1px solid #d0d0d0;
+    line-height: 20px;
 }
 
 div.ganttview-hzheader-day {
-	width: 25px;
-	height: 20px;
-	border-right: 1px solid #f0f0f0;
-	border-top: 1px solid #d0d0d0;
-	line-height: 20px;
-	color: #777;
+    width: 25px;
+    height: 20px;
+    border-right: 1px solid #f0f0f0;
+    border-top: 1px solid #d0d0d0;
+    line-height: 20px;
+    color: #777;
 }
 
 
 /* Vertical Header */
 
 div.ganttview-vtheader {
-	width: 430px;
-	overflow: hidden;
-	background-color: #fff;
+        height: 100%;
+    width: 430px;
+    overflow: hidden;
+    background-color: #fff;
 }
 
 div.ganttview-vtheader-item {
-	overflow: auto;
-	color: #666;
+        height: 100%;
+    overflow: auto;
+    color: #666;
+}
+
+div.ganttview-vtheader-item::-webkit-scrollbar:vertical {
+  display: none;
 }
 
 div.ganttview-vtheader-item-name {
-	width: 100px;
-	padding-left: 5px;
-	border-top: 1px solid #d0d0d0;
-	line-height: 16px;
+    width: 100px;
+    padding-left: 5px;
+    border-top: 1px solid #d0d0d0;
+    line-height: 16px;
 }
 
 div.ganttview-vtheader-series-item-cell {
-	height: 31px;
-	border-top: 1px solid #d0d0d0;
-	line-height: 31px;
-	padding-left: 5px;
-	text-overflow: ellipsis;
-        overflow: hidden;
-	white-space: nowrap;
-	float: left;
-	text-align: center;
+    height: 31px;
+    border-top: 1px solid #d0d0d0;
+    line-height: 31px;
+    padding-left: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    float: left;
+    text-align: center;
 }
 
 div.ganttview-vtheader-series-header-item {
+  position: absolute;
+  opacity: 1;
+  background-color: #fff;
   height: 40px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 div.ganttview-vtheader-series-header-item-cell {
-	height: 40px;
-	border-right: 1px solid #d0d0d0;
-	line-height: 31px;
-	padding-left: 5px;
-	padding-top: 6px;
-	text-overflow: ellipsis;
+    height: 40px;
+    border-right: 1px solid #d0d0d0;
+    line-height: 31px;
+    padding-left: 5px;
+    padding-top: 6px;
+    text-overflow: ellipsis;
         overflow: hidden;
-	white-space: nowrap;
-	color: #a6a6a6;
-	float: left;
-	text-align: center;
+    white-space: nowrap;
+    color: #a6a6a6;
+    float: left;
+    text-align: center;
 }
 
 div.ganttview-vtheader-series-item {
   height: 31px;
+}
+
+div.ganttview-vtheader-series-item:nth-child(2) {
+  margin-top: 40px;
 }
 
 div.ganttview-vtheader-series-item:hover {
@@ -110,56 +137,60 @@ div.ganttview-vtheader-series-item:hover {
 /* Slider */
 
 div.ganttview-slide-container {
-	overflow: auto;
-	border-left: 1px solid #999;
+        z-index: 2;
+        position: relative;
+        height: 100%;
+    overflow: auto;
+    border-left: 1px solid #999;
 }
 
 div.ganttview-hzheader-day.ganttview-weekend {
-	background-color: #fff0f0;
+    background-color: #fff0f0;
 }
 
 div.ganttview-hzheader-day.ganttview-today {
-	background-color: #ffff00;
+    background-color: #ffff00;
 }
 
 /* Grid */
 
 div.ganttview-grid-row-cell {
-	width: 25px;
-	height: 31px;
-	border-right: 1px solid #f0f0f0;
-	border-top: 1px solid #f0f0f0;
+    width: 25px;
+    height: 31px;
+    background-color: #fff;
+    border-right: 1px solid #f0f0f0;
+    border-top: 1px solid #f0f0f0;
 }
 
 div.ganttview-grid-row-cell.ganttview-weekend {
-	background-color: #fff0f0;
+    background-color: #fff0f0;
 }
 
 div.ganttview-grid-row-cell.ganttview-today {
-	background-color: #ffff00;
+    background-color: #ffff00;
 }
 
 /* Blocks */
 
 div.ganttview-blocks {
-	margin-top: 40px;
+    margin-top: 40px;
 }
 
 div.ganttview-block-container {
-	height: 31px;
-	padding-top: 5px;
+    height: 31px;
+    padding-top: 5px;
 }
 
 div.ganttview-block {
-	position: relative;
-	height: 23px;
-	background-color: #ddd;
+    position: relative;
+    height: 23px;
+    background-color: #ddd;
 }
 
 div.ganttview-block-parent {
-	position: relative;
-	height: 10px;
-	background-color: #65c16f;
+    position: relative;
+    height: 10px;
+    background-color: #65c16f;
 }
 
 div.ganttview-block-parent-left {
@@ -198,20 +229,20 @@ div.ganttview-marker {
 }
 
 div.ganttview-block-movable {
-	cursor: move;
+    cursor: move;
 }
 
 div.ganttview-block-text {
-	position: absolute;
-	height: 12px;
-	font-size: 0.8em;
-	color: #999;
-	padding: 2px 3px;
+    position: absolute;
+    height: 12px;
+    font-size: 0.8em;
+    color: #999;
+    padding: 2px 3px;
 }
 
 
 /* Adjustments for jQuery UI Styling */
 
 div.ganttview-block div.ui-resizable-handle.ui-resizable-s {
-	bottom: -0;
+    bottom: -0;
 }
