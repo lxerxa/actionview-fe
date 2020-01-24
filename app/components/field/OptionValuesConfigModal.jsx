@@ -15,7 +15,7 @@ export default class OptionValuesConfigModal extends Component {
   constructor(props) {
     super(props);
     this.add = this.add.bind(this);
-    this.state = { cards: [], editingCards: [], ecode: 0, enableAdd: false, addErr: false };
+    this.state = { cards: [], editingCards: [], ecode: 0, sort: 1, enableAdd: false, addErr: false };
     const optionValues = this.props.data.optionValues || [];
     const optionNum = optionValues.length;
     for (let i = 0; i < optionNum; i++) {
@@ -60,7 +60,12 @@ export default class OptionValuesConfigModal extends Component {
 
   sort() {
     const cards = this.state.cards;
-    this.setState(cards.sort(function(a, b) { return a.text.localeCompare(b.text); } ));
+    if (this.state.sort == 1) {
+      this.setState(cards.sort(function(a, b) { return a.text.localeCompare(b.text); } ));
+    } else {
+      this.setState(cards.sort(function(a, b) { return b.text.localeCompare(a.text); } ));
+    }
+    this.state.sort = -this.state.sort;
   }
 
   addEditingCards(id) {
@@ -150,22 +155,7 @@ export default class OptionValuesConfigModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ '字段可选值配置 - ' + this.props.data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
-          <Form horizontal>
-            <FormGroup controlId='formControlsText' validationState={ this.state.addErr ? 'error' : null }>
-              <Col sm={ 12 }>
-                <FormControl 
-                  type='text' 
-                  ref='addOpt' 
-                  placeholder='输入可选值，回车即可添加'
-                  onChange={ this.handleChange.bind(this) } 
-                  onKeyDown={ (e) => { if (e.keyCode == '13') { e.preventDefault(); this.add(); } } }/>
-              </Col>
-              {/* <Col sm={ 1 }>
-                <Button bsStyle='link' style={ { marginLeft: '-25px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
-              </Col> */}
-            </FormGroup>
-          </Form>
-          { cards.length > 0 && <div>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></div> }
+          { cards.length > 0 && <div style={ { marginTop: '-6px' } }>通过上下拖拽改变显示顺序。<Button bsStyle='link' onClick={ this.sort.bind(this) }>按字母排序</Button></div> }
           { cards.length > 0 ?
             cards.map((op, i) => {
               return (
@@ -183,8 +173,24 @@ export default class OptionValuesConfigModal extends Component {
                   del={ this.deleteCard.bind(this, i) }/>
               );
             }) :
-            <p>可选值列表为空</p>
+            <div style={ { paddingBottom: '6px' } }>可选值列表为空</div>
           }
+          <Form horizontal>
+            <FormGroup controlId='formControlsText' validationState={ this.state.addErr ? 'error' : null }>
+              <Col sm={ 12 }>
+                <FormControl
+                  style={ { marginTop: '5px' } }
+                  type='text'
+                  ref='addOpt'
+                  placeholder='输入可选值，回车即可添加'
+                  onChange={ this.handleChange.bind(this) }
+                  onKeyDown={ (e) => { if (e.keyCode == '13') { e.preventDefault(); this.add(); } } }/>
+              </Col>
+              {/* <Col sm={ 1 }>
+                <Button bsStyle='link' style={ { marginLeft: '-25px' } } onClick={ this.add.bind(this) } disabled={ !enableAdd }>添加</Button>
+              </Col> */}
+            </FormGroup>
+          </Form>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
