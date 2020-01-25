@@ -25,6 +25,7 @@ export default class List extends Component {
       foldIssues: [],
       collection: [], 
       selectedIssue: {}, 
+      markedIssue: {}, 
       barShow: false,
       editModalShow: false
     };
@@ -261,7 +262,7 @@ export default class List extends Component {
   }
 
   addVtHeader() {
-    const { collection, mode, foldIssues } = this.state;
+    const { collection, mode, foldIssues, markedIssue } = this.state;
     const { options: { states=[] } } = this.props;
 
     const header = (
@@ -302,12 +303,12 @@ export default class List extends Component {
           <div className='ganttview-vtheader-series' style={ { width: '950px' } }>
             { header }
             { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
-            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id }>
+            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id } onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ markedIssue: markedIssue.id == v.id ? {} : v }); } } style={ { backgroundColor: v.id == markedIssue.id ? '#FFFACD' : '#fff' } }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
                 <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasSubtasks ? 'visible' : 'hidden', cursor: 'pointer' } }>
-                  { foldIssues.indexOf(v.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
+                  { foldIssues.indexOf(v.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
                 </span>
-                <a href='#' onClick={ (e) => { e.preventDefault(); this.show(v.id) } } title={ v.title }>
+                <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.show(v.id) } } title={ v.title }>
                   <span style={ { marginLeft: '3px' } }>{ v.title }</span>
                 </a>
               </div>
@@ -335,7 +336,7 @@ export default class List extends Component {
                 { v.expect_complete_time && v.expect_start_time ? this.getDuration(v.expect_start_time, v.expect_complete_time) : '-' }
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '50px' } }>
-                <a href='#' onClick={ (e) => { e.preventDefault(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
+                <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
                   <i className='fa fa-dot-circle-o'></i>
                 </a> 
               </div>
@@ -396,7 +397,7 @@ export default class List extends Component {
 
   addGrid() {
     const cellWidth = this.configs.cellWidth;
-    const { collection, dates, foldIssues } = this.state;
+    const { collection, dates, foldIssues, markedIssue } = this.state;
     const { options: { today = '' } } = this.props;
 
     const dates2 = _.flatten(_.values(dates));
@@ -412,6 +413,7 @@ export default class List extends Component {
         { _.map(dates2, (v2, key2) => 
           <div 
             className={ 'ganttview-grid-row-cell ' + (v2.date == today ? 'ganttview-today' : (v2.notWorking === 1 ? 'ganttview-weekend' : '')) } 
+            style={ { backgroundColor: markedIssue.id == v.id ? '#FFFACD' : '' } }
             key={ v2.date }/> ) }
         </div> ) ) }
       </div>);
@@ -632,11 +634,13 @@ export default class List extends Component {
 
   componentDidUpdate(prevProps) {
     const { itemData, options, isHeaderHidden } = this.props;
-    const { collection } = this.state;
+    const { collection, markedIssue } = this.state;
 
     if (this.state.barShow) {
       $('.ganttview-vtheader-series-item').each(function(i) {
-        if (itemData.id === $(this).attr('id')) {
+        if (markedIssue.id === $(this).attr('id')) {
+          $(this).css('background-color', '#FFFACD');
+        } else if (itemData.id === $(this).attr('id')) {
           $(this).css('background-color', '#eee');
         } else {
           $(this).css('background-color', '');
