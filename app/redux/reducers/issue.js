@@ -96,7 +96,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_COPY_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection.unshift(action.result.data);
+        state.collection.unshift(_.clone(action.result.data));
         if (!_.isEmpty(state.itemData) && action.result.data.links.length > 0) {
           _.map(action.result.data.links, (link) => {
             if (state.itemData.id === link.dest.id) {
@@ -115,19 +115,17 @@ export default function issue(state = initialState, action) {
 
 
     case t.ISSUE_EDIT:
-    case t.ISSUE_COPY:
     case t.ISSUE_MOVE:
     case t.ISSUE_CONVERT:
       return { ...state, loading: true, historyLoaded: false };
 
     case t.ISSUE_EDIT_SUCCESS:
-    case t.ISSUE_COPY_SUCCESS:
     case t.ISSUE_MOVE_SUCCESS:
     case t.ISSUE_CONVERT_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         if (ind !== -1) {
-          state.collection[ind] = action.result.data;
+          state.collection[ind] = _.clone(action.result.data);
         }
         _.map(state.collection, (v) => {
           if (v.parent_id === action.result.data.id) {
@@ -143,7 +141,6 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.ISSUE_EDIT_FAIL:
-    case t.ISSUE_COPY_FAIL:
     case t.ISSUE_MOVE_FAIL:
     case t.ISSUE_CONVERT_FAIL:
       return { ...state, loading: false, error: action.error };
