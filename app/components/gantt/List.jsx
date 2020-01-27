@@ -757,8 +757,16 @@ export default class List extends Component {
   }
 
   closeDetail() {
+    const { markedIssue } = this.state;
+
     this.setState({ barShow: false });
-    $('.ganttview-vtheader-series-item').css('background-color', '');
+    $('.ganttview-vtheader-series-item').each(function(i) {
+      if (markedIssue.id === $(this).attr('id')) {
+        $(this).css('background-color', '#FFFACD');
+      } else {
+        $(this).css('background-color', '');
+      }
+    });
     const { cleanRecord } = this.props;
     cleanRecord();
   }
