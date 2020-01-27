@@ -15,7 +15,7 @@ export const FieldTypes =  [
   { value: 'MultiVersion', label: '多版本选择' },
   { value: 'SingleUser', label: '单一用户选择' },
   { value: 'MultiUser', label: '多用户选择' },
-  { value: 'Url', label: 'URL字段' }
+  { value: 'Url', label: 'URL' }
 ];
 
 export const StateCategories = [
