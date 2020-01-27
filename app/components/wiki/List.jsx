@@ -11,7 +11,6 @@ const $ = require('$');
 const moment = require('moment');
 const DelNotify = require('./DelNotify');
 const CheckoutNotify = require('./CheckoutNotify');
-const CreateModal = require('./CreateModal');
 const CopyModal = require('./CopyModal');
 const MoveModal = require('./MoveModal');
 const EditModal = require('./EditModal');
@@ -33,17 +32,12 @@ export default class List extends Component {
       hoverRowId: '', 
       editRowId: '',
       createFolderShow: false,
-      isCreateHome: false,
-      createModalShow: false,
-      editeModalShow: false,
       name: '' };
 
     this.state.sortkey = window.localStorage && window.localStorage.getItem('wiki-sortkey') || 'create_time_desc';
 
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.checkoutNotifyClose = this.checkoutNotifyClose.bind(this);
-    this.createModalClose = this.createModalClose.bind(this);
-    this.editModalClose = this.editModalClose.bind(this);
     this.reload = this.reload.bind(this);
     this.cancelEditRow = this.cancelEditRow.bind(this);
     this.initEditRow = this.initEditRow.bind(this);
@@ -57,7 +51,6 @@ export default class List extends Component {
     user: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
-    item: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -66,7 +59,7 @@ export default class List extends Component {
     reload: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     sort: PropTypes.func.isRequired,
-    show: PropTypes.func.isRequired,
+    goto: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
@@ -104,14 +97,6 @@ export default class List extends Component {
     this.setState({ checkoutNotifyShow: false });
   }
 
-  createModalClose() {
-    this.setState({ createModalShow: false });
-  }
-
-  editModalClose() {
-    this.setState({ editModalShow: false });
-  }
-
   componentDidMount() {
     const self = this;
     $('#pname').bind('keypress',function(event){  
@@ -140,7 +125,7 @@ export default class List extends Component {
 
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { select, project_key, checkin, checkout, user } = this.props;
+    const { select, project_key, checkin, checkout, user, goto } = this.props;
     await select(hoverRowId);
 
     if (eventKey === 'checkin') {
@@ -163,7 +148,7 @@ export default class List extends Component {
         }
       }
     } else if (eventKey === 'edit') {
-      this.setState({ editModalShow: true });
+      goto('edit', hoverRowId);
     } else if (eventKey === 'copy') {
       this.setState({ copyModalShow: true });
     } else if (eventKey === 'move') {
@@ -210,14 +195,13 @@ export default class List extends Component {
       directory,
       collection, 
       selectedItem, 
-      item, 
       loading, 
       indexLoading, 
       itemLoading, 
       reload, 
       checkin,
       checkout,
-      show,
+      goto,
       create, 
       del, 
       update, 
@@ -425,7 +409,7 @@ export default class List extends Component {
                 placeholder='标题名称查询...' />
             </span>
             <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { this.setState({ createModalShow: true, isCreateHome: false }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+              <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
                 <i className='fa fa-pencil'></i>&nbsp;新建文档
               </Button>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
@@ -445,7 +429,7 @@ export default class List extends Component {
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
-              <span>为了项目成员能更好的理解此项目，建议增加 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createModalShow: true, isCreateHome: true }); } }>Home</a> 页面。</span>
+              <span>为了项目成员能更好的理解此项目，建议增加 <a href='#' onClick={ (e) => { e.preventDefault(); goto('new', '', { home: 1 }); } }>Home</a> 页面。</span>
             </div>
           </div> }
           { !indexLoading && options.home && options.home.id && _.isEmpty(query) &&
@@ -469,29 +453,6 @@ export default class List extends Component {
               close={ this.checkoutNotifyClose }
               data={ selectedItem }
               checkout={ checkout }/> }
-          { this.state.createModalShow &&
-            <CreateModal
-              i18n={ i18n }
-              show
-              isHome={ this.state.isCreateHome }
-              close={ this.createModalClose }
-              path={ options.path || [] }
-              loading={ loading }
-              create={ create }/> }
-          { this.state.editModalShow &&
-            <EditModal
-              i18n={ i18n }
-              show
-              get={ show }
-              checkin={ checkin }
-              close={ this.editModalClose }
-              path={ options.path || [] }
-              itemLoading={ itemLoading }
-              loading={ loading }
-              wid={ selectedItem.id }
-              user={ user }
-              data={ item }
-              update={ update }/> }
           { this.state.copyModalShow &&
             <CopyModal
               show

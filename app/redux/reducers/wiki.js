@@ -5,6 +5,7 @@ const initialState = {
   ecode: 0, 
   collection: [], 
   indexLoading: false, 
+  itemDetailLoading: false, 
   itemLoading: false, 
   item: {}, 
   loading: false, 
@@ -51,17 +52,17 @@ export default function wiki(state = initialState, action) {
       return { ...state, indexLoading: false, error: action.error };
 
     case t.WIKI_SHOW:
-      return { ...state, itemLoading: true, item: action.wid != state.item.id || action.v ? {} : state.item };
+      return { ...state, itemDetailLoading: true, item: {} };
 
     case t.WIKI_SHOW_SUCCESS:
       if (action.result.ecode === 0) {
         state.item = action.result.data;
         _.extend(state.options, action.result.options);
       }
-      return { ...state, itemLoading: false, ecode: action.result.ecode };
+      return { ...state, itemDetailLoading: false, ecode: action.result.ecode };
 
     case t.WIKI_SHOW_FAIL:
-      return { ...state, itemLoading: false, error: action.error };
+      return { ...state, itemDetailLoading: false, error: action.error };
 
     case t.WIKI_CREATE:
       return { ...state, loading: true };

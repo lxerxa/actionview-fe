@@ -46,7 +46,9 @@ export default class Preview extends Component {
     wid: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
+    itemDetailLoading: PropTypes.bool.isRequired,
     item: PropTypes.object.isRequired,
+    goto: PropTypes.func.isRequired,
     show: PropTypes.func.isRequired,
     checkin: PropTypes.func.isRequired,
     checkout: PropTypes.func.isRequired,
@@ -153,6 +155,11 @@ export default class Preview extends Component {
     window.open(url, '_blank');
   }
 
+  edit() {
+    const { wid, goto } = this.props;
+    goto('edit', wid);
+  }
+
   render() {
     const { 
       i18n, 
@@ -160,6 +167,7 @@ export default class Preview extends Component {
       user, 
       project_key, 
       loading, 
+      itemDetailLoading, 
       itemLoading, 
       item, 
       wid,
@@ -171,7 +179,7 @@ export default class Preview extends Component {
       show, 
       reload } = this.props;
 
-    if (!itemLoading && _.isEmpty(item)) {
+    if (!itemDetailLoading && _.isEmpty(item)) {
       return (<div/>);
     }
 
@@ -207,7 +215,7 @@ export default class Preview extends Component {
 
     return (
       <div style={ { marginTop: '15px' } }>
-        { itemLoading && !item.id &&
+        { itemDetailLoading &&
         <div style={ { marginTop: '25px' } }>
           <div style={ { margin: '0 auto', width: '100px', paddingTop: '25px' } }>
             <img src={ loadingImg } className='loading'/>
@@ -234,7 +242,7 @@ export default class Preview extends Component {
           </a> }
           { (!isCheckin || (isCheckin && item.checkin.user.id === user.id)) && !(this.state.operate === 'delete' && itemLoading) &&
           <span style={ { float: 'right' } }>
-            <Button style={ { marginRight: '5px' } } disabled={ itemLoading } onClick={ () => { this.setState({ operate: 'edit', editModalShow: true }); } }><i className='fa fa-pencil'></i> 编辑</Button>
+            <Button style={ { marginRight: '5px' } } disabled={ itemLoading } onClick={ this.edit.bind(this) }><i className='fa fa-pencil'></i> 编辑</Button>
             <Button bsStyle='link' style={ { fontSize: '14px', marginRight: '5px' } } disabled={ itemLoading } onClick={ () => { this.setState({ operate: 'delete', delNotifyShow: true }); } }>删除</Button>
           </span> }
           { this.state.operate === 'delete' && itemLoading &&
@@ -260,7 +268,7 @@ export default class Preview extends Component {
           { item.checkin && !_.isEmpty(item.checkin) && 
           <span style={ { marginLeft: '8px', color: '#f0ad4e' } }><i className='fa fa-lock'></i> 该文档被{ item.checkin.user ? (item.checkin.user.id == user.id ? '我' : (item.checkin.user.name || '')) : '' }于 { item.checkin.at ? moment.unix(item.checkin.at).format('YYYY/MM/DD HH:mm') : '' } 锁定。</span> }
 
-          { itemLoading && (this.state.operate === 'refresh' || this.state.operate == 'checkin' || this.state.operate == 'checkout') ? 
+          { itemLoading && (this.state.operate == 'checkin' || this.state.operate == 'checkout') ? 
           <span>
             <img src={ loadingImg } className='loading' style={ { width: '13px', height: '13px' } }/>
           </span>

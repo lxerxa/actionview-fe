@@ -254,7 +254,7 @@ export default (
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
         <Route path='gantt' getComponent={ GanttContainer }/>
         <Route path='document(/:id)' getComponent={ DocumentContainer }/>
-        <Route path='wiki(/:dir)(/:wid)' getComponent={ WikiContainer }/>
+        <Route path='wiki(/:dir)(/:wid)(/:mode)' getComponent={ WikiContainer }/>
         <Route path='integrations' getComponent={ IntegrationsContainer }/>
         <Route path='webhooks' getComponent={ WebhooksContainer }/>
       </Route>

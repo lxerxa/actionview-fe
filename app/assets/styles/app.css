@@ -939,7 +939,7 @@ table tr:hover .remove-icon{
 }
 
 .CodeMirror, .CodeMirror-scroll {
-  min-height: 415px;
+  min-height: 500px;
 }
 
 .CodeMirror p > img {
