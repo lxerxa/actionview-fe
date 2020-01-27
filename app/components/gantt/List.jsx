@@ -165,6 +165,7 @@ export default class List extends Component {
       this.setDates(singulars);
     } else {
       this.state.collection = [];
+      this.state.markedIssue = {};
     }
   }
 
@@ -911,7 +912,7 @@ export default class List extends Component {
           </span>
         </div>
         { indexLoading && 
-        <div className='detail-view-blanket' style={ { display: 'block', paddingTop: '100px' } }>
+        <div className='detail-view-blanket' style={ { display: 'block', paddingTop: '200px' } }>
           <img src={ img } className='loading'/>
         </div> }
         { !indexLoading && collection.length <= 0 &&  
