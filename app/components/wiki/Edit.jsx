@@ -6,7 +6,7 @@ import { notify } from 'react-notify-toast';
 const SimpleMDE = require('SimpleMDE');
 const img = require('../../assets/images/loading.gif');
 
-let simplemde = {};
+let simplemde = null;
 
 export default class Edit extends Component {
   constructor(props) {
@@ -70,8 +70,8 @@ export default class Edit extends Component {
       } else if (data.checkin.user.id !== user.id) {
         this.state.emsg = data.checkin.user.name + ' 正编辑该文档，暂不能编辑提交。';
       }
-      this.setState({ name: data.name || '', emsg : this.state.msg });
       simplemde.value(data.contents || '');
+      this.setState({ name: data.name || '', emsg : this.state.msg });
     }
     setRouterNotifyFlg(false);
   }
@@ -86,6 +86,7 @@ export default class Edit extends Component {
         const { loading, data, setRouterNotifyFlg } = self.props;
         if (!loading) {
           setRouterNotifyFlg(simplemde.value() != data.contents && true);
+          self.setState({ data }); // for render
         }
       });
     }
@@ -101,7 +102,7 @@ export default class Edit extends Component {
         </div>
         <div style={ { display: itemLoading || itemDetailLoading ? 'none' : '' } }>
           <div style={ { fontSize: '25px', fontWeight: 400, marginBottom: '5px' } }>
-            正在编辑 { data.name }
+            正在编辑【{ data.name }】
           </div>
           <FormGroup validationState={ this.state.touched && !this.state.name && 'error' || null }>
             <InputGroup>
@@ -131,7 +132,7 @@ export default class Edit extends Component {
             style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
             通知项目成员
           </Checkbox>
-          <Button disabled={ this.state.emsg || loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
+          <Button disabled={ this.state.emsg || loading || !this.state.name || (data.name == this.state.name && simplemde && data.contents == simplemde.value()) } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </div>
       </div>
