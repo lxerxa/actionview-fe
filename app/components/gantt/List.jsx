@@ -504,7 +504,7 @@ export default class List extends Component {
                 id={ v.id }
                 style={ { width: width + 'px', height: blockHeight + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor } }>
                 { mode == 'progress' &&
-                <div style={ { height: blockHeight + 'px', width: (width * _.min([ v.progress || 0, 100 ]) / 100) + 'px', backgroundColor: progressBGColor } }/> }
+                <div style={ { height: blockHeight + 'px', width: (width * _.min([ _.max([ v.progress || 0, 0 ]), 100 ]) / 100) + 'px', backgroundColor: progressBGColor } }/> }
               </div> }
             </OverlayTrigger>
           </div> ) } ) }
@@ -683,7 +683,7 @@ export default class List extends Component {
 
       $('div.ganttview-vtheader-item').scroll(function() {
         setTimeout(function() {
-          $('div.ganttview-vtheader-series-header-item').css('left', -$('div.ganttview-vtheader-item').scrollLeft() + 1);
+          $('div.ganttview-vtheader-series-header-item').css('left', -$('div.ganttview-vtheader-item').scrollLeft());
           if ($('div.ganttview-vtheader-item').scrollTop() === $('div.ganttview-slide-container').scrollTop()) {
             return false;
           }

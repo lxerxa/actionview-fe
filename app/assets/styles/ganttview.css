@@ -39,7 +39,8 @@ div.ganttview-hzheader-month.last {
 
 div.ganttview {
     border: 1px solid #999;
-        overflow: hidden;
+    overflow: hidden;
+    position: relative;
 }
 
 
