@@ -674,6 +674,7 @@ export default class List extends Component {
       $('div.ganttview-slide-container').scroll(function() {
         setTimeout(function() {
           $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
+          $('div.ganttview-slide-container').scrollLeft(_.ceil($('div.ganttview-slide-container').scrollLeft() / cellWidth) * cellWidth);
           if ($('div.ganttview-vtheader-item').scrollTop() === $('div.ganttview-slide-container').scrollTop()) {
             return false;
           }
