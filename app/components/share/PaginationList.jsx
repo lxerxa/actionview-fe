@@ -45,13 +45,13 @@ export default class PaginationList extends Component {
     }
 
     return (
-      <div style={ { marginTop: '10px', height: '40px' } }>
-        <div className='col-md-6'>
+      <div style={ { marginTop: '10px' } }>
+        <div className='col-md-6' style={ { textAlign: 'left' } }>
           <span>{ _.add((curPage - 1) * sizePerPage, 1) }-{ curPage * sizePerPage >= total ? total : curPage * sizePerPage } 共{ total }条 { pages }页</span>
         </div>
-        <div className='col-md-6'>
+        <div className='col-md-6' style={ { textAlign: 'right' } }>
           { pages > 1 &&
-          <ul className='pagination' style={ { float:'right', marginTop: '0px', marginBottom: '10px' } }>
+          <ul className='pagination' style={ { marginTop: '0px', marginBottom: '10px' } }>
             { curPage - paginationSize > 1 &&
             <li key='first'>
               <span className='page-button' onClick={ this.goPage.bind(this, 1) } title='首页'>&lt;&lt;</span>
