@@ -375,7 +375,7 @@ export default class Card extends Component {
                 }
                 return (
                   <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontSize: '12px' } }>
-                    <span style={ { marginRight: '3px', float: 'left' } }><b>{ field.name }</b>:</span><span>{ contents }</span> 
+                    <span style={ { marginRight: '3px' } }><b>{ field.name }</b>:</span><span>{ contents }</span> 
                   </div>);
               }
             }) }
