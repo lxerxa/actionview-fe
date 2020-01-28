@@ -489,7 +489,7 @@ class CreateModal extends Component {
                   <Col sm={ 3 }>
                     <FormControl
                       type='number'
-                      min={ v.key == 'progress' ? '0' : '' }
+                      max={ v.key == 'progress' ? '100' : '' }
                       disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
