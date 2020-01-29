@@ -71,7 +71,7 @@ export default class Edit extends Component {
         this.state.emsg = data.checkin.user.name + ' 正编辑该文档，暂不能编辑提交。';
       }
       simplemde.value(data.contents || '');
-      this.setState({ name: data.name || '', emsg : this.state.msg });
+      this.setState({ name: data.name || '', emsg : this.state.emsg });
     }
     setRouterNotifyFlg(false);
   }
@@ -123,7 +123,7 @@ export default class Edit extends Component {
           </FormGroup>
         </div>
         <div style={ { float: 'right', marginTop: '-5px', display: itemLoading || itemDetailLoading ? 'none' : '' } }>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading ? errMsg[this.state.ecode] : this.state.emsg }</span>
+          <span style={ { marginRight: '20px', color: 'red' } }>{ this.state.ecode !== 0 && !loading ? errMsg[this.state.ecode] : this.state.emsg }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Checkbox
             disabled={ loading }
