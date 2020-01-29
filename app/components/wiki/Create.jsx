@@ -104,7 +104,7 @@ export default class Create extends Component {
           <textarea name='field' id='fileedit'></textarea>
         </FormGroup>
         <div style={ { float: 'right', marginTop: '-5px' } }>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
+          <span style={ { marginRight: '20px', color: 'red' } }>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Checkbox
             disabled={ loading }
