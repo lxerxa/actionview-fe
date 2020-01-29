@@ -166,6 +166,9 @@ export default class List extends Component {
     if (this.state.uploader_id) {
       query.uploader_id = this.state.uploader_id;
     }
+    if (this.state.uploaded_at) {
+      query.uploaded_at = this.state.uploaded_at;
+    }
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
@@ -174,6 +177,11 @@ export default class List extends Component {
 
   uploaderChange(newValue) {
     this.state.uploader_id = newValue;
+    this.refresh();
+  }
+
+  uploadedAtChange(newValue) {
+    this.state.uploaded_at = newValue;
     this.refresh();
   }
 
@@ -230,6 +238,13 @@ export default class List extends Component {
       options, 
       query } = this.props;
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
+
+    const uploadedat_options = [
+      { value: '1w', label: '1周内' },
+      { value: '2w', label: '2周内' },
+      { value: '1m', label: '1个月内' },
+      { value: '2m', label: '2个月内' }
+    ];
 
     const sortOptions = [
       { value: 'create_time_asc', label: '创建时间 ↑' },
@@ -408,7 +423,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'left' } }>
+            <span style={ { float: 'left', fontSize: '16px' } }>
               <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
                 { _.map(options.path || [], (v, i) => {
                   if (i === options.path.length - 1) {
@@ -438,6 +453,14 @@ export default class List extends Component {
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '文档名称查询...' } />
+            </span>
+            <span style={ { float: 'right', width: '120px', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='上传时间'
+                value={ this.state.uploaded_at }
+                onChange={ this.uploadedAtChange.bind(this) }
+                options={ uploadedat_options }/>
             </span>
             <span style={ { float: 'right', width: '12%', marginRight: '10px' } }>
               <Select

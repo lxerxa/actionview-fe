@@ -173,10 +173,18 @@ export default class List extends Component {
   reload() {
     const { reload } = this.props;
     const query = {};
+    if (this.state.updated_at) {
+      query.updated_at = this.state.updated_at;
+    }
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
     reload(query);
+  }
+
+  updatedAtChange(newValue) {
+    this.state.updated_at = newValue;
+    this.reload();
   }
 
   sortChange(newValue) {
@@ -212,9 +220,18 @@ export default class List extends Component {
       query } = this.props;
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
 
+    const updatedat_options = [
+      { value: '1w', label: '1周内' },
+      { value: '2w', label: '2周内' },
+      { value: '1m', label: '1个月内' },
+      { value: '2m', label: '2个月内' }
+    ];
+
     const sortOptions = [
       { value: 'create_time_asc', label: '创建时间 ↑' },
       { value: 'create_time_desc', label: '创建时间 ↓' },
+      { value: 'update_time_asc', label: '更新时间 ↑' },
+      { value: 'update_time_desc', label: '更新时间 ↓' },
       { value: 'name_asc', label: '名称 ↑' },
       { value: 'name_desc', label: '名称 ↓' }
     ];
@@ -377,7 +394,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'left' } }>
+            <span style={ { float: 'left', fontSize: '16px' } }>
               <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
                 { _.map(options.path || [], (v, i) => {
                   if (i === options.path.length - 1) {
@@ -407,6 +424,14 @@ export default class List extends Component {
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder='标题名称查询...' />
+            </span>
+            <span style={ { float: 'right', width: '120px', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='更新时间'
+                value={ this.state.updated_at }
+                onChange={ this.updatedAtChange.bind(this) }
+                options={ updatedat_options }/>
             </span>
             <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
               <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
