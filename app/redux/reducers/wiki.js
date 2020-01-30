@@ -24,6 +24,10 @@ function sort(collection, sortkey='') {
         return b.created_at - a.created_at;
       } else if (sortkey == 'create_time_asc') {
         return a.created_at - b.created_at;
+      } else if (sortkey == 'update_time_desc') {
+        return (b.updated_at || b.created_at) - (a.updated_at || a.created_at);
+      } else if (sortkey == 'update_time_asc') {
+        return (a.updated_at || a.created_at) - (b.updated_at || b.created_at);
       } else if (sortkey == 'name_asc') {
         return a.name.localeCompare(b.name);
       } else if (sortkey == 'name_desc') {

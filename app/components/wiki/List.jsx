@@ -75,6 +75,9 @@ export default class List extends Component {
     if (query.name) {
       newQuery.name = this.state.name = query.name;
     }
+    if (query.updated_at) {
+      newQuery.updated_at = this.state.updated_at = query.updated_at;
+    }
     index(newQuery);
   }
 
@@ -115,6 +118,7 @@ export default class List extends Component {
     }
 
     this.state.name = newQuery.name || '';
+    this.state.updated_at = newQuery.updated_at || null;
   }
 
   delNotify(id) {
@@ -394,7 +398,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'left', fontSize: '16px' } }>
+            <span style={ { float: 'left' } }>
               <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
                 { _.map(options.path || [], (v, i) => {
                   if (i === options.path.length - 1) {
