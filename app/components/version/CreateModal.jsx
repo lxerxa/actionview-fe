@@ -31,7 +31,7 @@ const validate = (values, props) => {
 
   if (values.start_time && values.end_time) {
     if (values.start_time > values.end_time) {
-      errors.start_time = '开始时间要早于发布时间';
+      errors.start_time = '开始时间要早于完成时间';
     }
   }
 
@@ -133,7 +133,7 @@ export default class CreateModal extends Component {
                 <HelpBlock style={ { float: 'right' } }>{ start_time.error }</HelpBlock> }
             </FormGroup>
             <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } } validationState={ end_time.value && end_time.error ? 'error' : null }>
-              <ControlLabel>发布时间</ControlLabel>
+              <ControlLabel>完成时间</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 
