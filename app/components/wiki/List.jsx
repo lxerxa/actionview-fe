@@ -411,41 +411,43 @@ export default class List extends Component {
                 }) }
               </Breadcrumb>
             </span>
-            <span style={ { float: 'right', width: '120px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='默认顺序'
-                value={ this.state.sortkey }
-                onChange={ this.sortChange.bind(this) }
-                clearable={ false }
-                options={ sortOptions }/>
+            <span style={ { float: 'right' } }>
+              <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
+                <Select
+                  simpleValue
+                  placeholder='默认顺序'
+                  value={ this.state.sortkey }
+                  onChange={ this.sortChange.bind(this) }
+                  clearable={ false }
+                  options={ sortOptions }/>
+              </span>
+              <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
+                <FormControl
+                  type='text'
+                  id='pname'
+                  style={ { height: '36px' } }
+                  value={ this.state.name }
+                  onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                  placeholder='标题名称查询...' />
+              </span>
+              <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
+                <Select
+                  simpleValue
+                  placeholder='更新时间'
+                  value={ this.state.updated_at }
+                  onChange={ this.updatedAtChange.bind(this) }
+                  options={ updatedat_options }/>
+              </span>
+              <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
+                <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                  <i className='fa fa-pencil'></i>&nbsp;新建文档
+                </Button>
+                { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                  <i className='fa fa-plus'></i>&nbsp;创建目录
+                </Button> }
+              </ButtonGroup>
             </span>
-            <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
-              <FormControl
-                type='text'
-                id='pname'
-                style={ { height: '36px' } }
-                value={ this.state.name }
-                onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder='标题名称查询...' />
-            </span>
-            <span style={ { float: 'right', width: '120px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='更新时间'
-                value={ this.state.updated_at }
-                onChange={ this.updatedAtChange.bind(this) }
-                options={ updatedat_options }/>
-            </span>
-            <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
-                <i className='fa fa-pencil'></i>&nbsp;新建文档
-              </Button>
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-              <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
-                <i className='fa fa-plus'></i>&nbsp;创建目录
-              </Button> }
-            </ButtonGroup>
           </FormGroup>
         </div>
         <div>

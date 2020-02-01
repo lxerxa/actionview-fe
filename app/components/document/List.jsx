@@ -440,46 +440,48 @@ export default class List extends Component {
                 }) }
               </Breadcrumb>
             </span>
-            <span style={ { float: 'right', width: '120px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='默认顺序'
-                value={ this.state.sortkey }
-                onChange={ this.sortChange.bind(this) }
-                clearable={ false }
-                options={ sortOptions }/>
+            <span style={ { float: 'right' } }>
+              <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
+                <Select
+                  simpleValue
+                  placeholder='默认顺序'
+                  value={ this.state.sortkey }
+                  onChange={ this.sortChange.bind(this) }
+                  clearable={ false }
+                  options={ sortOptions }/>
+              </span>
+              <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
+                <FormControl
+                  type='text'
+                  id='pname'
+                  style={ { height: '36px' } }
+                  value={ this.state.name }
+                  onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                  placeholder={ '文档名称查询...' } />
+              </span>
+              <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
+                <Select
+                  simpleValue
+                  placeholder='上传时间'
+                  value={ this.state.uploaded_at }
+                  onChange={ this.uploadedAtChange.bind(this) }
+                  options={ uploadedat_options }/>
+              </span>
+              <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
+                <Select
+                  simpleValue
+                  placeholder='上传者'
+                  value={ this.state.uploader_id }
+                  onChange={ this.uploaderChange.bind(this) }
+                  options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
+              </span>
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+              <span style={ { float: 'right', marginRight: '10px' } }>
+                <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
+                  <i className='fa fa-plus'></i>&nbsp;新建目录
+                </Button>
+              </span> }
             </span>
-            <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
-              <FormControl
-                type='text'
-                id='pname'
-                style={ { height: '36px' } }
-                value={ this.state.name }
-                onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '文档名称查询...' } />
-            </span>
-            <span style={ { float: 'right', width: '120px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='上传时间'
-                value={ this.state.uploaded_at }
-                onChange={ this.uploadedAtChange.bind(this) }
-                options={ uploadedat_options }/>
-            </span>
-            <span style={ { float: 'right', width: '12%', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='上传者'
-                value={ this.state.uploader_id }
-                onChange={ this.uploaderChange.bind(this) }
-                options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
-            </span>
-            { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-            <span style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
-                <i className='fa fa-plus'></i>&nbsp;新建目录
-              </Button>
-            </span> }
           </FormGroup>
         </div>
         <div>
