@@ -712,7 +712,7 @@ export default class DetailBar extends Component {
                         <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
                       </div> 
                       : 
-                      <div style={ { marginTop: '3px' } }>
+                      <div style={ { marginTop: '7px' } }>
                         <span>{ data['assignee'] && data['assignee'].name || '-' }</span>
                       </div> }
                       { (!data['assignee'] || data['assignee'].id !== user.id) && options.permissions && options.permissions.indexOf('assigned_issue') !== -1 &&
@@ -835,7 +835,7 @@ export default class DetailBar extends Component {
                         <span className='edit-icon-zone edit-icon' onClick={ () => { this.setState({ editProgress: true, newProgress: data['progress'] || 0 }) } }><i className='fa fa-pencil'></i></span>
                       </div> 
                       : 
-                      <div style={ { marginTop: '3px' } }>
+                      <div style={ { marginTop: '7px' } }>
                         <span>{ (data['progress'] || '0') + '%' }</span>
                       </div> }
                     </div>
