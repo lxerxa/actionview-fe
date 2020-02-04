@@ -649,10 +649,6 @@ export default class List extends Component {
       });
     }
 
-    if (options.permissions && options.permissions.indexOf('edit_issue') === -1) {
-      return;
-    }
-
     if (collection.length > 0) {
       const self = this;
       const cellWidth = this.configs.cellWidth;
@@ -720,6 +716,10 @@ export default class List extends Component {
         $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
         return false;
       }*/
+
+      if (options.permissions && options.permissions.indexOf('edit_issue') === -1) {
+        return;
+      }
 
       $('div.ganttview-block-movable').unbind('dblclick').bind('dblclick', function() {
         const block = $(this);
@@ -894,7 +894,7 @@ export default class List extends Component {
               <i className='fa fa-dot-circle-o'></i> 今天 
             </span>
           </a>
-          <span style={ { marginLeft: '15px', fontSize: '12px', color: 'red' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span>
+          { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <span style={ { marginLeft: '15px', fontSize: '12px', color: 'red' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span> }
           <span style={ { float: 'right', marginRight: '5px' } }>
             { mode == 'progress' ?
             <span>按任务进度</span>
