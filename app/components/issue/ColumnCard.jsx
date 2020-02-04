@@ -93,7 +93,7 @@ export default class Card extends Component {
           <FormGroup style={ { marginBottom: '0px' } }>
             <FormControl
               style={ { height: '21px', fontSize: '10px' } }
-              type='text'
+              type='number'
               value={ width }
               onChange={ (e) => { const v = e.target.value.replace(/[^0-9]/ig, ''); editWidth(index, v) } }
               placeholder='宽度(px)'/>
