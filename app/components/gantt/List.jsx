@@ -733,13 +733,17 @@ export default class List extends Component {
         grid: cellWidth, 
         handles: 'e,w',
         start: function() {
-          $(this).children('div.ganttview-block-progress').css('display', 'none');
+          if ($(this).children('div.ganttview-block-progress').length > 0) {
+            $(this).children('div.ganttview-block-progress').css('display', 'none');
+          }
         },
         stop: function () {
           const block = $(this);
           const start = moment.unix(start).subtract(1, 'days').startOf('day').format('X'); 
           self.updateData(block);
-          $(this).children('div.ganttview-block-progress').css('display', '');
+          if ($(this).children('div.ganttview-block-progress').length > 0) {
+            $(this).children('div.ganttview-block-progress').css('display', '');
+          }
           //callback(block.data('block-data'));
         }
       });
