@@ -500,11 +500,14 @@ export default class List extends Component {
                 <div className='ganttview-block-parent-right'/>
               </div>
               :
-              <div className={ 'ganttview-block ' + (v.hasSubtasks ? '' : 'ganttview-block-movable') } 
+              <div 
+                className={ 'ganttview-block ' + (v.hasSubtasks ? '' : 'ganttview-block-movable') } 
                 id={ v.id }
                 style={ { width: width + 'px', height: blockHeight + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor } }>
                 { mode == 'progress' &&
-                <div style={ { height: blockHeight + 'px', width: (width * _.min([ _.max([ v.progress || 0, 0 ]), 100 ]) / 100) + 'px', backgroundColor: progressBGColor } }/> }
+                <div 
+                  className='ganttview-block-progress' 
+                  style={ { height: blockHeight + 'px', width: (width * _.min([ _.max([ v.progress || 0, 0 ]), 100 ]) / 100) + 'px', backgroundColor: progressBGColor } }/> }
               </div> }
             </OverlayTrigger>
           </div> ) } ) }
@@ -729,10 +732,14 @@ export default class List extends Component {
       $('div.ganttview-block-movable').resizable({
         grid: cellWidth, 
         handles: 'e,w',
+        start: function() {
+          $(this).children('div.ganttview-block-progress').css('display', 'none');
+        },
         stop: function () {
           const block = $(this);
           const start = moment.unix(start).subtract(1, 'days').startOf('day').format('X'); 
           self.updateData(block);
+          $(this).children('div.ganttview-block-progress').css('display', '');
           //callback(block.data('block-data'));
         }
       });
