@@ -341,7 +341,7 @@ export default class Card extends Component {
               if (v == 'labels') {
                 return (
                   <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
-                    { _.map(issue[v] || [], (lv) => <span title={ lv } className='issue-label' style={ { marginTop: '5px', float: 'unset' } }>{ lv }</span>) }
+                    { _.map(issue[v] || [], (lv) => <span title={ lv } className='issue-label' style={ { marginTop: '5px', maxWidth: '100%', float: 'unset' } }>{ lv }</span>) }
                   </div>);
               } else {
                 const field = _.find(options.fields || [] , { key: v });
