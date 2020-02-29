@@ -36,10 +36,8 @@ export default class List extends Component {
     const bgColors = [ '#58ca9a', '#ee706d', '#f7da47', '#447eff' ];   
 
     return ( loading ?
-      <div style={ { marginTop: '20px' } }>
-        <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }>
-          <img src={ img } className='loading'/>
-        </div>
+      <div style={ { marginTop: '50px', textAlign: 'center' } }>
+        <img src={ img } className='loading'/>
       </div>
       :
       <div style={ { marginTop: '20px', marginBottom: '30px' } }>

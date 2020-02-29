@@ -121,10 +121,8 @@ export default class List extends Component {
     });
 
     return ( loading ?
-      <div style={ { marginTop: '30px' } }>
-        <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }>
-          <img src={ img } className='loading'/>
-        </div>
+      <div style={ { marginTop: '50px', textAlign: 'center' } }>
+        <img src={ img } className='loading'/>
       </div>
       :
       <div style={ { marginTop: '15px', marginBottom: '30px' } } className='report-container'>

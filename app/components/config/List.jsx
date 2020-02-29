@@ -67,10 +67,8 @@ export default class List extends Component {
     const { project, data, options, loading } = this.props;
 
     return ( loading ?
-      <div style={ { marginTop: '15px' } }>
-        <div className='detail-view-blanket' style={ { display: loading ? 'block' : 'none' } }>
-          <img src={ img } className='loading'/>
-        </div>
+      <div style={ { marginTop: '50px', textAlign: 'center' } }>
+        <img src={ img } className='loading'/>
       </div>
       :
       <div style={ { marginTop: '15px', marginBottom: '30px' } }>
