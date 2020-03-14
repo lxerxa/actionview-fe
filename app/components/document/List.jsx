@@ -441,14 +441,20 @@ export default class List extends Component {
               </Breadcrumb>
             </span>
             <span style={ { float: 'right' } }>
-              <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
-                <Select
-                  simpleValue
-                  placeholder='默认顺序'
-                  value={ this.state.sortkey }
-                  onChange={ this.sortChange.bind(this) }
-                  clearable={ false }
-                  options={ sortOptions }/>
+              <span style={ { float: 'right', marginRight: '10px' } }>
+                <DropdownButton
+                  pullRight
+                  title='排序'
+                  id='basic-nav-dropdown-project'
+                  onSelect={ this.sortChange.bind(this) }>
+                    { _.map(sortOptions, (v, i) =>
+                      <MenuItem key={ i } eventKey={ v.value }>
+                        <div style={ { display: 'inline-block', width: '20px', textAlign: 'left' } }>
+                        { this.state.sortkey == v.value && <span><i className='fa fa-check'></i></span> }
+                        </div>
+                        <span>{ v.label }</span>
+                      </MenuItem> ) }
+                </DropdownButton>
               </span>
               <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
                 <FormControl
