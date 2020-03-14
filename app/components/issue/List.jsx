@@ -533,32 +533,32 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn width='50' dataField='type'> 
             <span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>
-              类型
+              <span style={ { marginRight: '3px' } }>类型</span>
               { mainOrder.field === 'type' && 
-                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+                (mainOrder.order === 'desc' ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-up'></i>) }
             </span>
           </TableHeaderColumn>
           <TableHeaderColumn dataField='no' width='50'>
             <span className='table-header' onClick={ this.orderBy.bind(this, 'no') }>
-              NO
+              <span style={ { marginRight: '3px' } }>NO</span>
               { mainOrder.field === 'no' && 
-                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+                (mainOrder.order === 'desc' ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-up'></i>) }
             </span>
           </TableHeaderColumn>
           <TableHeaderColumn dataField='name'>
             <span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>
-              主题 
+              <span style={ { marginRight: '3px' } }>主题</span>
               { mainOrder.field === 'title' && 
-                (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+                (mainOrder.order === 'desc' ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-up'></i>) }
             </span>
           </TableHeaderColumn>
           { _.map(display_columns, (val, i) => {
             return (
               <TableHeaderColumn width={ val.width || '100' } dataField={ val.key } key={ i }>
                 <span className='table-header' onClick={ val.sortKey ? this.orderBy.bind(this, val.sortKey) : null }>
-                  { val.name }
+                  <span style={ { marginRight: '3px' } }>{ val.name }</span>
                   { mainOrder.field === val.sortKey && 
-                  (mainOrder.order === 'desc' ? <i className='fa fa-arrow-down'></i> : <i className='fa fa-arrow-up'></i>) }
+                    (mainOrder.order === 'desc' ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-up'></i>) }
                 </span>
               </TableHeaderColumn>);
           }) }
