@@ -263,7 +263,10 @@ export default class AddActionModal extends Component {
 
     const eventOptions = options.events || [];
     const stateOptions = options.states || [];
-    const permissionOptions = _.reject(Permissions, { id: 'all' });
+    let permissionOptions = [];
+    _.forEach(Permissions, (v) => {
+      permissionOptions = permissionOptions.concat(v);
+    });
     const roleOptions = options.roles || [];
     const resolutionOptions = options.resolutions || [];
 
