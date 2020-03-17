@@ -459,14 +459,13 @@ export default class AddActionModal extends Component {
                   </li>
                   */}
                   <li>
-                    <Checkbox value='triggerEvent'/>
+                    <Checkbox value='triggerEvent' disabled={ _.indexOf(this.state.postFunctions, 'triggerEvent') !== -1 }/>
                     <span>过程结束后触发</span>
                     <select
                       value={ this.state.eventParam }
                       onChange={ (e) => this.setState({ eventParam: e.target.value }) }
                       disabled={ _.indexOf(this.state.postFunctions, 'triggerEvent') !== -1 ? false : true }
                       style={ _.indexOf(this.state.postFunctions, 'triggerEvent') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
-                      <option value='' key=''>请选择事件</option>
                       { eventOptions.map( eventOption => <option value={ eventOption.id } key={ eventOption.id }>{ eventOption.name }</option> ) }
                     </select>
                     <span>通知事件</span>
