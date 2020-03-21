@@ -96,7 +96,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_COPY_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        state.collection.unshift(_.clone(action.result.data));
+        state.collection.unshift(action.result.data);
         if (!_.isEmpty(state.itemData) && action.result.data.links.length > 0) {
           _.map(action.result.data.links, (link) => {
             if (state.itemData.id === link.dest.id) {
@@ -125,7 +125,7 @@ export default function issue(state = initialState, action) {
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         if (ind !== -1) {
-          state.collection[ind] = _.clone(action.result.data);
+          state.collection[ind] = action.result.data;
         }
         _.map(state.collection, (v) => {
           if (v.parent_id === action.result.data.id) {
@@ -162,7 +162,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_DELETE_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        _.map(action.result.data.ids || [], (val) => {
+        _.forEach(action.result.data.ids || [], (val) => {
           state.collection = _.reject(state.collection, { id: val });
         });
       }
@@ -288,7 +288,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_COMMENTS_SORT:
       state.commentsCollection.reverse();
-      return { ...state, commentsSort: state.commentsSort === 'desc' ? 'asc' : 'desc', commentsCollection: _.clone(state.commentsCollection) };
+      return { ...state, commentsSort: state.commentsSort === 'desc' ? 'asc' : 'desc' };
 
     case t.ISSUE_COMMENTS_ADD:
       return { ...state, commentsLoading: true };
@@ -367,7 +367,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_HISTORY_SORT:
       state.historyCollection.reverse();
-      return { ...state, historySort: state.historySort === 'desc' ? 'asc' : 'desc', historyCollection: _.clone(state.historyCollection) };
+      return { ...state, historySort: state.historySort === 'desc' ? 'asc' : 'desc' };
 
     case t.ISSUE_GITCOMMITS_INDEX:
       return { ...state, gitCommitsIndexLoading: true, gitCommitsCollection: [] };
@@ -385,7 +385,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_GITCOMMITS_SORT:
       state.gitCommitsCollection.reverse();
-      return { ...state, gitCommitsSort: state.gitCommitsSort === 'desc' ? 'asc' : 'desc', gitCommitsCollection: _.clone(state.gitCommitsCollection) };
+      return { ...state, gitCommitsSort: state.gitCommitsSort === 'desc' ? 'asc' : 'desc' };
 
     case t.ISSUE_WORKLOG_INDEX:
       return { ...state, worklogIndexLoading: true, worklogCollection: [] };
@@ -403,7 +403,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_WORKLOG_SORT:
       state.worklogCollection.reverse();
-      return { ...state, worklogSort: state.worklogSort === 'asc' ? 'desc' : 'asc', worklogCollection: _.clone(state.worklogCollection) };
+      return { ...state, worklogSort: state.worklogSort === 'asc' ? 'desc' : 'asc' };
 
     case t.ISSUE_WORKLOG_ADD:
       return { ...state, worklogLoading: true };
@@ -541,7 +541,7 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_KANBAN_RANK_SET_SUCCESS:
       if (action.result.ecode === 0 && action.result.data.rank && action.result.data.rank.length > 0) {
         const newCollection = [];
-        _.map(action.result.data.rank, (no) => {
+        _.forEach(action.result.data.rank, (no) => {
           const issue = _.find(state.collection, { no });
           if (issue) {
             newCollection.push(issue);
@@ -559,7 +559,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_KANBAN_RELEASE_SUCCESS:
       if ( action.result.ecode === 0 ) {
-        _.map(action.result.data.ids || [], (val) => {
+        _.forEach(action.result.data.ids || [], (val) => {
           state.collection = _.reject(state.collection, { id: val });
         });
       }
@@ -578,6 +578,38 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.ISSUE_IMPORTS_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case t.ISSUE_MULTI_EDIT:
+    case t.ISSUE_MULTI_DELETE:
+    case t.ISSUE_MULTI_STATE_RESET:
+      return { ...state, loading: true };
+
+    case t.ISSUE_MULTI_EDIT_SUCCESS:
+    case t.ISSUE_MULTI_STATE_RESET_SUCCESS:
+      if (action.result.ecode === 0) {
+        _.forEach(action.result.data || [] , (v) => {
+          const ind = _.findIndex(state.collection, { id: v.id });
+          if (ind !== -1) {
+            state.collection[ind] = v;
+          }
+          if (!_.isEmpty(state.itemData) && v.id === state.itemData.id) {
+            state.itemData = v;
+          }
+        });
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_MULTI_DELETE_SUCCESS:
+      if (action.result.ecode === 0) {
+        const ids = action.result.data.ids || [];
+        state.collection = _.reject(state.collection, (v) => ids.indexOf(v.id) !== -1);
+      }
+      return { ...state, loading: false, ecode: action.result.ecode };
+
+    case t.ISSUE_MULTI_EDIT_FAIL:
+    case t.ISSUE_MULTI_DELETE_FAIL:
+    case t.ISSUE_MULTI_STATE_RESET_FAIL:
       return { ...state, loading: false, error: action.error };
 
     default:

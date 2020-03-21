@@ -301,3 +301,17 @@ export function imports(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/imports', method: 'post', data: values || {} })
   });
 }
+
+export function multiUpdate(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_MULTI_EDIT',
+    promise: (client) => client.request({ url: '/project/' + key + '/batch', method: 'post', data: values })
+  });
+}
+
+export function multiDel(key, values) {
+  return asyncFuncCreator({
+    constant: 'ISSUE_MULTI_DELETE',
+    promise: (client) => client.request({ url: '/project/' + key + '/batch', method: 'post', data: values })
+  });
+}
