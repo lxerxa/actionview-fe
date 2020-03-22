@@ -44,6 +44,7 @@ export default class List extends Component {
       hoverRowId: '',
       display_columns: []
     };
+
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
     this.show = this.show.bind(this);
@@ -121,6 +122,11 @@ export default class List extends Component {
     convert: PropTypes.func.isRequired,
     resetState: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
+    selectedIds: PropTypes.array.isRequired,
+    setSelectedIds: PropTypes.func.isRequired,
+    multiDel: PropTypes.func.isRequired,
+    multiUpdate: PropTypes.func.isRequired,
+    isBatchHandle: PropTypes.bool.isRequired,
     user: PropTypes.object.isRequired
   }
 
@@ -220,6 +226,32 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
+  onSelectAll(isSelected, rows) {
+    const { selectedIds, setSelectedIds } = this.props;
+    if (isSelected) {
+      const length = rows.length;
+      for (let i = 0; i < length; i++) {
+        selectedIds.push(rows[i].id);
+      }
+      setSelectedIds(selectedIds);
+    } else {
+      setSelectedIds([]);
+    }
+  }
+
+  onSelect(row, isSelected) {
+    const { selectedIds, setSelectedIds } = this.props;
+    if (isSelected) {
+      selectedIds.push(row.id);
+    } else {
+      const index = selectedIds.indexOf(row.id);
+      if (index !== -1) {
+        selectedIds.splice(index, 1);
+      }
+    }
+    setSelectedIds(selectedIds);
+  }
+
   orderBy(field) {
     const { query={}, refresh } = this.props;
     if (_.isEmpty(query) || !query.orderBy) {
@@ -267,11 +299,11 @@ export default class List extends Component {
       });
     }
 
-    if (parseInt($('.react-bs-table-container th').eq(3).css('width')) < 300) {
-      $('.react-bs-table-container th').eq(3).css('width', '300px');
-      $('.react-bs-table-container th').eq(3).css('min-width', '300px');
-      $('.react-bs-table-container col').eq(3).css('width', '300px');
-      $('.react-bs-table-container col').eq(3).css('min-width', '300px');
+    if (parseInt($('.react-bs-table-container th[data-field=title]').css('width')) < 300) {
+      $('.react-bs-table-container th[data-field=title]').css('width', '300px');
+      $('.react-bs-table-container th[data-field=title`]').css('min-width', '300px');
+      $('.react-bs-table-container col[data-field=title]').css('width', '300px');
+      $('.react-bs-table-container col[data-field=title]').css('min-width', '300px');
     }
   }
 
@@ -353,8 +385,13 @@ export default class List extends Component {
       move,
       convert,
       resetState,
+      selectedIds,
+      multiUpdate,
+      multiDel,
+      isBatchHandle,
       doAction,
-      user } = this.props;
+      user 
+    } = this.props;
 
     const { operateShow, hoverRowId, selectedItem } = this.state;
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -394,6 +431,16 @@ export default class List extends Component {
         subtaskTypeOptions.push(val);
       }
     });
+
+    let selectRow = { selected: selectedIds };
+    if (isBatchHandle) {
+      selectRow = {
+        mode: 'checkbox',
+        selected: selectedIds,
+        onSelect: this.onSelect.bind(this),
+        onSelectAll: this.onSelectAll.bind(this)
+      };
+    }
 
     const issues = [];
     _.forEach(collection, (item) => {
@@ -528,6 +575,7 @@ export default class List extends Component {
           data={ issues } 
           bordered={ false } 
           options={ opts } 
+          selectRow={ selectRow }
           trClassName='tr-top' 
           headerStyle={ { overflow: 'unset' } }>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>

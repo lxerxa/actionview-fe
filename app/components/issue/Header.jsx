@@ -11,6 +11,8 @@ const ResetColumnsNotify = require('./ResetColumnsNotify');
 const ColumnsConfigModal = require('./ColumnsConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
 const ImportModal = require('./ImportModal');
+const MultiDelNotify = require('./MultiDelNotify');
+
 const img = require('../../assets/images/loading.gif');
 
 export default class Header extends Component {
@@ -25,7 +27,9 @@ export default class Header extends Component {
       setColumnsShow: false,
       resetColumnsShow: false,
       exportConfigShow: false,
-      importModalShow: false };
+      importModalShow: false, 
+      multiDelNotifyShow: false 
+    };
 
     this.createModalClose = this.createModalClose.bind(this);
     this.saveFilterModalClose = this.saveFilterModalClose.bind(this);
@@ -35,6 +39,7 @@ export default class Header extends Component {
     this.resetColumnsNotifyClose = this.resetColumnsNotifyClose.bind(this);
     this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
     this.importModalClose = this.importModalClose.bind(this);
+    this.multiDelNotifyClose = this.multiDelNotifyClose.bind(this);
   }
 
   static propTypes = {
@@ -59,7 +64,11 @@ export default class Header extends Component {
     optionsLoading: PropTypes.bool.isRequired,
     filterLoading: PropTypes.bool.isRequired,
     columnsLoading: PropTypes.bool.isRequired,
-    indexLoading: PropTypes.bool.isRequired
+    indexLoading: PropTypes.bool.isRequired,
+    multiDel: PropTypes.func.isRequired,
+    selectedIds: PropTypes.array.isRequired,
+    isBatchHandle: PropTypes.bool.isRequired,
+    switchBatch: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -99,8 +108,12 @@ export default class Header extends Component {
     this.setState({ importModalShow: false });
   }
 
+  multiDelNotifyClose() {
+    this.setState({ multiDelNotifyShow: false });
+  }
+
   operateSelect(eventKey) {
-    const { refresh, index, query } = this.props;
+    const { refresh, index, query, switchBatch } = this.props;
     if (eventKey === 'refresh') {
       if (query.page > 1) {
         refresh(_.extend(query, { page: undefined }));
@@ -117,6 +130,8 @@ export default class Header extends Component {
       this.setState({ importModalShow: true });
     } else if (eventKey === 'export') {
       this.setState({ exportConfigShow: true });
+    } else if (eventKey == 'batch') {
+      switchBatch();
     }
   }
 
@@ -141,6 +156,12 @@ export default class Header extends Component {
     exportExcel(query, fields);
   }
 
+  multiOperateSelect(eventKey) {
+    if (eventKey === 'multi_del') {
+      this.setState({ 'multiDelNotifyShow' : true });
+    }
+  }
+
   render() {
     const { 
       i18n, 
@@ -162,7 +183,11 @@ export default class Header extends Component {
       refresh, 
       query, 
       loading, 
-      project } = this.props;
+      project,
+      multiDel,
+      selectedIds,
+      isBatchHandle
+    } = this.props;
 
     const standardTypes = _.reject(_.reject(options.types || [], { type: 'subtask' }) || [], { disabled: true }) || [];
     const sqlTxt = optionsLoading ? '' : parseQuery(query, options);
@@ -170,6 +195,11 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
+          { selectedIds.length > 0 &&
+            <DropdownButton className='create-btn' title='批量操作' onSelect={ this.multiOperateSelect.bind(this) }>
+              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='multi_edit'>编辑</MenuItem> }
+              { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='multi_del'>删除</MenuItem> }
+            </DropdownButton> }
           <DropdownButton className='create-btn' id='filters' title='过滤器' onSelect={ this.selectFilter.bind(this) }>
             { options.filters && options.filters.length > 0 ? 
               _.map(options.filters || [], (val) => <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem> ) :
@@ -190,6 +220,10 @@ export default class Header extends Component {
               <MenuItem divider/>
               <MenuItem eventKey='set_columns'>显示列配置</MenuItem>
               <MenuItem eventKey='reset_columns'>显示列重置</MenuItem>
+              { options.permissions && (options.permissions.indexOf('edit_issue') !== -1 || options.permissions.indexOf('delete_issue') !== -1) &&
+                <MenuItem divider/> }
+              { options.permissions && (options.permissions.indexOf('edit_issue') !== -1 || options.permissions.indexOf('delete_issue') !== -1) &&
+                <MenuItem eventKey='batch'>{ isBatchHandle ? '取消批量操作' : '批量操作' }</MenuItem> }
               { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
                 <MenuItem divider/> }
               { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
@@ -277,6 +311,13 @@ export default class Header extends Component {
             imports={ imports }
             loading={ loading }
             index={ index }
+            i18n={ i18n }/> }
+        { this.state.multiDelNotifyShow &&
+          <MultiDelNotify show
+            close={ this.multiDelNotifyClose }
+            issueIds={ selectedIds }
+            loading = { loading }
+            multiDel={ multiDel }
             i18n={ i18n }/> }
       </div>
     );

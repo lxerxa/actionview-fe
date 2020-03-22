@@ -210,7 +210,7 @@ export default function(router) {
   });
 
   router.get('/project/:key', function(req, res) {
-    const results = { ecode: 0, data: { id: '546761', name: '演示事例一', key: 'demo', principal: { id:'xxx', name: '王五' }, creator: '王五', create_time: 144444 }, options: { permissions: [ 'manage_project', 'edit_comments', 'delete_comments', 'edit_worklog', 'delete_worklog', 'reset_issue', 'create_issue', 'edit_issue', 'exec_workflow', 'link_issue', 'view_project', 'download_file', 'remove_file', 'upload_file', 'assign_issue' ] }};
+    const results = { ecode: 0, data: { id: '546761', name: '演示事例一', key: 'demo', principal: { id:'xxx', name: '王五' }, creator: '王五', create_time: 144444 }, options: { permissions: [ 'manage_project', 'edit_comments', 'delete_comments', 'edit_worklog', 'delete_worklog', 'reset_issue', 'create_issue', 'edit_issue', 'delete_issue', 'exec_workflow', 'link_issue', 'view_project', 'download_file', 'remove_file', 'upload_file', 'assign_issue' ] }};
     return res.status(200).send(results);
   });
 

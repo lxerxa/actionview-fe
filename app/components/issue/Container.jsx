@@ -22,6 +22,7 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
+    this.state = { isBatchHandle: false, selectedIds: [] };
     this.pid = '';
   }
 
@@ -264,6 +265,24 @@ export default class Container extends Component {
     return { ecode: this.props.issue.ecode, emsg: this.props.issue.emsg };
   }
 
+  switchBatch() {
+    this.setState({ isBatchHandle: !this.state.isBatchHandle, selectedIds: [] });
+  }
+
+  async multiDel(values) {
+    await this.props.actions.multiDel(this.pid, values);
+    return { ecode: this.props.issue.ecode, emsg: this.props.issue.emsg };
+  }
+
+  async multiUpdate(values) {
+    await this.props.actions.multiUpdate(this.pid, values);
+    return { ecode: this.props.issue.ecode, emsg: this.props.issue.emsg };
+  }
+
+  setSelectedIds(ids) {
+    this.setState({ selectedIds: ids });
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -294,6 +313,11 @@ export default class Container extends Component {
           imports={ this.imports.bind(this) } 
           project={ this.props.project.item } 
           closeDetailBar={ this.closeDetailBar.bind(this) }
+          multiUpdate={ this.multiUpdate.bind(this) }
+          multiDel={ this.multiDel.bind(this) }
+          selectedIds={ this.state.selectedIds }
+          isBatchHandle={ this.state.isBatchHandle }
+          switchBatch={ this.switchBatch.bind(this) }
           i18n={ this.props.i18n }
           { ...this.props.issue }/>
         <List ref='list' 
@@ -340,6 +364,9 @@ export default class Container extends Component {
           copy={ this.copy.bind(this) }
           move={ this.move.bind(this) }
           convert={ this.convert.bind(this) }
+          setSelectedIds={ this.setSelectedIds.bind(this) }
+          selectedIds={ this.state.selectedIds }
+          isBatchHandle={ this.state.isBatchHandle }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
           { ...this.props.issue }/> 
