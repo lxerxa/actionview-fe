@@ -76,9 +76,9 @@ export default class List extends Component {
 
     return (
       <div>
-        <div style={ { textAlign: 'right' } }>
-          <Button bsStyle='link' onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i> 刷新</Button>
-          <Button bsStyle='link' onClick={ this.export.bind(this) }><i className='fa fa-download'></i> 导出</Button>
+        <div style={ { padding: '5px' } }>
+          <Button bsStyle='primary' onClick={ this.export.bind(this) }><i className='fa fa-download'></i> 导出</Button>
+          <Button onClick={ this.refresh.bind(this) } style={ { float: 'right' } }><i className='fa fa-refresh'></i> 刷新</Button>
         </div>
         <div>
           <BootstrapTable 

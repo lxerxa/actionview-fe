@@ -46,8 +46,8 @@ export default class DelNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>删除问题 - { data.no }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此问题？<br/>
-          如果你完成了这个问题，通常是"解决"或者"关闭"此问题，而不是删除。<br/>
+          确认要删除此问题？<br/><br/>
+          如果您完成了这个问题，通常是"解决"或者"关闭"此问题，而不是删除。<br/>
           如果此问题有子任务也将一并被删除。<br/> 
         </Modal.Body>
         <Modal.Footer>
