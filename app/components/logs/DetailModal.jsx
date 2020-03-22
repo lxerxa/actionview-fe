@@ -64,6 +64,16 @@ export default class DetailModal extends Component {
             </FormGroup>
             <FormGroup>
               <Col sm={ 3 } componentClass={ ControlLabel }>
+                来源IP 
+              </Col>
+              <Col sm={ 9 }>
+                <div style={ { marginTop: '7px' } }>
+                  { data.request_source_ip || '-' }
+                </div>
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Col sm={ 3 } componentClass={ ControlLabel }>
                 开始时间
               </Col>
               <Col sm={ 9 }>
