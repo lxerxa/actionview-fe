@@ -10,7 +10,7 @@ export function arrange(options) {
     { key: 'module', name: '模块', type: 'MultiSelect' },
     { key: 'resolve_version', name: '解决版本', type: 'SingleVersion' },
     { key: 'effect_versions', name: '影响版本', type: 'MultiVersion' },
-    { key: 'labels', name: '标签', type: 'MultiVersion' },
+    { key: 'labels', name: '标签', type: 'MultiSelect' },
     { key: 'reporter', name: '报告者', type: 'SingleUser' },
     { key: 'assignee', name: '经办人', type: 'SingleUser' },
     { key: 'resolver', name: '解决者', type: 'SingleUser' },

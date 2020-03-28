@@ -12,6 +12,7 @@ const ColumnsConfigModal = require('./ColumnsConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
 const ImportModal = require('./ImportModal');
 const MultiDelNotify = require('./MultiDelNotify');
+const MultiEditModal = require('./MultiEditModal');
 
 const img = require('../../assets/images/loading.gif');
 
@@ -28,6 +29,7 @@ export default class Header extends Component {
       resetColumnsShow: false,
       exportConfigShow: false,
       importModalShow: false, 
+      multiEditModalShow: false, 
       multiDelNotifyShow: false 
     };
 
@@ -39,6 +41,7 @@ export default class Header extends Component {
     this.resetColumnsNotifyClose = this.resetColumnsNotifyClose.bind(this);
     this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
     this.importModalClose = this.importModalClose.bind(this);
+    this.multiEditModalClose = this.multiEditModalClose.bind(this);
     this.multiDelNotifyClose = this.multiDelNotifyClose.bind(this);
   }
 
@@ -65,6 +68,7 @@ export default class Header extends Component {
     filterLoading: PropTypes.bool.isRequired,
     columnsLoading: PropTypes.bool.isRequired,
     indexLoading: PropTypes.bool.isRequired,
+    multiUpdate: PropTypes.func.isRequired,
     multiDel: PropTypes.func.isRequired,
     selectedIds: PropTypes.array.isRequired,
     isBatchHandle: PropTypes.bool.isRequired,
@@ -110,6 +114,10 @@ export default class Header extends Component {
 
   multiDelNotifyClose() {
     this.setState({ multiDelNotifyShow: false });
+  }
+
+  multiEditModalClose() {
+    this.setState({ multiEditModalShow: false });
   }
 
   operateSelect(eventKey) {
@@ -159,6 +167,8 @@ export default class Header extends Component {
   multiOperateSelect(eventKey) {
     if (eventKey === 'multi_del') {
       this.setState({ 'multiDelNotifyShow' : true });
+    } else if (eventKey === 'multi_edit') {
+      this.setState({ 'multiEditModalShow' : true });
     }
   }
 
@@ -185,6 +195,7 @@ export default class Header extends Component {
       loading, 
       project,
       multiDel,
+      multiUpdate,
       selectedIds,
       isBatchHandle
     } = this.props;
@@ -315,9 +326,22 @@ export default class Header extends Component {
         { this.state.multiDelNotifyShow &&
           <MultiDelNotify show
             close={ this.multiDelNotifyClose }
+            index={ index }
+            query={ query }
             issueIds={ selectedIds }
             loading = { loading }
             multiDel={ multiDel }
+            i18n={ i18n }/> }
+        { this.state.multiEditModalShow &&
+          <MultiEditModal
+            show
+            close={ this.multiEditModalClose }
+            index={ index }
+            query={ query }
+            issueIds={ selectedIds }
+            loading = { loading }
+            multiUpdate={ multiUpdate }
+            options={ options }
             i18n={ i18n }/> }
       </div>
     );

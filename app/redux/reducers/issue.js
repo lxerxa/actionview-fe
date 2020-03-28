@@ -587,25 +587,26 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_MULTI_EDIT_SUCCESS:
     case t.ISSUE_MULTI_STATE_RESET_SUCCESS:
-      if (action.result.ecode === 0) {
-        _.forEach(action.result.data || [] , (v) => {
-          const ind = _.findIndex(state.collection, { id: v.id });
-          if (ind !== -1) {
-            state.collection[ind] = v;
-          }
-          if (!_.isEmpty(state.itemData) && v.id === state.itemData.id) {
-            state.itemData = v;
-          }
-        });
-      }
+    case t.ISSUE_MULTI_DELETE_SUCCESS:
+      //if (action.result.ecode === 0) {
+      //  _.forEach(action.result.data || [] , (v) => {
+      //    const ind = _.findIndex(state.collection, { id: v.id });
+      //    if (ind !== -1) {
+      //      state.collection[ind] = v;
+      //    }
+      //    if (!_.isEmpty(state.itemData) && v.id === state.itemData.id) {
+      //      state.itemData = v;
+      //    }
+      //  });
+      //}
       return { ...state, loading: false, ecode: action.result.ecode };
 
-    case t.ISSUE_MULTI_DELETE_SUCCESS:
-      if (action.result.ecode === 0) {
-        const ids = action.result.data.ids || [];
-        state.collection = _.reject(state.collection, (v) => ids.indexOf(v.id) !== -1);
-      }
-      return { ...state, loading: false, ecode: action.result.ecode };
+    //case t.ISSUE_MULTI_DELETE_SUCCESS:
+    //  if (action.result.ecode === 0) {
+    //    const ids = action.result.data.ids || [];
+    //    state.collection = _.reject(state.collection, (v) => ids.indexOf(v.id) !== -1);
+    //  }
+    //  return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.ISSUE_MULTI_EDIT_FAIL:
     case t.ISSUE_MULTI_DELETE_FAIL:

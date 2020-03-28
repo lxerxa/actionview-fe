@@ -15,18 +15,21 @@ export default class MultiDelNotify extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
+    index: PropTypes.func.isRequired,
+    query: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     multiDel: PropTypes.func.isRequired,
     issueIds: PropTypes.array.isRequired
   }
 
   async confirm() {
-    const { close, multiDel, issueIds } = this.props;
+    const { close, multiDel, issueIds, index, query } = this.props;
     const ecode = await multiDel({ method: 'delete', data: issueIds });
     this.setState({ ecode: ecode });
     if (ecode === 0) {
       close();
       notify.show('问题已删除。', 'success', 2000);
+      index(query);
     }
   }
 

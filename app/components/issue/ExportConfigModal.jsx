@@ -54,7 +54,7 @@ export default class ConfigModal extends Component {
     const { i18n: { errMsg }, options } = this.props;
 
     const defined_field_keys = [];
-    _.map(options.fields || [], (f) => {
+    _.forEach(options.fields || [], (f) => {
       if (f.type !== 'File') {
         defined_field_keys.push(f.key);
       }
@@ -96,7 +96,7 @@ export default class ConfigModal extends Component {
     ];
 
     const fields = [];
-    _.map(sorted_field_keys, (k) => {
+    _.forEach(sorted_field_keys, (k) => {
       let i = _.findIndex(options.fields, { key: k });
       if (i !== -1) {
         fields.push(options.fields[i]);

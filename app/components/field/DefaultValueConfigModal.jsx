@@ -126,7 +126,7 @@ export default class DefaultValueConfigModal extends Component {
     } else {
       defaultComponent = ( 
         <FormControl 
-          type='text' 
+          type={ data.type === 'Number' ? 'number' : 'text' }
           { ...defaultValue } 
           placeholder='输入默认值'/> );
     }
