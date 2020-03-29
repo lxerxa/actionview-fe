@@ -24,7 +24,7 @@ export default class MultiDelNotify extends Component {
 
   async confirm() {
     const { close, multiDel, issueIds, index, query } = this.props;
-    const ecode = await multiDel({ method: 'delete', data: issueIds });
+    const ecode = await multiDel({ method: 'delete', data: { ids: issueIds } });
     this.setState({ ecode: ecode });
     if (ecode === 0) {
       close();

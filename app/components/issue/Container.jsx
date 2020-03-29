@@ -53,6 +53,7 @@ export default class Container extends Component {
 
   async index(query) {
     this.closeDetailBar();
+    this.state.selectedIds = [];
 
     query = query || {};
     if (!query.page) { query.page = 1; }
@@ -271,12 +272,12 @@ export default class Container extends Component {
 
   async multiDel(values) {
     await this.props.actions.multiDel(this.pid, values);
-    return { ecode: this.props.issue.ecode, emsg: this.props.issue.emsg };
+    return this.props.issue.ecode;
   }
 
   async multiUpdate(values) {
     await this.props.actions.multiUpdate(this.pid, values);
-    return { ecode: this.props.issue.ecode, emsg: this.props.issue.emsg };
+    return this.props.issue.ecode;
   }
 
   setSelectedIds(ids) {
