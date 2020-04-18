@@ -66,6 +66,8 @@ export default {
 
       new webpack.DefinePlugin({
         'process.env': {
+          BASENAME: JSON.stringify(''),
+          API_BASENAME: JSON.stringify('/api'),
           BROWSER: JSON.stringify(true),
           NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
         }

@@ -1,14 +1,15 @@
 import debug from 'debug';
 
 import ReactDOM from 'react-dom';
-import { browserHistory } from 'react-router';
+import { useRouterHistory, browserHistory } from 'react-router';
+import { createHistory } from 'history';
 
 import createStore from './redux/create';
 import ApiClient from '../shared/api-client';
 import universalRender from '../shared/universal-render';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-const { NODE_ENV, BROWSER } = process.env;
+const { BASENAME, NODE_ENV, BROWSER } = process.env;
 
 if (NODE_ENV !== 'production') debug.enable('dev');
 
@@ -35,8 +36,10 @@ if (BROWSER) {
 
 (async function() {
   try {
-    const store = createStore(new ApiClient(), window.__state, browserHistory);
-    const history = syncHistoryWithStore(browserHistory, store);
+    const baseHistory = useRouterHistory(createHistory)({ basename: BASENAME });
+
+    const store = createStore(new ApiClient(), window.__state, baseHistory);
+    const history = syncHistoryWithStore(baseHistory, store);
 
     const container = window.document.getElementById('content');
     const element = await universalRender({ history, store });

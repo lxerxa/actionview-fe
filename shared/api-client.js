@@ -1,15 +1,15 @@
 import axios from 'axios';
 
-const { BROWSER, PORT = 3000 } = process.env;
+const { API_BASENAME, BROWSER, PORT = 3000 } = process.env;
 
 class ApiClient {
 
   constructor(req) {
     if (BROWSER) {
-      this.baseURL = '/api';
+      this.baseURL = API_BASENAME;
     } else {
       this.cookie = req.get('cookie');
-      this.baseURL = `http://localhost:${PORT}/api`;
+      this.baseURL = `http://localhost:${PORT}${API_BASENAME}`;
     }
   }
 

@@ -35,6 +35,8 @@ export default {
 
     new webpack.DefinePlugin({
       'process.env': {
+        BASENAME: JSON.stringify('/actionview'),
+        API_BASENAME: JSON.stringify('/actionview/api'),
         BROWSER: JSON.stringify(true),
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production')
       }
