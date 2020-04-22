@@ -100,7 +100,6 @@ export default class Container extends Component {
           release={ this.release.bind(this) } 
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
-          delNotify={ this.props.actions.delNotify } 
           i18n={ this.props.i18n }
           { ...this.props.version }/>
       </div>
