@@ -240,7 +240,8 @@ export default class List extends Component {
       copy, 
       move, 
       options, 
-      query } = this.props;
+      query 
+    } = this.props;
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
 
     const uploadedat_options = [
