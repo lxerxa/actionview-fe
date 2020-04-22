@@ -297,7 +297,7 @@ export default class Card extends Component {
 
     let backgroundColor = '';
     if (issue.id == openedIssue.id) {
-      backgroundColor = '#eee';
+      backgroundColor = '#e6f7ff';
     }
 
     let marginLeft = '';
