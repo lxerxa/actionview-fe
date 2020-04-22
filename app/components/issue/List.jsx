@@ -292,7 +292,7 @@ export default class List extends Component {
     if (this.state.barShow) {
       $('.react-bs-container-body table tr').each(function(i) {
         if (itemData.id === $(this).find('td:first').text()) {
-          $(this).css('background-color', '#eee');
+          $(this).css('background-color', '#e6f7ff');
         } else {
           $(this).css('background-color', '');
         }

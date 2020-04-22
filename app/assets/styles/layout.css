@@ -76,14 +76,14 @@ html.docs .doc-container {
 }
 
 html.docs .doc-main .head {
-  background-color: #f5f5f5;
+  background-color: #fff;
   width: 100%;
   padding: 7px 0;
   padding-left: 19%;
   font-size: 16px;
   height: 50px;
   line-height: 35px;
-  border-bottom: solid 1px #e5e5e5;
+  border-bottom: solid 1px #ddd;
   color: #5c5c5c;
   left: 0;
   top: 0;
@@ -132,7 +132,7 @@ html.docs .toc-container {
   top: 0;
   white-space: nowrap;
   z-index: 1000;
-  background-color: #f5f5f5;
+  background-color: #fff;
   -webkit-overflow-scrolling: touch
 }
 
@@ -247,7 +247,7 @@ html.docs .toc-container .fa-minus-square-o,html.docs .toc-container .fa-plus-sq
     display: block;
     left: 0;
     height: 100%;
-    border-right: solid 1px #e5e5e5;
+    border-right: solid 1px #ddd;
     position: relative 
   }
 }
