@@ -246,6 +246,7 @@ export default class Header extends Component {
       { value: 'resolution', label: '解决结果' },
       { value: 'role', label: '角色权限' },
       { value: 'events', label: '通知事件' },
+      { value: 'labels', label: '标签管理' },
       { value: 'integrations', label: '外部用户' },
       { value: 'webhooks', label: 'Webhooks' }
     ]; 
