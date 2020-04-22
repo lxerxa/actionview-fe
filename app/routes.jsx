@@ -178,6 +178,12 @@ const WikiContainer = (location, cb) => {
   }, 'wiki')
 };
 
+const LabelsContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/labels/Container'))
+  }, 'labels')
+};
+
 const IntegrationsContainer = (location, cb) => {
   require.ensure([], require => {
     cb(null, require('./components/integrations/Container'))
@@ -255,6 +261,7 @@ export default (
         <Route path='gantt' getComponent={ GanttContainer }/>
         <Route path='document(/:id)' getComponent={ DocumentContainer }/>
         <Route path='wiki(/:dir)(/:wid)(/:mode)' getComponent={ WikiContainer }/>
+        <Route path='labels' getComponent={ LabelsContainer }/>
         <Route path='integrations' getComponent={ IntegrationsContainer }/>
         <Route path='webhooks' getComponent={ WebhooksContainer }/>
       </Route>

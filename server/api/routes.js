@@ -1313,6 +1313,15 @@ export default function(router) {
 
   /******************report*****************/
 
+  /******************labels*****************/
+  router.get('/project/:key/labels', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{id: '1111', name: '测试111', bgColor: '#4a6785', issues:{ completed: 13, incompleted: 12, inestimable: 3 }}, {id: '2222', name: '测试222', bgColor: '#8eb021', issues:{ completed: 15, incompleted: 2, inestimable: 3 }}]};
+    return res.status(200).send(results);
+  });
+  /******************labels*****************/
+
   /******************integrations*****************/
   router.get('/project/:key/integrations', function(req, res) {
     const startTime = new Date().getTime();

@@ -125,6 +125,7 @@ export default class Header extends Component {
       { key: 'role', name: '角色权限' },
       { key: 'events', name: '通知事件' },
       { key: 'options', name: '选项' },
+      { key: 'labels', name: '标签管理' },
       { key: 'integrations', name: '外部用户' },
       { key: 'webhooks', name: 'Webhooks' }
     ];
