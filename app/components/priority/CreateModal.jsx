@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm, getValues } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
-import { SketchPicker } from 'react-color';
+import { PriorityRGBs } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -15,12 +16,8 @@ const validate = (values, props) => {
     errors.name = '该名称已存在';
   }
 
-  if (values.color) {
-    const pattern = new RegExp(/^#[0-9a-fA-F]{6}$/);
-    if (!pattern.test(values.color))
-    {
-      errors.color = '格式错误';
-    }
+  if (!values.color) {
+    errors.color = '必填';
   }
 
   return errors;
@@ -85,7 +82,9 @@ export default class CreateModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { name, color, description }, handleSubmit, invalid, submitting } = this.props;
     
-    let colorStyle = { backgroundColor: color.value || '#cccccc', marginTop: '10px', marginRight: '8px' };
+    const colorOptions = _.map(PriorityRGBs, (v) => {
+      return { value: v, label: (<span className='priority-color' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
+    });
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -100,20 +99,16 @@ export default class CreateModal extends Component {
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ color.touched && color.error ? 'error' : null }>
-            <ControlLabel>图案颜色</ControlLabel>
-            <FormControl disabled={ submitting } onClick={ this.handlerShowColorPicker.bind(this) } type='text' { ...color } value={ color.value } placeholder='#cccccc'/>
-            <FormControl.Feedback>
-              <span className='circle' style={ colorStyle }/>
-            </FormControl.Feedback>
-            { color.touched && color.error && <HelpBlock style={ { float: 'right' } }>{ color.error }</HelpBlock> }
-            { this.state.displayColorPicker && 
-              <div 
-                onClick={ (e)=>{ e.stopPropagation(); } } 
-                style={ { display: 'inline-block' } } >
-                <SketchPicker 
-                  color={ color.value || '#cccccc' } 
-                  onChange={ (pickedColor) => { color.onChange(pickedColor.hex) } } />
-              </div> }
+            <ControlLabel><span className='txt-impt'>*</span>图案色</ControlLabel>
+            <Select
+              simpleValue
+              disabled={ submitting }
+              options={ colorOptions }
+              clearable={ false }
+              searchable={ false }
+              value={ color.value }
+              onChange={ newValue => { color.onChange(newValue) } }
+              placeholder='请选择背景色'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
