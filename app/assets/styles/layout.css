@@ -76,7 +76,7 @@ html.docs .doc-container {
 }
 
 html.docs .doc-main .head {
-  background-color: #fff;
+  background-color: #f7f7f7;
   width: 100%;
   padding: 7px 0;
   padding-left: 19%;
@@ -121,7 +121,6 @@ html.docs .logo {
 }
 
 html.docs .toc-container {
-  background-color: #fff;
   float: left;
   height: 100%;
   width: 18%;
@@ -132,7 +131,7 @@ html.docs .toc-container {
   top: 0;
   white-space: nowrap;
   z-index: 1000;
-  background-color: #fff;
+  background-color: #f7f7f7;
   -webkit-overflow-scrolling: touch
 }
 

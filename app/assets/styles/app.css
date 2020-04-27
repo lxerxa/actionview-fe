@@ -329,6 +329,8 @@
   right: 0;
   bottom: 0;
   z-index: 10;
+  box-shadow: -2px 0 20px 0 #ccc; 
+  -webkit-box-shadow: -2px 0 20px 0 #ccc; 
 }
 
 .animate-dialog .panel {
@@ -494,8 +496,7 @@ table tr:hover .remove-icon{
 .reply-contents-item {
   vertical-align: top; 
   margin-top: 10px; 
-  padding-left: 10px; 
-  padding-top: 10px; 
+  padding: 10px 10px 0px 10px; 
   border-top-style: solid; 
   border-top-width: 1px; 
   border-color: #ddd;
@@ -925,7 +926,6 @@ table tr:hover .remove-icon{
   border: 1px solid #ccc;
   border-radius: 3px;
   display: inline-block;
-  font-size: 12px;
   font-weight: normal;
   max-width: 200px;
   padding: 1px 5px;
