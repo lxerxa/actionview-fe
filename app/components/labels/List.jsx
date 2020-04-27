@@ -4,6 +4,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
 
+const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 
@@ -12,7 +13,14 @@ const img = require('../../assets/images/loading.gif');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { editModalShow: false, delNotifyShow: false, operateShow: false, hoverRowId: '' };
+    this.state = { 
+      createModalShow: false, 
+      editModalShow: false, 
+      delNotifyShow: false, 
+      operateShow: false, 
+      hoverRowId: '' 
+    };
+    this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
   }
@@ -27,6 +35,7 @@ export default class List extends Component {
     gotoIssueList: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -36,18 +45,22 @@ export default class List extends Component {
     index();
   }
 
-  editModalClose() {
-    this.setState({ editModalShow: false });
+  createModalClose() {
+    this.setState({ createModalShow: false });
   }
 
-  delNotifyClose() {
-    this.setState({ delNotifyShow: false });
+  editModalClose() {
+    this.setState({ editModalShow: false });
   }
 
   async edit(id) {
     this.setState({ editModalShow: true });
     const { select } = this.props;
     select(id);
+  }
+
+  delNotifyClose() {
+    this.setState({ delNotifyShow: false });
   }
 
   delNotify(id) {
@@ -89,6 +102,7 @@ export default class List extends Component {
       loading, 
       del, 
       update, 
+      create, 
       index 
     } = this.props;
     const { hoverRowId, operateShow } = this.state;
@@ -101,10 +115,21 @@ export default class List extends Component {
     const labels = [];
     const labelNum = collection.length;
     for (let i = 0; i < labelNum; i++) {
+
+      let style = {};
+      if (collection[i].bgColor) {
+        style = { 
+          backgroundColor: collection[i].bgColor, 
+          borderColor: collection[i].bgColor, 
+          border: '1px solid ' + collection[i].bgColor,
+          color: '#fff'
+        };
+      }
+
       labels.push({
         id: collection[i].id,
         name: ( 
-          <span className='label-title' title={ collection[i].name } style={ { backgroundColor: collection[i].bgColor, borderColor: collection[i].bgColor, maxWith: '10em' } }>
+          <span className='issue-label' title={ collection[i].name } style={ style }>
             { collection[i].name }
           </span> ),
         bgColor: ( <div className='label-label' style={ { backgroundColor: collection[i].bgColor || '#ccc' } } /> ),
@@ -148,7 +173,7 @@ export default class List extends Component {
     return (
       <div style={ { marginBottom: '30px' } }>
         <div style={ { marginTop: '15px' } }>
-          <Button>
+          <Button onClick={ () => { this.setState({ createModalShow: true }) } }>
             <i className='fa fa-plus'></i>&nbsp;新建标签
           </Button>
         </div>
@@ -171,6 +196,13 @@ export default class List extends Component {
             update={ update } 
             data={ selectedItem } 
             collection={ collection } 
+            i18n={ i18n }/> }
+        { this.state.createModalShow &&
+          <CreateModal
+            show
+            close={ this.createModalClose }
+            create={ create }
+            collection={ collection }
             i18n={ i18n }/> }
         { this.state.delNotifyShow && 
           <DelNotify 

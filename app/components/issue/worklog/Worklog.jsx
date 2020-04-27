@@ -195,7 +195,7 @@ export default class Worklog extends Component {
     //});
    
     return (
-      <Form horizontal>
+      <Form horizontal style={ { padding: '0px 5px' } }>
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
             <div>

@@ -42,7 +42,7 @@ export default class GitCommits extends Component {
     const { issue_id, currentTime, currentUser, indexGitCommits, sortGitCommits, collection, indexLoading } = this.props;
 
     return (
-      <Form horizontal>
+      <Form horizontal style={ { padding: '0px 5px' } }>
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
             <div>

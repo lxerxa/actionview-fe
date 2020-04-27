@@ -71,6 +71,7 @@ export default class DetailBar extends Component {
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
     this.watch = this.watch.bind(this);
+    this.getLabelStyle = this.getLabelStyle.bind(this);
   }
 
   static propTypes = {
@@ -442,6 +443,22 @@ export default class DetailBar extends Component {
     this.setState({ inlinePreviewShow: this.state.inlinePreviewShow, photoIndex: imgInd });
   }
 
+  getLabelStyle(name) {
+    const { options: { labels=[] } } = this.props;
+    const label = _.find(labels, { name });
+
+    let style = {};
+    if (label && label.bgColor) {
+      style = {
+        backgroundColor: label.bgColor,
+        borderColor: label.bgColor,
+        border: '1px solid ' + label.bgColor,
+        color: '#fff'
+      };
+    }
+    return style;
+  }
+
   render() {
     const { 
       i18n,
@@ -596,7 +613,9 @@ export default class DetailBar extends Component {
         <div className='panel panel-default' style={ panelStyle }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='issue-detail-tab'>
             <Tab eventKey={ 1 } title='基本'>
-              <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }><img src={ img } className='loading detail-loading'/></div>
+              <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }>
+                <img src={ img } className='loading detail-loading'/>
+              </div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '10px', marginBottom: '40px', marginLeft: '10px' } }>
                 <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
                   { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button> }
@@ -751,9 +770,13 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
-                    { _.map(data.labels, (v, i) => {
-                      return (<Link to={ '/project/' + project.key + '/issue?labels=' + v } key={ i }><span title={ v } className='issue-label'>{ v }</span></Link>);
-                    }) }
+                    { _.map(data.labels, (v, i) => 
+                      <Link to={ '/project/' + project.key + '/issue?labels=' + v } key={ i }>
+                        <span title={ v } className='issue-label' style={ this.getLabelStyle(v) }>
+                          { v }
+                        </span>
+                      </Link>
+                      ) }
                     </div>
                   </Col>
                 </FormGroup> }

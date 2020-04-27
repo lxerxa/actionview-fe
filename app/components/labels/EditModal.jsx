@@ -18,13 +18,13 @@ const validate = (values, props) => {
 
   if (values.bgColor) {
     const pattern = new RegExp(/^#[0-9a-fA-F]{6}$/);
-    if (!pattern.test(values.bgColor))
-    {
+    if (!pattern.test(values.bgColor)) {
       errors.bgColor = '格式错误';
     }
   } else {
     errors.bgColor = '必选';
   }
+
   return errors;
 };
 

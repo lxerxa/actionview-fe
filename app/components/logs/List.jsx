@@ -76,7 +76,7 @@ export default class List extends Component {
 
     return (
       <div>
-        <div style={ { padding: '5px' } }>
+        <div style={ { padding: '0px 5px' } }>
           <Button bsStyle='primary' onClick={ this.export.bind(this) }><i className='fa fa-download'></i> 导出</Button>
           <Button onClick={ this.refresh.bind(this) } style={ { float: 'right' } }><i className='fa fa-refresh'></i> 刷新</Button>
         </div>

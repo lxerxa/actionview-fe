@@ -12,7 +12,7 @@ const initialState = {
   epicLoading: false,
   selectedEpicItem: {},
   epics: [],
-  epicStates: [],
+  epicStates: {},
   versions: [],
   loading: false, 
   rankLoading: false, 

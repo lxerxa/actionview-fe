@@ -91,7 +91,7 @@ export default class List extends Component {
     const { 
       i18n, 
       options, 
-      stateOptions, 
+      stateOptions={}, 
       collection, 
       selectedItem, 
       indexLoading, 

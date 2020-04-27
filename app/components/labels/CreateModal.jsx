@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { reduxForm, getValues } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
+import { LabelRGBs } from '../share/Constants';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
@@ -17,13 +18,13 @@ const validate = (values, props) => {
 
   if (values.bgColor) {
     const pattern = new RegExp(/^#[0-9a-fA-F]{6}$/);
-    if (!pattern.test(values.bgColor))
-    {
+    if (!pattern.test(values.bgColor)) {
       errors.bgColor = '格式错误';
     }
   } else {
     errors.bgColor = '必选';
   }
+
   return errors;
 };
 
@@ -75,7 +76,7 @@ export default class CreateModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { name, bgColor }, handleSubmit, invalid, submitting } = this.props;
 
-    const bgColors = [ '#815b3a', '#f79232', '#d39c3f', '#654982', '#4a6785', '#8eb021', '#3b7fc4', '#f15c75', '#ac707a' ];
+    const bgColors = LabelRGBs;
     const bgColorOptions = _.map(bgColors, (v) => {
       return { value: v, label: (<span className='epic-label' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
     });

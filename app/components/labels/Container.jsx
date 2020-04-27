@@ -81,6 +81,7 @@ export default class Container extends Component {
           index={ this.index.bind(this) } 
           refresh={ this.refresh.bind(this) }
           select={ this.props.actions.select } 
+          create={ this.create.bind(this) } 
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 
           i18n={ this.props.i18n }

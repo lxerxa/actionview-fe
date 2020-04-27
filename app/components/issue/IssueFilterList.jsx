@@ -148,7 +148,7 @@ export class IssueFilterList extends Component {
 
     const userOptions = _.map(users, (val) => { return { name: val.name + '(' + val.email + ')', id: val.id } });
     userOptions.unshift({ id: 'me', name: '当前用户' });
-    const labelOptions = _.map(labels, (val) => { return { id: val, name: val } });
+    const labelOptions = _.map(labels, (val) => { return { id: val.name, name: val.name } });
     const sprintOptions = _.map(sprints, (val) => { return { name: 'Sprint ' + val, id: val } });
 
     const baseFields = [

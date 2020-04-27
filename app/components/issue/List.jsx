@@ -49,6 +49,7 @@ export default class List extends Component {
     this.closeDetail = this.closeDetail.bind(this);
     this.show = this.show.bind(this);
     this.watch = this.watch.bind(this);
+    this.getLabelStyle = this.getLabelStyle.bind(this);
   }
 
   static propTypes = {
@@ -316,6 +317,22 @@ export default class List extends Component {
     cleanRecord();
   }
 
+  getLabelStyle(name) {
+    const { options: { labels=[] } } = this.props;
+    const label = _.find(labels, { name }); 
+
+    let style = {};
+    if (label && label.bgColor) {
+      style = {
+        backgroundColor: label.bgColor,
+        borderColor: label.bgColor,
+        border: '1px solid ' + label.bgColor,
+        color: '#fff'
+      };
+    }
+    return style;
+  }
+
   render() {
     const { 
       i18n,
@@ -467,7 +484,14 @@ export default class List extends Component {
              <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
                { item.reporter.name + '  ' + moment.unix(item.created_at).format('YYYY/MM/DD HH:mm') }
              </span> }
-             { _.map(item.labels || [], (val, i) => <Link to={ '/project/' + project.key + '/issue?labels=' + val } key={ i }><span title={ val } className='issue-label'>{ val }</span></Link>) }
+             { _.map(item.labels || [], 
+               (val, i) => 
+                 <Link to={ '/project/' + project.key + '/issue?labels=' + val } key={ i }>
+                   <span title={ val } className='issue-label' style={ this.getLabelStyle(val) }>
+                     { val }
+                   </span>
+                 </Link>
+               ) }
            </span>
          </div> );
       issue.operation = (
