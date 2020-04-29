@@ -21,8 +21,6 @@ const validate = (values, props) => {
     if (!pattern.test(values.bgColor)) {
       errors.bgColor = '格式错误';
     }
-  } else {
-    errors.bgColor = '必选';
   }
 
   return errors;
@@ -103,12 +101,12 @@ export default class EditModal extends Component {
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ bgColor.touched && bgColor.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>背景色</ControlLabel>
+            <ControlLabel>背景色</ControlLabel>
             <Select
               simpleValue
               disabled={ submitting }
               options={ bgColorOptions }
-              clearable={ false }
+              clearable
               searchable={ false }
               value={ bgColor.value }
               onChange={ newValue => { bgColor.onChange(newValue) } }

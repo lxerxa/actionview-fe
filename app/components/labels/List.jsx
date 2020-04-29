@@ -135,8 +135,8 @@ export default class List extends Component {
         bgColor: ( <div className='label-label' style={ { backgroundColor: collection[i].bgColor || '#ccc' } } /> ),
         issues: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
-            <li>已完成 - <Link to={ '/project/' + collection[i].project_key + '/issue?' + 'labels=' + collection[i].id + '&state=' + completedStates.join(',') }>{ collection[i].completed || 0 }</Link></li>
-            <li>未完成 - <Link to={ '/project/' + collection[i].project_key + '/issue?' + 'labels=' + collection[i].id + '&state=' + inCompletedStates.join(',') }><span style={ { color: 'red' } }>{ collection[i].incompleted || 0 }</span></Link></li>
+            <li>所有问题 - <Link to={ '/project/' + collection[i].project_key + '/issue?labels=' + collection[i].name }>{ collection[i].all_cnt || 0 }</Link></li>
+            <li>未解决的 - <Link to={ '/project/' + collection[i].project_key + '/issue?resolution=Unresolved&labels=' + collection[i].name }><span style={ { color: 'red' } }>{ collection[i].unresolved_cnt || 0 }</span></Link></li>
           </ul>
         ),
         operation: (

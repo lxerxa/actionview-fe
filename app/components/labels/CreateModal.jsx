@@ -21,8 +21,6 @@ const validate = (values, props) => {
     if (!pattern.test(values.bgColor)) {
       errors.bgColor = '格式错误';
     }
-  } else {
-    errors.bgColor = '必选';
   }
 
   return errors;
@@ -84,22 +82,22 @@ export default class CreateModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>创建Epic</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>创建标签</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='Epic名称'/>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='标签名称'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ bgColor.touched && bgColor.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>背景色</ControlLabel>
+            <ControlLabel>背景色</ControlLabel>
             <Select
               simpleValue
               disabled={ submitting }
               options={ bgColorOptions }
-              clearable={ false }
+              clearable
               searchable={ false }
               value={ bgColor.value }
               onChange={ newValue => { bgColor.onChange(newValue) } }
