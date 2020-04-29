@@ -116,6 +116,7 @@ export default class Card extends Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleContextMenu = this.handleContextMenu.bind(this);
+    this.getLabelStyle = this.getLabelStyle.bind(this);
   }
 
   static propTypes = {
@@ -210,6 +211,28 @@ export default class Card extends Component {
     }
   }
 
+  getLabelStyle(name) {
+    const { options: { labels=[] } } = this.props;
+    const label = _.find(labels, { name });
+
+    let style = {
+      marginTop: '5px', 
+      maxWidth: '100%', 
+      float: 'unset'
+    };
+
+    if (label && label.bgColor) {
+      style = {
+        backgroundColor: label.bgColor,
+        borderColor: label.bgColor,
+        border: '1px solid ' + label.bgColor,
+        color: '#fff',
+        ...style
+      };
+    }
+    return style;
+  }
+
   render() {
     const { 
       index,
@@ -237,7 +260,8 @@ export default class Card extends Component {
       toBottom,
       removeFromSprint,
       moveCard,
-      options } = this.props;
+      options 
+    } = this.props;
 
     if (subtasks.length > 0) {
       return connectDropTarget( 
@@ -335,13 +359,14 @@ export default class Card extends Component {
           { displayFields.length > 0 && 
           <div style={ { marginTop: '5px' } }>
             { _.map(displayFields, (v) => {
-              if (!issue[v] && !_.isNumber(issue[v])) {
+              if (_.isEmpty(issue[v]) && !_.isNumber(issue[v])) {
                 return;
               }
               if (v == 'labels') {
                 return (
-                  <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
-                    { _.map(issue[v] || [], (lv) => <span title={ lv } className='issue-label' style={ { marginTop: '5px', maxWidth: '100%', float: 'unset' } }>{ lv }</span>) }
+                  <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontSize: '12px' } }>
+                    <span style={ { marginRight: '3px', marginTop: '7px', float: 'left' } }><b>标签</b>:</span>
+                    { _.map(issue[v], (lv) => <span title={ lv } className='issue-label' style={ this.getLabelStyle(lv) }>{ lv }</span>) }
                   </div>);
               } else {
                 const field = _.find(options.fields || [] , { key: v });
