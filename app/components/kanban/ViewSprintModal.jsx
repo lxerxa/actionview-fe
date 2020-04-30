@@ -3,6 +3,7 @@ import { Modal, Button, Table } from 'react-bootstrap';
 import _ from 'lodash';
 
 const no_avatar = require('../../assets/images/no_avatar.png');
+const { API_BASENAME } = process.env;
 
 export default class ViewSprintModal extends Component {
   constructor(props) {
@@ -80,7 +81,7 @@ export default class ViewSprintModal extends Component {
               return (<tr key={ key }>
                 <td>
                   <div style={ { float: 'left' } }>
-                    <img className='board-avatar' src={ v.assignee && v.assignee.avatar ? '/api/getavatar?fid=' + v.assignee.avatar : no_avatar }/>
+                    <img className='board-avatar' src={ v.assignee && v.assignee.avatar ? API_BASENAME + '/getavatar?fid=' + v.assignee.avatar : no_avatar }/>
                     <span style={ { marginLeft: '5px' } }>{ v.assignee.name }</span>
                   </div>
                 </td>

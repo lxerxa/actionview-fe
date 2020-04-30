@@ -11,6 +11,8 @@ const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
 
+const { API_BASENAME } = process.env;
+
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(IssueActions, dispatch),
@@ -74,7 +76,7 @@ export default class Container extends Component {
 
     const eleLink = document.createElement('a');
     eleLink.style.display = 'none';
-    eleLink.href = '/api/project/' + this.pid + '/issue?' + qs.stringify(newQuery || {});
+    eleLink.href = API_BASENAME + '/project/' + this.pid + '/issue?' + qs.stringify(newQuery || {});
     eleLink.target = '_blank';
     // 触发点击
     document.body.appendChild(eleLink);

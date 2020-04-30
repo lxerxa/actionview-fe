@@ -10,6 +10,8 @@ const no_avatar = require('../../assets/images/no_avatar.png');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
 
+const { API_BASENAME } = process.env;
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -251,7 +253,7 @@ export default class List extends Component {
 
       activities.push({
         id: collection[i].id,
-        avatar: ( <img src={ collection[i].user.avatar ? '/api/getavatar?fid=' + collection[i].user.avatar : no_avatar } className='no-avatar'/> ),
+        avatar: ( <img src={ collection[i].user.avatar ? API_BASENAME + '/getavatar?fid=' + collection[i].user.avatar : no_avatar } className='no-avatar'/> ),
         summary: (
           <div>
             <span style={ { marginRight: '5px' } }><b>{ user.id === collection[i].user.id ? '我' : collection[i].user.name }</b></span>

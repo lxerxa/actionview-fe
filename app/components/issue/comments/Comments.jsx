@@ -13,6 +13,8 @@ const DelCommentsModal = require('./DelCommentsModal');
 const DelReplyModal = require('./DelReplyModal');
 const EditCommentsModal = require('./EditCommentsModal');
 
+const { API_BASENAME } = process.env;
+
 export default class Comments extends Component {
   constructor(props) {
     super(props);
@@ -113,7 +115,7 @@ export default class Comments extends Component {
       $(function() {
         $('.comments-inputor textarea').inlineattachment({
           allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: '/api/project/' + project.key + '/file',
+          uploadUrl: API_BASENAME + '/project/' + project.key + '/file',
           onFileUploaded: (editor, filename) => {
             self.setState({ contents: editor.getValue() });
           },

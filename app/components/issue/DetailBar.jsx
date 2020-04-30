@@ -32,6 +32,8 @@ const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const WatcherListModal = require('./WatcherListModal');
 
+const { API_BASENAME } = process.env;
+
 export default class DetailBar extends Component {
   constructor(props) {
     super(props);
@@ -1008,7 +1010,7 @@ export default class DetailBar extends Component {
                   } else if (field.type === 'File') {
                     const componentConfig = {
                       showFiletypeIcon: true,
-                      postUrl: '/api/project/' + project.key + '/file?issue_id=' + data.id 
+                      postUrl: API_BASENAME + '/project/' + project.key + '/file?issue_id=' + data.id 
                     };
                     const djsConfig = {
                       parallelUploads: 1,
@@ -1032,7 +1034,7 @@ export default class DetailBar extends Component {
                                 <td>
                                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span> 
                                   { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
-                                    <a href={ '/api/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a> :
+                                    <a href={ API_BASENAME + '/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }
                                 </td>
                                 { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 && f.uploader.id == user.id)) && 
@@ -1052,7 +1054,7 @@ export default class DetailBar extends Component {
                             <Col sm={ 6 } key={ i }>
                               <div className='attachment-content'>
                                 <div className='attachment-thumb' onClick={ this.openPreview.bind(this, i, field.key) }>
-                                  <img src={  '/api/project/' + project.key + '/file/' + f.id + '/thumbnail' }/>
+                                  <img src={ API_BASENAME + '/project/' + project.key + '/file/' + f.id + '/thumbnail' }/>
                                 </div>
                                 <div className='attachment-title-container'>
                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>
@@ -1072,9 +1074,9 @@ export default class DetailBar extends Component {
                       </div> }
                       { previewShow[field.key] &&
                         <Lightbox
-                          mainSrc={  '/api/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
-                          nextSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
-                          prevSrc={  '/api/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+                          mainSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
+                          nextSrc={  API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
+                          prevSrc={  API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
                           imageTitle={ imgFiles[photoIndex].name }
                           imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
                           onCloseRequest={ () => { this.state.previewShow[field.key] = false; this.setState({ previewShow: this.state.previewShow }) } }

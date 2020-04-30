@@ -10,6 +10,8 @@ const moment = require('moment');
 const $ = require('$');
 const no_avatar = require('../../assets/images/no_avatar.png');
 
+const { API_BASENAME } = process.env;
+
 const cardSource = {
   beginDrag(props) {
     props.closeDetail();
@@ -343,7 +345,7 @@ export default class Card extends Component {
       <div className='board-issue' style={ { ...styles, opacity, backgroundColor, marginLeft } }>
         <div className='board-issue-content'>
           <div style={ { float: 'right' } }>
-            <img className='board-avatar' src={ issue.assignee && issue.assignee.avatar ? '/api/getavatar?fid=' + issue.assignee.avatar : no_avatar }/>
+            <img className='board-avatar' src={ issue.assignee && issue.assignee.avatar ? API_BASENAME + '/getavatar?fid=' + issue.assignee.avatar : no_avatar }/>
           </div>
           <div>
             <span className='type-abb' title={ _.findIndex(options.types, { id: issue.type }) !== -1 ? _.find(options.types, { id: issue.type }).name : '' }>

@@ -16,6 +16,8 @@ const MoveModal = require('./MoveModal');
 const EditRow = require('./EditRow');
 const img = require('../../assets/images/loading.gif');
 
+const { API_BASENAME } = process.env;
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -143,14 +145,14 @@ export default class List extends Component {
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
-      const url = '/api/project/' + project_key + '/document/' + hoverRowId + '/download';
+      const url = API_BASENAME + '/project/' + project_key + '/document/' + hoverRowId + '/download';
       window.open(url, '_blank');
     }
   }
 
   downloadAll() {
     const { project_key, directory } = this.props;
-    const url = '/api/project/' + project_key + '/document/' + directory + '/download';
+    const url = API_BASENAME + '/project/' + project_key + '/document/' + directory + '/download';
     window.open(url, '_blank');
   }
 
@@ -260,7 +262,7 @@ export default class List extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: '/api/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
+      postUrl: API_BASENAME + '/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
     };
     const djsConfig = {
       addRemoveLinks: true
@@ -378,7 +380,7 @@ export default class List extends Component {
         name: ( 
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
-            <a href={ '/api/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
+            <a href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
               { files[i].name }
             </a>
             <span style={ { float: 'right' } }>

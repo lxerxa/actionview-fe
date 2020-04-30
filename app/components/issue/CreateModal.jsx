@@ -14,6 +14,8 @@ const $ = require('$');
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
 
+const { API_BASENAME } = process.env;
+
 class CreateModal extends Component {
   constructor(props) {
     super(props);
@@ -157,7 +159,7 @@ class CreateModal extends Component {
       $(function() {
         $('#create-issue-dialog textarea').inlineattachment({
           allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: '/api/project/' + project.key + '/file',
+          uploadUrl: API_BASENAME + '/project/' + project.key + '/file',
           onFileUploaded: (editor, filename) => { 
             const fieldkey = editor.getAttr('id').substr(15); 
             self.state.values[fieldkey] = editor.getValue(); 
@@ -614,7 +616,7 @@ class CreateModal extends Component {
               } else if (v.type === 'File' && options.permissions && options.permissions.indexOf('upload_file') !== -1) {
                 const componentConfig = {
                   showFiletypeIcon: true,
-                  postUrl: '/api/project/' + project.key + '/file'
+                  postUrl: API_BASENAME + '/project/' + project.key + '/file'
                 };
                 const djsConfig = {
                   addRemoveLinks: true,

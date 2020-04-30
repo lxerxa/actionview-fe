@@ -8,6 +8,8 @@ const SettingPwdModal = require('./SettingPwdModal');
 const EnableNotify = require('./EnableNotify');
 const img = require('../../assets/images/loading.gif');
 
+const { API_BASENAME } = process.env;
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -92,7 +94,7 @@ export default class List extends Component {
         </div>
         <Panel header={ gitHubHeader } style={ { textAlign: 'center' } }>
           <div>
-            <b>Request Url:</b> { 'http://www.example.com/api/webhook/github/project/' + pkey } { !indexLoading && <Label bsStyle={ statusStyles[github.status] && statusStyles[github.status].style || 'default' }>{ statusStyles[github.status] && statusStyles[github.status].name || '未开通' }</Label> }
+            <b>Request Url:</b> { 'http://www.example.com' + API_BASENAME + '/webhook/github/project/' + pkey } { !indexLoading && <Label bsStyle={ statusStyles[github.status] && statusStyles[github.status].style || 'default' }>{ statusStyles[github.status] && statusStyles[github.status].name || '未开通' }</Label> }
           </div>
           { indexLoading || (itemLoading && this.state.user.key == 'github' && (this.state.mode == 'enable' || this.state.mode == 'disable')) ?
           <div style={ { marginTop: '10px' } }>
@@ -108,7 +110,7 @@ export default class List extends Component {
         </Panel>
         <Panel header={ gitLabHeader } style={ { textAlign: 'center' } }>
           <div>
-            <b>Request Url:</b> { 'http://www.example.com/api/webhook/gitlab/project/' + pkey } { !indexLoading && <Label bsStyle={ statusStyles[gitlab.status] && statusStyles[gitlab.status].style || 'default' }>{ statusStyles[gitlab.status] && statusStyles[gitlab.status].name || '未开通' }</Label> }
+            <b>Request Url:</b> { 'http://www.example.com' + API_BASENAME + '/webhook/gitlab/project/' + pkey } { !indexLoading && <Label bsStyle={ statusStyles[gitlab.status] && statusStyles[gitlab.status].style || 'default' }>{ statusStyles[gitlab.status] && statusStyles[gitlab.status].name || '未开通' }</Label> }
           </div>
           { indexLoading || (itemLoading && this.state.user.key == 'gitlab' && (this.state.mode == 'enable' || this.state.mode == 'disable')) ?
           <div style={ { marginTop: '10px' } }>

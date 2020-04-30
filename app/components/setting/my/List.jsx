@@ -12,6 +12,8 @@ const AvatarEditModal = require('./AvatarEditModal');
 const EditModal = require('./EditModal');
 const ResetPwdModal = require('./ResetPwdModal');
 
+const { API_BASENAME } = process.env;
+
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -160,7 +162,7 @@ export default class List extends Component {
       ),
       contents: (
         <div style={ styles }>
-          <img src={ accounts.avatar ? '/api/getavatar?fid=' + accounts.avatar : no_avatar } className='big-no-avatar'/>
+          <img src={ accounts.avatar ? API_BASENAME + '/getavatar?fid=' + accounts.avatar : no_avatar } className='big-no-avatar'/>
           <Button style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ avatarEditModalShow: true }) } }>设置头像</Button>
         </div>
       )

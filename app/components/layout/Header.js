@@ -7,6 +7,8 @@ const logo = require('../../assets/images/brand.png');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const $ = require('$');
 
+const { API_BASENAME } = process.env;
+
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -191,7 +193,7 @@ export default class Header extends Component {
     }
 
     const headerUser = { paddingTop: '4px', color: '#5f5f5f', textDecoration: 'blink', fontSize: '16px' }; 
-    const avatar = (<img className='no-avatar' src={ session.user && session.user.avatar ? '/api/getavatar?fid=' + session.user.avatar : no_avatar }/>);
+    const avatar = (<img className='no-avatar' src={ session.user && session.user.avatar ? API_BASENAME + '/getavatar?fid=' + session.user.avatar : no_avatar }/>);
     const sysTitle = (<span><i className='fa fa-cog'></i></span>);
 
     return (

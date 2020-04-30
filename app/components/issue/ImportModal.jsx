@@ -8,6 +8,8 @@ import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
+const { API_BASENAME } = process.env;
+
 export default class ImportModal extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +59,7 @@ export default class ImportModal extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: '/api/tmpfile'
+      postUrl: API_BASENAME + '/tmpfile'
     };
     const djsConfig = {
       addRemoveLinks: true

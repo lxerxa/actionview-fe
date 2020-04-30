@@ -16,6 +16,7 @@ const DelFileModal = require('./DelFileModal');
 const EditModal = require('./EditModal');
 const VersionView = require('./VersionView');
 
+const { API_BASENAME } = process.env;
 let simplemde = {};
 
 export default class Preview extends Component {
@@ -151,7 +152,7 @@ export default class Preview extends Component {
 
   downloadAll() {
     const { project_key, wid } = this.props;
-    const url = '/api/project/' + project_key + '/wiki/' + wid + '/download';
+    const url = API_BASENAME + '/project/' + project_key + '/wiki/' + wid + '/download';
     window.open(url, '_blank');
   }
 
@@ -185,7 +186,7 @@ export default class Preview extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: '/api/project/' + project_key + '/wiki/' + item.id + '/upload'
+      postUrl: API_BASENAME + '/project/' + project_key + '/wiki/' + item.id + '/upload'
     };
     const djsConfig = {
       addRemoveLinks: true
@@ -301,7 +302,7 @@ export default class Preview extends Component {
               <tr key={ i }>
                 <td>
                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span>
-                  <a href={ '/api/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
+                  <a href={ API_BASENAME + '/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
                  </td>
                  <td width='10%'>
                    <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YYYY/MM/DD HH:mm') }</div>
