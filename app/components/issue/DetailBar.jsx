@@ -461,6 +461,10 @@ export default class DetailBar extends Component {
     return style;
   }
 
+  componentDidMount() {
+    $('.animate-dialog .nav-tabs>li>a:first').css('border-left', '0px');
+  }
+
   render() {
     const { 
       i18n,

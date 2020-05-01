@@ -269,7 +269,7 @@ export default class Header extends Component {
       <Form
         id='search-form'
         horizontal
-        style={ { marginTop: '15px', marginBottom: '10px', padding: '15px 10px 0px 0px', backgroundColor: '#f5f5f5', borderRadius: '4px' } }>
+        style={ { marginTop: '15px', marginBottom: '10px', padding: '15px 10px 0px 0px', backgroundColor: '#f7f7f7', borderRadius: '4px' } }>
         <FormGroup>
           <Col sm={ 1 } componentClass={ ControlLabel }>
             时间 
