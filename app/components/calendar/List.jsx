@@ -94,16 +94,16 @@ export default class List extends Component {
             <i className='fa fa-angle-right fa-lg'></i></span>
           </Button>
           { options.year && this.state.year >= options.year && 
-          <Button bsStyle='link' style={ { position: 'absolute', right: 0, top: 0 } } onClick={ () => { this.setState({ syncNotifyShow: true }) } }>
+          <Button bsStyle='link' style={ { position: 'absolute', right: '20px', top: '75px' } } onClick={ () => { this.setState({ syncNotifyShow: true }) } }>
             同步日历 
           </Button> }
         </div> } 
         { indexLoading && 
         <div style={ { textAlign: 'center', paddingTop: '50px' } }>
-         <img src={ img } className='loading'/> 
+          <img src={ img } className='loading'/> 
         </div> }
         { !indexLoading && data.length > 0 &&
-        <Form horizontal> 
+        <Form horizontal style={ { margin: '0px 5px' } }> 
           { _.map(data, (qdata, q) =>
             <FormGroup key={ q }>
               { _.map(qdata, (mdata, k) =>
