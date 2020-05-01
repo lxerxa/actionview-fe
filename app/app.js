@@ -21,6 +21,10 @@ if (BROWSER) {
   require('react-datetime/css/react-datetime.css');
   require('simplemde/dist/simplemde.min.css');
   require('rc-tabs/assets/index.css');
+  require('mermaid/dist/mermaid.css');
+  require('react-dropzone-component/styles/filepicker.css');
+  require('dropzone/dist/dropzone.css');
+  require('cropperjs/dist/cropper.css');
   require('assets/styles/layout.css');
   require('assets/styles/app.css');
   require('assets/styles/board.css');
@@ -28,10 +32,6 @@ if (BROWSER) {
   require('assets/styles/jquery.atwho.css');
   require('assets/styles/jquery-ui.css');
   require('assets/styles/ganttview.css');
-  require('mermaid/dist/mermaid.css');
-  require('react-dropzone-component/styles/filepicker.css');
-  require('dropzone/dist/dropzone.css');
-  require('cropperjs/dist/cropper.css');
 }
 
 (async function() {
