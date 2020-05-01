@@ -71,7 +71,7 @@ export default class SetLabelsModal extends Component {
   componentWillMount() {
     const { initializeForm, options, issue } = this.props;
     if (options.permissions && options.permissions.indexOf('manage_project') !== -1) {
-      initializeForm({ labels: _.map(issue.labels || [], (v) => { return { value: v, label :v } }) });
+      initializeForm({ labels: _.map(issue.labels || [], (v) => { return { value: v, label: v } }) });
     } else {
       initializeForm({ labels: (issue.labels || []).join(',') });
     }
@@ -80,7 +80,7 @@ export default class SetLabelsModal extends Component {
   render() {
     const { i18n: { errMsg }, fields: { labels }, handleSubmit, invalid, submitting, issue, options } = this.props;
 
-    const labelOptions = _.map(options.labels || [], (val) => { return { label: val, value: val } });
+    const labelOptions = _.map(options.labels || [], (val) => { return { label: val.name, value: val.name } });
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

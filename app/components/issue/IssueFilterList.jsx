@@ -204,7 +204,7 @@ export class IssueFilterList extends Component {
       <Form 
         id='search-form'
         horizontal 
-        style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 10px 10px', backgroundColor: '#f5f5f5', borderRadius: '4px' } } 
+        style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 10px 10px', backgroundColor: '#f7f7f7', borderRadius: '4px' } } 
         className={ !searchShow && 'hide' }>
         { notShowBlocks.indexOf('base') === -1 &&
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px' } }>

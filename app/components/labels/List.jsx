@@ -32,7 +32,6 @@ export default class List extends Component {
     selectedItem: PropTypes.object.isRequired,
     indexLoading: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
-    gotoIssueList: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
@@ -71,14 +70,11 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { gotoIssueList } = this.props;
 
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId);
-    } else if (eventKey === '3') {
-      gotoIssueList(hoverRowId);
     }
   }
 
@@ -152,8 +148,6 @@ export default class List extends Component {
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
               <MenuItem eventKey='2'>删除</MenuItem>
-              <MenuItem divider/>
-              <MenuItem eventKey='3'>问题列表</MenuItem>
             </DropdownButton> }
           </div>
         )
@@ -181,7 +175,6 @@ export default class List extends Component {
           hover
           data={ labels } 
           bordered={ false } 
-          tableStyle={ { marginBottom: '230px' } } 
           options={ opts } 
           trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
