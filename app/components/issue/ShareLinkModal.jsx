@@ -1,13 +1,15 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, FormControl } from 'react-bootstrap';
 
+const { BASENAME } = process.env;
+
 export default class ShareLinkModal extends Component {
   constructor(props) {
     super(props);
     const protocol = window.location.protocol;
     const host = window.location.host;
 
-    this.state = { url: protocol + '//' + host + '/project/' + props.project.key + '/issue?no=' + props.issue.no };
+    this.state = { url: protocol + '//' + host + BASENAME + '/project/' + props.project.key + '/issue?no=' + props.issue.no };
   }
 
   static propTypes = {
