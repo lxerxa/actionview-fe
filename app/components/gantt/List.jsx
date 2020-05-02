@@ -924,7 +924,7 @@ export default class List extends Component {
           </span>
         </div>
         { indexLoading && 
-        <div className='detail-view-blanket' style={ { display: 'block', paddingTop: '200px' } }>
+        <div style={ { textAlign: 'center', paddingTop: '50px' } }>
           <img src={ img } className='loading'/>
         </div> }
         { !indexLoading && collection.length <= 0 &&  
