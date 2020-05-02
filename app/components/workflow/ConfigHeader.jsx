@@ -157,7 +157,7 @@ export default class ConfigHeader extends Component {
             className='create-btn' 
             onClick={ () => { this.setState({ previewModalShow: true }); } } 
             disabled={ collection.length <= 0 }>
-            <i className='fa fa-search'></i>&nbsp;预览
+            <i className='fa fa-search-plus'></i>&nbsp;预览
           </Button>
           <Button 
             className='create-btn' 
