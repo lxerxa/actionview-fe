@@ -84,7 +84,7 @@ export default class EditModal extends Component {
 
     const bgColors = [ '#815b3a', '#f79232', '#d39c3f', '#654982', '#4a6785', '#8eb021', '#3b7fc4', '#f15c75', '#ac707a' ];
     const bgColorOptions = _.map(bgColors, (v) => {
-      return { value: v, label: (<span className='epic-label' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
+      return { value: v, label: (<span className='select-color' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
     });
     
     return (

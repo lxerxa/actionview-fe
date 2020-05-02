@@ -880,15 +880,6 @@ table tr:hover .remove-icon{
   border-radius: 4px;
 }
 
-.epic-label {
-  width: 40px;
-  height: 20px;
-  display: inline-block;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-}
-
 .epic-title {
   padding: 1px 5px;
   margin-top: 5px;
@@ -1060,7 +1051,7 @@ table tr:hover .remove-icon{
   border-top: 0px;
 }
 
-.priority-color {
+.select-color {
   width: 40px;
   height: 20px;
   display: inline-block;

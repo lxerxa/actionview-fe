@@ -83,7 +83,7 @@ export default class CreateModal extends Component {
     const { i18n: { errMsg }, fields: { name, color, description }, handleSubmit, invalid, submitting } = this.props;
     
     const colorOptions = _.map(PriorityRGBs, (v) => {
-      return { value: v, label: (<span className='priority-color' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
+      return { value: v, label: (<span className='select-color' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
     });
 
     return (

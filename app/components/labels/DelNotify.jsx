@@ -9,7 +9,7 @@ const loadimg = require('../../assets/images/loading.gif');
 export default class DelNotify extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, operate_flg: '0', swapEpic: '' };
+    this.state = { ecode: 0, operate_flg: '0', swapLabel: '' };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -26,7 +26,7 @@ export default class DelNotify extends Component {
 
   async confirm() {
     const { close, del, index, data } = this.props;
-    const ecode = await del(_.extend({}, { id: data.id }, { operate_flg: this.state.operate_flg, swap_label: this.state.swapEpic }));
+    const ecode = await del(_.extend({}, { id: data.id }, { operate_flg: this.state.operate_flg, swap_label: this.state.swapLabel }));
     if (ecode === 0) {
       close();
       notify.show('删除完成。', 'success', 2000);
@@ -80,8 +80,8 @@ export default class DelNotify extends Component {
                     clearable={ false }
                     disabled={ this.state.operate_flg !== '1' }
                     options={ _.map(_.reject(labels, { id: data.id } ), (v) => ({ value: v.id, label: v.name }) ) }
-                    value={ this.state.swapEpic }
-                    onChange={ (newValue) => { this.setState({ swapEpic: newValue }) } }
+                    value={ this.state.swapLabel }
+                    onChange={ (newValue) => { this.setState({ swapLabel: newValue }) } }
                     placeholder='选择标签'/>
                 </div>
                 <Radio
@@ -100,7 +100,7 @@ export default class DelNotify extends Component {
           <img src={ loadimg } className={ loading ? 'loading' : 'hide' }/>
           <Button
             onClick={ this.confirm }
-            disabled={ loading || (data.is_used && this.state.operate_flg === '0') || (this.state.operate_flg === '1' && !this.state.swapEpic) }>
+            disabled={ loading || (data.is_used && this.state.operate_flg === '0') || (this.state.operate_flg === '1' && !this.state.swapLabel) }>
             确定
           </Button>
           <Button bsStyle='link' onClick={ this.cancel }>取消</Button>

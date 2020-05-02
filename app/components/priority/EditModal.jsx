@@ -91,7 +91,7 @@ export default class EditModal extends Component {
     const { i18n: { errMsg }, fields: { id, name, color, description }, handleSubmit, invalid, dirty, submitting, data } = this.props;
 
     const colorOptions = _.map(PriorityRGBs, (v) => {
-      return { value: v, label: (<span className='priority-color' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
+      return { value: v, label: (<span className='select-color' style={ { marginTop: '7px', backgroundColor: v } }></span>) }
     });
 
     return (

@@ -113,7 +113,7 @@ export default class List extends Component {
           <span className='epic-title' title={ collection[i].name } style={ { backgroundColor: collection[i].bgColor, borderColor: collection[i].bgColor, maxWith: '10em' } }>
             { collection[i].name }
           </span> ),
-        bgColor: ( <div className='epic-label' style={ { backgroundColor: collection[i].bgColor || '#ccc' } } /> ),
+        bgColor: ( <div className='select-color' style={ { backgroundColor: collection[i].bgColor || '#ccc' } } /> ),
         issues: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             <li>已完成 - <Link to={ '/project/' + collection[i].project_key + '/issue?' + 'epic=' + collection[i].id + '&state=' + (stateOptions.completed_states || []).join(',') }>{ collection[i].completed || 0 }</Link></li>
