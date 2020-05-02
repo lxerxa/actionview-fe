@@ -532,7 +532,7 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] || [] }
                       clearable={ false }
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); } }
-                      options={ _.map(options.labels || [], (val) => { return { label: val, value: val } } ) }
+                      options={ _.map(options.labels || [], (val) => { return { label: val.name, value: val.name } } ) }
                       placeholder='选择或输入标签'/>
                   </Col>
                 </FormGroup> );
