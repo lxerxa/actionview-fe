@@ -49,7 +49,7 @@ export default class Header extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     changeModel: PropTypes.func.isRequired,
-    model: PropTypes.string.isRequired,
+    mode: PropTypes.string.isRequired,
     selectedFilter: PropTypes.string.isRequired,
     create: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
@@ -129,13 +129,13 @@ export default class Header extends Component {
     $('.board-container').css('height', winHeight - 28 - 50);
   }
 
-  async changeModel(model) {
+  async changeModel(mode) {
     const { changeModel, selectFilter, index, curKanban, getSprint, completedSprintNum } = this.props;
-    await changeModel(model);
-    if (model == 'issue' || model == 'backlog') {
+    await changeModel(mode);
+    if (mode == 'issue' || mode == 'backlog') {
       await selectFilter('all');
       index();
-    } else if (model == 'history') {
+    } else if (mode == 'history') {
       await selectFilter(completedSprintNum + '');
       index({ sprints: completedSprintNum });
       getSprint(completedSprintNum);
@@ -178,7 +178,7 @@ export default class Header extends Component {
     const { 
       i18n, 
       changeModel, 
-      model, 
+      mode, 
       selectedFilter,
       createKanban, 
       curKanban, 
@@ -214,7 +214,7 @@ export default class Header extends Component {
     let popoverSprint = '';
     let hisPopoverSprint = '';
     let activeSprint = {};
-    if (curKanban.type == 'scrum' && model == 'issue') {
+    if (curKanban.type == 'scrum' && mode == 'issue') {
       activeSprint = _.find(sprints || [], { status: 'active' });
       if (activeSprint) {
         popoverSprint = (
@@ -239,7 +239,7 @@ export default class Header extends Component {
             </Grid>
           </Popover>);
       }
-    } else if (curKanban.type == 'scrum' && model == 'history') {
+    } else if (curKanban.type == 'scrum' && mode == 'history') {
       hisPopoverSprint = (
         <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
           <Grid>
@@ -286,16 +286,16 @@ export default class Header extends Component {
             </span> } 
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>
-            { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) && ((curKanban.type == 'kanban' && model === 'issue') || model === 'backlog') &&
+            { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) && ((curKanban.type == 'kanban' && mode === 'issue') || mode === 'backlog') &&
             <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
             { !_.isEmpty(curKanban) &&
             <ButtonGroup style={ { marginRight: '10px' } }>
-              { curKanban.type == 'kanban' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>看板</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'epic' && '#eee' } } onClick={ () => { this.changeModel('epic') } }>Epic</Button> }
-              { curKanban.type == 'scrum' && completedSprintNum > 0 && <Button style={ { backgroundColor: model == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'backlog' && '#eee' } } onClick={ () => { this.changeModel('backlog') } }>Backlog</Button> }
-              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: model == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
-              <Button style={ { backgroundColor: model == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
+              { curKanban.type == 'kanban' && <Button style={ { backgroundColor: mode == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>看板</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: mode == 'epic' && '#eee' } } onClick={ () => { this.changeModel('epic') } }>Epic</Button> }
+              { curKanban.type == 'scrum' && completedSprintNum > 0 && <Button style={ { backgroundColor: mode == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: mode == 'backlog' && '#eee' } } onClick={ () => { this.changeModel('backlog') } }>Backlog</Button> }
+              { curKanban.type == 'scrum' && <Button style={ { backgroundColor: mode == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
+              <Button style={ { backgroundColor: mode == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
             </ButtonGroup> }
             { kanbans.length > 0 && 
             <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
@@ -316,7 +316,7 @@ export default class Header extends Component {
           </div>
         </div>
 
-        { model === 'issue' && !loading && !_.isEmpty(curKanban) &&
+        { mode === 'issue' && !loading && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
           { curKanban.type == 'scrum' && !_.isEmpty(activeSprint) &&
           <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverSprint }>
@@ -339,7 +339,7 @@ export default class Header extends Component {
             <Button onClick={ () => { this.setState({ burndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
           </span> }
         </div> }
-        { model === 'backlog' && !_.isEmpty(curKanban) &&
+        { mode === 'backlog' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
           <div className='exchange-icon' style={ { float: 'left', marginTop: '7px' } } onClick={ this.changeFilterMode.bind(this) } title={ '切换至' + (this.state.backlogFilterMode == 'epic' ? '版本' : 'Epic') }><i className='fa fa-retweet'></i></div>
           <span style={ { float: 'left', marginTop: '7px', marginRight: '5px' } }>{ this.state.backlogFilterMode === 'epic' ? 'Epic' : '版本' }过滤：</span>
@@ -370,7 +370,7 @@ export default class Header extends Component {
           </div> }
         </div> }
 
-        { model === 'history' && !_.isEmpty(curKanban) &&
+        { mode === 'history' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
           <div className='exchange-icon' style={ { float: 'left', marginTop: '7px' } }>Sprint</div>
           <div style={ { display: 'inline-block', float: 'left', width: '28%' } }>
@@ -396,7 +396,7 @@ export default class Header extends Component {
           </span>
         </div> }
 
-        { model === 'epic' && !_.isEmpty(curKanban) && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
+        { mode === 'epic' && !_.isEmpty(curKanban) && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
         <div style={ { height: '45px', display: this.state.hideHeader ? 'none': 'block' } }>
           <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
             <Button disabled={ indexEpicLoading } onClick={ () => { this.setState({ createEpicModalShow: true }) } }>
@@ -439,7 +439,7 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow &&
           <SortCardsModal
             show
-            model='Epic'
+            mode='Epic'
             close={ this.sortCardsModalClose.bind(this) }
             cards={ epics }
             setSort={ setEpicSort }

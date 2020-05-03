@@ -28,7 +28,7 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
-    this.state = { model: 'issue', filter: 'all' };
+    this.state = { mode: 'issue', filter: 'all' };
     this.pid = '';
     this.kanban_id = '';
     this.getOptions = this.getOptions.bind(this);
@@ -61,15 +61,15 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
-  goto(id, model) {
+  goto(id, mode) {
     this.context.router.push({ pathname: '/project/' + this.pid + '/kanban/' + id });
-    if (model) {
-      this.setState({ model });
+    if (mode) {
+      this.setState({ mode });
     }
   }
 
   gotoBacklog(epic) {
-    this.setState({ model: 'backlog' });
+    this.setState({ mode: 'backlog' });
     this.refs.header.handleSelectEV(epic, 'epic');
   }
 
@@ -91,11 +91,11 @@ export default class Container extends Component {
     if (curKanban.type === 'kanban') {
       _.extend(newQuery, { from: 'kanban' });
     } else {
-      if (this.state.model === 'issue') {
+      if (this.state.mode === 'issue') {
         _.extend(newQuery, { from: 'active_sprint' });
-      } else if (this.state.model === 'backlog') {
+      } else if (this.state.mode === 'backlog') {
         _.extend(newQuery, { from: 'backlog' });
-      } else if (this.state.model === 'history') {
+      } else if (this.state.mode === 'history') {
         _.extend(newQuery, { from: 'his_sprint' });
       } else {
         return;
@@ -294,7 +294,7 @@ export default class Container extends Component {
   }
 
   async getDraggableActions(id) {
-    if (this.state.model == 'backlog') {
+    if (this.state.mode == 'backlog') {
       this.props.actions.dragBacklogIssue(id);
     } else {
       await this.props.actions.getDraggableActions(this.pid, id);
@@ -373,8 +373,8 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
-  changeModel(model) {
-    this.setState({ model });
+  changeModel(mode) {
+    this.setState({ mode });
   }
 
   componentWillMount() {
@@ -422,7 +422,7 @@ export default class Container extends Component {
       <div style={ { overflowY: 'hidden', height: '100%' } }>
         <Header ref='header' 
           changeModel={ this.changeModel.bind(this) }
-          model={ this.state.model }
+          mode={ this.state.mode }
           curKanban={ curKanban }
           kanbans={ this.props.kanban.list }
           completedSprintNum={ this.props.kanban.completedSprintNum }
@@ -450,7 +450,7 @@ export default class Container extends Component {
           addLabels={ this.props.issueActions.addLabels }
           options={ this.props.issue.options }
           i18n={ this.props.i18n }/>
-        { (this.state.model == 'issue' || this.state.model == 'backlog' || this.state.model == 'history') &&
+        { (this.state.mode == 'issue' || this.state.mode == 'backlog' || this.state.mode == 'history') &&
         <List ref='list' 
           curKanban={ curKanban }
           selectedSprint={ this.props.kanban.selectedSprint }
@@ -510,9 +510,9 @@ export default class Container extends Component {
           user={ this.props.session.user }
           i18n={ this.props.i18n }
           layout={ this.props.layout }
-          model={ this.state.model }
+          mode={ this.state.mode }
           { ...this.props.issue }/> }
-        { this.state.model == 'config' &&
+        { this.state.mode == 'config' &&
         <Config
           config={ curKanban }
           loading={ this.props.kanban.configLoading }
@@ -520,7 +520,7 @@ export default class Container extends Component {
           del={ this.delKanban.bind(this) }
           options={ this.props.issue.options }
           i18n={ this.props.i18n } /> }
-        { this.state.model == 'epic' &&
+        { this.state.mode == 'epic' &&
         <EpicList
           indexLoading={ this.props.kanban.indexEpicLoading }
           loading={ this.props.kanban.epicLoading }

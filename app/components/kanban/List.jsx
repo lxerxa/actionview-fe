@@ -34,7 +34,9 @@ export default class List extends Component {
       movedData: {},
       curSprintNo: 0,
       drop_issue_id: '', 
-      action_id: '' };
+      action_id: '', 
+      msgOnceNotify: true
+    };
   }
 
   static propTypes = {
@@ -44,7 +46,7 @@ export default class List extends Component {
     selectedSprint: PropTypes.object.isRequired,
     sprints: PropTypes.array.isRequired,
     sprintLoading: PropTypes.bool.isRequired,
-    model: PropTypes.string.isRequired,
+    mode: PropTypes.string.isRequired,
     draggedIssue: PropTypes.string.isRequired,
     draggableActions: PropTypes.array.isRequired,
     getDraggableActions: PropTypes.func.isRequired,
@@ -202,12 +204,12 @@ export default class List extends Component {
   async issueView(id, colNo) {
     this.setState({ barShow: true });
 
-    const { model, show, record, curKanban, sprints } = this.props;
+    const { mode, show, record, curKanban, sprints } = this.props;
 
     let colNum = 0;
-    if (model == 'backlog') {
+    if (mode == 'backlog') {
       colNum = sprints.length + 1;
-    } else if (model == 'history') {
+    } else if (mode == 'history') {
       colNum = 2;
     } else {
       colNum = curKanban.columns.length;
@@ -221,6 +223,13 @@ export default class List extends Component {
     const ecode = await show(id, floatStyle);
     if (ecode === 0) {
       record();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { curKanban } = this.props;
+    if (curKanban.id !== nextProps.curKanban.id) {
+      this.state.msgOnceNotify = true;
     }
   }
 
@@ -267,7 +276,7 @@ export default class List extends Component {
       selectedSprint,
       sprints,
       sprintLoading,
-      model,
+      mode,
       draggedIssue,
       draggableActions,
       getDraggableActions,
@@ -354,7 +363,7 @@ export default class List extends Component {
     let columns = [];
     const columnIssues = [];
     if (!_.isEmpty(curKanban)) {
-      if (model == 'backlog') {
+      if (mode == 'backlog') {
         columns = _.clone(sprints || []);
         columns.unshift({ no: 0, name: 'Backlog' });
 
@@ -383,7 +392,7 @@ export default class List extends Component {
             columnIssues[0].push(v);
           }
         });
-      } else if (model == 'history') {
+      } else if (mode == 'history') {
         columns = [ { no: 0, name: '未完成' }, { no: 1, name: '已完成' } ]; 
         columnIssues[0] = [];
         columnIssues[1] = [];
@@ -416,6 +425,20 @@ export default class List extends Component {
             }
           });
         });
+
+        if (options.permissions && options.permissions.indexOf('manage_project') !== -1 && this.state.msgOnceNotify) {
+          if (curKanban.type == 'kanban') {
+            if (collection.length > 1000) {
+              notify.show('该看板问题数量太多，建议发布已完成的问题或重新定义该看板的全局检索条件。', 'warning', 5000);
+              this.state.msgOnceNotify = false;
+            }
+          } else {
+            if (collection.length !== _.flatten(columnIssues).length) {
+              notify.show('该看板有部分问题未展示。', 'warning', 5000);
+              this.state.msgOnceNotify = false;
+            }
+          }
+        }
       }
     }
 
@@ -438,23 +461,23 @@ export default class List extends Component {
               <li 
                 key={ i } 
                 className='board-column' 
-                style={ { background: model == 'issue' && selectedFilter === 'all' ? (v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '')) : '' } }>
+                style={ { background: mode == 'issue' && selectedFilter === 'all' ? (v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '')) : '' } }>
                 <span style={ { fontWeight: 600 } }>
-                  { model == 'backlog' ? (v.no == 0 ? 'Backlog' : 'Sprint ' + v.no) : v.name }
+                  { mode == 'backlog' ? (v.no == 0 ? 'Backlog' : 'Sprint ' + v.no) : v.name }
                 </span>（{ columnIssues[i].length }）
-                { model == 'issue' && v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
-                { model == 'issue' && v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
-                { model == 'issue' && curKanban.type == 'kanban' && i == columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                { mode == 'issue' && v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
+                { mode == 'issue' && v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
+                { mode == 'issue' && curKanban.type == 'kanban' && i == columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ selectVersionShow: true }); } }>
                   发布...
                 </a> }
-                { model == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && _.findIndex(sprints, { status: 'active' }) !== -1 &&
+                { mode == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && _.findIndex(sprints, { status: 'active' }) !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ completeSprintShow: true }); } }>
                   完成...
                 </a> }
-                { model == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && i != 0 &&
+                { mode == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && i != 0 &&
                 <div style={ { float: 'right' } }>
                   <DropdownButton
                     bsStyle='default'
@@ -469,7 +492,7 @@ export default class List extends Component {
                     { v.status == 'waiting' && <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> }
                   </DropdownButton> 
                 </div> }
-                { model == 'backlog' && v.status == 'active' && <span> - <b>活动中</b></span> }
+                { mode == 'backlog' && v.status == 'active' && <span> - <b>活动中</b></span> }
               </li> ) ) }
             </ul>
           </div>
@@ -480,9 +503,9 @@ export default class List extends Component {
                 key={ i }
                 colNo={ i }
                 displayFields={ curKanban.display_fields || [] }
-                epicShow={ model == 'backlog' || model == 'history' }
-                inSprint={ model == 'issue' && curKanban.type == 'scrum' }
-                inHisSprint={ model == 'history' }
+                epicShow={ mode == 'backlog' || mode == 'history' }
+                inSprint={ mode == 'issue' && curKanban.type == 'scrum' }
+                inHisSprint={ mode == 'history' }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
                 openedIssue={ this.state.barShow ? itemData : {} }
                 draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
@@ -497,7 +520,7 @@ export default class List extends Component {
                 removeFromSprint={ this.removeFromSprint.bind(this) }
                 options={ options } /> ) } ) }
           </div>
-          { model == 'issue' &&
+          { mode == 'issue' &&
           <div className='board-zone-overlay' style={ { top: '46px' } }>
             <div className='board-zone-overlay-table'>
             { _.map(columns, (v, i) => {
@@ -514,7 +537,7 @@ export default class List extends Component {
                   acceptStates={ v.states || [] }/> ) } ) }
             </div>
           </div> }
-          { model == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          { mode == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div className='board-zone-overlay' style={ { top: '46px' } }>
             <div className='board-zone-overlay-table'>
             { _.map(columns, (v, i) => {
@@ -530,7 +553,7 @@ export default class List extends Component {
             </div>
           </div> }
         </div> }
-        { !_.isEmpty(curKanban) && !indexLoading && model == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 && collection.length <= 0 &&
+        { !_.isEmpty(curKanban) && !indexLoading && mode == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 && collection.length <= 0 &&
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
           <span>暂无活动的Sprint</span>
         </div> }
