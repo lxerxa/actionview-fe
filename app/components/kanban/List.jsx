@@ -432,9 +432,9 @@ export default class List extends Component {
               notify.show('该看板问题数量太多，建议发布已完成的问题或重新定义该看板的全局检索条件。', 'warning', 5000);
               this.state.msgOnceNotify = false;
             }
-          } else {
+          } else if (curKanban.type == 'scrum') {
             if (collection.length !== _.flatten(columnIssues).length) {
-              notify.show('该看板有部分问题未展示。', 'warning', 5000);
+              notify.show('该看板未能展示当前Sprint中的所有问题。', 'warning', 5000);
               this.state.msgOnceNotify = false;
             }
           }
@@ -664,7 +664,7 @@ export default class List extends Component {
             close={ this.completeSprintModalClose.bind(this) }
             loading={ sprintLoading }
             sprintNo={ _.find(sprints, { status: 'active' }) ? _.find(sprints, { status: 'active' }).no : 0 }
-            total={ collection.length }
+            total={ _.flatten(columnIssues).length }
             complete={ completeSprint }
             completedIssues={ _.last(columnIssues) || [] }
             i18n={ i18n }/> }
