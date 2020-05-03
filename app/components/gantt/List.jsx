@@ -645,7 +645,7 @@ export default class List extends Component {
         if (markedIssue.id === $(this).attr('id')) {
           $(this).css('background-color', '#FFFACD');
         } else if (itemData.id === $(this).attr('id')) {
-          $(this).css('background-color', '#eee');
+          $(this).css('background-color', '#e6f7ff');
         } else {
           $(this).css('background-color', '');
         }
