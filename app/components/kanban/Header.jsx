@@ -201,7 +201,8 @@ export default class Header extends Component {
       create, 
       addLabels,
       goto, 
-      options } = this.props;
+      options 
+    } = this.props;
 
     const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });
     const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });

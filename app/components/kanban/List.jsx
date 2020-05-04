@@ -34,8 +34,7 @@ export default class List extends Component {
       movedData: {},
       curSprintNo: 0,
       drop_issue_id: '', 
-      action_id: '', 
-      msgOnceNotify: true
+      action_id: '' 
     };
   }
 
@@ -223,13 +222,6 @@ export default class List extends Component {
     const ecode = await show(id, floatStyle);
     if (ecode === 0) {
       record();
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { curKanban } = this.props;
-    if (curKanban.id !== nextProps.curKanban.id) {
-      this.state.msgOnceNotify = true;
     }
   }
 
@@ -425,20 +417,6 @@ export default class List extends Component {
             }
           });
         });
-
-        if (options.permissions && options.permissions.indexOf('manage_project') !== -1 && this.state.msgOnceNotify) {
-          if (curKanban.type == 'kanban') {
-            if (collection.length > 1000) {
-              notify.show('该看板问题数量太多，建议发布已完成的问题或重新定义该看板的全局检索条件。', 'warning', 5000);
-              this.state.msgOnceNotify = false;
-            }
-          } else if (curKanban.type == 'scrum') {
-            if (collection.length !== _.flatten(columnIssues).length) {
-              notify.show('该看板未能展示当前Sprint中的所有问题。', 'warning', 5000);
-              this.state.msgOnceNotify = false;
-            }
-          }
-        }
       }
     }
 
