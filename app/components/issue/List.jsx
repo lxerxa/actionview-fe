@@ -300,11 +300,11 @@ export default class List extends Component {
       });
     }
 
-    if (parseInt($('.react-bs-table-container th[data-field=title]').css('width')) < 300) {
-      $('.react-bs-table-container th[data-field=title]').css('width', '300px');
-      $('.react-bs-table-container th[data-field=title`]').css('min-width', '300px');
-      $('.react-bs-table-container col[data-field=title]').css('width', '300px');
-      $('.react-bs-table-container col[data-field=title]').css('min-width', '300px');
+    if (parseInt($('.react-bs-table-container th').eq(3).css('width')) < 300) {
+      $('.react-bs-table-container th').eq(3).css('width', '300px');
+      $('.react-bs-table-container th').eq(3).css('min-width', '300px');
+      $('.react-bs-table-container col').eq(3).css('width', '300px');
+      $('.react-bs-table-container col').eq(3).css('min-width', '300px');
     }
   }
 
@@ -468,7 +468,7 @@ export default class List extends Component {
           { _.findIndex(options.types, { id: item.type }) !== -1 ? _.find(options.types, { id: item.type }).abb : '-' }
         </span> );
       issue.no = ( <a href='#' onClick={ (e) => { e.preventDefault(); this.show(item.id) } }>{ item.no }</a> );
-      issue.name = ( 
+      issue.title = ( 
         <div>
           { item.parent &&
           <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
@@ -617,7 +617,7 @@ export default class List extends Component {
                 (mainOrder.order === 'desc' ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-up'></i>) }
             </span>
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>
+          <TableHeaderColumn dataField='title'>
             <span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>
               <span style={ { marginRight: '3px' } }>主题</span>
               { mainOrder.field === 'title' && 

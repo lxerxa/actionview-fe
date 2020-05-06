@@ -982,7 +982,7 @@ export default class DetailBar extends Component {
                     return;
                   }
                   if (field.type === 'File') {
-                    if (options.permissions && options.permissions.indexOf('upload_file') === -1 && !data[field.key]) {
+                    if (options.permissions && options.permissions.indexOf('upload_file') === -1 && _.isEmpty(data[field.key])) {
                       return;
                     }
                   } else if (_.isEmpty(data[field.key]) && !_.isNumber(data[field.key])) {
