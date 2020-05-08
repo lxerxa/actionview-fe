@@ -300,11 +300,15 @@ export default class List extends Component {
       });
     }
 
-    if (parseInt($('.react-bs-table-container th').eq(3).css('width')) < 300) {
-      $('.react-bs-table-container th').eq(3).css('width', '300px');
-      $('.react-bs-table-container th').eq(3).css('min-width', '300px');
-      $('.react-bs-table-container col').eq(3).css('width', '300px');
-      $('.react-bs-table-container col').eq(3).css('min-width', '300px');
+    let titleNo = 3;
+    if ($('.react-bs-table-container th').eq(3).attr('data-field') !== 'title') {
+      titleNo = 4;
+    }
+    if (parseInt($('.react-bs-table-container th').eq(titleNo).css('width')) < 300) {
+      $('.react-bs-table-container th').eq(titleNo).css('width', '300px');
+      $('.react-bs-table-container th').eq(titleNo).css('min-width', '300px');
+      $('.react-bs-table-container col').eq(titleNo).css('width', '300px');
+      $('.react-bs-table-container col').eq(titleNo).css('min-width', '300px');
     }
   }
 
