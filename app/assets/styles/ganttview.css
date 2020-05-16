@@ -38,7 +38,7 @@ div.ganttview-hzheader-month.last {
 }
 
 div.ganttview {
-    border: 1px solid #999;
+    border: 1px solid #ddd;
     overflow: hidden;
     position: relative;
 }
@@ -91,7 +91,7 @@ div.ganttview-vtheader-item-name {
 
 div.ganttview-vtheader-series-item-cell {
     height: 31px;
-    border-top: 1px solid #d0d0d0;
+    border-top: 1px solid #e5e5e5;
     line-height: 31px;
     padding-left: 5px;
     text-overflow: ellipsis;
@@ -142,7 +142,7 @@ div.ganttview-slide-container {
         position: relative;
         height: 100%;
     overflow: auto;
-    border-left: 1px solid #999;
+    border-left: 1px solid #ddd;
 }
 
 div.ganttview-hzheader-day.ganttview-weekend {
@@ -237,7 +237,7 @@ div.ganttview-block-text {
     position: absolute;
     height: 12px;
     font-size: 0.8em;
-    color: #999;
+    color: #ccc;
     padding: 2px 3px;
 }
 

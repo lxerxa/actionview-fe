@@ -84,7 +84,7 @@ export default class Sidebar extends Component {
     }
     $('.head').css({ paddingLeft: '19%' });
     $('.toc-logo').css({ left: '54%' });
-    $('.toc-container').css({ position: 'relative', boxShadow: 'none' });
+    $('.toc-container').css({ position: 'relative', boxShadow: 'rgba(0, 21, 41, 0.08) 0px 1px 4px' });
     $('#show-bar').hide();
     $('#tack-bar').hide();
     $('#hide-bar').show();

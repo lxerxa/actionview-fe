@@ -419,7 +419,7 @@ export default class Container extends Component {
     }
 
     return (
-      <div style={ { overflowY: 'hidden', height: '100%' } }>
+      <div style={ { overflowY: 'hidden', height: '100%', margin: '0px -8px' } }>
         <Header ref='header' 
           changeModel={ this.changeModel.bind(this) }
           mode={ this.state.mode }

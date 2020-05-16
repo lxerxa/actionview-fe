@@ -988,13 +988,14 @@ table tr:hover .remove-icon{
 }
 
 .project-report-container {
-  margin: 20px 10px 20px 10px;
+  margin: 20px 0px;
 }
 
 .project-report-container .report-title {
   display: block; 
   font-size: 19px; 
   margin-top: 20px;
+  margin-left: 5px;
 }
 
 .project-report-container .report-filter-form {

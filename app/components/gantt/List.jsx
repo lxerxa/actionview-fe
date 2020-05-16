@@ -16,7 +16,7 @@ export default class List extends Component {
     super(props);
     this.configs = { 
       cellWidth: 25, 
-      blockHeight: 23, 
+      blockHeight: 21, 
       minDays: 60 
     };
     this.state = { 
@@ -304,7 +304,7 @@ export default class List extends Component {
           <div className='ganttview-vtheader-series' style={ { width: '950px' } }>
             { header }
             { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
-            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id } onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ markedIssue: markedIssue.id == v.id ? {} : v }); } } style={ { backgroundColor: v.id == markedIssue.id ? '#FFFACD' : '#fff' } }>
+            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id } onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ markedIssue: markedIssue.id == v.id ? {} : v }); } }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
                 <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasSubtasks ? 'visible' : 'hidden', cursor: 'pointer' } }>
                   { foldIssues.indexOf(v.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
@@ -640,20 +640,19 @@ export default class List extends Component {
     const { itemData, options, isHeaderHidden } = this.props;
     const { collection, markedIssue } = this.state;
 
-    if (this.state.barShow) {
-      $('.ganttview-vtheader-series-item').each(function(i) {
-        if (markedIssue.id === $(this).attr('id')) {
-          $(this).css('background-color', '#FFFACD');
-        } else if (itemData.id === $(this).attr('id')) {
-          $(this).css('background-color', '#e6f7ff');
-        } else {
-          $(this).css('background-color', '');
-        }
-      });
-    }
+    const self = this;
+
+    $('.ganttview-vtheader-series-item').each(function(i) {
+      if (markedIssue.id === $(this).attr('id')) {
+        $(this).css('background-color', '#FFFACD');
+      } else if (itemData.id === $(this).attr('id') && self.state.barShow) {
+        $(this).css('background-color', '#e6f7ff');
+      } else {
+        $(this).css('background-color', '');
+      }
+    });
 
     if (collection.length > 0) {
-      const self = this;
       const cellWidth = this.configs.cellWidth;
 
       let isIE = false; 
