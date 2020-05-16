@@ -14,6 +14,7 @@ export default {
   },
   module: {
     ...baseConfig.module,
+    base: '/actionview',
     loaders: [
       ...baseConfig.module.loaders,
 	        {
