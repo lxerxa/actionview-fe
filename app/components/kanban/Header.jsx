@@ -336,7 +336,7 @@ export default class Header extends Component {
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
           { curKanban.type == 'scrum' && !_.isEmpty(activeSprint) &&
-          <span style={ { float: 'right', marginRight: '15px' } } title='燃尽图'>
+          <span style={ { float: 'right', marginRight: '10px' } } title='燃尽图'>
             <Button onClick={ () => { this.setState({ burndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
           </span> }
         </div> }
@@ -366,7 +366,7 @@ export default class Header extends Component {
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
           { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-          <div style={ { display: 'inline-block', float: 'right', marginRight: '15px' } }> 
+          <div style={ { display: 'inline-block', float: 'right', marginRight: '10px' } }> 
             <Button bsStyle='primary' onClick={ createSprint }><i className='fa fa-plus' aria-hidden='true'></i> 创建Sprint</Button>
           </div> }
         </div> }
@@ -392,20 +392,20 @@ export default class Header extends Component {
           <span style={ { float: 'right' } } title='隐藏看板头'>
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
-          <span style={ { float: 'right', marginRight: '15px' } } title='燃尽图'>
+          <span style={ { float: 'right', marginRight: '10px' } } title='燃尽图'>
             <Button onClick={ () => { this.setState({ hisBurndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
           </span>
         </div> }
 
         { mode === 'epic' && !_.isEmpty(curKanban) && options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
         <div style={ { height: '45px', display: this.state.hideHeader ? 'none': 'block' } }>
-          <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
+          <div style={ { display: 'inline-block', float: 'left', marginRight: '10px' } }>
             <Button disabled={ indexEpicLoading } onClick={ () => { this.setState({ createEpicModalShow: true }) } }>
               <i className='fa fa-plus' aria-hidden='true'></i> 新建Epic
             </Button>
           </div>
           { !indexEpicLoading &&  
-          <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
+          <div style={ { display: 'inline-block', float: 'left', marginRight: '10px' } }>
             <Button onClick={ () => { this.setState({ sortCardsModalShow: true }) } }>
               <i className='fa fa-pencil' aria-hidden='true'></i> 编辑顺序
             </Button>

@@ -351,7 +351,7 @@ export default class List extends Component {
                 {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
               </DropdownButton>
             </span> }
-            <span style={ { float: 'left', marginRight: '20px' } }>
+            <span style={ { float: 'left', marginRight: '10px' } }>
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
             </span>
             <span style={ { float: 'left', width: '20%' } }>
