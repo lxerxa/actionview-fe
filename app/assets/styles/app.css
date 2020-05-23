@@ -484,6 +484,12 @@ table tr:hover .remove-icon{
   border-left-style: solid;
   border-left-width: 1px;
   border-left-color: #ddd;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #ddd;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #ddd;
   background-color: #f7f7f7;
 }
 

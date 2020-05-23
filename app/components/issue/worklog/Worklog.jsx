@@ -195,9 +195,9 @@ export default class Worklog extends Component {
     //});
    
     return (
-      <Form horizontal style={ { padding: '0px 5px' } }>
+      <Form horizontal style={ { padding: '0px 15px' } }>
         <FormGroup>
-          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
+          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '15px' } }>
             <div>
               <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
               <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
@@ -214,7 +214,7 @@ export default class Worklog extends Component {
             </div>
           </Col>
           <Col sm={ 12 } className={ indexLoading && 'hide' }>
-            <Table condensed hover responsive style={ { width: '96%', marginLeft: '10px', marginTop: '5px' } }>
+            <Table condensed hover responsive style={ { marginBottom: '15px' } }>
               <thead>
                 <tr>
                   <th>原估时间</th>
@@ -250,7 +250,7 @@ export default class Worklog extends Component {
               comments = comments.replace(/(\r\n)|(\n)/g, '<br/>'); 
 
               return (
-                <Panel header={ header } key={ i } style={ { margin: '5px' } }>
+                <Panel header={ header } key={ i } style={ { marginBottom: '15px' } }>
                   <Table condensed hover responsive>
                     <thead>
                       <tr>

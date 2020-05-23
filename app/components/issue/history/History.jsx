@@ -42,9 +42,9 @@ export default class History extends Component {
     const { issue_id, currentTime, currentUser, indexHistory, sortHistory, collection, indexLoading } = this.props;
 
     return (
-      <Form horizontal style={ { padding: '0px 5px' } }>
+      <Form horizontal style={ { padding: '0px 15px' } }>
         <FormGroup>
-          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
+          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '15px' } }>
             <div>
               <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
               <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortHistory() } }><i className='fa fa-sort'></i> 排序</span>
@@ -70,7 +70,7 @@ export default class History extends Component {
               </div> ); 
 
               return (
-                <Panel header={ header } key={ i } style={ { margin: '5px' } }>
+                <Panel header={ header } key={ i } style={ { marginBottom: '15px' } }>
                   { val.operation == 'modify' ?
                   <Table condensed hover responsive>
                     <thead>
@@ -83,19 +83,19 @@ export default class History extends Component {
                     <tbody>
                     { _.map(val.data || [], (v) => 
                       <tr>
-                        <td>
-                          <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '120px' } }>
+                        <td width='24%'>
+                          <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
                             { v.field || '' }
                           </div>
                         </td>
-                        <td> 
+                        <td width='38%'> 
                           <div 
-                            style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '190px' } } 
+                            style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
                             dangerouslySetInnerHTML = { { __html: _.isString(v.before_value) ? _.escape(v.before_value).replace(/(\r\n)|(\n)/g, '<br/>') : v.before_value } }/>
                         </td>
-                        <td> 
+                        <td width='38%'> 
                           <div 
-                            style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '190px' } } 
+                            style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
                             dangerouslySetInnerHTML = { { __html: _.isString(v.after_value) ? _.escape(v.after_value).replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value } }/>
                         </td>
                       </tr> ) }

@@ -214,9 +214,9 @@ export default class Comments extends Component {
     const { inlinePreviewShow, photoIndex } = this.state;
 
     return (
-      <Form horizontal style={ { padding: '0px 5px' } }>
+      <Form horizontal style={ { padding: '0px 15px' } }>
         <FormGroup>
-          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
+          <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '15px' } }>
             <div>
               <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexComments(issue_id) } }><i className='fa fa-refresh'></i> 刷新</span>
               <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortComments() } }><i className='fa fa-sort'></i> 排序</span>
@@ -299,7 +299,7 @@ export default class Comments extends Component {
               contents = contents.replace(/(\r\n)|(\n)/g, '<br/>'); 
 
               return (
-                <Panel header={ header } key={ i } style={ { margin: '5px' } }>
+                <Panel header={ header } key={ i } style={ { marginBottom: '15px' } }>
                   <div 
                     onClick={ this.previewInlineImg.bind(this) } 
                     style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
@@ -354,7 +354,7 @@ export default class Comments extends Component {
                        return (
                        <li className='reply-contents-item'>
                          <div className='reply-item-header'>
-                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (v.creator.name + '(' + v.creator.email + ')')) + '">' + (v.creator && v.creator.id === currentUser.id ? '我' : v.creator.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.created_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.created_at, currentTime)) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
+                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (v.creator.name + '(' + v.creator.email + ')')) + '">' + (v.creator && v.creator.id === currentUser.id ? '我' : v.creator.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(v.created_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(v.created_at, currentTime)) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
                            { ((v.creator && currentUser.id === v.creator.id && permissions.indexOf('delete_self_comments') !== -1)
                              || permissions.indexOf('delete_comments') !== -1) &&
                            <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) } title='删除'><i className='fa fa-trash'></i></span> }

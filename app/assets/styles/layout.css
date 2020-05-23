@@ -83,14 +83,12 @@ html.docs .doc-main .head {
   font-size: 16px;
   height: 50px;
   line-height: 35px;
-  border-bottom: solid 1px #ddd;
+  border-bottom: solid 1px #dedede;
   color: #5c5c5c;
   left: 0;
   top: 0;
   z-index: 100;
   position: fixed;
-  box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px;
-  -webkit-box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px;
 }
 
 html.docs .doc-main .head .show-bar-icon {
@@ -132,6 +130,7 @@ html.docs .toc-container {
   right: 0;
   top: 0;
   white-space: nowrap;
+  border-bottom: solid 1px #dedede;
   z-index: 1000;
   background-color: #f7f7f7;
   -webkit-overflow-scrolling: touch
