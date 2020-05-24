@@ -290,9 +290,16 @@ export default class List extends Component {
   componentDidUpdate() {
     const { itemData={} } = this.props;
 
+    let idNo = 0;
+    let titleNo = 3;
+    if ($('.react-bs-table-container th').eq(3).attr('data-field') !== 'title') {
+      idNo = 1;
+      titleNo = 4;
+    }
+
     if (this.state.barShow) {
       $('.react-bs-container-body table tr').each(function(i) {
-        if (itemData.id === $(this).find('td:first').text()) {
+        if (itemData.id === $(this).find('td').eq(idNo).text()) {
           $(this).css('background-color', '#e6f7ff');
         } else {
           $(this).css('background-color', '');
@@ -300,10 +307,6 @@ export default class List extends Component {
       });
     }
 
-    let titleNo = 3;
-    if ($('.react-bs-table-container th').eq(3).attr('data-field') !== 'title') {
-      titleNo = 4;
-    }
     if (parseInt($('.react-bs-table-container th').eq(titleNo).css('width')) < 300) {
       $('.react-bs-table-container th').eq(titleNo).css('width', '300px');
       $('.react-bs-table-container th').eq(titleNo).css('min-width', '300px');
