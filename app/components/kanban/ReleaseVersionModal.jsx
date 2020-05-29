@@ -85,7 +85,7 @@ export default class ReleaseVersionModal extends Component {
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>版本发布</Modal.Title>
         </Modal.Header>
-        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
+        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>版本名称</ControlLabel>
@@ -108,7 +108,12 @@ export default class ReleaseVersionModal extends Component {
           </FormGroup>*/}
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
+            <FormControl
+              disabled={ submitting }
+              componentClass='textarea'
+              style={ { height: '200px' } }
+              { ...description }
+              placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
