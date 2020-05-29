@@ -103,14 +103,15 @@ export default class CreateModal extends Component {
       fields: { name, start_time, end_time, description }, 
       handleSubmit, 
       invalid, 
-      submitting } = this.props;
+      submitting 
+    } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>创建版本</Modal.Title>
         </Modal.Header>
-        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
+        <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
@@ -145,9 +146,14 @@ export default class CreateModal extends Component {
               { end_time.value && end_time.error && <HelpBlock style={ { float: 'right' } }>{ end_time.error }</HelpBlock> }
             </FormGroup>
           </div>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup>
             <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
+            <FormControl
+              disabled={ submitting }
+              componentClass='textarea'
+              style={ { height: '200px' } }
+              { ...description }
+              placeholder='描述'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

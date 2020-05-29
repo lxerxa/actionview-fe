@@ -107,7 +107,8 @@ export default class PublishModal extends Component {
       fields: { start_time, complete_time, description }, 
       handleSubmit, 
       invalid, 
-      submitting } = this.props;
+      submitting 
+    } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

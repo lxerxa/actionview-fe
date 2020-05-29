@@ -4,6 +4,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, DropdownButton, MenuItem, Label } from 'react-bootstrap';
 import _ from 'lodash';
 
+const DetailModal = require('./DetailModal');
 const EditModal = require('./EditModal');
 const ReleaseModal = require('./ReleaseModal');
 const DelNotify = require('./DelNotify');
@@ -16,10 +17,13 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      viewModalShow: false, 
       editModalShow: false, 
       delNotifyShow: false, 
       operateShow: false, 
-      hoverRowId: '' };
+      hoverRowId: '' 
+    };
+    this.viewModalClose = this.viewModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.releaseModalClose = this.releaseModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
@@ -55,6 +59,10 @@ export default class List extends Component {
     }
   }
 
+  viewModalClose() {
+    this.setState({ viewModalShow: false });
+  }
+
   editModalClose() {
     this.setState({ editModalShow: false });
   }
@@ -65,6 +73,12 @@ export default class List extends Component {
 
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
+  }
+
+  view(id) {
+    this.setState({ viewModalShow: true });
+    const { select } = this.props;
+    select(id);
   }
 
   edit(id) {
@@ -87,7 +101,9 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    if (eventKey === 'edit') {
+    if (eventKey === 'view') {
+      this.view(hoverRowId);
+    } else if (eventKey === 'edit') {
       this.edit(hoverRowId);
     } else if (eventKey === 'del') {
       this.delNotify(hoverRowId);
@@ -132,7 +148,6 @@ export default class List extends Component {
         name: ( 
           <div>
             <span className='table-td-title'>{ collection[i].name }</span>
-            { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
         start_time: (
@@ -177,6 +192,7 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='view'>查看</MenuItem>
               <MenuItem eventKey='edit'>编辑</MenuItem>
               {/* collection[i].status == 'released' ? <MenuItem eventKey='unrelease'>取消发布</MenuItem> : <MenuItem eventKey='release'>发布</MenuItem> */}
               { collection[i].status != 'released' && <MenuItem eventKey='release'>发布</MenuItem> }
@@ -219,12 +235,17 @@ export default class List extends Component {
             query={ query }
             refresh={ refresh }/>
           : '' }
+        { this.state.viewModalShow &&
+          <DetailModal
+            show
+            close={ this.viewModalClose }
+            data={ selectedItem }/> }
         { this.state.editModalShow && 
           <EditModal 
             show 
             close={ this.editModalClose } 
             edit={ update } 
-            data={ selectedItem } 
+            data={ selectedItem }
             collection={ collection } 
             i18n={ i18n }/> }
         { this.state.delNotifyShow && 
