@@ -85,7 +85,7 @@ export default class DetailModal extends Component {
                 描述
               </Col>
               <Col sm={ 9 }>
-                <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', marginTop: '7px' } } dangerouslySetInnerHTML={ {  __html: _.escape(data.description).replace(/(\r\n)|(\n)/g, '<br/>') } }/>
+                <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', marginTop: '7px' } } dangerouslySetInnerHTML={ {  __html: _.escape(data.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
               </Col>
             </FormGroup>
           </Form>
