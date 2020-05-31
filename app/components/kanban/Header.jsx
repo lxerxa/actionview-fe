@@ -8,6 +8,7 @@ const CreateKanbanModal = require('./config/CreateModal');
 const EditKanbanModal = require('./config/EditModal');
 const CreateEpicModal = require('./epic/CreateModal');
 const SortCardsModal = require('../share/SortCardsModal');
+const MoreFilterModal = require('./MoreFilterModal');
 const BurndownModal = require('./BurndownModal');
 
 const $ = require('$');
@@ -25,6 +26,7 @@ export default class Header extends Component {
     }
 
     this.state = { 
+      query: {},
       hideHeader: false, 
       backlogFilterMode: ev,
       createIssueModalShow: false, 
@@ -32,7 +34,10 @@ export default class Header extends Component {
       createEpicModalShow: false, 
       sortCardsModalShow: false,
       burndownModalShow: false,
-      hisBurndownModalShow: false };
+      moreFilterModalShow: false, 
+      hisBurndownModalShow: false 
+    };
+
     this.changeModel = this.changeModel.bind(this);
     this.changeFilterMode = this.changeFilterMode.bind(this);
   }
@@ -42,6 +47,7 @@ export default class Header extends Component {
     if (this.props.curKanban.id != curKanban.id || !_.isEqual(this.props.curKanban.query, curKanban.query)) {
       await changeModel('issue');
       await selectFilter('all');
+      this.state.query = {};
       index();
     }
   }
@@ -94,6 +100,10 @@ export default class Header extends Component {
     this.setState({ sortCardsModalShow: false });
   }
 
+  moreFilterModalClose() {
+    this.setState({ moreFilterModalShow: false });
+  }
+
   burndownModalClose() {
     this.setState({ burndownModalShow: false });
   }
@@ -113,8 +123,9 @@ export default class Header extends Component {
 
   async handleSelect(selectedKey) {
     const { index, curKanban, selectFilter } = this.props;
+    this.state.query = selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query;
     await selectFilter(selectedKey);
-    index(selectedKey === 'all' ? {} : curKanban.filters[selectedKey].query);
+    index(this.state.query);
   }
 
   showHeader() {
@@ -134,6 +145,7 @@ export default class Header extends Component {
     await changeModel(mode);
     if (mode == 'issue' || mode == 'backlog') {
       await selectFilter('all');
+      this.state.query = {};
       index();
     } else if (mode == 'history') {
       await selectFilter(completedSprintNum + '');
@@ -174,11 +186,18 @@ export default class Header extends Component {
     }
   }
 
+  moreSearch(query) {
+    const { index, selectFilter } = this.props;
+    selectFilter(_.isEmpty(query) ? 'all' : 'more');
+    index(query);
+  }
+
   render() {
     const { 
       i18n, 
       changeModel, 
       mode, 
+      selectFilter,
       selectedFilter,
       createKanban, 
       curKanban, 
@@ -198,6 +217,7 @@ export default class Header extends Component {
       sprintLog={},
       sprintLogLoading, 
       project, 
+      index,
       create, 
       addLabels,
       goto, 
@@ -269,13 +289,13 @@ export default class Header extends Component {
     }
 
     return (
-      <div style={ { margin: '18px 10px 10px 10px' } }>
+      <div style={ { margin: '16px 10px 10px 10px' } }>
         <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'right' } }>
           <span title='展示看板头'>
             <Button onClick={ this.showHeader.bind(this) } style={ { marginTop: '-37px' } }><i className='fa fa-angle-double-down' aria-hidden='true'></i></Button>
           </span>
         </div>
-        <div id='main-header' style={ { height: '47px', display: this.state.hideHeader ? 'none': 'block' } }>
+        <div id='main-header' style={ { height: '49px', display: this.state.hideHeader ? 'none': 'block' } }>
           <div style={ { display: 'inline-block', fontSize: '19px', marginTop: '5px' } }>
             { loading && <img src={ img } className='loading'/> } 
             { !loading && !_.isEmpty(curKanban) && curKanban.name || '' } 
@@ -339,6 +359,9 @@ export default class Header extends Component {
           <span style={ { float: 'right', marginRight: '10px' } } title='燃尽图'>
             <Button onClick={ () => { this.setState({ burndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
           </span> }
+          <span style={ { float: 'right', marginRight: '10px' } } title='更多过滤'>
+            <Button onClick={ () => { this.setState({ moreFilterModalShow: true }) } }><i className='fa fa-filter' aria-hidden='true'></i> 更多过滤{ !_.isEmpty(this.state.query) ? '...' : '' }</Button>
+          </span>
         </div> }
         { mode === 'backlog' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
@@ -454,6 +477,13 @@ export default class Header extends Component {
             data={ sprintLog }
             close={ this.burndownModalClose.bind(this) }
             no={ activeSprint.no }/> }
+        { this.state.moreFilterModalShow &&
+          <MoreFilterModal
+            show
+            search={ this.moreSearch.bind(this) }
+            query={ this.state.query }
+            options={ options }
+            close={ this.moreFilterModalClose.bind(this) }/> }
         { this.state.hisBurndownModalShow &&
           <BurndownModal
             show

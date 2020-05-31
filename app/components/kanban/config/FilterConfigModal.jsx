@@ -14,7 +14,8 @@ export default class FilterConfigModal extends Component {
       name: '', 
       touched: {},
       errors: {},
-      query: {} };
+      query: {} 
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }

@@ -28,7 +28,10 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
-    this.state = { mode: 'issue', filter: 'all' };
+    this.state = { 
+      mode: 'issue', 
+      filter: 'all'
+    };
     this.pid = '';
     this.kanban_id = '';
     this.getOptions = this.getOptions.bind(this);

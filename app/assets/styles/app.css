@@ -608,6 +608,15 @@ table tr:hover .remove-icon{
   left: 54%;
 }
 
+.cond-txt {
+  background-color: #f7f7f7;
+  vertical-align: middle;
+  padding: 8px;
+  border: 1px #ccc solid;
+  border-radius: 4px;
+  line-height: 2;
+}
+
 .info-col {
   background-color: #f7f7f7;
   vertical-align: middle;

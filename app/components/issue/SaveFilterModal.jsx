@@ -82,7 +82,9 @@ export default class SaveFilterModal extends Component {
           </FormGroup>
           <FormGroup>
             <ControlLabel>条件</ControlLabel>
-            <div><span>{ sqlTxt || '全部' }</span></div>
+            <div className='cond-txt'>
+              { sqlTxt || '全部' }
+            </div>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
