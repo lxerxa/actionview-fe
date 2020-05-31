@@ -255,9 +255,19 @@
 
 .page-button:hover { cursor: pointer }
 
+.cond-txt {
+  background-color: #f7f7f7;
+  vertical-align: middle;
+  padding: 8px;
+  border: 1px #ccc solid;
+  border-radius: 4px;
+  line-height: 2;
+  margin-bottom: 15px;
+}
+
 .cond-bar {
   vertical-align: middle;
-  padding: 6px 6px 6px 10px;
+  padding: 5px 5px 5px 10px;
   margin: 10px 10px 10px 0px;
   display: inline-block;
   float: right;
@@ -265,6 +275,7 @@
 
 .cond-bar:hover {
   background-color: #f7f7f7;
+  border: 1px #ccc solid;
   border-radius: 4px;
 }
 
@@ -606,15 +617,6 @@ table tr:hover .remove-icon{
 .toc-logo {
   position: absolute;
   left: 54%;
-}
-
-.cond-txt {
-  background-color: #f7f7f7;
-  vertical-align: middle;
-  padding: 8px;
-  border: 1px #ccc solid;
-  border-radius: 4px;
-  line-height: 2;
 }
 
 .info-col {
