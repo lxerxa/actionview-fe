@@ -149,7 +149,7 @@ export default class PublishModal extends Component {
             <FormControl 
               disabled={ submitting } 
               componentClass='textarea'
-              style={ { height: '150px' } }
+              style={ { height: '200px' } }
               { ...description }
               placeholder='描述'/>
           </FormGroup>
