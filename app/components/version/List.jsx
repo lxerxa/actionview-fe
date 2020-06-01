@@ -181,7 +181,7 @@ export default class List extends Component {
           <span>{ collection[i].status === 'released' ? <span style={ { color: '#009900' } } title='已发布'><i className='fa fa-check'></i></span> : '未发布' }</span>
         ),
         operation: (
-          options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          options.permissions && options.permissions.indexOf('manage_project') !== -1 ? 
           <div>
             { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton 
@@ -200,6 +200,8 @@ export default class List extends Component {
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
+          :
+          <Button bsStyle='link' onClick={ this.view.bind(this, collection[i]) }>查看</Button>
         )
       });
     }
