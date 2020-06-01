@@ -189,6 +189,7 @@ export default class Header extends Component {
   moreSearch(query) {
     const { index, selectFilter } = this.props;
     selectFilter(_.isEmpty(query) ? 'all' : 'more');
+    this.setState({ query });
     index(query);
   }
 
