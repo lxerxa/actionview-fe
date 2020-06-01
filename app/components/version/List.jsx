@@ -201,7 +201,7 @@ export default class List extends Component {
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
           :
-          <Button bsStyle='link' onClick={ this.view.bind(this, collection[i]) }>查看</Button>
+          <Button bsStyle='link' onClick={ this.view.bind(this, collection[i].id) }>查看</Button>
         )
       });
     }
@@ -226,7 +226,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='released_time' width='120'>发布时间</TableHeaderColumn>
           <TableHeaderColumn dataField='issues' width='150'>问题完成情况</TableHeaderColumn>
           <TableHeaderColumn dataField='status' width='100'>状态</TableHeaderColumn>
-          <TableHeaderColumn width='60' dataField='operation'/>
+          <TableHeaderColumn width='80' dataField='operation'/>
         </BootstrapTable>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList
