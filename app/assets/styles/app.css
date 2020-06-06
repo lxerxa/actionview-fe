@@ -803,6 +803,7 @@ table tr:hover .remove-icon{
 .menu-active {
   font-weight: 600;
   cursor: default;
+  font-size: 16px;
 }
 
 .color-bar {

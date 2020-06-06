@@ -84,7 +84,7 @@ export default class Sidebar extends Component {
     }
     $('.head').css({ paddingLeft: '19%' });
     $('.toc-logo').css({ left: '54%' });
-    $('.toc-container').css({ position: 'relative', boxShadow: 'none' });
+    $('.toc-container').css({ position: 'relative' });
     $('#show-bar').hide();
     $('#tack-bar').hide();
     $('#hide-bar').show();
@@ -180,13 +180,13 @@ export default class Sidebar extends Component {
       return (
       <div className='toc-container'>
         <div className='react-menu-container'>
-          <div style={ { height: '50px', lineHeight: '35px', paddingTop: '8px' } }>
+          <div className='toc-container-header'>
             <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
             <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-thumb-tack fa-rotate-90'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           { session.user.permissions && session.user.permissions.sys_admin &&
-          <div>
+          <div className='toc-container-body'>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>管理员管理面板</h4>
             <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>全局方案配置</h4>
             <ul className={ !this.state.adminSchemeShow && 'hide' }>
@@ -226,13 +226,13 @@ export default class Sidebar extends Component {
       return (
       <div className='toc-container'>
         <div className='react-menu-container'>
-          <div style={ { height: '50px', lineHeight: '35px', paddingTop: '8px' } }>
+          <div className='toc-container-header'>
             <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
             <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-thumb-tack fa-rotate-90'></i></span>
             <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
           </div>
           { project.item.key ? 
-          <div>
+          <div className='toc-container-body'>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } } title={ project.item.name }>{ project.item.name || '' }</h4>
             <h4><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSummaryShow: !this.state.projectSummaryShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目概述</h4>
             { project.options.permissions && project.options.permissions.length > 0 &&
@@ -278,7 +278,7 @@ export default class Sidebar extends Component {
             <h4>&nbsp;</h4><h4>&nbsp;</h4>
           </div>
           :
-          <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>请选择要查看的项目</h4> } 
+          <h4 className='toc-container-body'>请选择要查看的项目</h4> } 
         </div>
       </div>);
     }

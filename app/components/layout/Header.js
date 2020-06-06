@@ -41,7 +41,7 @@ export default class Header extends Component {
     $('#hide-bar').hide();
     $('#tack-bar').show();
     $('.toc-container').click();
-    $('.toc-container').css({ position: 'fixed', boxShadow: '0 0 .5rem #9da5ab' });
+    $('.toc-container').css({ position: 'fixed' });
     $('.toc-container').animate({ left: '0px' });
     e.nativeEvent.stopImmediatePropagation();
   }
