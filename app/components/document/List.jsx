@@ -61,10 +61,8 @@ export default class List extends Component {
 
   cancelEditRow() {
     const { cancelCreateFolder } = this.props;
-    this.setState({ 
-      editRowId: ''
-    });
     cancelCreateFolder();
+    this.setState({ editRowId: '' });
   }
 
   delNotifyClose() {

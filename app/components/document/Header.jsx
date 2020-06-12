@@ -33,6 +33,8 @@ export default class Header extends Component {
     index: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
     sort: PropTypes.func.isRequired,
+    mode: PropTypes.string.isRequired,
+    changeMode: PropTypes.func.isRequired,
     showCreateFolder: PropTypes.func.isRequired,
     createFolder: PropTypes.func.isRequired
   }
@@ -116,6 +118,8 @@ export default class Header extends Component {
       itemLoading, 
       indexLoading, 
       refresh, 
+      mode,
+      changeMode,
       showCreateFolder, 
       options, 
       query 
@@ -151,6 +155,9 @@ export default class Header extends Component {
                 }
               }) }
             </Breadcrumb>
+          </span>
+          <span style={ { float: 'right' } }>
+            <Button onClick={ ()=>{ changeMode() } }><i className={ mode == 'list' ? 'fa fa-th' : 'fa fa-list' }></i></Button>
           </span>
           <span style={ { float: 'right' } }>
             <span style={ { float: 'right', marginRight: '10px' } }>

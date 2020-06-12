@@ -1087,3 +1087,30 @@ div.filepicker {
   min-height: 60px;
   border: 2px dashed #d5d5d5;
 }
+
+.files-grid-view {
+  height: 100%;
+  position: relative;
+}
+
+.files-grid-view .file-grid-overflow {
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  top: 49px;
+  bottom: 0;
+}
+
+.files-grid-view .grid-view-container {
+  position: relative;
+  display: table;
+  left: 15px;
+}
+
+.files-grid-view .grid-view-container .grid-view-item {
+  float: left;
+  margin: 15px 15px 0 0;
+  text-align: center;
+  cursor: pointer;
+  list-style-type: none;
+}

@@ -9,6 +9,7 @@ import * as DocumentActions from 'redux/actions/DocumentActions';
 const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
+const Grids = require('./Grids');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -20,7 +21,12 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
-    this.state = { createFolderShow: false };
+    this.state = { 
+      createFolderShow: false 
+    };
+
+    this.state.mode = window.localStorage && window.localStorage.getItem('document-display-mode') || 'list';
+
     this.pid = '';
     this.directory = '0';
   }
@@ -48,6 +54,16 @@ export default class Container extends Component {
     this.setState({ createFolderShow: false });
     await this.props.actions.index(this.pid, this.directory || '0', qs.stringify(query || {}));
     return this.props.document.ecode;
+  }
+
+  changeMode() {
+    const newMode = this.state.mode == 'list' ? 'grids' : 'list';
+
+    if (window.localStorage) {
+      window.localStorage.setItem('document-display-mode', newMode);
+    }
+
+    this.setState({ mode: newMode });
   }
 
   async createFolder(values) {
@@ -113,11 +129,14 @@ export default class Container extends Component {
           directory={ this.directory }
           index={ this.index.bind(this) }
           refresh={ this.refresh.bind(this) }
+          mode={ this.state.mode }
+          changeMode={ this.changeMode.bind(this) }
           showCreateFolder={ this.showCreateFolder.bind(this) }
           sort={ this.props.actions.sort }
           query={ query }
           { ...this.props.document }/>
-        <List 
+        { this.state.mode == 'grids' ?
+        <Grids
           user={ this.props.session.user }
           project_key={ this.pid }
           directory={ this.directory }
@@ -135,6 +154,25 @@ export default class Container extends Component {
           query={ query }
           i18n={ i18n }
           { ...this.props.document }/>
+          :
+        <List
+          user={ this.props.session.user }
+          project_key={ this.pid }
+          directory={ this.directory }
+          index={ this.index.bind(this) }
+          refresh={ this.refresh.bind(this) }
+          createFolderShow={ this.state.createFolderShow }
+          cancelCreateFolder={ this.cancelCreateFolder.bind(this) }
+          createFolder={ this.createFolder.bind(this) }
+          select={ this.props.actions.select }
+          addFile={ this.props.actions.addFile }
+          update={ this.update.bind(this) }
+          copy={ this.copy.bind(this) }
+          move={ this.move.bind(this) }
+          del={ this.del.bind(this) }
+          query={ query }
+          i18n={ i18n }
+          { ...this.props.document }/> }
       </div>
     );
   }

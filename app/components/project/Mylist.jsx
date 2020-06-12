@@ -338,8 +338,8 @@ export default class List extends Component {
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
             <ButtonGroup style={ { float: 'right', marginLeft: '10px' } }>
-              <Button title='卡片模式' style={ { backgroundColor: this.state.mode == 'card' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th-large fa-lg'></i></Button>
-              <Button title='列表模式' style={ { backgroundColor: this.state.mode == 'list' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'list' }) } }><i className='fa fa-bars fa-lg'></i></Button>
+              <Button title='卡片模式' style={ { backgroundColor: this.state.mode == 'card' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th'></i></Button>
+              <Button title='列表模式' style={ { backgroundColor: this.state.mode == 'list' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'list' }) } }><i className='fa fa-list'></i></Button>
             </ButtonGroup>
             <span style={ { float: 'right', width: '90px' } }>
               <Select
