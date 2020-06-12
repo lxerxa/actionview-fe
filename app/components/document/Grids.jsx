@@ -197,7 +197,7 @@ export default class Grids extends Component {
               <div className='attachment-content'>
                 <div className='attachment-thumb'>
                   { v.thumbnails_index ?
-                    <img src={ API_BASENAME + '/project/' + project_key + '/file/' + v.thumbnails_index }/>
+                    <img src={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' }/>
                    :
                    <span style={ { fontSize: '90px', color: '#aaa' } }>
                      <i className={ getFileIconCss(v.name) }></i>
