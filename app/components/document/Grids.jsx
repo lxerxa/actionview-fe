@@ -171,22 +171,27 @@ export default class Grids extends Component {
       <div>
         <div className='files-grid-view'>
           <div className='grid-view-container'>
+            { !indexLoading && options.path && options.path.length > 1 && _.isEmpty(query) && 
             <div className='grid-view-item'>
               <div className='attachment-content'>
-                <div className='attachment-thumb'>
-                  <span style={ { fontSize: '90px', color: '#FFD300' } }>...</span> 
-                </div>
+                <Link to={ '/project/' + project_key + '/document/' + (options.path[options.path.length - 2].id !== '0' ? ('/' + options.path[options.path.length - 2].id ) : '') }>
+                  <div className='attachment-thumb'>
+                    <span style={ { fontSize: '90px', color: '#FFD300' } }>...</span> 
+                  </div>
+                </Link>
                 <div className='attachment-title-container'>
                   <div className='attachment-title'>返回上级</div>
                 </div>
               </div>
-            </div>
+            </div> }
             { _.map(directories, (v) => 
             <div className='grid-view-item'>
               <div className='attachment-content'>
-                <div className='attachment-thumb'>
-                  <span style={ { fontSize: '90px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
-                </div>
+                <Link to={ '/project/' + project_key + '/document/' + v.id }>
+                  <div className='attachment-thumb'>
+                    <span style={ { fontSize: '90px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
+                  </div>
+                </Link>
                 <div className='attachment-title-container'>
                   <div className='attachment-title'>{ v.name }</div>
                 </div>
@@ -195,14 +200,16 @@ export default class Grids extends Component {
             { _.map(files, (v) => 
             <div className='grid-view-item'>
               <div className='attachment-content'>
-                <div className='attachment-thumb'>
+                <a href={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/download' } download={ v.name }>
+                  <div className='attachment-thumb'>
                   { v.thumbnails_index ?
                     <img src={ API_BASENAME + '/project/' + project_key + '/file/' + v.thumbnails_index }/>
-                   :
-                   <span style={ { fontSize: '90px', color: '#aaa' } }>
-                     <i className={ getFileIconCss(v.name) }></i>
-                   </span> }
-                </div>
+                    :
+                    <span style={ { fontSize: '90px', color: '#aaa' } }>
+                      <i className={ getFileIconCss(v.name) }></i>
+                    </span> }
+                  </div>
+                </a>
                 <div className='attachment-title-container'>
                   <div className='attachment-title'>{ v.name }</div>
                 </div>
