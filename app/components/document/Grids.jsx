@@ -174,9 +174,9 @@ export default class Grids extends Component {
             { !indexLoading && options.path && options.path.length > 1 && _.isEmpty(query) && 
             <div className='grid-view-item'>
               <div className='attachment-content'>
-                <Link to={ '/project/' + project_key + '/document/' + (options.path[options.path.length - 2].id !== '0' ? ('/' + options.path[options.path.length - 2].id ) : '') }>
+                <Link to={ '/project/' + project_key + '/document' + (options.path[options.path.length - 2].id !== '0' ? ('/' + options.path[options.path.length - 2].id ) : '') } style={ { textDecoration: 'none' } }>
                   <div className='attachment-thumb'>
-                    <span style={ { fontSize: '90px', color: '#FFD300' } }>...</span> 
+                    <div style={ { fontSize: '90px', color: '#FFD300', marginBottom: '30px' } }>..</div> 
                   </div>
                 </Link>
                 <div className='attachment-title-container'>
