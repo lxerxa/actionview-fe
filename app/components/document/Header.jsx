@@ -28,15 +28,14 @@ export default class Header extends Component {
     options: PropTypes.object,
     collection: PropTypes.array.isRequired,
     query: PropTypes.object.isRequired,
-    itemLoading: PropTypes.func.isRequired,
-    indexLoading: PropTypes.func.isRequired,
+    itemLoading: PropTypes.bool.isRequired,
+    indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
     sort: PropTypes.func.isRequired,
     mode: PropTypes.string.isRequired,
     changeMode: PropTypes.func.isRequired,
-    showCreateFolder: PropTypes.func.isRequired,
-    createFolder: PropTypes.func.isRequired
+    showCreateFolder: PropTypes.func.isRequired
   }
 
   componentWillMount() {

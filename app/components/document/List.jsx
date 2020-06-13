@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { FormGroup, FormControl, Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import DropzoneComponent from 'react-dropzone-component';
+import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { getFileIconCss } from '../share/Funcs';
@@ -25,6 +26,8 @@ export default class List extends Component {
       moveModalShow: false,
       delNotifyShow: false, 
       operateShow: false, 
+      photoIndex: 0,
+      imgPreviewShow: false,
       hoverRowId: '', 
       editRowId: ''
     };
@@ -33,6 +36,7 @@ export default class List extends Component {
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.cancelEditRow = this.cancelEditRow.bind(this);
     this.downloadAll = this.downloadAll.bind(this);
+    this.previewImg = this.previewImg.bind(this);
   }
 
   static propTypes = {
@@ -134,6 +138,12 @@ export default class List extends Component {
     }
   }
 
+  previewImg(imgFiles, id) {
+    const { project_key } = this.props;
+    const photoIndex = _.findIndex(imgFiles, { id });
+    this.setState({ photoIndex, imgPreviewShow: true });
+  }
+
   render() {
     const { 
       i18n, 
@@ -158,7 +168,9 @@ export default class List extends Component {
     const { 
       editRowId, 
       hoverRowId, 
-      operateShow 
+      operateShow,
+      photoIndex,
+      imgPreviewShow
     } = this.state;
 
     const componentConfig = {
@@ -254,6 +266,7 @@ export default class List extends Component {
     });
 
     const files = _.reject(collection, { d: 1 });
+    const imgFiles = _.filter(files, (f) => _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) !== -1);
     const fileNum = files.length;
     for (let i = 0; i < fileNum; i++) {
       const iconCss = getFileIconCss(files[i].name);
@@ -281,9 +294,14 @@ export default class List extends Component {
         name: ( 
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
-            <a href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
-              { files[i].name }
-            </a>
+            { _.indexOf(imgFiles, { id: files[i].id }) !== -1 ?
+              <a target='_blank' href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
+                { files[i].name }
+              </a>
+              :
+              <a href='#' style={ { cursor: 'pointer' } } onClick={ (e) => { e.preventDefault(); this.previewImg(imgFiles, files[i].id); } }>
+                { files[i].name }
+              </a> }
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
               <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
@@ -334,6 +352,18 @@ export default class List extends Component {
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
+
+        { imgPreviewShow &&
+          <Lightbox
+            mainSrc={ API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[photoIndex].id }
+            nextSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
+            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+            imageTitle={ imgFiles[photoIndex].name }
+            imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
+            onCloseRequest={ () => { this.setState({ imgPreviewShow: false }) } }
+            onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+            onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
+
         <div style={ { marginTop: '15px' } }>
           <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
         </div>
