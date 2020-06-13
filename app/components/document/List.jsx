@@ -294,7 +294,7 @@ export default class List extends Component {
         name: ( 
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
-            { _.indexOf(imgFiles, { id: files[i].id }) !== -1 ?
+            { _.indexOf(imgFiles, { id: files[i].id }) === -1 ?
               <a target='_blank' href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
                 { files[i].name }
               </a>
@@ -355,11 +355,11 @@ export default class List extends Component {
 
         { imgPreviewShow &&
           <Lightbox
-            mainSrc={ API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[photoIndex].id }
-            nextSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
-            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+            mainSrc={ API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[photoIndex].id + '/download' }
+            nextSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download' }
+            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/downlaod' }
             imageTitle={ imgFiles[photoIndex].name }
-            imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
+            imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + moment.unix(imgFiles[photoIndex].uploaded_at).format('YYYY/MM/DD HH:mm') }
             onCloseRequest={ () => { this.setState({ imgPreviewShow: false }) } }
             onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
             onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
