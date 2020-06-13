@@ -1104,7 +1104,6 @@ div.filepicker {
 .files-grid-view .grid-view-container {
   position: relative;
   display: table;
-  left: 15px;
 }
 
 .files-grid-view .grid-view-container .grid-view-item {

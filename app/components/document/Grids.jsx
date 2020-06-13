@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { FormGroup, FormControl, Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import DropzoneComponent from 'react-dropzone-component';
+import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { getFileIconCss } from '../share/Funcs';
@@ -25,6 +26,8 @@ export default class Grids extends Component {
       moveModalShow: false,
       delNotifyShow: false, 
       operateShow: false, 
+      photoIndex: 0,
+      imgPreviewShow: false, 
       hoverRowId: '', 
       editRowId: ''
     };
@@ -124,6 +127,18 @@ export default class Grids extends Component {
     }
   }
 
+  clickFile(imgFiles, id) {
+    const { project_key } = this.props;
+
+    const photoIndex = _.findIndex(imgFiles, { id });
+    if (photoIndex === -1) {
+      const url = API_BASENAME + '/project/' + project_key + '/document/' + id + '/download';
+      window.open(url, '_blank');
+    } else {
+      this.setState({ photoIndex, imgPreviewShow: true });
+    }
+  }
+
   render() {
     const { 
       i18n, 
@@ -148,7 +163,9 @@ export default class Grids extends Component {
     const { 
       editRowId, 
       hoverRowId, 
-      operateShow 
+      operateShow, 
+      photoIndex,
+      imgPreviewShow
     } = this.state;
 
     const componentConfig = {
@@ -166,10 +183,15 @@ export default class Grids extends Component {
 
     const directories = _.filter(collection, { d: 1 });
     const files = _.reject(collection, { d: 1 });
+    const imgFiles = _.filter(files, (f) => _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) !== -1);
 
     return (
       <div>
         <div className='files-grid-view'>
+          { indexLoading && 
+            <div style={ { display: 'block', margin: '30px auto', textAlign: 'center' } }>
+              <img src={ img } className='loading'/>
+            </div> }
           <div className='grid-view-container'>
             { !indexLoading && options.path && options.path.length > 1 && _.isEmpty(query) && 
             <div className='grid-view-item'>
@@ -191,17 +213,16 @@ export default class Grids extends Component {
                   <div className='attachment-thumb'>
                     <span style={ { fontSize: '90px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
                   </div>
+                  <div className='attachment-title-container'>
+                    <div className='attachment-title'>{ v.name }</div>
+                  </div>
                 </Link>
-                <div className='attachment-title-container'>
-                  <div className='attachment-title'>{ v.name }</div>
-                </div>
               </div>
             </div>) }
             { _.map(files, (v) => 
             <div className='grid-view-item'>
-              <div className='attachment-content'>
-                <a href={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/download' } download={ v.name }>
-                  <div className='attachment-thumb'>
+              <div className='attachment-content' onClick={ this.clickFile.bind(this, imgFiles, v.id) }>
+                <div className='attachment-thumb'>
                   { v.thumbnails_index ?
                     <img src={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' }/>
                     :
@@ -209,7 +230,6 @@ export default class Grids extends Component {
                       <i className={ getFileIconCss(v.name) }></i>
                     </span> }
                   </div>
-                </a>
                 <div className='attachment-title-container'>
                   <div className='attachment-title'>{ v.name }</div>
                 </div>
@@ -217,6 +237,18 @@ export default class Grids extends Component {
             </div>) }
           </div>
         </div>
+
+        { imgPreviewShow &&
+          <Lightbox
+            mainSrc={ API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[photoIndex].id }
+            nextSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
+            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+            imageTitle={ imgFiles[photoIndex].name }
+            imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
+            onCloseRequest={ () => { this.setState({ imgPreviewShow: false }) } }
+            onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+            onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
+
         <div style={ { marginTop: '15px' } }>
           <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
         </div>
