@@ -457,6 +457,8 @@ table tr:hover .remove-icon{
   white-space: nowrap;
   width: 180px;
   word-wrap: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .attachment-content .remove-icon {
@@ -637,11 +639,6 @@ table tr:hover .remove-icon{
 
 .info-content {
   display: inline-block;
-}
-
-.attachment-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .user-item {
@@ -1153,6 +1150,8 @@ div.filepicker {
   white-space: nowrap;
   width: 190px;
   word-wrap: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-content .operate-icon {
