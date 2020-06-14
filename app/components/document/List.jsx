@@ -294,7 +294,7 @@ export default class List extends Component {
         name: ( 
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
-            { _.indexOf(imgFiles, { id: files[i].id }) === -1 ?
+            { _.findIndex(imgFiles, { id: files[i].id }) === -1 ?
               <a target='_blank' href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
                 { files[i].name }
               </a>
