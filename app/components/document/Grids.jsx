@@ -28,7 +28,7 @@ export default class Grids extends Component {
       operateShow: false, 
       photoIndex: 0,
       imgPreviewShow: false, 
-      hoverRowId: '', 
+      currentId: '', 
       editRowId: ''
     };
 
@@ -78,13 +78,15 @@ export default class Grids extends Component {
     select(id);
   }
 
-  async operateSelect(eventKey) {
-    const { hoverRowId } = this.state;
+  async operateSelect(eventKey, e) {
+    e.stopPropagation();
+
+    const { currentId } = this.state;
     const { select, project_key } = this.props;
-    await select(hoverRowId);
+    await select(currentId);
 
     if (eventKey === 'rename') {
-      this.setState({ editRowId: hoverRowId });
+      this.setState({ editRowId: currentId });
     } else if (eventKey === 'copy') {
       this.setState({ copyModalShow: true });
     } else if (eventKey === 'move') {
@@ -92,7 +94,7 @@ export default class Grids extends Component {
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
-      const url = API_BASENAME + '/project/' + project_key + '/document/' + hoverRowId + '/download';
+      const url = API_BASENAME + '/project/' + project_key + '/document/' + currentId + '/download';
       window.open(url, '_blank');
     }
   }
@@ -162,7 +164,7 @@ export default class Grids extends Component {
 
     const { 
       editRowId, 
-      hoverRowId, 
+      currentId, 
       operateShow, 
       photoIndex,
       imgPreviewShow
@@ -195,43 +197,72 @@ export default class Grids extends Component {
           <div className='grid-view-container'>
             { !indexLoading && options.path && options.path.length > 1 && _.isEmpty(query) && 
             <div className='grid-view-item'>
-              <div className='attachment-content'>
+              <div className='file-content'>
                 <Link to={ '/project/' + project_key + '/document' + (options.path[options.path.length - 2].id !== '0' ? ('/' + options.path[options.path.length - 2].id ) : '') } style={ { textDecoration: 'none' } }>
-                  <div className='attachment-thumb'>
-                    <div style={ { fontSize: '90px', color: '#FFD300', marginBottom: '30px' } }>..</div> 
+                  <div className='file-thumb'>
+                    <div style={ { fontSize: '80px', color: '#FFD300', marginBottom: '30px' } }>..</div> 
+                  </div>
+                  <div className='file-title-container'>
+                    <div className='file-title'>返回上级</div>
                   </div>
                 </Link>
-                <div className='attachment-title-container'>
-                  <div className='attachment-title'>返回上级</div>
-                </div>
               </div>
             </div> }
             { _.map(directories, (v) => 
-            <div className='grid-view-item'>
-              <div className='attachment-content'>
+            <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
+              <div className='file-content'>
+                { this.state.currentId == v.id &&
+                <div className='operate-icon'>
+                  <DropdownButton
+                    bsStyle='link'
+                    style={ { textDecoration: 'blink', color: '#999' } }
+                    key={ v.id }
+                    title=<i className='fa fa-cog'></i>
+                    onSelect={ this.operateSelect.bind(this) } >
+                    <MenuItem eventKey='download'>下载</MenuItem>
+                    { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
+                    { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
+                    { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+                  </DropdownButton>
+                </div> }
                 <Link to={ '/project/' + project_key + '/document/' + v.id }>
-                  <div className='attachment-thumb'>
-                    <span style={ { fontSize: '90px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
+                  <div className='file-thumb'>
+                    <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
                   </div>
-                  <div className='attachment-title-container'>
-                    <div className='attachment-title'>{ v.name }</div>
+                  <div className='file-title-container'>
+                    <div className='file-title'>{ v.name }</div>
                   </div>
                 </Link>
               </div>
             </div>) }
             { _.map(files, (v) => 
-            <div className='grid-view-item'>
-              <div className='attachment-content' onClick={ this.clickFile.bind(this, imgFiles, v.id) }>
-                <div className='attachment-thumb'>
+            <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
+              <div className='file-content' onClick={ this.clickFile.bind(this, imgFiles, v.id) }>
+                { this.state.currentId == v.id &&
+                <div className='operate-icon'>
+                  <DropdownButton
+                    bsStyle='link'
+                    style={ { textDecoration: 'blink', color: '#999' } }
+                    key={ v.id }
+                    title=<i className='fa fa-cog'></i> 
+                    onClick={ (e) => { e.stopPropagation(); } }
+                    onSelect={ this.operateSelect.bind(this) } >
+                    <MenuItem eventKey='download'>下载</MenuItem>
+                    { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='rename'>重命名</MenuItem> }
+                    { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
+                    { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }
+                  </DropdownButton>
+                </div> }
+                <div className='file-thumb'>
                   { v.thumbnails_index ?
                     <img src={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' }/>
                     :
-                    <span style={ { fontSize: '90px', color: '#aaa' } }>
+                    <span style={ { fontSize: '80px', color: '#aaa' } }>
                       <i className={ getFileIconCss(v.name) }></i>
                     </span> }
                   </div>
-                <div className='attachment-title-container'>
-                  <div className='attachment-title'>{ v.name }</div>
+                <div className='file-title-container'>
+                  <div className='file-title'>{ v.name }</div>
                 </div>
               </div>
             </div>) }

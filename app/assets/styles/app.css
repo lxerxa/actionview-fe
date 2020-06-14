@@ -1111,5 +1111,58 @@ div.filepicker {
   margin: 15px 15px 0 0;
   text-align: center;
   cursor: pointer;
-  list-style-type: none;
+  position: relative;
+}
+
+.file-content {
+  border: 1px solid #f0f0f0;
+  height: 223px;
+  margin: 0 4px 4px 0;
+  padding: 6px 2px;
+  width: 200px;
+  text-align: center;
+}
+
+.file-content:hover {
+  background-color: #f0f0f0
+}
+
+.file-thumb {
+  cursor: pointer;
+  float: none;
+  height: 190px;
+  margin: 0 auto;
+  width: 190px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.file-title-container {
+  clear: left;
+  display: block;
+  height: 20px;
+  overflow: hidden;
+  width: 200px;
+}
+
+.file-title {
+  display: block;
+  float: left;
+  height: 21px;
+  white-space: nowrap;
+  width: 190px;
+  word-wrap: normal;
+}
+
+.file-content .operate-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0 !important;
+}
+
+.file-content:hover .operate-icon{
+  opacity: 1 !important;
+  cursor: pointer;
 }
