@@ -219,64 +219,83 @@ export default class Grids extends Component {
                 cancel={ this.cancelEditCard }
                 mode='createFolder'/> }
 
-            { _.map(directories, (v) => 
-            <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
-              <div className='file-content'>
-                { this.state.currentId == v.id &&
-                <div className='operate-icon'>
-                  <DropdownButton
-                    bsStyle='link'
-                    style={ { textDecoration: 'blink', color: '#999' } }
-                    key={ v.id }
-                    title=<i className='fa fa-cog'></i>
-                    onSelect={ this.operateSelect.bind(this) } >
-                    <MenuItem eventKey='download'>下载</MenuItem>
-                    { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
-                    { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
-                    { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
-                  </DropdownButton>
-                </div> }
-                <Link to={ '/project/' + project_key + '/document/' + v.id }>
+            { _.map(directories, (v) => this.editRowId == v.id ?
+              <EditCard
+                i18n={ i18n }
+                loading={ itemLoading }
+                data={ selectedItem }
+                collection={ collection }
+                edit={ update }
+                cancel={ this.cancelEditCard }
+                mode='editFolder' />
+              :
+              <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
+                <div className='file-content'>
+                  { this.state.currentId == v.id &&
+                  <div className='operate-icon'>
+                    <DropdownButton
+                      bsStyle='link'
+                      style={ { textDecoration: 'blink', color: '#999' } }
+                      key={ v.id }
+                      title=<i className='fa fa-cog'></i>
+                      onSelect={ this.operateSelect.bind(this) } >
+                      <MenuItem eventKey='download'>下载</MenuItem>
+                      { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+                    </DropdownButton>
+                  </div> }
+                  <Link to={ '/project/' + project_key + '/document/' + v.id }>
+                    <div className='file-thumb'>
+                      <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
+                    </div>
+                    <div className='file-title-container'>
+                      <div className='file-title'>{ v.name }</div>
+                    </div>
+                  </Link>
+                </div>
+              </div>) }
+            { _.map(files, (v) => this.editRowId == v.id ?
+              <EditCard
+                i18n={ i18n }
+                loading={ itemLoading }
+                data={ selectedItem }
+                collection={ collection }
+                edit={ update }
+                cancel={ this.cancelEditCard }
+                mode='editFile'
+                fileIconCss={ getFileIconCss(v.name) }/>
+              :
+              <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
+                <div className='file-content' onClick={ this.clickFile.bind(this, imgFiles, v.id) }>
+                  { this.state.currentId == v.id &&
+                  <div className='operate-icon'>
+                    <DropdownButton
+                      bsStyle='link'
+                      style={ { textDecoration: 'blink', color: '#999' } }
+                      key={ v.id }
+                      title=<i className='fa fa-cog'></i> 
+                      onClick={ (e) => { e.stopPropagation(); } }
+                      onSelect={ this.operateSelect.bind(this) } >
+                      <MenuItem eventKey='download'>下载</MenuItem>
+                      { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='rename'>重命名</MenuItem> }
+                      { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
+                      { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }
+                    </DropdownButton>
+                  </div> }
                   <div className='file-thumb'>
-                    <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
-                  </div>
+                    { v.thumbnails_index ?
+                      <img src={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' }/>
+                      :
+                      <span style={ { fontSize: '80px', color: '#aaa' } }>
+                        <i className={ getFileIconCss(v.name) }></i>
+                      </span> }
+                    </div>
                   <div className='file-title-container'>
                     <div className='file-title'>{ v.name }</div>
                   </div>
-                </Link>
-              </div>
-            </div>) }
-            { _.map(files, (v) => 
-            <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
-              <div className='file-content' onClick={ this.clickFile.bind(this, imgFiles, v.id) }>
-                { this.state.currentId == v.id &&
-                <div className='operate-icon'>
-                  <DropdownButton
-                    bsStyle='link'
-                    style={ { textDecoration: 'blink', color: '#999' } }
-                    key={ v.id }
-                    title=<i className='fa fa-cog'></i> 
-                    onClick={ (e) => { e.stopPropagation(); } }
-                    onSelect={ this.operateSelect.bind(this) } >
-                    <MenuItem eventKey='download'>下载</MenuItem>
-                    { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='rename'>重命名</MenuItem> }
-                    { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
-                    { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }
-                  </DropdownButton>
-                </div> }
-                <div className='file-thumb'>
-                  { v.thumbnails_index ?
-                    <img src={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' }/>
-                    :
-                    <span style={ { fontSize: '80px', color: '#aaa' } }>
-                      <i className={ getFileIconCss(v.name) }></i>
-                    </span> }
-                  </div>
-                <div className='file-title-container'>
-                  <div className='file-title'>{ v.name }</div>
                 </div>
-              </div>
-            </div>) }
+              </div>) }
           </div>
         </div>
 
