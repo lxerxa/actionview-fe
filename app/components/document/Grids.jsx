@@ -219,7 +219,7 @@ export default class Grids extends Component {
                 cancel={ this.cancelEditCard }
                 mode='createFolder'/> }
 
-            { _.map(directories, (v) => this.editRowId == v.id ?
+            { _.map(directories, (v) => this.state.editRowId == v.id ?
               <EditCard
                 i18n={ i18n }
                 loading={ itemLoading }
@@ -238,6 +238,7 @@ export default class Grids extends Component {
                       style={ { textDecoration: 'blink', color: '#999' } }
                       key={ v.id }
                       title=<i className='fa fa-cog'></i>
+                      onClick={ this.cancelEditCard }
                       onSelect={ this.operateSelect.bind(this) } >
                       <MenuItem eventKey='download'>下载</MenuItem>
                       { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
@@ -255,7 +256,7 @@ export default class Grids extends Component {
                   </Link>
                 </div>
               </div>) }
-            { _.map(files, (v) => this.editRowId == v.id ?
+            { _.map(files, (v) => this.state.editRowId == v.id ?
               <EditCard
                 i18n={ i18n }
                 loading={ itemLoading }
@@ -275,7 +276,7 @@ export default class Grids extends Component {
                       style={ { textDecoration: 'blink', color: '#999' } }
                       key={ v.id }
                       title=<i className='fa fa-cog'></i> 
-                      onClick={ (e) => { e.stopPropagation(); } }
+                      onClick={ (e) => { e.stopPropagation(); this.cancelEditCard(); } }
                       onSelect={ this.operateSelect.bind(this) } >
                       <MenuItem eventKey='download'>下载</MenuItem>
                       { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='rename'>重命名</MenuItem> }
