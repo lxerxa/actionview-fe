@@ -13,7 +13,7 @@ const moment = require('moment');
 const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const MoveModal = require('./MoveModal');
-const EditRow = require('./EditRow');
+const EditCard = require('./EditCard');
 const img = require('../../assets/images/loading.gif');
 
 const { API_BASENAME } = process.env;
@@ -34,7 +34,7 @@ export default class Grids extends Component {
 
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
-    this.cancelEditRow = this.cancelEditRow.bind(this);
+    this.cancelEditCard = this.cancelEditCard.bind(this);
     this.downloadAll = this.downloadAll.bind(this);
   }
 
@@ -62,7 +62,7 @@ export default class Grids extends Component {
     del: PropTypes.func.isRequired
   }
 
-  cancelEditRow() {
+  cancelEditCard() {
     const { cancelCreateFolder } = this.props;
     cancelCreateFolder();
     this.setState({ editRowId: '' });
@@ -208,6 +208,17 @@ export default class Grids extends Component {
                 </Link>
               </div>
             </div> }
+
+            { createFolderShow &&
+              <EditCard
+                i18n={ i18n }
+                loading={ itemLoading }
+                data={ {} }
+                createFolder={ createFolder }
+                collection={ collection }
+                cancel={ this.cancelEditCard }
+                mode='createFolder'/> }
+
             { _.map(directories, (v) => 
             <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
               <div className='file-content'>

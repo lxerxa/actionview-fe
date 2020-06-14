@@ -1127,7 +1127,7 @@ div.filepicker {
 .file-thumb {
   cursor: pointer;
   float: none;
-  height: 190px;
+  height: 180px;
   margin: 0 auto;
   width: 190px;
   display: table-cell;
@@ -1138,7 +1138,7 @@ div.filepicker {
 .file-title-container {
   clear: left;
   display: block;
-  height: 20px;
+  height: 33px;
   overflow: hidden;
   width: 200px;
 }
