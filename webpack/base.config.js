@@ -34,6 +34,7 @@ export default {
     externals: {
       'mermaid': 'window.mermaid',
       'SimpleMDE': 'window.SimpleMDE',
+      'inlineAttachment': 'window.inlineAttachment',
       '$': 'window.$'
     },
     resolve: {
