@@ -265,6 +265,7 @@ export default class Grids extends Component {
                 edit={ update }
                 cancel={ this.cancelEditCard }
                 mode='editFile'
+                imgsrc={ v.thumbnails_index ? API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' : '' }
                 fileIconCss={ getFileIconCss(v.name) }/>
               :
               <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>

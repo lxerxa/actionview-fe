@@ -18,6 +18,7 @@ export default class EditCard extends Component {
     i18n: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
+    imgsrc: PropTypes.string,
     fileIconCss: PropTypes.string,
     cancel: PropTypes.func.isRequired,
     createFolder: PropTypes.func,
@@ -93,19 +94,22 @@ export default class EditCard extends Component {
   }
 
   render() {
-    const { data, mode, fileIconCss, loading } = this.props;
+    const { data, mode, imgsrc='', fileIconCss, loading } = this.props;
 
     return (
       <div className='grid-view-item'>
         <div className='file-content'>
           { (mode === 'createFolder' || mode === 'editFolder') &&
-          <div className='file-thumb'>
-            <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
-          </div> }
+            <div className='file-thumb'>
+              <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
+            </div> }
           { mode === 'editFile' && 
-          <div className='file-thumb'>
-            <span style={ { fontSize: '80px', color: '#aaa' } }><i className={ fileIconCss }></i></span>
-          </div> }
+            <div className='file-thumb'>
+              { imgsrc ?
+                <img src={ imgsrc } />
+                :
+                <span style={ { fontSize: '80px', color: '#aaa' } }><i className={ fileIconCss }></i></span> }
+            </div> }
           <div className='file-title-container'>
             <FormControl 
               type='text' 
