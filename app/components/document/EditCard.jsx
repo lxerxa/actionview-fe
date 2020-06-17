@@ -106,7 +106,7 @@ export default class EditCard extends Component {
           <div className='file-thumb'>
             <span style={ { fontSize: '80px', color: '#aaa' } }><i className={ fileIconCss }></i></span>
           </div> }
-          <div className='file-title-container' style={ { marginTop: '-5px' } }>
+          <div className='file-title-container'>
             <FormControl 
               type='text' 
               id='input_nm' 

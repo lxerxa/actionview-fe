@@ -1113,7 +1113,7 @@ div.filepicker {
 
 .file-content {
   border: 1px solid #f0f0f0;
-  height: 223px;
+  height: 232px;
   margin: 0 4px 4px 0;
   padding: 6px 2px;
   width: 200px;
@@ -1127,7 +1127,7 @@ div.filepicker {
 .file-thumb {
   cursor: pointer;
   float: none;
-  height: 185px;
+  height: 190px;
   margin: 0 auto;
   width: 190px;
   display: table-cell;
@@ -1136,14 +1136,16 @@ div.filepicker {
 }
 
 .file-title-container {
+  padding-top: 2px;
   clear: left;
   display: block;
-  height: 33px;
+  height: 40px;
   overflow: hidden;
   width: 200px;
 }
 
 .file-title {
+  margin-top: 3px;
   display: block;
   float: left;
   height: 21px;
