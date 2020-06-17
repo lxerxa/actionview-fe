@@ -226,6 +226,7 @@ export default class Container extends Component {
     } else if (this.mode == 'new') {
       return (<Create
         i18n={ i18n }
+        project_key={ this.pid }
         setRouterNotifyFlg={ (v) => { this.routerNotifyFlg = v; } }
         goto={ this.goto.bind(this) }
         isHome={ query.home }
@@ -235,6 +236,7 @@ export default class Container extends Component {
     } else if (this.mode == 'edit') {
       return (<Edit
         i18n={ i18n }
+        project_key={ this.pid }
         setRouterNotifyFlg={ (v) => { this.routerNotifyFlg = v; } }
         goto={ this.goto.bind(this) }
         get={ this.show.bind(this) }

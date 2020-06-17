@@ -3,10 +3,14 @@ import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, 
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
+const inlineAttachment = require('inlineAttachment');
 const SimpleMDE = require('SimpleMDE');
 const img = require('../../assets/images/loading.gif');
 
 let simplemde = {};
+
+const { API_BASENAME } = process.env;
 
 export default class Create extends Component {
   constructor(props) {
@@ -18,6 +22,7 @@ export default class Create extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    project_key: PropTypes.string.isRequired,
     path: PropTypes.array.isRequired,
     isHome: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -57,6 +62,8 @@ export default class Create extends Component {
   }
 
   componentDidMount() {
+    const { project_key } = this.props;
+
     const fileeditDOM = document.getElementById('fileedit');
     if (fileeditDOM) {
       simplemde = new SimpleMDE({ 
@@ -66,7 +73,8 @@ export default class Create extends Component {
         showIcons: ['table'], 
         hideIcons: ['side-by-side', 'fullscreen'], 
         spellChecker: false, 
-        status: false });
+        status: false 
+      });
 
       const self = this;
       simplemde.codemirror.on('change', function() {
@@ -74,6 +82,15 @@ export default class Create extends Component {
         if (!loading) {
           setRouterNotifyFlg(simplemde.value() && true);
         }
+      });
+
+      $(function() {
+        const inlineAttachmentConfig = {
+          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          uploadUrl: API_BASENAME + '/project/' + project_key + '/file'
+        };
+
+        inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig); 
       });
     }
   }
@@ -101,7 +118,7 @@ export default class Create extends Component {
           </InputGroup>
         </FormGroup>
         <FormGroup>
-          <textarea name='field' id='fileedit'></textarea>
+          <textarea name='field' id='fileedit' value={ this.state.values }></textarea>
         </FormGroup>
         <div style={ { float: 'right', marginTop: '-5px' } }>
           <span style={ { marginRight: '20px', color: 'red' } }>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
