@@ -22,6 +22,7 @@ export default class Edit extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    project_key: PropTypes.string.isRequired,
     path: PropTypes.array.isRequired,
     wid: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
