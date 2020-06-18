@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const $ = require('$');
-const inlineAttachment = require('inlineAttachment');
+const inlineAttachment = require('inlineAttachment2');
 const SimpleMDE = require('SimpleMDE');
 const img = require('../../assets/images/loading.gif');
 
@@ -118,7 +118,7 @@ export default class Create extends Component {
           </InputGroup>
         </FormGroup>
         <FormGroup>
-          <textarea name='field' id='fileedit' value={ this.state.values }></textarea>
+          <textarea name='field' id='fileedit'></textarea>
         </FormGroup>
         <div style={ { float: 'right', marginTop: '-5px' } }>
           <span style={ { marginRight: '20px', color: 'red' } }>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

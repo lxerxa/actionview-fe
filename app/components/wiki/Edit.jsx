@@ -3,10 +3,14 @@ import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, 
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
+const inlineAttachment = require('inlineAttachment2');
 const SimpleMDE = require('SimpleMDE');
 const img = require('../../assets/images/loading.gif');
 
 let simplemde = null;
+
+const { API_BASENAME } = process.env;
 
 export default class Edit extends Component {
   constructor(props) {
@@ -77,9 +81,18 @@ export default class Edit extends Component {
   }
 
   componentDidMount() {
+    const { project_key } = this.props;
+
     const fileeditDOM = document.getElementById('fileedit');
     if (fileeditDOM) {
-      simplemde = new SimpleMDE({ element: fileeditDOM, autoDownloadFontAwesome: false, showIcons: ['table'], hideIcons: ['side-by-side', 'fullscreen'], spellChecker: false, status: false });
+      simplemde = new SimpleMDE({ 
+        element: fileeditDOM, 
+        autoDownloadFontAwesome: false, 
+        showIcons: ['table'], 
+        hideIcons: ['side-by-side', 'fullscreen'], 
+        spellChecker: false, 
+        status: false 
+      });
 
       const self = this;
       simplemde.codemirror.on('change', function() {
@@ -88,6 +101,15 @@ export default class Edit extends Component {
           setRouterNotifyFlg(simplemde.value() != data.contents && true);
           self.setState({ data }); // for render
         }
+      });
+
+      $(function() {
+        const inlineAttachmentConfig = {
+          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          uploadUrl: API_BASENAME + '/project/' + project_key + '/file'
+        };
+
+        inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig);
       });
     }
   }
