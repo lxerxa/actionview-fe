@@ -10,6 +10,39 @@ const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
 const Grids = require('./Grids');
+const DirectoryTree = require('./DirectoryTree');
+
+const testdata = {
+  name: 'root',
+  toggled: true,
+  children: [
+    {
+      name: '根目录',
+      active: true,
+      children: [
+        { name: 'child1' },
+        { name: 'child2' }
+      ]
+    },
+    {
+      name: '测试目录一',
+      loading: true,
+      children: []
+    },
+    {
+      name: '会议纪要',
+      children: [
+        {
+          name: '各种配置',
+          children: [
+            { name: 'nested child 1' },
+            { name: 'nested child 2' }
+          ]
+        }
+      ]
+    }
+  ]
+};
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -123,56 +156,61 @@ export default class Container extends Component {
 
     return (
       <div>
-        <Header
-          user={ this.props.session.user }
-          project_key={ this.pid }
-          directory={ this.directory }
-          index={ this.index.bind(this) }
-          refresh={ this.refresh.bind(this) }
-          mode={ this.state.mode }
-          changeMode={ this.changeMode.bind(this) }
-          showCreateFolder={ this.showCreateFolder.bind(this) }
-          sort={ this.props.actions.sort }
-          query={ query }
-          { ...this.props.document }/>
-        { this.state.mode == 'grids' ?
-        <Grids
-          user={ this.props.session.user }
-          project_key={ this.pid }
-          directory={ this.directory }
-          index={ this.index.bind(this) } 
-          refresh={ this.refresh.bind(this) } 
-          createFolderShow={ this.state.createFolderShow } 
-          cancelCreateFolder={ this.cancelCreateFolder.bind(this) }
-          createFolder={ this.createFolder.bind(this) } 
-          select={ this.props.actions.select } 
-          addFile={ this.props.actions.addFile } 
-          update={ this.update.bind(this) } 
-          copy={ this.copy.bind(this) } 
-          move={ this.move.bind(this) } 
-          del={ this.del.bind(this) } 
-          query={ query }
-          i18n={ i18n }
-          { ...this.props.document }/>
-          :
-        <List
-          user={ this.props.session.user }
-          project_key={ this.pid }
-          directory={ this.directory }
-          index={ this.index.bind(this) }
-          refresh={ this.refresh.bind(this) }
-          createFolderShow={ this.state.createFolderShow }
-          cancelCreateFolder={ this.cancelCreateFolder.bind(this) }
-          createFolder={ this.createFolder.bind(this) }
-          select={ this.props.actions.select }
-          addFile={ this.props.actions.addFile }
-          update={ this.update.bind(this) }
-          copy={ this.copy.bind(this) }
-          move={ this.move.bind(this) }
-          del={ this.del.bind(this) }
-          query={ query }
-          i18n={ i18n }
-          { ...this.props.document }/> }
+        <div style={ { position: 'absolute', width: '250px', borderRight: '1px solid #dedede', height: 'calc(100% - 50px)', overflow: 'scroll', marginLeft: '-5px' } }>
+          <DirectoryTree data={ testdata }/>
+        </div>
+        <div style={ { marginLeft: '260px' } }>
+          <Header
+            user={ this.props.session.user }
+            project_key={ this.pid }
+            directory={ this.directory }
+            index={ this.index.bind(this) }
+            refresh={ this.refresh.bind(this) }
+            mode={ this.state.mode }
+            changeMode={ this.changeMode.bind(this) }
+            showCreateFolder={ this.showCreateFolder.bind(this) }
+            sort={ this.props.actions.sort }
+            query={ query }
+            { ...this.props.document }/>
+          { this.state.mode == 'grids' ?
+          <Grids
+            user={ this.props.session.user }
+            project_key={ this.pid }
+            directory={ this.directory }
+            index={ this.index.bind(this) } 
+            refresh={ this.refresh.bind(this) } 
+            createFolderShow={ this.state.createFolderShow } 
+            cancelCreateFolder={ this.cancelCreateFolder.bind(this) }
+            createFolder={ this.createFolder.bind(this) } 
+            select={ this.props.actions.select } 
+            addFile={ this.props.actions.addFile } 
+            update={ this.update.bind(this) } 
+            copy={ this.copy.bind(this) } 
+            move={ this.move.bind(this) } 
+            del={ this.del.bind(this) } 
+            query={ query }
+            i18n={ i18n }
+            { ...this.props.document }/>
+            :
+          <List
+            user={ this.props.session.user }
+            project_key={ this.pid }
+            directory={ this.directory }
+            index={ this.index.bind(this) }
+            refresh={ this.refresh.bind(this) }
+            createFolderShow={ this.state.createFolderShow }
+            cancelCreateFolder={ this.cancelCreateFolder.bind(this) }
+            createFolder={ this.createFolder.bind(this) }
+            select={ this.props.actions.select }
+            addFile={ this.props.actions.addFile }
+            update={ this.update.bind(this) }
+            copy={ this.copy.bind(this) }
+            move={ this.move.bind(this) }
+            del={ this.del.bind(this) }
+            query={ query }
+            i18n={ i18n }
+            { ...this.props.document }/> }
+        </div>
       </div>
     );
   }
