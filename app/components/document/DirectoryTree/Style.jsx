@@ -17,6 +17,7 @@ exports.default = {
         position: 'relative',
         padding: '0px 5px',
         display: 'block',
+        minWidth: '100%',
         width: 'fit-content',
         whiteSpace: 'nowrap'
       },

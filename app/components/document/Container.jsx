@@ -12,38 +12,6 @@ const List = require('./List');
 const Grids = require('./Grids');
 const DirectoryTree = require('./DirectoryTree');
 
-const testdata = {
-  name: 'root',
-  toggled: true,
-  children: [
-    {
-      name: '根目录',
-      active: true,
-      children: [
-        { name: 'child1' },
-        { name: 'child2' }
-      ]
-    },
-    {
-      name: '测试目录一',
-      loading: true,
-      children: []
-    },
-    {
-      name: '会议纪要',
-      children: [
-        {
-          name: '各种配置',
-          children: [
-            { name: 'nested child 1' },
-            { name: 'nested child 2' }
-          ]
-        }
-      ]
-    }
-  ]
-};
-
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(DocumentActions, dispatch)
@@ -76,6 +44,11 @@ export default class Container extends Component {
     session: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     document: PropTypes.object.isRequired
+  }
+
+  goto(directory) {
+    const pathname = '/project/' + this.pid + '/document' + (directory != '0' ? ('/' + directory) : '');
+    this.context.router.push({ pathname });
   }
 
   refresh(query) {
@@ -133,6 +106,18 @@ export default class Container extends Component {
     return this.props.document.ecode;
   }
 
+  async getDirTree() {
+    const { actions } = this.props;
+    await actions.getDirTree(this.pid, this.directory);
+    return this.props.document.ecode;
+  }
+
+  async getDirChildren(dir) {
+    const { actions } = this.props;
+    await actions.getDirChildren(this.pid, dir);
+    return this.props.document.ecode;
+  }
+
   componentWillMount() {
     const { params: { key, id } } = this.props;
     this.props.actions.getOptions(key);
@@ -156,8 +141,15 @@ export default class Container extends Component {
 
     return (
       <div>
-        <div style={ { position: 'absolute', width: '250px', borderRight: '1px solid #dedede', height: 'calc(100% - 50px)', overflow: 'scroll', marginLeft: '-5px' } }>
-          <DirectoryTree data={ testdata }/>
+        <div style={ { position: 'absolute', width: '250px', borderRight: '1px solid #dedede', height: 'calc(100% - 65px)', overflow: 'scroll', marginLeft: '-5px' } }>
+          <DirectoryTree 
+            directory={ this.directory }
+            goto={ this.goto.bind(this) }
+            childLoading={ this.props.document.childLoading }
+            treeLoading={ this.props.document.treeLoading }
+            data={ this.props.document.tree }
+            getDirTree={ this.getDirTree.bind(this) }
+            getDirChildren={ this.getDirChildren.bind(this) }/>
         </div>
         <div style={ { marginLeft: '260px' } }>
           <Header

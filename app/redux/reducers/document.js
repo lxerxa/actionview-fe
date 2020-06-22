@@ -3,6 +3,9 @@ import _ from 'lodash';
 
 const initialState = { 
   ecode: 0, 
+  childrenLoading: false,
+  treeLoading: false,
+  tree: {},
   collection: [], 
   optionsLoading: false, 
   indexLoading: false, 
@@ -33,6 +36,98 @@ function sort(collection, sortkey='') {
       return (b.d || 0) - (a.d || 0);
     }
   });
+}
+
+function arrangeTree(data) {
+  if (data.children && data.children.length > 0) {
+    _.forEach(data.children, (v) => {
+      arrangeTree(v);
+    });
+    data.children.sort((a, b) => a.name.localeCompare(b.name));
+  } else {
+    data.children = [];
+  }
+}
+
+function findNode(tree, id) {
+  if (tree.id == id) {
+    return tree;
+  }
+
+  const childNum = tree.children ? tree.children.length : 0;
+  for (let i = 0; i < childNum; i++) {
+    const node = findNode(tree.children[i], id);
+    if (node !== false) {
+      return node;
+    }
+  }
+  return false;
+}
+
+function addChildren(tree, parentid, children) {
+  const parentNode = findNode(tree, parentid);
+  if (parentNode === false) {
+    return;
+  }
+
+  parentNode.loading = false;
+
+  if (!children || children.length === 0) {
+    parentNode.children = undefined;
+  } else {
+    parentNode.children = _.map(children, (v) => { return { ...v, children: [] } });
+  }
+  parentNode.children.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function addNode(tree, parentId, node) {
+  const parentNode = findNode(tree, parentId);
+  // 目录树还没展开改节点
+  if (parentNode === false || (parentNode.childern && parentNode.childern.length === 0)) {
+    return;
+  }
+
+  if (!parentNode.children) {
+    parentNode.children = [];
+  }
+  parentNode.children.push(node);
+  parentNode.children.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function updNode(tree, parentId, node) {
+  const parentNode = findNode(tree, parentId);
+  if (parentNode === false || !parentNode.children || parentNode.children.length <= 0) {
+    return;
+  }
+
+  const ind = _.findIndex(parentNode.children, { id: node.id });
+  if (ind !== -1) {
+    parentNode.children[ind].name = node.name;
+    parentNode.children.sort((a, b) => a.name.localeCompare(b.name));
+  }
+}
+
+function delNode(tree, parentId, nodeId) {
+  const parentNode = findNode(tree, parentId);
+  if (parentNode === false || !parentNode.children || parentNode.children.length <= 0) {
+    return;
+  }
+
+  const ind = _.findIndex(parentNode.children, { id: nodeId });
+  if (ind !== -1) {
+    parentNode.children.splice(ind, 1);
+  }
+}
+
+function copyNode() {
+}
+
+function moveNode(tree, nodeId, srcId, destId) {
+  const node = findNode(tree, nodeId);
+  if (node !== false) {
+    delNode(tree, srcId, nodeId);
+    addNode(tree, destId, node)
+  }
 }
 
 export default function document(state = initialState, action) {
@@ -69,6 +164,7 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_CREATE_FOLDER_SUCCESS:
       if ( action.result.ecode === 0 ) { 
         state.collection.unshift(action.result.data);
+        addNode(state.tree, _.pick(action.result.data, [ 'id', 'name' ]));
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
@@ -83,11 +179,18 @@ export default function document(state = initialState, action) {
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
         state.collection[ind] = action.result.data;
+        if (action.result.data.d === 1) {
+          updNode(state.tree, action.result.data.parent, _.pick(action.result.data, [ 'id', 'name' ]));
+        }
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
     case t.DOCUMENT_DELETE_SUCCESS:
       if (action.result.ecode === 0) {
+        const delObj = _.find(state.collection, { id: action.id });
+        if (delObj && delObj.d === 1) {
+          delNode(state.tree, delObj.parent, delObj.id);
+        }
         state.collection = _.reject(state.collection, { id: action.id });
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
@@ -103,11 +206,19 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_COPY_SUCCESS:
       if ( action.result.ecode === 0 && action.isSamePath ) {
         state.collection.push(action.result.data);
+        const copyObj = _.find(state.collection, { id: action.result.data.id });
+        if (copyObj && copyObj.d === 1) {
+          copyNode(state.tree, copyObj.id, action.result.data.parent);
+        }
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.DOCUMENT_MOVE_SUCCESS:
       if (action.result.ecode === 0) {
+        const moveObj = _.find(state.collection, { id: action.result.data.id });
+        if (moveObj && moveObj.d === 1) {
+          moveNode(state.tree, moveObj.id, action.result.data.parent);
+        }
         state.collection = _.reject(state.collection, { id: action.result.data.id });
       }
       return { ...state, loading: false, ecode: action.result.ecode };
@@ -115,6 +226,35 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_COPY_FAIL:
     case t.DOCUMENT_MOVE_FAIL:
       return { ...state, loading: false, error: action.error };
+
+    case t.DOCUMENT_DIRTREE_GET:
+      return { ...state, treeLoading: true };
+
+    case t.DOCUMENT_DIRTREE_GET_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.tree = action.result.data;
+        arrangeTree(state.tree)
+      }
+      return { ...state, treeLoading: false, ecode: action.result.ecode };
+
+    case t.DOCUMENT_DIRTREE_GET_FAIL:
+      return { ...state, treeLoading: false, error: action.error };
+
+    case t.DOCUMENT_DIRCHILDREN_GET:
+      const node = findNode(state.tree, action.parentid);
+      node.loading = true;
+      return { ...state, childrenLoading: true };
+
+    case t.DOCUMENT_DIRCHILDREN_GET_SUCCESS:
+      if (action.result.ecode === 0) {
+        addChildren(state.tree, action.parentid, action.result.data);
+      }
+      return { ...state, childrenLoading: false, ecode: action.result.ecode };
+
+    case t.DOCUMENT_DIRCHILDREN_GET_FAIL:
+      const node2 = findNode(state.tree, action.parentid);
+      node2.loading = false;
+      return { ...state, childrenLoading: false, error: action.error };
 
     case t.DOCUMENT_SELECT:
       const el = _.find(state.collection, { id: action.id });

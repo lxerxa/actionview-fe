@@ -1133,6 +1133,56 @@ export default function(router) {
     const results={ecode: 0, data:[{ name: '设计文档', id: '5555', d:1 }, {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '王五' }, uploaded_at: 1533636589, size: 123, parent: '0', index: '1111', versions: []}, {name: 'bbbb.docx', id: '2222', uploader: { id: '1111', name: '王五' }, uploaded_at: 1533636588, size: 10240, parent: '0', index: '2222', versions: []}, {name: 'cccc.xlsx', id: '3333', uploader: { id: '1111', name: '王五' }, uploaded_at: 1533636587, size: 2346111, parent: '0', index: '1111', versions: []}, {name: 'eeee.jpg', id: '4444', uploader: { id: '2222', name: '王老师' }, uploaded_at: 1533636586, size: 1233, parent: '1111', index: '1111', versions: []}], options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
     return res.status(200).send(results);
   });
+
+  router.get('/project/:key/document/:id/dirs', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+
+    const results = { ecode: 0, data: [{id: '111111', name: '111111'}, {id: '222222', name: '222222'}] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/document/dirtree', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+
+const testdata = {
+  name: '根目录',
+  id: '0',
+  toggled: true,
+  children: [
+    {
+      id: '2222',
+      name: '测试目录二',
+      children: [
+        { name: 'child1', id: '11111' },
+        { name: 'child2', id: '22222' }
+      ]
+    },
+    {
+      name: '测试目录一',
+      id: '1111',
+      children: []
+    },
+    {
+      id: '3333',
+      name: '会议纪要',
+      children: [
+        {
+          name: '各种配置',
+          children: [
+            { name: 'nested child 1', id: '33333' },
+            { name: 'nested child 2', id: '44444' }
+          ]
+        }
+      ]
+    }
+  ]
+};
+    const results = {ecode: 0, data: testdata};
+
+    return res.status(200).send(results);
+  });
   /******************document*****************/
 
   /******************wiki*****************/

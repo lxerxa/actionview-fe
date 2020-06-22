@@ -62,3 +62,18 @@ export function addFile(file) {
 export function sort(key) {
   return { type: 'DOCUMENT_SORT', key: key };
 }
+
+export function getDirTree(key, directory) {
+  return asyncFuncCreator({
+    constant: 'DOCUMENT_DIRTREE_GET',
+    promise: (client) => client.request({ url: '/project/' + key + '/document/dirtree?currentdir=' + directory })
+  });
+}
+
+export function getDirChildren(key, directory) {
+  return asyncFuncCreator({
+    constant: 'DOCUMENT_DIRCHILDREN_GET',
+    parentid: directory,
+    promise: (client) => client.request({ url: '/project/' + key + '/document/' + directory + '/dirs' })
+  });
+}
