@@ -68,7 +68,7 @@ export default class Tree extends Component {
     return false;
   }
 
-  onToggle(node, toggled, e){
+  async onToggle(node, toggled, e){
     const { cursor } = this.state;
     const { goto, getDirChildren } = this.props;
 
@@ -77,17 +77,22 @@ export default class Tree extends Component {
         cursor.active = false;
       }
       node.active = true;
-      goto(node.id);
       this.setState({ cursor: node });
-    } else {
-      if(node.children && node.children.length > 0) { 
-        node.toggled = toggled; 
-      } else {
-        getDirChildren(node.id);
-        node.toggled = toggled; 
-      }
 
-      this.setState({ cursor });
+      goto(node.id);
+    } else {
+      node.toggled = toggled;
+      if (!node.children || node.children.length == 0) { 
+        node.loading = true;
+        this.setState({ cursor });
+
+        await getDirChildren(node.id);
+
+        node.loading = false; 
+        this.setState({ cursor });
+      } else {
+        this.setState({ cursor });
+      }
     }
   }
 

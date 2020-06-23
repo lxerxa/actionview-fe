@@ -70,8 +70,6 @@ function addChildren(tree, parentid, children) {
     return;
   }
 
-  parentNode.loading = false;
-
   if (!children || children.length === 0) {
     parentNode.children = undefined;
   } else {
@@ -241,8 +239,6 @@ export default function document(state = initialState, action) {
       return { ...state, treeLoading: false, error: action.error };
 
     case t.DOCUMENT_DIRCHILDREN_GET:
-      const node = findNode(state.tree, action.parentid);
-      node.loading = true;
       return { ...state, childrenLoading: true };
 
     case t.DOCUMENT_DIRCHILDREN_GET_SUCCESS:
@@ -252,8 +248,6 @@ export default function document(state = initialState, action) {
       return { ...state, childrenLoading: false, ecode: action.result.ecode };
 
     case t.DOCUMENT_DIRCHILDREN_GET_FAIL:
-      const node2 = findNode(state.tree, action.parentid);
-      node2.loading = false;
       return { ...state, childrenLoading: false, error: action.error };
 
     case t.DOCUMENT_SELECT:
