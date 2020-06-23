@@ -74,8 +74,8 @@ function addChildren(tree, parentid, children) {
     parentNode.children = undefined;
   } else {
     parentNode.children = _.map(children, (v) => { return { ...v, children: [] } });
+    parentNode.children.sort((a, b) => a.name.localeCompare(b.name));
   }
-  parentNode.children.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 function addNode(tree, parentId, node) {
