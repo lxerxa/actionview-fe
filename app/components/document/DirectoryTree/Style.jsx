@@ -68,6 +68,11 @@ exports.default = {
           whiteSpace: 'nowrap',
           lineHeight: '28px',
           verticalAlign: 'middle'
+        },
+        folder: {
+          float: 'left',
+          color: '#FFD300',
+          marginRight: '5px'
         }
       },
       subtree: {
@@ -75,6 +80,7 @@ exports.default = {
         paddingLeft: '19px'
       },
       loading: {
+        marginLeft: '8px',
         color: '#E2C089'
       }
     }

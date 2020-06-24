@@ -145,7 +145,7 @@ export default class Container extends Component {
           <DirectoryTree 
             directory={ this.directory }
             goto={ this.goto.bind(this) }
-            childLoading={ this.props.document.childLoading }
+            childrenLoading={ this.props.document.childLoading }
             treeLoading={ this.props.document.treeLoading }
             data={ this.props.document.tree }
             getDirTree={ this.getDirTree.bind(this) }

@@ -40,6 +40,7 @@ function sort(collection, sortkey='') {
 
 function arrangeTree(data) {
   if (data.children && data.children.length > 0) {
+    data.toggled = true;
     _.forEach(data.children, (v) => {
       arrangeTree(v);
     });
