@@ -26,6 +26,7 @@ export default class Container extends Component {
       createFolderShow: false 
     };
 
+    this.state.directoryShow = window.localStorage && window.localStorage.getItem('document-directory-show') === 'N' ? false : true;
     this.state.mode = window.localStorage && window.localStorage.getItem('document-display-mode') || 'list';
 
     this.pid = '';
@@ -70,6 +71,14 @@ export default class Container extends Component {
     }
 
     this.setState({ mode: newMode });
+  }
+
+  toggleDirectory() {
+    if (window.localStorage) {
+      window.localStorage.setItem('document-directory-show', this.state.directoryShow ? 'N' : 'Y');
+    }
+
+    this.setState({ directoryShow: !this.state.directoryShow });
   }
 
   async createFolder(values) {
@@ -141,7 +150,7 @@ export default class Container extends Component {
 
     return (
       <div>
-        <div className='directory-bar'>
+        <div className='directory-bar' style={ { display: !this.state.directoryShow ? 'none': '' } }>
           <DirectoryTree 
             directory={ this.directory }
             goto={ this.goto.bind(this) }
@@ -151,7 +160,7 @@ export default class Container extends Component {
             getDirTree={ this.getDirTree.bind(this) }
             getDirChildren={ this.getDirChildren.bind(this) }/>
         </div>
-        <div style={ { marginLeft: '260px' } }>
+        <div style={ { marginLeft: this.state.directoryShow ? '260px' : '0px' } }>
           <Header
             user={ this.props.session.user }
             project_key={ this.pid }
@@ -161,6 +170,8 @@ export default class Container extends Component {
             mode={ this.state.mode }
             changeMode={ this.changeMode.bind(this) }
             showCreateFolder={ this.showCreateFolder.bind(this) }
+            directoryShow={ this.state.directoryShow }
+            toggleDirectory={ this.toggleDirectory.bind(this) }
             sort={ this.props.actions.sort }
             query={ query }
             { ...this.props.document }/>

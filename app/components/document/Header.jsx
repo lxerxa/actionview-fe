@@ -35,6 +35,8 @@ export default class Header extends Component {
     sort: PropTypes.func.isRequired,
     mode: PropTypes.string.isRequired,
     changeMode: PropTypes.func.isRequired,
+    directoryShow: PropTypes.bool.isRequired,
+    toggleDirectory: PropTypes.func.isRequired,
     showCreateFolder: PropTypes.func.isRequired
   }
 
@@ -120,6 +122,8 @@ export default class Header extends Component {
       mode,
       changeMode,
       showCreateFolder, 
+      directoryShow,
+      toggleDirectory,
       options, 
       query 
     } = this.props;
@@ -142,6 +146,7 @@ export default class Header extends Component {
     return (
       <div style={ { marginTop: '5px', height: '40px' } }>
         <FormGroup>
+          <span style={ { float: 'left' } } className='directory-indent' onClick={ () => { toggleDirectory(); } }><i className={ directoryShow ? 'fa fa-outdent' : 'fa fa-indent' }></i></span>
           <span style={ { float: 'left' } }>
             <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
               { _.map(options.path || [], (v, i) => {

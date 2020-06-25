@@ -1177,3 +1177,14 @@ div.filepicker {
   margin-top: -15px;
   padding-top: 15px;
 }
+
+.directory-indent {
+  cursor: pointer;
+  color: #777;
+  margin-top: 8px;
+  margin-right: 2px;
+}
+
+.directory-indent:hover {
+  color: #000;
+}
