@@ -89,7 +89,7 @@ function addNode(tree, parentId, node) {
   if (!parentNode.children) {
     parentNode.children = [];
   }
-  parentNode.children.push(node);
+  parentNode.children.push({ ...node, children: [] });
   parentNode.children.sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -163,7 +163,7 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_CREATE_FOLDER_SUCCESS:
       if ( action.result.ecode === 0 ) { 
         state.collection.unshift(action.result.data);
-        addNode(state.tree, _.pick(action.result.data, [ 'id', 'name' ]));
+        addNode(state.tree, action.result.data.parent, _.pick(action.result.data, [ 'id', 'name' ]));
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 

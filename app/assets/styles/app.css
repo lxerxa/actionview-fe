@@ -1087,7 +1087,6 @@ div.filepicker {
 
 .files-grid-view {
   height: 100%;
-  position: relative;
 }
 
 .files-grid-view .file-grid-overflow {
@@ -1166,4 +1165,15 @@ div.filepicker {
 .file-content:hover .operate-icon{
   opacity: 1 !important;
   cursor: pointer;
+}
+
+.directory-bar {
+  position: absolute;
+  width: 250px;
+  height: calc(100% - 50px);
+  border-right: 1px solid #dedede;
+  overflow: scroll;
+  margin-left: -5px;
+  margin-top: -15px;
+  padding-top: 15px;
 }

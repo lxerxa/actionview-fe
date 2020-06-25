@@ -158,54 +158,52 @@ export default class Header extends Component {
           <span style={ { float: 'right' } }>
             <Button onClick={ ()=>{ changeMode() } }><i className={ mode == 'list' ? 'fa fa-th' : 'fa fa-list' }></i></Button>
           </span>
-          <span style={ { float: 'right' } }>
-            <span style={ { float: 'right', marginRight: '10px' } }>
-              <DropdownButton
-                pullRight
-                title='排序'
-                id='basic-nav-dropdown-project'
-                onSelect={ this.sortChange.bind(this) }>
-                  { _.map(sortOptions, (v, i) =>
-                    <MenuItem key={ i } eventKey={ v.value }>
-                      <div style={ { display: 'inline-block', width: '20px', textAlign: 'left' } }>
-                      { this.state.sortkey == v.value && <span><i className='fa fa-check'></i></span> }
-                      </div>
-                      <span>{ v.label }</span>
-                    </MenuItem> ) }
-              </DropdownButton>
-            </span>
-            <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
-              <FormControl
-                type='text'
-                id='pname'
-                style={ { height: '36px' } }
-                value={ this.state.name }
-                onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '文档名称查询...' } />
-            </span>
-            <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='上传时间'
-                value={ this.state.uploaded_at }
-                onChange={ this.uploadedAtChange.bind(this) }
-                options={ uploadedat_options }/>
-            </span>
-            <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='上传者'
-                value={ this.state.uploader_id }
-                onChange={ this.uploaderChange.bind(this) }
-                options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
-            </span>
-            { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-            <span style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { showCreateFolder(); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
-                <i className='fa fa-plus'></i>&nbsp;新建目录
-              </Button>
-            </span> }
+          <span style={ { float: 'right', marginRight: '10px' } }>
+            <DropdownButton
+              pullRight
+              title='排序'
+              id='basic-nav-dropdown-project'
+              onSelect={ this.sortChange.bind(this) }>
+                { _.map(sortOptions, (v, i) =>
+                  <MenuItem key={ i } eventKey={ v.value }>
+                    <div style={ { display: 'inline-block', width: '20px', textAlign: 'left' } }>
+                    { this.state.sortkey == v.value && <span><i className='fa fa-check'></i></span> }
+                    </div>
+                    <span>{ v.label }</span>
+                  </MenuItem> ) }
+            </DropdownButton>
           </span>
+          <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
+            <FormControl
+              type='text'
+              id='pname'
+              style={ { height: '36px' } }
+              value={ this.state.name }
+              onChange={ (e) => { this.setState({ name: e.target.value }) } }
+              placeholder={ '文档名称查询...' } />
+          </span>
+          <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
+            <Select
+              simpleValue
+              placeholder='上传时间'
+              value={ this.state.uploaded_at }
+              onChange={ this.uploadedAtChange.bind(this) }
+              options={ uploadedat_options }/>
+          </span>
+          <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
+            <Select
+              simpleValue
+              placeholder='上传者'
+              value={ this.state.uploader_id }
+              onChange={ this.uploaderChange.bind(this) }
+              options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
+          </span>
+          { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          <span style={ { float: 'right', marginRight: '10px' } }>
+            <Button onClick={ () => { showCreateFolder(); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
+              <i className='fa fa-plus'></i>&nbsp;新建目录
+            </Button>
+          </span> }
         </FormGroup>
       </div>
     );

@@ -141,7 +141,7 @@ export default class Container extends Component {
 
     return (
       <div>
-        <div style={ { position: 'absolute', width: '250px', borderRight: '1px solid #dedede', height: 'calc(100% - 65px)', overflow: 'scroll', marginLeft: '-5px' } }>
+        <div className='directory-bar'>
           <DirectoryTree 
             directory={ this.directory }
             goto={ this.goto.bind(this) }
