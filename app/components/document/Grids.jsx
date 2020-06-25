@@ -188,7 +188,7 @@ export default class Grids extends Component {
     const imgFiles = _.filter(files, (f) => _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) !== -1);
 
     return (
-      <div>
+      <div style={ { clear: 'both' } }>
         <div className='files-grid-view'>
           { indexLoading && 
             <div style={ { display: 'block', margin: '30px auto', textAlign: 'center' } }>
