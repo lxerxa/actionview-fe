@@ -115,6 +115,13 @@ function delNode(tree, parentId, nodeId) {
   const ind = _.findIndex(parentNode.children, { id: nodeId });
   if (ind !== -1) {
     parentNode.children.splice(ind, 1);
+    if (parentNode.children.length === 0) {
+      if (parentNode.toggled) {
+        parentNode.children = undefined;
+      } else {
+        parentNode.children = [];
+      }
+    }
   }
 }
 
@@ -216,7 +223,7 @@ export default function document(state = initialState, action) {
       if (action.result.ecode === 0) {
         const moveObj = _.find(state.collection, { id: action.result.data.id });
         if (moveObj && moveObj.d === 1) {
-          moveNode(state.tree, moveObj.id, action.result.data.parent);
+          moveNode(state.tree, moveObj.id, moveObj.parent, action.result.data.parent);
         }
         state.collection = _.reject(state.collection, { id: action.result.data.id });
       }
