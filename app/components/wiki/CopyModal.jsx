@@ -53,7 +53,7 @@ export default class CopyModal extends Component {
 
   async handleSubmit() {
     const { values, copy, data, close, curPath } = this.props;
-    const ecode = await copy({ id: data.id, name: values.name, src_path: data.parent, dest_path: values.dest_path && values.dest_path.id || curPath }, !(values.dest_path && values.dest_path.id));
+    const ecode = await copy({ id: data.id, name: values.name, src_path: data.parent, dest_path: values.dest_path && values.dest_path.id || curPath }, !values.dest_path || !values.dest_path.id || values.dest_path.id == curPath);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();

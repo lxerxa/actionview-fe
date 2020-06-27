@@ -86,6 +86,10 @@ function addNode(tree, parentId, node) {
     return;
   }
 
+  if (parentNode.children && parentNode.children.length == 0) {
+    return;
+  }
+
   if (!parentNode.children) {
     parentNode.children = [];
   }
@@ -128,10 +132,12 @@ function delNode(tree, parentId, nodeId) {
 function copyNode() {
 }
 
-function moveNode(tree, nodeId, srcId, destId) {
-  const node = findNode(tree, nodeId);
-  if (node !== false) {
-    delNode(tree, srcId, nodeId);
+function moveNode(tree, node, srcId, destId) {
+  const node2 = findNode(tree, node.id);
+  if (node2 !== false) {
+    delNode(tree, srcId, node.id);
+    addNode(tree, destId, node)
+  } else {
     addNode(tree, destId, node)
   }
 }
@@ -223,7 +229,7 @@ export default function document(state = initialState, action) {
       if (action.result.ecode === 0) {
         const moveObj = _.find(state.collection, { id: action.result.data.id });
         if (moveObj && moveObj.d === 1) {
-          moveNode(state.tree, moveObj.id, moveObj.parent, action.result.data.parent);
+          moveNode(state.tree, _.pick(moveObj, [ 'id', 'name' ]), moveObj.parent, action.result.data.parent);
         }
         state.collection = _.reject(state.collection, { id: action.result.data.id });
       }

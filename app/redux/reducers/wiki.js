@@ -90,10 +90,14 @@ function addNode(tree, parentId, node) {
     return;
   }
 
+  if (parentNode.children && parentNode.children.length == 0) {
+    return;
+  }
+
   if (!parentNode.children) {
     parentNode.children = [];
   }
-  parentNode.children.push({ ...node, children: [] });
+  parentNode.children.push({ ...node, children: node.d == 1 ? [] : undefined });
   parentNode.children.sort((a, b) => { if (a.d == b.d || (!a.d && !b.d)) { return a.name.localeCompare(b.name); } else { return (b.d || 0) - (a.d || 0); } });
 }
 
@@ -129,14 +133,13 @@ function delNode(tree, parentId, nodeId) {
   }
 }
 
-function copyNode() {
-}
-
-function moveNode(tree, nodeId, srcId, destId) {
-  const node = findNode(tree, nodeId);
-  if (node !== false) {
-    delNode(tree, srcId, nodeId);
-    addNode(tree, destId, node)
+function moveNode(tree, node, srcId, destId) {
+  const node2 = findNode(tree, node.id);
+  if (node2 !== false) {
+    delNode(tree, srcId, node.id);
+    addNode(tree, destId, node);
+  } else {
+    addNode(tree, destId, node);
   }
 }
 
@@ -225,7 +228,7 @@ export default function wiki(state = initialState, action) {
     case t.WIKI_DELETE_SUCCESS:
       if (action.result.ecode === 0) {
         const delObj = _.find(state.collection, { id: action.id });
-        if (delObj && delObj.d === 1) {
+        if (delObj) {
           delNode(state.tree, delObj.parent, delObj.id);
         }
         state.collection = _.reject(state.collection, { id: action.id });
@@ -265,8 +268,11 @@ export default function wiki(state = initialState, action) {
       return { ...state, loading: true };
 
     case t.WIKI_COPY_SUCCESS:
-      if ( action.result.ecode === 0 && action.toCurPath ) {
-        state.collection.push(action.result.data);
+      if (action.result.ecode === 0) {
+        if (action.toCurPath) {
+          state.collection.push(action.result.data);
+        }
+        addNode(state.tree, action.result.data.parent, _.pick(action.result.data, [ 'id', 'name', 'd', 'parent' ]));
         if (action.result.data.name.toLowerCase() === 'home' && (!state.options.home || !state.options.home.id)) {
           state.options.home = action.result.data;
         }
@@ -276,8 +282,8 @@ export default function wiki(state = initialState, action) {
     case t.WIKI_MOVE_SUCCESS:
       if (action.result.ecode === 0) {
         const moveObj = _.find(state.collection, { id: action.result.data.id });
-        if (moveObj && moveObj.d === 1) {
-          moveNode(state.tree, moveObj.id, moveObj.parent, action.result.data.parent);
+        if (moveObj) {
+          moveNode(state.tree, _.pick(moveObj, [ 'id', 'name', 'd', 'parent' ]), moveObj.parent, action.result.data.parent);
         }
         state.collection = _.reject(state.collection, { id: action.result.data.id });
       }
