@@ -45,7 +45,7 @@ function arrangeTree(data) {
       arrangeTree(v);
     });
     data.children.sort((a, b) => a.name.localeCompare(b.name));
-  } else if (data.d == 1) {
+  } else {
     data.children = [];
   }
 }

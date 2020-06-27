@@ -148,7 +148,7 @@ export default class Container extends Component {
 
   async getDirTree() {
     const { actions } = this.props;
-    await actions.getDirTree(this.pid, this.directory);
+    await actions.getDirTree(this.pid, this.wid || this.directory || '0');
     return this.props.wiki.ecode;
   }
 
@@ -275,7 +275,7 @@ export default class Container extends Component {
         loading={ this.props.wiki.loading }
         create={ this.create.bind(this) }/>);
     } else if (this.mode == 'edit') {
-      contents (<Edit
+      contents = (<Edit
         i18n={ i18n }
         project_key={ this.pid }
         setRouterNotifyFlg={ (v) => { this.routerNotifyFlg = v; } }

@@ -67,11 +67,11 @@ export default class Tree extends Component {
   }
 
   async componentWillMount() {
-    const { directory, getDirTree } = this.props;
+    const { wid, directory, getDirTree } = this.props;
     await getDirTree();
 
     const { data } = this.props;
-    const node = this.findNode(data, directory);
+    const node = this.findNode(data, wid || directory || '0');
     if (node) {
       node.active = true;
       this.setState({ cursor: node });
