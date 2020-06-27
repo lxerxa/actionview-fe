@@ -1210,6 +1210,62 @@ const testdata = {
     const results={ecode: 0, data: { id: '1111', name: '测试测试测试', contents:'## aaa', updated_at: 1533636580, version: 2, editor: {id: '2222', name: '王老师', 'email': 'aa@aa.com'}, checkin: { user: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, at: 1533636580 }, attachments: [ {name: 'aaaa.docx', id: '1111', uploader: { id: '1111', name: '王五' }, uploaded_at: 1533636586, size: 123}, {name: 'bbbb.docx', id: '1111', uploader: { id: '1111', name: '王五' }, uploaded_at: 1533636586, size: 123 } ], history:[{ id: '1111', version: 2, editor: { id: '111', name: '王五', 'email': 'aa@aa.com' }, updated_at: 1533636580 }, { id: '2222', version: 1, editor: { id: '2222', name: '王老师', 'email': 'aa@aa.com' }, updated_at: 1533636586 }] }, options: { path:[{id: '0', name: 'root'}, {id: '111', name: 'aaaa'}, {id: '222', name: 'bbbb'}] }};
     return res.status(200).send(results);
   });
+
+  router.get('/project/:key/wiki/:id/dirs', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+
+    const results = { ecode: 0, data: [{id: '111111', name: '111111'}, {id: '222222', name: '222222'}] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/:key/wiki/dirtree', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+
+const testdata = {
+  name: '根目录',
+  d: 1,
+  id: '0',
+  toggled: true,
+  children: [
+    {
+      id: '2222',
+      d: 1,
+      name: '测试目录二',
+      children: [
+        { name: 'child1', id: '11111' },
+        { name: 'child2', id: '22222' }
+      ]
+    },
+    {
+      name: '测试目录一',
+      id: '1111',
+      d: 1,
+      children: []
+    },
+    {
+      id: '3333',
+      d: 1,
+      name: '会议纪要',
+      children: [
+        {
+          name: '各种配置',
+          d: 1,
+          children: [
+            { name: 'nested child 1', id: '33333' },
+            { name: 'nested child 2', id: '44444' }
+          ]
+        }
+      ]
+    }
+  ]
+};
+    const results = {ecode: 0, data: testdata};
+
+    return res.status(200).send(results);
+  });
+
   router.get('/project/:key/wiki/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
@@ -1237,6 +1293,7 @@ const testdata = {
     const results = { ecode: 0, data: '1111' };
     return res.status(200).send(results);
   });
+
   /******************wiki*****************/
 
   /******************report*****************/

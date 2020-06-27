@@ -86,3 +86,18 @@ export function delFile(key, wid, fid) {
     promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + wid + '/file/' + fid, method: 'delete' })
   });
 }
+
+export function getDirTree(key, oid) {
+  return asyncFuncCreator({
+    constant: 'WIKI_DIRTREE_GET',
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/dirtree?currentnode=' + oid })
+  });
+}
+
+export function getDirChildren(key, directory) {
+  return asyncFuncCreator({
+    constant: 'WIKI_DIRCHILDREN_GET',
+    parentid: directory,
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + directory + '/dirs' })
+  });
+}

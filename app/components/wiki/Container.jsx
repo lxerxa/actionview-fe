@@ -13,6 +13,7 @@ const Create = require('./Create');
 const Edit = require('./Edit');
 const List = require('./List');
 const Preview = require('./Preview');
+const DirectoryTree = require('./DirectoryTree');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -31,6 +32,9 @@ export default class Container extends Component {
     this.mode = '';
     this.routerNotifyFlg = false;
     this.routerWillLeave = this.routerWillLeave.bind(this);
+
+    this.state = {};
+    this.state.directoryShow = window.localStorage && window.localStorage.getItem('wiki-directory-show') === 'N' ? false : true;
   }
 
   static contextTypes = {
@@ -47,6 +51,18 @@ export default class Container extends Component {
     session: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     wiki: PropTypes.object.isRequired
+  }
+
+  goto2(directory, wid) {
+
+    let uri = '/project/' + this.pid + '/wiki';
+    uri += (directory != '0' ? ('/' + directory) : (wid ? '/root' : ''));
+
+    if (wid) {
+      uri += ('/' + wid);
+    }
+
+    this.context.router.push({ pathname: uri });
   }
 
   goto(mode, wid, query={}) {
@@ -130,6 +146,26 @@ export default class Container extends Component {
     return this.props.wiki.ecode;
   }
 
+  async getDirTree() {
+    const { actions } = this.props;
+    await actions.getDirTree(this.pid, this.directory);
+    return this.props.wiki.ecode;
+  }
+
+  async getDirChildren(dir) {
+    const { actions } = this.props;
+    await actions.getDirChildren(this.pid, dir);
+    return this.props.wiki.ecode;
+  }
+
+  toggleDirectory() {
+    if (window.localStorage) {
+      window.localStorage.setItem('wiki-directory-show', this.state.directoryShow ? 'N' : 'Y');
+    }
+
+    this.setState({ directoryShow: !this.state.directoryShow });
+  }
+
   componentWillMount() {
     const { params: { key, dir, wid, mode } } = this.props;
     this.pid = key;
@@ -186,8 +222,9 @@ export default class Container extends Component {
 
     const { i18n, location: { query={} } } = this.props;
 
+    let contents = null;
     if (this.mode == 'preview') {
-      return (<Preview
+      contents = (<Preview
         i18n={ i18n }
         project_key={ this.pid }
         goto={ this.goto.bind(this) }
@@ -200,10 +237,12 @@ export default class Container extends Component {
         delFile={ this.delFile.bind(this) }
         addAttachment={ this.props.actions.addAttachment }
         reload={ this.reload.bind(this) }
+        directoryShow={ this.state.directoryShow }
+        toggleDirectory={ this.toggleDirectory.bind(this) }
         user={ this.props.session.user }
         { ...this.props.wiki }/>);
     } else if (this.mode == 'list') {
-      return (<List
+      contents = (<List
         project_key={ this.pid }
         directory={ this.directory == 'root' ? '0' : this.directory }
         index={ this.index.bind(this) }
@@ -220,11 +259,13 @@ export default class Container extends Component {
         update={ this.update.bind(this) }
         del={ this.del.bind(this) }
         query={ query }
+        directoryShow={ this.state.directoryShow }
+        toggleDirectory={ this.toggleDirectory.bind(this) }
         user={ this.props.session.user }
         i18n={ i18n }
         { ...this.props.wiki }/>); 
     } else if (this.mode == 'new') {
-      return (<Create
+      contents = (<Create
         i18n={ i18n }
         project_key={ this.pid }
         setRouterNotifyFlg={ (v) => { this.routerNotifyFlg = v; } }
@@ -234,7 +275,7 @@ export default class Container extends Component {
         loading={ this.props.wiki.loading }
         create={ this.create.bind(this) }/>);
     } else if (this.mode == 'edit') {
-      return (<Edit
+      contents (<Edit
         i18n={ i18n }
         project_key={ this.pid }
         setRouterNotifyFlg={ (v) => { this.routerNotifyFlg = v; } }
@@ -250,5 +291,23 @@ export default class Container extends Component {
         data={ this.props.wiki.item }
         update={ this.update.bind(this) }/>);
     }
+
+    return (
+      <div>
+        <div className='directory-bar' style={ { display: !this.state.directoryShow ? 'none': '' } }>
+          <DirectoryTree
+            directory={ this.directory == 'root' ? '0' : this.directory }
+            wid={ this.wid }
+            goto={ this.goto2.bind(this) }
+            childrenLoading={ this.props.wiki.childLoading }
+            treeLoading={ this.props.wiki.treeLoading }
+            data={ this.props.wiki.tree }
+            getDirTree={ this.getDirTree.bind(this) }
+            getDirChildren={ this.getDirChildren.bind(this) }/>
+        </div>
+        <div style={ { marginLeft: this.state.directoryShow ? '260px' : '0px' } }>
+          { contents }
+        </div>
+      </div> );
   }
 }

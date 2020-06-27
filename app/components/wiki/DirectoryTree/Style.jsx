@@ -70,6 +70,11 @@ exports.default = {
           lineHeight: '28px',
           verticalAlign: 'middle'
         },
+        text: {
+          float: 'left',
+          color: '#777',
+          marginRight: '5px'
+        },
         folder: {
           float: 'left',
           color: '#FFD300',

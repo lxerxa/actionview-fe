@@ -66,7 +66,9 @@ export default class List extends Component {
     move: PropTypes.func.isRequired,
     checkout: PropTypes.func.isRequired,
     checkin: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired
+    del: PropTypes.func.isRequired,
+    directoryShow: PropTypes.bool.isRequired,
+    toggleDirectory: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -221,7 +223,10 @@ export default class List extends Component {
       move, 
       options, 
       user, 
-      query } = this.props;
+      query,
+      directoryShow,
+      toggleDirectory
+    } = this.props;
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
 
     const updatedat_options = [
@@ -398,6 +403,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
+            <span style={ { float: 'left' } } className='directory-indent' onClick={ () => { toggleDirectory(); } }><i className={ directoryShow ? 'fa fa-outdent' : 'fa fa-indent' }></i></span>
             <span style={ { float: 'left' } }>
               <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
                 { _.map(options.path || [], (v, i) => {

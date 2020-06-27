@@ -57,7 +57,9 @@ export default class Preview extends Component {
     del: PropTypes.func.isRequired,
     delFile: PropTypes.func.isRequired,
     addAttachment: PropTypes.func.isRequired,
-    reload: PropTypes.func.isRequired
+    reload: PropTypes.func.isRequired,
+    directoryShow: PropTypes.bool.isRequired,
+    toggleDirectory: PropTypes.func.isRequired
   }
 
   async componentWillMount() {
@@ -178,7 +180,10 @@ export default class Preview extends Component {
       checkin,
       checkout,
       show, 
-      reload } = this.props;
+      reload,
+      directoryShow,
+      toggleDirectory
+    } = this.props;
 
     if (!itemDetailLoading && _.isEmpty(item)) {
       return (<div/>);
@@ -224,6 +229,7 @@ export default class Preview extends Component {
         </div> }
         { item.id &&
         <div>
+          <span style={ { float: 'left' } } className='directory-indent' onClick={ () => { toggleDirectory(); } }><i className={ directoryShow ? 'fa fa-outdent' : 'fa fa-indent' }></i></span>
           <span style={ { float: 'left' } }>
             <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
             { _.map(options.path || [], (v, i) => {

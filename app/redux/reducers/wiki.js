@@ -3,6 +3,9 @@ import _ from 'lodash';
 
 const initialState = { 
   ecode: 0, 
+  childrenLoading: false,
+  treeLoading: false,
+  tree: {},
   collection: [], 
   indexLoading: false, 
   itemDetailLoading: false, 
@@ -37,6 +40,104 @@ function sort(collection, sortkey='') {
       return (b.d || 0) - (a.d || 0);
     }
   });
+}
+
+function arrangeTree(data) {
+  if (data.children && data.children.length > 0) {
+    data.toggled = true;
+    _.forEach(data.children, (v) => {
+      arrangeTree(v);
+    });
+    data.children.sort((a, b) => { if (a.d == b.d || (!a.d && !b.d)) { return a.name.localeCompare(b.name); } else { return (b.d || 0) - (a.d || 0); } });
+  } else if (data.d == 1) {
+    data.children = [];
+  }
+}
+
+function findNode(tree, id) {
+  if (tree.id == id) {
+    return tree;
+  }
+
+  const childNum = tree.children ? tree.children.length : 0;
+  for (let i = 0; i < childNum; i++) {
+    const node = findNode(tree.children[i], id);
+    if (node !== false) {
+      return node;
+    }
+  }
+  return false;
+}
+
+function addChildren(tree, parentid, children) {
+  const parentNode = findNode(tree, parentid);
+  if (parentNode === false) {
+    return;
+  }
+
+  if (!children || children.length === 0) {
+    parentNode.children = undefined;
+  } else {
+    parentNode.children = _.map(children, (v) => { return { ...v, children: v.d == 1 ? [] : undefined } });
+    parentNode.children.sort((a, b) => { if (a.d == b.d || (!a.d && !b.d)) { return a.name.localeCompare(b.name); } else { return (b.d || 0) - (a.d || 0); } });
+  }
+}
+
+function addNode(tree, parentId, node) {
+  const parentNode = findNode(tree, parentId);
+  // 目录树还没展开改节点
+  if (parentNode === false || (parentNode.childern && parentNode.childern.length === 0)) {
+    return;
+  }
+
+  if (!parentNode.children) {
+    parentNode.children = [];
+  }
+  parentNode.children.push({ ...node, children: [] });
+  parentNode.children.sort((a, b) => { if (a.d == b.d || (!a.d && !b.d)) { return a.name.localeCompare(b.name); } else { return (b.d || 0) - (a.d || 0); } });
+}
+
+function updNode(tree, parentId, node) {
+  const parentNode = findNode(tree, parentId);
+  if (parentNode === false || !parentNode.children || parentNode.children.length <= 0) {
+    return;
+  }
+
+  const ind = _.findIndex(parentNode.children, { id: node.id });
+  if (ind !== -1) {
+    parentNode.children[ind].name = node.name;
+    parentNode.children.sort((a, b) => { if (a.d == b.d || (!a.d && !b.d)) { return a.name.localeCompare(b.name); } else { return (b.d || 0) - (a.d || 0); } });
+  }
+}
+
+function delNode(tree, parentId, nodeId) {
+  const parentNode = findNode(tree, parentId);
+  if (parentNode === false || !parentNode.children || parentNode.children.length <= 0) {
+    return;
+  }
+
+  const ind = _.findIndex(parentNode.children, { id: nodeId });
+  if (ind !== -1) {
+    parentNode.children.splice(ind, 1);
+    if (parentNode.children.length === 0) {
+      if (parentNode.toggled) {
+        parentNode.children = undefined;
+      } else {
+        parentNode.children = [];
+      }
+    }
+  }
+}
+
+function copyNode() {
+}
+
+function moveNode(tree, nodeId, srcId, destId) {
+  const node = findNode(tree, nodeId);
+  if (node !== false) {
+    delNode(tree, srcId, nodeId);
+    addNode(tree, destId, node)
+  }
 }
 
 export default function wiki(state = initialState, action) {
@@ -77,6 +178,7 @@ export default function wiki(state = initialState, action) {
         if (action.result.data.d !== 1 && action.result.data.name.toLowerCase() === 'home' && (!state.options.home || !state.options.home.id)) {
           state.options.home = action.result.data;
         }
+        addNode(state.tree, action.result.data.parent, _.pick(action.result.data, [ 'id', 'name', 'd', 'parent' ]));
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
@@ -92,6 +194,8 @@ export default function wiki(state = initialState, action) {
         if (ind !== -1) {
           state.collection[ind] = action.result.data;
         }
+        updNode(state.tree, action.result.data.parent, _.pick(action.result.data, [ 'id', 'name', 'd', 'parent' ]));
+
         state.item = action.result.data;
 
         if (action.result.data.d === 1) {
@@ -120,6 +224,10 @@ export default function wiki(state = initialState, action) {
 
     case t.WIKI_DELETE_SUCCESS:
       if (action.result.ecode === 0) {
+        const delObj = _.find(state.collection, { id: action.id });
+        if (delObj && delObj.d === 1) {
+          delNode(state.tree, delObj.parent, delObj.id);
+        }
         state.collection = _.reject(state.collection, { id: action.id });
         if (state.options.home && state.options.home.id === action.id) {
           state.options.home = {};
@@ -167,6 +275,10 @@ export default function wiki(state = initialState, action) {
 
     case t.WIKI_MOVE_SUCCESS:
       if (action.result.ecode === 0) {
+        const moveObj = _.find(state.collection, { id: action.result.data.id });
+        if (moveObj && moveObj.d === 1) {
+          moveNode(state.tree, moveObj.id, moveObj.parent, action.result.data.parent);
+        }
         state.collection = _.reject(state.collection, { id: action.result.data.id });
       }
       return { ...state, loading: false, ecode: action.result.ecode };
@@ -174,6 +286,31 @@ export default function wiki(state = initialState, action) {
     case t.WIKI_COPY_FAIL:
     case t.WIKI_MOVE_FAIL:
       return { ...state, loading: false, error: action.error };
+
+    case t.WIKI_DIRTREE_GET:
+      return { ...state, treeLoading: true };
+
+    case t.WIKI_DIRTREE_GET_SUCCESS:
+      if (action.result.ecode === 0) {
+        state.tree = action.result.data;
+        arrangeTree(state.tree)
+      }
+      return { ...state, treeLoading: false, ecode: action.result.ecode };
+
+    case t.WIKI_DIRTREE_GET_FAIL:
+      return { ...state, treeLoading: false, error: action.error };
+
+    case t.WIKI_DIRCHILDREN_GET:
+      return { ...state, childrenLoading: true };
+
+    case t.WIKI_DIRCHILDREN_GET_SUCCESS:
+      if (action.result.ecode === 0) {
+        addChildren(state.tree, action.parentid, action.result.data);
+      }
+      return { ...state, childrenLoading: false, ecode: action.result.ecode };
+
+    case t.WIKI_DIRCHILDREN_GET_FAIL:
+      return { ...state, childrenLoading: false, error: action.error };
 
     case t.WIKI_SELECT:
       const el = _.find(state.collection, { id: action.id });
