@@ -70,6 +70,16 @@ export default class Preview extends Component {
     }
   }
 
+  async componentWillReceiveProps(nextProps) {
+    const { show, wid } = this.props;
+    if (nextProps.wid !== wid) {
+      const ecode = await show(wid);
+      if (ecode !== 0) {
+        notify.show('文档信息获取失败。', 'error', 2000);
+      }
+    }
+  }
+
   async refresh() {
     this.state.operate = 'refresh';
     const { show, wid } = this.props;
