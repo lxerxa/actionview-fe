@@ -120,7 +120,7 @@ export default class Edit extends Component {
 
     return (
       <div style={ { marginTop: '15px' } }>
-        <div style={ { marginTop: '200px', textAlign: 'center', display: !itemLoading && !itemDetailLoading ? 'none' : '' } }>
+        <div style={ { textAlign: 'center', paddingTop: '25px', display: !itemLoading && !itemDetailLoading ? 'none' : '' } }>
           <img src={ img } className='loading'/>
         </div>
         <div style={ { display: itemLoading || itemDetailLoading ? 'none' : '' } }>
