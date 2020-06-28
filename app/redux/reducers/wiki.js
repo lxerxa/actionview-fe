@@ -227,10 +227,14 @@ export default function wiki(state = initialState, action) {
 
     case t.WIKI_DELETE_SUCCESS:
       if (action.result.ecode === 0) {
+
         const delObj = _.find(state.collection, { id: action.id });
         if (delObj) {
-          delNode(state.tree, delObj.parent, delObj.id);
+          delNode(state.tree, delObj.parent, action.id);
+        } else if (state.item.id == action.id) {
+          delNode(state.tree, state.item.parent , action.id);
         }
+
         state.collection = _.reject(state.collection, { id: action.id });
         if (state.options.home && state.options.home.id === action.id) {
           state.options.home = {};
