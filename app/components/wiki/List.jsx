@@ -32,7 +32,9 @@ export default class List extends Component {
       hoverRowId: '', 
       editRowId: '',
       createFolderShow: false,
-      name: '' };
+      searchShow: false,
+      name: '' 
+    };
 
     this.state.sortkey = window.localStorage && window.localStorage.getItem('wiki-sortkey') || 'create_time_desc';
 
@@ -227,7 +229,14 @@ export default class List extends Component {
       directoryShow,
       toggleDirectory
     } = this.props;
-    const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
+
+    const { 
+      createFolderShow, 
+      searchShow,
+      editRowId, 
+      hoverRowId, 
+      operateShow 
+    } = this.state;
 
     const updatedat_options = [
       { value: '1w', label: '1周内' },
@@ -418,7 +427,7 @@ export default class List extends Component {
               </Breadcrumb>
             </span>
             <span style={ { float: 'right' } }>
-              <span style={ { float: 'right', marginRight: '10px' } }>
+              <span style={ { float: 'right' } }>
                 <DropdownButton
                   pullRight
                   title='排序'
@@ -433,7 +442,24 @@ export default class List extends Component {
                       </MenuItem> ) }
                 </DropdownButton>
               </span>
-              <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
+              <span style={ { float: 'right', marginRight: '10px' } }>
+                <Button onClick={ ()=>{ this.setState({ searchShow: !this.state.searchShow }) } }><i className='fa fa-search'></i> 检索{ !_.isEmpty(query) && !searchShow ? '...' : '' }</Button>
+              </span>
+              <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
+                <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                  <i className='fa fa-pencil'></i>&nbsp;新建文档
+                </Button>
+                { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+                <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                  <i className='fa fa-plus'></i>&nbsp;创建目录
+                </Button> }
+              </ButtonGroup>
+            </span>
+          </FormGroup>
+          { searchShow &&
+          <FormGroup style={ { clear: 'both' } }>
+            <span style={ { float: 'right', marginTop: '5px', backgroundColor: '#f1f1f1', padding: '10px', borderRadius: '4px' } }>
+              <span style={ { float: 'right', width: '165px' } }>
                 <FormControl
                   type='text'
                   id='pname'
@@ -450,17 +476,8 @@ export default class List extends Component {
                   onChange={ this.updatedAtChange.bind(this) }
                   options={ updatedat_options }/>
               </span>
-              <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
-                <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
-                  <i className='fa fa-pencil'></i>&nbsp;新建文档
-                </Button>
-                { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-                <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
-                  <i className='fa fa-plus'></i>&nbsp;创建目录
-                </Button> }
-              </ButtonGroup>
             </span>
-          </FormGroup>
+          </FormGroup> }
         </div>
         <div>
           <BootstrapTable data={ rows } bordered={ false } hover options={ opts } trClassName='tr-middle'>

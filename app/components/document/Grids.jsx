@@ -191,7 +191,7 @@ export default class Grids extends Component {
       <div style={ { clear: 'both' } }>
         <div className='files-grid-view'>
           { indexLoading && 
-            <div style={ { display: 'block', margin: '30px auto', textAlign: 'center' } }>
+            <div style={ { display: 'block', padding: '30px 0px', textAlign: 'center' } }>
               <img src={ img } className='loading'/>
             </div> }
           <div className='grid-view-container'>

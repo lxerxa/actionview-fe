@@ -11,6 +11,7 @@ export default class Header extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      searchShow: false,
       uploader_id: null,
       uploaded_at: null,
       name: ''
@@ -127,7 +128,7 @@ export default class Header extends Component {
       options, 
       query 
     } = this.props;
-    const { createFolderShow } = this.state;
+    const { createFolderShow, searchShow } = this.state;
 
     const uploadedat_options = [
       { value: '1w', label: '1周内' },
@@ -179,7 +180,21 @@ export default class Header extends Component {
                     </MenuItem> ) }
               </DropdownButton>
             </span>
-            <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
+            <span style={ { float: 'right', marginRight: '10px' } }>
+              <Button onClick={ ()=>{ this.setState({ searchShow: !this.state.searchShow }) } }><i className='fa fa-search'></i> 检索{ !_.isEmpty(query) && !searchShow ? '...' : '' }</Button>
+            </span>
+            { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+            <span style={ { float: 'right', marginRight: '10px' } }>
+              <Button onClick={ () => { showCreateFolder(); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
+                <i className='fa fa-plus'></i>&nbsp;新建目录
+              </Button>
+            </span> }
+          </span>
+        </FormGroup>
+        { searchShow &&
+        <FormGroup style={ { clear: 'both' } }>
+          <span style={ { float: 'right', marginTop: '5px', backgroundColor: '#f1f1f1', padding: '10px', borderRadius: '4px' } }>
+            <span style={ { float: 'right', width: '150px' } }>
               <FormControl
                 type='text'
                 id='pname'
@@ -204,14 +219,8 @@ export default class Header extends Component {
                 onChange={ this.uploaderChange.bind(this) }
                 options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
             </span>
-            { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-            <span style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { showCreateFolder(); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
-                <i className='fa fa-plus'></i>&nbsp;新建目录
-              </Button>
-            </span> }
           </span>
-        </FormGroup>
+        </FormGroup> }
       </div>
     );
   }
