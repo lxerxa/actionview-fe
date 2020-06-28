@@ -5,8 +5,6 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
-const $ = require('$');
-
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -66,15 +64,6 @@ export default class Header extends Component {
     this.state.uploader_id = newQuery.uploader_id || null;
     this.state.name = newQuery.name || '';
     this.state.uploaded_at = newQuery.uploaded_at || null;
-  }
-
-  componentDidMount() {
-    const self = this;
-    $('#pname').bind('keypress',function(event){
-      if(event.keyCode == '13') {
-        self.refresh();
-      }
-    });
   }
 
   refresh() {
@@ -197,10 +186,10 @@ export default class Header extends Component {
             <span style={ { float: 'right', width: '150px' } }>
               <FormControl
                 type='text'
-                id='pname'
                 style={ { height: '36px' } }
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                onKeyDown={ (e) => { if (e.keyCode == '13') { this.refresh(); } } } 
                 placeholder={ '文档名称查询...' } />
             </span>
             <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>

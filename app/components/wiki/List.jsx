@@ -7,7 +7,6 @@ import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
-const $ = require('$');
 const moment = require('moment');
 const DelNotify = require('./DelNotify');
 const CheckoutNotify = require('./CheckoutNotify');
@@ -102,15 +101,6 @@ export default class List extends Component {
 
   checkoutNotifyClose() {
     this.setState({ checkoutNotifyShow: false });
-  }
-
-  componentDidMount() {
-    const self = this;
-    $('#pname').bind('keypress',function(event){  
-      if(event.keyCode == '13') {  
-        self.reload();
-      }
-    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -462,10 +452,10 @@ export default class List extends Component {
               <span style={ { float: 'right', width: '165px' } }>
                 <FormControl
                   type='text'
-                  id='pname'
                   style={ { height: '36px' } }
                   value={ this.state.name }
                   onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                  onKeyDown={ (e) => { if (e.keyCode == '13') { this.reload(); } } } 
                   placeholder='标题名称查询...' />
               </span>
               <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
