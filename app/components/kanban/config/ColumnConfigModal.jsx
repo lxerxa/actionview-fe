@@ -95,7 +95,16 @@ export default class ColumnConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { name, states, max, min }, handleSubmit, invalid, submitting, config, no, options } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { name, states, max, min }, 
+      handleSubmit, 
+      invalid, 
+      submitting, 
+      config, 
+      no, 
+      options 
+    } = this.props;
 
     let otherStates = [];
     _.forEach(config.columns, (v) => {
@@ -110,7 +119,7 @@ export default class ColumnConfigModal extends Component {
         stateOptions.push({ label: <span className={ 'state-' + v.category + '-label' }>{ v.name }</span>, value: v.id });
       }
     });
-    
+
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
@@ -118,13 +127,13 @@ export default class ColumnConfigModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
+          <FormGroup validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='列名'/ >
             { name.touched && name.error &&
               <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup>
             <ControlLabel>状态</ControlLabel>
             <Select 
               multi
@@ -135,8 +144,12 @@ export default class ColumnConfigModal extends Component {
               value={ states.value } 
               onChange={ (newValue) => { states.onChange(newValue) } } 
               placeholder='选择状态'/>
+            { stateOptions.length == 0 &&
+              <div>
+                <span style={ { fontSize: '12px', color: '#8a6d3b' } }>所有问题状态都已被其他列使用，需从其他列移除某些问题状态或创建新的问题状态供选择。</span>
+              </div> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ max.touched && max.error ? 'error' : null }>
+          <FormGroup validationState={ max.touched && max.error ? 'error' : null }>
             <ControlLabel>最大问题数（Max）</ControlLabel>
             <FormControl 
               disabled={ submitting } 
@@ -146,7 +159,7 @@ export default class ColumnConfigModal extends Component {
             { max.touched && max.error &&
               <HelpBlock style={ { float: 'right' } }>{ max.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ min.touched && min.error ? 'error' : null }>
+          <FormGroup validationState={ min.touched && min.error ? 'error' : null }>
             <ControlLabel>最小问题数（Min）</ControlLabel>
             <FormControl 
               disabled={ submitting } 
