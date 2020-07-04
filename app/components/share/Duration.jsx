@@ -13,8 +13,10 @@ export default class Duration extends Component {
       isModeChanged: props.mode ? false : true, 
       start_time: '', 
       end_time: '', 
+      current_variable: '', 
       inside_variable: '', 
-      outside_variable: '' };
+      outside_variable: '' 
+    };
     this.getValue = this.getValue.bind(this);
     this.onChange = this.onChange.bind(this);
   }
@@ -27,7 +29,7 @@ export default class Duration extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    let mode = 'fixed', start_time = '', end_time = '', inside_variable = '', outside_variable = '';
+    let mode = 'fixed', start_time = '', end_time = '', current_variable = '', inside_variable = '', outside_variable = '';
     const suffix_list = [ 'w', 'm', 'y' ];
 
     const duration = nextProps.value || '';
@@ -36,6 +38,9 @@ export default class Duration extends Component {
       const sections = duration.split('~');
       start_time = sections[0] ? moment(sections[0]) : '';
       end_time = sections[1] ? moment(sections[1]) : '';
+    } else if ([ '0d', '0w', '0m', '0y' ].indexOf(duration) !== -1) {
+      mode = 'current_variable';
+      current_variable = duration;
     } else if (suffix_list.indexOf(duration.substr(duration.length - 1)) !== -1) {
       if (_.startsWith(duration, '-')) {
         mode = 'outside_variable';
@@ -58,7 +63,7 @@ export default class Duration extends Component {
   }
 
   getValue() {
-    const { start_time, end_time, mode, inside_variable, outside_variable } = this.state;
+    const { start_time, end_time, mode, current_variable, inside_variable, outside_variable } = this.state;
 
     if (mode === 'fixed') {
       if (start_time || end_time) {
@@ -66,6 +71,8 @@ export default class Duration extends Component {
       } else {
         return '';
       }
+    } else if (mode === 'current_variable') {
+      return current_variable;
     } else if (mode === 'outside_variable') {
       return outside_variable;
     } else if (mode === 'inside_variable') {
@@ -78,9 +85,10 @@ export default class Duration extends Component {
   render() {
 
     const modeOptions = [
-     { value: 'fixed', label: '固定时间' }, 
-     { value: 'inside_variable', label: '时间段之内' }, 
-     { value: 'outside_variable', label: '时间段之外' }
+      { value: 'fixed', label: '固定时间段' }, 
+      { value: 'current_variable', label: '当前时间段' }, 
+      { value: 'inside_variable', label: '时间段之内' }, 
+      { value: 'outside_variable', label: '时间段之外' }
     ];
 
     const variable_durations = [
@@ -102,18 +110,36 @@ export default class Duration extends Component {
       { value: '2y', label: '2年' }
     ];
 
+    const current_variable_durations = [
+      { value: '0d', label: '当天' },
+      { value: '0w', label: '当前周' },
+      { value: '0m', label: '当月' },
+      { value: '0y', label: '当前年' }
+    ];
+
     return (
       <div style={ { display: 'inline' } }>
-        { this.state.isModeChanged &&
         <div style={ { width: '26%', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
           <Select
-            options={ modeOptions }
+            options={ this.state.isModeChanged ? modeOptions : _.filter(modeOptions, (v) => v.value == 'fixed' || v.value == 'current_variable' ) }
             disabled={ false }
             simpleValue
             searchable={ false }
             clearable={ false }
             value={ this.state.mode }
             onChange={ (newValue) => { this.setState({ mode: newValue }) } }
+            placeholder='请选择'/>
+        </div>
+        { this.state.mode === 'current_variable' &&
+        <div style={ { width: '40%', display: 'inline-block', float: 'left' } }>
+          <Select
+            options={ current_variable_durations }
+            disabled={ false }
+            simpleValue
+            searchable={ false }
+            clearable={ true }
+            value={ this.state.current_variable || null }
+            onChange={ (newValue) => { this.onChange({ current_variable: newValue }); } }
             placeholder='请选择'/>
         </div> }
         { this.state.mode === 'outside_variable' &&
@@ -143,7 +169,7 @@ export default class Duration extends Component {
         </div> }
         { this.state.mode === 'inside_variable' && <span style={ { float: 'left', marginTop: '8px', marginLeft: '2px' } }>之内</span> }
         { this.state.mode === 'fixed' &&
-        <div style={ { width: this.state.isModeChanged ? '34%' : '47%', display: 'inline-block', float: 'left' } }>
+        <div style={ { width: '34%', display: 'inline-block', float: 'left' } }>
           <DateTime
             mode='date'
             locale='zh-cn'
@@ -156,7 +182,7 @@ export default class Duration extends Component {
         </div> }
         { this.state.mode === 'fixed' && <div style={ { float: 'left', width: '6%', marginTop: '8px', textAlign: 'center' } }>～</div> }
         { this.state.mode === 'fixed' &&  
-        <div style={ { width: this.state.isModeChanged ? '34%' : '47%', display: 'inline-block', float: 'right' } }>
+        <div style={ { width: '34%', display: 'inline-block', float: 'right' } }>
           <DateTime
             mode='date'
             locale='zh-cn'
