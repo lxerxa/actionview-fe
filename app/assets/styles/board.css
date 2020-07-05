@@ -147,6 +147,10 @@
   margin-top: 80px;
 }
 
+.kanban-header {
+  margin: 16px 10px 10px 10px;
+}
+
 .kanban-table-td-title {
   margin-top: 12px;
   display: block;

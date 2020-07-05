@@ -351,6 +351,13 @@ export function parseQuery(query, options) {
     }
   });
 
+  const currentDurations = {
+    '0d': '当天',
+    '0w': '当前周',
+    '0m': '当月',
+    '0y': '当前年'
+  };
+
   const queryConds = [];
   const errorMsg = ' 检索值解析失败，条件无法正常显示。如果当前检索已被保存为过滤器，建议删除，重新保存。';
   let index = -1;
@@ -374,7 +381,9 @@ export function parseQuery(query, options) {
       } else if ([ 'Duration', 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
         let cond = '';
         const timeUnits = { w: '周', m: '月', y: '年' };
-        if (_.endsWith(query[v.key], 'w') || _.endsWith(query[v.key], 'm') || _.endsWith(query[v.key], 'y')) {
+        if ([ '0d', '0w', '0m', '0y' ].indexOf(query[v.key]) !== -1) {
+          return currentDurations[query[v.key]];
+        } else if (_.endsWith(query[v.key], 'w') || _.endsWith(query[v.key], 'm') || _.endsWith(query[v.key], 'y')) {
           const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
           if (pattern.exec(query[v.key])) {
             cond = RegExp.$2 + timeUnits[RegExp.$3] + (RegExp.$1 === '-' ? '外' : '内');

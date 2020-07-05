@@ -18,6 +18,7 @@ const DelSprintNotify = require('./DelSprintNotify');
 const CompleteSprintNotify = require('./CompleteSprintNotify');
 const MoveIssueNotify = require('./MoveIssueNotify');
 const ViewSprintModal = require('./ViewSprintModal');
+const EditSprintModal = require('./EditSprintModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ export default class List extends Component {
       barShow: false, 
       selectVersionShow: false,
       viewSprintShow: false, 
+      editSprintShow: false, 
       publishSprintShow: false,
       completeSprintShow: false,
       deleteSprintShow: false,
@@ -121,6 +123,7 @@ export default class List extends Component {
     setRank: PropTypes.func.isRequired,
     rankLoading: PropTypes.bool.isRequired,
     release: PropTypes.func.isRequired,
+    updateSprint: PropTypes.func.isRequired,
     publishSprint: PropTypes.func.isRequired,
     completeSprint: PropTypes.func.isRequired,
     deleteSprint: PropTypes.func.isRequired,
@@ -150,6 +153,10 @@ export default class List extends Component {
 
   viewSprintModalClose() {
     this.setState({ viewSprintShow: false });
+  }
+
+  editSprintModalClose() {
+    this.setState({ editSprintShow: false });
   }
 
   workflowScreenModalClose() {
@@ -253,6 +260,8 @@ export default class List extends Component {
     const no = eventKey.split('-').pop();
     if (eventKey.indexOf('view') !== -1) {
       this.setState({ viewSprintShow: true, curSprintNo: no - 0 });
+    } else if (eventKey.indexOf('edit') !== -1) {
+      this.setState({ editSprintShow: true, curSprintNo: no - 0 });
     } else if (eventKey.indexOf('publish') !== -1) {
       this.setState({ publishSprintShow: true, curSprintNo: no - 0 });
     } else if (eventKey.indexOf('delete') !== -1) {
@@ -343,6 +352,7 @@ export default class List extends Component {
       setRank,
       rankLoading,
       release,
+      updateSprint,
       publishSprint,
       completeSprint,
       deleteSprint,
@@ -441,7 +451,7 @@ export default class List extends Component {
                 className='board-column' 
                 style={ { background: mode == 'issue' && selectedFilter === 'all' ? (v.max && columnIssues[i].length > v.max ? '#d04437' : (v.min && columnIssues[i].length < v.min ? '#f6c342' : '')) : '' } }>
                 <span style={ { fontWeight: 600 } }>
-                  { mode == 'backlog' ? (v.no == 0 ? 'Backlog' : 'Sprint ' + v.no) : v.name }
+                  { mode == 'backlog' ? (v.no == 0 ? 'Backlog' : v.name) : v.name }
                 </span>（{ columnIssues[i].length }）
                 { mode == 'issue' && v.max && <span className='config-wip'>{ 'Max-' + v.max }</span> }
                 { mode == 'issue' && v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
@@ -466,6 +476,7 @@ export default class List extends Component {
                     onClick={ this.closeDetail.bind(this) }
                     pullRight>
                     <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> 
+                    <MenuItem eventKey={ 'edit-' +  v.no }>编辑</MenuItem> 
                     { v.status == 'waiting' && i == 1 && <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
                     { v.status == 'waiting' && <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> }
                   </DropdownButton> 
@@ -606,7 +617,8 @@ export default class List extends Component {
             doAction={ doAction }
             user={ user }/> }
         { this.state.workflowScreenShow &&
-          <CreateModal show
+          <CreateModal 
+            show
             close={ this.workflowScreenModalClose.bind(this) }
             options={ options }
             edit={ edit }
@@ -618,27 +630,31 @@ export default class List extends Component {
             isFromWorkflow={ true }
             i18n={ i18n }/> }
         { this.state.selectVersionShow &&
-          <ReleaseVersionModal show
+          <ReleaseVersionModal 
+            show
             options={ options }
             close={ this.selectVersionModalClose.bind(this) }
             release={ release } 
             releasedIssues={ _.last(columnIssues) || [] } 
             i18n={ i18n }/> }
         { this.state.publishSprintShow &&
-          <PublishSprintModal show
+          <PublishSprintModal 
+            show
             close={ this.publishSprintModalClose.bind(this) }
             sprintNo={ this.state.curSprintNo }
             publish={ publishSprint }
             i18n={ i18n }/> }
         { this.state.deleteSprintShow &&
-          <DelSprintNotify show
+          <DelSprintNotify 
+            show
             close={ this.deleteSprintModalClose.bind(this) }
             sprintNo={ this.state.curSprintNo }
             del={ deleteSprint }
             loading={ sprintLoading }
             i18n={ i18n }/> }
         { this.state.completeSprintShow &&
-          <CompleteSprintNotify show
+          <CompleteSprintNotify 
+            show
             close={ this.completeSprintModalClose.bind(this) }
             loading={ sprintLoading }
             sprintNo={ _.find(sprints, { status: 'active' }) ? _.find(sprints, { status: 'active' }).no : 0 }
@@ -647,18 +663,27 @@ export default class List extends Component {
             completedIssues={ _.last(columnIssues) || [] }
             i18n={ i18n }/> }
         { this.state.moveIssueShow &&
-          <MoveIssueNotify show
+          <MoveIssueNotify 
+            show
             close={ this.moveIssueModalClose.bind(this) }
             loading={ sprintLoading }
             move={ moveSprintIssue }
             values={ this.state.movedData }
             i18n={ i18n }/> }
         { this.state.viewSprintShow &&
-          <ViewSprintModal show
+          <ViewSprintModal 
+            show
             close={ this.viewSprintModalClose.bind(this) }
             sprintNo={ this.state.curSprintNo }
             sprints={ sprints }
             collection={ collection }/> }
+        { this.state.editSprintShow &&
+          <EditSprintModal 
+            show
+            update={ updateSprint } 
+            close={ this.editSprintModalClose.bind(this) }
+            data={ _.find(sprints, { no: this.state.curSprintNo }) }
+            i18n={ i18n }/> }
       </div>
     );
   }

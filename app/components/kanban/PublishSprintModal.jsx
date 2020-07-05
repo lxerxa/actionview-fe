@@ -6,10 +6,15 @@ import DateTime from 'react-datetime';
 import { notify } from 'react-notify-toast';
 
 var moment = require('moment');
+const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
+
+  if (!values.name) {
+    errors.name = '必填';
+  }
 
   if (!values.start_time) {
     errors.start_time = '必填';
@@ -39,7 +44,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'publish',
-  fields: ['start_time', 'complete_time', 'description'],
+  fields: ['name', 'start_time', 'complete_time', 'description'],
   validate
 })
 export default class PublishModal extends Component {
@@ -96,15 +101,15 @@ export default class PublishModal extends Component {
   }
 
   componentWillMount() {
-    const { initializeForm } = this.props;
-    initializeForm({ start_time: moment(), complete_time: moment().add(15, 'days') });
+    const { initializeForm, sprintNo } = this.props;
+    initializeForm({ name: 'Sprint ' + sprintNo, start_time: moment(), complete_time: moment().add(15, 'days') });
   }
 
   render() {
     const { 
       sprintNo,
       i18n: { errMsg }, 
-      fields: { start_time, complete_time, description }, 
+      fields: { name, start_time, complete_time, description }, 
       handleSubmit, 
       invalid, 
       submitting 
@@ -117,6 +122,14 @@ export default class PublishModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body style={ { maxHeight: '580px' } }>
+          <FormGroup>
+            <ControlLabel>名称</ControlLabel>
+            <FormControl
+              disabled={ submitting }
+              componentClass='text'
+              { ...name }
+              placeholder='名称'/>
+          </FormGroup>
           <div>
             <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ start_time.error ? 'error' : null }>
               <ControlLabel><span className='txt-impt'>*</span>开始时间</ControlLabel>

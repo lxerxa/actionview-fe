@@ -341,6 +341,11 @@ export default class Container extends Component {
     return this.props.kanban.ecode;
   }
 
+  async updateSprint(values) {
+    await this.props.actions.updateSprint(this.pid, values);
+    return this.props.kanban.ecode;
+  }
+
   async deleteSprint(sprintNo) {
     await this.props.actions.deleteSprint(this.pid, sprintNo);
     return this.props.kanban.ecode;
@@ -507,6 +512,7 @@ export default class Container extends Component {
           setRank={ this.setRank.bind(this) }
           release={ this.release.bind(this) }
           moveSprintIssue={ this.moveSprintIssue.bind(this) }
+          updateSprint={ this.updateSprint.bind(this) }
           publishSprint={ this.publishSprint.bind(this) }
           completeSprint={ this.completeSprint.bind(this) }
           deleteSprint={ this.deleteSprint.bind(this) }

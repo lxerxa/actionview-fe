@@ -243,8 +243,12 @@ export default class Header extends Component {
           <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
             <Grid>
               <Row>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>序号</Col>
+                <Col sm={ 9 }>{ activeSprint.no || '' }</Col>
+              </Row>
+              <Row>
                 <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>名称</Col>
-                <Col sm={ 9 }>Sprint { activeSprint.no || '' }</Col>
+                <Col sm={ 9 }>{ activeSprint.name || '' }</Col>
               </Row>
               <Row>
                 <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
@@ -290,7 +294,7 @@ export default class Header extends Component {
     }
 
     return (
-      <div style={ { margin: '16px 10px 10px 10px' } }>
+      <div className='kanban-header'>
         <div style={ { height: '0px', display: this.state.hideHeader ? 'block' : 'none', textAlign: 'right' } }>
           <span title='展示看板头'>
             <Button onClick={ this.showHeader.bind(this) } style={ { marginTop: '-37px' } }><i className='fa fa-angle-double-down' aria-hidden='true'></i></Button>

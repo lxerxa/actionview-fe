@@ -88,6 +88,13 @@ export function completeSprint(key, no, values) {
   });
 }
 
+export function updateSprint(key, values) {
+  return asyncFuncCreator({
+    constant: 'KANBAN_SPRINT_EDIT',
+    promise: (client) => client.request({ url: '/project/' + key + '/sprint/' + values.no, data: values, method: 'put' })
+  });
+}
+
 export function deleteSprint(key, no) {
   return asyncFuncCreator({
     constant: 'KANBAN_SPRINT_DELETE',
