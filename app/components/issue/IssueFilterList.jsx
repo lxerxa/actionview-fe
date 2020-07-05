@@ -204,7 +204,6 @@ export class IssueFilterList extends Component {
       <Form 
         id='search-form'
         horizontal 
-        style={ { marginTop: '10px', marginBottom: '15px', padding: '15px 10px 10px 10px', backgroundColor: '#f7f7f7', borderRadius: '4px' } } 
         className={ !searchShow && 'hide' }>
         { notShowBlocks.indexOf('base') === -1 &&
         <div style={ { width: '100%', textAlign: 'left', paddingBottom: '5px' } }>
@@ -382,7 +381,7 @@ export function parseQuery(query, options) {
         let cond = '';
         const timeUnits = { w: '周', m: '月', y: '年' };
         if ([ '0d', '0w', '0m', '0y' ].indexOf(query[v.key]) !== -1) {
-          return currentDurations[query[v.key]];
+          cond = currentDurations[query[v.key]];
         } else if (_.endsWith(query[v.key], 'w') || _.endsWith(query[v.key], 'm') || _.endsWith(query[v.key], 'y')) {
           const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
           if (pattern.exec(query[v.key])) {

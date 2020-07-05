@@ -648,7 +648,7 @@ export default class List extends Component {
           <DelSprintNotify 
             show
             close={ this.deleteSprintModalClose.bind(this) }
-            sprintNo={ this.state.curSprintNo }
+            data={ _.find(sprints, { no: this.state.curSprintNo }) }
             del={ deleteSprint }
             loading={ sprintLoading }
             i18n={ i18n }/> }

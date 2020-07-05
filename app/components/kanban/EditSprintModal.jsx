@@ -84,7 +84,7 @@ export default class EditSprintModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>编辑 - Sprint{ data.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>编辑 - { data.name || '' }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body style={ { maxHeight: '580px' } }>

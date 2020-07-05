@@ -59,7 +59,7 @@ export default class ViewSprintModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>工作量查看 - Sprint{ sprintNo }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>工作量查看 - { curSprint.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           { !_.isEmpty(issuesByAssignee) &&
@@ -72,11 +72,12 @@ export default class ViewSprintModal extends Component {
               </tr>
             </thead>
             <tbody>
+              { unassignedIssues.issue_count > 0 &&
               <tr>
                 <td>未分配的</td>
                 <td>{ unassignedIssues.issue_count }</td>
                 <td>{ unassignedIssues.story_points }</td>
-              </tr>
+              </tr> }
             { _.map(issuesByAssignee, (v, key) => {
               return (<tr key={ key }>
                 <td>

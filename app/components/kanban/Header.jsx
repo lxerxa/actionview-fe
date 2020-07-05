@@ -243,7 +243,7 @@ export default class Header extends Component {
           <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
             <Grid>
               <Row>
-                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>序号</Col>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Sprint No</Col>
                 <Col sm={ 9 }>{ activeSprint.no || '' }</Col>
               </Row>
               <Row>
@@ -270,8 +270,12 @@ export default class Header extends Component {
         <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
           <Grid>
             <Row>
+              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Sprint No</Col>
+              <Col sm={ 9 }>{ activeSprint.no || '' }</Col>
+            </Row>
+            <Row>
               <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>名称</Col>
-              <Col sm={ 9 }>Sprint { selectedSprint.no || '' }</Col>
+              <Col sm={ 9 }>{ selectedSprint.name || '' }</Col>
             </Row>
             <Row>
               <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>期间</Col>
@@ -346,8 +350,8 @@ export default class Header extends Component {
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
           { curKanban.type == 'scrum' && !_.isEmpty(activeSprint) &&
           <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverSprint }>
-            <div style={ { float: 'left', marginTop: '7px', marginRight: '20px', cursor: 'pointer' } }>
-              Sprint { activeSprint.no || '' } <i className='fa fa-caret-down' aria-hidden='true'></i>
+            <div className='popover-active-sprint'>
+              <div className='active-sprint-name'>{ activeSprint.name || '' } <i className='fa fa-caret-down' aria-hidden='true'></i></div> 
             </div> 
           </OverlayTrigger> }
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>

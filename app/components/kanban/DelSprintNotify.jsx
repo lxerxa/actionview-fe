@@ -18,12 +18,12 @@ export default class DelNotify extends Component {
     close: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
     del: PropTypes.func.isRequired,
-    sprintNo: PropTypes.number.isRequired
+    data: PropTypes.object.isRequired
   }
 
   async confirm() {
-    const { close, del, sprintNo } = this.props;
-    const ecode = await del(sprintNo);
+    const { close, del, data } = this.props;
+    const ecode = await del(data.no);
     this.setState({ ecode: ecode });
 
     if (ecode === 0) {
@@ -41,13 +41,13 @@ export default class DelNotify extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, sprintNo, loading } = this.props;
+    const { i18n: { errMsg }, data, loading } = this.props;
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>
-            删除 - Sprint{ sprintNo }
+            删除 - { data.name || '' }
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
