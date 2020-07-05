@@ -305,10 +305,10 @@
   color: #000;
 }
 
-.search-form {
+#search-form {
   margin-top: 10px; 
   margin-bottom: 15px; 
-  padding: 15px 10px 1px 10px; 
+  padding: 15px 10px 10px 10px; 
   background-color: #f7f7f7; 
   border-radius: 4px;
 }
@@ -1187,4 +1187,12 @@ div.filepicker {
 
 .directory-indent:hover {
   color: #000;
+}
+
+.log-search-form {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 15px 10px 0px 0px;
+  background-color: #f7f7f7;
+  border-radius: 4px;
 }
