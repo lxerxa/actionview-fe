@@ -164,7 +164,7 @@ export default class Header extends Component {
   }
 
   async handleSelectSprint(key) {
-    const { index, curKanban, selectFilter, completedSprintNum, getSprint } = this.props;
+    const { index, selectFilter, completedSprintNum, getSprint } = this.props;
     await selectFilter(key || completedSprintNum);
     index({ sprints: key });
     getSprint(key);
@@ -228,10 +228,7 @@ export default class Header extends Component {
     const epicOptions = _.map(epics, (val) => { return { label: val.name, value: val.id } });
     const versionOptions = _.map(versions, (val) => { return { label: val.name, value: val.id } });
 
-    const completedSprintOptions = [];
-    for (let i = completedSprintNum; i > 0; i--) {
-      completedSprintOptions.push({ label: 'Sprint ' + i , value: '' + i });
-    }
+    const completedSprintOptions = _.map(_.filter(options.sprints, (v) => v.no <= completedSprintNum), (v) => { return { label: v.name, value: v.no + '' } });
 
     let popoverSprint = '';
     let hisPopoverSprint = '';
@@ -240,7 +237,7 @@ export default class Header extends Component {
       activeSprint = _.find(sprints || [], { status: 'active' });
       if (activeSprint) {
         popoverSprint = (
-          <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
+          <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px', lineHeight: '25px' } }>
             <Grid>
               <Row>
                 <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Sprint No</Col>
@@ -267,11 +264,11 @@ export default class Header extends Component {
       }
     } else if (curKanban.type == 'scrum' && mode == 'history') {
       hisPopoverSprint = (
-        <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
+        <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px', lineHeight: '25px' } }>
           <Grid>
             <Row>
               <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Sprint No</Col>
-              <Col sm={ 9 }>{ activeSprint.no || '' }</Col>
+              <Col sm={ 9 }>{ selectedSprint.no || '' }</Col>
             </Row>
             <Row>
               <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>名称</Col>

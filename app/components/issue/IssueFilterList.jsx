@@ -105,7 +105,7 @@ export class IssueFilterList extends Component {
             </Col>
             <Col sm={ 12 / columns - 1 }>
               <Duration
-                mode={ (v.type === 'DatePicker' || v.type === 'DateTimePicker') ? 'fixed' : (v.mode || '') }
+                options={ (v.type === 'DatePicker' || v.type === 'DateTimePicker') ? [ 'fixed', 'current_variable' ] : (v.options || []) }
                 value={ this.state.values[v.key] }
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.onChange(); } }/>
             </Col>
@@ -144,12 +144,13 @@ export class IssueFilterList extends Component {
       notShowFields=[],
       notShowBlocks=[],
       notShowTypes=[],
-      options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[], fields=[] } } = this.props;
+      options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[], fields=[] } 
+    } = this.props;
 
     const userOptions = _.map(users, (val) => { return { name: val.name + '(' + val.email + ')', id: val.id } });
     userOptions.unshift({ id: 'me', name: '当前用户' });
     const labelOptions = _.map(labels, (val) => { return { id: val.name, name: val.name } });
-    const sprintOptions = _.map(sprints, (val) => { return { name: 'Sprint ' + val, id: val } });
+    const sprintOptions = _.map(sprints, (val) => { return { name: val.name, id: val.no + '' } });
 
     const baseFields = [
       { key: 'title', name: '主题/NO', type: 'Text', desc: '主题关键字或编号' },
@@ -178,8 +179,8 @@ export class IssueFilterList extends Component {
       { key: 'updated_at', name: '更新时间', type: 'Duration' },
       { key: 'resolved_at', name: '解决时间', type: 'Duration' },
       { key: 'closed_at', name: '关闭时间', type: 'Duration' },
-      { key: 'expect_start_time', name: '期望开始', type: 'Duration', mode: 'fixed' },
-      { key: 'expect_complete_time', name: '期望完成', type: 'Duration', mode: 'fixed' }
+      { key: 'expect_start_time', name: '期望开始', type: 'Duration', options: [ 'fixed', 'current_variable' ] },
+      { key: 'expect_complete_time', name: '期望完成', type: 'Duration', options: [ 'fixed', 'current_variable' ] }
     ];
     const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 2);
 
@@ -312,6 +313,8 @@ export function parseQuery(query, options) {
   const userOptions = _.map(users, (val) => { return { name: val.name, id: val.id } });
   userOptions.unshift({ id: 'me', name: '当前用户' });
 
+  const sprintOptions = _.map(sprints, (val) => { return { name: val.name, id: val.no + '' } });
+
   const sections = [
     { key: 'no', name: 'NO', type: 'Text' },
     { key: 'title', name: '主题/NO', type: 'Text' },
@@ -336,7 +339,7 @@ export function parseQuery(query, options) {
     { key: 'expect_start_time', name : '期望开始时间', type: 'Duration' },
     { key: 'expect_complete_time', name : '期望完成时间', type: 'Duration' },
     { key: 'epic', type: 'MultiSelect', name: 'Epic', optionValues: epics },
-    { key: 'sprints', type: 'Select', name: 'Sprint' }
+    { key: 'sprints', type: 'Select', name: 'Sprint', optionValues: sprintOptions }
   ];
 
   _.forEach(fields, (v) => {
@@ -364,7 +367,7 @@ export function parseQuery(query, options) {
   for(let i = 0; i < sections.length; i++) {
     const v = sections[i];
     if (query[v.key]) {
-      if ([ 'labels', 'sprints' ].indexOf(v.key) !== -1 || [ 'Text', 'TextArea', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
+      if ('labels' == v.key || [ 'Text', 'TextArea', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
         queryConds.push(v.name + '～' + query[v.key]);
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
         const queryNames = [];
@@ -376,7 +379,7 @@ export function parseQuery(query, options) {
             return v.name + '～' + errorMsg;
           }
         }
-        queryConds.push(v.name + '～' + queryNames.join(','));
+        queryConds.push(v.name + '～' + queryNames.join(', '));
       } else if ([ 'Duration', 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
         let cond = '';
         const timeUnits = { w: '周', m: '月', y: '年' };
@@ -430,7 +433,7 @@ export function parseQuery(query, options) {
       } 
     });
     if (orderItems.length > 0) {
-      queryConds.push(orderItems.join(','));
+      queryConds.push(orderItems.join(', '));
     }
   }
 

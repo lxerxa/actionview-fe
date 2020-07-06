@@ -120,6 +120,9 @@ export default class FilterConfigModal extends Component {
               { this.state.touched.name && (this.state.errors.name || '') }
             </Col>
           </FormGroup> }
+          <div className='cond-txt'>
+            { !_.isEmpty(_.omit(this.state.query, [ 'subtask' ])) ? parseQuery(this.state.query, options) : '全部' }
+          </div>
           <IssueFilterList
             values={ this.state.query }
             textInputChange={ true }
@@ -134,7 +137,7 @@ export default class FilterConfigModal extends Component {
           <Button bsStyle='link' style={ { float: 'left' } } disabled={ loading } onClick={ () => { this.setState({ query: {} }) } }>清空条件</Button>
           <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ (model === 'filter' && !this.state.name) || loading || _.isEmpty(this.state.query) } onClick={ this.handleSubmit }>确定</Button>
+          <Button disabled={ (model === 'filter' && (!this.state.name || _.isEmpty(this.state.query))) || loading } onClick={ this.handleSubmit }>确定</Button>
           <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>
         </Form>

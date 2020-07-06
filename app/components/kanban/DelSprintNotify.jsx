@@ -41,7 +41,7 @@ export default class DelNotify extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, data, loading } = this.props;
+    const { i18n: { errMsg }, data={}, loading } = this.props;
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

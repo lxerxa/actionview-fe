@@ -21,7 +21,9 @@ export default class ConfigModal extends Component {
         'created_at',  
         'updated_at', 
         'resolved_at', 
-        'closed_at' ] };
+        'closed_at' 
+      ] 
+    };
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -76,7 +78,8 @@ export default class ConfigModal extends Component {
       'resolved_at', 
       'closed_at', 
       'epic', 
-      'sprints' ];
+      'sprints' 
+    ];
     const diff_field_keys = _.difference(defined_field_keys, field_keys);
     const sorted_field_keys = field_keys.concat(diff_field_keys);
 

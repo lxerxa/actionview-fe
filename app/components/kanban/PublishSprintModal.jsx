@@ -64,12 +64,12 @@ export default class PublishModal extends Component {
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     initializeForm: PropTypes.func.isRequired,
-    sprintNo: PropTypes.number.isRequired,
+    sprint: PropTypes.object.isRequired,
     publish: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, publish, sprintNo, close } = this.props;
+    const { values, publish, sprint, close } = this.props;
     
     if (values.start_time)
     {
@@ -82,7 +82,7 @@ export default class PublishModal extends Component {
 
     values.isSendMsg = this.state.isSendMsg;
 
-    const ecode = await publish(values, sprintNo);
+    const ecode = await publish(values, sprint.no);
     this.setState({ ecode: ecode });
 
     if (ecode === 0) {
@@ -101,13 +101,18 @@ export default class PublishModal extends Component {
   }
 
   componentWillMount() {
-    const { initializeForm, sprintNo } = this.props;
-    initializeForm({ name: 'Sprint ' + sprintNo, start_time: moment(), complete_time: moment().add(15, 'days') });
+    const { initializeForm, sprint } = this.props;
+    initializeForm({ 
+      name: sprint.name || '', 
+      start_time: moment(), 
+      complete_time: moment().add(15, 'days'), 
+      description: sprint.description || '' 
+    });
   }
 
   render() {
     const { 
-      sprintNo,
+      sprint,
       i18n: { errMsg }, 
       fields: { name, start_time, complete_time, description }, 
       handleSubmit, 
@@ -118,17 +123,19 @@ export default class PublishModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>发布 - Sprint{ sprintNo }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>发布 - { sprint.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body style={ { maxHeight: '580px' } }>
-          <FormGroup>
-            <ControlLabel>名称</ControlLabel>
+          <FormGroup validationState={ name.error ? 'error' : null }>
+            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl
               disabled={ submitting }
-              componentClass='text'
+              type='text'
               { ...name }
               placeholder='名称'/>
+            { name.error && 
+              <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <div>
             <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ start_time.error ? 'error' : null }>

@@ -641,7 +641,7 @@ export default class List extends Component {
           <PublishSprintModal 
             show
             close={ this.publishSprintModalClose.bind(this) }
-            sprintNo={ this.state.curSprintNo }
+            sprint={ _.find(sprints, { no: this.state.curSprintNo }) }
             publish={ publishSprint }
             i18n={ i18n }/> }
         { this.state.deleteSprintShow &&

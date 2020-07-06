@@ -22,7 +22,8 @@ export default class Worklog extends Component {
       worklogListShow: false,
       showedUser: {},
       sort: 'default', 
-      shape: 'pie' };
+      shape: 'pie' 
+    };
     this.showList = this.showList.bind(this);
     this.refreshList = this.refreshList.bind(this);
   }
@@ -159,6 +160,7 @@ export default class Worklog extends Component {
             </Col>
             <Col sm={ 5 }>
               <Duration
+                options={ [ 'fixed', 'inside_variable' ] }
                 value={ this.state.recorded_at }
                 onChange={ (newValue) => { this.state.recorded_at = newValue; this.search(); } }/>
             </Col>

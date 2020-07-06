@@ -128,7 +128,8 @@ export default class Config extends Component {
       loading,
       edit,
       del,
-      config } = this.props;
+      config
+    } = this.props;
 
     const isAllowedEdit = options.permissions && options.permissions.indexOf('manage_project') !== -1;
 

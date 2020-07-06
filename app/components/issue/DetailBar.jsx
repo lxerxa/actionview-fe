@@ -536,7 +536,8 @@ export default class DetailBar extends Component {
       editProgress, 
       delFileShow, 
       selectedFile, 
-      action_id } = this.state;
+      action_id 
+    } = this.state;
 
     const panelStyle = { marginBottom: '0px', borderTop: '0px', borderRadius: '0px' };
 
@@ -819,7 +820,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
-                      Sprint { data.sprints.join(', ') }
+                      { _.map(data.sprints, (v) => { return _.find(options.sprints, { no: v }).name }).join(', ') }
                     </div>
                   </Col>
                 </FormGroup> }
@@ -993,7 +994,7 @@ export default class DetailBar extends Component {
                   if (field.type === 'SingleUser') {
                     contents = data[field.key] && data[field.key].name || '-';
                   } else if (field.type === 'MultiUser') {
-                    contents = _.map(data[field.key] || [], (v) => v.name).join(',');
+                    contents = _.map(data[field.key] || [], (v) => v.name).join(', ');
                   } else if (field.type === 'Select' || field.type === 'RadioGroup' || field.type === 'SingleVersion') {
                     const optionValues = field.optionValues || [];
                     contents = _.find(optionValues, { id: data[field.key] }) ? _.find(optionValues, { id: data[field.key] }).name : '-';
@@ -1006,7 +1007,7 @@ export default class DetailBar extends Component {
                         newValues.push(_.find(optionValues, { id: v }).name);
                       }
                     });
-                    contents = newValues.join(',') || '-';
+                    contents = newValues.join(', ') || '-';
                   } else if (field.type === 'DatePicker') {
                     contents = moment.unix(data[field.key]).format('YYYY/MM/DD');
                   } else if (field.type === 'DateTimePicker') {

@@ -9,8 +9,8 @@ export default class Duration extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      mode: props.mode || 'fixed', 
-      isModeChanged: props.mode ? false : true, 
+      options: !_.isEmpty(props.options) ? props.options : [ 'fixed', 'current_variable', 'inside_variable', 'outside_variable' ],
+      mode: 'fixed', 
       start_time: '', 
       end_time: '', 
       current_variable: '', 
@@ -22,7 +22,7 @@ export default class Duration extends Component {
   }
 
   static propTypes = {
-    mode: PropTypes.string,
+    options: PropTypes.array,
     onChange: PropTypes.func,
     value: PropTypes.string
   }
@@ -50,7 +50,7 @@ export default class Duration extends Component {
         inside_variable = duration;
       }
     }
-    this.setState({ mode, start_time, end_time, inside_variable, outside_variable });
+    this.setState({ mode, start_time, end_time, current_variable, inside_variable, outside_variable });
   }
 
   async onChange(data) {
@@ -119,9 +119,10 @@ export default class Duration extends Component {
 
     return (
       <div style={ { display: 'inline' } }>
+        { this.state.options.length > 1 &&
         <div style={ { width: '26%', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
           <Select
-            options={ this.state.isModeChanged ? modeOptions : _.filter(modeOptions, (v) => v.value == 'fixed' || v.value == 'current_variable' ) }
+            options={ _.filter(modeOptions, (v) => this.state.options.indexOf(v.value) !== -1) }
             disabled={ false }
             simpleValue
             searchable={ false }
@@ -129,7 +130,7 @@ export default class Duration extends Component {
             value={ this.state.mode }
             onChange={ (newValue) => { this.setState({ mode: newValue }) } }
             placeholder='请选择'/>
-        </div>
+        </div> }
         { this.state.mode === 'current_variable' &&
         <div style={ { width: '40%', display: 'inline-block', float: 'left' } }>
           <Select

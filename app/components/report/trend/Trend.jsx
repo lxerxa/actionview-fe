@@ -175,6 +175,7 @@ export default class Trend extends Component {
             </Col>
             <Col sm={ 6 }>
               <Duration
+                options={ [ 'fixed', 'inside_variable' ] }
                 value={ this.state.stat_time }
                 onChange={ (newValue) => { this.state.stat_time = newValue; this.search(); } }/>
             </Col>
