@@ -20,7 +20,14 @@ export default class OverlayColumn extends Component {
   }
 
   render() {
-    const { isEmpty, draggedIssue, sprintNo, columns, options, moveSprintIssue } = this.props;
+    const { 
+      isEmpty, 
+      draggedIssue, 
+      sprintNo, 
+      columns, 
+      options, 
+      moveSprintIssue 
+    } = this.props;
 
     let headerHeight = 120 + 50;
     if ($('#main-header').css('display') == 'none') {

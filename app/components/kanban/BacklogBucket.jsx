@@ -60,8 +60,10 @@ export default class Bucket extends Component {
       isOver,
       canDrop,
       connectDropTarget,
+      columns,
       sprintNo, 
-      height } = this.props;
+      height 
+    } = this.props;
 
     const isActive = isOver && canDrop
 
@@ -70,9 +72,21 @@ export default class Bucket extends Component {
       backgroundColor = 'darkseagreen';
     }
 
+    let sprintName = '';
+    if (sprintNo == 0) {
+      sprintName = 'Backlog';
+    } else {
+      const sprint = _.find(columns, { no: sprintNo });
+      if (!_.isEmpty(sprint) && sprint.name) {
+        sprintName = sprint.name;
+      } else {
+        sprintName = 'Sprint ' + sprintNo; 
+      }
+    }
+
     return connectDropTarget (
       <div className='board-zone-cell' style={ { height, backgroundColor } }>
-        { sprintNo == 0 ? 'Backlog' : 'Sprint ' + sprintNo }
+        { sprintName }
       </div>);
   }
 }
