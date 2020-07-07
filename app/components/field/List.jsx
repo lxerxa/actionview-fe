@@ -167,7 +167,7 @@ export default class List extends Component {
                 onSelect={ this.operateSelect.bind(this) }>
                 { [ 'Select', 'MultiSelect', 'RadioGroup', 'CheckboxGroup' ].indexOf(collection[i].type) !== -1 && <MenuItem eventKey='4'>可选值配置</MenuItem> }
                 { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
-                { collection[i].type !== 'File' && collection[i].type !== 'SingleVersion' && collection[i].type !== 'MultiVersion' && collection[i].type !== 'SingleUser' && collection[i].type !== 'MultiUser' && collection[i].type !== 'TimeTracking' && collection[i].type !== 'DateTimePicker' && <MenuItem eventKey='3'>默认值配置</MenuItem> }
+                { [ 'File', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser', 'TimeTracking', 'DateTimePicker' ].indexOf(collection[i].type) === -1 && <MenuItem eventKey='3'>属性配置</MenuItem> }
                 <MenuItem eventKey='1'>编辑</MenuItem>
                 { pkey === '$_sys_$' && <MenuItem eventKey='6'>查看项目应用</MenuItem> }
                 { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }

@@ -28,7 +28,7 @@ const validate = (values, props) => {
 };
 @reduxForm({
   form: 'field',
-  fields: [ 'id', 'defaultValue' ],
+  fields: [ 'id', 'defaultValue', 'maxValue', 'minValue', 'maxLength' ],
   validate
 })
 export default class DefaultValueConfigModal extends Component {
@@ -66,8 +66,12 @@ export default class DefaultValueConfigModal extends Component {
 
   async handleSubmit() {
     const { values, config, close, data } = this.props;
+
+    const submittedData = {};
     if (values.defaultValue && data.type === 'DatePicker') {
-      values.defaultValue = parseInt(moment(values.defaultValue).startOf('day').format('X')); 
+      submittedData.defaultValue = parseInt(moment(values.defaultValue).startOf('day').format('X')); 
+    } else {
+      submittedData.defaultValue = values.defaultValue; 
     }
     //alert(JSON.stringify(values));
     const ecode = await config(values);
@@ -90,7 +94,15 @@ export default class DefaultValueConfigModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, defaultValue }, dirty, handleSubmit, invalid, submitting, data } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { id, defaultValue, maxValue, minValue, maxLength }, 
+      dirty, 
+      handleSubmit, 
+      invalid, 
+      submitting, 
+      data 
+    } = this.props;
 
     let optionValues = [];
     let defaultComponent = {};
@@ -117,6 +129,8 @@ export default class DefaultValueConfigModal extends Component {
     } else if (data.type === 'DatePicker') {
       defaultComponent = ( 
        <DateTime 
+         style={ { width: '80%' } }
+         locale='zh-cn'
          mode='date' 
          closeOnSelect 
          dateFormat='YYYY/MM/DD' 
@@ -134,16 +148,41 @@ export default class DefaultValueConfigModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '字段默认值配置 - ' + data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '字段属性配置 - ' + data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ defaultValue.value && defaultValue.error ? 'error' : null }>
+          <FormGroup validationState={ defaultValue.value && defaultValue.error ? 'error' : null }>
             <FormControl type='hidden' { ...id }/>
             <ControlLabel>默认值</ControlLabel>
             { defaultComponent }
             { defaultValue.value && defaultValue.error && <HelpBlock>{ defaultValue.error }</HelpBlock> }
           </FormGroup>
+          { data.type === 'Number' &&
+          <div>
+            <FormGroup style={ { width: '45%', display: 'inline-block' } }>
+              <ControlLabel>最小值</ControlLabel>
+              <FormControl
+                type='Number'
+                { ...minValue }
+                placeholder='输入最小值'/>
+            </FormGroup>
+            <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } }>
+              <ControlLabel>最大值</ControlLabel>
+              <FormControl
+                type='Number'
+                { ...maxValue }
+                placeholder='输入最大值'/>
+            </FormGroup>
+          </div> }
+          { (data.type == 'TextArea' || data.type == 'Text') &&
+          <FormGroup validationState={ maxLength.value && maxLength.error ? 'error' : null }>
+            <ControlLabel>最大长度</ControlLabel>
+            <FormControl
+              type='Number'
+              { ...maxLength }
+              placeholder='输入最大长度，默认不限制'/>
+          </FormGroup> }
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
