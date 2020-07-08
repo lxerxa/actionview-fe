@@ -803,7 +803,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     Epic
                   </Col>
-                  <Col sm={ 7 }>
+                  <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
                       <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
                         <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px', float: 'left' } } title={ selectedEpic.name || '-' } >
@@ -818,7 +818,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     Sprint
                   </Col>
-                  <Col sm={ 7 }>
+                  <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
                       { _.map(data.sprints, (v) => { return _.find(options.sprints, { no: v }).name }).join(', ') }
                     </div>
