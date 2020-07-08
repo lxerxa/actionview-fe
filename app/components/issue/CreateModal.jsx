@@ -144,6 +144,7 @@ class CreateModal extends Component {
     this.getChangedKeys = this.getChangedKeys.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount(){
@@ -389,8 +390,88 @@ class CreateModal extends Component {
     return flag;
   }
 
+  onChange(newValue, field) {
+    this.state.values[field.key] = newValue;
+
+    if ([ 'Text', 'TextArea', 'Number', 'Url', 'TimeTracking' ].indexOf(field.type) === -1) {
+      this.state.touched[field.key] = true;
+    }
+
+    if (field.required && (!newValue || (_.isArray(newValue) && newValue.length == 0))) {
+      this.state.errors[field.key] = '必填';
+      this.setState({ values: this.state.values });
+      return;
+    }
+
+    if ([ 'Text', 'TextArea' ].indexOf(field.type) !== -1) {
+      if (newValue && field.maxLength && _.trim(newValue) > field.maxLength) {
+        this.state.errors[field.key] = '字符个数不能超过' + field.maxLength + '个';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    } else if ('Number' == field.type) {
+      if (newValue || newValue === 0) {
+        if (isNaN(newValue)) {
+          this.state.errors[field.key] = '格式有误';
+          this.setState({ values: this.state.values });
+          return;
+        } else if ((field.minValue || field.minValue === 0) && (field.maxValue || field.maxValue === 0)) {
+          if (parseFloat(newValue) > parseFloat(field.maxValue) || parseFloat(field.minValue) > parseFloat(newValue)) {
+            this.state.errors[field.key] = '输入值必须在' + field.minValue + '和' + field.maxValue + '之间';
+            this.setState({ values: this.state.values });
+            return;
+          } 
+        } else if (field.minValue || field.minValue === 0) {
+          if (parseFloat(field.minValue) > parseFloat(newValue)) {
+            this.state.errors[field.key] = '输入值不能小于' + field.minValue;
+            this.setState({ values: this.state.values });
+            return;
+          } 
+        } else if (field.maxValue || field.maxValue === 0) {
+          if (parseFloat(newValue) > parseFloat(field.maxValue)) {
+            this.state.errors[field.key] = '输入值不能大于' + field.maxValue;
+            this.setState({ values: this.state.values });
+            return;
+          }
+        }
+      }
+    } else if (field.type === 'DatePicker' || field.type === 'DateTimePicker') {
+      if (newValue && !moment(newValue).isValid()) {
+        this.state.errors[field.key] = '格式有误';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    } else if (field.type === 'Url') {
+      if (newValue && !this.urlTest(newValue)) {
+        this.state.errors[field.key] = '格式有误';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    } else if (field.type === 'TimeTracking') {
+      if (newValue && !this.ttTest(newValue)) {
+        this.state.errors[field.key] = '格式有误';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    }
+
+    delete this.state.errors[field.key];
+    this.setState({ values: this.state.values });
+  }
+
   render() {
-    const { i18n: { errMsg }, options, close, loading, project, data={}, parent={}, isSubtask=false, isFromWorkflow=false } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      options, 
+      close, 
+      loading, 
+      project, 
+      data={}, 
+      parent={}, 
+      isSubtask=false, 
+      isFromWorkflow=false 
+    } = this.props;
+
     const { schema } = this.state;
 
     const typeOptions = _.map(this.state.typeOptions, function(val) {
@@ -423,7 +504,7 @@ class CreateModal extends Component {
         <Form horizontal>
           <Modal.Body style={ bodyStyles } ref='createModal'>
             { !isFromWorkflow && !isSubtask &&
-            <FormGroup controlId='formControlsLabel'>
+            <FormGroup>
               <Col sm={ 2 } componentClass={ ControlLabel }>
                 项目名称
               </Col>
@@ -432,7 +513,7 @@ class CreateModal extends Component {
               </Col>
             </FormGroup> }
             { !isFromWorkflow && isSubtask &&
-            <FormGroup controlId='formControlsLabel'>
+            <FormGroup>
               <Col sm={ 2 } componentClass={ ControlLabel }>
                 父任务 
               </Col>
@@ -441,7 +522,7 @@ class CreateModal extends Component {
               </Col>
             </FormGroup> }
             { !isFromWorkflow &&
-            <FormGroup controlId='formControlsSelect' style={ { height: '68px', borderBottom: '1px solid #ddd' } }>
+            <FormGroup style={ { height: '68px', borderBottom: '1px solid #ddd' } }>
               <Col sm={ 2 } componentClass={ ControlLabel }>
                 <span className='txt-impt'>*</span>类型
               </Col>
@@ -469,14 +550,14 @@ class CreateModal extends Component {
 
               if (v.type === 'Text') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl 
                       type='text' 
                       disabled={ loading }
                       value={ this.state.values[v.key] } 
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } } 
+                      onChange={ (e) => { this.onChange(e.target.value, v); } } 
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '输入' + v.name } />
                   </Col>
@@ -486,7 +567,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'Number') { 
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 3 }>
                     <FormControl
@@ -494,7 +575,7 @@ class CreateModal extends Component {
                       max={ v.key == 'progress' ? '100' : '' }
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '输入' + v.name } />
                   </Col>
@@ -504,7 +585,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'TextArea') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl
@@ -513,7 +594,7 @@ class CreateModal extends Component {
                       componentClass='textarea'
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       style={ { height: '200px' } }
                       placeholder={ '输入' + v.name } />
@@ -524,7 +605,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.key === 'labels' && options.permissions && options.permissions.indexOf('manage_project') !== -1) {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key }>
+                <FormGroup key={ key }>
                   { title }
                   <Col sm={ 7 }>
                     <CreatableSelect
@@ -538,7 +619,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if ([ 'Select', 'MultiSelect', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ].indexOf(v.type) !== -1) {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 7 }>
                     <Select 
@@ -548,7 +629,7 @@ class CreateModal extends Component {
                       clearable={ !v.required && v.key !== 'assignee' && v.key !== 'resolution' } 
                       value={ this.state.values[v.key] || null } 
                       options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } } ) } 
-                      onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } } 
+                      onChange={ (newValue) => { this.onChange(newValue, v); } } 
                       className={ this.state.touched[v.key] && this.state.errors[v.key] && 'select-error' }
                       placeholder={ '选择' + v.name } />
                     { v.key === 'labels' &&
@@ -562,14 +643,14 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'CheckboxGroup') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <CheckboxGroup
                       style={ { marginTop: '7px' } }
                       name={ v.name }
                       value={ this.state.values[v.key] }
-                      onChange={ newValue => { v.required && newValue.length <= 0 ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } }>
+                      onChange={ newValue => { this.onChange(newValue, v); } }>
                       { _.map(v.optionValues || [], (val, i) => 
                         <span style={ { marginLeft: '6px' } } key={ i }><Checkbox disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
@@ -580,7 +661,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'RadioGroup') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key }>
+                <FormGroup key={ key }>
                   { title }
                   <Col sm={ 9 }>
                     <RadioGroup
@@ -597,7 +678,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 4 }>
                     <DateTime 
@@ -607,7 +688,7 @@ class CreateModal extends Component {
                       timeFormat={ v.type === 'DateTimePicker' ?  'HH:mm' : false } 
                       closeOnSelect={ v.type === 'DatePicker' }
                       value={ this.state.values[v.key] } 
-                      onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必填' : (newValue && !moment(newValue).isValid() ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }/>
+                      onChange={ newValue => { this.onChange(newValue, v); } }/>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -629,7 +710,7 @@ class CreateModal extends Component {
                   removedfile: this.removedfile.bind(this)
                 }
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key }>
+                <FormGroup key={ key }>
                   { title }
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
@@ -639,14 +720,14 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'Url') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 7 }>
                     <FormControl
                       type='text'
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.urlTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '输入' + v.name } />
                   </Col>
@@ -656,14 +737,14 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'TimeTracking') {
                 return (
-                <FormGroup key={ key } controlId={ 'id' + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 4 }>
                     <FormControl
                       type='text'
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.ttTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '例如：3w 4d 12h 30m' } />
                   </Col>
