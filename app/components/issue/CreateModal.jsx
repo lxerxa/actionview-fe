@@ -86,7 +86,7 @@ class CreateModal extends Component {
           } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
             values[v.key] = data[v.key] && moment.unix(data[v.key]);
             oldValues[v.key] = data[v.key] && moment.unix(data[v.key]);
-          } else if (v.type === 'Number') {
+          } else if (v.type === 'Number' || v.type === 'Integer') {
             values[v.key] = data[v.key] + '';
             oldValues[v.key] = data[v.key] + '';
           } else {
@@ -245,8 +245,8 @@ class CreateModal extends Component {
           submitData[key] = parseInt(moment(val).format('X')); 
         } else if (field.type === 'Number') {
           submitData[key] = parseFloat(val);
-        //} else if (field.type === 'TextArea') {
-        //  submitData[key] = val.replace(/!\[Uploading file\.\.\.\]\(\)((\r\n)|(\n))?/ig, '');
+        } else if (field.type === 'Integer') {
+          submitData[key] = parseInt(val);
         } else {
           submitData[key] = val;
         }
@@ -393,7 +393,7 @@ class CreateModal extends Component {
   onChange(newValue, field) {
     this.state.values[field.key] = newValue;
 
-    if ([ 'Text', 'TextArea', 'Number', 'Url', 'TimeTracking' ].indexOf(field.type) === -1) {
+    if ([ 'Text', 'TextArea', 'Number', 'Integer', 'Url', 'TimeTracking' ].indexOf(field.type) === -1) {
       this.state.touched[field.key] = true;
     }
 
@@ -409,13 +409,15 @@ class CreateModal extends Component {
         this.setState({ values: this.state.values });
         return;
       }
-    } else if ('Number' == field.type) {
+    } else if ('Number' == field.type || 'Integer' == field.type) {
       if (newValue || newValue === 0) {
-        if (isNaN(newValue)) {
+        if (isNaN(newValue) || (field.type === 'Integer' && !/^-?\d+$/.test(newValue))) {
           this.state.errors[field.key] = '格式有误';
           this.setState({ values: this.state.values });
           return;
-        } else if ((field.minValue || field.minValue === 0) && (field.maxValue || field.maxValue === 0)) {
+        } 
+
+        if ((field.minValue || field.minValue === 0) && (field.maxValue || field.maxValue === 0)) {
           if (parseFloat(newValue) > parseFloat(field.maxValue) || parseFloat(field.minValue) > parseFloat(newValue)) {
             this.state.errors[field.key] = '输入值必须在' + field.minValue + '和' + field.maxValue + '之间';
             this.setState({ values: this.state.values });
@@ -565,14 +567,13 @@ class CreateModal extends Component {
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> ); 
-              } else if (v.type === 'Number') { 
+              } else if (v.type === 'Number' || v.type == 'Integer') { 
                 return (
                 <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 3 }>
                     <FormControl
                       type='number'
-                      max={ v.key == 'progress' ? '100' : '' }
                       disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { this.onChange(e.target.value, v); } }

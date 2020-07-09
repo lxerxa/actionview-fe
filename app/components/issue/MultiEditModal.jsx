@@ -22,12 +22,14 @@ export default class MultiEditModal extends Component {
         assignee: assignees[0] && assignees[0].id || null 
       },
       errors: {},
+      touched: {},
       step: 1
     };
 
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
     this.goStep = this.goStep.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   static propTypes = {
@@ -42,7 +44,17 @@ export default class MultiEditModal extends Component {
   }
 
   goStep() {
-    this.setState({ step: this.state.step == 2 ? 1 : 2 });
+    const errors = {};
+    const touched = {};
+    if (this.state.step == 1) {
+      _.forEach(this.state.errors, (v, k) => {
+        if (this.state.fields.indexOf(k) !== -1) {
+          errors[k] = v;
+          touched[k] = true;
+        }
+      });
+    }
+    this.setState({ step: this.state.step == 2 ? 1 : 2, errors, touched });
   }
 
   async confirm() {
@@ -76,6 +88,8 @@ export default class MultiEditModal extends Component {
           submitData[v] = parseInt(moment(values[v]).format('X'));
         } else if (type == 'Number') {
           submitData[v] = parseFloat(values[v]);
+        } else if (type == 'Integer') {
+          submitData[v] = parseInt(values[v]);
         } else {
           submitData[v] = values[v]; 
         }
@@ -119,6 +133,61 @@ export default class MultiEditModal extends Component {
       }
     });
     return flag;
+  }
+
+  onChange(newValue, field) {
+    this.state.values[field.key] = newValue;
+
+    if ([ 'Text', 'TextArea' ].indexOf(field.type) !== -1) {
+      if (newValue && field.maxLength && _.trim(newValue) > field.maxLength) {
+        this.state.errors[field.key] = '字符个数不能超过' + field.maxLength + '个';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    } else if ('Number' == field.type || 'Integer' == field.type) {
+      if (newValue || newValue === 0) {
+        if (isNaN(newValue) || (field.type === 'Integer' && !/^-?\d+$/.test(newValue))) {
+          this.state.errors[field.key] = '格式有误';
+          this.setState({ values: this.state.values });
+          return;
+        }
+
+        if ((field.minValue || field.minValue === 0) && (field.maxValue || field.maxValue === 0)) {
+          if (parseFloat(newValue) > parseFloat(field.maxValue) || parseFloat(field.minValue) > parseFloat(newValue)) {
+            this.state.errors[field.key] = '输入值必须在' + field.minValue + '和' + field.maxValue + '之间';
+            this.setState({ values: this.state.values });
+            return;
+          }
+        } else if (field.minValue || field.minValue === 0) {
+          if (parseFloat(field.minValue) > parseFloat(newValue)) {
+            this.state.errors[field.key] = '输入值不能小于' + field.minValue;
+            this.setState({ values: this.state.values });
+            return;
+          }
+        } else if (field.maxValue || field.maxValue === 0) {
+          if (parseFloat(newValue) > parseFloat(field.maxValue)) {
+            this.state.errors[field.key] = '输入值不能大于' + field.maxValue;
+            this.setState({ values: this.state.values });
+            return;
+          }
+        }
+      }
+    } else if (field.type === 'DatePicker' || field.type === 'DateTimePicker') {
+      if (newValue && !moment(newValue).isValid()) {
+        this.state.errors[field.key] = '格式有误';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    } else if (field.type === 'TimeTracking') {
+      if (newValue && !this.ttTest(newValue)) {
+        this.state.errors[field.key] = '格式有误';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    }
+
+    delete this.state.errors[field.key];
+    this.setState({ values: this.state.values });
   }
 
   render() {
@@ -178,7 +247,7 @@ export default class MultiEditModal extends Component {
             { _.map(editFields, (v) => { 
               if (v.type === 'Text' || v.type === 'Url') {
                 return (
-                  <FormGroup key={ v.key } controlId={ 'id' + v.key }>
+                  <FormGroup key={ v.key }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
@@ -187,13 +256,14 @@ export default class MultiEditModal extends Component {
                         type='text'
                         disabled={ loading }
                         value={ this.state.values[v.key] || '' }
-                        onChange={ (e) => { this.setState({ values: { ...this.state.values, [v.key]: e.target.value } }) } }
+                        onChange={ (e) => { this.onChange(e.target.value, v); } }
+                        onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                         placeholder={ '输入' + v.name } />
                     </Col>
                   </FormGroup> ) 
-              } else if (v.type === 'Number') {
+              } else if (v.type === 'Number' || v.type === 'Integer') {
                 return (
-                  <FormGroup key={ v.key } controlId={ 'id' + v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
+                  <FormGroup key={ v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
@@ -201,31 +271,40 @@ export default class MultiEditModal extends Component {
                       <FormControl
                         type='number'
                         disabled={ loading }
+                        max={ v.maxValue || v.maxValue === 0 ?  v.maxValue : '' }
+                        min={ v.minValue || v.minValue === 0 ?  v.minValue : '' }
                         value={ this.state.values[v.key] || 0 }
-                        onChange={ (e) => { e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]; this.setState({ values: { ...this.state.values, [v.key]: e.target.value } }) } }
-                        max={ v.key == 'progress' ? '100' : '' }
+                        onChange={ (e) => { this.onChange(e.target.value, v); } }
+                        onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                         placeholder={ '输入' + v.name } />
+                    </Col>
+                    <Col sm={ 7 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                      { this.state.touched[v.key] && this.state.errors[v.key] || '' }
                     </Col>
                   </FormGroup> )
               } else if (v.type === 'TextArea') {
                 return (
-                  <FormGroup key={ v.key } controlId={ 'id' + v.key }>
+                  <FormGroup key={ v.key }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
-                    <Col sm={ 9 }>
+                    <Col sm={ 8 }>
                       <FormControl
                         componentClass='textarea'
                         disabled={ loading }
                         value={ this.state.values[v.key] || '' }
-                        onChange={ (e) => { this.setState({ values: { ...this.state.values, [v.key]: e.target.value } }) } }
+                        onChange={ (e) => { this.onChange(e.target.value, v); } }
+                        onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                         style={ { height: '150px' } }
                         placeholder={ '输入' + v.name } />
+                    </Col>
+                    <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                      { this.state.touched[v.key] && this.state.errors[v.key] || '' }
                     </Col>
                   </FormGroup> )
               } else if (v.key === 'labels' && options.permissions && options.permissions.indexOf('manage_project') !== -1) {
                 return (
-                  <FormGroup key={ v.key } controlId={ 'id' + v.key }>
+                  <FormGroup key={ v.key }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
@@ -241,7 +320,7 @@ export default class MultiEditModal extends Component {
                   </FormGroup> )
               } else if ([ 'Select', 'MultiSelect', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup' ].indexOf(v.type) !== -1) {
                 return (
-                  <FormGroup key={ v.key } controlId={ 'id' + v.key }>
+                  <FormGroup key={ v.key }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
@@ -259,7 +338,7 @@ export default class MultiEditModal extends Component {
                   </FormGroup> )
               } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
                 return (
-                  <FormGroup key={ v.key } controlId={ 'id' + v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
+                  <FormGroup key={ v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
@@ -271,15 +350,16 @@ export default class MultiEditModal extends Component {
                         timeFormat={ v.type === 'DateTimePicker' ?  'HH:mm' : false }
                         closeOnSelect={ v.type === 'DatePicker' }
                         value={ this.state.values[v.key] }
-                        onChange={ newValue => { newValue && !moment(newValue).isValid() ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]; this.setState({ values: { ...this.state.values, [v.key]: newValue } }) } } />
+                        onChange={ newValue => { this.onChange(newValue, v); } }
+                        onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } } />
                     </Col>
                     <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                      { this.state.errors[v.key] || '' }
+                      { this.state.touched[v.key] && this.state.errors[v.key] || '' }
                     </Col>
                   </FormGroup> )
               } else if (v.type === 'TimeTracking') {
                 return (
-                  <FormGroup key={ v.key } controlId={ 'id' + v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
+                  <FormGroup key={ v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
@@ -288,11 +368,12 @@ export default class MultiEditModal extends Component {
                         type='text'
                         disabled={ loading }
                         value={ this.state.values[v.key] || '' }
-                        onChange={ (e) => { e.target.value && !this.ttTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]; this.setState({ values: { ...this.state.values, [v.key]: e.target.value } }) } }
+                        onChange={ (e) => { this.onChange(e.target.value, v); } }
+                        onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                         placeholder='例如：3w 4d 12h 30m' />
                     </Col>
                     <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                      { this.state.errors[v.key] || '' }
+                      { this.state.touched[v.key] && this.state.errors[v.key] || '' }
                     </Col>
                   </FormGroup> )
               } } )

@@ -24,6 +24,20 @@ const validate = (values, props) => {
     }
   }
 
+  if (values.minValue && isNaN(values.minValue)) {
+    errors.minValue = '格式错误';
+  }
+  if (values.maxValue && isNaN(values.maxValue)) {
+    errors.minValue = '格式错误';
+  }
+  if ((values.minValue || values.minValue === 0) && (values.maxValue || values.maxValue === 0) && parseFloat(values.minValue) > parseFloat(values.maxValue)) {
+    errors.minValue = '最小值不能大于最大值';
+  }
+
+  if ((values.maxLength || values.maxLength === 0) && (!/^\d+$/.test(values.maxLength) || parseInt(values.maxLength) < 1)) {
+    errors.maxLength = '请输入大于1的整数';
+  }
+
   return errors;
 };
 @reduxForm({
@@ -61,6 +75,7 @@ export default class DefaultValueConfigModal extends Component {
     } else if (data.type === 'DatePicker' && data.defaultValue) {
       data.defaultValue = moment.unix(data.defaultValue);
     }
+
     initializeForm(data);
   }
 
@@ -160,28 +175,31 @@ export default class DefaultValueConfigModal extends Component {
           </FormGroup>
           { data.type === 'Number' &&
           <div>
-            <FormGroup style={ { width: '45%', display: 'inline-block' } }>
+            <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ minValue.value && minValue.error ? 'error' : null }>
               <ControlLabel>最小值</ControlLabel>
               <FormControl
                 type='Number'
                 { ...minValue }
                 placeholder='输入最小值'/>
+              { minValue.value && minValue.error && <HelpBlock>{ minValue.error }</HelpBlock> }
             </FormGroup>
-            <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } }>
+            <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } } validationState={ maxValue.value && maxValue.error ? 'error' : null }>
               <ControlLabel>最大值</ControlLabel>
               <FormControl
                 type='Number'
                 { ...maxValue }
                 placeholder='输入最大值'/>
+              { maxValue.value && maxValue.error && <HelpBlock>{ maxValue.error }</HelpBlock> }
             </FormGroup>
           </div> }
-          { (data.type == 'TextArea' || data.type == 'Text') &&
-          <FormGroup validationState={ maxLength.value && maxLength.error ? 'error' : null }>
+          { (data.type == 'TextArea' || data.type == 'Text' || true)  &&
+          <FormGroup style={ { width: '45%' } } validationState={ maxLength.value && maxLength.error ? 'error' : null }>
             <ControlLabel>最大长度</ControlLabel>
             <FormControl
               type='Number'
               { ...maxLength }
               placeholder='输入最大长度，默认不限制'/>
+            { maxLength.value && maxLength.error && <HelpBlock>{ maxLength.error }</HelpBlock> }
           </FormGroup> }
         </Modal.Body>
         <Modal.Footer>

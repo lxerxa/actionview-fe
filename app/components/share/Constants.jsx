@@ -1,5 +1,6 @@
 
 export const FieldTypes =  [
+  { value: 'Integer', label: '整数字段' },
   { value: 'Number', label: '数值字段' },
   { value: 'Text', label: '文本框单行' },
   { value: 'TextArea', label: '文本框多行' },
