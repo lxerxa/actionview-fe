@@ -171,7 +171,7 @@ export default class DefaultValueConfigModal extends Component {
             <FormControl type='hidden' { ...id }/>
             <ControlLabel>默认值</ControlLabel>
             { defaultComponent }
-            { defaultValue.value && defaultValue.error && <HelpBlock>{ defaultValue.error }</HelpBlock> }
+            { defaultValue.error && <HelpBlock>{ defaultValue.error }</HelpBlock> }
           </FormGroup>
           { data.type === 'Number' &&
           <div>
@@ -192,14 +192,14 @@ export default class DefaultValueConfigModal extends Component {
               { maxValue.value && maxValue.error && <HelpBlock>{ maxValue.error }</HelpBlock> }
             </FormGroup>
           </div> }
-          { (data.type == 'TextArea' || data.type == 'Text' || true)  &&
+          { (data.type == 'TextArea' || data.type == 'Text')  &&
           <FormGroup style={ { width: '45%' } } validationState={ maxLength.value && maxLength.error ? 'error' : null }>
             <ControlLabel>最大长度</ControlLabel>
             <FormControl
               type='Number'
               { ...maxLength }
               placeholder='输入最大长度，默认不限制'/>
-            { maxLength.value && maxLength.error && <HelpBlock>{ maxLength.error }</HelpBlock> }
+            { maxLength.error && <HelpBlock>{ maxLength.error }</HelpBlock> }
           </FormGroup> }
         </Modal.Body>
         <Modal.Footer>

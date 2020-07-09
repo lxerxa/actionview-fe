@@ -191,9 +191,25 @@ export default class MultiEditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, options, issueIds, loading } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      options, 
+      issueIds, 
+      loading
+    } = this.props;
 
-    const implicitFields = [ 'title', 'state', 'reporter', 'resolver', 'closer', 'created_at', 'updated_at', 'resolved_at', 'closed_at', 'sprints' ];
+    const implicitFields = [ 
+      'title', 
+      'state', 
+      'reporter', 
+      'resolver', 
+      'closer', 
+      'created_at', 
+      'updated_at', 
+      'resolved_at', 
+      'closed_at', 
+      'sprints' 
+    ];
 
     const allFields = [];
     _.forEach(options.fields || [], (f) => {
@@ -271,8 +287,8 @@ export default class MultiEditModal extends Component {
                       <FormControl
                         type='number'
                         disabled={ loading }
-                        max={ v.maxValue || v.maxValue === 0 ?  v.maxValue : '' }
-                        min={ v.minValue || v.minValue === 0 ?  v.minValue : '' }
+                        max={ v.maxValue || v.maxValue === 0 ? v.maxValue : '' }
+                        min={ v.minValue || v.minValue === 0 ? v.minValue : '' }
                         value={ this.state.values[v.key] || 0 }
                         onChange={ (e) => { this.onChange(e.target.value, v); } }
                         onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }

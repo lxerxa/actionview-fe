@@ -574,6 +574,8 @@ class CreateModal extends Component {
                   <Col sm={ 3 }>
                     <FormControl
                       type='number'
+                      max={ v.maxValue || v.maxValue === 0 ? v.maxValue : '' }
+                      min={ v.minValue || v.minValue === 0 ? v.minValue : '' }
                       disabled={ loading }
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { this.onChange(e.target.value, v); } }
