@@ -30,7 +30,8 @@ const sysFields = [
   'labels', 
   'original_estimate',
   'story_points',
-  'attachments' ];
+  'attachments' 
+];
 
 export default class List extends Component {
   constructor(props) {

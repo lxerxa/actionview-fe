@@ -405,7 +405,7 @@ class CreateModal extends Component {
 
     if ([ 'Text', 'TextArea' ].indexOf(field.type) !== -1) {
       if (newValue && field.maxLength && _.trim(newValue).length > field.maxLength) {
-        this.state.errors[field.key] = '字数' + field.maxLength + '字之内';
+        this.state.errors[field.key] = '字数必须在' + field.maxLength + '字之内';
         this.setState({ values: this.state.values });
         return;
       }
@@ -419,19 +419,19 @@ class CreateModal extends Component {
 
         if ((field.minValue || field.minValue === 0) && (field.maxValue || field.maxValue === 0)) {
           if (parseFloat(newValue) > parseFloat(field.maxValue) || parseFloat(field.minValue) > parseFloat(newValue)) {
-            this.state.errors[field.key] = '输入值在' + field.minValue + '~' + field.maxValue + '之间';
+            this.state.errors[field.key] = '输入值必须在' + field.minValue + '~' + field.maxValue + '之间';
             this.setState({ values: this.state.values });
             return;
           } 
         } else if (field.minValue || field.minValue === 0) {
           if (parseFloat(field.minValue) > parseFloat(newValue)) {
-            this.state.errors[field.key] = '输入值大于' + field.minValue;
+            this.state.errors[field.key] = '输入值必须大于' + field.minValue;
             this.setState({ values: this.state.values });
             return;
           } 
         } else if (field.maxValue || field.maxValue === 0) {
           if (parseFloat(newValue) > parseFloat(field.maxValue)) {
-            this.state.errors[field.key] = '输入值小于' + field.maxValue;
+            this.state.errors[field.key] = '输入值必须小于' + field.maxValue;
             this.setState({ values: this.state.values });
             return;
           }
