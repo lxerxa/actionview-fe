@@ -404,8 +404,8 @@ class CreateModal extends Component {
     }
 
     if ([ 'Text', 'TextArea' ].indexOf(field.type) !== -1) {
-      if (newValue && field.maxLength && _.trim(newValue) > field.maxLength) {
-        this.state.errors[field.key] = '字符个数不能超过' + field.maxLength + '个';
+      if (newValue && field.maxLength && _.trim(newValue).length > field.maxLength) {
+        this.state.errors[field.key] = '字数' + field.maxLength + '字之内';
         this.setState({ values: this.state.values });
         return;
       }
@@ -419,19 +419,19 @@ class CreateModal extends Component {
 
         if ((field.minValue || field.minValue === 0) && (field.maxValue || field.maxValue === 0)) {
           if (parseFloat(newValue) > parseFloat(field.maxValue) || parseFloat(field.minValue) > parseFloat(newValue)) {
-            this.state.errors[field.key] = '输入值必须在' + field.minValue + '和' + field.maxValue + '之间';
+            this.state.errors[field.key] = '输入值在' + field.minValue + '~' + field.maxValue + '之间';
             this.setState({ values: this.state.values });
             return;
           } 
         } else if (field.minValue || field.minValue === 0) {
           if (parseFloat(field.minValue) > parseFloat(newValue)) {
-            this.state.errors[field.key] = '输入值不能小于' + field.minValue;
+            this.state.errors[field.key] = '输入值大于' + field.minValue;
             this.setState({ values: this.state.values });
             return;
           } 
         } else if (field.maxValue || field.maxValue === 0) {
           if (parseFloat(newValue) > parseFloat(field.maxValue)) {
-            this.state.errors[field.key] = '输入值不能大于' + field.maxValue;
+            this.state.errors[field.key] = '输入值小于' + field.maxValue;
             this.setState({ values: this.state.values });
             return;
           }
@@ -459,6 +459,24 @@ class CreateModal extends Component {
 
     delete this.state.errors[field.key];
     this.setState({ values: this.state.values });
+  }
+
+  getPlaceholder(field) {
+    let placeHolder = '输入' + field.name;
+    if (field.type == 'Text' || field.type == 'TextArea') {
+      if (field.maxLength) {
+        placeHolder += '(字数' + field.maxLength + '字之内)';
+      }
+    } else if (field.type == 'Number' || field.type == 'Integer') {
+      if ((field.minValue || field.minValue === 0) && (field.maxValue || field.maxValue === 0)) {
+        placeHolder = '输入' + field.minValue + '~' + field.maxValue + '之间' + (field.type == 'Integer' ? '整数' : '数值');
+      } else if (field.minValue || field.minValue === 0) {
+        placeHolder = '输入大于' + field.minValue + (field.type == 'Integer' ? '整数' : '数值');
+      } else if (field.maxValue || field.maxValue === 0) {
+        placeHolder = '输入小于' + field.minValue + (field.type == 'Integer' ? '整数' : '数值');
+      }
+    }
+    return placeHolder;
   }
 
   render() {
@@ -561,7 +579,7 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] } 
                       onChange={ (e) => { this.onChange(e.target.value, v); } } 
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ this.getPlaceholder(v) } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -571,7 +589,7 @@ class CreateModal extends Component {
                 return (
                 <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
-                  <Col sm={ 3 }>
+                  <Col sm={ 4 }>
                     <FormControl
                       type='number'
                       max={ v.maxValue || v.maxValue === 0 ? v.maxValue : '' }
@@ -580,7 +598,7 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] }
                       onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ this.getPlaceholder(v) } />
                   </Col>
                   <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -600,7 +618,7 @@ class CreateModal extends Component {
                       onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       style={ { height: '200px' } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ this.getPlaceholder(v) } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }

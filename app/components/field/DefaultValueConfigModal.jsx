@@ -18,6 +18,10 @@ const validate = (values, props) => {
     if (values.defaultValue && isNaN(values.defaultValue)) {
       errors.defaultValue = '格式错误';
     }
+  } else if (data.type === 'Integer') {
+    if (values.defaultValue && (isNaN(values.defaultValue) || !/^-?\d+$/.test(values.defaultValue))) {
+      errors.defaultValue = '格式错误';
+    }
   } else if (data.type === 'DatePicker') {
     if (values.defaultValue && !moment(values.defaultValue).isValid()) {
       errors.defaultValue = '格式错误';
@@ -173,7 +177,7 @@ export default class DefaultValueConfigModal extends Component {
             { defaultComponent }
             { defaultValue.error && <HelpBlock>{ defaultValue.error }</HelpBlock> }
           </FormGroup>
-          { data.type === 'Number' &&
+          { (data.type === 'Number' || data.type === 'Integer') &&
           <div>
             <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ minValue.value && minValue.error ? 'error' : null }>
               <ControlLabel>最小值</ControlLabel>
@@ -181,7 +185,7 @@ export default class DefaultValueConfigModal extends Component {
                 type='Number'
                 { ...minValue }
                 placeholder='输入最小值'/>
-              { minValue.value && minValue.error && <HelpBlock>{ minValue.error }</HelpBlock> }
+              { minValue.error && <HelpBlock>{ minValue.error }</HelpBlock> }
             </FormGroup>
             <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } } validationState={ maxValue.value && maxValue.error ? 'error' : null }>
               <ControlLabel>最大值</ControlLabel>
@@ -189,7 +193,7 @@ export default class DefaultValueConfigModal extends Component {
                 type='Number'
                 { ...maxValue }
                 placeholder='输入最大值'/>
-              { maxValue.value && maxValue.error && <HelpBlock>{ maxValue.error }</HelpBlock> }
+              { maxValue.error && <HelpBlock>{ maxValue.error }</HelpBlock> }
             </FormGroup>
           </div> }
           { (data.type == 'TextArea' || data.type == 'Text')  &&

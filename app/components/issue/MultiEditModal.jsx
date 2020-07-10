@@ -44,17 +44,24 @@ export default class MultiEditModal extends Component {
   }
 
   goStep() {
+    const values = {};
     const errors = {};
     const touched = {};
     if (this.state.step == 1) {
-      _.forEach(this.state.errors, (v, k) => {
-        if (this.state.fields.indexOf(k) !== -1) {
-          errors[k] = v;
-          touched[k] = true;
+      _.forEach(this.state.fields, (v) => {
+        if (this.state.errors[v]) {
+          errors[v] = this.state.errors[v];
+        }
+        if (this.state.values[v]) {
+          values[v] = this.state.values[v];
+        }
+        if (this.state.touched[v]) {
+          touched[v] = this.state.touched[v];
         }
       });
+      this.setState({ values, errors, touched });
     }
-    this.setState({ step: this.state.step == 2 ? 1 : 2, errors, touched });
+    this.setState({ step: this.state.step == 2 ? 1 : 2 });
   }
 
   async confirm() {
@@ -263,11 +270,11 @@ export default class MultiEditModal extends Component {
             { _.map(editFields, (v) => { 
               if (v.type === 'Text' || v.type === 'Url') {
                 return (
-                  <FormGroup key={ v.key }>
+                  <FormGroup key={ v.key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
-                    <Col sm={ 9 }>
+                    <Col sm={ 8 }>
                       <FormControl
                         type='text'
                         disabled={ loading }
@@ -276,10 +283,13 @@ export default class MultiEditModal extends Component {
                         onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                         placeholder={ '输入' + v.name } />
                     </Col>
+                    <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                      { this.state.touched[v.key] && this.state.errors[v.key] || '' }
+                    </Col>
                   </FormGroup> ) 
               } else if (v.type === 'Number' || v.type === 'Integer') {
                 return (
-                  <FormGroup key={ v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
+                  <FormGroup key={ v.key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
@@ -289,7 +299,7 @@ export default class MultiEditModal extends Component {
                         disabled={ loading }
                         max={ v.maxValue || v.maxValue === 0 ? v.maxValue : '' }
                         min={ v.minValue || v.minValue === 0 ? v.minValue : '' }
-                        value={ this.state.values[v.key] || 0 }
+                        value={ this.state.values[v.key] || '' }
                         onChange={ (e) => { this.onChange(e.target.value, v); } }
                         onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                         placeholder={ '输入' + v.name } />
@@ -301,7 +311,7 @@ export default class MultiEditModal extends Component {
               } else if (v.type === 'TextArea') {
                 return (
                   <FormGroup key={ v.key }>
-                    <Col sm={ 2 } componentClass={ ControlLabel }>
+                    <Col sm={ 2 } componentClass={ ControlLabel } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                       { v.name }
                     </Col>
                     <Col sm={ 8 }>
@@ -369,13 +379,13 @@ export default class MultiEditModal extends Component {
                         onChange={ newValue => { this.onChange(newValue, v); } }
                         onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } } />
                     </Col>
-                    <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                      { this.state.touched[v.key] && this.state.errors[v.key] || '' }
+                    <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                      { this.state.errors[v.key] || '' }
                     </Col>
                   </FormGroup> )
               } else if (v.type === 'TimeTracking') {
                 return (
-                  <FormGroup key={ v.key } validationState={ this.state.errors[v.key] ? 'error' : null }>
+                  <FormGroup key={ v.key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                     <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
