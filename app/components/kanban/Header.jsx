@@ -348,10 +348,10 @@ export default class Header extends Component {
           { curKanban.type == 'scrum' && !_.isEmpty(activeSprint) &&
           <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={ popoverSprint }>
             <div className='popover-active-sprint'>
-              <div className='active-sprint-name'>{ activeSprint.name || '' } <i className='fa fa-caret-down' aria-hidden='true'></i></div> 
+              <div className='active-sprint-name' title={ activeSprint.name || '' }>{ activeSprint.name || '' } <i className='fa fa-caret-down' aria-hidden='true'></i></div> 
             </div> 
           </OverlayTrigger> }
-          <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>
+          <span style={ { float: 'left', marginTop: '7px', marginRight: '5px' } }>
             过滤器：
           </span>
           <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ selectedFilter } onSelect={ this.handleSelect.bind(this) }>
