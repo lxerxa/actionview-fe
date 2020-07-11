@@ -110,7 +110,7 @@ export class IssueFilterList extends Component {
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.onChange(); } }/>
             </Col>
           </div> );
-      } else if (v.type === 'Number' || v.type === 'TimeTracking') {
+      } else if ([ 'Number', 'Integer', 'TimeTracking' ].indexOf(v.type) !== -1) {
         filters.push(
           <div>
             <Col sm={ 1 } componentClass={ ControlLabel }>
