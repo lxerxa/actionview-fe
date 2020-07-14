@@ -259,7 +259,7 @@
   background-color: #f7f7f7;
   vertical-align: middle;
   padding: 5px 12px;
-  border: 1px #ccc solid;
+  border: 1px #ddd solid;
   border-radius: 4px;
   line-height: 2;
   margin-bottom: 15px;
@@ -275,7 +275,7 @@
 
 .cond-bar:hover {
   background-color: #f7f7f7;
-  border: 1px #ccc solid;
+  border: 1px #ddd solid;
   border-radius: 4px;
 }
 
@@ -309,6 +309,7 @@
   margin-top: 10px; 
   margin-bottom: 15px; 
   padding: 15px 10px 10px 10px; 
+  border: 1px #ddd solid;
   background-color: #f7f7f7; 
   border-radius: 4px;
 }
@@ -626,7 +627,7 @@ table tr:hover .remove-icon{
   vertical-align: middle;
   padding: 8px;
   margin: 10px 0px 10px 0px;
-  border: 1px #ccc solid;
+  border: 1px #ddd solid;
   border-radius: 4px;
   line-height: 2;
 }
@@ -1019,6 +1020,7 @@ table tr:hover .remove-icon{
   padding: 15px 10px 1px 10px; 
   background-color: #f7f7f7; 
   border-radius: 4px;
+  border: 1px solid #ddd;
 }
 
 .project-report-container .report-conds-style {
