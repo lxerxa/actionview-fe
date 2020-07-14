@@ -248,12 +248,16 @@ export default class MultiEditModal extends Component {
       rows.push(
         <li style={ { height: '30px' } }>
           <div style={ { width: '50%', display: 'inline-block' } }>
-            <Checkbox value={ allFields[i].key }/>
-            <span> { allFields[i].name || '' }</span>
+            <label style={ { fontWeight: 400 } }>
+              <Checkbox value={ allFields[i].key }/>
+              <span> { allFields[i].name || '' }</span>
+            </label>
           </div>
           <div style={ { width: '50%', display: 'inline-block' } }>
-            { allFields[i + 1] && <Checkbox value={ allFields[i + 1].key }/> }
-            <span> { allFields[i + 1] && allFields[i + 1].name || '' }</span>
+            <label style={ { fontWeight: 400 } }>
+              { allFields[i + 1] && <Checkbox value={ allFields[i + 1].key }/> }
+              <span> { allFields[i + 1] && allFields[i + 1].name || '' }</span>
+            </label>
           </div>
         </li>);
     }

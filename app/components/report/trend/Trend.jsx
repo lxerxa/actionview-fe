@@ -23,7 +23,8 @@ export default class Trend extends Component {
       interval: 'day',
       is_accu: '0',
       statItems: [ 'new', 'resolve', 'close' ],
-      shape: 'bar' };
+      shape: 'bar' 
+    };
     this.gotoIssue = this.gotoIssue.bind(this);
   }
 
@@ -184,9 +185,21 @@ export default class Trend extends Component {
             </Col>
             <Col sm={ 4 }>
               <CheckboxGroup name='statItems' value={ this.state.statItems } onChange={ (newValue) => { this.setState({ statItems: newValue }) } } style={ { marginTop: '8px' } }>
-                <div style={ { float: 'left' } }><Checkbox2 value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>新建的</span></div>
-                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='resolve'/><span style={ { marginLeft: '2px' } }>已解决的</span></div>
-                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='close'/><span style={ { marginLeft: '2px' } }>已关闭的</span></div>
+                <div style={ { float: 'left' } }>
+                  <label style={ { fontWeight: 400 } }>
+                    <Checkbox2 value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>新建的</span>
+                  </label>
+                </div>
+                <div style={ { float: 'left', marginLeft: '8px' } }>
+                  <label style={ { fontWeight: 400 } }>
+                    <Checkbox2 value='resolve'/><span style={ { marginLeft: '2px' } }>已解决的</span>
+                  </label>
+                </div>
+                <div style={ { float: 'left', marginLeft: '8px' } }>
+                  <label style={ { fontWeight: 400 } }>
+                    <Checkbox2 value='close'/><span style={ { marginLeft: '2px' } }>已关闭的</span>
+                  </label>
+                </div>
               </CheckboxGroup>
             </Col>
           </FormGroup>

@@ -9,7 +9,14 @@ const img = require('../../assets/images/loading.gif');
 export default class ConfigModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, notifications: [], userParam: '', roleParam: '', singleUserFieldParam: '', multiUserFieldParam: '' };
+    this.state = { 
+      ecode: 0, 
+      notifications: [], 
+      userParam: '', 
+      roleParam: '', 
+      singleUserFieldParam: '', 
+      multiUserFieldParam: '' 
+    };
 
     const { data: { notifications=[] } } = props;
     _.map(notifications, (v) => {
@@ -125,46 +132,60 @@ export default class ConfigModal extends Component {
           <Modal.Title id='contained-modal-title-la'>通知设置 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
-          <div style={ { paddingTop: '10px', paddingBottom: '0px', paddingLeft: '5px' } }>
+          <div>
             <CheckboxGroup name='notifications' value={ this.state.notifications } onChange={ this.notificationsChanged.bind(this) }>
               <ui className='list-unstyled clearfix cond-list'>
-                <li>
+                <li style={ { height: '40px', marginTop: '5px' } }>
                   请选择以下通知对象：
                 </li>
-                <li>
+                <li style={ { height: '40px' } }>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='current_user'/>
-                    <span>当前用户</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='current_user'/>
+                      <span>当前用户</span>
+                    </label>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='assignee'/>
-                    <span>当前经办人</span>
-                  </div>
-                </li>
-                <li>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='reporter'/>
-                    <span>报告者</span>
-                  </div>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='watchers'/>
-                    <span>所有关注者</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='assignee'/>
+                      <span>当前经办人</span>
+                    </label>
                   </div>
                 </li>
-                <li>
+                <li style={ { height: '40px' } }>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='project_principal'/>
-                    <span>项目负责人</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='reporter'/>
+                      <span>报告者</span>
+                    </label>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='module_principal'/>
-                    <span>模块负责人</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='watchers'/>
+                      <span>所有关注者</span>
+                    </label>
                   </div>
                 </li>
-                <li>
+                <li style={ { height: '40px' } }>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='user'/>
-                    <span>单一用户</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='project_principal'/>
+                      <span>项目负责人</span>
+                    </label>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='module_principal'/>
+                      <span>模块负责人</span>
+                    </label>
+                  </div>
+                </li>
+                <li style={ { height: '40px' } }>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='user'/>
+                      <span>单一用户</span>
+                    </label>
                     <select
                       value={ this.state.userParam }
                       onChange={ (e) => this.setState({ userParam: e.target.value }) }
@@ -175,8 +196,10 @@ export default class ConfigModal extends Component {
                     </select>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='role'/>
-                    <span>项目角色</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='role'/>
+                      <span>项目角色</span>
+                    </label>
                     <select
                       value={ this.state.roleParam }
                       onChange={ (e) => this.setState({ roleParam: e.target.value }) }
@@ -187,10 +210,12 @@ export default class ConfigModal extends Component {
                     </select>
                   </div>
                 </li>
-                <li>
+                <li style={ { height: '40px' } }>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='single_user_field'/>
-                    <span>单一用户字段</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='single_user_field'/>
+                      <span>单一用户字段</span>
+                    </label>
                     <select
                       value={ this.state.singleUserFieldParam }
                       onChange={ (e) => this.setState({ singleUserFieldParam: e.target.value }) }
@@ -201,8 +226,10 @@ export default class ConfigModal extends Component {
                     </select>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox disabled={ loading } value='multi_user_field'/>
-                    <span>多用户字段</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox disabled={ loading } value='multi_user_field'/>
+                      <span>多用户字段</span>
+                    </label>
                     <select
                       value={ this.state.multiUserFieldParam }
                       onChange={ (e) => this.setState({ multiUserFieldParam: e.target.value }) }

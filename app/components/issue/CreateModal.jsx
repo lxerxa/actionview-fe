@@ -673,9 +673,11 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] }
                       onChange={ newValue => { this.onChange(newValue, v); } }>
                       { _.map(v.optionValues || [], (val, i) => 
-                        <span style={ { marginLeft: '6px' } } key={ i }><Checkbox disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
-                        )
-                      }
+                        <span style={ { marginLeft: '6px' } } key={ i }>
+                          <label style={ { fontWeight: 400 } }>
+                            <Checkbox disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }
+                          </label>
+                        </span> ) }
                       { this.state.touched[v.key] && this.state.errors[v.key] && <div><ControlLabel>{ this.state.errors[v.key] || '' }</ControlLabel></div> }
                     </CheckboxGroup>
                   </Col>

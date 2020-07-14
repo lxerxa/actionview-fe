@@ -82,8 +82,10 @@ export default class PreviewModal extends Component {
             <Button title='故事点' style={ { backgroundColor: this.state.mode == 'storyPoints' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'storyPoints' }) } }>故事点数</Button>
           </ButtonGroup> 
           <CheckboxGroup style={ { float: 'right', marginTop: '8px', marginRight: '10px' } } name='notifications' value={ this.state.display } onChange={ this.diplayChanged.bind(this) }>
-            <Checkbox value='notWorkingShow'/>
-            <span style={ { marginLeft: '3px' } }>显示非工作日</span>
+            <label style={ { fontWeight: 400 } }>
+              <Checkbox value='notWorkingShow'/>
+              <span style={ { marginLeft: '3px' } }>显示非工作日</span>
+            </label>
           </CheckboxGroup>
           <LineChart width={ 760 } height={ 420 } style={ { marginTop: '45px' } }>
             <XAxis dataKey='day' type='category' allowDuplicatedCategory={ false } />

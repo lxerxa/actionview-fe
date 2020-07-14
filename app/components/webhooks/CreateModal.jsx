@@ -89,68 +89,94 @@ export default class CreateModal extends Component {
               <ui className='list-unstyled clearfix'>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='create_issue'/>
-                    <span> 创建问题</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='create_issue'/>
+                      <span> 创建问题</span>
+                    </label>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='edit_issue'/>
-                    <span> 编辑问题</span>
-                  </div>
-                </li>
-                <li>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='del_issue'/>
-                    <span> 删除问题</span>
-                  </div>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='resolve_issue'/>
-                    <span> 解决问题</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='edit_issue'/>
+                      <span> 编辑问题</span>
+                    </label>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='close_issue'/>
-                    <span> 关闭问题</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='del_issue'/>
+                      <span> 删除问题</span>
+                    </label>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='reopen_issue'/>
-                    <span> 重新打开</span>
-                  </div>
-                </li>
-                <li>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='add_worklog'/>
-                    <span> 添加工作日志</span>
-                  </div>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='edit_worklog'/>
-                    <span> 编辑工作日志</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='resolve_issue'/>
+                      <span> 解决问题</span>
+                    </label>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='create_version'/>
-                    <span> 新建版本</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='close_issue'/>
+                      <span> 关闭问题</span>
+                    </label>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='edit_version'/>
-                    <span> 编辑版本</span>
-                  </div>
-                </li>
-                <li>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='release_version'/>
-                    <span> 发布版本</span>
-                  </div>
-                  <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='merge_version'/>
-                    <span> 合并版本</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='reopen_issue'/>
+                      <span> 重新打开</span>
+                    </label>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
-                    <Checkbox value='del_version'/>
-                    <span> 删除版本</span>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='add_worklog'/>
+                      <span> 添加工作日志</span>
+                    </label>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='edit_worklog'/>
+                      <span> 编辑工作日志</span>
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='create_version'/>
+                      <span> 新建版本</span>
+                    </label>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='edit_version'/>
+                      <span> 编辑版本</span>
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='release_version'/>
+                      <span> 发布版本</span>
+                    </label>
+                  </div>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='merge_version'/>
+                      <span> 合并版本</span>
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div style={ { width: '50%', display: 'inline-block' } }>
+                    <label style={ { fontWeight: 400 } }>
+                      <Checkbox value='del_version'/>
+                      <span> 删除版本</span>
+                    </label>
                   </div>
                 </li>
               </ui>

@@ -28,7 +28,8 @@ export default class Config extends Component {
       columnModalShow: false,
       delColumnNotifyShow: false,
       filterNo: -1,
-      columnNo: -1 };
+      columnNo: -1 
+    };
 
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
@@ -115,7 +116,7 @@ export default class Config extends Component {
         fieldNames.push(options.fields[ind].name);
       }
     });
-    return fieldNames.join(',') || '-';
+    return fieldNames.join(', ') || '-';
   }
 
   render() {
