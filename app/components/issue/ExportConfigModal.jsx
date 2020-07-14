@@ -118,12 +118,16 @@ export default class ConfigModal extends Component {
       rows.push(
         <li style={ { height: '30px' } }>
           <div style={ { width: '50%', display: 'inline-block' } }>
-            <Checkbox value={ fields[i].key }/>
-            <span> { fields[i].name || '' }</span>
+            <label style={ { fontWeight: 400 } }>
+              <Checkbox value={ fields[i].key }/>
+              <span> { fields[i].name || '' }</span>
+            </label>
           </div>
           <div style={ { width: '50%', display: 'inline-block' } }>
-            { fields[i + 1] && <Checkbox value={ fields[i + 1].key }/> }
-            <span> { fields[i + 1] && fields[i + 1].name || '' }</span>
+            <label style={ { fontWeight: 400 } }>
+              { fields[i + 1] && <Checkbox value={ fields[i + 1].key }/> }
+              <span> { fields[i + 1] && fields[i + 1].name || '' }</span>
+            </label>
           </div>
         </li>);
     }

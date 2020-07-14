@@ -139,9 +139,21 @@ export default class List extends Component {
               value={ this.state.pulseStatItems } 
               onChange={ (newValue) => { this.setState({ pulseStatItems: newValue }) } } 
               style={ { float: 'right', margin: '5px 10px 0px 0px', height: '30px' } }>
-              <div style={ { float: 'left' } }><Checkbox value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>新建的</span></div>
-              <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox value='resolve'/><span style={ { marginLeft: '2px' } }>已解决的</span></div>
-              <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox value='close'/><span style={ { marginLeft: '2px' } }>已关闭的</span></div>
+              <div style={ { float: 'left' } }>
+                <label style={ { fontWeight: 400 } }>
+                  <Checkbox value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>新建的</span>
+                </label>
+              </div>
+              <div style={ { float: 'left', marginLeft: '8px' } }>
+                <label style={ { fontWeight: 400 } }>
+                  <Checkbox value='resolve'/><span style={ { marginLeft: '2px' } }>已解决的</span>
+                </label>
+              </div>
+              <div style={ { float: 'left', marginLeft: '8px' } }>
+                <label style={ { fontWeight: 400 } }>
+                  <Checkbox value='close'/><span style={ { marginLeft: '2px' } }>已关闭的</span>
+                </label>
+              </div>
             </CheckboxGroup>
           </div> }
           { this.state.pulseShowModel == 'charts' &&
