@@ -390,9 +390,9 @@ export default class Header extends Component {
               options={ execOptions }/>
           </Col>
         </FormGroup> }
-        <FormGroup>
+        <FormGroup style={ { marginBottom: '0px' } }>
           <Col sm={ 12 }>
-            <div style={ { float: 'right', marginBottom: '10px', marginTop: '-5px' } }>
+            <div style={ { float: 'right', marginBottom: '5px', marginTop: '-5px' } }>
               <Button bsStyle='link' onClick={ this.reset.bind(this) }><i className='fa fa-undo'></i> 重置</Button>
               { this.state.isExtended ? 
                 <Button bsStyle='link' onClick={ () => { this.setState({ isExtended: false }) } }>收起 <i className='fa fa-angle-double-up'></i></Button>

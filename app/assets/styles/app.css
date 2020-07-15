@@ -1197,4 +1197,5 @@ div.filepicker {
   padding: 15px 10px 0px 0px;
   background-color: #f7f7f7;
   border-radius: 4px;
+  border: 1px solid #ddd;
 }
