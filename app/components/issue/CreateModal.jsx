@@ -691,7 +691,7 @@ class CreateModal extends Component {
                       style={ { marginTop: '7px' } }
                       name={ v.name }
                       selectedValue={ this.state.values[v.key] }
-                      onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }) } }>
+                      onChange={ newValue => { this.state.values[v.key] = newValue; delete this.state.errors[v.key]; this.setState({ values: this.state.values }) } }>
                       { _.map(v.optionValues || [], (val, i) =>
                         <span style={ { marginLeft: '6px' } } key={ i }><Radio disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )
