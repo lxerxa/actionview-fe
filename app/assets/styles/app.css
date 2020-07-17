@@ -741,7 +741,7 @@ table tr:hover .remove-icon{
 .card {
   position: relative;
   height: 200px;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
 }
 .card:hover {
   border: 1px solid #ccc;

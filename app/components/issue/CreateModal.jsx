@@ -589,7 +589,7 @@ class CreateModal extends Component {
                 return (
                 <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
-                  <Col sm={ 4 }>
+                  <Col sm={ 3 }>
                     <FormControl
                       type='number'
                       max={ v.maxValue || v.maxValue === 0 ? v.maxValue : '' }
@@ -600,7 +600,7 @@ class CreateModal extends Component {
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ this.getPlaceholder(v) } />
                   </Col>
-                  <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                  <Col sm={ 7 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
