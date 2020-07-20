@@ -14,7 +14,7 @@ export function asyncFuncCreator({ constant, ...rest }) {
 
 export function generateConstants(constants) {
   return constants.reduce((result, constant) => {
-    if (constant.indexOf('(ASYNC)')) {
+    if (constant.indexOf('(ASYNC)') !== -1) {
       const clean = constant.replace('(ASYNC)', '');
       result[clean] = clean;
       result[clean + '_SUCCESS'] = clean + '_SUCCESS';
