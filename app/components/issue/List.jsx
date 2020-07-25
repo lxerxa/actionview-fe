@@ -28,7 +28,7 @@ export default class List extends Component {
     this.state = { 
       delNotifyShow: false, 
       operateShow: false, 
-      barShow: false,
+      detailBarShow: false,
       addWorklogShow: false,
       editModalShow: false,
       createSubtaskModalShow: false,
@@ -137,7 +137,7 @@ export default class List extends Component {
     if (ecode === 0 && query.no) {
       const { collection, show, record } = this.props;
       if (collection.length > 0) {
-        this.state.barShow = true;
+        this.state.detailBarShow = true;
         ecode = await show(collection[0].id); 
         if (ecode === 0) {
           record();
@@ -279,7 +279,7 @@ export default class List extends Component {
   }
 
   async show(id) {
-    this.setState({ barShow: true }); 
+    this.setState({ detailBarShow: true }); 
     const { show, record } = this.props;
     const ecode = await show(id);  //fix me
     if (ecode == 0) {
@@ -297,7 +297,7 @@ export default class List extends Component {
       titleNo = 4;
     }
 
-    if (this.state.barShow) {
+    if (this.state.detailBarShow) {
       $('.react-bs-container-body table tr').each(function(i) {
         if (itemData.id === $(this).find('td').eq(idNo).text()) {
           $(this).css('background-color', '#e6f7ff');
@@ -316,7 +316,7 @@ export default class List extends Component {
   }
 
   closeDetail() {
-    this.setState({ barShow: false });
+    this.setState({ detailBarShow: false });
     $('.react-bs-container-body table tr').each(function(i) {
       $(this).css('background-color', '');
     });
@@ -643,7 +643,7 @@ export default class List extends Component {
           }) }
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
-        { this.state.barShow &&
+        { this.state.detailBarShow &&
           <DetailBar 
             i18n={ i18n }
             layout={ layout }

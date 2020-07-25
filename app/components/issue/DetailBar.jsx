@@ -463,6 +463,22 @@ export default class DetailBar extends Component {
 
   componentDidMount() {
     $('.animate-dialog .nav-tabs>li>a:first').css('border-left', '0px');
+
+    const { detailFloatStyle={}, layout } = this.props;
+
+    const width = _.min([ _.max([ layout.containerWidth / 2, 600 ]), 1000 ]);
+    const initialStyles = { width: width + 'px' };
+    const animateStyles = {};
+
+    if (detailFloatStyle.left !== undefined) {
+      initialStyles.left = detailFloatStyle.left - width;
+      animateStyles.left = detailFloatStyle.left;
+    } else {
+      initialStyles.right = -width;
+      animateStyles.right = 0;
+    }
+    $('.animate-dialog').css(initialStyles);
+    $('.animate-dialog').animate(animateStyles);
   }
 
   render() {
@@ -525,7 +541,8 @@ export default class DetailBar extends Component {
       delLink, 
       linkLoading, 
       doAction,
-      user } = this.props;
+      user 
+    } = this.props;
 
     const { 
       inlinePreviewShow, 
@@ -598,7 +615,7 @@ export default class DetailBar extends Component {
     const width = _.min([ _.max([ layout.containerWidth / 2, 600 ]), 1000 ]) + 'px';
 
     return (
-      <div className='animate-dialog' style={ { ...detailFloatStyle, width } }>
+      <div className='animate-dialog' style={ { width } }>
         <Button className='close' onClick={ close } title='关闭'>
           <i className='fa fa-close'></i>
         </Button>

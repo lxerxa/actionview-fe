@@ -26,7 +26,7 @@ export default class List extends Component {
       collection: [], 
       selectedIssue: {}, 
       markedIssue: {}, 
-      barShow: false,
+      detailBarShow: false,
       editModalShow: false
     };
     this.scrollSide = '';
@@ -134,7 +134,7 @@ export default class List extends Component {
   };
 
   async show(id) {
-    this.setState({ barShow: true });
+    this.setState({ detailBarShow: true });
     const { show, record } = this.props;
     const ecode = await show(id);  //fix me
     if (ecode == 0) {
@@ -645,7 +645,7 @@ export default class List extends Component {
     $('.ganttview-vtheader-series-item').each(function(i) {
       if (markedIssue.id === $(this).attr('id')) {
         $(this).css('background-color', '#FFFACD');
-      } else if (itemData.id === $(this).attr('id') && self.state.barShow) {
+      } else if (itemData.id === $(this).attr('id') && self.state.detailBarShow) {
         $(this).css('background-color', '#e6f7ff');
       } else {
         $(this).css('background-color', '');
@@ -771,7 +771,7 @@ export default class List extends Component {
   closeDetail() {
     const { markedIssue } = this.state;
 
-    this.setState({ barShow: false });
+    this.setState({ detailBarShow: false });
     $('.ganttview-vtheader-series-item').each(function(i) {
       if (markedIssue.id === $(this).attr('id')) {
         $(this).css('background-color', '#FFFACD');
@@ -950,7 +950,7 @@ export default class List extends Component {
           close={ () => { this.setState({ editModalShow: false }) } }          
           edit={ edit }
           data={ selectedIssue }/> }
-        { this.state.barShow &&
+        { this.state.detailBarShow &&
         <DetailBar
           i18n={ i18n }
           layout={ layout }

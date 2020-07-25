@@ -24,7 +24,7 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      barShow: false, 
+      detailBarShow: false, 
       selectVersionShow: false,
       viewSprintShow: false, 
       editSprintShow: false, 
@@ -202,13 +202,13 @@ export default class List extends Component {
   }
 
   closeDetail() {
-    this.setState({ barShow: false });
+    this.setState({ detailBarShow: false });
     const { cleanRecord } = this.props;
     cleanRecord();
   }
 
   async issueView(id, colNo) {
-    this.setState({ barShow: true });
+    this.state.detailBarShow = true;
 
     const { mode, show, record, curKanban, sprints } = this.props;
 
@@ -432,7 +432,7 @@ export default class List extends Component {
 
     return (
       <div className='board-container'>
-        <div className='board-overlay-waiting' style={ { display: !this.state.barShow && itemLoading ? 'block' : 'none' } }>
+        <div className='board-overlay-waiting' style={ { display: !this.state.detailBarShow && itemLoading ? 'block' : 'none' } }>
           <img src={ loadingImg } className='loading board-loading'/>
         </div>
 
@@ -496,7 +496,7 @@ export default class List extends Component {
                 inSprint={ mode == 'issue' && curKanban.type == 'scrum' }
                 inHisSprint={ mode == 'history' }
                 subtaskShow={ curKanban.query && curKanban.query.subtask && true }
-                openedIssue={ this.state.barShow ? itemData : {} }
+                openedIssue={ this.state.detailBarShow ? itemData : {} }
                 draggedIssue={ _.find(collection, { id: draggedIssue }) || {} }
                 issueView={ this.issueView.bind(this) }
                 getDraggableActions={ getDraggableActions }
@@ -546,7 +546,7 @@ export default class List extends Component {
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
           <span>暂无活动的Sprint</span>
         </div> }
-        { this.state.barShow &&
+        { this.state.detailBarShow &&
           <DetailBar
             i18n={ i18n }
             layout={ layout }
