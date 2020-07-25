@@ -18,7 +18,7 @@ export default class List extends Component {
     this.state = { 
       limit: 50, 
       category: 'all', 
-      barShow: false 
+      detailBarShow: false 
     };
     this.state.displayTimeFormat = window.localStorage && window.localStorage.getItem('activity-displayTimeFormat') || 'relative';
   }
@@ -122,13 +122,13 @@ export default class List extends Component {
   }
 
   closeDetail() {
-    this.setState({ barShow: false });
+    this.setState({ detailBarShow: false });
     const { cleanRecord } = this.props;
     cleanRecord();
   }
 
   async issueView(id) {
-    this.setState({ barShow: true });
+    this.setState({ detailBarShow: true });
     const { show, record } = this.props;
     const ecode = await show(id);
     if (ecode === 0) {
@@ -395,7 +395,7 @@ export default class List extends Component {
         <ButtonGroup vertical block>
           <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
         </ButtonGroup> }
-        { this.state.barShow &&
+        { this.state.detailBarShow &&
           <DetailBar
             i18n={ i18n }
             layout={ layout }
