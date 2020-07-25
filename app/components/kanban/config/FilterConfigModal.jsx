@@ -100,7 +100,7 @@ export default class FilterConfigModal extends Component {
           <Modal.Title id='contained-modal-title-la'>{ model == 'global' ? '全局过滤器' : ( no === -1 ? '添加快速过滤器' : '编辑快速过滤器' ) }</Modal.Title>
         </Modal.Header>
         <Form horizontal onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>
+        <Modal.Body style={ { maxHeight: '580px', overflow: 'auto', paddingBottom: '0px' } }>
           { model === 'filter' &&
           <FormGroup 
             style={ { height: '50px', borderBottom: '1px solid #ddd' } } 
