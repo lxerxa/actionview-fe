@@ -6,6 +6,14 @@ import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
 
+// Borrowed from chromium blink, which is based on
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
+const emailPattern = '[a-z0-9!#$%&\'*+/=?^_`{|}~.-]+' + // local part
+                     '@' +
+                     '[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?' + // domain part
+                     '(?:\\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*';
+const emailRegExp = new RegExp(`^${emailPattern}$`);
+
 const validate = (values, props) => {
   const errors = {};
   if (!values.first_name) {
@@ -14,7 +22,7 @@ const validate = (values, props) => {
 
   if (!values.email) {
     errors.email = '必填';
-  } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
+  } else if (!emailRegExp.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
     errors.email = '格式有误';
   } 
 

@@ -249,9 +249,12 @@ html.docs .toc-container .empty-state {
 }
 
 html.docs .toc-container .fa-minus-square-o,html.docs .toc-container .fa-plus-square-o ,html.docs .toc-container .fa-th-large {
-  cursor: pointer;
   font-size: 1.4rem;
   margin-right: 1.1rem
+}
+
+html.docs .toc-container h4 {
+  cursor: pointer;
 }
 
 @media (min-width:768px) {
