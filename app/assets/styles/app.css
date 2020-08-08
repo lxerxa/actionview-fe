@@ -738,15 +738,18 @@ table tr:hover .remove-icon{
   padding: 0 0 0 15px;
   margin-top: 15px;
 }
+
 .card {
   position: relative;
   height: 200px;
   border: 1px solid #ddd;
 }
+
 .card:hover {
   border: 1px solid #ccc;
   box-shadow:0 0 5px #ccc;
 }
+
 .card .content {
   position: relative;
   height: 83%;
@@ -754,6 +757,7 @@ table tr:hover .remove-icon{
   border-bottom: 1px solid #eee;
   overflow: hidden;
 }
+
 .card .title {
   position: absolute;
   top: 50px;  
@@ -764,6 +768,7 @@ table tr:hover .remove-icon{
   text-align: center;
   padding: 5px;
 }
+
 .card .title .name {
   font-size: 19px;
   margin: 0;
@@ -771,6 +776,7 @@ table tr:hover .remove-icon{
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
 .card .title .key {
   font-size: 16px;
   margin: 0;
@@ -1122,7 +1128,8 @@ div.filepicker {
 }
 
 .file-content:hover {
-  background-color: #f0f0f0
+  background-color: #f0f0f0;
+  box-shadow:0 0 5px #ccc;
 }
 
 .file-thumb {

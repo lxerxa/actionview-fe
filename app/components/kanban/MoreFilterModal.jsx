@@ -51,7 +51,7 @@ export default class MoreFilterModal extends Component {
           <Modal.Title id='contained-modal-title-la'>更多过滤</Modal.Title>
         </Modal.Header>
         <Form horizontal onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
-        <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>
+        <Modal.Body style={ { maxHeight: '580px', overflow: 'auto', paddingBottom: '0px' } }>
           <div className='cond-txt'>
             { !_.isEmpty(query) ? parseQuery(query, options) : '全部' }
           </div>
