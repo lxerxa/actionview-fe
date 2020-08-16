@@ -620,7 +620,11 @@ export default class DetailBar extends Component {
     const width = _.min([ _.max([ layout.containerWidth / 2, 600 ]), 1000 ]) + 'px';
 
     return (
-      <div className='animate-dialog' style={ { width, display: thisHide ? 'none': '' } }>
+      <div 
+        className='animate-dialog' 
+        style={ { width, display: thisHide ? 'none': '' } } 
+        onClick={ (e) => { e.stopPropagation(); } }
+        onMouseUp={ (e) => { e.stopPropagation(); } }>
         <Button className='close' onClick={ close } title='关闭'>
           <i className='fa fa-close'></i>
         </Button>
