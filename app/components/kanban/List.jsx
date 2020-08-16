@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 
 const $ = require('$');
 const moment = require('moment');
@@ -202,7 +203,22 @@ export default class List extends Component {
   }
 
   closeDetail() {
-    this.setState({ detailBarShow: false });
+
+    const { detailFloatStyle={}, layout } = this.props;
+
+    const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
+    const animateStyles = {};
+    if (detailFloatStyle.left !== undefined) {
+      animateStyles.left = detailFloatStyle.left - width;
+    } else {
+      animateStyles.right = - width;
+    }
+    $('.animate-dialog').animate(animateStyles);
+
+    setTimeout(() => {
+      this.setState({ detailBarShow: false });
+    }, 300);
+
     const { cleanRecord } = this.props;
     cleanRecord();
   }
@@ -432,10 +448,6 @@ export default class List extends Component {
 
     return (
       <div className='board-container'>
-        <div className='board-overlay-waiting' style={ { display: !this.state.detailBarShow && itemLoading ? 'block' : 'none' } }>
-          <img src={ loadingImg } className='loading board-loading'/>
-        </div>
-
         { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
           <img src={ loadingImg } className='loading'/> 

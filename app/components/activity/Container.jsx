@@ -204,6 +204,10 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  closeDetailBar() {
+    this.refs.list && this.refs.list.closeDetail();
+  }
+
   componentWillMount() {
     const { params: { key } } = this.props;
     this.pid = key;
@@ -215,7 +219,7 @@ export default class Container extends Component {
     }
 
     return (
-      <div>
+      <div onClick={ this.closeDetailBar.bind(this) }>
         <Header getOptions={ this.getOptions.bind(this) } { ...this.props.activity }/>
         <List ref='list'
           layout={ this.props.layout }

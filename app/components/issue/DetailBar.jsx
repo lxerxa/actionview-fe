@@ -68,7 +68,6 @@ export default class DetailBar extends Component {
       delNotifyShow: false,
       copyModalShow: false,
       watchersModalShow: false,
-      thisHide: true,
       action_id: '' 
     };
     this.delFileModalClose = this.delFileModalClose.bind(this);
@@ -466,12 +465,10 @@ export default class DetailBar extends Component {
   componentDidMount() {
     $('.animate-dialog .nav-tabs>li>a:first').css('border-left', '0px');
 
-    this.state.thisHide = false;
-
     const { detailFloatStyle={}, layout } = this.props;
 
     const width = _.min([ _.max([ layout.containerWidth / 2, 600 ]), 1000 ]);
-    const initialStyles = { width: width + 'px', display: '' };
+    const initialStyles = { width: width + 'px' };
     const animateStyles = {};
 
     if (detailFloatStyle.left !== undefined) {
@@ -557,7 +554,6 @@ export default class DetailBar extends Component {
       editProgress, 
       delFileShow, 
       selectedFile, 
-      thisHide,
       action_id 
     } = this.state;
 
@@ -622,7 +618,7 @@ export default class DetailBar extends Component {
     return (
       <div 
         className='animate-dialog' 
-        style={ { width, display: thisHide ? 'none': '' } } 
+        style={ { width } } 
         onClick={ (e) => { e.stopPropagation(); } }
         onMouseUp={ (e) => { e.stopPropagation(); } }>
         <Button className='close' onClick={ close } title='关闭'>

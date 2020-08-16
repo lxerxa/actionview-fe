@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button, OverlayTrigger, Popover, Grid, Row, Col, ControlLabel } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 
 const moment = require('moment');
 const $ = require('$');
@@ -304,7 +305,7 @@ export default class List extends Component {
           <div className='ganttview-vtheader-series' style={ { width: '950px' } }>
             { header }
             { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
-            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id } onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ markedIssue: markedIssue.id == v.id ? {} : v }); } }>
+            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id } onClick={ (e) => { e.preventDefault(); this.setState({ markedIssue: markedIssue.id == v.id ? {} : v }); } }>
               <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
                 <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasSubtasks ? 'visible' : 'hidden', cursor: 'pointer' } }>
                   { foldIssues.indexOf(v.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
@@ -337,7 +338,7 @@ export default class List extends Component {
                 { v.expect_complete_time && v.expect_start_time ? this.getDuration(v.expect_start_time, v.expect_complete_time) : '-' }
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '50px' } }>
-                <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
+                <a href='#' onClick={ (e) => { e.preventDefault(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
                   <i className='fa fa-dot-circle-o'></i>
                 </a> 
               </div>
@@ -771,7 +772,15 @@ export default class List extends Component {
   closeDetail() {
     const { markedIssue } = this.state;
 
-    this.setState({ detailBarShow: false });
+    const { layout } = this.props;
+    const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
+    const animateStyles = { right: -width };
+    $('.animate-dialog').animate(animateStyles);
+
+    setTimeout(() => {
+      this.setState({ detailBarShow: false });
+    }, 300);
+
     $('.ganttview-vtheader-series-item').each(function(i) {
       if (markedIssue.id === $(this).attr('id')) {
         $(this).css('background-color', '#FFFACD');

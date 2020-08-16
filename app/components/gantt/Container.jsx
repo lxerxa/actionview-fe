@@ -243,6 +243,10 @@ export default class Container extends Component {
     this.pid = key;
   }
 
+  closeDetailBar() {
+    this.refs.list && this.refs.list.closeDetail();
+  }
+
   render() {
     if (this.props.project.options) {
       _.assign(this.props.issue.options, this.props.project.options);
@@ -251,7 +255,7 @@ export default class Container extends Component {
     const { location: { query={} } } = this.props;
 
     return (
-      <div>
+      <div onClick={ this.closeDetailBar.bind(this) }>
         { !this.state.isHeaderHidden &&
         <Header
           create={ this.create.bind(this) }

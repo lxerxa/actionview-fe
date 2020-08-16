@@ -33,7 +33,8 @@ export default class Sidebar extends Component {
   componentDidMount() {
     const self = this;
     $('.toc-container').unbind('click').bind('click', function(e) {
-      if ([ 'I', 'SPAN', 'A' ].indexOf(e.target.nodeName) === -1) {
+      console.log(e.target.nodeName);
+      if ([ 'I', 'H4', 'SPAN', 'A' ].indexOf(e.target.nodeName) === -1) {
         e.stopPropagation();
       }
     });
@@ -96,6 +97,13 @@ export default class Sidebar extends Component {
     if (storage) {
       storage.setItem('sideBarHide', '0');
     }
+  }
+
+  toggleShow(item) {
+    return (e) => {
+      this.setState({ [`${item}Show`]: !this.state[`${item}Show`] });
+      e.nativeEvent.stopImmediatePropagation();
+    };
   }
 
   componentDidUpdate() {
@@ -175,6 +183,7 @@ export default class Sidebar extends Component {
 
   render() {
     const { project, session } = this.props;
+    const toggleShow = this.toggleShow.bind(this);
 
     if (this.state.adminPanelShow) {
       return (
@@ -187,8 +196,8 @@ export default class Sidebar extends Component {
           </div>
           { session.user.permissions && session.user.permissions.sys_admin &&
           <div className='toc-container-body'>
-            <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>管理员管理面板</h4>
-            <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>全局方案配置</h4>
+            <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis', cursor: 'default' } }>管理员管理面板</h4>
+            <h4 onClick={ toggleShow('adminScheme') }><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />全局方案配置</h4>
             <ul className={ !this.state.adminSchemeShow && 'hide' }>
               <li><Link to='/admin/scheme/type' activeClassName='menu-active'>问题类型</Link></li>
               <li><Link to='/admin/scheme/state' activeClassName='menu-active'>状态</Link></li>
@@ -200,21 +209,21 @@ export default class Sidebar extends Component {
               <li><Link to='/admin/scheme/role' activeClassName='menu-active'>角色权限</Link></li>
               <li><Link to='/admin/scheme/events' activeClassName='menu-active'>通知事件</Link></li>
             </ul>
-            <h4><i className={ this.state.adminUserManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminUserManageShow: !this.state.adminUserManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>用户管理</h4>
+            <h4 onClick={ toggleShow('adminUserManage') }><i className={ this.state.adminUserManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />用户管理</h4>
             <ul className={ !this.state.adminUserManageShow && 'hide' }>
               <li><Link to='/admin/user' activeClassName='menu-active'>用户</Link></li>
               <li><Link to='/admin/group' activeClassName='menu-active'>用户组</Link></li>
               <li><Link to='/admin/directory' activeClassName='menu-active'>用户目录</Link></li>
             </ul>
-            <h4><i className={ this.state.adminProjectManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminProjectManageShow: !this.state.adminProjectManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目管理</h4>
+            <h4 onClick={ toggleShow('adminProjectManage') }><i className={ this.state.adminProjectManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />项目管理</h4>
             <ul className={ !this.state.adminProjectManageShow && 'hide' }>
               <li><Link to='/admin/project' activeClassName='menu-active'>项目</Link></li>
             </ul>
-            <h4><i className={ this.state.adminAccessLogsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminAccessLogsShow: !this.state.adminAccessLogsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>日志查看</h4>
+            <h4 onClick={ toggleShow('adminAccessLogs') }><i className={ this.state.adminAccessLogsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />日志查看</h4>
             <ul className={ !this.state.adminAccessLogsShow && 'hide' }>
               <li><Link to='/admin/logs' activeClassName='menu-active'>日志</Link></li>
             </ul>
-            <h4><i className={ this.state.adminSysSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingsShow: !this.state.adminSysSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>
+            <h4 onClick={ toggleShow('adminSysSettings') }><i className={ this.state.adminSysSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />系统配置</h4>
             <ul className={ !this.state.adminSysSettingsShow && 'hide' }>
               <li><Link to='/admin/syssetting' activeClassName='menu-active'>系统配置</Link></li>
               <li><Link to='/admin/calendar' activeClassName='menu-active'>日历管理</Link></li>
@@ -229,12 +238,12 @@ export default class Sidebar extends Component {
           <div className='toc-container-header'>
             <span className='span-bar-icon' onClick={ this.hideBar.bind(this) }><i className='fa fa-bars'></i></span>
             <span className='span-angle-double' id='hide-bar' onClick={ this.hideBar.bind(this)  }><i className='fa fa-thumb-tack fa-rotate-90'></i></span>
-            <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'></i></span>
+            <span className='span-tack-bar' style={ { display: 'none' } } id='tack-bar' onClick={ this.tackBar.bind(this) }><i className='fa fa-thumb-tack'/></span>
           </div>
           { project.item.key ? 
           <div className='toc-container-body'>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } } title={ project.item.name }>{ project.item.name || '' }</h4>
-            <h4><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSummaryShow: !this.state.projectSummaryShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目概述</h4>
+            <h4 onClick={ toggleShow('projectSummary') } ><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />项目概述</h4>
             { project.options.permissions && project.options.permissions.length > 0 &&
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active' id='summary'>概要</Link></li>
@@ -249,7 +258,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/wiki' } activeClassName='menu-active' id='wiki'>Wiki</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/team' } activeClassName='menu-active'>成员</Link></li>
             </ul> }
-            <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
+            <h4 onClick={ toggleShow('projectConfig') }><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />方案配置</h4>
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectConfigShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li>
@@ -268,7 +277,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li> 
             </ul> }
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
-            <h4><i className={ this.state.projectSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSettingsShow: !this.state.projectSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目设置</h4> }
+            <h4 onClick={ toggleShow('projectSettings') }><i className={ this.state.projectSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />项目设置</h4> }
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectSettingsShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/labels' } activeClassName='menu-active'>标签管理</Link></li>

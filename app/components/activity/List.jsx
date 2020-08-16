@@ -4,7 +4,9 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem, Checkbox } from 'react-bootstrap';
 import { getAgoAt } from '../share/Funcs';
 import _ from 'lodash';
+import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 
+const $ = require('$');
 const moment = require('moment');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const img = require('../../assets/images/loading.gif');
@@ -122,7 +124,15 @@ export default class List extends Component {
   }
 
   closeDetail() {
-    this.setState({ detailBarShow: false });
+    const { layout } = this.props;
+    const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
+    const animateStyles = { right: -width };
+    $('.animate-dialog').animate(animateStyles);
+
+    setTimeout(() => {
+      this.setState({ detailBarShow: false });
+    }, 300);
+
     const { cleanRecord } = this.props;
     cleanRecord();
   }
@@ -269,7 +279,7 @@ export default class List extends Component {
                         { collection[i].issue_link.src.no + ' - ' + collection[i].issue_link.src.title }
                       </span> 
                       : 
-                      <a style={ collection[i].issue_link.src.state == 'Closed' ? { textDecoration: 'line-through' } : {} } href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue_link.src.id); } }>
+                      <a style={ collection[i].issue_link.src.state == 'Closed' ? { textDecoration: 'line-through' } : {} } href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.issueView(collection[i].issue_link.src.id); } }>
                         <span style={ { marginRight: '5px' } }>
                           { collection[i].issue_link.src.no + ' - ' + collection[i].issue_link.src.title }
                         </span>
@@ -283,7 +293,7 @@ export default class List extends Component {
                         { collection[i].issue_link.dest.no + ' - ' + collection[i].issue_link.dest.title }
                       </span> 
                       : 
-                      <a style={ collection[i].issue_link.dest.state == 'Closed' ? { textDecoration: 'line-through' } : {} } href='#' onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue_link.dest.id); } }>
+                      <a style={ collection[i].issue_link.dest.state == 'Closed' ? { textDecoration: 'line-through' } : {} } href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.issueView(collection[i].issue_link.dest.id); } }>
                         <span style={ { marginRight: '5px' } }>
                           { collection[i].issue_link.dest.no + ' - ' + collection[i].issue_link.dest.title }
                         </span>
@@ -306,7 +316,7 @@ export default class List extends Component {
             { collection[i].event_key == 'unwatched_issue' && <span>取消关注了</span> }
             { collection[i].event_key.indexOf('_') === -1  && <span>将</span> }
             { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
-            { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
+            { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
             { wfEventFlag && collection[i].event_key.indexOf('_') !== -1 && <span>, </span> }
             { wfEventFlag && collection[i].event_key.indexOf('_') === -1 && <span>的</span> }
             { wfEventFlag &&

@@ -7,6 +7,7 @@ import _ from 'lodash';
 import * as IssueActions from 'redux/actions/IssueActions';
 import * as WorkflowActions from 'redux/actions/WorkflowActions';
 
+const $ = require('$');
 const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
@@ -299,7 +300,7 @@ export default class Container extends Component {
     const { location: { query={} } } = this.props;
 
     return (
-      <div>
+      <div onClick={ this.closeDetailBar.bind(this) }>
         <Header 
           create={ this.create.bind(this) } 
           addLabels={ this.props.actions.addLabels } 

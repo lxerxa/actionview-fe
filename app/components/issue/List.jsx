@@ -4,6 +4,7 @@ import { Button, DropdownButton, MenuItem, Label, Nav, NavItem } from 'react-boo
 import { Link } from 'react-router';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 
 const $ = require('$');
 const moment = require('moment');
@@ -125,8 +126,6 @@ export default class List extends Component {
     del: PropTypes.func.isRequired,
     selectedIds: PropTypes.array.isRequired,
     setSelectedIds: PropTypes.func.isRequired,
-    multiDel: PropTypes.func.isRequired,
-    multiUpdate: PropTypes.func.isRequired,
     isBatchHandle: PropTypes.bool.isRequired,
     user: PropTypes.object.isRequired
   }
@@ -316,7 +315,15 @@ export default class List extends Component {
   }
 
   closeDetail() {
-    this.setState({ detailBarShow: false });
+    const { layout } = this.props;
+    const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
+    const animateStyles = { right: -width };
+    $('.animate-dialog').animate(animateStyles);
+
+    setTimeout(() => {
+      this.setState({ detailBarShow: false });
+    }, 300);
+
     $('.react-bs-container-body table tr').each(function(i) {
       $(this).css('background-color', '');
     });
@@ -410,8 +417,6 @@ export default class List extends Component {
       convert,
       resetState,
       selectedIds,
-      multiUpdate,
-      multiDel,
       isBatchHandle,
       doAction,
       user 
@@ -474,14 +479,14 @@ export default class List extends Component {
         <span className='type-abb' title={ _.findIndex(options.types, { id: item.type }) !== -1 ? _.find(options.types, { id: item.type }).name : '' }>
           { _.findIndex(options.types, { id: item.type }) !== -1 ? _.find(options.types, { id: item.type }).abb : '-' }
         </span> );
-      issue.no = ( <a href='#' onClick={ (e) => { e.preventDefault(); this.show(item.id) } }>{ item.no }</a> );
+      issue.no = ( <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.show(item.id) } }>{ item.no }</a> );
       issue.title = ( 
         <div>
           { item.parent &&
           <span style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
             { item.parent.title ? item.parent.title + ' / ' : '- / ' }
           </span> }
-          <a href='#' onClick={ (e) => { e.preventDefault(); this.show(item.id) } } style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+          <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.show(item.id) } } style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
             { item.title ? item.title : '-' }
           </a>
           { item.watching &&

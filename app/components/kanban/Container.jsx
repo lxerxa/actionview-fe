@@ -415,6 +415,10 @@ export default class Container extends Component {
     }
   }
 
+  closeDetailBar() {
+    this.refs.list && this.refs.list.closeDetail();
+  }
+
   render() {
     if (this.props.project.options) {
       _.assign(this.props.issue.options, this.props.project.options);
@@ -427,7 +431,9 @@ export default class Container extends Component {
     }
 
     return (
-      <div style={ { overflowY: 'hidden', height: '100%', margin: '0px -8px' } }>
+      <div 
+        onMouseUp={ this.closeDetailBar.bind(this) }
+        style={ { overflowY: 'hidden', height: '100%', margin: '0px -8px' } }>
         <Header ref='header' 
           changeModel={ this.changeModel.bind(this) }
           mode={ this.state.mode }
