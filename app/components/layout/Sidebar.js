@@ -242,7 +242,7 @@ export default class Sidebar extends Component {
           </div>
           { project.item.key ? 
           <div className='toc-container-body'>
-            <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } } title={ project.item.name }>{ project.item.name || '' }</h4>
+            <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis', cursor: 'default' } } title={ project.item.name }>{ project.item.name || '' }</h4>
             <h4 onClick={ toggleShow('projectSummary') } ><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />项目概述</h4>
             { project.options.permissions && project.options.permissions.length > 0 &&
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
