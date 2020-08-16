@@ -24,8 +24,9 @@ const EditSprintModal = require('./EditSprintModal');
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       detailBarShow: false, 
+      detailClosing: false,
       selectVersionShow: false,
       viewSprintShow: false, 
       editSprintShow: false, 
@@ -202,14 +203,20 @@ export default class List extends Component {
     }
   }
 
-  closeDetail() {
+  quickCloseDetail() {
+    this.setState({ detailBarShow: false });
+    const { cleanRecord } = this.props;
+    cleanRecord();
+  }
 
+  closeDetail() {
     const { detailFloatStyle={}, layout } = this.props;
 
     const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
     const animateStyles = {};
-    if (detailFloatStyle.left !== undefined) {
-      animateStyles.left = detailFloatStyle.left - width;
+    const left = parseInt($('.animate-dialog').css('left'));
+    if (left < 260) {
+      animateStyles.left = left - width;
     } else {
       animateStyles.right = - width;
     }
@@ -221,6 +228,7 @@ export default class List extends Component {
 
     const { cleanRecord } = this.props;
     cleanRecord();
+
   }
 
   async issueView(id, colNo) {
@@ -271,8 +279,6 @@ export default class List extends Component {
   }
 
   operateBacklog(eventKey) {
-    this.closeDetail();
-
     const no = eventKey.split('-').pop();
     if (eventKey.indexOf('view') !== -1) {
       this.setState({ viewSprintShow: true, curSprintNo: no - 0 });
@@ -448,6 +454,10 @@ export default class List extends Component {
 
     return (
       <div className='board-container'>
+        <div className='board-overlay-waiting' style={ { display: !this.state.detailBarShow && itemLoading ? 'block' : 'none' } }>
+          <img src={ loadingImg } className='loading board-loading'/>
+        </div>
+
         { !_.isEmpty(curKanban) && indexLoading && 
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
           <img src={ loadingImg } className='loading'/> 
@@ -469,12 +479,12 @@ export default class List extends Component {
                 { mode == 'issue' && v.min && <span className='config-wip'>{ 'Min-' + v.min }</span> }
                 { mode == 'issue' && curKanban.type == 'kanban' && i == columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
-                  onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ selectVersionShow: true }); } }>
+                  onClick={ (e) => { e.preventDefault(); this.setState({ selectVersionShow: true }); } }>
                   发布...
                 </a> }
                 { mode == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && _.findIndex(sprints, { status: 'active' }) !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
-                  onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ completeSprintShow: true }); } }>
+                  onClick={ (e) => { e.preventDefault(); this.setState({ completeSprintShow: true }); } }>
                   完成...
                 </a> }
                 { mode == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && i != 0 &&
@@ -485,7 +495,6 @@ export default class List extends Component {
                     noCaret
                     style={ { padding: '2px 7px' } }
                     onSelect={ this.operateBacklog.bind(this) }
-                    onClick={ this.closeDetail.bind(this) }
                     pullRight>
                     <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> 
                     <MenuItem eventKey={ 'edit-' +  v.no }>编辑</MenuItem> 
@@ -517,7 +526,7 @@ export default class List extends Component {
                 rankLoading={ rankLoading }
                 cards={ columnIssues[i] }
                 pkey={ project.key }
-                closeDetail={ this.closeDetail.bind(this) }
+                closeDetail={ this.quickCloseDetail.bind(this) }
                 removeFromSprint={ this.removeFromSprint.bind(this) }
                 options={ options } /> ) } ) }
           </div>

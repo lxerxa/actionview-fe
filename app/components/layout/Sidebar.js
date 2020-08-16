@@ -33,7 +33,6 @@ export default class Sidebar extends Component {
   componentDidMount() {
     const self = this;
     $('.toc-container').unbind('click').bind('click', function(e) {
-      console.log(e.target.nodeName);
       if ([ 'I', 'H4', 'SPAN', 'A' ].indexOf(e.target.nodeName) === -1) {
         e.stopPropagation();
       }
