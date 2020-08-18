@@ -127,6 +127,11 @@ export default class Container extends Component {
     return this.props.document.ecode;
   }
 
+  async favorite(id, flag) {
+    await this.props.actions.favorite(this.pid, id, flag);
+    return this.props.document.ecode;
+  }
+
   componentWillMount() {
     const { params: { key, id } } = this.props;
     this.props.actions.getOptions(key);
@@ -187,6 +192,7 @@ export default class Container extends Component {
             createFolder={ this.createFolder.bind(this) } 
             select={ this.props.actions.select } 
             addFile={ this.props.actions.addFile } 
+            favorite={ this.favorite.bind(this) }
             update={ this.update.bind(this) } 
             copy={ this.copy.bind(this) } 
             move={ this.move.bind(this) } 
@@ -206,6 +212,7 @@ export default class Container extends Component {
             createFolder={ this.createFolder.bind(this) }
             select={ this.props.actions.select }
             addFile={ this.props.actions.addFile }
+            favorite={ this.favorite.bind(this) }
             update={ this.update.bind(this) }
             copy={ this.copy.bind(this) }
             move={ this.move.bind(this) }

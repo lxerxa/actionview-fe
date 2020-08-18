@@ -37,6 +37,7 @@ export default class List extends Component {
     this.cancelEditRow = this.cancelEditRow.bind(this);
     this.downloadAll = this.downloadAll.bind(this);
     this.previewImg = this.previewImg.bind(this);
+    this.favorite = this.favorite.bind(this);
   }
 
   static propTypes = {
@@ -57,6 +58,7 @@ export default class List extends Component {
     createFolderShow: PropTypes.bool.isRequired,
     cancelCreateFolder: PropTypes.func.isRequired,
     createFolder: PropTypes.func.isRequired,
+    favorite: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
     move: PropTypes.func.isRequired,
@@ -79,10 +81,29 @@ export default class List extends Component {
     select(id);
   }
 
+  async favorite() {
+    const { favorite, selectedItem } = this.props;
+    const ecode = await favorite(selectedItem.id, !selectedItem.favorited);
+    if (ecode === 0) {
+      if (!selectedItem.favorited) {
+        notify.show('已收藏。', 'success', 2000);
+      } else {
+        notify.show('已取消收藏。', 'success', 2000);
+      }
+    } else {
+      if (!selectedItem.favorited) {
+        notify.show('收藏失败。', 'error', 2000);
+      } else {
+        notify.show('取消失败。', 'error', 2000);
+      }
+    }
+  }
+
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     const { select, project_key } = this.props;
     await select(hoverRowId);
+    const { selectedItem } = this.props;
 
     if (eventKey === 'rename') {
       this.setState({ editRowId: hoverRowId });
@@ -95,6 +116,8 @@ export default class List extends Component {
     } else if (eventKey === 'download') {
       const url = API_BASENAME + '/project/' + project_key + '/document/' + hoverRowId + '/download';
       window.open(url, '_blank');
+    } else if (eventKey === 'favorite') {
+      this.favorite();
     }
   }
 
@@ -242,6 +265,8 @@ export default class List extends Component {
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
             <Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link>
+            { v.favorited &&
+            <span title='点击取消收藏' style={ { float: 'right', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { console.log('a') } }><i className='fa fa-star'></i></span> }
           </div> ),
         operation: (
           <div>
@@ -256,6 +281,7 @@ export default class List extends Component {
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='download'>下载</MenuItem>
+              <MenuItem eventKey='favorite'>{ v.favorited ? '取消收藏' : '收藏' }</MenuItem>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
@@ -304,9 +330,11 @@ export default class List extends Component {
               </a> }
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
-              <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
+              <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '10px', float: 'left' } }>打开目录</span></Link> }
+              { files[i].favorited &&
+              <span title='点击取消收藏' style={ { float: 'left', color: '#FF9900', cursor: 'pointer', marginRight: '10px' } } onClick={ () => { console.log('a') } }><i className='fa fa-star'></i></span> }
               { files[i].uploader &&
-              <span style={ { marginRight: '15px', float: 'left' } }>
+              <span style={ { marginRight: '10px', float: 'left' } }>
                 { files[i].uploader.name + '  ' + moment.unix(files[i].uploaded_at).format('YYYY/MM/DD HH:mm') }
               </span> }
               <span style={ { float: 'left' } }>{ this.getFileSize(files[i].size) }</span>
@@ -325,6 +353,7 @@ export default class List extends Component {
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='download'>下载</MenuItem>
+              <MenuItem eventKey='favorite'>{ files[i].favorited ? '取消收藏' : '收藏' }</MenuItem>
               { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || files[i].uploader.id == user.id) && <MenuItem eventKey='rename'>重命名</MenuItem> }
               { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || files[i].uploader.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
               { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || files[i].uploader.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }

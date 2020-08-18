@@ -42,6 +42,7 @@ export default class List extends Component {
     this.reload = this.reload.bind(this);
     this.cancelEditRow = this.cancelEditRow.bind(this);
     this.initEditRow = this.initEditRow.bind(this);
+    this.favorite = this.favorite.bind(this);
   }
 
   static propTypes = {
@@ -61,6 +62,7 @@ export default class List extends Component {
     select: PropTypes.func.isRequired,
     sort: PropTypes.func.isRequired,
     goto: PropTypes.func.isRequired,
+    favorite: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
@@ -121,6 +123,24 @@ export default class List extends Component {
     select(id);
   }
 
+  async favorite(id, flag) {
+    const { favorite, selectedItem } = this.props;
+    const ecode = await favorite(selectedItem.id, !selectedItem.favorited);
+    if (ecode === 0) {
+      if (!selectedItem.favorited) {
+        notify.show('已收藏。', 'success', 2000);
+      } else {
+        notify.show('已取消收藏。', 'success', 2000);
+      }
+    } else {
+      if (!selectedItem.favorited) {
+        notify.show('收藏失败。', 'error', 2000);
+      } else {
+        notify.show('取消失败。', 'error', 2000);
+      }
+    }
+  }
+
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
     const { select, project_key, checkin, checkout, user, goto } = this.props;
@@ -155,6 +175,8 @@ export default class List extends Component {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'rename') {
       this.setState({ editRowId: hoverRowId });
+    } else if (eventKey === 'favorite') {
+      this.favorite();
     }
   }
 

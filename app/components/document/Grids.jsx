@@ -36,6 +36,7 @@ export default class Grids extends Component {
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.cancelEditCard = this.cancelEditCard.bind(this);
     this.downloadAll = this.downloadAll.bind(this);
+    this.favorite = this.favorite.bind(this);
   }
 
   static propTypes = {
@@ -56,6 +57,7 @@ export default class Grids extends Component {
     createFolderShow: PropTypes.bool.isRequired,
     cancelCreateFolder: PropTypes.func.isRequired,
     createFolder: PropTypes.func.isRequired,
+    favorite: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     copy: PropTypes.func.isRequired,
     move: PropTypes.func.isRequired,
@@ -78,6 +80,24 @@ export default class Grids extends Component {
     select(id);
   }
 
+  async favorite() {
+    const { favorite, selectedItem } = this.props;
+    const ecode = await favorite(selectedItem.id, !selectedItem.favorited);
+    if (ecode === 0) {
+      if (!selectedItem.favorited) {
+        notify.show('已收藏。', 'success', 2000);
+      } else {
+        notify.show('已取消收藏。', 'success', 2000);
+      }
+    } else {
+      if (!selectedItem.favorited) {
+        notify.show('收藏失败。', 'error', 2000);
+      } else {
+        notify.show('取消失败。', 'error', 2000);
+      }
+    }
+  }
+
   async operateSelect(eventKey, e) {
     e.stopPropagation();
 
@@ -96,6 +116,8 @@ export default class Grids extends Component {
     } else if (eventKey === 'download') {
       const url = API_BASENAME + '/project/' + project_key + '/document/' + currentId + '/download';
       window.open(url, '_blank');
+    } else if (eventKey === 'favorite') {
+      this.favorite();
     }
   }
 
@@ -241,6 +263,7 @@ export default class Grids extends Component {
                       onClick={ this.cancelEditCard }
                       onSelect={ this.operateSelect.bind(this) } >
                       <MenuItem eventKey='download'>下载</MenuItem>
+                      <MenuItem eventKey='favorite'>{ v.favorited ? '取消收藏' : '收藏' }</MenuItem>
                       { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> }
                       { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
                       { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
@@ -280,6 +303,7 @@ export default class Grids extends Component {
                       onClick={ (e) => { e.stopPropagation(); this.cancelEditCard(); } }
                       onSelect={ this.operateSelect.bind(this) } >
                       <MenuItem eventKey='download'>下载</MenuItem>
+                      <MenuItem eventKey='favorite'>{ v.favorited ? '取消收藏' : '收藏' }</MenuItem>
                       { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='rename'>重命名</MenuItem> }
                       { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
                       { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }

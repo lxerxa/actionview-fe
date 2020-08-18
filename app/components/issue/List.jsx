@@ -491,21 +491,21 @@ export default class List extends Component {
           </a>
           { item.watching &&
           <span title='点击取消关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(item.id, false) } }><i className='fa fa-eye'></i></span> }
-           <span className='table-td-issue-desc'>
-             { item.reporter &&
-             <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
-               { item.reporter.name + '  ' + moment.unix(item.created_at).format('YYYY/MM/DD HH:mm') }
-             </span> }
-             { _.map(item.labels || [], 
-               (val, i) => 
-                 <Link to={ '/project/' + project.key + '/issue?labels=' + val } key={ i }>
-                   <span title={ val } className='issue-label' style={ this.getLabelStyle(val) }>
-                     { val }
-                   </span>
-                 </Link>
-               ) }
-           </span>
-         </div> );
+          <span className='table-td-issue-desc'>
+            { item.reporter &&
+            <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
+              { item.reporter.name + '  ' + moment.unix(item.created_at).format('YYYY/MM/DD HH:mm') }
+            </span> }
+            { _.map(item.labels || [], 
+              (val, i) => 
+                <Link to={ '/project/' + project.key + '/issue?labels=' + val } key={ i }>
+                  <span title={ val } className='issue-label' style={ this.getLabelStyle(val) }>
+                    { val }
+                  </span>
+                </Link>
+              ) }
+          </span>
+        </div> );
       issue.operation = (
         <div>
           { operateShow && hoverRowId === item.id && !itemLoading &&

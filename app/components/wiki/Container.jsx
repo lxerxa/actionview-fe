@@ -166,6 +166,11 @@ export default class Container extends Component {
     this.setState({ directoryShow: !this.state.directoryShow });
   }
 
+  async favorite(id, flag) {
+    await this.props.actions.favorite(this.pid, id, flag);
+    return this.props.wiki.ecode;
+  }
+
   componentWillMount() {
     const { params: { key, dir, wid, mode } } = this.props;
     this.pid = key;
@@ -229,6 +234,7 @@ export default class Container extends Component {
         project_key={ this.pid }
         goto={ this.goto.bind(this) }
         wid={ this.wid }
+        favorite={ this.favorite.bind(this) }
         update={ this.update.bind(this) }
         show={ this.show.bind(this) }
         checkin={ this.checkin.bind(this) }
@@ -248,6 +254,7 @@ export default class Container extends Component {
         index={ this.index.bind(this) }
         reload={ this.reload.bind(this) }
         goto={ this.goto.bind(this) }
+        favorite={ this.favorite.bind(this) }
         create={ this.create.bind(this) }
         show={ this.show.bind(this) }
         select={ this.props.actions.select }
