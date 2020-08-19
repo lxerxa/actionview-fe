@@ -98,6 +98,15 @@ export default class Grids extends Component {
     }
   }
 
+  async clickFavorite(e) {
+    e.stopPropagation();
+
+    const { currentId } = this.state;
+    const { select } = this.props;
+    await select(currentId);
+    this.favorite();
+  }
+
   async operateSelect(eventKey, e) {
     e.stopPropagation();
 
@@ -269,6 +278,10 @@ export default class Grids extends Component {
                       { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
                     </DropdownButton>
                   </div> }
+                  { v.favorited &&
+                  <div className='favorite-icon'>
+                    <span onClick={ this.clickFavorite.bind(this) }><i className='fa fa-star'></i></span>
+                  </div> }
                   <Link to={ '/project/' + project_key + '/document/' + v.id }>
                     <div className='file-thumb'>
                       <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
@@ -308,6 +321,10 @@ export default class Grids extends Component {
                       { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
                       { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || v.uploader.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }
                     </DropdownButton>
+                  </div> }
+                  { v.favorited &&
+                  <div className='favorite-icon'>
+                    <span onClick={ this.clickFavorite.bind(this) }><i className='fa fa-star'></i></span>
                   </div> }
                   <div className='file-thumb'>
                     { v.thumbnails_index ?

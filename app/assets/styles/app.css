@@ -1176,6 +1176,15 @@ div.filepicker {
   cursor: pointer;
 }
 
+.file-content .favorite-icon {
+  position: absolute;
+  right: 18px;
+  top: 8px;
+  color: #FF9900;
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
 .directory-bar {
   position: absolute;
   width: 250px;

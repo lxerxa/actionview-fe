@@ -77,3 +77,10 @@ export function getDirChildren(key, directory) {
     promise: (client) => client.request({ url: '/project/' + key + '/document/' + directory + '/dirs' })
   });
 }
+
+export function favorite(key, id, flag) {
+  return asyncFuncCreator({
+    constant: 'DOCUMENT_FAVORITE',
+    promise: (client) => client.request({ url: '/project/' + key + '/document/' + id + '/favorite', method: 'post', data: { flag } })
+  });
+}

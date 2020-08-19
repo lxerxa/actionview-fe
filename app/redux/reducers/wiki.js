@@ -349,6 +349,16 @@ export default function wiki(state = initialState, action) {
       sort(state.collection, action.key);
       return { ...state };
 
+    case t.WIKI_FAVORITE_SUCCESS:
+      const ind = _.findIndex(state.collection, { id: action.result.data.id });
+      if (ind !== -1) {
+        state.collection[ind].favorited = action.result.data.favorited;
+      }
+      if (state.item.id == action.result.data.id) {
+        state.item.favorited = action.result.data.favorited;
+      }
+      return { ...state, ecode: action.result.ecode };
+
     default:
       return state;
   }

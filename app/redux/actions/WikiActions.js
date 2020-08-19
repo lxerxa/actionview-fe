@@ -101,3 +101,10 @@ export function getDirChildren(key, directory) {
     promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + directory + '/dirs' })
   });
 }
+
+export function favorite(key, id, flag) {
+  return asyncFuncCreator({
+    constant: 'WIKI_FAVORITE',
+    promise: (client) => client.request({ url: '/project/' + key + '/wiki/' + id + '/favorite', method: 'post', data: { flag } })
+  });
+}

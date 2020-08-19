@@ -183,6 +183,13 @@ export default function document(state = initialState, action) {
     case t.DOCUMENT_CREATE_FOLDER_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
+    case t.DOCUMENT_FAVORITE_SUCCESS:
+      const ind = _.findIndex(state.collection, { id: action.result.data.id });
+      if (ind !== -1) {
+        state.collection[ind].favorited = action.result.data.favorited;
+      }
+      return { ...state, ecode: action.result.ecode };
+
     case t.DOCUMENT_UPDATE:
     case t.DOCUMENT_DELETE:
       return { ...state, itemLoading: true };
