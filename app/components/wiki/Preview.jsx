@@ -59,7 +59,8 @@ export default class Preview extends Component {
     addAttachment: PropTypes.func.isRequired,
     reload: PropTypes.func.isRequired,
     directoryShow: PropTypes.bool.isRequired,
-    toggleDirectory: PropTypes.func.isRequired
+    toggleDirectory: PropTypes.func.isRequired,
+    favorite: PropTypes.func.isRequired
   }
 
   async componentWillMount() {
@@ -171,6 +172,24 @@ export default class Preview extends Component {
   edit() {
     const { wid, goto } = this.props;
     goto('edit', wid);
+  }
+
+  async favorite() {
+    const { favorite, item } = this.props;
+    const ecode = await favorite(item.id, !item.favorited);
+    if (ecode === 0) {
+      if (!item.favorited) {
+        notify.show('已收藏。', 'success', 2000);
+      } else {
+        notify.show('已取消收藏。', 'success', 2000);
+      }
+    } else {
+      if (!item.favorited) {
+        notify.show('收藏失败。', 'error', 2000);
+      } else {
+        notify.show('取消失败。', 'error', 2000);
+      }
+    }
   }
 
   render() {
@@ -298,6 +317,10 @@ export default class Preview extends Component {
 
             <span style={ { marginLeft: '8px' } }><a href='#' onClick={ (e) => { e.preventDefault(); this.refresh(); } } title={ isNewestVer ? '刷新' : '最新版' }><i className='fa fa-refresh'></i></a></span>
           </span> }
+          { item.favorited ?
+            <span style={ { float: 'right', marginRight: '5px', cursor: 'pointer', color: '#FF9900' } } title='点击取消收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star'></i></span>
+            :
+            <span style={ { float: 'right', marginRight: '5px', cursor: 'pointer' } } title='点击收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star-o'></i></span> }
         </div> }
         <div style={ { marginTop: '15px', marginBottom: '20px', paddingLeft: '5px' } }>
           <div style={ { display: 'none' } }>

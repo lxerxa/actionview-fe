@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Panel, FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Panel, FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, DropdownButton, MenuItem, Checkbox } from 'react-bootstrap';
 import Select from 'react-select';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
@@ -32,7 +32,8 @@ export default class List extends Component {
       editRowId: '',
       createFolderShow: false,
       searchShow: false,
-      name: '' 
+      name: '', 
+      myfavorite: ''
     };
 
     this.state.sortkey = window.localStorage && window.localStorage.getItem('wiki-sortkey') || 'create_time_desc';
@@ -83,13 +84,17 @@ export default class List extends Component {
     if (query.updated_at) {
       newQuery.updated_at = this.state.updated_at = query.updated_at;
     }
+    if (query.myfavorite) {
+      newQuery.myfavorite = this.state.myfavorite = query.myfavorite;
+    }
     index(newQuery);
   }
 
   cancelEditRow() {
     this.setState({ 
       editRowId: '',
-      createFolderShow: false });
+      createFolderShow: false 
+    });
   }
 
   initEditRow() {
@@ -115,6 +120,7 @@ export default class List extends Component {
 
     this.state.name = newQuery.name || '';
     this.state.updated_at = newQuery.updated_at || null;
+    this.state.myfavorite = newQuery.myfavorite || '';
   }
 
   delNotify(id) {
@@ -123,7 +129,7 @@ export default class List extends Component {
     select(id);
   }
 
-  async favorite(id, flag) {
+  async favorite() {
     const { favorite, selectedItem } = this.props;
     const ecode = await favorite(selectedItem.id, !selectedItem.favorited);
     if (ecode === 0) {
@@ -198,6 +204,9 @@ export default class List extends Component {
     }
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
+    }
+    if (this.state.myfavorite == '1') {
+      query.myfavorite = '1';
     }
     reload(query);
   }
@@ -334,10 +343,12 @@ export default class List extends Component {
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
             <Link to={ '/project/' + project_key + '/wiki/' + v.id }>{ v.name }</Link>
+            { v.favorited &&
+            <span title='点击取消收藏' style={ { float: 'right', color: '#FF9900', cursor: 'pointer' } } onClick={ this.favorite }><i className='fa fa-star'></i></span> }
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === v.id && !itemLoading && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
+          { operateShow && hoverRowId === v.id && !itemLoading  &&
             <DropdownButton
               pullRight
               bsStyle='link'
@@ -347,6 +358,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` }
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='favorite'>{ v.favorited ? '取消收藏' : '收藏' }</MenuItem>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
@@ -376,6 +388,8 @@ export default class List extends Component {
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
               <Link to={ '/project/' + project_key + '/wiki' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
+              { files[i].favorited &&
+              <span title='点击取消收藏' style={ { float: 'left', color: '#FF9900', cursor: 'pointer', marginRight: '10px' } } onClick={ this.favorite }><i className='fa fa-star'></i></span> }
               { files[i].creator &&
               <span style={ { marginRight: '15px', float: 'left' } }>
                 { files[i].creator.name + '  ' + moment.unix(files[i].created_at).format('YYYY/MM/DD HH:mm') }
@@ -398,6 +412,7 @@ export default class List extends Component {
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='edit'>编辑</MenuItem>
+              <MenuItem eventKey='favorite'>{ files[i].favorited ? '取消收藏' : '收藏' }</MenuItem>
               { _.isEmpty(files[i].checkin) && <MenuItem eventKey='checkin'>加锁</MenuItem> }
               { !_.isEmpty(files[i].checkin) && (files[i].checkin.user.id == user.id || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) && <MenuItem eventKey='checkout'>解锁</MenuItem> }
               <MenuItem eventKey='copy'>复制</MenuItem>
@@ -471,7 +486,15 @@ export default class List extends Component {
           { searchShow &&
           <FormGroup style={ { clear: 'both' } }>
             <span style={ { float: 'right', marginTop: '5px', backgroundColor: '#f1f1f1', padding: '10px', borderRadius: '4px' } }>
-              <span style={ { float: 'right', width: '165px' } }>
+              <span style={ { float: 'right', marginRight: '10px' } }>
+                <Checkbox
+                  checked={ this.state.myfavorite == '1' }
+                  onClick={ () => { this.state.myfavorite = (this.state.myfavorite == '1' ? '' : '1'); this.reload(); } }
+                  style={ { display: 'inline-block' } }>
+                  我收藏的 
+                </Checkbox>
+              </span>
+              <span style={ { float: 'right', width: '165px', marginRight: '10px' } }>
                 <FormControl
                   type='text'
                   style={ { height: '36px' } }

@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
-import { FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, DropdownButton, MenuItem } from 'react-bootstrap';
+import { FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, DropdownButton, MenuItem, Checkbox } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
@@ -12,7 +12,8 @@ export default class Header extends Component {
       searchShow: false,
       uploader_id: null,
       uploaded_at: null,
-      name: ''
+      name: '',
+      myfavorite: ''
     };
 
     this.state.sortkey = window.localStorage && window.localStorage.getItem('document-sortkey') || 'create_time_desc';
@@ -51,6 +52,9 @@ export default class Header extends Component {
     if (query.uploaded_at) {
       newQuery.uploaded_at = this.state.uploaded_at = query.uploaded_at;
     }
+    if (query.myfavorite) {
+      newQuery.myfavorite = this.state.myfavorite = query.myfavorite;
+    }
     index(newQuery);
   }
 
@@ -64,6 +68,7 @@ export default class Header extends Component {
     this.state.uploader_id = newQuery.uploader_id || null;
     this.state.name = newQuery.name || '';
     this.state.uploaded_at = newQuery.uploaded_at || null;
+    this.state.myfavorite = newQuery.myfavorite || '';
   }
 
   refresh() {
@@ -77,6 +82,9 @@ export default class Header extends Component {
     }
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
+    }
+    if (this.state.myfavorite == '1') {
+      query.myfavorite = '1';
     }
     refresh(query);
   }
@@ -183,7 +191,15 @@ export default class Header extends Component {
         { searchShow &&
         <FormGroup style={ { clear: 'both' } }>
           <span style={ { float: 'right', marginTop: '5px', backgroundColor: '#f1f1f1', padding: '10px', borderRadius: '4px' } }>
-            <span style={ { float: 'right', width: '150px' } }>
+            <span style={ { float: 'right', marginRight: '10px' } }>
+              <Checkbox
+                checked={ this.state.myfavorite == '1' }
+                onClick={ () => { this.state.myfavorite = (this.state.myfavorite == '1' ? '' : '1'); this.refresh(); } }
+                style={ { display: 'inline-block' } }>
+                我收藏的
+              </Checkbox>
+            </span>
+            <span style={ { float: 'right', width: '150px', marginRight: '10px' } }>
               <FormControl
                 type='text'
                 style={ { height: '36px' } }
