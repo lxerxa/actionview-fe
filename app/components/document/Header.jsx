@@ -222,7 +222,7 @@ export default class Header extends Component {
                 placeholder='上传者'
                 value={ this.state.uploader_id }
                 onChange={ this.uploaderChange.bind(this) }
-                options={ _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } }) }/>
+                options={ _.union([ { value: 'me', label: '当前用户' } ], _.map(options.uploader || [], (v) => { return { value: v.id, label: v.name } })) }/>
             </span>
           </span>
         </FormGroup> }
