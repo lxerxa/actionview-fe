@@ -470,7 +470,7 @@ export default function issue(state = initialState, action) {
       return { ...state, visitedIndex: _.add(state.visitedIndex, action.offset || 0) };
 
     case t.ISSUE_CLEAN_RECORD:
-      return { ...state, visitedIndex: -1, visitedCollection: [], itemData: {}, itemLoading: false };
+      return { ...state, visitedIndex: -1, visitedCollection: [], itemLoading: false };
 
     case t.ISSUE_LINK_CREATE:
       return { ...state, linkLoading: true };
