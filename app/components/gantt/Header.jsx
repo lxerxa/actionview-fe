@@ -120,7 +120,7 @@ export default class Header extends Component {
 
     return (
       <div>
-        <div style={ { marginTop: '5px' } }>
+        <div style={ { paddingTop: '5px' } }>
           <DropdownButton className='create-btn' id='filters' title='过滤器' onSelect={ this.selectFilter.bind(this) }>
             { options.filters && options.filters.length > 0 ? 
               _.map(options.filters || [], (val) => <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem> ) :

@@ -205,7 +205,7 @@ export default class Header extends Component {
 
     return (
       <div>
-        <div style={ { marginTop: '5px' } }>
+        <div style={ { paddingTop: '5px' } }>
           { selectedIds.length > 0 &&
             <DropdownButton className='create-btn' title='批量操作' onSelect={ this.multiOperateSelect.bind(this) }>
               { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='multi_edit'>编辑</MenuItem> }

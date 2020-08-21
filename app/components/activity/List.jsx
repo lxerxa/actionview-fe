@@ -380,7 +380,7 @@ export default class List extends Component {
     } 
 
     return (
-      <div style={ { marginTop: '15px', marginBottom: '20px' } }>
+      <div style={ { paddingTop: '15px', paddingBottom: '20px' } }>
         <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.category } onSelect={ this.handleSelect.bind(this) }>
           <NavItem eventKey='all' href='#'>全部</NavItem>
           <NavItem eventKey='comments' href='#'>备注</NavItem>
