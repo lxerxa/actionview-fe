@@ -109,6 +109,7 @@ export default class PropertiesModal extends Component {
     ];
 
     const logsSaveOptions = [
+      { value: '0d', label: '不保存' },
       { value: '3m', label: '3个月' },
       { value: '6m', label: '6个月' },
       { value: '1y', label: '1年' },

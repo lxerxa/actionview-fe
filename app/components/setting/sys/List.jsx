@@ -82,7 +82,7 @@ export default class List extends Component {
     const { i18n, update, resetPwd, sendTestMail, loading, settings: { properties={}, timetrack={}, mailserver={}, sysroles={} } } = this.props;
 
     const styles = { marginTop: '10px', marginBottom: '10px' };
-    const logsSaveOptions = { '3m': '3个月', '6m': '6个月', '1y': '1年', '2y': '2年' }; 
+    const logsSaveOptions = { '0d': '不保存', '3m': '3个月', '6m': '6个月', '1y': '1年', '2y': '2年' }; 
  
     const propertyItems = [];
     propertyItems.push({
