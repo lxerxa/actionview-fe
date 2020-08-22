@@ -84,13 +84,13 @@ export default class Grids extends Component {
     const { favorite, selectedItem } = this.props;
     const ecode = await favorite(selectedItem.id, !selectedItem.favorited);
     if (ecode === 0) {
-      if (!selectedItem.favorited) {
+      if (selectedItem.favorited) {
         notify.show('已收藏。', 'success', 2000);
       } else {
         notify.show('已取消收藏。', 'success', 2000);
       }
     } else {
-      if (!selectedItem.favorited) {
+      if (selectedItem.favorited) {
         notify.show('收藏失败。', 'error', 2000);
       } else {
         notify.show('取消失败。', 'error', 2000);
