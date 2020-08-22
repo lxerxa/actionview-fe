@@ -631,6 +631,7 @@ class CreateModal extends Component {
                   <Col sm={ 7 }>
                     <CreatableSelect
                       multi
+                      disabled={ loading }
                       value={ this.state.values[v.key] || [] }
                       clearable={ false }
                       onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); } }
