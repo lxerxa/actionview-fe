@@ -118,7 +118,7 @@ export default class Duration extends Component {
     ];
 
     return (
-      <div style={ { display: 'inline' } }>
+      <div style={ { display: 'inline' } } onClick={ (e) => { e.stopPropagation(); } }>
         { this.state.options.length > 1 &&
         <div style={ { width: '26%', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
           <Select

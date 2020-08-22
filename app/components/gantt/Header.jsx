@@ -33,7 +33,6 @@ export default class Header extends Component {
     saveFilter: PropTypes.func.isRequired,
     resetFilters: PropTypes.func.isRequired,
     configFilters: PropTypes.func.isRequired,
-    closeDetailBar: PropTypes.func,
     index: PropTypes.func,
     refresh: PropTypes.func,
     getOptions: PropTypes.func,
@@ -109,7 +108,6 @@ export default class Header extends Component {
       optionsLoading, 
       filterLoading, 
       options={}, 
-      closeDetailBar,
       refresh, 
       query, 
       loading, 
@@ -130,7 +128,7 @@ export default class Header extends Component {
             <MenuItem eventKey='filterConfig'>过滤器管理</MenuItem>
             <MenuItem eventKey='resetFilters'>过滤器重置</MenuItem>
           </DropdownButton>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { if (!this.state.searchShow) { closeDetailBar(); }  this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
           <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
           <div style={ { marginTop: '10px', float: 'right' } }>

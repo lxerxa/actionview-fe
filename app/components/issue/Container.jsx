@@ -316,7 +316,6 @@ export default class Container extends Component {
           exportExcel={ this.exportExcel.bind(this) } 
           imports={ this.imports.bind(this) } 
           project={ this.props.project.item } 
-          closeDetailBar={ this.closeDetailBar.bind(this) }
           multiUpdate={ this.multiUpdate.bind(this) }
           multiDel={ this.multiDel.bind(this) }
           selectedIds={ this.state.selectedIds }
