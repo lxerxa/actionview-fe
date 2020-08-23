@@ -66,14 +66,14 @@ div.ganttview-hzheader-day {
 /* Vertical Header */
 
 div.ganttview-vtheader {
-        height: 100%;
+    height: 100%;
     width: 430px;
     overflow: hidden;
     background-color: #fff;
 }
 
 div.ganttview-vtheader-item {
-        height: 100%;
+    height: 100%;
     overflow: auto;
     color: #666;
 }
@@ -93,7 +93,7 @@ div.ganttview-vtheader-series-item-cell {
     height: 31px;
     border-top: 1px solid #e5e5e5;
     line-height: 31px;
-    padding-left: 5px;
+    padding-left: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -116,7 +116,7 @@ div.ganttview-vtheader-series-header-item-cell {
     padding-left: 5px;
     padding-top: 6px;
     text-overflow: ellipsis;
-        overflow: hidden;
+    overflow: hidden;
     white-space: nowrap;
     color: #a6a6a6;
     float: left;
@@ -138,9 +138,9 @@ div.ganttview-vtheader-series-item:hover {
 /* Slider */
 
 div.ganttview-slide-container {
-        z-index: 2;
-        position: relative;
-        height: 100%;
+    z-index: 2;
+    position: relative;
+    height: 100%;
     overflow: auto;
     border-left: 1px solid #ddd;
 }

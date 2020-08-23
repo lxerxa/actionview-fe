@@ -338,7 +338,7 @@ export default class List extends Component {
                 { v.expect_complete_time && v.expect_start_time ? this.getDuration(v.expect_start_time, v.expect_complete_time) : '-' }
               </div>
               <div className='ganttview-vtheader-series-item-cell' style={ { width: '50px' } }>
-                <a href='#' onClick={ (e) => { e.preventDefault(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
+                <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
                   <i className='fa fa-dot-circle-o'></i>
                 </a> 
               </div>
@@ -618,6 +618,17 @@ export default class List extends Component {
 
     start = moment.unix(start).startOf('day').format('X');
     end = moment.unix(end).startOf('day').format('X');
+
+    //let maxStamp = 0;
+    //if (data.length > 50) {
+    //  maxStamp = moment.unix(start).add(1, 'year').startOf('day').format('X');
+    //} else {
+    //  maxStamp = moment.unix(start).add(2, 'year').startOf('day').format('X');
+    //}
+
+    //if (maxStamp < end) {
+    //  end = maxStamp; 
+    //}
 
     return [ start - 0, end - 0 ]; 
   }
