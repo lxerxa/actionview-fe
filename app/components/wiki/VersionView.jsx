@@ -47,7 +47,7 @@ export default class VersionViewModal extends Component {
                 </td>
                 <td>
                   <div style={ { float: 'left' } }>
-                    { v.editor && v.editor.name ? v.editor.name : (v.creator && v.creator.name || '') }于 { v.updated_at ? moment.unix(v.updated_at).format('YYYY/MM/DD HH:mm') : moment.unix(v.created_at).format('YYYY/MM/DD HH:mm') } { v.version == 1 ? '创建' : '编辑' }。
+                    { v.editor && v.editor.name ? v.editor.name : (v.creator && v.creator.name || '') }于 { v.updated_at ? moment.unix(v.updated_at).format('YYYY/MM/DD HH:mm') : moment.unix(v.created_at).format('YYYY/MM/DD HH:mm') } { v.version == 1 ? 'Create' : 'Edit' }。
                   </div>
                 </td>
               </tr>); }) }
@@ -55,7 +55,7 @@ export default class VersionViewModal extends Component {
           </Table>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.handleCancel }>关闭</Button>
+          <Button onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

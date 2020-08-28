@@ -105,8 +105,8 @@ export default class FilterItemCard extends Component {
     return connectDragSource(connectDropTarget(
       <div style={ { opacity } } className='filter-dragcard dragcard'>
         <span style={ { fontWeight: 600 } }>{ name }</span> -- <span>{ condsTxt }</span>
-        { isAllowedEdit && !!delFilter && <span style={ styles } onClick={ () => { delFilter(id) } } title='删除' className='rm-icon'><i className='fa fa-remove'></i></span> }
-        { isAllowedEdit && !!editFilter && <span style={ styles } onClick={ () => { editFilter(id) } } title='编辑' className='edit-icon'><i className='fa fa-pencil'></i></span> }
+        { isAllowedEdit && !!delFilter && <span style={ styles } onClick={ () => { delFilter(id) } } title='Delete' className='rm-icon'><i className='fa fa-remove'></i></span> }
+        { isAllowedEdit && !!editFilter && <span style={ styles } onClick={ () => { editFilter(id) } } title='Edit' className='edit-icon'><i className='fa fa-pencil'></i></span> }
 
       </div>
     ));

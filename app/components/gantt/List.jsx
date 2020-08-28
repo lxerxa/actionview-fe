@@ -269,27 +269,27 @@ export default class List extends Component {
     const header = (
       <div className='ganttview-vtheader-series-header-item'>
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
-          主题
+          Title
         </div>
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '60px' } }>
           NO
         </div>
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          经办人
+          Assignee
         </div>
         { mode == 'progress' &&
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
-          进度
+          Progress
         </div> }
         { mode == 'status' &&
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
-          状态
+          Status
         </div> }
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          开始时间
+          Start date
         </div>
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          完成时间
+          End date
         </div>
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
           工期(天)
@@ -437,11 +437,11 @@ export default class List extends Component {
           <Popover id='popover-trigger-hover' style={ { maxWidth: '350px', padding: '15px 0px' } }>
             <Grid>
               <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>主题</Col>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Title</Col>
                 <Col sm={ 8 }><div style={ { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' } }>{ v.title }</div></Col>
               </Row>
               <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Start date</Col>
                 <Col sm={ 8 }>{ v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : <span style={ { fontStyle: 'italic', color: '#aaa' } }>未指定</span> }</Col>
               </Row>
               <Row>
@@ -450,12 +450,12 @@ export default class List extends Component {
               </Row>
               { mode == 'progress' &&
               <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>进度</Col>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Progress</Col>
                 <Col sm={ 8 }>{ v.progress ? v.progress + '%' : '0%' }</Col>
               </Row> }
               { mode == 'status' &&
               <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>状态</Col>
+                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Status</Col>
                 <Col sm={ 8 }>{ _.findIndex(states, { id: v.state }) != -1 ? <span className={ 'state-' + _.find(states, { id: v.state }).category + '-label' }>{ _.find(states, { id: v.state }).name }</span>: '-' }</Col>
               </Row> }
             </Grid>
@@ -892,12 +892,12 @@ export default class List extends Component {
         <div style={ { marginTop: '10px' } }>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'start_time_desc' ? 'start_time_asc' : 'start_time_desc') } }>
             <span style={ { marginLeft: '5px' } }>
-              { (this.state.sortkey == 'start_time_asc' || this.state.sortkey == 'start_time_desc') && <i className={ this.state.sortkey == 'start_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } 开始时间
+              { (this.state.sortkey == 'start_time_asc' || this.state.sortkey == 'start_time_desc') && <i className={ this.state.sortkey == 'start_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } Start date
             </span>
           </a>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'create_time_desc' ? 'create_time_asc' : 'create_time_desc') } }>
             <span style={ { marginLeft: '15px' } }>
-              { (this.state.sortkey == 'create_time_asc' || this.state.sortkey == 'create_time_desc') && <i className={ this.state.sortkey == 'create_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } 创建时间
+              { (this.state.sortkey == 'create_time_asc' || this.state.sortkey == 'create_time_desc') && <i className={ this.state.sortkey == 'create_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } Creation date
             </span>
           </a>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.locateToday(); } }>
@@ -905,17 +905,17 @@ export default class List extends Component {
               <i className='fa fa-dot-circle-o'></i> 今天 
             </span>
           </a>
-          { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <span style={ { marginLeft: '15px', fontSize: '12px', color: 'red' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span> }
+          { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <span style={ { marginLeft: '15px', fontSize: '12px', color: 'red' } }>Note：移动或调整任务条将改变任务of开始时间和完成时间，也可通过双击任务条修改。</span> }
           <span style={ { float: 'right', marginRight: '5px' } }>
             { mode == 'progress' ?
-            <span>按任务进度</span>
+            <span>By task progress</span>
             :
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('progress'); } }>按任务进度</a> }
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('progress'); } }>By task progress</a> }
             <span style={ { margin: '0px 2px' } }> | </span>
             { mode == 'status' ?
-            <span>按问题状态</span>
+            <span>By task status</span>
             :
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按问题状态</a> }
+            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>By task status</a> }
             <a href='#' onClick={ (e) => {  e.preventDefault(); toggleHeader(); } } style={ { marginLeft: '8px' } }>
               <span style={ { border: '1px solid #ddd', borderRadius: '2px', padding: '0px 3px' } } title={ isHeaderHidden ? '展示头部' : '隐藏头部' }>
                 <i className={ isHeaderHidden ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up' }></i>
@@ -932,7 +932,7 @@ export default class List extends Component {
           <span style={ { fontSize: '160px', color: '#FFC125' } } >
             <i className='fa fa-warning'></i>
           </span><br/>
-          <span>抱歉，暂无满足该检索条件的数据。</span>
+          <span>抱歉，暂无满足该检索条件of数据。</span>
         </div> }
         { !indexLoading && collection.length > 0 &&  
         <div className='ganttview'>

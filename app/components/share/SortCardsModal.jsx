@@ -79,10 +79,10 @@ export default class SortCardsModal extends Component {
     return (
       <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '编辑' + model + '顺序' }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ 'Edit ' + model + ' order' }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
-          <div style={ { marginBottom: '8px' } }>通过上下拖拽改变显示顺序。</div>
+          <div style={ { marginBottom: '8px' } }>Drag up and down to change the display order.</div>
           <div style={ style }>
             { cards.map((card, i) => {
               return (
@@ -98,8 +98,8 @@ export default class SortCardsModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ sortLoading ? 'loading' : 'hide' }/>
-          <Button disabled={ sortLoading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
-          <Button bsStyle='link' disabled={ sortLoading } onClick={ this.cancel.bind(this) }>取消</Button>
+          <Button disabled={ sortLoading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>Submit</Button>
+          <Button bsStyle='link' disabled={ sortLoading } onClick={ this.cancel.bind(this) }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

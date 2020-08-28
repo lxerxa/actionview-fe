@@ -58,9 +58,9 @@ export default class DelNotify extends Component {
 
     let opt = '';
     if (operation == 'disable') {
-      opt = '禁用';
+      opt = 'disable';
     } else if (operation == 'enable') {
-      opt = '启用';
+      opt = 'enable';
     }
 
     return (
@@ -69,13 +69,13 @@ export default class DelNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>{ opt }方案 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要{ opt }此方案？
+          Confirm{ opt }此方案？
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && 'aaaa' }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

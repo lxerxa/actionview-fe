@@ -10,13 +10,13 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
-    errors.name = '必填';
+    errors.name = 'Required';
   } else if (_.findIndex(props.collection || [], { name: values.name }) !== -1) {
     errors.name = '该名称已存在';
   }
 
   if (!values.abb) {
-    errors.abb = '必填';
+    errors.abb = 'Required';
   } else {
     const pattern = new RegExp(/^[a-zA-Z0-9]/);
     if (!pattern.test(values.abb)) {
@@ -68,7 +68,7 @@ export default class CreateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('新建完成。', 'success', 2000);
+      notify.show('New 完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -98,7 +98,7 @@ export default class CreateModal extends Component {
     const workflowOptions = _.map(workflows, function(val) {
       return { label: val.name, value: val.id };
     });
-    const typeOptions = [{ label: '标准', value: 'standard' }, { label: '子任务', value: 'subtask' }]; 
+    const typeOptions = [{ label: '标准', value: 'standard' }, { label: 'Subtask', value: 'subtask' }];
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -108,17 +108,17 @@ export default class CreateModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题类型名'/ >
+            <ControlLabel><span className='txt-impt'>*</span>Name</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='Issue type name'/ >
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ abb.touched && abb.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>缩码</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...abb } placeholder='缩码(一个字母或数字)'/ >
+            <ControlLabel><span className='txt-impt'>*</span>Short</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...abb } placeholder='Abbreviation (a letter or number)'/ >
             { abb.touched && abb.error && <HelpBlock style={ { float: 'right' } }>{ abb.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel><span className='txt-impt'>*</span>界面</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Screen</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ screenOptions } 
@@ -129,7 +129,7 @@ export default class CreateModal extends Component {
               placeholder='请选择一个界面'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel><span className='txt-impt'>*</span>工作流</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Workflow</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ workflowOptions } 
@@ -140,7 +140,7 @@ export default class CreateModal extends Component {
               placeholder='请选择一个工作流'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>类型</ControlLabel>
+            <ControlLabel>Type</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ typeOptions } 
@@ -151,15 +151,15 @@ export default class CreateModal extends Component {
               placeholder='请选择问题类型'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
+            <ControlLabel>Description</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='Description'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

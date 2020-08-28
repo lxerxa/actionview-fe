@@ -69,11 +69,11 @@ export default class List extends Component {
     const { updNotify } = this.props;
     const ecode = await updNotify(values);
     if (ecode === 0) {
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
       const { notifications } = this.props;
       this.setState({ notifications });
-      notify.show('设置失败。', 'error', 2000);
+      notify.show('Setup failed', 'error', 2000);
     }
     return ecode;
   }
@@ -192,7 +192,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>邮箱地址</span>
-          <span className='table-td-issue-desc'>该账号绑定的邮箱地址不能改变。</span>
+          <span className='table-td-issue-desc'>该账号绑定of邮箱地址不能改变。</span>
         </div>
       ),
       contents: (
@@ -222,7 +222,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>绑定手机号</span>
-          <span className='table-td-issue-desc'>修改手机时 ActionView 会发送短信到新的手机号，请按照短信中的验证码修改你的手机号码。</span>
+          <span className='table-td-issue-desc'>修改手机时 ActionView 会发送短信到新of手机号，请按照短信中of验证码修改你of手机号码。</span>
         </div>
       ),
       contents: (
@@ -241,7 +241,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>语言设置</span>
-          <span className='table-td-issue-desc'>请选择您喜欢的语言(暂不支持此功能)</span>
+          <span className='table-td-issue-desc'>请选择您喜欢of语言(暂不支持此功能)</span>
         </div>
       ),
       contents: (
@@ -257,7 +257,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>邮件通知</span>
-          <span className='table-td-issue-desc'>当问题有重要操作时，会根据相应的通知方案配置，发送提醒邮件给你。</span>
+          <span className='table-td-issue-desc'>当问题有重要操作时，会根据相应of通知方案配置，发送提醒邮件给你。</span>
         </div>
       ),
       contents: (
@@ -268,7 +268,7 @@ export default class List extends Component {
             { notifications.mail_notify ?
             <span style={ startStyles }>已开启</span>
             :
-            <span style={ closeStyles }>已关闭</span> }
+            <span style={ closeStyles }>Closed</span> }
           </CheckboxGroup>
         </div>
       )
@@ -279,7 +279,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>移动端通知</span>
-          <span className='table-td-issue-desc'>当问题有重要操作时，会根据相应的通知方案配置，自动将消息推送到 ActionView 移动客户端</span>
+          <span className='table-td-issue-desc'>当问题有重要操作时，会根据相应of通知方案配置，自动将消息推送到 ActionView 移动客户端</span>
         </div>
       ),
       contents: (
@@ -290,7 +290,7 @@ export default class List extends Component {
             { notifications.mobile_notify ? 
             <span style={ startStyles }>已开启</span>
             :
-            <span style={ closeStyles }>已关闭</span> }
+            <span style={ closeStyles }>Closed</span> }
           </CheckboxGroup>
         </div>
       )
@@ -301,7 +301,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>每日提醒</span>
-          <span className='table-td-issue-desc'>每天向你发送一封包含当日工作内容的邮件。</span>
+          <span className='table-td-issue-desc'>每天向你发送一封包含当日工作内容of邮件。</span>
         </div>
       ),
       contents: (
@@ -312,7 +312,7 @@ export default class List extends Component {
             { notifications.daily_notify ?
             <span style={ startStyles }>已开启</span>
             :
-            <span style={ closeStyles }>已关闭</span> }
+            <span style={ closeStyles }>Closed</span> }
           </CheckboxGroup>
         </div>
       )
@@ -323,7 +323,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>每周提醒</span>
-          <span className='table-td-issue-desc'>每周向你发送一封本周工作内容的邮件。</span>
+          <span className='table-td-issue-desc'>每周向你发送一封本周工作内容of邮件。</span>
         </div>
       ),
       contents: (
@@ -334,7 +334,7 @@ export default class List extends Component {
             { notifications.weekly_notify ? 
             <span style={ startStyles }>已开启</span>
             :
-            <span style={ closeStyles }>已关闭</span> }
+            <span style={ closeStyles }>Closed</span> }
           </CheckboxGroup>
         </div>
       )

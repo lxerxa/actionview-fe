@@ -11,7 +11,7 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.parent_id) {
-    errors.parent_id = '必填';
+    errors.parent_id = 'Required';
   }
   return errors;
 };
@@ -99,7 +99,7 @@ export default class MoveModal extends Component {
         <Modal.Body>
           <div className='info-col' style={ { marginBottom: '15px', marginTop: '5px' } }>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-            <div className='info-content'>仅支持子项目在不同父项目间的移动。</div>
+            <div className='info-content'>仅支持子项目在不同父项目间of移动。</div>
           </div>
           <FormGroup controlId='formControlsText' validationState={ parent_id.touched && parent_id.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>移动到</ControlLabel>
@@ -119,8 +119,8 @@ export default class MoveModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

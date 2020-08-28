@@ -113,7 +113,7 @@ export default class UsersConfigModal extends Component {
                   valueKey='id'
                   labelKey='nameAndEmail'
                   loadOptions={ this.searchUsers }
-                  placeholder='请输入用户'/>
+                  placeholder='enter a username'/>
                 <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) }>添加至用户列表 >> </Button>
               </Col>
               <Col sm={ 6 }>
@@ -139,8 +139,8 @@ export default class UsersConfigModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.save.bind(this) }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
+          <Button disabled={ loading } onClick={ this.save.bind(this) }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

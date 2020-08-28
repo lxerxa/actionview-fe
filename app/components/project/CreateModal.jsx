@@ -11,13 +11,13 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
-    errors.name = '必填';
+    errors.name = 'Required';
   } 
   if (!values.principal) {
-    errors.principal = '必填';
+    errors.principal = 'Required';
   } 
   if (!values.key) {
-    errors.key = '必填';
+    errors.key = 'Required';
   } else {
     const Regex = '^\\w+$';
     const re = new RegExp(Regex);
@@ -111,21 +111,21 @@ export default class CreateModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...name } placeholder='项目名'/>
+            <ControlLabel><span className='txt-impt'>*</span>Name</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...name } placeholder='name'/>
             <FormControl.Feedback/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ key.touched && key.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值'/>
+            <ControlLabel><span className='txt-impt'>*</span>Key value</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...key } placeholder='Key value'/>
             <FormControl.Feedback>
             { asyncValidating ? <i className='fa fa-spinner fa-spin'></i> : (key.active === false && key.invalid === false ? <span style={ { color : '#3c763d' } }><i className='fa fa-check'></i></span> : '') }
             </FormControl.Feedback>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>责任人</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Principal responsible</ControlLabel>
             <Select.Async 
               clearable={ false } 
               disabled={ submitting } 
@@ -139,15 +139,15 @@ export default class CreateModal extends Component {
             { principal.touched && principal.error && <HelpBlock style={ { float: 'right' } }>{ principal.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='项目描述'/>
+            <ControlLabel>Description</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='Description'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ key.active === true || asyncValidating || submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ key.active === true || asyncValidating || submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

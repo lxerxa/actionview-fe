@@ -79,8 +79,8 @@ export default class OperateNotify extends Component {
           是否禁用【{ data.request_url }】该Webhook？
         </Modal.Body> }
         <Modal.Footer>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

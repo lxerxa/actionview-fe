@@ -49,13 +49,13 @@ export default class ResetNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>重置过滤器 - { blockTitles[mode] }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要重置此模块的过滤器？
+          确认要重置此模块of过滤器？
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

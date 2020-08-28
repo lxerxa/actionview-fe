@@ -367,7 +367,7 @@ export default class Card extends Component {
               if (v == 'labels') {
                 return (
                   <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontSize: '12px' } }>
-                    <span style={ { marginRight: '3px', marginTop: '7px', float: 'left' } }><b>标签</b>:</span>
+                    <span style={ { marginRight: '3px', marginTop: '7px', float: 'left' } }><b>Label</b>:</span>
                     { _.map(issue[v], (lv) => <span title={ lv } className='issue-label' style={ this.getLabelStyle(lv) }>{ lv }</span>) }
                   </div>);
               } else {

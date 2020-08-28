@@ -508,15 +508,15 @@ export default class List extends Component {
               style={ { textDecoration: 'blink' ,color: '#000' } }
               title={ node }
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='view'>查看</MenuItem>
-              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
-              { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
-              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
+              <MenuItem eventKey='view'>View</MenuItem>
+              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>Edit</MenuItem> }
+              { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>Assign</MenuItem> }
+              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>Set label</MenuItem> }
               <MenuItem divider/>
-              <MenuItem eventKey='watch'>{ item.watching ? '取消关注' : '关注' }</MenuItem>
-              <MenuItem eventKey='share'>分享链接</MenuItem>
+              <MenuItem eventKey='watch'>{ item.watching ? '取消关注' : 'Watch' }</MenuItem>
+              <MenuItem eventKey='share'>Share</MenuItem>
               <MenuItem divider/>
-              <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
+              <MenuItem eventKey='worklog'>Add worklog</MenuItem>
               { !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('edit_issue') !== -1 && !item.hasSubtasks)) && <MenuItem divider/> }
               { !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
               { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
@@ -524,10 +524,10 @@ export default class List extends Component {
               { item.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
               { options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('move_issue') !== -1 && item.parent_id)) && <MenuItem divider/> }
               { options.permissions && options.permissions.indexOf('move_issue') !== -1 && item.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-              { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
+              { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>Copy</MenuItem> }
               { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
-              { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
-              { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>Reset Issue</MenuItem> }
+              { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>Delete</MenuItem> }
             </DropdownButton> }
           </div> );
 
@@ -590,7 +590,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -609,7 +609,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn width='50' dataField='type'> 
             <span className='table-header' onClick={ this.orderBy.bind(this, 'type') }>
-              <span style={ { marginRight: '3px' } }>类型</span>
+              <span style={ { marginRight: '3px' } }>Type</span>
               { mainOrder.field === 'type' && 
                 (mainOrder.order === 'desc' ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-up'></i>) }
             </span>
@@ -623,7 +623,7 @@ export default class List extends Component {
           </TableHeaderColumn>
           <TableHeaderColumn dataField='title'>
             <span className='table-header' onClick={ this.orderBy.bind(this, 'title') }>
-              <span style={ { marginRight: '3px' } }>主题</span>
+              <span style={ { marginRight: '3px' } }>Title</span>
               { mainOrder.field === 'title' && 
                 (mainOrder.order === 'desc' ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-up'></i>) }
             </span>

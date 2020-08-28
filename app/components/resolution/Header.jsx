@@ -33,9 +33,9 @@ export default class Header extends Component {
     const { setDefault } = this.props;
     const ecode = await setDefault({ 'defaultValue': defaultValue });
     if (ecode === 0) {
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
-      notify.show('设置失败。', 'error', 2000);
+      notify.show('Setup failed', 'error', 2000);
     }
     this.setState({ defaultSetShow: false });
   }
@@ -56,7 +56,7 @@ export default class Header extends Component {
       <div>
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }>
-            <i className='fa fa-plus'></i>&nbsp;新建结果
+            <i className='fa fa-plus'></i>&nbsp;New 结果
           </Button>
           { !indexLoading && 
             <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }>
@@ -87,7 +87,7 @@ export default class Header extends Component {
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'>新建问题时如果没有指定解决结果，默认初始值是未解决。<br/>只能删除没有应用到项目问题中的解决结果。</div>
+          <div className='info-content'>New 问题时如果没有指定解决结果，默认初始值是未解决。<br/>只能删除没有应用到项目问题中of解决结果。</div>
         </div>
         { this.state.createModalShow && 
           <CreateModal 
@@ -99,7 +99,7 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow && 
           <SortCardsModal 
             show 
-            model='解决结果'
+            model='Resolution'
             close={ this.sortCardsModalClose } 
             cards={ collection } 
             setSort={ setSort } 

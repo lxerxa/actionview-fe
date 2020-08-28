@@ -11,7 +11,7 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
-    errors.name = '必填';
+    errors.name = 'Required';
   }
 
   const usedKeys = [ 
@@ -60,7 +60,7 @@ const validate = (values, props) => {
   ];
 
   if (!values.key) {
-    errors.key = '必填';
+    errors.key = 'Required';
   } else {
     _.forEach(props.collection, (v) => {
       usedKeys.push(v.key);
@@ -79,7 +79,7 @@ const validate = (values, props) => {
   }
 
   if (!values.type) {
-    errors.type = '必填';
+    errors.type = 'Required';
   }
 
   return errors;
@@ -117,7 +117,7 @@ export default class CreateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('新建完成。', 'success', 2000);
+      notify.show('New 完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -157,12 +157,12 @@ export default class CreateModal extends Component {
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ key.touched && key.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>键值</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Key value</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...key } placeholder='键值唯一'/>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsSelect' validationState={ type.touched && type.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>类型</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Type</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ FieldTypes } 
@@ -185,15 +185,15 @@ export default class CreateModal extends Component {
               placeholder='默认全部'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述内容'/>
+            <ControlLabel>Description</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='Description'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

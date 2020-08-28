@@ -29,7 +29,7 @@ export default class DelNotify extends Component {
     const ecode = await del(_.extend({}, { id: data.id }, { operate_flg: this.state.operate_flg, swap_epic: this.state.swapEpic }));
     if (ecode === 0) {
       close();
-      notify.show('删除完成。', 'success', 2000);
+      notify.show('Deletion complete', 'success', 2000);
       index();
     }
     this.setState({ ecode: ecode });
@@ -101,9 +101,9 @@ export default class DelNotify extends Component {
           <Button
             onClick={ this.confirm }
             disabled={ loading || (data.is_used && this.state.operate_flg === '0') || (this.state.operate_flg === '1' && !this.state.swapEpic) }>
-            确定
+            Submit
           </Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

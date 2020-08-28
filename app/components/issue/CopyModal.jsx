@@ -11,7 +11,7 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values) => {
   const errors = {};
   if (!values.title) {
-    errors.title = '必填';
+    errors.title = 'Required';
   }
   return errors;
 };
@@ -46,7 +46,7 @@ export default class CopyModal extends Component {
   componentWillMount() {
     const { initializeForm, data } = this.props;
     const copyData = _.clone(data);
-    _.extend(copyData, { title: '复制 - ' + data.title, assignee: data.assignee && data.assignee.id || null });
+    _.extend(copyData, { title: 'Copy - ' + data.title, assignee: data.assignee && data.assignee.id || null });
     initializeForm(copyData);
   }
 
@@ -90,8 +90,8 @@ export default class CopyModal extends Component {
         <Modal.Body>
           <FormControl type='hidden' { ...id }/>
           <FormGroup controlId='formControlsText' validationState={ title.touched && title.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>主题</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...title } placeholder='主题'/>
+            <ControlLabel><span className='txt-impt'>*</span>Title</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...title } placeholder='Title'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ assignee.touched && assignee.error ? 'error' : null }>
@@ -107,7 +107,7 @@ export default class CopyModal extends Component {
             { assignee.touched && assignee.error && <HelpBlock style={ { float: 'right' } }>{ assignee.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ resolution.touched && resolution.error ? 'error' : null }>
-            <ControlLabel>解决结果</ControlLabel>
+            <ControlLabel>Resolution</ControlLabel>
             <Select
               simpleValue
               clearable={ false }
@@ -122,8 +122,8 @@ export default class CopyModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

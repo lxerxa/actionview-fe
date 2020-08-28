@@ -119,13 +119,13 @@ export default class List extends Component {
       this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds, willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds });
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
       const settingIndex = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
       this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
-      notify.show('设置失败。', 'error', 2000);
+      notify.show('Setup failed', 'error', 2000);
     }
   }
 
@@ -162,13 +162,13 @@ export default class List extends Component {
       this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds, willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds });
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
       const settingIndex = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
       this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
 
       this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
-      notify.show('设置失败。', 'error', 2000);
+      notify.show('Setup failed', 'error', 2000);
     }
   }
 
@@ -303,7 +303,7 @@ export default class List extends Component {
                 options={ defaultAssigneeOptions } 
                 value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee } 
                 onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } 
-                placeholder='默认经办人(项目负责人)'/>
+                placeholder='Default assignee(项目负责人)'/>
               <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-cancel-button' onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -324,10 +324,10 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='2'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='1'>Edit</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='2'>Delete</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
-              <MenuItem eventKey='3'>问题列表</MenuItem>
+              <MenuItem eventKey='3'>List of issues</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -339,7 +339,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。';
+      opts.noDataText = 'No data displayed';
     }
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -349,9 +349,9 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ modules } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
-          <TableHeaderColumn dataField='defaultAssignee'>默认经办人</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+          <TableHeaderColumn dataField='principal'>Principal</TableHeaderColumn>
+          <TableHeaderColumn dataField='defaultAssignee'>Default assignee</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && 

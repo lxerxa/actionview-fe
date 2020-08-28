@@ -44,10 +44,10 @@ export default class Header extends Component {
         { options.permissions && options.permissions.indexOf('manage_project') !== -1 ? 
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ createModalShow: true }); } }>
-            <i className='fa fa-plus'></i>&nbsp;新建版本
+            <i className='fa fa-plus'></i>&nbsp;New version
           </Button>
           <Button className='create-btn' disabled={ indexLoading } onClick={ () => { this.setState({ mergeModalShow: true }); } }>
-            <i className='fa fa-code-fork'></i>&nbsp;合并版本
+            <i className='fa fa-code-fork'></i>&nbsp;Merge version
           </Button>
         </div>
         :

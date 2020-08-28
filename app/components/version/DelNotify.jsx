@@ -28,7 +28,7 @@ export default class DelNotify extends Component {
     const ecode = await del(_.extend({}, { id: data.id }, { operate_flg: this.state.operate_flg, swap_version: this.state.swapVersion }));
     if (ecode === 0) {
       close();
-      notify.show('删除完成。', 'success', 2000);    
+      notify.show('Deletion complete', 'success', 2000);
     }
     this.setState({ ecode: ecode });
   }
@@ -47,7 +47,7 @@ export default class DelNotify extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除版本 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Delete version - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           { data.is_used ? 
@@ -99,9 +99,9 @@ export default class DelNotify extends Component {
           <Button 
             onClick={ this.confirm } 
             disabled={ loading || (data.is_used && this.state.operate_flg === '0') || (this.state.operate_flg === '1' && !this.state.swapVersion) }>
-            确定
+            Submit
           </Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

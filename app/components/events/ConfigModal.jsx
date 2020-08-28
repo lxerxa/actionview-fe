@@ -144,7 +144,7 @@ export default class ConfigModal extends Component {
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='reporter'/>
-                    <span>报告者</span>
+                    <span>Reporter</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='watchers'/>
@@ -176,13 +176,13 @@ export default class ConfigModal extends Component {
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox disabled={ loading } value='role'/>
-                    <span>项目角色</span>
+                    <span>项目Role</span>
                     <select
                       value={ this.state.roleParam }
                       onChange={ (e) => this.setState({ roleParam: e.target.value }) }
                       disabled={ (_.indexOf(this.state.notifications, 'role') !== -1 && !loading) ? false : true }
                       style={ _.indexOf(this.state.notifications, 'role') !== -1 ? selectEnableStyles : selectDisabledStyles }>
-                      <option value='' key=''>选择角色</option>
+                      <option value='' key=''>选择Role</option>
                       { roleOptions.map( roleOption => <option value={ roleOption.id } key={ roleOption.id }>{ roleOption.name }</option> ) }
                     </select>
                   </div>
@@ -220,8 +220,8 @@ export default class ConfigModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button onClick={ this.confirm } disabled={ !isChanged || loading }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm } disabled={ !isChanged || loading }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

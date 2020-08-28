@@ -100,7 +100,7 @@ export default class LinkIssueModal extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>链接问题</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Link issue</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormGroup controlId='formControlsSelect'>
@@ -116,7 +116,7 @@ export default class LinkIssueModal extends Component {
               placeholder='请选择关系'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel><span className='txt-impt'>*</span>问题</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Issue</ControlLabel>
             <Select.Async 
               clearable={ false } 
               disabled={ loading } 
@@ -132,8 +132,8 @@ export default class LinkIssueModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || !this.state.relation || !this.state.dest } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading || !this.state.relation || !this.state.dest } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

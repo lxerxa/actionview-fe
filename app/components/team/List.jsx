@@ -166,7 +166,7 @@ export default class List extends Component {
         id: collection[i].id,
         name:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ collection[i].category && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ collection[i].category && <span style={ { fontWeight: 'normal' } }> (Global)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
@@ -217,7 +217,7 @@ export default class List extends Component {
                 valueKey='id' 
                 labelKey='nameAndEmail' 
                 loadOptions={ this.searchUsers } 
-                placeholder='请输入用户'/>
+                placeholder='enter a username'/>
               <div className={ _.indexOf(settingUserRoleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setUsers.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-cancel-button' onClick={ this.cancelSetUsers.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -291,7 +291,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -301,13 +301,13 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px', marginTop: '15px' } }>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'>若成员配置修改后，用户权限没有生效，请刷新页面。</div>
+          <div className='info-content'>If the user authority does not take effect after the member configuration is modified, please refresh the page.</div>
         </div>
         <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name' width='300'>角色</TableHeaderColumn>
-          <TableHeaderColumn dataField='users'>用户</TableHeaderColumn>
-          <TableHeaderColumn dataField='groups'>用户组</TableHeaderColumn>
+          <TableHeaderColumn dataField='name' width='300'>Role</TableHeaderColumn>
+          <TableHeaderColumn dataField='users'>User</TableHeaderColumn>
+          <TableHeaderColumn dataField='groups'>Group</TableHeaderColumn>
         </BootstrapTable>
       </div>
     );

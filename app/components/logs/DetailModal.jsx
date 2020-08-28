@@ -34,7 +34,7 @@ export default class DetailModal extends Component {
           <Form horizontal>
             <FormGroup>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                用户
+                User
               </Col>
               <Col sm={ 9 }>
                 <div style={ { marginTop: '7px' } }>
@@ -74,7 +74,7 @@ export default class DetailModal extends Component {
             </FormGroup>
             <FormGroup>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                开始时间
+                Start date
               </Col>
               <Col sm={ 9 }>
                 <div style={ { marginTop: '7px' } }>
@@ -146,7 +146,7 @@ export default class DetailModal extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.handleCancel }>关闭</Button>
+          <Button onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

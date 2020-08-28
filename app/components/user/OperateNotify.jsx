@@ -59,9 +59,9 @@ export default class OperateNotify extends Component {
     } else if (operate === 'del') {
       operateTitle = '用户删除'
     } else if (operate === 'validate') {
-      operateTitle = '用户启用';
+      operateTitle = 'User enabled';
     } else if (operate === 'invalidate') {
-      operateTitle = '用户禁用';
+      operateTitle = 'User disabled';
     } else {
       return <div/>;
     }
@@ -77,7 +77,7 @@ export default class OperateNotify extends Component {
         </Modal.Body> }
         { operate === 'del' && 
         <Modal.Body>
-          用户被删除后，项目中的用户也同时被删除。<br/>
+          用户被删除后，项目中of用户也同时被删除。<br/>
           是否删除【{ data.first_name }】该用户？
         </Modal.Body> }
         { operate === 'validate' &&
@@ -89,8 +89,8 @@ export default class OperateNotify extends Component {
           是否禁用【{ data.first_name }】该用户？
         </Modal.Body> }
         <Modal.Footer>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

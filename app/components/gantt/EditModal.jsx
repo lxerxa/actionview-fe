@@ -129,12 +129,12 @@ export default class EditModal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>主题</ControlLabel>
+            <ControlLabel>Title</ControlLabel>
             <span style={ { marginLeft: '10px' } }>{ data.title }</span>
           </FormGroup>
           <div>
             <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ expect_start_time.value && expect_start_time.error ? 'error' : null }>
-              <ControlLabel>期望开始时间</ControlLabel>
+              <ControlLabel>Expected start date</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 
@@ -147,7 +147,7 @@ export default class EditModal extends Component {
                 <HelpBlock style={ { float: 'right' } }>{ expect_start_time.error }</HelpBlock> }
             </FormGroup>
             <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } } validationState={ expect_complete_time.value && expect_complete_time.error ? 'error' : null }>
-              <ControlLabel>期望完成时间</ControlLabel>
+              <ControlLabel>Expected completion date</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 
@@ -160,7 +160,7 @@ export default class EditModal extends Component {
             </FormGroup>
           </div>
           <FormGroup validationState={ progress.touched && progress.error ? 'error' : null }>
-            <ControlLabel>进度</ControlLabel>
+            <ControlLabel>Progress</ControlLabel>
             <FormControl 
               disabled={ submitting } 
               type='number' 
@@ -168,15 +168,15 @@ export default class EditModal extends Component {
               max='100'
               style={ { width: '80px', display: 'inline-block', marginLeft: '10px' } }
               { ...progress } 
-              placeholder='进度'/> %
+              placeholder='Progress'/> %
             { progress.value && progress.touched && progress.error ? <HelpBlock>{ progress.error }</HelpBlock> : '' }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

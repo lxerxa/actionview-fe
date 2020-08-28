@@ -79,7 +79,7 @@ export default class TestModal extends Component {
         </Modal.Body> }
         <Modal.Footer>
           <Button disabled={ loading } bsStyle='link' onClick={ this.retest.bind(this) }>重新测试</Button>
-          <Button disabled={ loading } onClick={ this.handleCancel }>关闭</Button>
+          <Button disabled={ loading } onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

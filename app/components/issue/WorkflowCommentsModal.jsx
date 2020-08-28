@@ -48,8 +48,8 @@ export default class WorkflowCommentsModal extends Component {
             value={ this.state.comments } />
         </Modal.Body>
         <Modal.Footer>
-          <Button disabled={ !this.state.comments } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button disabled={ !this.state.comments } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

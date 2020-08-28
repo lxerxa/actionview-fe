@@ -10,7 +10,7 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.request_url) {
-    errors.request_url = '必填';
+    errors.request_url = 'Required';
   } 
   return errors;
 };
@@ -45,7 +45,7 @@ export default class CreateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('新建完成。', 'success', 2000);
+      notify.show('New 完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -66,7 +66,7 @@ export default class CreateModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>新建Webhooks</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>New Webhooks</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
@@ -90,67 +90,67 @@ export default class CreateModal extends Component {
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='create_issue'/>
-                    <span> 创建问题</span>
+                    <span> Create issue</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='edit_issue'/>
-                    <span> 编辑问题</span>
+                    <span> Edit issue</span>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='del_issue'/>
-                    <span> 删除问题</span>
+                    <span> Delete issue</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='resolve_issue'/>
-                    <span> 解决问题</span>
+                    <span> Resolve issue</span>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='close_issue'/>
-                    <span> 关闭问题</span>
+                    <span> Close issue</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='reopen_issue'/>
-                    <span> 重新打开</span>
+                    <span> Reopen</span>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='add_worklog'/>
-                    <span> 添加工作日志</span>
+                    <span> Add worklog</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='edit_worklog'/>
-                    <span> 编辑工作日志</span>
+                    <span> Edit worklog</span>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='create_version'/>
-                    <span> 新建版本</span>
+                    <span> New version</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='edit_version'/>
-                    <span> 编辑版本</span>
+                    <span> Edit version</span>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='release_version'/>
-                    <span> 发布版本</span>
+                    <span> Release version</span>
                   </div>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='merge_version'/>
-                    <span> 合并版本</span>
+                    <span> Merge version</span>
                   </div>
                 </li>
                 <li>
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <Checkbox value='del_version'/>
-                    <span> 删除版本</span>
+                    <span> Delete version</span>
                   </div>
                 </li>
               </ui>
@@ -164,15 +164,15 @@ export default class CreateModal extends Component {
               onChange={ (newValue) => { ssl.onChange(newValue) } } 
               style={ { marginLeft: '10px' } }>
               <Checkbox value='1' disabled={ submitting }/>
-              <span> 启用</span>
+              <span> enable</span>
             </CheckboxGroup>
           </FormGroup>*/}
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

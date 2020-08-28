@@ -132,8 +132,8 @@ export default class Edit extends Component {
             style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
             通知项目成员
           </Checkbox>
-          <Button disabled={ this.state.emsg || loading || !this.state.name || (data.name == this.state.name && simplemde && data.contents == simplemde.value()) } onClick={ this.handleSubmit }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ this.state.emsg || loading || !this.state.name || (data.name == this.state.name && simplemde && data.contents == simplemde.value()) } onClick={ this.handleSubmit }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>Cancel</Button>
         </div>
       </div>
     );

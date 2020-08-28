@@ -43,7 +43,7 @@ export default class DelNotify extends Component {
     } else {
       ecode = await del(data.id);
       if (ecode === 0) {
-        notify.show('删除完成。', 'success', 2000);
+        notify.show('Deletion complete', 'success', 2000);
       } else {
         notify.show('删除失败。', 'error', 2000);
       }
@@ -67,26 +67,26 @@ export default class DelNotify extends Component {
 
     let opt = '';
     if (operation == 'disable') {
-      opt = '禁用';
+      opt = 'disable';
     } else if (operation == 'enable') {
-      opt = '启用';
+      opt = 'enable';
     } else {
-      opt = '删除';
+      opt = 'Delete';
     }
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ opt }问题类型 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ opt }Type - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要{ opt }此问题类型？
+          Confirm{ opt }此问题类型？
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

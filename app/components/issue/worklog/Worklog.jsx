@@ -199,8 +199,8 @@ export default class Worklog extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' title='Refresh' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> Refresh</span>
+              <span className='comments-button' title='Sort' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> Sort</span>
               { permissions.indexOf('add_worklog') !== -1 &&
               <span className='comments-button' title='添加' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span> }
               <span style={ { marginRight: '20px', float: 'right' } }>
@@ -208,7 +208,7 @@ export default class Worklog extends Component {
                   style={ { paddingTop: '0px', minHeight: '18px' } }
                   checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
                   onClick={ this.swapTime.bind(this) }>
-                  显示绝对时间
+                  Show absolute date
                 </Checkbox>
               </span>
             </div>
@@ -217,9 +217,9 @@ export default class Worklog extends Component {
             <Table condensed hover responsive style={ { width: '96%', marginLeft: '10px', marginTop: '5px' } }>
               <thead>
                 <tr>
-                  <th>原估时间</th>
-                  <th>总耗费时间</th>
-                  <th>剩余时间</th>
+                  <th>Original estimated time</th>
+                  <th>Total spent time</th>
+                  <th>Remaining time</th>
                 </tr>
               </thead>
               <tbody>
@@ -238,13 +238,13 @@ export default class Worklog extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML={ { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder.id === currentUser.id ? '我' : val.recorder.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.recorded_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.recorded_at, currentTime)) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML={ { __html: '<a title="' + (val.recorder && (val.recorder.name + '(' + val.recorder.email + ')')) + '">' + (val.recorder.id === currentUser.id ? '我' : val.recorder.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.recorded_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.recorded_at, currentTime)) + (val.edited_flag == 1 ? '<span style="color:red"> - Edited</span>' : '') } } />
                 { ((val.recorder && currentUser.id === val.recorder.id && permissions.indexOf('delete_self_worklog') !== -1) 
                   || permissions.indexOf('delete_worklog') !== -1) &&  
-                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='Delete'></i></span> }
                 { ((val.recorder && currentUser.id === val.recorder.id && permissions.indexOf('edit_self_worklog') !== -1) 
                   || permissions.indexOf('edit_worklog') !== -1) &&  
-                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditWorklog.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditWorklog.bind(this, val) }><i className='fa fa-pencil' title='Edit'></i></span> }
               </div> ); 
               let comments = val.comments ? _.escape(val.comments) : '-';
               comments = comments.replace(/(\r\n)|(\n)/g, '<br/>'); 
@@ -254,9 +254,9 @@ export default class Worklog extends Component {
                   <Table condensed hover responsive>
                     <thead>
                       <tr>
-                        <th>开始日期</th>
-                        <th>耗费时间</th>
-                        <th>剩余时间</th>
+                        <th>Start date</th>
+                        <th>Spent time</th>
+                        <th>Remaining time</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -268,7 +268,7 @@ export default class Worklog extends Component {
                     </tbody>
                   </Table>
                   <div style={ { marginLeft: '5px', lineHeight: '24px' } }>
-                    <span style={ { width: '10%', float: 'left', fontWeight: 'bold' } }>备注：</span>
+                    <span style={ { width: '10%', float: 'left', fontWeight: 'bold' } }>Comments：</span>
                     <span style={ { width: '90%', float: 'left', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: comments } }/>
                   </div>
                 </Panel>) }) }

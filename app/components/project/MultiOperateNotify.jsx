@@ -34,13 +34,13 @@ export default class MultiOperateNotify extends Component {
     let ecode = 0, msg = '';
     if (operate == 'reopen') {
       ecode = await multiReopen(ids);
-      msg = '项目已打开。'; 
+      msg = 'Project reopened';
     } else if (operate == 'close') {
       ecode = await multiStop(ids);
       msg = '项目已关闭。'; 
     } else if (operate == 'create_index') {
       ecode = await multiCreateIndex(ids);
-      msg = '索引已创建。'; 
+      msg = 'Index created';
     }
     if (ecode === 0) {
       close();
@@ -63,7 +63,7 @@ export default class MultiOperateNotify extends Component {
 
   render() {
     const { i18n: { errMsg }, operate, loading } = this.props;
-    const operateTitle = operate === 'reopen' ? '重新打开' : (operate === 'create_index' ? '重新索引' : '关闭');
+    const operateTitle = operate === 'reopen' ? 'Reopen' : (operate === 'create_index' ? '重新索引' : 'Close');
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -71,13 +71,13 @@ export default class MultiOperateNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>批处理项目 - { operateTitle }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          { '确认要 ' + operateTitle + ' 选中的项目？' }
+          { 'Confirm ' + operateTitle + ' 选中of项目？' }
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

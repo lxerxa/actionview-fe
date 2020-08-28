@@ -12,7 +12,7 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values) => {
   const errors = {};
   if (!values.dest_path) {
-    errors.dest_path = '必填';
+    errors.dest_path = 'Required';
   }
   return errors;
 };
@@ -47,7 +47,7 @@ export default class CopyModal extends Component {
   componentWillMount() {
     const { initializeForm, data } = this.props;
     const copyData = _.clone(data);
-    _.extend(copyData, { name: '复制 - ' + data.name });
+    _.extend(copyData, { name: 'Copy - ' + data.name });
     initializeForm(copyData);
   }
 
@@ -106,7 +106,7 @@ export default class CopyModal extends Component {
     return (
       <Modal show bsSize='large' onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>移动{ data.d === 1 ? '目录' : '文档' } - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>移动{ data.d === 1 ? '目录' : 'Document' } - { data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
@@ -128,8 +128,8 @@ export default class CopyModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

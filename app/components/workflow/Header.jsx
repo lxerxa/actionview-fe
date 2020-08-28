@@ -33,7 +33,7 @@ export default class Header extends Component {
           <Button 
             className='create-btn' 
             onClick={ () => { this.setState({ createModalShow: true }); } }>
-            <i className='fa fa-plus'></i>&nbsp;新建工作流
+            <i className='fa fa-plus'></i>&nbsp;New 工作流
           </Button>
         </div>
         <div className='info-col'>
@@ -41,7 +41,7 @@ export default class Header extends Component {
             <i className='fa fa-info-circle'></i>
           </div>
           <div className='info-content'>
-            只能删除没有关联到问题类型{ isSysConfig && '（包括各项目自定义问题类型）' }的工作流。
+            只能删除没有关联到问题类型{ isSysConfig && '（Each project includes a custom question types）' }of工作流。
           </div>
         </div>
         { this.state.createModalShow && 

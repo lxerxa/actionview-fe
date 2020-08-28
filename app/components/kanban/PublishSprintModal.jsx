@@ -12,7 +12,7 @@ const validate = (values, props) => {
   const errors = {};
 
   if (!values.start_time) {
-    errors.start_time = '必填';
+    errors.start_time = 'Required';
   } else {
     if (!moment(values.start_time).isValid()) {
       errors.start_time = '格式错误';
@@ -20,7 +20,7 @@ const validate = (values, props) => {
   }
 
   if (!values.complete_time) {
-    errors.complete_time = '必填';
+    errors.complete_time = 'Required';
   } else {
     if (!moment(values.complete_time).isValid()) {
       errors.complete_time = '格式错误';
@@ -112,13 +112,13 @@ export default class PublishModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>发布 - Sprint{ sprintNo }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Release - Sprint{ sprintNo }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body style={ { maxHeight: '580px' } }>
           <div>
             <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ start_time.error ? 'error' : null }>
-              <ControlLabel><span className='txt-impt'>*</span>开始时间</ControlLabel>
+              <ControlLabel><span className='txt-impt'>*</span>Start date</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 
@@ -144,13 +144,13 @@ export default class PublishModal extends Component {
             </FormGroup>
           </div>
           <FormGroup>
-            <ControlLabel>描述</ControlLabel>
+            <ControlLabel>Description</ControlLabel>
             <FormControl 
               disabled={ submitting } 
               componentClass='textarea'
               style={ { height: '150px' } }
               { ...description }
-              placeholder='描述'/>
+              placeholder='Description'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
@@ -163,8 +163,8 @@ export default class PublishModal extends Component {
             style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
             通知项目成员
           </Checkbox>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

@@ -225,19 +225,19 @@ export default class List extends Component {
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
 
     const updatedat_options = [
-      { value: '1w', label: '1周内' },
-      { value: '2w', label: '2周内' },
-      { value: '1m', label: '1个月内' },
-      { value: '2m', label: '2个月内' }
+      { value: '1w', label: '1w' },
+      { value: '2w', label: '2w' },
+      { value: '1m', label: '1m' },
+      { value: '2m', label: '2m' }
     ];
 
     const sortOptions = [
-      { value: 'create_time_asc', label: '创建时间 ↑' },
-      { value: 'create_time_desc', label: '创建时间 ↓' },
-      { value: 'update_time_asc', label: '更新时间 ↑' },
-      { value: 'update_time_desc', label: '更新时间 ↓' },
-      { value: 'name_asc', label: '名称 ↑' },
-      { value: 'name_desc', label: '名称 ↓' }
+      { value: 'create_time_asc', label: 'Creation date ↑' },
+      { value: 'create_time_desc', label: 'Creation date ↓' },
+      { value: 'update_time_asc', label: 'Update date ↑' },
+      { value: 'update_time_desc', label: 'Update date ↓' },
+      { value: 'name_asc', label: 'Name ↑' },
+      { value: 'name_desc', label: 'Name ↓' }
     ];
 
     let contents = '';
@@ -323,7 +323,7 @@ export default class List extends Component {
               onSelect={ this.operateSelect.bind(this) }>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> } 
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>Delete</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === v.id) ? 'loading' : 'hide' }/>
           </div>)
@@ -371,12 +371,12 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='edit'>编辑</MenuItem>
+              <MenuItem eventKey='edit'>Edit</MenuItem>
               { _.isEmpty(files[i].checkin) && <MenuItem eventKey='checkin'>加锁</MenuItem> }
               { !_.isEmpty(files[i].checkin) && (files[i].checkin.user.id == user.id || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) && <MenuItem eventKey='checkout'>解锁</MenuItem> }
-              <MenuItem eventKey='copy'>复制</MenuItem>
+              <MenuItem eventKey='copy'>Copy</MenuItem>
               <MenuItem eventKey='move'>移动</MenuItem>
-              <MenuItem eventKey='del'>删除</MenuItem>
+              <MenuItem eventKey='del'>Delete</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -388,7 +388,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -415,7 +415,7 @@ export default class List extends Component {
               <span style={ { float: 'right', marginRight: '10px' } }>
                 <DropdownButton
                   pullRight
-                  title='排序'
+                  title='Sort'
                   id='basic-nav-dropdown-project'
                   onSelect={ this.sortChange.bind(this) }>
                     { _.map(sortOptions, (v, i) =>
@@ -439,14 +439,14 @@ export default class List extends Component {
               <span style={ { float: 'right', width: '110px', marginRight: '10px' } }>
                 <Select
                   simpleValue
-                  placeholder='更新时间'
+                  placeholder='Update date'
                   value={ this.state.updated_at }
                   onChange={ this.updatedAtChange.bind(this) }
                   options={ updatedat_options }/>
               </span>
               <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
                 <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
-                  <i className='fa fa-pencil'></i>&nbsp;新建文档
+                  <i className='fa fa-pencil'></i>&nbsp;New 文档
                 </Button>
                 { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
@@ -459,14 +459,14 @@ export default class List extends Component {
         <div>
           <BootstrapTable data={ rows } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+            <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { !indexLoading && directory === '0' && _.isEmpty(query) && (!options.home || !options.home.id) && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
-              <span>为了项目成员能更好的理解此项目，建议增加 <a href='#' onClick={ (e) => { e.preventDefault(); goto('new', '', { home: 1 }); } }>Home</a> 页面。</span>
+              <span>为了项目成员能更好of理解此项目，建议增加 <a href='#' onClick={ (e) => { e.preventDefault(); goto('new', '', { home: 1 }); } }>Home</a> 页面。</span>
             </div>
           </div> }
           { !indexLoading && options.home && options.home.id && _.isEmpty(query) &&

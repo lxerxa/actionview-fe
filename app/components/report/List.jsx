@@ -183,7 +183,7 @@ export default class List extends Component {
         { this.state.searchConfigShow &&
           <FilterConfigModal
             show
-            title={ blockTitles[this.state.selectedBlock] + ' - 过滤器管理' }
+            title={ blockTitles[this.state.selectedBlock] + ' - Filter management' }
             close={ () => { this.setState({ searchConfigShow: false }) } }
             filters={ filters[this.state.selectedBlock] }
             config={ this.edit.bind(this) }

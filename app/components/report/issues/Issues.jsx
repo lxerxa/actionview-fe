@@ -167,7 +167,7 @@ export default class Issues extends Component {
             <Col sm={ 3 }>
               <Select
                 simpleValue
-                placeholder='请选择'
+                placeholder='set value'
                 clearable={ false }
                 value={ stat_x || null }
                 onChange={ (newValue) => { this.state.stat_x = newValue; this.search(); } }
@@ -179,7 +179,7 @@ export default class Issues extends Component {
             <Col sm={ 3 }>
               <Select
                 simpleValue
-                placeholder='请选择'
+                placeholder='set value'
                 value={ this.state.stat_y || null }
                 onChange={ (newValue) => { this.state.stat_y = newValue; this.search(); } }
                 options={ _.map(stat_dimensions, (v) => { return { value: v.key, label: v.name } }) }/>
@@ -205,7 +205,7 @@ export default class Issues extends Component {
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='Save filter'><i className='fa fa-save'></i></div>
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>
             { (stat_x === stat_y || !stat_y) &&
@@ -238,7 +238,7 @@ export default class Issues extends Component {
               <span style={ { fontSize: '160px', color: '#FFC125' } } >
                 <i className='fa fa-warning'></i>
               </span><br/>
-              <span>抱歉，暂无满足该检索条件的数据。</span>
+              <span>抱歉，暂无满足该检索条件of数据。</span>
             </div>
           </div> }
           { showShape === 'bar' && data.length > 0 && 
@@ -296,7 +296,7 @@ export default class Issues extends Component {
           </div> }
           { data.length > 0 && 
           <div style={ { float: 'left', width: '100%', marginBottom: '30px' } }>
-            <span>注：该图表最多统计满足当前检索条件下的10000条结果。</span>
+            <span>Note：该图表最多统计满足当前检索条件下of10000条结果。</span>
             { (stat_x == stat_y || !stat_y) ? 
             <Table responsive bordered={ true }>
               <thead>

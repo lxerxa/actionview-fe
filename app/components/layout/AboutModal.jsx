@@ -57,7 +57,7 @@ export default class AboutModal extends Component {
             </table>
           </div>
           <div style={ { margin: '40px' } }>
-            <span>一个面向中小企业的、开源免费的、简单易用的、类Jira的问题需求跟踪工具。目标是成为企业开源研发工具链中的重要一环。</span>
+            <span>一个面向中小企业of、开源免费of、简单易用of、类Jiraof问题需求跟踪工具。目标是成为企业开源研发工具链中of重要一环。</span>
           </div>
           <div style={ { margin: '40px', textAlign: 'center' } }>
             <span>想帮忙吗？<a href='https://github.com/lxerxa/actionview' target='_blank'>欢迎参与！</a></span>
@@ -68,7 +68,7 @@ export default class AboutModal extends Component {
           <a href='https://github.com/lxerxa/actionview/blob/master/LICENSE.txt' target='_blank'>
             <span style={ { float: 'left', marginTop: '5px', marginLeft: '5px' } }>授权信息</span>
           </a>
-          <Button onClick={ this.handleCancel }>关闭</Button>
+          <Button onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

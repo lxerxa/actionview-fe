@@ -49,7 +49,7 @@ export default class Header extends Component {
             className='create-btn' 
             disabled={ indexLoading } 
             onClick={ () => { this.setState({ createModalShow: true }); } }>
-            <i className='fa fa-plus'></i>&nbsp;新建模块
+            <i className='fa fa-plus'></i>&nbsp;New Module
           </Button>
           { !indexLoading && 
           <Button 
@@ -71,7 +71,7 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow &&
           <SortCardsModal
             show
-            model='模块'
+            model='Module'
             close={ this.sortCardsModalClose.bind(this) }
             cards={ collection }
             setSort={ setSort }

@@ -163,7 +163,7 @@ export default class EditCommentsModal extends Component {
 
     let title = '';
     if (data.id) {
-      title = '编辑备注';
+      title = 'Edit comments';
     } else {
       title = '回复备注';
     }
@@ -188,8 +188,8 @@ export default class EditCommentsModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ this.state.oldContents === this.state.contents || loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ this.state.oldContents === this.state.contents || loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

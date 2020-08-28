@@ -46,13 +46,13 @@ export default class ConfigNotify extends Component {
         </Modal.Header>
         <Modal.Body>
           <br/>
-          { cancel ? '确认要放弃修改吗？' : '配置可能存在无法到达的结点，确认要继续保存吗？' }
+          { cancel ? '确认要放弃修改吗？' : '配置可能存在无法到达of结点，确认要继续保存吗？' }
           <br/>
           <br/>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

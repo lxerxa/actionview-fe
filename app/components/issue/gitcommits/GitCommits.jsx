@@ -46,14 +46,14 @@ export default class GitCommits extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexGitCommits(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortGitCommits() } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' title='Refresh' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexGitCommits(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> Refresh</span>
+              <span className='comments-button' title='Sort' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortGitCommits() } }><i className='fa fa-sort'></i> Sort</span>
               <span style={ { marginRight: '20px', float: 'right' } }>
                 <Checkbox
                   style={ { paddingTop: '0px', minHeight: '18px' } }
                   checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
                   onClick={ this.swapTime.bind(this) }>
-                  显示绝对时间
+                  Show absolute date
                 </Checkbox>
               </span>
             </div>

@@ -134,7 +134,7 @@ export default class List extends Component {
           <div>
             <span className='table-td-title'>
               <span className={ 'state-' + collection[i].category + '-label' }>{ collection[i].name }</span>
-              { isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }
+              { isGlobal && <span style={ { fontWeight: 'normal' } }> (Global)</span> }
             </span> 
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
@@ -155,9 +155,9 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='1'>编辑</MenuItem>
+              <MenuItem eventKey='1'>Edit</MenuItem>
               { pkey === '$_sys_$' && <MenuItem eventKey='3'>查看项目应用</MenuItem> }
-              { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              { !collection[i].is_used && <MenuItem eventKey='2'>Delete</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -169,7 +169,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -179,7 +179,7 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
           <TableHeaderColumn dataField='category'>类别</TableHeaderColumn>
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>

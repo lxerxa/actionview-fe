@@ -78,7 +78,7 @@ export class IssueFilterList extends Component {
                 value={ this.state.values[v.key] || '' }
                 onKeyDown={ (e) => { if (e.keyCode == '13') { this.onChange(); } } }
                 onChange={ (e) => { this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }
-                placeholder={ '输入' + (v.desc || v.name) } />
+                placeholder={ 'Enter' + (v.desc || v.name) } />
             </Col>
           </div> );
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
@@ -94,7 +94,7 @@ export class IssueFilterList extends Component {
                 value={ this.state.values[v.key] || null }
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.onChange(); } }
                 options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } }) }
-                placeholder={ '选择' +  v.name }/>
+                placeholder={ 'Select' +  v.name }/>
             </Col>
           </div> );
       } else if ([ 'Duration', 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
@@ -152,34 +152,34 @@ export class IssueFilterList extends Component {
     const sprintOptions = _.map(sprints, (val) => { return { name: 'Sprint ' + val, id: val } });
 
     const baseFields = [
-      { key: 'title', name: '主题/NO', type: 'Text', desc: '主题关键字或编号' },
-      { key: 'type', name: '类型', type: 'MultiSelect', optionValues: types },
-      { key: 'priority', name: '优先级', type: 'MultiSelect', optionValues: priorities },
-      { key: 'state', name: '状态', type: 'MultiSelect', optionValues: states },
-      { key: 'resolution', name: '解决结果', type: 'MultiSelect', optionValues: resolutions },
-      { key: 'module', name: '模块', type: 'MultiSelect', optionValues: modules },
-      { key: 'resolve_version', name: '解决版本', type: 'MultiSelect', optionValues: versions },
-      { key: 'effect_versions', name: '影响版本', type: 'MultiSelect', optionValues: versions },
-      { key: 'labels', name: '标签', type: 'MultiSelect', optionValues: labelOptions }
+      { key: 'title', name: 'Title/NO', type: 'Text', desc: 'Title keyword or number' },
+      { key: 'type', name: 'Type', type: 'MultiSelect', optionValues: types },
+      { key: 'priority', name: 'Priority', type: 'MultiSelect', optionValues: priorities },
+      { key: 'state', name: 'Status', type: 'MultiSelect', optionValues: states },
+      { key: 'resolution', name: 'Resolution', type: 'MultiSelect', optionValues: resolutions },
+      { key: 'module', name: 'Module', type: 'MultiSelect', optionValues: modules },
+      { key: 'resolve_version', name: 'Resolution version', type: 'MultiSelect', optionValues: versions },
+      { key: 'effect_versions', name: 'Affect version', type: 'MultiSelect', optionValues: versions },
+      { key: 'labels', name: 'Label', type: 'MultiSelect', optionValues: labelOptions }
     ];
     const baseFilterSections = this.groupFields(_.reject(baseFields, (v) => notShowFields.indexOf(v.key) !== -1 || notShowTypes.indexOf(v.type) !== -1), columns || 3);
 
     const memberFields = [
-      { key: 'reporter', name: '报告者', type: 'MultiSelect', optionValues: userOptions },
-      { key: 'assignee', name: '经办人', type: 'MultiSelect', optionValues: userOptions },
-      { key: 'resolver', name: '解决者', type: 'MultiSelect', optionValues: userOptions },
-      { key: 'closer', name: '关闭者', type: 'MultiSelect', optionValues: userOptions },
-      { key: 'watcher', name: '关注者', type: 'MultiSelect', optionValues: [ { id: 'me', name: '当前用户' } ] }
+      { key: 'reporter', name: 'Reporter', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'assignee', name: 'Assignee', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'resolver', name: 'Resolver', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'closer', name: 'Closer', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'watcher', name: 'Watcher', type: 'MultiSelect', optionValues: [ { id: 'me', name: '当前用户' } ] }
     ];
     const memberFilterSections = this.groupFields(_.reject(memberFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
 
     const timeFields = [
-      { key: 'created_at', name: '创建时间', type: 'Duration' },
-      { key: 'updated_at', name: '更新时间', type: 'Duration' },
-      { key: 'resolved_at', name: '解决时间', type: 'Duration' },
-      { key: 'closed_at', name: '关闭时间', type: 'Duration' },
-      { key: 'expect_start_time', name: '期望开始', type: 'Duration', mode: 'fixed' },
-      { key: 'expect_complete_time', name: '期望完成', type: 'Duration', mode: 'fixed' }
+      { key: 'created_at', name: 'Creation date', type: 'Duration' },
+      { key: 'updated_at', name: 'Update date', type: 'Duration' },
+      { key: 'resolved_at', name: 'Resolution date', type: 'Duration' },
+      { key: 'closed_at', name: 'Close date', type: 'Duration' },
+      { key: 'expect_start_time', name: 'Expected start date', type: 'Duration', mode: 'fixed' },
+      { key: 'expect_complete_time', name: 'Expected complete date', type: 'Duration', mode: 'fixed' }
     ];
     const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 2);
 
@@ -212,8 +212,8 @@ export class IssueFilterList extends Component {
             <span 
               className='direct-button' 
               onClick={ () => this.setState({ baseFilterShow: !this.state.baseFilterShow }) } 
-              title={ this.state.baseFilterShow ? '收缩' : '展开' }>
-              <span style={ { marginRight: '2px' } }>基本字段</span>
+              title={ this.state.baseFilterShow ? '收缩' : 'unfold' }>
+              <span style={ { marginRight: '2px' } }>Basic field</span>
               { _.intersection(_.keys(values), _.map(baseFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.baseFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
@@ -231,8 +231,8 @@ export class IssueFilterList extends Component {
             <span 
               className='direct-button' 
               onClick={ () => this.setState({ memberFilterShow: !this.state.memberFilterShow }) } 
-              title={ this.state.memberFilterShow ? '收缩' : '展开' }>
-              <span style={ { marginRight: '2px' } }>人员</span>
+              title={ this.state.memberFilterShow ? '收缩' : 'unfold' }>
+              <span style={ { marginRight: '2px' } }>Member</span>
               { _.intersection(_.keys(values), _.map(memberFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.memberFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
@@ -250,8 +250,8 @@ export class IssueFilterList extends Component {
             <span 
               className='direct-button' 
               onClick={ () => this.setState({ timeFilterShow: !this.state.timeFilterShow }) } 
-              title={ this.state.timeFilterShow ? '收缩' : '展开' }>
-              <span style={ { marginRight: '2px' } }>时间</span>
+              title={ this.state.timeFilterShow ? '收缩' : 'unfold' }>
+              <span style={ { marginRight: '2px' } }>Date</span>
               { _.intersection(_.keys(values), _.map(timeFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.timeFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
@@ -269,7 +269,7 @@ export class IssueFilterList extends Component {
             <span 
               className='direct-button' 
               onClick={ () => this.setState({ agileFilterShow: !this.state.agileFilterShow }) } 
-              title={ this.state.agileFilterShow ? '收缩' : '展开' }>
+              title={ this.state.agileFilterShow ? '收缩' : 'unfold' }>
               <span style={ { marginRight: '2px' } }>敏捷迭代</span> 
               { _.intersection(_.keys(values), _.map(agileFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.agileFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
@@ -288,7 +288,7 @@ export class IssueFilterList extends Component {
             <span
               className='direct-button'
               onClick={ () => this.setState({ othersFilterShow: !this.state.othersFilterShow }) }
-              title={ this.state.othersFilterShow ? '收缩' : '展开' }>
+              title={ this.state.othersFilterShow ? '收缩' : 'unfold' }>
               <span style={ { marginRight: '2px' } }>其它字段</span>
               { _.intersection(_.keys(values), _.map(othersFields, _.iteratee('key'))).length > 0 ? <span>...</span> : <span/> }
               { this.state.othersFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
@@ -315,27 +315,27 @@ export function parseQuery(query, options) {
 
   const sections = [
     { key: 'no', name: 'NO', type: 'Text' },
-    { key: 'title', name: '主题/NO', type: 'Text' },
-    { key: 'type', type: 'MultiSelect', name: '类型', optionValues: types },
-    { key: 'priority', type: 'MultiSelect', name: '优先级', optionValues: priorities },
-    { key: 'state', type: 'MultiSelect', name: '状态', optionValues: states },
-    { key: 'resolution', type: 'MultiSelect', name: '解决结果', optionValues: resolutions },
-    { key: 'module', type: 'MultiSelect', name: '模块', optionValues: modules },
-    { key: 'resolve_version', type: 'MultiSelect', name: '解决版本', optionValues: versions  },
-    { key: 'effect_versions', type: 'MultiSelect', name: '影响版本', optionValues: versions },
-    { key: 'labels', name: '标签', type: 'MultiSelect' },
-    { key: 'description', name: '描述', type: 'TextArea' },
-    { key: 'reporter', name : '报告人', type: 'MultiSelect', optionValues: userOptions },
-    { key: 'assignee', name: '经办人', type: 'MultiSelect', optionValues: userOptions },
-    { key: 'watcher', name : '关注者', type: 'MultiSelect', optionValues: userOptions },
-    { key: 'resolver', name : '解决者', type: 'MultiSelect', optionValues: userOptions },
-    { key: 'closer', name : '关闭者', type: 'MultiSelect', optionValues: userOptions },
-    { key: 'created_at', name: '创建时间', type: 'Duration' },
-    { key: 'updated_at', name : '更新时间', type: 'Duration' },
-    { key: 'resolved_at', name : '解决时间', type: 'Duration' },
-    { key: 'closed_at', name : '关闭时间', type: 'Duration' },
-    { key: 'expect_start_time', name : '期望开始时间', type: 'Duration' },
-    { key: 'expect_complete_time', name : '期望完成时间', type: 'Duration' },
+    { key: 'title', name: 'Title/NO', type: 'Text' },
+    { key: 'type', type: 'MultiSelect', name: 'Type', optionValues: types },
+    { key: 'priority', type: 'MultiSelect', name: 'Priority', optionValues: priorities },
+    { key: 'state', type: 'MultiSelect', name: 'Status', optionValues: states },
+    { key: 'resolution', type: 'MultiSelect', name: 'Resolution', optionValues: resolutions },
+    { key: 'module', type: 'MultiSelect', name: 'Module', optionValues: modules },
+    { key: 'resolve_version', type: 'MultiSelect', name: 'Resolution version', optionValues: versions  },
+    { key: 'effect_versions', type: 'MultiSelect', name: 'Affect version', optionValues: versions },
+    { key: 'labels', name: 'Label', type: 'MultiSelect' },
+    { key: 'description', name: 'Description', type: 'TextArea' },
+    { key: 'reporter', name : 'Reporter', type: 'MultiSelect', optionValues: userOptions },
+    { key: 'assignee', name: 'Assignee', type: 'MultiSelect', optionValues: userOptions },
+    { key: 'watcher', name : 'Watcher', type: 'MultiSelect', optionValues: userOptions },
+    { key: 'resolver', name : 'Resolver', type: 'MultiSelect', optionValues: userOptions },
+    { key: 'closer', name : 'Closer', type: 'MultiSelect', optionValues: userOptions },
+    { key: 'created_at', name: 'Creation date', type: 'Duration' },
+    { key: 'updated_at', name : 'Update date', type: 'Duration' },
+    { key: 'resolved_at', name : 'Resolution date', type: 'Duration' },
+    { key: 'closed_at', name : 'Close date', type: 'Duration' },
+    { key: 'expect_start_time', name : 'Expected start date', type: 'Duration' },
+    { key: 'expect_complete_time', name : 'Expected completion date', type: 'Duration' },
     { key: 'epic', type: 'MultiSelect', name: 'Epic', optionValues: epics },
     { key: 'sprints', type: 'Select', name: 'Sprint' }
   ];

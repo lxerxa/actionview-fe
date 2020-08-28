@@ -45,7 +45,7 @@ export default class Menu extends Component {
         style={ { position: 'fixed' } }
         onSelect={ this.onSelectMenu.bind(this) }>
         <Dropdown.Menu>
-          <MenuItem eventKey='issueView'>查看</MenuItem>
+          <MenuItem eventKey='issueView'>View</MenuItem>
           { hasMove && <MenuItem divider /> }
           { hasMove && <MenuItem eventKey='toTop'>移至顶部</MenuItem> }
           { hasMove && <MenuItem eventKey='toBottom'>移至底部</MenuItem> }

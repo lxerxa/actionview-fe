@@ -183,9 +183,9 @@ export default class Trend extends Component {
             </Col>
             <Col sm={ 4 }>
               <CheckboxGroup name='statItems' value={ this.state.statItems } onChange={ (newValue) => { this.setState({ statItems: newValue }) } } style={ { marginTop: '8px' } }>
-                <div style={ { float: 'left' } }><Checkbox2 value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>新建的</span></div>
-                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='resolve'/><span style={ { marginLeft: '2px' } }>已解决的</span></div>
-                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='close'/><span style={ { marginLeft: '2px' } }>已关闭的</span></div>
+                <div style={ { float: 'left' } }><Checkbox2 value='new' style={ { float: 'left' } }/><span style={ { marginLeft: '2px' } }>New</span></div>
+                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='resolve'/><span style={ { marginLeft: '2px' } }>Resolved</span></div>
+                <div style={ { float: 'left', marginLeft: '8px' } }><Checkbox2 value='close'/><span style={ { marginLeft: '2px' } }>Closed</span></div>
               </CheckboxGroup>
             </Col>
           </FormGroup>
@@ -243,7 +243,7 @@ export default class Trend extends Component {
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='Save filter'><i className='fa fa-save'></i></div>
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>
             <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
@@ -294,9 +294,9 @@ export default class Trend extends Component {
               <YAxis />
               <Tooltip />
               <Legend />
-              { this.state.statItems.indexOf('new') !== -1 && <Bar dataKey='new' name='新建的' stackId='a' fill='#4572A7' /> }
-              { this.state.statItems.indexOf('resolve') !== -1 && <Bar dataKey='resolved' name='已解决的' stackId='a' fill='#89A54E' /> }
-              { this.state.statItems.indexOf('close') !== -1 && <Bar dataKey='closed' name='已关闭的' stackId='a' fill='#AA4643' /> }
+              { this.state.statItems.indexOf('new') !== -1 && <Bar dataKey='new' name='New' stackId='a' fill='#4572A7' /> }
+              { this.state.statItems.indexOf('resolve') !== -1 && <Bar dataKey='resolved' name='Resolved' stackId='a' fill='#89A54E' /> }
+              { this.state.statItems.indexOf('close') !== -1 && <Bar dataKey='closed' name='Closed' stackId='a' fill='#AA4643' /> }
             </BarChart>
           </div> }
           { this.state.shape === 'line' && !hasErr &&
@@ -311,9 +311,9 @@ export default class Trend extends Component {
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              { this.state.statItems.indexOf('new') !== -1 && <Line dataKey='new' name='新建的' stroke='#4572A7'/> }
-              { this.state.statItems.indexOf('resolve') !== -1 && <Line dataKey='resolved' name='已解决的' stroke='#89A54E'/> }
-              { this.state.statItems.indexOf('close') !== -1 && <Line dataKey='closed' name='已关闭的' stroke='#AA4643'/> }
+              { this.state.statItems.indexOf('new') !== -1 && <Line dataKey='new' name='New' stroke='#4572A7'/> }
+              { this.state.statItems.indexOf('resolve') !== -1 && <Line dataKey='resolved' name='Resolved' stroke='#89A54E'/> }
+              { this.state.statItems.indexOf('close') !== -1 && <Line dataKey='closed' name='Closed' stroke='#AA4643'/> }
             </LineChart>
           </div> }
           { this.state.shape === 'area' && !hasErr &&
@@ -345,21 +345,21 @@ export default class Trend extends Component {
               <CartesianGrid strokeDasharray='3 3'/>
               <Tooltip/>
               <Legend />
-              { this.state.statItems.indexOf('new') !== -1 && <Area dataKey='new' name='新建的' fillOpacity={ 1 } stroke='#4572A7' fill='url(#colorNew)' type='monotone'/> }
-              { this.state.statItems.indexOf('resolve') !== -1 && <Area dataKey='resolved' name='已解决的' fillOpacity={ 1 } stroke='#89A54E' fill='url(#colorResolved)' type='monotone'/> }
-              { this.state.statItems.indexOf('close') !== -1 && <Area dataKey='closed' name='已关闭的' fillOpacity={ 1 } stroke='#AA4643' fill='url(#colorClosed)' type='monotone'/> }
+              { this.state.statItems.indexOf('new') !== -1 && <Area dataKey='new' name='New' fillOpacity={ 1 } stroke='#4572A7' fill='url(#colorNew)' type='monotone'/> }
+              { this.state.statItems.indexOf('resolve') !== -1 && <Area dataKey='resolved' name='Resolved' fillOpacity={ 1 } stroke='#89A54E' fill='url(#colorResolved)' type='monotone'/> }
+              { this.state.statItems.indexOf('close') !== -1 && <Area dataKey='closed' name='Closed' fillOpacity={ 1 } stroke='#AA4643' fill='url(#colorClosed)' type='monotone'/> }
             </AreaChart>
           </div> }
           { !hasErr &&
           <div style={ { float: 'left', width: '100%', marginBottom: '30px' } }>
-            <span>注：该图表最多展示100条目。</span>
+            <span>Note：该图表最多展示100条目。</span>
             <Table responsive bordered={ true }>
               <thead>
                 <tr>
-                  <th>时间</th>
-                  <th>新建的</th>
-                  <th>已解决的</th>
-                  <th>已关闭的</th>
+                  <th>Date</th>
+                  <th>New</th>
+                  <th>Resolved</th>
+                  <th>Closed</th>
                 </tr>
               </thead>
               <tbody>

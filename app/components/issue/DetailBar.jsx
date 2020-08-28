@@ -581,12 +581,12 @@ export default class DetailBar extends Component {
 
     const commentsTab = (
       <div>
-        <span style={ { paddingRight: '6px' } }>备注{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
+        <span style={ { paddingRight: '6px' } }>Comments{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
       </div>);
 
     const worklogTab = (
       <div>
-        <span style={ { paddingRight: '6px' } }>工作日志{ !itemLoading && '(' + (data.worklogs_num > 99 ? '99+' : (data.worklogs_num || 0)) + ')' }</span>
+        <span style={ { paddingRight: '6px' } }>Work log{ !itemLoading && '(' + (data.worklogs_num > 99 ? '99+' : (data.worklogs_num || 0)) + ')' }</span>
       </div>);
 
     const gitTab = (
@@ -598,7 +598,7 @@ export default class DetailBar extends Component {
 
     return (
       <div className='animate-dialog' style={ { ...detailFloatStyle, width } }>
-        <Button className='close' onClick={ close } title='关闭'>
+        <Button className='close' onClick={ close } title='Close'>
           <i className='fa fa-close'></i>
         </Button>
         <Button className={ curInd < 0 || curInd >= issueCollection.length - 1 ? 'angle-disable' : 'angle' } onClick={ this.next.bind(this, curInd) } disabled={ curInd < 0 || curInd >= issueCollection.length - 1 } title='下一个'>
@@ -618,13 +618,13 @@ export default class DetailBar extends Component {
         </Button>
         <div className='panel panel-default' style={ panelStyle }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='issue-detail-tab'>
-            <Tab eventKey={ 1 } title='基本'>
+            <Tab eventKey={ 1 } title='Basic'>
               <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }>
                 <img src={ img } className='loading detail-loading'/>
               </div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '10px', marginBottom: '40px', marginLeft: '10px' } }>
                 <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
-                  { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button> }
+                  { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> Edit</Button> }
                   { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
                     data.wfactions && data.wfactions.length <= 4 ?
                     <ButtonGroup style={ { marginLeft: '10px' } }>
@@ -641,32 +641,32 @@ export default class DetailBar extends Component {
                       </DropdownButton>
                     </div> ) }
                   <div style={ { float: 'right' } }>
-                    <DropdownButton pullRight title='更多' onSelect={ this.operateSelect.bind(this) }>
-                      <MenuItem eventKey='refresh'>刷新</MenuItem>
-                      { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
+                    <DropdownButton pullRight title='More' onSelect={ this.operateSelect.bind(this) }>
+                      <MenuItem eventKey='refresh'>Refresh</MenuItem>
+                      { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>Assign</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>Set label</MenuItem> }
                       <MenuItem divider/>
-                      <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
-                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
-                      <MenuItem eventKey='share'>分享链接</MenuItem>
+                      <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : 'Watch' }</MenuItem>
+                      <MenuItem eventKey='watchers'><span>Watchers<span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
+                      <MenuItem eventKey='share'>Share</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && ((options.permissions.indexOf('edit_issue') !== -1 && !data.hasSubtasks) || options.permissions.indexOf('create_issue') !== -1) && <MenuItem divider/> }
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>Create subtask</MenuItem> }
+                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>Convert to subtask</MenuItem> }
                       { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
                       { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                       { options.permissions && (_.intersection(options.permissions, ['link_issue', 'create_issue']).length > 0 || (options.permissions.indexOf('move_issue') !== -1 && data.parent_id)) && <MenuItem divider/> }
                       { options.permissions && options.permissions.indexOf('move_issue') !== -1 && data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('link_issue') !== -1 && <MenuItem eventKey='link'>链接</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('link_issue') !== -1 && <MenuItem eventKey='link'>Link</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>Copy</MenuItem> }
                       { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
-                      { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>Reset Issue</MenuItem> }
+                      { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>Delete</MenuItem> }
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    主题/NO 
+                    Title/NO 
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
@@ -680,7 +680,7 @@ export default class DetailBar extends Component {
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    类型 
+                    Type 
                   </Col>
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px' } }>
@@ -691,18 +691,18 @@ export default class DetailBar extends Component {
                     </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
-                    状态
+                    Status
                   </Col>
                   <Col sm={ 4 }>
                     <div style={ { marginTop: '7px' } }>
                       { stateInd !== -1 ? <span className={ stateClassName }>{ options.states[stateInd].name }</span> : '-' } 
-                      { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(查看)</span></a> : <img src={ img } className='small-loading'/> }
+                      { !wfLoading ? <a href='#' onClick={ this.viewWorkflow.bind(this) }><span style={ { marginLeft: '5px' } }>(View)</span></a> : <img src={ img } className='small-loading'/> }
                     </div>
                   </Col>
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    优先级
+                    Priority
                   </Col>
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px' } }>
@@ -712,7 +712,7 @@ export default class DetailBar extends Component {
                       </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
-                    解决结果
+                    Resolution
                   </Col>
                   <Col sm={ 4 }>
                     <div style={ { marginTop: '7px' } }>
@@ -722,7 +722,7 @@ export default class DetailBar extends Component {
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    经办人
+                    Assignee
                   </Col>
                   <Col sm={ editAssignee ? 7 : 3 }>
                     { !editAssignee ?
@@ -760,7 +760,7 @@ export default class DetailBar extends Component {
                   </Col>
                   { !editAssignee && 
                   <Col sm={ 2 } componentClass={ ControlLabel }>
-                    报告人 
+                    Reporter
                   </Col> }
                   { !editAssignee && 
                   <Col sm={ 4 }>
@@ -772,7 +772,7 @@ export default class DetailBar extends Component {
                 { data.labels && data.labels.length > 0 &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    标签 
+                    Label
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
@@ -789,7 +789,7 @@ export default class DetailBar extends Component {
                 { data.resolve_version &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    解决版本 
+                    Resolution version
                   </Col>
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
@@ -827,7 +827,7 @@ export default class DetailBar extends Component {
                 <FormGroup>
                   { data.expect_start_time &&
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    期望开始时间
+                    Expected start date
                   </Col> }
                   { data.expect_start_time &&
                   <Col sm={ 2 }>
@@ -837,7 +837,7 @@ export default class DetailBar extends Component {
                   </Col> }
                   { data.expect_complete_time &&
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    期望完成时间
+                    Expected completion date
                   </Col> }
                   { data.expect_complete_time &&
                   <Col sm={ data.expect_start_time ? 2 : 4 }>
@@ -849,7 +849,7 @@ export default class DetailBar extends Component {
                 { _.isNumber(data.progress) &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    进度
+                    Progress
                   </Col>
                   <Col sm={ 3 }>
                     { !editProgress ?
@@ -886,15 +886,15 @@ export default class DetailBar extends Component {
                 { data.subtasks && data.subtasks.length > 0 &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    子任务 
+                    Subtask 
                   </Col>
                   <Col sm={ 9 }>
                     { data.subtasks.length > 3 &&
                     <div style={ { marginTop: '7px' } }>
-                      共{ data.subtasks.length }个子任务
+                      Total { data.subtasks.length } Subtasks
                       <span style={ { marginLeft: '5px' } }> 
                         <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>
-                          { this.state.subtaskShow ? '收起' : '展开' } 
+                          { this.state.subtaskShow ? 'Collapse' : 'unfold' }
                           <i className={ this.state.subtaskShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i>
                         </a>
                       </span>
@@ -921,15 +921,15 @@ export default class DetailBar extends Component {
                 { data.links && data.links.length > 0 &&
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    链接问题 
+                    Link issue
                   </Col>
                   <Col sm={ 9 }>
                     { data.links.length > 3 &&
                     <div style={ { marginTop: '7px' } }>
-                      共{ data.links.length }个问题
+                      Total{ data.links.length }个问题
                       <span style={ { marginLeft: '5px' } }> 
                         <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>
-                          { this.state.linkShow ? '收起' : '展开' } 
+                          { this.state.linkShow ? 'Collapse' : 'unfold' }
                           <i className={ this.state.linkShow ?  'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i>
                         </a>
                       </span>
@@ -1168,7 +1168,7 @@ export default class DetailBar extends Component {
                 delComments={ delComments } 
                 itemLoading={ commentsItemLoading }/>
             </Tab>
-            <Tab eventKey={ 3 } title='改动纪录'>
+            <Tab eventKey={ 3 } title='History'>
               <History 
                 issue_id={ data.id }
                 currentTime={ options.current_time || 0 }

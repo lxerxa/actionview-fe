@@ -49,7 +49,7 @@ export default class EditRow extends Component {
         notify.show('创建完成。', 'success', 2000);
         cancel();
       } else {
-        notify.show(errMsg[ecode] + '，创建失败。', 'error', 2000);
+        notify.show(errMsg[ecode] + '，Creation failed', 'error', 2000);
         $('#input_nm').select();
       }
     } else {
@@ -95,9 +95,9 @@ export default class EditRow extends Component {
           onChange={ (e) => { this.setState({ name: _.trim(e.target.value) }) } }
           style={ { height: '30px', width: '250px', display: 'inline-block' } }/>
         { !loading &&
-        <Button disabled={ this.state.name === this.state.oldname || !this.state.name } style={ { marginLeft: '10px', padding: '4px 10px' } } onClick={ this.confirm }>确定</Button> }
+        <Button disabled={ this.state.name === this.state.oldname || !this.state.name } style={ { marginLeft: '10px', padding: '4px 10px' } } onClick={ this.confirm }>Submit</Button> }
         { !loading &&
-        <Button style={ { padding: '4px 10px' } } bsStyle='link' onClick={ () => { this.cancel() } }>取消</Button> }
+        <Button style={ { padding: '4px 10px' } } bsStyle='link' onClick={ () => { this.cancel() } }>Cancel</Button> }
         <img src={ img } className={ loading ? 'loading' : 'hide' }/>
       </div>
     );

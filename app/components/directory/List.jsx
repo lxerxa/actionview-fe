@@ -178,8 +178,8 @@ export default class List extends Component {
               <MenuItem eventKey='edit'>编辑查看</MenuItem>
               <MenuItem eventKey='test'>测试</MenuItem>
               <MenuItem eventKey='sync'>同步数据</MenuItem>
-              { collection[i].invalid_flag == 1 ? <MenuItem eventKey='validate'>启用</MenuItem> : <MenuItem eventKey='invalidate'>禁用</MenuItem> }
-              <MenuItem eventKey='del'>删除</MenuItem>
+              { collection[i].invalid_flag == 1 ? <MenuItem eventKey='validate'>enable</MenuItem> : <MenuItem eventKey='invalidate'>disable</MenuItem> }
+              <MenuItem eventKey='del'>Delete</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -191,7 +191,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -213,7 +213,7 @@ export default class List extends Component {
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
              <span>
-               目前仅支持OpenLDAP目录用户的同步。<br/>
+               目前仅支持OpenLDAP目录用户of同步。<br/>
                禁用目录后，用户将不会自动同步，登录认证也将无效。<br/>
                首次数据同步需要时间多一点，请耐心等待。
              </span>
@@ -222,8 +222,8 @@ export default class List extends Component {
           <BootstrapTable data={ directories } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>目录名</TableHeaderColumn>
-            <TableHeaderColumn dataField='type'>类型</TableHeaderColumn>
-            <TableHeaderColumn dataField='status'>状态</TableHeaderColumn>
+            <TableHeaderColumn dataField='type'>Type</TableHeaderColumn>
+            <TableHeaderColumn dataField='status'>Status</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && 

@@ -95,9 +95,9 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='config'>配置</MenuItem>
-              <MenuItem eventKey='edit'>编辑</MenuItem>
-              { collection[i].disabled ? <MenuItem eventKey='enable'>启用</MenuItem> : <MenuItem eventKey='disable'>禁用</MenuItem> }
+              <MenuItem eventKey='config'>Configuration</MenuItem>
+              <MenuItem eventKey='edit'>Edit</MenuItem>
+              { collection[i].disabled ? <MenuItem eventKey='enable'>enable</MenuItem> : <MenuItem eventKey='disable'>disable</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -109,7 +109,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -119,8 +119,8 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ states } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+          <TableHeaderColumn dataField='description'>Description</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && <EditModal show close={ this.editModalClose } update={ update } data={ selectedItem } collection={ collection }/> }

@@ -12,48 +12,48 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values) => {
   const errors = {};
   if (!values.name) {
-    errors.name = '必填';
+    errors.name = 'Required';
   }
   if (!values.host) {
-    errors.host = '必填';
+    errors.host = 'Required';
   }
   if (!values.port) {
-    errors.port = '必填';
+    errors.port = 'Required';
   } else if (values.port && !/^[1-9][0-9]*$/.test(values.port)) {
     errors.port = '必须输入正整数';
   }
   if (!values.admin_username) {
-    errors.admin_username = '必填';
+    errors.admin_username = 'Required';
   }
   if (!values.id && !values.admin_password) {
-    errors.admin_password = '必填';
+    errors.admin_password = 'Required';
   }
   if (!values.base_dn) {
-    errors.base_dn = '必填';
+    errors.base_dn = 'Required';
   }
   if (!values.user_object_class) {
-    errors.user_object_class = '必填';
+    errors.user_object_class = 'Required';
   }
   if (!values.user_object_filter) {
-    errors.user_object_filter = '必填';
+    errors.user_object_filter = 'Required';
   }
   if (!values.user_name_attr) {
-    errors.user_name_attr = '必填';
+    errors.user_name_attr = 'Required';
   }
   if (!values.user_email_attr) {
-    errors.user_email_attr = '必填';
+    errors.user_email_attr = 'Required';
   }
   if (!values.group_object_class) {
-    errors.group_object_class = '必填';
+    errors.group_object_class = 'Required';
   }
   if (!values.group_object_filter) {
-    errors.group_object_filter = '必填';
+    errors.group_object_filter = 'Required';
   }
   if (!values.group_name_attr) {
-    errors.group_name_attr = '必填';
+    errors.group_name_attr = 'Required';
   }
   if (!values.group_membership_attr) {
-    errors.group_membership_attr = '必填';
+    errors.group_membership_attr = 'Required';
   }
   return errors;
 };
@@ -230,7 +230,7 @@ export default class AddLDAPModal extends Component {
                     options={ [ { value: '', label: '无' }, { value: 'tls', label: 'TLS' }, { value: 'ssl', label: 'SSL' } ] }
                     value={ encryption.value || '' }
                     onChange={ newValue => { encryption.onChange(newValue) } }
-                    placeholder='请选择'/>
+                    placeholder='set value'/>
                 </FormGroup>
                 <FormGroup controlId='formControlsText' validationState={ admin_username.touched && admin_username.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>用户名</ControlLabel>
@@ -244,7 +244,7 @@ export default class AddLDAPModal extends Component {
                     { id.value &&
                     <a style={ { fontWeight: 'normal', fontSize: '12px', cursor: 'pointer', marginLeft: '5px' } }
                       onClick={ (e) => { e.preventDefault(); if (this.state.passwordShow) { admin_password.onChange('') } this.setState({ passwordShow: !this.state.passwordShow }) } }>
-                      { this.state.passwordShow ? '取消' : '设置' }
+                      { this.state.passwordShow ? 'Cancel' : '设置' }
                     </a> }
                   </ControlLabel>
                   { this.state.passwordShow && <FormControl disabled={ submitting } type='text' { ...admin_password } placeholder='密码'/> }
@@ -269,7 +269,7 @@ export default class AddLDAPModal extends Component {
                 </FormGroup>
               </div>
             </TabPane>
-            <TabPane tab='用户' key='3'>
+            <TabPane tab='User' key='3'>
               <div style={ { paddingTop: '15px' } }>
                 <FormGroup controlId='formControlsText' validationState={ user_object_class.touched && user_object_class.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>对象类</ControlLabel>
@@ -293,7 +293,7 @@ export default class AddLDAPModal extends Component {
                 </FormGroup>
               </div>
             </TabPane>
-            <TabPane tab='用户组' key='4'>
+            <TabPane tab='Group' key='4'>
               <div style={ { paddingTop: '15px' } }>
                 <FormGroup controlId='formControlsText' validationState={ group_object_class.touched && group_object_class.error ? 'error' : null }>
                   <ControlLabel><span className='txt-impt'>*</span>对象类</ControlLabel>
@@ -322,8 +322,8 @@ export default class AddLDAPModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ !dirty || submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

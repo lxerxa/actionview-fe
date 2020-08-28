@@ -217,7 +217,7 @@ export default function(router) {
   router.get('/project/:key/summary', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = {"ecode":0,"data":{"filters":[{name: '全部问题', count: 120, query: {} }, { name: '分配给我的', count: 12, query: { assignee: 'me' } }, { name: '未解决的', count: 12, query: { resolution: 'Unresolved' } }, { name: '我关注的', count: 4, query: { watcher: 'me' } }],"trend":[{ day: '2019/05/02', new: 15, resolved: 10, closed: 4 }, { day: '2019/05/03', new: 1, resolved: 6, closed: 14 }, { day: '2019/05/04', new: 5, resolved: 10, closed: 2 }, { day: '2019/05/05', new: 7, resolved: 10, closed: 6, notWorking: 1 }, { day: '2019/05/06', new: 5, resolved: 8, closed: 4 }, { day: '2019/05/07', new: 9, resolved: 9, closed: 9 }, { day: '2019/05/08', new: 8, resolved: 5, closed: 4}],"new_issues":{percent:30,"total":182,"580314351d41c82c7204e82c":16,"5803140b1d41c8689559abe4":81,"5803141b1d41c863de053625":75,"58898c1e1d41c844577ee642":9,"588be9be1d41c84f294a86e2":1},"closed_issues":{percent: 0,"total":6,"5803141b1d41c863de053625":5,"5803140b1d41c8689559abe4":1},"assignee_unresolved_issues":{"57afced21d41c8174d7421c1":{"percent": 80,"5803140b1d41c8689559abe4":33,"total":44,"5803141b1d41c863de053625":8,"58898c1e1d41c844577ee642":3},"57afcef01d41c817500aed73":{"percent": 10,"5803141b1d41c863de053625":1,"total":1},"58f1d7751d41c86e296e75ea":{"percent": 90,"5803141b1d41c863de053625":1,"total":1},"57b12aee1d41c817500aed75":{"percent": 5,"5803140b1d41c8689559abe4":1,"total":1},"57b12a801d41c819135a6c93":{"percent": 10,"58898c1e1d41c844577ee642":1,"total":1}},"priority_unresolved_issues":{"57a97fdd1d41c848b53bc166":{"5803140b1d41c8689559abe4":19,"total":26,"5803141b1d41c863de053625":7, percent: 35},"Major":{"5803140b1d41c8689559abe4":14,"total":21,"58898c1e1d41c844577ee642":4,"5803141b1d41c863de053625":3, percent: 50},"Blocker":{"5803140b1d41c8689559abe4":1,"total":1, percent: 19},"Critical":{"5803140b1d41c8689559abe4":1,"total":1, percent: 5}}},"options":{"types":[{"abb":"T","created_at":"2016-10-16 13:45:47","default":true,"disabled":false,"name":"\u4efb\u52a1","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":1,"updated_at":"2017-03-31 21:47:21","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"5803140b1d41c8689559abe4"},{"abb":"F","created_at":"2016-10-16 13:46:29","description":"","disabled":false,"name":"\u65b0\u529f\u80fd","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":2,"type":"standard","updated_at":"2017-03-31 21:47:11","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"580314351d41c82c7204e82c"},{"abb":"B","created_at":"2016-10-16 13:46:03","disabled":false,"name":"\u7f3a\u9677","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":3,"updated_at":"2017-03-31 21:46:06","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"5803141b1d41c863de053625"},{"abb":"I","created_at":"2017-03-31 21:46:51","name":"\u6539\u8fdb","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":4,"updated_at":"2017-03-31 21:47:11","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"58de5dcb1d41c82c6b16f43b"},{"abb":"S","created_at":"2017-01-26 13:41:50","description":"","disabled":true,"name":"\u5b50\u4efb\u52a1","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":5,"type":"subtask","updated_at":"2017-05-20 21:16:14","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"58898c1e1d41c844577ee642"}],"users":{"57afced21d41c8174d7421c1":"王五","57afcef01d41c817500aed73":"李老师","58f1d7751d41c86e296e75ea":"李老八","57b12aee1d41c817500aed75":"杨老六","57b12a801d41c819135a6c93":"卢十三"},"priorities":{"Blocker":"\u81f4\u547d","Critical":"\u4e25\u91cd","Major":"\u91cd\u8981","Minor":"\u8f7b\u5fae","Trivial":"\u5fae\u5c0f"},"twoWeeksAgo":"2015\/06\/22"}}; 
+    const results = {"ecode":0,"data":{"filters":[{name: 'All issues', count: 120, query: {} }, { name: 'Assigned to me', count: 12, query: { assignee: 'me' } }, { name: 'Unresolved', count: 12, query: { resolution: 'Unresolved' } }, { name: 'Watcher', count: 4, query: { watcher: 'me' } }],"trend":[{ day: '2019/05/02', new: 15, resolved: 10, closed: 4 }, { day: '2019/05/03', new: 1, resolved: 6, closed: 14 }, { day: '2019/05/04', new: 5, resolved: 10, closed: 2 }, { day: '2019/05/05', new: 7, resolved: 10, closed: 6, notWorking: 1 }, { day: '2019/05/06', new: 5, resolved: 8, closed: 4 }, { day: '2019/05/07', new: 9, resolved: 9, closed: 9 }, { day: '2019/05/08', new: 8, resolved: 5, closed: 4}],"new_issues":{percent:30,"total":182,"580314351d41c82c7204e82c":16,"5803140b1d41c8689559abe4":81,"5803141b1d41c863de053625":75,"58898c1e1d41c844577ee642":9,"588be9be1d41c84f294a86e2":1},"closed_issues":{percent: 0,"total":6,"5803141b1d41c863de053625":5,"5803140b1d41c8689559abe4":1},"assignee_unresolved_issues":{"57afced21d41c8174d7421c1":{"percent": 80,"5803140b1d41c8689559abe4":33,"total":44,"5803141b1d41c863de053625":8,"58898c1e1d41c844577ee642":3},"57afcef01d41c817500aed73":{"percent": 10,"5803141b1d41c863de053625":1,"total":1},"58f1d7751d41c86e296e75ea":{"percent": 90,"5803141b1d41c863de053625":1,"total":1},"57b12aee1d41c817500aed75":{"percent": 5,"5803140b1d41c8689559abe4":1,"total":1},"57b12a801d41c819135a6c93":{"percent": 10,"58898c1e1d41c844577ee642":1,"total":1}},"priority_unresolved_issues":{"57a97fdd1d41c848b53bc166":{"5803140b1d41c8689559abe4":19,"total":26,"5803141b1d41c863de053625":7, percent: 35},"Major":{"5803140b1d41c8689559abe4":14,"total":21,"58898c1e1d41c844577ee642":4,"5803141b1d41c863de053625":3, percent: 50},"Blocker":{"5803140b1d41c8689559abe4":1,"total":1, percent: 19},"Critical":{"5803140b1d41c8689559abe4":1,"total":1, percent: 5}}},"options":{"types":[{"abb":"T","created_at":"2016-10-16 13:45:47","default":true,"disabled":false,"name":"\u4efb\u52a1","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":1,"updated_at":"2017-03-31 21:47:21","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"5803140b1d41c8689559abe4"},{"abb":"F","created_at":"2016-10-16 13:46:29","description":"","disabled":false,"name":"\u65b0\u529f\u80fd","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":2,"type":"standard","updated_at":"2017-03-31 21:47:11","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"580314351d41c82c7204e82c"},{"abb":"B","created_at":"2016-10-16 13:46:03","disabled":false,"name":"\u7f3a\u9677","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":3,"updated_at":"2017-03-31 21:46:06","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"5803141b1d41c863de053625"},{"abb":"I","created_at":"2017-03-31 21:46:51","name":"\u6539\u8fdb","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":4,"updated_at":"2017-03-31 21:47:11","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"58de5dcb1d41c82c6b16f43b"},{"abb":"S","created_at":"2017-01-26 13:41:50","description":"","disabled":true,"name":"\u5b50\u4efb\u52a1","project_key":"boba","screen_id":"58ddfc5f1d41c82c6b16f42f","sn":5,"type":"subtask","updated_at":"2017-05-20 21:16:14","workflow_id":"58dc8d9f1d41c828264c7bd3","id":"58898c1e1d41c844577ee642"}],"users":{"57afced21d41c8174d7421c1":"王五","57afcef01d41c817500aed73":"李老师","58f1d7751d41c86e296e75ea":"李老八","57b12aee1d41c817500aed75":"杨老六","57b12a801d41c819135a6c93":"卢十三"},"priorities":{"Blocker":"\u81f4\u547d","Critical":"\u4e25\u91cd","Major":"\u91cd\u8981","Minor":"\u8f7b\u5fae","Trivial":"\u5fae\u5c0f"},"twoWeeksAgo":"2015\/06\/22"}};
     return res.status(200).send(results);
   });
 
@@ -238,35 +238,35 @@ export default function(router) {
   router.get('/project/:key/config', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { types: [{ id: '546761', abb:'T', name: '任务', description:'bbbbb', screen_id:'111', workflow_id:'111', 'screen': { name: 'aaa', schema: [{"key":"title","name":"\u4e3b\u9898","type":"Text","required":true,"id":"580039521d41c81fdf499353"}] } },{ id: '546763', name: '需求', abb:'D', screen_id:'222', workflow_id:'111', default: true },{ id: '546762', abb: 'C', name: '缺陷', screen_id:'111', workflow_id:'111'},{ id: '2323', abb:'S', name: '子任务', screen_id:'111', workflow_id:'222'}]}};
+    const results = { ecode: 0, data: { types: [{ id: '546761', abb:'T', name: 'Task', description:'bbbbb', screen_id:'111', workflow_id:'111', 'screen': { name: 'aaa', schema: [{"key":"title","name":"\u4e3b\u9898","type":"Text","required":true,"id":"580039521d41c81fdf499353"}] } },{ id: '546763', name: '需求', abb:'D', screen_id:'222', workflow_id:'111', default: true },{ id: '546762', abb: 'C', name: '缺陷', screen_id:'111', workflow_id:'111'},{ id: '2323', abb:'S', name: 'Subtask', screen_id:'111', workflow_id:'222'}]}};
     return res.status(200).send(results);
   });
 
   router.get('/project/:key/type', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', abb:'T', name: '任务', description:'bbbbb', screen_id:'111', workflow_id:'111'},{ id: '546763', name: '需求', abb:'D', screen_id:'222', workflow_id:'111', default: true },{ id: '546762', abb: 'C', name: '缺陷', screen_id:'111', workflow_id:'111'},{ id: '2323', abb:'S', name: '子任务', screen_id:'111', workflow_id:'222'}], options:{ screens:[{id:'111',name:'界面1'},{id:'222', name:'界面2'}, {id:'333', name:'界面3'}], workflows:[{id:'111',name:'流程1'},{id:'222', name:'流程2'}, {id:'333', name:'流程3'}] }};
+    const results = { ecode: 0, data: [{ id: '546761', abb:'T', name: 'Task', description:'bbbbb', screen_id:'111', workflow_id:'111'},{ id: '546763', name: '需求', abb:'D', screen_id:'222', workflow_id:'111', default: true },{ id: '546762', abb: 'C', name: '缺陷', screen_id:'111', workflow_id:'111'},{ id: '2323', abb:'S', name: 'Subtask', screen_id:'111', workflow_id:'222'}], options:{ screens:[{id:'111',name:'界面1'},{id:'222', name:'界面2'}, {id:'333', name:'界面3'}], workflows:[{id:'111',name:'流程1'},{id:'222', name:'流程2'}, {id:'333', name:'流程3'}] }};
     return res.status(200).send(results);
   });
 
   router.get('/project/:key/module', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', principal: { name: 'lihui', id: '111'}, defaultAssignee_id:'111'},{ id: '546763', name: '需求', principal_id:'222', defaultAssignee_id:'111', default: true },{ id: '546762', name: '缺陷', principal_id:'111', defaultAssignee_id:'111'},{ id: '2323', name: '子任务'}], options:{ users: [{ id: '111', name:'王五', email:'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: 'Task', description:'bbbbb', principal: { name: 'lihui', id: '111'}, defaultAssignee_id:'111'},{ id: '546763', name: '需求', principal_id:'222', defaultAssignee_id:'111', default: true },{ id: '546762', name: '缺陷', principal_id:'111', defaultAssignee_id:'111'},{ id: '2323', name: 'Subtask'}], options:{ users: [{ id: '111', name:'王五', email:'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }] }};
     return res.status(200).send(results);
   });
 
   router.get('/project/:key/version', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '任务', description:'bbbbb', start_time:1474642399, end_time:1474646399},{ id: '546763', name: '需求', start_time:1474546399, end_time:1474646499 },{ id: '546762', name: '缺陷', start_time:1474646399, end_time:1474646399},{ id: '2323', name: '子任务'}] };
+    const results = { ecode: 0, data: [{ id: '546761', name: 'Task', description:'bbbbb', start_time:1474642399, end_time:1474646399},{ id: '546763', name: '需求', start_time:1474546399, end_time:1474646499 },{ id: '546762', name: '缺陷', start_time:1474646399, end_time:1474646399},{ id: '2323', name: 'Subtask'}] };
     return res.status(200).send(results);
   });
 
   router.get('/project/:key/issue', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, options: { 'total': 9, today: '2018/08/13' }, data: [{ no:1555, id: '546761', type:'1111', labels:['视频转码', '管理员'],title: '任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'546761', epic: '1111', resolve_version: '1111', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', expect_complete_time: 1534646586, expect_start_time: 1533636586, progress: 80, watching: true },{ no:9999, id: '546763', type:'1111', labels:['视频转码', '管理员'], title: 'demo首页未填写的本月月报显示为本月待填', assignee:{id:'aaa', name:'王五'}, priority:'2222', state:'546761', epic: '2222', created_at: '1533636586', expect_complete_time: 1534446586, expect_start_time: 1533636586, progress: 50, rank: 98 },{ no:3, id: '546762', type:'2222', assignee: {id:'xxxx', name:'wangwu'}, title: 'demo首页右上角新建窗口，提交成功后窗口关闭没有提示信息', priority:'3333', state:'546762', epic: '1111', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', rank: 49},{ no:4, id: '2323', title: 'demo首页-我的日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', expect_complete_time: 1538963157, rank: 88 },{ no:1, id: '5426761', type:'1111', title: 'dsaffsafsafsdf', description:'bbbbb', priority:'1111', state:'546763', epic: '2222', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', rank: 21 },{ no:2, id: '5462763', type:'1111', labels:['视频转码', '管理员'], title: 'xxxxxxxxxxxx', progress: 80, assignee:{id:'aaa', name:'王五'}, priority:'2222', state:'546762', epic: '2222', created_at: '1533636586', rank: 35 },{ no:365, id: '5367621', type:'2222', assignee: {id:'xxxx', name:'wangwu'}, title: 'YYYYYYYYYYYYYYY', priority:'3333', state:'546761', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', rank: 23},{ no:8, type: '1111', id: '22323', title: 'ZZZZZZZZZZZZZZ' , created_at: '1533636586', expect_complete_time: 1534446586, expect_start_time: 1533636586, priority:'1111', state: '546762', parent: { no: 2, title: 'xxxxxxxxxxxx', id: '5462763', state: '546762' }, rank : 100}, { no:7, type: '1111', id: '2232dd3', title: 'demo首页-ssssssss' , created_at: '1533636586', priority:'1111', state: '546762', parent: { no: 2, title: 'xxxxxxxxxxxx', id: '5462763', state: '546762' }, rank : 100}] };
+    const results = { ecode: 0, options: { 'total': 9, today: '2018/08/13' }, data: [{ no:1555, id: '546761', type:'1111', labels:['视频转码', '管理员'],title: '任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'546761', epic: '1111', resolve_version: '1111', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', expect_complete_time: 1534646586, expect_start_time: 1533636586, progress: 80, watching: true },{ no:9999, id: '546763', type:'1111', labels:['视频转码', '管理员'], title: 'demo首页未填写of本月月报显示为本月待填', assignee:{id:'aaa', name:'王五'}, priority:'2222', state:'546761', epic: '2222', created_at: '1533636586', expect_complete_time: 1534446586, expect_start_time: 1533636586, progress: 50, rank: 98 },{ no:3, id: '546762', type:'2222', assignee: {id:'xxxx', name:'wangwu'}, title: 'demo首页右上角New 窗口，提交成功后窗口关闭没有提示信息', priority:'3333', state:'546762', epic: '1111', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', rank: 49},{ no:4, id: '2323', title: 'demo首页-我of日程起止时间，第一行和第二行字体大小相同' , created_at: '1533636586', expect_complete_time: 1538963157, rank: 88 },{ no:1, id: '5426761', type:'1111', title: 'dsaffsafsafsdf', description:'bbbbb', priority:'1111', state:'546763', epic: '2222', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', rank: 21 },{ no:2, id: '5462763', type:'1111', labels:['视频转码', '管理员'], title: 'xxxxxxxxxxxx', progress: 80, assignee:{id:'aaa', name:'王五'}, priority:'2222', state:'546762', epic: '2222', created_at: '1533636586', rank: 35 },{ no:365, id: '5367621', type:'2222', assignee: {id:'xxxx', name:'wangwu'}, title: 'YYYYYYYYYYYYYYY', priority:'3333', state:'546761', reporter: {id:'aaa', name:'王五'}, created_at: '1533636586', rank: 23},{ no:8, type: '1111', id: '22323', title: 'ZZZZZZZZZZZZZZ' , created_at: '1533636586', expect_complete_time: 1534446586, expect_start_time: 1533636586, priority:'1111', state: '546762', parent: { no: 2, title: 'xxxxxxxxxxxx', id: '5462763', state: '546762' }, rank : 100}, { no:7, type: '1111', id: '2232dd3', title: 'demo首页-ssssssss' , created_at: '1533636586', priority:'1111', state: '546762', parent: { no: 2, title: 'xxxxxxxxxxxx', id: '5462763', state: '546762' }, rank : 100}] };
     return res.status(200).send(results);
   });
 
@@ -315,7 +315,7 @@ export default function(router) {
   router.get('/project/:key/issue/:id/history', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ operator: { id: '1111', name: '王五', email: 'bbb' }, operated_at: 1478414469, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级', before: 'aa', after: 'bb'}, { field: '优先级', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '王五', email: 'tttt' }, operated_at: 1478415479, operation: 'modify',items: [ { field: '优先级', before: 'aa', after: 'bb' }, { field: '优先级22', before: 'aa', after: 'bb'}, { field: '优先级3', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '王五' }, operated_at: 1478415469, operation: 'new' }], options:{ current_time: 1520943279 } };
+    const results = { ecode: 0, data: [{ operator: { id: '1111', name: '王五', email: 'bbb' }, operated_at: 1478414469, operation: 'modify',items: [ { field: 'Priority', before: 'aa', after: 'bb' }, { field: 'Priority', before: 'aa', after: 'bb'}, { field: 'Priority', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '王五', email: 'tttt' }, operated_at: 1478415479, operation: 'modify',items: [ { field: 'Priority', before: 'aa', after: 'bb' }, { field: '优先级22', before: 'aa', after: 'bb'}, { field: '优先级3', before: 'aa', after: 'bb'} ] }, { operator: { id: '1111', name: '王五' }, operated_at: 1478415469, operation: 'new' }], options:{ current_time: 1520943279 } };
     return res.status(200).send(results);
   });
 
@@ -343,28 +343,28 @@ export default function(router) {
   router.get('/project/:key/issue/options', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode:0, data: { timetrack:{ w2d: 6, d2h: 9},filters:[{id:'1111', name:'分配给我的', query:{ aa: 'aa'}},{id:'2222', name:'分配给我的2', query:{bb:'bb'}},{id:'3333', name:'分配给我的3', query:{cc:'cc'}},{id:'4444', name:'分配给我的4', link:'dd'},{id:'5555', name:'分配给我的5', link:'dd'}], types: [{id: '1111', name: '任务',abb:'T', type: 'standard'}, { id: '2222', name: 'Bug', abb:'B', type:'standard', default: true, schema: [ { key:'name', name:'名称', required: true, type: 'Text' }, { key:'title', name:'主题', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'description', name:'描述', type: 'TextArea' }, {key: 'labels', name: '标签', type: 'Labels', optionValues: [{id: '转码失败', name: '转码失败'},{id: '转码成功', name: '转码成功'}, {id: '管理员', name: '管理员'}]}, {key: 'epic', name: 'Epic',  type:'Select', optionValues:[{id: '1111', name: '1111' }, { id: '2222', name: '2222'}] },{ key:'attachments', name:'附件', type: 'File'}, { key:'expect_time', name:'完成时间', type: 'DateTimePicker' }, { key:'assignee', name:'经办人', type: 'Select' } ] }, { id: '3333', name: '需求',abb:'D', type:'standard', schema: [ { key:'title', name:'主题', type: 'Text', required: true }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'city2', name:'完成时间', type: 'CheckboxGroup', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'expect_time', name:'期望时间', type: 'DateTimePicker', required: true }, { key:'title2', name:'主题', type: 'Number' } ] }, { id: '4444', name: '子任务', abb:'S', type:'subtask', schema: [ { key:'name', name:'名称', required: true, type: 'TextArea' }, { key:'title', name:'主题', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'attachments', name:'附件', type: 'File'}, { key:'expect_time', name:'完成时间', type: 'DateTimePicker' }, { key:'assignee', name:'经办人', type: 'Select' } ] }, { id: '5555', name: '子任务2', abb:'S', type:'subtask', schema: [ { key:'title', name:'主题', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'版本', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'attachments', name:'附件', type: 'File'}, { key:'expect_time', name:'完成时间', type: 'DateTimePicker' }, { key:'assignee', name:'经办人', type: 'Select' } ] }], priorities:[{id:'1111',color:'#000000',name:'重要'},{id:'2222',color:'#aaaaaa',name:'一般'},{id:'3333',color:'#cccccc',name:'微小'}], resolutions:[{id:'1111',name:'待处理'},{id:'2222',name:'开发中'},{id:'3333',name:'完成'}], states:[{id:'546761',name:'待处理',category: 'new'},{id:'546762',name:'开发中', category:'inprogress'},{id:'546763',name:'完成',category:'completed'}], assignees: [{ id: '111', name:'王五', email: 'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }], users: [{ id: '111', name:'王五', email: 'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }], versions:[{id: '1111', name: '1111' }, { id: '2222', name: '2222'}], epics: [{id: '1111', bgColor: '#4a6785', name: '1111' }, { id: '2222', bgColor: '#8eb021', name: '2222'}], sprints: ['4','3','2','1'], fields: [ {key: 'title', name: '主题', type: 'Text'}, {key: 'type', name: '类型', type: 'Select'}, {key: 'priority', name: '优先级', type:'Select'}, {key: 'state', name: '状态', type:'Select'}, {key: 'assignee', name: '经办人', type: 'SingleUser'}, {key: 'aa', type: "Text", name: 'AA'}, {key: 'bb', type: "Text", name: 'BB'}, {key: 'cc', type: "MultiSelect", name: 'CC', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'}]}, {key:'dd', type:'DateTimePicker', name: 'DD'}, {key:'ee', type:'Number', name: 'EE'}, {key:'ff', type:'MultiUser', name: 'FF'}, {key:'gg', type:'TextArea', name: 'GG'} ], labels:[ { name: '转码失败', bgColor: '#ccc' }, { name: '转码成功', bgColor: '#34f444' }, { name: '管理员', bgColor: '#ddd' } ], relations: [ { id: 'blocks', out: 'blocks', in: 'is blocked by' }, { id: 'clones', out: 'clones', in: 'is cloned by' }, { id: 'duplicates', out: 'duplicates', in: 'is duplicated by' }, { id: 'relates', out: 'relates to', in: 'relates to' } ], display_columns: [ { key: 'resolution', width: '100' }, { key: 'priority', width: '200' }, { key: 'assignee', width: '100'}, { key: 'state', width: '150' }, { key: 'resolve_version', width: '150' } ] }};
+    const results = { ecode:0, data: { timetrack:{ w2d: 6, d2h: 9},filters:[{id:'1111', name:'Assigned to me', query:{ aa: 'aa'}},{id:'2222', name:'Assigned to me2', query:{bb:'bb'}},{id:'3333', name:'Assigned to me3', query:{cc:'cc'}},{id:'4444', name:'Assigned to me4', link:'dd'},{id:'5555', name:'Assigned to me5', link:'dd'}], types: [{id: '1111', name: 'Task',abb:'T', type: 'standard'}, { id: '2222', name: 'Bug', abb:'B', type:'standard', default: true, schema: [ { key:'name', name:'Name', required: true, type: 'Text' }, { key:'title', name:'Title', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'Version', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'description', name:'Description', type: 'TextArea' }, {key: 'labels', name: 'Label', type: 'Labels', optionValues: [{id: '转码失败', name: '转码失败'},{id: '转码成功', name: '转码成功'}, {id: '管理员', name: '管理员'}]}, {key: 'epic', name: 'Epic',  type:'Select', optionValues:[{id: '1111', name: '1111' }, { id: '2222', name: '2222'}] },{ key:'attachments', name:'Files', type: 'File'}, { key:'expect_time', name:'End date', type: 'DateTimePicker' }, { key:'assignee', name:'Assignee', type: 'Select' } ] }, { id: '3333', name: '需求',abb:'D', type:'standard', schema: [ { key:'title', name:'Title', type: 'Text', required: true }, { key:'version', name:'Version', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'city2', name:'End date', type: 'CheckboxGroup', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'expect_time', name:'期望时间', type: 'DateTimePicker', required: true }, { key:'title2', name:'Title', type: 'Number' } ] }, { id: '4444', name: 'Subtask', abb:'S', type:'subtask', schema: [ { key:'name', name:'Name', required: true, type: 'TextArea' }, { key:'title', name:'Title', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'Version', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'attachments', name:'Files', type: 'File'}, { key:'expect_time', name:'End date', type: 'DateTimePicker' }, { key:'assignee', name:'Assignee', type: 'Select' } ] }, { id: '5555', name: 'Subtask 2', abb:'S', type:'subtask', schema: [ { key:'title', name:'Title', type: 'Url', defaultValue: 'bb' }, { key:'version', name:'Version', type: 'MultiSelect', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'} ], defaultValue: '1111', required: true }, { key:'attachments', name:'Files', type: 'File'}, { key:'expect_time', name:'End date', type: 'DateTimePicker' }, { key:'assignee', name:'Assignee', type: 'Select' } ] }], priorities:[{id:'1111',color:'#000000',name:'重要'},{id:'2222',color:'#aaaaaa',name:'一般'},{id:'3333',color:'#cccccc',name:'微小'}], resolutions:[{id:'1111',name:'待处理'},{id:'2222',name:'开发中'},{id:'3333',name:'Completed'}], states:[{id:'546761',name:'待处理',category: 'new'},{id:'546762',name:'开发中', category:'inprogress'},{id:'546763',name:'Completed',category:'completed'}], assignees: [{ id: '111', name:'王五', email: 'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }], users: [{ id: '111', name:'王五', email: 'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }], versions:[{id: '1111', name: '1111' }, { id: '2222', name: '2222'}], epics: [{id: '1111', bgColor: '#4a6785', name: '1111' }, { id: '2222', bgColor: '#8eb021', name: '2222'}], sprints: ['4','3','2','1'], fields: [ {key: 'title', name: 'Title', type: 'Text'}, {key: 'type', name: 'Type', type: 'Select'}, {key: 'priority', name: 'Priority', type:'Select'}, {key: 'state', name: 'Status', type:'Select'}, {key: 'assignee', name: 'Assignee', type: 'SingleUser'}, {key: 'aa', type: "Text", name: 'AA'}, {key: 'bb', type: "Text", name: 'BB'}, {key: 'cc', type: "MultiSelect", name: 'CC', optionValues: [{id: '1111', name: 'aaaa'},{id: '2222', name: 'bbbb'}, {id: '3333', name: 'cccc'}]}, {key:'dd', type:'DateTimePicker', name: 'DD'}, {key:'ee', type:'Number', name: 'EE'}, {key:'ff', type:'MultiUser', name: 'FF'}, {key:'gg', type:'TextArea', name: 'GG'} ], labels:[ { name: '转码失败', bgColor: '#ccc' }, { name: '转码成功', bgColor: '#34f444' }, { name: '管理员', bgColor: '#ddd' } ], relations: [ { id: 'blocks', out: 'blocks', in: 'is blocked by' }, { id: 'clones', out: 'clones', in: 'is cloned by' }, { id: 'duplicates', out: 'duplicates', in: 'is duplicated by' }, { id: 'relates', out: 'relates to', in: 'relates to' } ], display_columns: [ { key: 'resolution', width: '100' }, { key: 'priority', width: '200' }, { key: 'assignee', width: '100'}, { key: 'state', width: '150' }, { key: 'resolve_version', width: '150' } ] }};
     return res.status(200).send(results);
   });
 
   router.get('/project/:key/issue/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { id: '546761', no:155, name: 'aaaaaaa', labels:['转码失败', '管理员'], epic: '2222', expect_complete_time: 1534446586, expect_start_time: 1533636586, progress: 60, links: [{id: '1111', src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:112, type:'2222', title:'aaaaaaa'}, relation:'is blocked by'}, {id: '1111',dest:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, src:{id:'546762', no:113, type:'2222', title:'bbbbb'}, relation:'is blocked by'}, {id: '1111',src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:114, type:'2222', title:'cccc'}, relation:'is cloned by'}], description: 'bbbbbb![file](http://www.actionview.cn:8080/api/project/demo/file/5be377d810e4114e937c5524)![file](http://www.actionview.cn:8080/api/project/demo/file/5be377d810e4114e937c5524)![file](http://www.actionview.cn:8080/api/project/demo/file/5be377d810e4114e937c5524)cccc<script/>c', assignee:{ id: '1111', name: '王五' },type: '2222', title: '国拨类型的项目添加任务中责任人没有必选*号', priority:'1111', state:'546762', expect_time: 1478415469, version: '1111,2222', wfactions: [ {name:'纳入迭代', screen: '11111', id: 1111 }, { name:'纳入迭代', screen: '11111', id: 1112 }, { name:'纳入迭代', screen: '11111', id:1113 } ], attachments:[{id: '1111',type:'image/jpeg', uploader:'aaaa', size: 2222, time:1474646499, name: '截图.jpeg'}, {id: '2222',type:'docx', uploader:'aaaa', size: 2222, time:1474646499, name: '测试.docx'},{id: '2222',type:'docx',uploader:'aaaa', size: 2222, time:1474646499, name: '测试2.docx'}, {id: '4444',type:'image/png',uploader:'aaaa', size: 2222, time:1474646499, name: '截图3.jpeg'}], watchers: [{name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}] } };
+    const results = { ecode: 0, data: { id: '546761', no:155, name: 'aaaaaaa', labels:['转码失败', '管理员'], epic: '2222', expect_complete_time: 1534446586, expect_start_time: 1533636586, progress: 60, links: [{id: '1111', src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:112, type:'2222', title:'aaaaaaa'}, relation:'is blocked by'}, {id: '1111',dest:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, src:{id:'546762', no:113, type:'2222', title:'bbbbb'}, relation:'is blocked by'}, {id: '1111',src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:114, type:'2222', title:'cccc'}, relation:'is cloned by'}], description: 'bbbbbb![file](http://www.actionview.cn:8080/api/project/demo/file/5be377d810e4114e937c5524)![file](http://www.actionview.cn:8080/api/project/demo/file/5be377d810e4114e937c5524)![file](http://www.actionview.cn:8080/api/project/demo/file/5be377d810e4114e937c5524)cccc<script/>c', assignee:{ id: '1111', name: '王五' },type: '2222', title: '国拨类型of项目添加任务中责任人没有必选*号', priority:'1111', state:'546762', expect_time: 1478415469, version: '1111,2222', wfactions: [ {name:'纳入迭代', screen: '11111', id: 1111 }, { name:'纳入迭代', screen: '11111', id: 1112 }, { name:'纳入迭代', screen: '11111', id:1113 } ], attachments:[{id: '1111',type:'image/jpeg', uploader:'aaaa', size: 2222, time:1474646499, name: '截图.jpeg'}, {id: '2222',type:'docx', uploader:'aaaa', size: 2222, time:1474646499, name: '测试.docx'},{id: '2222',type:'docx',uploader:'aaaa', size: 2222, time:1474646499, name: '测试2.docx'}, {id: '4444',type:'image/png',uploader:'aaaa', size: 2222, time:1474646499, name: '截图3.jpeg'}], watchers: [{name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}] } };
     return res.status(200).send(results);
   });
 
   router.post('/project/:key/issue', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { no:1, id: '546761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'2222', creator: {id:'aaa', name:'王五'} } };
+    const results = { ecode: 0, data: { no:1, id: '546761', type:'1111', title: '国拨类型of项目添加任务中责任人没有必选*号', description:'bbbbb', priority:'1111', state:'2222', creator: {id:'aaa', name:'王五'} } };
     return res.status(200).send(results);
   }); 
 
   router.post('/project/:key/issue/searcher', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { id: '6666', name:'分配给我的6', link:'ee' } };
+    const results = { ecode: 0, data: { id: '6666', name:'Assigned to me6', link:'ee' } };
     return res.status(200).send(results);
   });
 
@@ -378,7 +378,7 @@ export default function(router) {
   router.post('/project/:key/issue/:id/labels', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { id: '546761', no:155, name: 'aaaaaaa', labels:['转码失败', '转码成功', '管理员'], links: [{id: '1111', src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:112, type:'2222', title:'aaaaaaa'}, relation:'is blocked by'}, {id: '1111',dest:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, src:{id:'546762', no:113, type:'2222', title:'bbbbb'}, relation:'is blocked by'}, {id: '1111',src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:114, type:'2222', title:'cccc'}, relation:'is cloned by'}], description: 'bbbbbb', assignee:{ id: '1111', name: '王五' },type: '2222', title: '国拨类型的项目添加任务中责任人没有必选*号', priority:'1111', state:'546762', expect_time: 1478415469, version: '1111,2222', wfactions: [ {name:'纳入迭代', screen: '11111', id: 1111 }, { name:'纳入迭代', screen: '11111', id: 1112 }, { name:'纳入迭代', screen: '11111', id:1113 } ], attachments:[{id: '1111',type:'image/jpeg', uploader:'aaaa', size: 2222, time:1474646499, name: '截图.jpeg'}, {id: '2222',type:'docx', uploader:'aaaa', size: 2222, time:1474646499, name: '测试.docx'},{id: '2222',type:'docx',uploader:'aaaa', size: 2222, time:1474646499, name: '测试2.docx'}, {id: '4444',type:'image/png',uploader:'aaaa', size: 2222, time:1474646499, name: '截图3.jpeg'}], watchers: [{name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}] } };
+    const results = { ecode: 0, data: { id: '546761', no:155, name: 'aaaaaaa', labels:['转码失败', '转码成功', '管理员'], links: [{id: '1111', src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:112, type:'2222', title:'aaaaaaa'}, relation:'is blocked by'}, {id: '1111',dest:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, src:{id:'546762', no:113, type:'2222', title:'bbbbb'}, relation:'is blocked by'}, {id: '1111',src:{id:'546761', no:111, type:'2222', title:'aaaaaaa'}, dest:{id:'546762', no:114, type:'2222', title:'cccc'}, relation:'is cloned by'}], description: 'bbbbbb', assignee:{ id: '1111', name: '王五' },type: '2222', title: '国拨类型of项目添加任务中责任人没有必选*号', priority:'1111', state:'546762', expect_time: 1478415469, version: '1111,2222', wfactions: [ {name:'纳入迭代', screen: '11111', id: 1111 }, { name:'纳入迭代', screen: '11111', id: 1112 }, { name:'纳入迭代', screen: '11111', id:1113 } ], attachments:[{id: '1111',type:'image/jpeg', uploader:'aaaa', size: 2222, time:1474646499, name: '截图.jpeg'}, {id: '2222',type:'docx', uploader:'aaaa', size: 2222, time:1474646499, name: '测试.docx'},{id: '2222',type:'docx',uploader:'aaaa', size: 2222, time:1474646499, name: '测试2.docx'}, {id: '4444',type:'image/png',uploader:'aaaa', size: 2222, time:1474646499, name: '截图3.jpeg'}], watchers: [{name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}, {name:'aa', email:'aa@aa.com'}] } };
     return res.status(200).send(results);
   });
 
@@ -393,9 +393,9 @@ export default function(router) {
     const { id } = req.params;
     let results = {};
     if (id === '546761') {
-      results = { ecode: 0, data: { id: '546761', name: '任务', screen: '111', workflow:'111'}};
+      results = { ecode: 0, data: { id: '546761', name: 'Task', screen: '111', workflow:'111'}};
     } else {
-      results = { ecode: 0, data: { id: '546762', name: '任务2', screen: '222', workflow:'111'}};
+      results = { ecode: 0, data: { id: '546762', name: 'Subtask', screen: '222', workflow:'111'}};
     }
     return res.status(200).send(results);
   });
@@ -410,7 +410,7 @@ export default function(router) {
   router.put('/project/:key/type', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
+    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: 'Task', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: 'Subtask', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
     return res.status(200).send(results);
   });
 
@@ -426,11 +426,11 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-      { id: '546761', name: '主题', type: 'Text', project_key: '$_sys_$', screens: [{id:'111', name:'界面1'}], key:'title'},
-      { id: '546763', name: '描述', type:'Text', project_key: '$_sys_$', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
-      { id: '546762', name: '优先级', type:'Select', screens: [], key:'priority'},
-      { id: '546764', name: '开始时间', type:'DatePicker', screens: [{id:'111', name:'界面1'}], key:'starttime'},
-      { id: '2323', name: '附件', type:'CheckboxGroup', screens: [{id:'111', name:'界面1'}], key:'attachment'}],
+      { id: '546761', name: 'Title', type: 'Text', project_key: '$_sys_$', screens: [{id:'111', name:'界面1'}], key:'title'},
+      { id: '546763', name: 'Description', type:'Text', project_key: '$_sys_$', screens: [{id:'222', name:'界面2'}, {id:'111', name:'界面1'}], key:'description'},
+      { id: '546762', name: 'Priority', type:'Select', screens: [], key:'priority'},
+      { id: '546764', name: 'Start date', type:'DatePicker', screens: [{id:'111', name:'界面1'}], key:'starttime'},
+      { id: '2323', name: 'Files', type:'CheckboxGroup', screens: [{id:'111', name:'界面1'}], key:'attachment'}],
       options: { types: [{id: '1111', name: '1111'}, {id: '2222', name: '2222'}] }
     };
     return res.status(200).send(results);
@@ -447,15 +447,15 @@ export default function(router) {
     const { id } = req.params;
     let results = {};
     if (id === '546761') {
-      results = { ecode: 0, data: { id: '546761', name: '主题', key:'title',type:'Text', description:'aaaaaaaa', defaultValue: '123qwe'}};
+      results = { ecode: 0, data: { id: '546761', name: 'Title', key:'title',type:'Text', description:'aaaaaaaa', defaultValue: '123qwe'}};
     } else if (id === '546763') {
-      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'TextArea', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
+      results = { ecode: 0, data: { id: '546763', name: 'Description', key:'title',type:'TextArea', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
     } else if (id === '546764') {
-      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'DatePicker', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
+      results = { ecode: 0, data: { id: '546763', name: 'Description', key:'title',type:'DatePicker', description:'aaaaaaaa', defaultValue: 'sfasfsaf'}};
     } else if (id === '2323') {
-      results = { ecode: 0, data: { id: '546763', name: '描述', key:'title',type:'CheckboxGroup', optionValues:['111', '222', '333'], defaultValue: ['111', '222']}};
+      results = { ecode: 0, data: { id: '546763', name: 'Description', key:'title',type:'CheckboxGroup', optionValues:['111', '222', '333'], defaultValue: ['111', '222']}};
     } else {
-      results = { ecode: 0, data: { id: '546762', name: '优先级', key:'priority', type:'Select', optionValues:['111', '222', '333'], defaultValue: '222'}};
+      results = { ecode: 0, data: { id: '546762', name: 'Priority', key:'priority', type:'Select', optionValues:['111', '222', '333'], defaultValue: '222'}};
     }
     return res.status(200).send(results);
   });
@@ -463,7 +463,7 @@ export default function(router) {
   router.put('/project/:key/field/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: { id: '546761', name: '主题2', key:'title',type:'Text', description:'bbbbb'}};
+    const results = { ecode: 0, data: { id: '546761', name: 'Title 2', key:'title',type:'Text', description:'bbbbb'}};
     return res.status(200).send(results);
   });
 
@@ -680,7 +680,7 @@ export default function(router) {
   router.get('/project/:key/state', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', category:'new', name: '开发中', project_key: '$_sys_$', description: 'aaaaaaaaaaa'},{ id: '546763', category: 'inprogress', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', category: 'completed', name: '已发布' },{ id: '2323', name: '已关闭', description: 'ddddddddddd' }]};
+    const results = { ecode: 0, data: [{ id: '546761', category:'new', name: '开发中', project_key: '$_sys_$', description: 'aaaaaaaaaaa'},{ id: '546763', category: 'inprogress', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', category: 'completed', name: '已发布' },{ id: '2323', name: 'Closed', description: 'ddddddddddd' }]};
     return res.status(200).send(results);
   });
 
@@ -712,7 +712,7 @@ export default function(router) {
   router.put('/project/:key/state', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
+    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: 'Task', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: 'Subtask', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
     return res.status(200).send(results);
   });
 
@@ -734,7 +734,7 @@ export default function(router) {
   router.get('/project/:key/resolution', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '开发中', project_key: '$_sys_$', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: '已关闭', description: 'ddddddddddd' }]};
+    const results = { ecode: 0, data: [{ id: '546761', name: '开发中', project_key: '$_sys_$', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: 'Closed', description: 'ddddddddddd' }]};
     return res.status(200).send(results);
   });
 
@@ -773,7 +773,7 @@ export default function(router) {
   router.put('/project/:key/resolution', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
+    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: 'Task', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: 'Subtask', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
     return res.status(200).send(results);
   });
 
@@ -788,7 +788,7 @@ export default function(router) {
   router.get('/project/:key/priority', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '开发中', key: '1111', project_key: '$_sys_$', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: '已关闭', description: 'ddddddddddd' }]};
+    const results = { ecode: 0, data: [{ id: '546761', name: '开发中', key: '1111', project_key: '$_sys_$', description: 'aaaaaaaaaaa'},{ id: '546763', name: '待测试', description: 'aaaaaaaaaaa', default: true },{ id: '546762', name: '已发布' },{ id: '2323', name: 'Closed', description: 'ddddddddddd' }]};
     return res.status(200).send(results);
   });
 
@@ -825,7 +825,7 @@ export default function(router) {
   router.put('/project/:key/priority', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
+    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: 'Task', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: 'Subtask', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
     return res.status(200).send(results);
   });
 
@@ -879,7 +879,7 @@ export default function(router) {
   router.put('/project/:key/role', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 5000);
-    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: '任务', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: '子任务', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
+    const results = { ecode: 0, data: [{ id: '546763', name: '需求', screen: {id:'222', name:'界面2'}, workflow:{id:'111', name:'流程2'}},{ id: '546761', name: 'Task', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '546762', name: '缺陷', screen: {id:'111', name:'界面1'}, workflow:{id:'111', name:'流程1'}},{ id: '2323', name: 'Subtask', screen: {id:'111', name:'界面1'}, workflow:{id:'222', name:'流程2'}}] };
     return res.status(200).send(results);
   });
 
@@ -952,7 +952,7 @@ export default function(router) {
   router.get('/project/:key/events', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '546761', name: '创建问题', notifications: [  'assignee', 'reporter','project_principal', { key: 'role', value: '1111'}, { key: 'single_user_field', value: '1111' } ] },{ id: '546763', name: '编辑问题', notifications: [ 'assignee', 'reporter', 'project_principal', { key: 'multi_user_field', value: '2222' } ] },{ id: '546762', name: '删除问题' },{ id: '2323', name: '添加备注', notifications: [ 'assignee', 'reporter', 'module_principal' ] }], options:{ users: [{ id: '111', name:'王五', email:'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }], roles: [{id: '1111', name:'role1'}, {id: '2222', name:'role2'}, {id: '3333', name:'role3'}], single_user_fields: [{id: '1111', name:'field1'}, {id: '2222', name:'field2'}, {id: '3333', name:'field3'}], multi_user_fields: [{id: '1111', name:'field1'}, {id: '2222', name:'field2'}, {id: '3333', name:'field3'}] }};
+    const results = { ecode: 0, data: [{ id: '546761', name: 'Create issue', notifications: [  'assignee', 'reporter','project_principal', { key: 'role', value: '1111'}, { key: 'single_user_field', value: '1111' } ] },{ id: '546763', name: 'Edit issue', notifications: [ 'assignee', 'reporter', 'project_principal', { key: 'multi_user_field', value: '2222' } ] },{ id: '546762', name: 'Delete issue' },{ id: '2323', name: 'Add comments', notifications: [ 'assignee', 'reporter', 'module_principal' ] }], options:{ users: [{ id: '111', name:'王五', email:'wangwu@aaa.com' }, { id: '222', name:'李老师', email: 'lilaoshi@aaa.com' }], roles: [{id: '1111', name:'role1'}, {id: '2222', name:'role2'}, {id: '3333', name:'role3'}], single_user_fields: [{id: '1111', name:'field1'}, {id: '2222', name:'field2'}, {id: '3333', name:'field3'}], multi_user_fields: [{id: '1111', name:'field1'}, {id: '2222', name:'field2'}, {id: '3333', name:'field3'}] }};
     return res.status(200).send(results);
   });
 
@@ -966,7 +966,7 @@ export default function(router) {
   router.get('/project/:key/activity', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '54dd6761', event_key: 'del_file', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, data : 'aaa.jpg', issue: { id: '1111', no: '23', title: '1111111111111' }, created_at: 1520943111 }, { id: '546763', event_key: 'add_file', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, data : 'bbb.jpg', issue: { id: '1111', no:'45', title: '1111111111111' }, created_at: 1520929420 }, { id: '546761', event_key: 'create_issue', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, issue: { id: '1111', no:'324', title: '1111111111111' }, data: '', created_at: 1520922345 }, { id: '54s6763', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, event_key: 'edit_issue', data: [{ field : '主题', after_value : 'jjjjjjj', type : 'Text' }, { field : '优先级', after_value : '一般', type : 'Select'} ], issue: { id: '1111', no: '77', title: '1111111111111' }, created_at: 1520922345 }], options: { current_time: 1520943279 } };
+    const results = { ecode: 0, data: [{ id: '54dd6761', event_key: 'del_file', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, data : 'aaa.jpg', issue: { id: '1111', no: '23', title: '1111111111111' }, created_at: 1520943111 }, { id: '546763', event_key: 'add_file', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, data : 'bbb.jpg', issue: { id: '1111', no:'45', title: '1111111111111' }, created_at: 1520929420 }, { id: '546761', event_key: 'create_issue', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, issue: { id: '1111', no:'324', title: '1111111111111' }, data: '', created_at: 1520922345 }, { id: '54s6763', user : { id : '57afced21d41c8174d7421c1', name : '王五', email : 'wangwu@aaa.com' }, event_key: 'edit_issue', data: [{ field : 'Title', after_value : 'jjjjjjj', type : 'Text' }, { field : 'Priority', after_value : '一般', type : 'Select'} ], issue: { id: '1111', no: '77', title: '1111111111111' }, created_at: 1520922345 }], options: { current_time: 1520943279 } };
     return res.status(200).send(results);
   });
   /******************Activity***************/
@@ -975,7 +975,7 @@ export default function(router) {
   router.get('/project/:key/kanban', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
-    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', type: 'kanban', filters: [{no: 2, name: '1111', query:{ assignee: [ 'me', 'ttt' ] }}, {no: 3, name: '2222', query:{updated_at: '1w'}}, {no: 1, name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', no: 1, states: ['546761','546762'], max: 4, min: 2}, {name:'处理中', no: 0, states: [ '546763' ], max: 4}, {name:'关闭', no: 2, states:[], min: 1}], query: { subtask: false, type: [ '1111', '3333' ] }, last_access_time: 11111111, display_fields: ['priority', 'labels', 'aa'] }, { id: '2222', name:'2222', type: 'scrum', filters: [{ no: 1, name: 'mmmmmmm', query:{ assignee: [ 'me','ttt' ] } }, {no: 2, name: 'nnnnnnn', query:{updated_at: '1w'}}, {no: 4, name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', no: 0, states: [ '546761']}, {name:'处理中22', no: 2, states: [ '546762' ]}, {name:'关闭22', no: 5, states:[ '546763' ]}], query: { subtask: true, type: [ '1111', '2222' ] } }], options: { completed_sprint_num: 5, sprints: [{no: 3, start_time:1474642399, complete_time:1474642399, status: 'active', issues:[1,2]}, {no: 4, status: 'waiting', issues: [3,4]}], epics: [{id: '1111', bgColor: '#4a6785', name: '测试测试11'}, {id: '2222', bgColor: '#8eb021', name: '测试测试22'}], versions:[{id: '1111', name: '1111' }, { id: '2222', name: '2222'}] } };
+    const results={ ecode: 0, data: [{ id: '1111', name: '测试测试11', type: 'kanban', filters: [{no: 2, name: '1111', query:{ assignee: [ 'me', 'ttt' ] }}, {no: 3, name: '2222', query:{updated_at: '1w'}}, {no: 1, name: '3333', query: {created_at: '1w'}}], columns: [{name: '待处理', no: 1, states: ['546761','546762'], max: 4, min: 2}, {name:'处理中', no: 0, states: [ '546763' ], max: 4}, {name:'Close', no: 2, states:[], min: 1}], query: { subtask: false, type: [ '1111', '3333' ] }, last_access_time: 11111111, display_fields: ['priority', 'labels', 'aa'] }, { id: '2222', name:'2222', type: 'scrum', filters: [{ no: 1, name: 'mmmmmmm', query:{ assignee: [ 'me','ttt' ] } }, {no: 2, name: 'nnnnnnn', query:{updated_at: '1w'}}, {no: 4, name: 'tttt', query: {created_at: '1w'}}], columns: [{name: '待处理22', no: 0, states: [ '546761']}, {name:'处理中22', no: 2, states: [ '546762' ]}, {name:'关闭22', no: 5, states:[ '546763' ]}], query: { subtask: true, type: [ '1111', '2222' ] } }], options: { completed_sprint_num: 5, sprints: [{no: 3, start_time:1474642399, complete_time:1474642399, status: 'active', issues:[1,2]}, {no: 4, status: 'waiting', issues: [3,4]}], epics: [{id: '1111', bgColor: '#4a6785', name: '测试测试11'}, {id: '2222', bgColor: '#8eb021', name: '测试测试22'}], versions:[{id: '1111', name: '1111' }, { id: '2222', name: '2222'}] } };
     return res.status(200).send(results);
   });
 
@@ -1195,11 +1195,11 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode:0, data: { 
-    	issues: [{id: '1111', name: '问题类型', query: { stat_x: 'type', stat_y: 'type' }}, {id: '2222', name: '优先级', query: { stat_x: 'priority', stat_y: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}], 
-    	trend: [{id: '1111', name: '近一月的', query: { stat_time: '1m' }}], 
-    	worklog: [{id: '1111', name: '近一月的', query: { recorded_at: '1m' }}, {id: '2222', name: '创建3个月外的', query: { created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}], 
-    	timetracks: [ {id: '1111', name: '近一月的', query: { resolution: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ], 
-    	regressions: [ {id: '1111', name: '未解决的', query: { resolution: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ], 
+    	issues: [{id: '1111', name: 'Type', query: { stat_x: 'type', stat_y: 'type' }}, {id: '2222', name: 'Priority', query: { stat_x: 'priority', stat_y: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}],
+    	trend: [{id: '1111', name: '近一月of', query: { stat_time: '1m' }}],
+    	worklog: [{id: '1111', name: '近一月of', query: { recorded_at: '1m' }}, {id: '2222', name: '创建3个月外of', query: { created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}],
+    	timetracks: [ {id: '1111', name: '近一月of', query: { resolution: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ],
+    	regressions: [ {id: '1111', name: 'Unresolved', query: { resolution: 'Unresolved' } }, {id: '2222', name: '44444', query: { created_at: '1m' } } ], 
     	others: [] } };
 
     return res.status(200).send(results);
@@ -1209,7 +1209,7 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
 
-    const results = { ecode:0, data: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}] };
+    const results = { ecode:0, data: [{id: '1111', name: 'Type', query: { row: 'type', column: 'type' }}, {id: '2222', name: 'Priority', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}] };
     return res.status(200).send(results);
   });
 
@@ -1217,7 +1217,7 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
 
-    const results = { ecode:0, data: [{id: '1111', name: '问题类型', query: { row: 'type', column: 'type' }}, {id: '2222', name: '优先级', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}] };
+    const results = { ecode:0, data: [{id: '1111', name: 'Type', query: { row: 'type', column: 'type' }}, {id: '2222', name: 'Priority', query: { row: 'priority', column: 'priority', created_at: '-3m'}}, {id: '3333', name: 'tttttt', query: {}}, {id: '4444', name: 'tttttt', query: {}}, {id: '5555', name: 'tttttt', query: {}}, {id: '6666', name: 'tttttt', query: {}}] };
 
     return res.status(200).send(results);
   });
@@ -1240,9 +1240,9 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-    { no:1555, id: '546761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号', state:'546761', total_value: 34 },
-    { no:10, id: '546762', type:'2222', title: '国拨类型的项目添加任务中责任人没有必选号22222', state:'546762', total_value: 24 },
-    { no:12, id: '546763', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号333333', state:'546763', total_value: 12 } 
+    { no:1555, id: '546761', type:'1111', title: '国拨类型of项目添加任务中责任人没有必选号', state:'546761', total_value: 34 },
+    { no:10, id: '546762', type:'2222', title: '国拨类型of项目添加任务中责任人没有必选号22222', state:'546762', total_value: 24 },
+    { no:12, id: '546763', type:'1111', title: '国拨类型of项目添加任务中责任人没有必选号333333', state:'546763', total_value: 12 }
     ] };
     return res.status(200).send(results);
   });
@@ -1288,11 +1288,11 @@ export default function(router) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);
     const results = { ecode: 0, data: [
-    { no:1555, id: 's546761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号', state:'546761', origin: '2d 4h', origin_m: 1200, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
-    { no:10, id: 'b546762', type:'2222', title: '国拨类型的项目添加任务中责任人没有必选号22222', state:'546762', origin: '4d', origin_m: 1920,spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
-    { no:155, id: 'c546761', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号', state:'546761', origin: '2d 4h', origin_m: 1200, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
-    { no:102, id: 'd546762', type:'2222', title: '国拨类型的项目添加任务中责任人没有必选号22222', state:'546762', origin: '4d', origin_m: 1920, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
-    { no:12, id: 'e546763', type:'1111', title: '国拨类型的项目添加任务中责任人没有必选号333333', state:'546763', origin: '3d', origin_m: 1440, spend: '3h', spend_m: 180, left: '2d 5h', left_m: 1260 }
+    { no:1555, id: 's546761', type:'1111', title: '国拨类型of项目添加任务中责任人没有必选号', state:'546761', origin: '2d 4h', origin_m: 1200, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:10, id: 'b546762', type:'2222', title: '国拨类型of项目添加任务中责任人没有必选号22222', state:'546762', origin: '4d', origin_m: 1920,spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:155, id: 'c546761', type:'1111', title: '国拨类型of项目添加任务中责任人没有必选号', state:'546761', origin: '2d 4h', origin_m: 1200, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:102, id: 'd546762', type:'2222', title: '国拨类型of项目添加任务中责任人没有必选号22222', state:'546762', origin: '4d', origin_m: 1920, spend: '3h', spend_m: 180, left: '2d', left_m: 960 },
+    { no:12, id: 'e546763', type:'1111', title: '国拨类型of项目添加任务中责任人没有必选号333333', state:'546763', origin: '3d', origin_m: 1440, spend: '3h', spend_m: 180, left: '2d 5h', left_m: 1260 }
     ], options:{d2h: 8, w2d: 5}, options2:{ progress: { percent: 0.8, spend: '1w 1d', total: '2w 2d' }, accuracy: { percent: 0.7, plan: '2w', real: '2d' }, total: { origin: '20d', spend: '2d, 4h', left: '3d', diff: '2w' } } };
     return res.status(200).send(results);
   });

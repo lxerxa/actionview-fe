@@ -188,36 +188,36 @@ export default class Sidebar extends Component {
           { session.user.permissions && session.user.permissions.sys_admin &&
           <div>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>管理员管理面板</h4>
-            <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>全局方案配置</h4>
+            <h4><i className={ this.state.adminSchemeShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSchemeShow: !this.state.adminSchemeShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>Global scheme configuration</h4>
             <ul className={ !this.state.adminSchemeShow && 'hide' }>
-              <li><Link to='/admin/scheme/type' activeClassName='menu-active'>问题类型</Link></li>
-              <li><Link to='/admin/scheme/state' activeClassName='menu-active'>状态</Link></li>
-              <li><Link to='/admin/scheme/workflow' activeClassName='menu-active' id='admin-workflow'>工作流</Link></li>
-              <li><Link to='/admin/scheme/field' activeClassName='menu-active'>字段</Link></li>
-              <li><Link to='/admin/scheme/screen' activeClassName='menu-active'>界面</Link></li>
-              <li><Link to='/admin/scheme/priority' activeClassName='menu-active'>优先级</Link></li>
-              <li><Link to='/admin/scheme/resolution' activeClassName='menu-active'>解决结果</Link></li>
-              <li><Link to='/admin/scheme/role' activeClassName='menu-active'>角色权限</Link></li>
-              <li><Link to='/admin/scheme/events' activeClassName='menu-active'>通知事件</Link></li>
+              <li><Link to='/admin/scheme/type' activeClassName='menu-active'>Type</Link></li>
+              <li><Link to='/admin/scheme/state' activeClassName='menu-active'>Status</Link></li>
+              <li><Link to='/admin/scheme/workflow' activeClassName='menu-active' id='admin-workflow'>Workflow</Link></li>
+              <li><Link to='/admin/scheme/field' activeClassName='menu-active'>Field</Link></li>
+              <li><Link to='/admin/scheme/screen' activeClassName='menu-active'>Screen</Link></li>
+              <li><Link to='/admin/scheme/priority' activeClassName='menu-active'>Priority</Link></li>
+              <li><Link to='/admin/scheme/resolution' activeClassName='menu-active'>Resolution</Link></li>
+              <li><Link to='/admin/scheme/role' activeClassName='menu-active'>Role</Link></li>
+              <li><Link to='/admin/scheme/events' activeClassName='menu-active'>Events</Link></li>
             </ul>
-            <h4><i className={ this.state.adminUserManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminUserManageShow: !this.state.adminUserManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>用户管理</h4>
+            <h4><i className={ this.state.adminUserManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminUserManageShow: !this.state.adminUserManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>User management</h4>
             <ul className={ !this.state.adminUserManageShow && 'hide' }>
-              <li><Link to='/admin/user' activeClassName='menu-active'>用户</Link></li>
-              <li><Link to='/admin/group' activeClassName='menu-active'>用户组</Link></li>
-              <li><Link to='/admin/directory' activeClassName='menu-active'>用户目录</Link></li>
+              <li><Link to='/admin/user' activeClassName='menu-active'>User</Link></li>
+              <li><Link to='/admin/group' activeClassName='menu-active'>Group</Link></li>
+              <li><Link to='/admin/directory' activeClassName='menu-active'>Directory</Link></li>
             </ul>
-            <h4><i className={ this.state.adminProjectManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminProjectManageShow: !this.state.adminProjectManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目管理</h4>
+            <h4><i className={ this.state.adminProjectManageShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminProjectManageShow: !this.state.adminProjectManageShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>Project management</h4>
             <ul className={ !this.state.adminProjectManageShow && 'hide' }>
-              <li><Link to='/admin/project' activeClassName='menu-active'>项目</Link></li>
+              <li><Link to='/admin/project' activeClassName='menu-active'>Project</Link></li>
             </ul>
-            <h4><i className={ this.state.adminAccessLogsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminAccessLogsShow: !this.state.adminAccessLogsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>日志查看</h4>
+            <h4><i className={ this.state.adminAccessLogsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminAccessLogsShow: !this.state.adminAccessLogsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>Log view</h4>
             <ul className={ !this.state.adminAccessLogsShow && 'hide' }>
-              <li><Link to='/admin/logs' activeClassName='menu-active'>日志</Link></li>
+              <li><Link to='/admin/logs' activeClassName='menu-active'>Log</Link></li>
             </ul>
-            <h4><i className={ this.state.adminSysSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingsShow: !this.state.adminSysSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>系统配置</h4>
+            <h4><i className={ this.state.adminSysSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ adminSysSettingsShow: !this.state.adminSysSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>System configuration</h4>
             <ul className={ !this.state.adminSysSettingsShow && 'hide' }>
-              <li><Link to='/admin/syssetting' activeClassName='menu-active'>系统配置</Link></li>
-              <li><Link to='/admin/calendar' activeClassName='menu-active'>日历管理</Link></li>
+              <li><Link to='/admin/syssetting' activeClassName='menu-active'>System configuration</Link></li>
+              <li><Link to='/admin/calendar' activeClassName='menu-active'>Calendar</Link></li>
             </ul>
           </div> }
         </div>
@@ -234,51 +234,51 @@ export default class Sidebar extends Component {
           { project.item.key ? 
           <div>
             <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } } title={ project.item.name }>{ project.item.name || '' }</h4>
-            <h4><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSummaryShow: !this.state.projectSummaryShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目概述</h4>
+            <h4><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSummaryShow: !this.state.projectSummaryShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>Project Overview</h4>
             { project.options.permissions && project.options.permissions.length > 0 &&
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
-              <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active' id='summary'>概要</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/issue' } activeClassName='menu-active'>问题</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active' id='kanban'>看板</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/gantt' } activeClassName='menu-active' id='gantt'>甘特图</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/activity' } activeClassName='menu-active'>活动</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/module' } activeClassName='menu-active'>模块</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/version' } activeClassName='menu-active'>版本</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/report' } activeClassName='menu-active' id='report'>报告</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/document' } activeClassName='menu-active' id='document'>文档</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active' id='summary'>Summary</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/issue' } activeClassName='menu-active'>Issue</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active' id='kanban'>Kanban</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/gantt' } activeClassName='menu-active' id='gantt'>Gantt</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/activity' } activeClassName='menu-active'>Activity</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/module' } activeClassName='menu-active'>Module</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/version' } activeClassName='menu-active'>Version</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/report' } activeClassName='menu-active' id='report'>Report</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/document' } activeClassName='menu-active' id='document'>Document</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/wiki' } activeClassName='menu-active' id='wiki'>Wiki</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/team' } activeClassName='menu-active'>成员</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/team' } activeClassName='menu-active'>Team</Link></li>
             </ul> }
-            <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>方案配置</h4>
+            <h4><i className={ this.state.projectConfigShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectConfigShow: !this.state.projectConfigShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>Project configuration</h4>
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectConfigShow && 'hide' }>
-              <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/type' } activeClassName='menu-active'>问题类型</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/state' } activeClassName='menu-active'>状态</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/workflow' } activeClassName='menu-active' id='workflow'>工作流</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/field' } activeClassName='menu-active'>字段</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/screen' } activeClassName='menu-active'>界面</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/priority' } activeClassName='menu-active'>优先级</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/resolution' } activeClassName='menu-active'>解决结果</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/role' } activeClassName='menu-active'>角色权限</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/events' } activeClassName='menu-active'>通知事件</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>Summary</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/type' } activeClassName='menu-active'>Type</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/state' } activeClassName='menu-active'>Status</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/workflow' } activeClassName='menu-active' id='workflow'>Workflow</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/field' } activeClassName='menu-active'>Field</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/screen' } activeClassName='menu-active'>Screen</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/priority' } activeClassName='menu-active'>Priority</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/resolution' } activeClassName='menu-active'>Resolution</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/role' } activeClassName='menu-active'>Role</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/events' } activeClassName='menu-active'>Events</Link></li>
             </ul> }
             { project.options.permissions && project.options.permissions.indexOf('manage_project') === -1 &&
             <ul className={ !this.state.projectConfigShow && 'hide' }>
-              <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>概要</Link></li> 
+              <li><Link to={ '/project/' + project.item.key + '/config' } activeClassName='menu-active'>Overview</Link></li>
             </ul> }
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
-            <h4><i className={ this.state.projectSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSettingsShow: !this.state.projectSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>项目设置</h4> }
+            <h4><i className={ this.state.projectSettingsShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } onClick={ (e) => { this.setState({ projectSettingsShow: !this.state.projectSettingsShow }); e.nativeEvent.stopImmediatePropagation(); } }></i>Project settings</h4> }
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectSettingsShow && 'hide' }>
-              <li><Link to={ '/project/' + project.item.key + '/labels' } activeClassName='menu-active'>标签管理</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/integrations' } activeClassName='menu-active'>外部用户</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/labels' } activeClassName='menu-active'>Label management</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/integrations' } activeClassName='menu-active'>External users</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/webhooks' } activeClassName='menu-active'>Webhooks</Link></li>
             </ul> }
             <h4>&nbsp;</h4><h4>&nbsp;</h4>
           </div>
           :
-          <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>请选择要查看的项目</h4> } 
+          <h4 style={ { overflow: 'hidden', textOverflow: 'ellipsis' } }>Please select the item to view</h4> }
         </div>
       </div>);
     }

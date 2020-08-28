@@ -97,7 +97,7 @@ export default class PreviewModal extends Component {
           </LineChart>
         </Modal.Body> }
         <Modal.Footer>
-          <Button onClick={ this.handleCancel }>关闭</Button>
+          <Button onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

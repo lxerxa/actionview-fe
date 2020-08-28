@@ -109,9 +109,9 @@ export default class List extends Component {
     select(id);
     const ecode = await reopen(id);
     if (ecode === 0) {
-      notify.show('项目已打开。', 'success', 2000);    
+      notify.show('Project reopened', 'success', 2000);
     } else {
-      notify.show('打开失败。', 'error', 2000);    
+      notify.show('Reopening failed', 'error', 2000);
     }
   }
 
@@ -120,9 +120,9 @@ export default class List extends Component {
     select(id);
     const ecode = await createIndex(id);
     if (ecode === 0) {
-      notify.show('索引已创建。', 'success', 2000);
+      notify.show('Index created', 'success', 2000);
     } else {
-      notify.show('创建失败。', 'error', 2000);
+      notify.show('Creation failed', 'error', 2000);
     }
   }
 
@@ -172,12 +172,12 @@ export default class List extends Component {
       this.state.settingPrincipalPids.splice(settingIndex, 1);
 
       this.setState({ willSetPrincipalPids: this.state.willSetPrincipalPids, settingPrincipalPids: this.state.settingPrincipalPids });
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     }else {
       const settingIndex = _.indexOf(this.state.settingPrincipalPids, pid);
       this.state.settingPrincipalPids.splice(settingIndex, 1);
       this.setState({ settingPrincipalPids: this.state.settingPrincipalPids });
-      notify.show('设置失败。', 'error', 2000);
+      notify.show('Setup failed', 'error', 2000);
     }
   }
 
@@ -283,7 +283,7 @@ export default class List extends Component {
                 valueKey='id' 
                 labelKey='nameAndEmail' 
                 loadOptions={ this.searchUsers } 
-                placeholder='请输入用户'/>
+                placeholder='enter a username'/>
               <div className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
@@ -297,7 +297,7 @@ export default class List extends Component {
           <img src={ loadingImg } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
-        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
+        status: collection[i].status == 'active' ? <Label bsStyle='success'>active</Label> : <Label>Closed</Label>,
         operation: (
           collection[i].principal.id === user.id &&
           <div>
@@ -310,9 +310,9 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              { collection[i].status == 'active' && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
-              { collection[i].status == 'active' && <MenuItem eventKey='4'>重建索引</MenuItem> }
+              { collection[i].status == 'active' && <MenuItem eventKey='1'>Edit</MenuItem> }
+              { collection[i].status == 'active' ? <MenuItem eventKey='2'>Close</MenuItem> : <MenuItem eventKey='3'>Reopen</MenuItem> }
+              { collection[i].status == 'active' && <MenuItem eventKey='4'>Reindex</MenuItem> }
             </DropdownButton> }
             <img src={ loadingImg } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -335,7 +335,7 @@ export default class List extends Component {
           <FormGroup>
             { options.allow_create_project === 1 && 
             <span style={ { float: 'left', width: '20%' } }>
-              <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
+              <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;New project</Button>
             </span> }
             <ButtonGroup style={ { float: 'right', marginLeft: '10px' } }>
               <Button title='卡片模式' style={ { backgroundColor: this.state.mode == 'card' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th-large fa-lg'></i></Button>
@@ -345,10 +345,10 @@ export default class List extends Component {
               <Select
                 simpleValue
                 clearable={ false }
-                placeholder='项目状态'
+                placeholder='Project status'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
+                options={ [{ value: 'all', label: 'all' }, { value: 'active', label: 'active' }, { value: 'closed', label: 'Closed' }] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
@@ -357,7 +357,7 @@ export default class List extends Component {
                 style={ { height: '36px' } }
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                placeholder={ '名称、键值查询...' } />
+                placeholder={ 'Name、键值查询...' } />
             </span>
           </FormGroup>
         </div>
@@ -366,10 +366,10 @@ export default class List extends Component {
           <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-            <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
-            <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
-            <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
+            <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+            <TableHeaderColumn dataField='key' width='170'>Key value</TableHeaderColumn>
+            <TableHeaderColumn dataField='principal' width='320'>Principal responsible</TableHeaderColumn>
+            <TableHeaderColumn dataField='status' width='80'>Status</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
             </BootstrapTable> }
           { this.state.mode === 'card' && indexLoading &&
@@ -387,7 +387,7 @@ export default class List extends Component {
               <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer' key={ i }>
                 <div className='card'>
                   { model.status !== 'active' &&
-                  <div className='status'><Label>已关闭</Label></div> }
+                  <div className='status'><Label>Closed</Label></div> }
                   <div className='content'>
                     <span className='title'>
                       { model.status == 'active'
@@ -397,17 +397,17 @@ export default class List extends Component {
                     </span>
                   </div>
                   <div className='leader'>
-                    <span>负责人: { model.principal.name }</span>
+                    <span>Principal: { model.principal.name }</span>
                   </div>
                   { model.principal.id === user.id && 
                   <div className='btns'>
                     { model.status == 'active' && 
-                      <span style={ { marginLeft: '3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span> }
+                      <span style={ { marginLeft: '3px' } } title='Edit' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span> }
                     { model.status == 'active' && 
-                      <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-refresh' aria-hidden='true'></i></span> }
+                      <span style={ { marginLeft: '3px' } } title='Reindex' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-refresh' aria-hidden='true'></i></span> }
                     { model.status === 'active' 
-                    ? <span style={ { marginLeft: '3px' } } title='关闭' onClick={ this.closeNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-toggle-off' aria-hidden='true'></i></span>
-                    : <span style={ { marginLeft: '3px' } } title='重新打开' onClick={ this.reopen.bind(this, model.id) } className='comments-button'><i className='fa fa-toggle-on' aria-hidden='true'></i></span> }
+                    ? <span style={ { marginLeft: '3px' } } title='Close' onClick={ this.closeNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-toggle-off' aria-hidden='true'></i></span>
+                    : <span style={ { marginLeft: '3px' } } title='Reopen' onClick={ this.reopen.bind(this, model.id) } className='comments-button'><i className='fa fa-toggle-on' aria-hidden='true'></i></span> }
                   </div> }
                 </div>
               </div>
@@ -435,7 +435,7 @@ export default class List extends Component {
         </div>
         { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
         <ButtonGroup vertical block style={ { marginTop: '15px' } }>
-          <Button onClick={ this.more.bind(this) }>{ <div><img src={ loadingImg } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
+          <Button onClick={ this.more.bind(this) }>{ <div><img src={ loadingImg } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : 'More...' }</span></div> }</Button>
         </ButtonGroup> }
       </div>
     );

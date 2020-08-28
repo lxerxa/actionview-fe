@@ -83,7 +83,7 @@ export default class FilterConfigModal extends Component {
     return (
       <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ title ? title : '过滤器管理' }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ title ? title : 'Filter management' }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>
           <Form horizontal>
@@ -107,8 +107,8 @@ export default class FilterConfigModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
+          <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

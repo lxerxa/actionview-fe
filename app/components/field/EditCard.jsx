@@ -130,9 +130,9 @@ export default class Card extends Component {
           </FormGroup>
         </div>
         :
-        <span>{ text }{ isEdited ? <span style={ { color: 'red' } }> - 已编辑</span> : '' }</span> }
+        <span>{ text }{ isEdited ? <span style={ { color: 'red' } }> - Edited</span> : '' }</span> }
         { !!del && !this.state.editing && 
-        <span style={ styles } onClick={ del } title='删除' className='rm-icon'>
+        <span style={ styles } onClick={ del } title='Delete' className='rm-icon'>
           <i className='fa fa-remove'></i>
         </span> }
         { isEdited && !this.state.editing &&
@@ -140,7 +140,7 @@ export default class Card extends Component {
           <i className='fa fa-undo'></i>
         </span> }
         { !!edit && !this.state.editing && 
-        <span style={ styles } onClick={ this.edit.bind(this) } title='编辑' className='rm-icon'>
+        <span style={ styles } onClick={ this.edit.bind(this) } title='Edit' className='rm-icon'>
           <i className='fa fa-pencil'></i>
         </span> }
       </div>

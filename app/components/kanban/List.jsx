@@ -448,12 +448,12 @@ export default class List extends Component {
                 { mode == 'issue' && curKanban.type == 'kanban' && i == columns.length - 1 && columnIssues[i].length > 0 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ selectVersionShow: true }); } }>
-                  发布...
+                  Release...
                 </a> }
                 { mode == 'issue' && curKanban.type == 'scrum' && i == columns.length - 1 && selectedFilter == 'all' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && _.findIndex(sprints, { status: 'active' }) !== -1 &&
                 <a href='#' style={ { float: 'right' } } 
                   onClick={ (e) => { e.preventDefault(); this.closeDetail(); this.setState({ completeSprintShow: true }); } }>
-                  完成...
+                  Completed...
                 </a> }
                 { mode == 'backlog' && options.permissions && options.permissions.indexOf('manage_project') !== -1 && i != 0 &&
                 <div style={ { float: 'right' } }>
@@ -467,10 +467,10 @@ export default class List extends Component {
                     pullRight>
                     <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'view-' +  v.no }>工作量查看</MenuItem> 
                     { v.status == 'waiting' && i == 1 && <MenuItem disabled={ columnIssues[i].length <= 0 } eventKey={ 'publish-' +  v.no }>启动</MenuItem> }
-                    { v.status == 'waiting' && <MenuItem eventKey={ 'delete-' + v.no }>删除</MenuItem> }
+                    { v.status == 'waiting' && <MenuItem eventKey={ 'delete-' + v.no }>Delete</MenuItem> }
                   </DropdownButton> 
                 </div> }
-                { mode == 'backlog' && v.status == 'active' && <span> - <b>活动中</b></span> }
+                { mode == 'backlog' && v.status == 'active' && <span> - <b>active</b></span> }
               </li> ) ) }
             </ul>
           </div>
@@ -533,7 +533,7 @@ export default class List extends Component {
         </div> }
         { !_.isEmpty(curKanban) && !indexLoading && mode == 'issue' && curKanban.type == 'scrum' && _.findIndex(sprints, { status: 'active' }) === -1 && collection.length <= 0 &&
         <div style={ { marginTop: '20px', width: '100%', textAlign: 'center' } }>
-          <span>暂无活动的Sprint</span>
+          <span>暂无活动ofSprint</span>
         </div> }
         { this.state.barShow &&
           <DetailBar

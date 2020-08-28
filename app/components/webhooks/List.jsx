@@ -138,8 +138,8 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              { collection[i].status == 'enabled' ? <MenuItem eventKey='disable'>禁用</MenuItem> : <MenuItem eventKey='enable'>启用</MenuItem> }
-              <MenuItem eventKey='del'>删除</MenuItem>
+              { collection[i].status == 'enabled' ? <MenuItem eventKey='disable'>disable</MenuItem> : <MenuItem eventKey='enable'>enable</MenuItem> }
+              <MenuItem eventKey='del'>Delete</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -151,7 +151,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -164,7 +164,7 @@ export default class List extends Component {
               style={ { float: 'left', marginRight: '20px' } } 
               onClick={ () => { this.setState({ createModalShow: true }); } } 
               disabled={ indexLoading }>
-              <i className='fa fa-plus'></i>&nbsp;新建Webhook
+              <i className='fa fa-plus'></i>&nbsp;New Webhook
             </Button>
           </FormGroup>
         </div>
@@ -172,7 +172,7 @@ export default class List extends Component {
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>
             <span>
-              请求Header Content-Type为：application/json；Token附加在Header中的X_ACTIONVIEW_TOKEN里。
+              请求Header Content-Type为：application/json；Token附加在Header中ofX_ACTIONVIEW_TOKEN里。
             </span>
           </div>
         </div>
@@ -181,7 +181,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='request_url'>请求Url</TableHeaderColumn>
             <TableHeaderColumn dataField='events'>事件</TableHeaderColumn>
-            <TableHeaderColumn dataField='status' width='100'>状态</TableHeaderColumn>
+            <TableHeaderColumn dataField='status' width='100'>Status</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.createModalShow && 

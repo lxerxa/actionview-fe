@@ -156,7 +156,7 @@ export default class List extends Component {
         id: collection[i].id,
         name: (
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (Global)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> } 
           </div>
         ),
@@ -169,7 +169,7 @@ export default class List extends Component {
                 if (v == 'assignee') {
                   name = '当前经办人';
                 } else if (v == 'reporter') {
-                  name = '报告者';
+                  name = 'Reporter';
                 } else if (v == 'project_principal') {
                   name = '项目负责人';
                 } else if (v == 'module_principal') {
@@ -183,9 +183,9 @@ export default class List extends Component {
                 } else if (v.key == 'role' && v.value) {
                   const role = _.find(options.roles || [], { id: v.value });
                   if (role) {
-                    name = '角色: ' + role.name;
+                    name = 'Role: ' + role.name;
                   } else {
-                    name = '角色: 不明确';
+                    name = 'Role: 不明确';
                   }
                 } else if (v.key == 'single_user_field' && v.value) {
                   const role = _.find(options.single_user_fields || [], { id: v.value });
@@ -210,10 +210,10 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              { !isGlobal && sysEvents.indexOf(collection[i].key || '') === -1 && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { !isGlobal && sysEvents.indexOf(collection[i].key || '') === -1 && <MenuItem eventKey='1'>Edit</MenuItem> }
               <MenuItem eventKey='2'>通知设置</MenuItem>
               { isGlobal && <MenuItem eventKey='3'>重置通知</MenuItem> }
-              { !isGlobal && sysEvents.indexOf(collection[i].key || '') === -1 && <MenuItem eventKey='4'>删除</MenuItem> }
+              { !isGlobal && sysEvents.indexOf(collection[i].key || '') === -1 && <MenuItem eventKey='4'>Delete</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -225,7 +225,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -235,7 +235,7 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ events } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
           <TableHeaderColumn dataField='notifications'>通知设置</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>

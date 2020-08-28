@@ -16,10 +16,10 @@ const validate = (values) => {
   const errors = {};
 
   if (!values.new_password) {
-    errors.new_password = '必填';
+    errors.new_password = 'Required';
   }
   if (!values.new_password2) {
-    errors.new_password2 = '必填';
+    errors.new_password2 = 'Required';
   }
   if ((values.new_password || values.new_password2) && values.new_password != values.new_password2) {
     errors.new_password2 = '密码不一致';

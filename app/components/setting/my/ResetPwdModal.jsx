@@ -9,13 +9,13 @@ const img = require('../../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.password) {
-    errors.password = '必填';
+    errors.password = 'Required';
   }
   if (!values.new_password) {
-    errors.new_password = '必填';
+    errors.new_password = 'Required';
   }
   if (!values.new_password2) {
-    errors.new_password2 = '必填';
+    errors.new_password2 = 'Required';
   }
   if ((values.new_password || values.new_password2) && values.new_password != values.new_password2) {
     errors.new_password2 = '密码不一致';
@@ -98,8 +98,8 @@ export default class ResetPwdModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

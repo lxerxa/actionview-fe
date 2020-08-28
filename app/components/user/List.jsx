@@ -265,10 +265,10 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading && (!collection[i].directory || collection[i].directory === 'self') &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              { collection[i].status === 'active' && <MenuItem eventKey='edit'>编辑</MenuItem> }
-              { collection[i].status === 'active' && <MenuItem eventKey='invalidate'>禁用</MenuItem> }
-              { collection[i].status === 'invalid' && <MenuItem eventKey='validate'>启用</MenuItem> }
-              <MenuItem eventKey='del'>删除</MenuItem>
+              { collection[i].status === 'active' && <MenuItem eventKey='edit'>Edit</MenuItem> }
+              { collection[i].status === 'active' && <MenuItem eventKey='invalidate'>disable</MenuItem> }
+              { collection[i].status === 'invalid' && <MenuItem eventKey='validate'>enable</MenuItem> }
+              <MenuItem eventKey='del'>Delete</MenuItem>
               { collection[i].status === 'active' && <MenuItem eventKey='renew'>重置密码</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
@@ -281,7 +281,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -319,7 +319,7 @@ export default class List extends Component {
             <span style={ { float: 'right', width: '18%' } }>
               <Select
                 simpleValue
-                placeholder='用户目录'
+                placeholder='Directory'
                 value={ this.state.directory }
                 onChange={ this.directoryChange.bind(this) }
                 options={ _.map(options.directories || [], (val) => { return { label: val.name, value: val.id } }) }/>
@@ -345,14 +345,14 @@ export default class List extends Component {
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
                 { !multiDelShow && <MenuItem disabled eventKey='null'>无</MenuItem> }
-                { multiDelShow && <MenuItem eventKey='del'>删除</MenuItem> }
-                { multiValidShow && <MenuItem eventKey='validate'>启用</MenuItem> }
-                { multiInvalidateShow && <MenuItem eventKey='invalidate'>禁用</MenuItem> }
+                { multiDelShow && <MenuItem eventKey='del'>Delete</MenuItem> }
+                { multiValidShow && <MenuItem eventKey='validate'>enable</MenuItem> }
+                { multiInvalidateShow && <MenuItem eventKey='invalidate'>disable</MenuItem> }
                 {/*<MenuItem eventKey='renew'>重置密码</MenuItem>*/}
               </DropdownButton>
             </span> }
             <span style={ { float: 'left', marginRight: '20px' } }>
-              <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
+              <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;New 用户</Button>
             </span>
             <span style={ { float: 'left', width: '20%' } }>
               <Button onClick={ () => { this.setState({ importModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-users'></i>&nbsp;批量导入</Button>
@@ -365,8 +365,8 @@ export default class List extends Component {
             <div className='info-content'>
               <span>
                 请使用邮箱登录，若在系统配置里配置了“默认登录邮箱域名”可使用邮箱前缀登录。<br/>
-                新建或批量导入的用户，默认密码是：actionview。从外部用户目录同步过来的用户，密码和用户目录的保持一致。<br/>
-                从外部用户目录同步过来的用户，不能对其做任何操作。
+                New 或批量导入of用户，默认密码是：actionview。从外部用户目录同步过来of用户，密码和用户目录of保持一致。<br/>
+                从外部用户目录同步过来of用户，不能对其做任何操作。
               </span>
             </div>
           </div>

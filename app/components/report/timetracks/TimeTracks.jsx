@@ -120,7 +120,7 @@ export default class TimeTracks extends Component {
 
     let sqlTxt = '';
     if (!optionsLoading) {
-      sqlTxt = '统计范围～' + (query.scale === 'only' ? '仅包含有初始预估时间的' : '所有问题');
+      sqlTxt = '统计范围～' + (query.scale === 'only' ? '仅包含有初始预估时间of' : 'All issues');
       const issueSqlTxt = parseQuery(query, options);
       if (issueSqlTxt) {
         sqlTxt += ' | ' + issueSqlTxt;
@@ -206,7 +206,7 @@ export default class TimeTracks extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。';
+      opts.noDataText = 'No data displayed';
     }
 
     return ( 
@@ -226,10 +226,10 @@ export default class TimeTracks extends Component {
               <Select
                 simpleValue
                 clearable={ false }
-                placeholder='请选择'
+                placeholder='set value'
                 value={ this.state.scale }
                 onChange={ (newValue) => { this.state.scale = newValue; this.search(); } }
-                options={ [ { value: 'all', label: '所有问题' }, { value: 'only', label: '仅包含有初始预估时间的' } ] }/>
+                options={ [ { value: 'all', label: 'All issues' }, { value: 'only', label: '仅包含有初始预估时间of' } ] }/>
             </Col>
             <Col sm={ 7 }>
               <Button
@@ -254,24 +254,24 @@ export default class TimeTracks extends Component {
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='Save filter'><i className='fa fa-save'></i></div>
           </div> }
         </div>
         { !indexLoading && collection.length > 0 && <Summary options={ options } values={ total }/> }
         <div style={ { marginBottom: '30px' } }>
           <BootstrapTable selectRow={ selectRowProp } data={ timetracks } bordered={ false } headerStyle={ { backgroundColor: '#fff' } } hover options={ opts }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='type' width='50'>类型</TableHeaderColumn>
-            <TableHeaderColumn dataField='state' width='100'>状态</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+            <TableHeaderColumn dataField='type' width='50'>Type</TableHeaderColumn>
+            <TableHeaderColumn dataField='state' width='100'>Status</TableHeaderColumn>
+            <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
             <TableHeaderColumn dataField='origin' width='120'>初始预估时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='spend' width='120'>耗费时间</TableHeaderColumn>
-            <TableHeaderColumn dataField='left' width='120'>剩余时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='spend' width='120'>Spent time</TableHeaderColumn>
+            <TableHeaderColumn dataField='left' width='120'>Remaining time</TableHeaderColumn>
             <TableHeaderColumn dataField='diff' width='120'>误差</TableHeaderColumn>
           </BootstrapTable>
           { collection.length > 0 &&
           <div>
-            <span>共计 { timetracks.length } 条</span>
+            <span>Total count { timetracks.length } Items</span>
           </div> }
         </div>
         { this.state.saveFilterShow &&

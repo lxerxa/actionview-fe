@@ -10,7 +10,7 @@ const img = require('../../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.host) {
-    errors.host = '必填';
+    errors.host = 'Required';
   }
   // if (!/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/.test(values.ip)) {
   else if (!/^[\w-]+([.][\w-]+)+$/.test(values.host)) {
@@ -18,17 +18,17 @@ const validate = (values, props) => {
   }
 
   if (!values.port) {
-    errors.port = '必填';
+    errors.port = 'Required';
   } else if (values.port && !/^[1-9][0-9]*$/.test(values.port)) {
     errors.port = '必须输入正整数';
   }
 
   if (!values.username) {
-    errors.username = '必填';
+    errors.username = 'Required';
   }
 
   if (!values.has_old_password && !values.password) {
-    errors.password = '必填';
+    errors.password = 'Required';
   }
   return errors;
 };
@@ -79,7 +79,7 @@ export default class SmtpServerModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -130,7 +130,7 @@ export default class SmtpServerModal extends Component {
               options={ [ { value: '', label: '无' }, { value: 'tls', label: 'TLS' }, { value: 'ssl', label: 'SSL' } ] }
               value={ encryption.value || '' }
               onChange={ newValue => { encryption.onChange(newValue) } }
-              placeholder='请选择'/>
+              placeholder='set value'/>
           </FormGroup>
           <FormGroup validationState={ username.touched && username.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>帐号</ControlLabel>
@@ -144,7 +144,7 @@ export default class SmtpServerModal extends Component {
               { has_old_password.value && 
               <a style={ { fontWeight: 'normal', fontSize: '12px', cursor: 'pointer', marginLeft: '5px' } } 
                 onClick={ (e) => { e.preventDefault(); if (this.state.passwordShow) { password.onChange('') } this.setState({ passwordShow: !this.state.passwordShow }) } }>
-                { this.state.passwordShow ? '取消' : '设置' }
+                { this.state.passwordShow ? 'Cancel' : 'Set up' }
               </a> }
             </ControlLabel>
             { this.state.passwordShow && <FormControl disabled={ submitting } type='text' { ...password } placeholder='输入密码'/> }
@@ -154,8 +154,8 @@ export default class SmtpServerModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ !dirty || submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

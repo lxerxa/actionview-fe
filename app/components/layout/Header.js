@@ -104,28 +104,28 @@ export default class Header extends Component {
     }
 
     const Modules = [
-      { key: 'myproject', name: '项目中心' }, 
-      { key: 'summary', name: '概要' }, 
-      { key: 'issue', name: '问题' }, 
-      { key: 'activity', name: '活动' },
-      { key: 'kanban', name: '看板' },
-      { key: 'gantt', name: '甘特图' },
-      { key: 'module', name: '模块' },
-      { key: 'version', name: '版本' },
-      { key: 'report', name: '报告' },
-      { key: 'document', name: '文档' },
+      { key: 'myproject', name: 'Project center' },
+      { key: 'summary', name: 'Summary' },
+      { key: 'issue', name: 'Issue' }, 
+      { key: 'activity', name: 'Activity' },
+      { key: 'kanban', name: 'Kanban' },
+      { key: 'gantt', name: 'Gantt' },
+      { key: 'module', name: 'Module' },
+      { key: 'version', name: 'Version' },
+      { key: 'report', name: 'Report' },
+      { key: 'document', name: 'Document' },
       { key: 'wiki', name: 'Wiki' },
       { key: 'team', name: '项目成员' },
       { key: 'config', name: '配置概要' },
-      { key: 'type', name: '问题类型' },
-      { key: 'workflow', name: '工作流' },
-      { key: 'field', name: '字段' },
-      { key: 'screen', name: '界面' },
-      { key: 'resolution', name: '解决结果' },
-      { key: 'priority', name: '优先级' },
-      { key: 'state', name: '状态' },
-      { key: 'role', name: '角色权限' },
-      { key: 'events', name: '通知事件' },
+      { key: 'type', name: 'Type' },
+      { key: 'workflow', name: 'Workflow' },
+      { key: 'field', name: 'Field' },
+      { key: 'screen', name: 'Screen' },
+      { key: 'resolution', name: 'Resolution' },
+      { key: 'priority', name: 'Priority' },
+      { key: 'state', name: 'Status' },
+      { key: 'role', name: 'Role' },
+      { key: 'events', name: 'Events' },
       { key: 'options', name: '选项' },
       { key: 'labels', name: '标签管理' },
       { key: 'integrations', name: '外部用户' },
@@ -149,9 +149,9 @@ export default class Header extends Component {
 
     let modulename = '';
     if (patten0.exec(pathname)) {
-      modulename = '项目中心';
+      modulename = 'Project center';
     } else if (patten1.exec(pathname)) {
-      modulename = (curProject.key ? curProject.key + ' - ' : '') + '概要';
+      modulename = (curProject.key ? curProject.key + ' - ' : '') + 'Summary';
     } else if (patten3.exec(pathname)) {
       modulename = (curProject.key ? curProject.key + ' - ' : '') + '工作流配置';
     } else if (patten2.exec(pathname)) {
@@ -160,36 +160,36 @@ export default class Header extends Component {
       if (module) {
         modulename = (curProject.key ? curProject.key + ' - ' : '') + module.name;
       } else {
-        modulename = (curProject.key ? curProject.key + ' - ' : '') + '其他';
+        modulename = (curProject.key ? curProject.key + ' - ' : '') + 'Other';
       }
     } else if (patten6.exec(pathname)) {
       const moduleKey = RegExp.$1;
       const module = _.find(Modules, { key: moduleKey });
       if (module) {
-        modulename = '全局方案配置 - ' + module.name;
+        modulename = 'Global scheme configuration - ' + module.name;
       } else {
-        modulename = '其他';
+        modulename = 'Other';
       }
     } else if (patten7.exec(pathname)) {
-      modulename = '方案配置 - 工作流配置';
+      modulename = 'Project configuration - 工作流配置';
     } else if (patten4.exec(pathname)) {
-      modulename = '项目列表';
+      modulename = 'Project list';
     } else if (patten5.exec(pathname)) {
-      modulename = '用户管理';
+      modulename = 'User management';
     } else if (patten10.exec(pathname)) {
       modulename = '用户组管理';
     } else if (patten11.exec(pathname)) {
-      modulename = '用户目录';
+      modulename = 'Directory';
     } else if (patten8.exec(pathname)) {
       modulename = '系统设置';
     } else if (patten9.exec(pathname)) {
       modulename = '个人设置';
     } else if (patten12.exec(pathname)) {
-      modulename = '日志';
+      modulename = 'Log';
     } else if (patten13.exec(pathname)) {
-      modulename = '日历管理';
+      modulename = 'Calendar';
     } else {
-      modulename = '其他';
+      modulename = 'Other';
     }
 
     const headerUser = { paddingTop: '4px', color: '#5f5f5f', textDecoration: 'blink', fontSize: '16px' }; 
@@ -211,10 +211,10 @@ export default class Header extends Component {
             onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='about'>关于</MenuItem>
+            <MenuItem eventKey='about'>on</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='setting'>个人设置</MenuItem>
-            <MenuItem eventKey='logout'>退出</MenuItem>
+            <MenuItem eventKey='setting'>Personal settings</MenuItem>
+            <MenuItem eventKey='logout'>Quit</MenuItem>
           </DropdownButton>
         </span>
         { session.user && session.user.permissions && session.user.permissions.sys_admin &&
@@ -226,16 +226,16 @@ export default class Header extends Component {
             id='basic-nav-dropdown'  
             style={ headerUser }  
             onSelect={ this.sysOperateSelect.bind(this) }>
-            <MenuItem eventKey='scheme'>方案配置</MenuItem>
+            <MenuItem eventKey='scheme'>Solution configuration</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='user'>用户</MenuItem>
-            <MenuItem eventKey='group'>用户组</MenuItem>
+            <MenuItem eventKey='user'>User</MenuItem>
+            <MenuItem eventKey='group'>User group</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='project'>项目管理</MenuItem>
+            <MenuItem eventKey='project'>Project management</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='logs'>日志</MenuItem>
+            <MenuItem eventKey='logs'>Log</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey='setting'>系统设置</MenuItem>
+            <MenuItem eventKey='setting'>Settings</MenuItem>
           </DropdownButton>
         </span> }
         { session.user && session.user.email && session.user.email !== 'admin@action.view' &&
@@ -243,7 +243,7 @@ export default class Header extends Component {
           <DropdownButton 
             pullRight 
             bsStyle='link' 
-            title='项目' 
+            title='Project'
             id='basic-nav-dropdown-project' 
             style={ headerUser } 
             onSelect={ this.operateSelect.bind(this) }>
@@ -259,7 +259,7 @@ export default class Header extends Component {
             <MenuItem eventKey='myproject'>
               { !_.isEmpty(curProject) && 
               <div style={ { display: 'inline-block', width: '20px' } }/> }
-              <span>项目中心</span>
+              <span>Project center</span>
             </MenuItem>
           </DropdownButton>
         </span> }

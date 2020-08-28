@@ -41,7 +41,7 @@ export default class ConfigModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -85,7 +85,7 @@ export default class ConfigModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>权限配置 - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Rights profile - { data.name }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>
@@ -95,23 +95,23 @@ export default class ConfigModal extends Component {
               value={ permissions.value || [] } 
               onChange={ (newValue) => { permissions.onChange(newValue) } } 
               style={ { marginLeft: '10px' } }>
-              <ControlLabel>项目</ControlLabel>
+              <ControlLabel>Project</ControlLabel>
               <ui className='list-unstyled clearfix'>
                 { this.rows(Permissions.project) }
               </ui>
-              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>问题</ControlLabel>
+              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>Issue</ControlLabel>
               <ui className='list-unstyled clearfix'>
                 { this.rows(Permissions.issue) }
               </ui>
-              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>附件</ControlLabel>
+              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>Files</ControlLabel>
               <ui className='list-unstyled clearfix'>
                 { this.rows(Permissions.files) }
               </ui>
-              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>备注</ControlLabel>
+              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>Comments</ControlLabel>
               <ui className='list-unstyled clearfix'>
                 { this.rows(Permissions.comments) }
               </ui>
-              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>工作日志</ControlLabel>
+              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>Work log</ControlLabel>
               <ui className='list-unstyled clearfix'>
                 { this.rows(Permissions.worklogs) }
               </ui>
@@ -129,12 +129,12 @@ export default class ConfigModal extends Component {
               }
             } }
             style={ { float: 'left', margin: '5px 5px' } }>
-            全部选择
+            Select all
           </BootstrapCheckbox>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

@@ -60,17 +60,17 @@ export default class SyncModal extends Component {
           <table style={ { marginLeft: '20px' } }>
             <tr>
               <td style={ { height: '35px', textAlign: 'right' } }>同步用户：</td>
-              <td>{ syncInfo.user ? <Label bsStyle='success'>完成</Label> : <Label bsStyle='danger'>失败</Label> }</td>
+              <td>{ syncInfo.user ? <Label bsStyle='success'>Completed</Label> : <Label bsStyle='danger'>失败</Label> }</td>
             </tr>
             <tr>
               <td style={ { height: '35px', textAlign: 'right' } }>同步用户组：</td>
-              <td>{ syncInfo.group ? <Label bsStyle='success'>完成</Label> : <Label bsStyle='danger'>失败</Label> }</td>
+              <td>{ syncInfo.group ? <Label bsStyle='success'>Completed</Label> : <Label bsStyle='danger'>失败</Label> }</td>
             </tr>
           </table>
         </Modal.Body> }
         <Modal.Footer>
           <Button disabled={ loading } bsStyle='link' onClick={ this.resync.bind(this) }>重新同步</Button>
-          <Button disabled={ loading } onClick={ this.handleCancel }>关闭</Button>
+          <Button disabled={ loading } onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

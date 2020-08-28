@@ -45,7 +45,7 @@ export default class ViewUsedModal extends Component {
           { !loading &&
           <div style={ { marginBottom: '10px' } }>
             { projects.length > 0 ?
-            <span>共有应用项目 <strong>{ projects.length }</strong> 个</span>
+            <span>Total有应用项目 <strong>{ projects.length }</strong> 个</span>
             :
             <span>暂无项目应用</span> }
           </div> }
@@ -53,8 +53,8 @@ export default class ViewUsedModal extends Component {
           <Table condensed hover responsive>
             <thead>
               <tr>
-                <th>项目名称</th>
-                <th>问题类型</th>
+                <th>Project name</th>
+                <th>Type</th>
               </tr>
             </thead>
             <tbody>
@@ -65,7 +65,7 @@ export default class ViewUsedModal extends Component {
                     { v.status === 'active' ?
                     <span><Link to={ '/project/' + v.key }>{ v.name }</Link></span>
                     :
-                    <span>{ v.name }(已关闭)</span> }
+                    <span>{ v.name }(Closed)</span> }
                   </td>
                   <td>
                     { v.status === 'active' ?
@@ -87,7 +87,7 @@ export default class ViewUsedModal extends Component {
           </Table> }
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.handleCancel }>关闭</Button>
+          <Button onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

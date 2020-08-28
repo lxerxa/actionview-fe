@@ -21,7 +21,7 @@ export default class OperateNotify extends Component {
     close();
     const ecode = await del(data.id);
     if (ecode === 0) {
-      notify.show('删除完成。', 'success', 2000);
+      notify.show('Deletion complete', 'success', 2000);
     } else {
       notify.show('删除失败。', 'error', 2000);
     }
@@ -44,8 +44,8 @@ export default class OperateNotify extends Component {
           是否删除【{ data.name }】该用户组？
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

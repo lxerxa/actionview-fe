@@ -47,15 +47,15 @@ export default class MultiDelNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>批量删除问题</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          共选择问题 <b>{ issueIds.length }</b> 个，确认要删除这些问题？<br/><br/>
-          如果您完成了这些问题，通常是"解决"或者"关闭"问题，而不是删除。<br/>
-          如果删除，这些问题的子任务也将一并被删除。<br/> 
+          Total选择问题 <b>{ issueIds.length }</b> 个，确认要删除这些问题？<br/><br/>
+          如果您完成了这些问题，通常是"解决"或者"Close"Issue，而不是删除。<br/>
+          如果删除，这些问题of子任务也将一并被删除。<br/>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

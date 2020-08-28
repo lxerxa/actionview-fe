@@ -33,7 +33,7 @@ export default class Header extends Component {
             className='create-btn' 
             onClick={ () => { this.setState({ createModalShow: true }); } } 
             disabled={ indexLoading }>
-            <i className='fa fa-plus'></i>&nbsp;新建事件
+            <i className='fa fa-plus'></i>&nbsp;New 事件
           </Button>
         </div>
         { this.state.createModalShow && 

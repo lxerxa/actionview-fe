@@ -75,9 +75,9 @@ export default class MultiOperateNotify extends Component {
     } else if (operate === 'del') {
       operateTitle = '用户删除'
     } else if (operate === 'validate') {
-      operateTitle = '用户启用';
+      operateTitle = 'User enabled';
     } else if (operate === 'invalidate') {
-      operateTitle = '用户禁用';
+      operateTitle = 'User disabled';
     } else {
       return <div/>;
     }
@@ -89,35 +89,35 @@ export default class MultiOperateNotify extends Component {
         </Modal.Header>
         { operate === 'renew' && 
         <Modal.Body>
-          是否重置选中用户的密码？
+          是否重置选中用户of密码？
         </Modal.Body> }
         { operate === 'invalidate' &&
         <Modal.Body>
-          共选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
+          Total选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
           其中可被禁用用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'active' && ids.indexOf(v.id) !== -1).length }</span> 个。<br/>
           是否禁用？<br/><br/>
-          注：此操作对从外部用户目录同步过来的用户无效。
+          Note：此操作对从外部用户目录同步过来of用户无效。
         </Modal.Body> }
         { operate === 'validate' &&
         <Modal.Body>
-          共选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
+          Total选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
           其中可被启用用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && v.status == 'invalid' && ids.indexOf(v.id) !== -1).length }</span> 个。<br/>
           是否启用？<br/><br/>
-          注：此操作对从外部用户目录同步过来的用户无效。
+          Note：此操作对从外部用户目录同步过来of用户无效。
         </Modal.Body> }
         { operate === 'del' && 
         <Modal.Body>
-          用户被删除后，项目中的用户也同时被删除。<br/>
-          共选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
+          用户被删除后，项目中of用户也同时被删除。<br/>
+          Total选中用户 <span style={ { fontWeight: 'bold' } }>{ ids.length }</span> 个，
           其中可被删除用户 <span style={ { fontWeight: 'bold', color: 'red' } }>{ _.filter(collection, (v) => (!v.directory || v.directory == 'self') && ids.indexOf(v.id) !== -1).length }</span> 个。<br/>
           是否删除？<br/><br/>
-          注：此操作对从外部用户目录同步过来的用户无效。
+          Note：此操作对从外部用户目录同步过来of用户无效。
         </Modal.Body> }
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

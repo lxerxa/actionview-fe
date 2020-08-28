@@ -37,7 +37,7 @@ export default class Header extends Component {
       <div>
         <div style={ { marginTop: '5px' } }>
           <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }>
-            <i className='fa fa-plus'></i>&nbsp;新建状态
+            <i className='fa fa-plus'></i>&nbsp;New 状态
           </Button>
           { !indexLoading &&
           <Button
@@ -49,7 +49,7 @@ export default class Header extends Component {
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'>
-            <span>状态是指执行工作流过程中问题的状态，定义工作流时和某一步骤绑定。<br/>只能删除没有关联到工作流{ isSysConfig && '（包括各项目自定义工作流）' }和没有应用到项目问题中的状态。</span>
+            <span>状态是指执行工作流过程中问题of状态，定义工作流时和某一步骤绑定。<br/>只能删除没有关联到工作流{ isSysConfig && '（包括各项目自定义工作流）' }和没有应用到项目问题中of状态。</span>
           </div>
         </div>
         { this.state.createModalShow && 
@@ -62,7 +62,7 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow &&
           <SortCardsModal
             show
-            model='状态'
+            model='Status'
             close={ this.sortCardsModalClose.bind(this) }
             cards={ collection }
             setSort={ setSort }

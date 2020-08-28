@@ -162,7 +162,7 @@ export default class ConfigHeader extends Component {
           <Button 
             className='create-btn' 
             onClick={ () => { this.setState({ createStepModalShow: true }); } }>
-            <i className='fa fa-plus'></i>&nbsp;新建步骤
+            <i className='fa fa-plus'></i>&nbsp;New 步骤
           </Button>
           <span style={ { float: 'right', marginTop: '20px', marginRight: '10px', fontWeight: 'bold' } }>{ workflowName }</span>
           <span style={ { float: 'right', marginTop: '20px' } }>工作流名称：</span>
@@ -172,7 +172,7 @@ export default class ConfigHeader extends Component {
             <i className='fa fa-info-circle'></i>
           </div>
           <div className='info-content'>
-            配置工作流时应先新建工作流步骤，然后再添加相关的动作。<br/>每一步骤相关联的状态在状态模块中定义。
+            配置工作流时应先New 工作流步骤，然后再添加相关of动作。<br/>每一步骤相关联of状态在状态模块中定义。
           </div>
         </div>
         { this.state.createStepModalShow && 

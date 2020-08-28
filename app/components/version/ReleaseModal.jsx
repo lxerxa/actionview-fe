@@ -51,7 +51,7 @@ export default class ReleaseModal extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>版本{ data.status === 'released' ? '取消发布' : '发布' } - { data.name }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Version{ data.status === 'released' ? 'Unrelease' : 'Release' } - { data.name }</Modal.Title>
         </Modal.Header>
         { data.status !== 'released' &&
         <Modal.Body>
@@ -63,11 +63,11 @@ export default class ReleaseModal extends Component {
           :
           <div className='info-col' style={ { marginTop: '5px' } }>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-            <div className='info-content'>该版本没有未解决的问题。</div>
+            <div className='info-content'>该版本没有未解决of问题。</div>
           </div> }
           { data.unresolved_cnt > 0 &&
           <div style={ { margin: '20px 10px 10px 10px' } }>
-            <div style={ { display: 'inline-block', verticalAlign: 'top', fontWeight: 600 } }>未解决的问题</div>
+            <div style={ { display: 'inline-block', verticalAlign: 'top', fontWeight: 600 } }>未解决of问题</div>
             <div style={ { display: 'inline-block', marginLeft: '20px' } }>
               <FormGroup>
                 <Radio 
@@ -116,9 +116,9 @@ export default class ReleaseModal extends Component {
           <Button 
             onClick={ this.confirm } 
             disabled={ loading || (data.status !== 'released' && data.unresolved_cnt > 0 && this.state.operate_flg === '0') || (data.status !== 'released' && this.state.operate_flg === '1' && !this.state.swapVersion) }>
-            确定
+            Submit
           </Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

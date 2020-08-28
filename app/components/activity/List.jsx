@@ -301,14 +301,14 @@ export default class List extends Component {
             { collection[i].event_key == 'stop_progress_issue'    && <span>停止解决</span> }
             { collection[i].event_key == 'resolve_issue'   && <span>解决了</span> }
             { collection[i].event_key == 'close_issue'     && <span>关闭了</span> }
-            { collection[i].event_key == 'reopen_issue'    && <span>重新打开</span> }
+            { collection[i].event_key == 'reopen_issue'    && <span>Reopen</span> }
             { collection[i].event_key == 'watched_issue'   && <span>关注了</span> }
             { collection[i].event_key == 'unwatched_issue' && <span>取消关注了</span> }
             { collection[i].event_key.indexOf('_') === -1  && <span>将</span> }
-            { collection[i].issue && <span style={ { marginRight: '5px' } }>问题</span> }
+            { collection[i].issue && <span style={ { marginRight: '5px' } }>Issue</span> }
             { collection[i].issue && (collection[i].issue.del_flg === 1 ? <span style={ ltStyles }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span> : <a href='#' style={ collection[i].issue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.issueView(collection[i].issue.id); } }><span style={ { marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>{ collection[i].issue.no + ' - ' + collection[i].issue.title }</span></a>) }
             { wfEventFlag && collection[i].event_key.indexOf('_') !== -1 && <span>, </span> }
-            { wfEventFlag && collection[i].event_key.indexOf('_') === -1 && <span>的</span> }
+            { wfEventFlag && collection[i].event_key.indexOf('_') === -1 && <span>of</span> }
             { wfEventFlag &&
             <span>
             { _.map(collection[i].data, (v, i) => {
@@ -319,7 +319,7 @@ export default class List extends Component {
               }
             }) }
             </span> }
-            { collection[i].event_key == 'edit_issue' && <span>的 { collection[i].data.length } 个字段</span> }
+            { collection[i].event_key == 'edit_issue' && <span>of { collection[i].data.length } fields</span> }
             { collection[i].event_key == 'edit_issue' &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
             { _.map(collection[i].data, (v, i) => {
@@ -328,33 +328,33 @@ export default class List extends Component {
             </ul> }
             { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && user.id === collection[i].data.new_user.id ? '我' : (collection[i].data.new_user.name || '') }</span> }
 
-            { collection[i].event_key == 'add_file' && <span>上传了文档 { collection[i].data }</span> }
-            { collection[i].event_key == 'del_file' && <span>删除了文档 <span style={ ltStyles }>{ collection[i].data }</span></span> }
+            { collection[i].event_key == 'add_file' && <span>Uploaded document { collection[i].data }</span> }
+            { collection[i].event_key == 'del_file' && <span>Document deleted <span style={ ltStyles }>{ collection[i].data }</span></span> }
 
-            { collection[i].event_key == 'add_comments'   && <span>添加了备注</span> }
-            { collection[i].event_key == 'edit_comments'  && <span>编辑了备注</span> }
-            { collection[i].event_key == 'del_comments'   && <span>删除了备注</span> }
+            { collection[i].event_key == 'add_comments'   && <span>Add comments</span> }
+            { collection[i].event_key == 'edit_comments'  && <span>Edit comments</span> }
+            { collection[i].event_key == 'del_comments'   && <span>Delete comments</span> }
             { comments &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
               <li style={ collection[i].event_key == 'del_comments' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: comments } }/>
             </ul> }
 
-            { collection[i].event_key == 'add_worklog'    && <span> 添加了工作日志</span> }
-            { collection[i].event_key == 'edit_worklog'   && <span> 编辑了工作日志</span> }
-            { collection[i].event_key == 'del_worklog'    && <span> 删除了工作日志</span> }
+            { collection[i].event_key == 'add_worklog'    && <span> Add worklog</span> }
+            { collection[i].event_key == 'edit_worklog'   && <span> Edit worklog</span> }
+            { collection[i].event_key == 'del_worklog'    && <span> Delete worklog</span> }
             { collection[i].event_key.indexOf('worklog') !== -1 &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              { collection[i].data && collection[i].data.started_at       && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>开始时间: { moment.unix(collection[i].data.started_at).format('YYYY/MM/DD') }</li> }
-              { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
-              { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
-              { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }
-              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: '备注 : ' + _.escape(collection[i].data.comments).replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
+              { collection[i].data && collection[i].data.started_at       && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>Start date: { moment.unix(collection[i].data.started_at).format('YYYY/MM/DD') }</li> }
+              { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>Spent time: { collection[i].data.spend }</li> }
+              { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>Remaining time: { collection[i].data.leave_estimate }</li> }
+              { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>Remaining time removed: { collection[i].data.cut }</li> }
+              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: 'Comments : ' + _.escape(collection[i].data.comments).replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
             </ul> }
             {/* (collection[i].event_key == 'create_version' || collection[i].event_key == 'edit_version') &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              { collection[i].data && collection[i].data.start_time && <li>开始时间 : { moment.unix(collection[i].data.start_time).format('YY/MM/DD') }</li> }
+              { collection[i].data && collection[i].data.start_time && <li>Start date : { moment.unix(collection[i].data.start_time).format('YY/MM/DD') }</li> }
               { collection[i].data && collection[i].data.end_time && <li>结束时间 : { moment.unix(collection[i].data.end_time).format('YY/MM/DD') }</li> }
-              { collection[i].data && collection[i].data.description && <li>描述 : { collection[i].data.description }</li> }
+              { collection[i].data && collection[i].data.description && <li>Description : { collection[i].data.description }</li> }
             </ul> */}
           </div>
         ),
@@ -366,23 +366,23 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     return (
       <div style={ { marginTop: '15px', marginBottom: '20px' } }>
         <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.category } onSelect={ this.handleSelect.bind(this) }>
-          <NavItem eventKey='all' href='#'>全部</NavItem>
-          <NavItem eventKey='comments' href='#'>备注</NavItem>
-          <NavItem eventKey='worklog' href='#'>工作日志</NavItem>
+          <NavItem eventKey='all' href='#'>all</NavItem>
+          <NavItem eventKey='comments' href='#'>Comments</NavItem>
+          <NavItem eventKey='worklog' href='#'>Work log</NavItem>
         </Nav>
-        <Button style={ { float: 'right' } } onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i>&nbsp;刷新</Button>
+        <Button style={ { float: 'right' } } onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i>&nbsp;Refresh</Button>
         <span style={ { marginRight: '20px', float: 'right' } }>
           <Checkbox
             style={ { paddingTop: '0px', marginBottom: '0px' } }
             checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
             onClick={ this.swapTime.bind(this) }>
-            显示绝对时间
+            Show absolute date
           </Checkbox>
         </span>
         <BootstrapTable data={ activities } bordered={ false } hover options={ opts } trClassName='tr-middle'>
@@ -393,7 +393,7 @@ export default class List extends Component {
         </BootstrapTable>
         { increaseCollection.length > 0 && increaseCollection.length % this.state.limit === 0 && 
         <ButtonGroup vertical block>
-          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
+          <Button onClick={ this.more.bind(this) }>{ <div><img src={ img } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : 'More...' }</span></div> }</Button>
         </ButtonGroup> }
         { this.state.barShow &&
           <DetailBar

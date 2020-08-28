@@ -112,7 +112,7 @@ class Register extends Component {
               <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>
-            <Button bsStyle='success' disabled={ invalid || submitting } type='submit'>注  册</Button>
+            <Button bsStyle='success' disabled={ invalid || submitting } type='submit'>Note  册</Button>
           </form>
           :
           <div className='reset-pwd-msg'>

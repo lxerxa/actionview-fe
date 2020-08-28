@@ -48,13 +48,13 @@ export default class SyncNotify extends Component {
         </Modal.Header>
         <Modal.Body>
           <br/>同步数据来至接口：<a href={ 'http://www.actionview.cn:8080/actionview/api/holiday/' + year } target='_blank'>{ 'http://www.actionview.cn:8080/actionview/api/holiday/' + year }</a><br/><br/>
-          同步后，该年度原有设置的日历将会被覆盖，确认要同步吗？<br/><br/>
+          同步后，该年度原有设置of日历将会被覆盖，确认要同步吗？<br/><br/>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ loadimg } className={ loading ? 'loading' : 'hide' }/>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -208,24 +208,24 @@ export default class Header extends Component {
         <div style={ { marginTop: '5px' } }>
           { selectedIds.length > 0 &&
             <DropdownButton className='create-btn' title='批量操作' onSelect={ this.multiOperateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='multi_edit'>编辑</MenuItem> }
-              { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='multi_del'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='multi_edit'>Edit</MenuItem> }
+              { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='multi_del'>Delete</MenuItem> }
             </DropdownButton> }
-          <DropdownButton className='create-btn' id='filters' title='过滤器' onSelect={ this.selectFilter.bind(this) }>
+          <DropdownButton className='create-btn' id='filters' title='Filter' onSelect={ this.selectFilter.bind(this) }>
             { options.filters && options.filters.length > 0 ? 
               _.map(options.filters || [], (val) => <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem> ) :
               <MenuItem disabled>无</MenuItem> }
             <MenuItem divider/>
-            <MenuItem eventKey='saveFilter'>保存当前检索</MenuItem>
-            <MenuItem eventKey='filterConfig'>过滤器管理</MenuItem>
-            <MenuItem eventKey='resetFilters'>过滤器重置</MenuItem>
+            <MenuItem eventKey='saveFilter'>Save filter</MenuItem>
+            <MenuItem eventKey='filterConfig'>Filter management</MenuItem>
+            <MenuItem eventKey='resetFilters'>Reset filter</MenuItem>
           </DropdownButton>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { if (!this.state.searchShow) { closeDetailBar(); }  this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { if (!this.state.searchShow) { closeDetailBar(); }  this.setState({ searchShow: !this.state.searchShow }); } }>Search&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
-          <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
+          <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> Create</Button> }
           <div style={ { marginTop: '8px', float: 'right' } }>
-            <DropdownButton id='more' pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='refresh'>刷新</MenuItem>
+            <DropdownButton id='more' pullRight style={ { float: 'right' } } title='More' onSelect={ this.operateSelect.bind(this) }>
+              <MenuItem eventKey='refresh'>Refresh</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='gotogantt'>跳至甘特图</MenuItem>
               <MenuItem divider/>
@@ -247,7 +247,7 @@ export default class Header extends Component {
           <div className='cond-bar'>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='Save filter'><i className='fa fa-save'></i></div>
           </div> }
         </div>
         { this.state.filterConfigShow && 

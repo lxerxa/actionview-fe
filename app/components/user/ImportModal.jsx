@@ -76,7 +76,7 @@ export default class ImportModal extends Component {
         <Modal.Body>
           <FormGroup>
             { this.state.fid ?
-            <ControlLabel>文件：{ this.state.fname }</ControlLabel>
+            <ControlLabel>File：{ this.state.fname }</ControlLabel>
             :
             <ControlLabel>选择导入Excel文件</ControlLabel> }
             <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
@@ -97,8 +97,8 @@ export default class ImportModal extends Component {
           <a href='/template/import_user_tpl.xlsx' style={ { float: 'left', marginTop: '5px', marginLeft: '5px' } } download='import_user_tpl.xlsx'>模版下载</a>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || !this.state.fid } onClick={ this.handleSubmit }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ loading || !this.state.fid } onClick={ this.handleSubmit }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -228,11 +228,11 @@ export default (
     <Route path='/home' component={ Home }>
       <Route 
         path='/myproject' 
-        onEnter={ ()=> { document.title = '项目中心' + suffix; } } 
+        onEnter={ ()=> { document.title = 'Project center' + suffix; } }
         getComponent={ ProjectContainer }/>
       <Route 
         path='/mysetting' 
-        onEnter={ ()=> { document.title = '个人设置' + suffix; } } 
+        onEnter={ ()=> { document.title = 'Settings' + suffix; } }
         getComponent={ MysettingContainer }/>
       <Route 
         path='/project/:key' 
@@ -267,19 +267,19 @@ export default (
       </Route>
       <Route 
         path='/admin/project' 
-        onEnter={ ()=> { document.title = '项目列表' + suffix; } } 
+        onEnter={ ()=> { document.title = 'Project list' + suffix; } }
         getComponent={ ProjectContainer }/>
       <Route 
         path='/admin/user' 
-        onEnter={ ()=> { document.title = '用户' + suffix; } } 
+        onEnter={ ()=> { document.title = 'User' + suffix; } }
         getComponent={ UserContainer }/>
       <Route 
         path='/admin/group' 
-        onEnter={ ()=> { document.title = '用户组' + suffix; } } 
+        onEnter={ ()=> { document.title = 'User group' + suffix; } }
         getComponent={ GroupContainer }/>
       <Route 
         path='/admin/directory' 
-        onEnter={ ()=> { document.title = '用户目录' + suffix; } } 
+        onEnter={ ()=> { document.title = 'Directory' + suffix; } }
         getComponent={ DirectoryContainer }/>
       <Route 
         path='/admin/syssetting' 
@@ -287,11 +287,11 @@ export default (
         getComponent={ SyssettingContainer }/>
       <Route 
         path='/admin/logs' 
-        onEnter={ ()=> { document.title = '日志' + suffix; } } 
+        onEnter={ ()=> { document.title = 'Log' + suffix; } }
         getComponent={ LogsContainer }/>
       <Route
         path='/admin/calendar'
-        onEnter={ ()=> { document.title = '日历管理' + suffix; } }
+        onEnter={ ()=> { document.title = 'Calendar' + suffix; } }
         getComponent={ CalendarContainer }/>
       <Route 
         path='/admin/scheme' 

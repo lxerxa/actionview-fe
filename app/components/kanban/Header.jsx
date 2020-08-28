@@ -222,11 +222,11 @@ export default class Header extends Component {
           <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
             <Grid>
               <Row>
-                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>名称</Col>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Name</Col>
                 <Col sm={ 9 }>Sprint { activeSprint.no || '' }</Col>
               </Row>
               <Row>
-                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Start date</Col>
                 <Col sm={ 9 }>{ moment.unix(activeSprint.start_time).format('YYYY/MM/DD') }</Col>
               </Row>
               <Row>
@@ -234,7 +234,7 @@ export default class Header extends Component {
                 <Col sm={ 9 }>{ moment.unix(activeSprint.complete_time).format('YYYY/MM/DD') }</Col>
               </Row>
               <Row>
-                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>描述</Col>
+                <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Description</Col>
                 <Col sm={ 9 } style={ { overflowY: 'scroll', maxHeight: '450px' } } dangerouslySetInnerHTML={ { __html: _.escape(activeSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
               </Row>
             </Grid>
@@ -245,7 +245,7 @@ export default class Header extends Component {
         <Popover id='popover-trigger-click' style={ { maxWidth: '500px', padding: '15px 0px' } }>
           <Grid>
             <Row>
-              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>名称</Col>
+              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Name</Col>
               <Col sm={ 9 }>Sprint { selectedSprint.no || '' }</Col>
             </Row>
             <Row>
@@ -261,7 +261,7 @@ export default class Header extends Component {
               <Col sm={ 9 }>{ selectedSprint.real_complete_time && moment.unix(selectedSprint.real_complete_time).format('YYYY/MM/DD HH:mm') }</Col>
             </Row>
             <Row>
-              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>描述</Col>
+              <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>Description</Col>
               <Col sm={ 9 } style={ { overflowY: 'scroll', maxHeight: '450px' } } dangerouslySetInnerHTML={ { __html: _.escape(selectedSprint.description || '-').replace(/(\r\n)|(\n)/g, '<br/>') } }/>
             </Row>
           </Grid>
@@ -283,23 +283,23 @@ export default class Header extends Component {
             { !loading && _.isEmpty(curKanban) && kanbans.length <= 0 && 
             <span style={ { fontSize: '14px' } }>
               该项目暂未定义看板，
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 ? <span>请点击 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createKanbanModalShow: true }); } }>创建看板</a>。</span> : '请联系项目管理员创建。' }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 ? <span>请点击 <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ createKanbanModalShow: true }); } }>Create Kanban</a>。</span> : '请联系项目管理员创建。' }
             </span> } 
           </div>
           <div style={ { float: 'right', display: 'inline-block' } }>
             { options.permissions && options.permissions.indexOf('create_issue') !== -1 && !_.isEmpty(curKanban) && ((curKanban.type == 'kanban' && mode === 'issue') || mode === 'backlog') &&
-            <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> 创建问题</Button> }
+            <Button style={ { marginRight: '10px' } } bsStyle='primary' onClick={ () => { this.setState({ createIssueModalShow: true }); } }><i className='fa fa-plus'></i> Create issue</Button> }
             { !_.isEmpty(curKanban) &&
             <ButtonGroup style={ { marginRight: '10px' } }>
-              { curKanban.type == 'kanban' && <Button style={ { backgroundColor: mode == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>看板</Button> }
+              { curKanban.type == 'kanban' && <Button style={ { backgroundColor: mode == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>Kanban</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: mode == 'epic' && '#eee' } } onClick={ () => { this.changeModel('epic') } }>Epic</Button> }
               { curKanban.type == 'scrum' && completedSprintNum > 0 && <Button style={ { backgroundColor: mode == 'history' && '#eee' } } onClick={ () => { this.changeModel('history') } }>Sprint 历史</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: mode == 'backlog' && '#eee' } } onClick={ () => { this.changeModel('backlog') } }>Backlog</Button> }
               { curKanban.type == 'scrum' && <Button style={ { backgroundColor: mode == 'issue' && '#eee' } } onClick={ () => { this.changeModel('issue') } }>活动Sprint</Button> }
-              <Button style={ { backgroundColor: mode == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>配置</Button>
+              <Button style={ { backgroundColor: mode == 'config' && '#eee' } } onClick={ () => { this.changeModel('config') } }>Configuration</Button>
             </ButtonGroup> }
             { kanbans.length > 0 && 
-            <DropdownButton pullRight title='列表' onSelect={ this.changeKanban.bind(this) }>
+            <DropdownButton pullRight title='List' onSelect={ this.changeKanban.bind(this) }>
             { _.map(kanbans, (v, i) => ( 
               <MenuItem key={ i } eventKey={ v.id }>
                 <div style={ { display: 'inline-block', width: '20px', textAlign: 'left' } }>
@@ -311,7 +311,7 @@ export default class Header extends Component {
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 && 
               <MenuItem eventKey='create'>
                 { kanbans.length > 0 && <div style={ { display: 'inline-block', width: '20px' } }/> }
-                <span>创建看板</span>
+                <span>Create Kanban</span>
               </MenuItem> }
             </DropdownButton> } 
           </div>
@@ -326,10 +326,10 @@ export default class Header extends Component {
             </div> 
           </OverlayTrigger> }
           <span style={ { float: 'left', marginTop: '7px', marginRight: '10px' } }>
-            过滤器：
+            Filter：
           </span>
           <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ selectedFilter } onSelect={ this.handleSelect.bind(this) }>
-            <NavItem eventKey='all' href='#'>全部</NavItem>
+            <NavItem eventKey='all' href='#'>all</NavItem>
             { _.map(curKanban.filters || [], (v, i) => (<NavItem key={ i } eventKey={ i } href='#'>{ v.name }</NavItem>) ) }
           </Nav>
           <span style={ { float: 'right' } } title='隐藏看板头'>
@@ -342,8 +342,8 @@ export default class Header extends Component {
         </div> }
         { mode === 'backlog' && !_.isEmpty(curKanban) &&
         <div style={ { height: '45px', borderBottom: '2px solid #f5f5f5', display: this.state.hideHeader ? 'none': 'block' } }>
-          <div className='exchange-icon' style={ { float: 'left', marginTop: '7px' } } onClick={ this.changeFilterMode.bind(this) } title={ '切换至' + (this.state.backlogFilterMode == 'epic' ? '版本' : 'Epic') }><i className='fa fa-retweet'></i></div>
-          <span style={ { float: 'left', marginTop: '7px', marginRight: '5px' } }>{ this.state.backlogFilterMode === 'epic' ? 'Epic' : '版本' }过滤：</span>
+          <div className='exchange-icon' style={ { float: 'left', marginTop: '7px' } } onClick={ this.changeFilterMode.bind(this) } title={ '切换至' + (this.state.backlogFilterMode == 'epic' ? 'Version' : 'Epic') }><i className='fa fa-retweet'></i></div>
+          <span style={ { float: 'left', marginTop: '7px', marginRight: '5px' } }>{ this.state.backlogFilterMode === 'epic' ? 'Epic' : 'Version' }过滤：</span>
           { this.state.backlogFilterMode === 'epic' ?
           <div style={ { display: 'inline-block', float: 'left', width: '28%' } }>
             <Select
@@ -401,13 +401,13 @@ export default class Header extends Component {
         <div style={ { height: '45px', display: this.state.hideHeader ? 'none': 'block' } }>
           <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
             <Button disabled={ indexEpicLoading } onClick={ () => { this.setState({ createEpicModalShow: true }) } }>
-              <i className='fa fa-plus' aria-hidden='true'></i> 新建Epic
+              <i className='fa fa-plus' aria-hidden='true'></i> New Epic
             </Button>
           </div>
           { !indexEpicLoading &&  
           <div style={ { display: 'inline-block', float: 'left', marginRight: '15px' } }>
             <Button onClick={ () => { this.setState({ sortCardsModalShow: true }) } }>
-              <i className='fa fa-pencil' aria-hidden='true'></i> 编辑顺序
+              <i className='fa fa-pencil' aria-hidden='true'></i>Edit order
             </Button>
           </div> }
         </div> }

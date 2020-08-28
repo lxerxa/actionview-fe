@@ -21,7 +21,7 @@ export default class DelNotify extends Component {
     close();
     const ecode = await del(data.id);
     if (ecode === 0) {
-      notify.show((data.d == 1 ? '目录' : '文档') + '已删除。', 'success', 2000);    
+      notify.show((data.d == 1 ? '目录' : 'Document') + '已删除。', 'success', 2000);
       if (reload) {
         reload();
       }
@@ -38,20 +38,20 @@ export default class DelNotify extends Component {
   render() {
     const { data } = this.props;
 
-    const obj = data.d == 1 ? '目录' : '文档';
+    const obj = data.d == 1 ? '目录' : 'Document';
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除{ obj }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Delete{ obj }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           { obj }被删除后，将不可恢复。<br/>
           确认要删除【{ data.name }】该{ obj }？<br/>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

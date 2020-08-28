@@ -143,8 +143,8 @@ export default class ConfigList extends Component {
           <div>
             <Button bsStyle='link' onClick={ this.addAction.bind(this, collection[i].id) }>添加动作</Button>
             <Button bsStyle='link' onClick={ this.delAction.bind(this, collection[i].id) }>删除动作</Button>
-            <Button bsStyle='link' onClick={ this.showStep.bind(this, collection[i].id) }>编辑</Button>
-            { collection[i].actions.length === 0 && collection[i].id !== 1 && _.indexOf(allDestSteps, collection[i].id) === -1 && <Button bsStyle='link' onClick={ this.delStepNotify.bind(this, collection[i].id) }>删除</Button> }
+            <Button bsStyle='link' onClick={ this.showStep.bind(this, collection[i].id) }>Edit</Button>
+            { collection[i].actions.length === 0 && collection[i].id !== 1 && _.indexOf(allDestSteps, collection[i].id) === -1 && <Button bsStyle='link' onClick={ this.delStepNotify.bind(this, collection[i].id) }>Delete</Button> }
           </div>
         )
       });
@@ -154,7 +154,7 @@ export default class ConfigList extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     return (

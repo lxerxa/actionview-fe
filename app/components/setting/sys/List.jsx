@@ -166,7 +166,7 @@ export default class List extends Component {
       title: (
         <div>
           <span className='table-td-title'>时间追踪</span>
-          <span className='table-td-issue-desc'>建议启用此功能之前，确定此相关参数。若改动，可能会影响到原有问题的估算。</span>
+          <span className='table-td-issue-desc'>建议启用此功能之前，确定此相关参数。若改动，可能会影响到原有问题of估算。</span>
         </div>
       ),
       contents: (
@@ -290,7 +290,7 @@ export default class List extends Component {
           <NavItem eventKey='properties' href='#'>通用设置</NavItem>
           {/*<NavItem eventKey='timetrack' href='#'>时间追踪</NavItem>*/}
           <NavItem eventKey='mailserver' href='#'>邮件服务器</NavItem>
-          <NavItem eventKey='sysroles' href='#'>系统角色</NavItem>
+          <NavItem eventKey='sysroles' href='#'>系统Role</NavItem>
         </Nav>
         <BootstrapTable data={ data } bordered={ false } hover trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
@@ -308,7 +308,7 @@ export default class List extends Component {
         </div> }
         { this.state.tabKey == 'sysroles' &&
         <div style={ { width: '100%', marginTop: '20px' } }>
-          <Button disabled={ loading } onClick={ () => { this.setState({ configActorModalShow: true }) } }>角色配置</Button>
+          <Button disabled={ loading } onClick={ () => { this.setState({ configActorModalShow: true }) } }>Role配置</Button>
         </div> }
         { this.state.propertiesModalShow && 
         <PropertiesModal 

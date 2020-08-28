@@ -66,7 +66,7 @@ export default class PreviewModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <span style={ { float: 'left', marginTop: '7px' } }>提示：预览不支持IE</span>
-          <Button onClick={ close }>关闭</Button>
+          <Button onClick={ close }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

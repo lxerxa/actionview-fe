@@ -247,17 +247,17 @@ export default class List extends Component {
     const { createFolderShow, editRowId, hoverRowId, operateShow } = this.state;
 
     const uploadedat_options = [
-      { value: '1w', label: '1周内' },
-      { value: '2w', label: '2周内' },
-      { value: '1m', label: '1个月内' },
-      { value: '2m', label: '2个月内' }
+      { value: '1w', label: '1w' },
+      { value: '2w', label: '2w' },
+      { value: '1m', label: '1m' },
+      { value: '2m', label: '2m' }
     ];
 
     const sortOptions = [
-      { value: 'create_time_asc', label: '创建时间 ↑' },
-      { value: 'create_time_desc', label: '创建时间 ↓' },
-      { value: 'name_asc', label: '名称 ↑' },
-      { value: 'name_desc', label: '名称 ↓' }
+      { value: 'create_time_asc', label: 'Creation date ↑' },
+      { value: 'create_time_desc', label: 'Creation date ↓' },
+      { value: 'name_asc', label: 'Name ↑' },
+      { value: 'name_desc', label: 'Name ↓' }
     ];
 
     const componentConfig = {
@@ -345,7 +345,7 @@ export default class List extends Component {
               <MenuItem eventKey='download'>下载</MenuItem>
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='rename'>重命名</MenuItem> } 
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='move'>移动</MenuItem> }
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='del'>Delete</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === v.id) ? 'loading' : 'hide' }/>
           </div>)
@@ -408,7 +408,7 @@ export default class List extends Component {
               <MenuItem eventKey='download'>下载</MenuItem>
               { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || files[i].uploader.id == user.id) && <MenuItem eventKey='rename'>重命名</MenuItem> }
               { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || files[i].uploader.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
-              { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || files[i].uploader.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }
+              { options.permissions && (options.permissions.indexOf('manage_project') !== -1 || files[i].uploader.id == user.id) && <MenuItem eventKey='del'>Delete</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -420,7 +420,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -447,7 +447,7 @@ export default class List extends Component {
               <span style={ { float: 'right', marginRight: '10px' } }>
                 <DropdownButton
                   pullRight
-                  title='排序'
+                  title='Sort'
                   id='basic-nav-dropdown-project'
                   onSelect={ this.sortChange.bind(this) }>
                     { _.map(sortOptions, (v, i) =>
@@ -487,7 +487,7 @@ export default class List extends Component {
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
               <span style={ { float: 'right', marginRight: '10px' } }>
                 <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
-                  <i className='fa fa-plus'></i>&nbsp;新建目录
+                  <i className='fa fa-plus'></i>&nbsp;New 目录
                 </Button>
               </span> }
             </span>
@@ -496,14 +496,14 @@ export default class List extends Component {
         <div>
           <BootstrapTable data={ rows } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+            <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           <div style={ { marginTop: '15px' } }>
             <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
           </div>
           <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
-            { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
+            { !indexLoading && collection.length > 0 && <span>Total count 文件夹 { _.filter(collection, { d: 1 }).length } 个，File { _.reject(collection, { d: 1 }).length } 个。</span> }
             { collection.length > 1 && _.isEmpty(query) && options.path.length > 1 && 
             <span style={ { marginLeft: '10px' } }>
               <i className='fa fa-download'></i>

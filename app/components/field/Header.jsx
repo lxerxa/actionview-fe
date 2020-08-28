@@ -35,13 +35,13 @@ export default class Header extends Component {
             className='create-btn' 
             onClick={ () => { this.setState({ createModalShow: true }); } } 
             disabled={ indexLoading }>
-            <i className='fa fa-plus'></i>&nbsp;新建字段
+            <i className='fa fa-plus'></i>&nbsp;New 字段
           </Button>
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
           <div className='info-content'> 
-            <span>创建字段时键值必须唯一，且创建后键值不能改变。<br/>只能删除没有应用到界面{ isSysConfig && '（包括各项目自定义界面）' }中的字段。</span>
+            <span>创建字段时键值必须唯一，且创建后键值不能改变。<br/>只能删除没有应用到界面{ isSysConfig && '（包括各项目自定义界面）' }中of字段。</span>
           </div>
         </div>
         { this.state.createModalShow && 

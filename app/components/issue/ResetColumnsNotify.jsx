@@ -61,8 +61,8 @@ export default class ResetColumnsNotify extends Component {
             style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
             删除项目默认设置
           </Checkbox> }
-          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

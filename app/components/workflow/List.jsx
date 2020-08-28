@@ -133,7 +133,7 @@ export default class List extends Component {
         id: collection[i].id,
         name:  (
           <div>
-            <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }</span>
+            <span className='table-td-title'>{ collection[i].name }{ isGlobal && <span style={ { fontWeight: 'normal' } }> (Global)</span> }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
@@ -155,11 +155,11 @@ export default class List extends Component {
                 id={ `dropdown-basic-${i}` } 
                 onSelect={ this.operateSelect.bind(this) }>
                 <MenuItem eventKey='5'>预览</MenuItem>
-                { !isGlobal && <MenuItem eventKey='3'>配置</MenuItem> }
-                <MenuItem eventKey='4'>复制</MenuItem>
-                { !isGlobal && <MenuItem eventKey='1'>编辑</MenuItem> }
+                { !isGlobal && <MenuItem eventKey='3'>Configuration</MenuItem> }
+                <MenuItem eventKey='4'>Copy</MenuItem>
+                { !isGlobal && <MenuItem eventKey='1'>Edit</MenuItem> }
                 { pkey === '$_sys_$' && <MenuItem eventKey='6'>查看项目应用</MenuItem> }
-                { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+                { !isGlobal && !collection[i].is_used && <MenuItem eventKey='2'>Delete</MenuItem> }
               </DropdownButton>
             }
             <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
@@ -172,7 +172,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -181,7 +181,7 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px' } }>
         <BootstrapTable pullRight data={ workflows } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name' >名称</TableHeaderColumn>
+          <TableHeaderColumn dataField='name' >Name</TableHeaderColumn>
           <TableHeaderColumn dataField='latest_modify'>最近配置修改</TableHeaderColumn>
           <TableHeaderColumn dataField='step' width='200'>步骤</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>

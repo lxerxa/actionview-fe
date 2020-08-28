@@ -46,15 +46,15 @@ export default class History extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortHistory() } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' title='Refresh' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexHistory(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> Refresh</span>
+              <span className='comments-button' title='Sort' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortHistory() } }><i className='fa fa-sort'></i> Sort</span>
               <span style={ { marginRight: '20px', float: 'right' } }>
                 <Checkbox
                   style={ { paddingTop: '0px', minHeight: '18px' } }
                   checked={ this.state.displayTimeFormat == 'absolute' ? true : false }
                   disabled={ indexLoading }
                   onClick={ this.swapTime.bind(this) }>
-                  显示绝对时间
+                  Show absolute date
                 </Checkbox>
               </span>
             </div>
@@ -66,7 +66,7 @@ export default class History extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && (val.operator.name + '(' + val.operator.email + ')')) + '">' + (val.operator && val.operator.id === currentUser.id ? '我' : val.operator.name) + '</a> ' + (val.operation == 'modify' ? '修改': '新建') + ' - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.operated_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.operated_at, currentTime)) } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.operator && (val.operator.name + '(' + val.operator.email + ')')) + '">' + (val.operator && val.operator.id === currentUser.id ? '我' : val.operator.name) + '</a> ' + (val.operation == 'modify' ? '修改': 'New') + ' - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.operated_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.operated_at, currentTime)) } } />
               </div> ); 
 
               return (
@@ -75,9 +75,9 @@ export default class History extends Component {
                   <Table condensed hover responsive>
                     <thead>
                       <tr>
-                        <th>字段</th>
-                        <th>原值</th>
-                        <th>新值</th>
+                        <th>Field</th>
+                        <th>Original value</th>
+                        <th>New value</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -102,7 +102,7 @@ export default class History extends Component {
                     </tbody>
                   </Table>
                   :
-                  <span style={ { marginLeft: '5px' } }>创建问题</span> }
+                  <span style={ { marginLeft: '5px' } }>Create issue</span> }
                 </Panel>) } ) }
           </Col>
         </FormGroup>

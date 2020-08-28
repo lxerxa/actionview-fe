@@ -30,7 +30,7 @@ export default class WatcherListModal extends Component {
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           <div style={ { marginBottom: '10px' } }>
             { watchers.length > 0 ?
-            <span>共有关注者 <strong>{ watchers.length }</strong> 人</span>
+            <span>Total有关注者 <strong>{ watchers.length }</strong> 人</span>
             :
             <span>暂无关注者</span> }
           </div>
@@ -48,7 +48,7 @@ export default class WatcherListModal extends Component {
           </Table> }
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.handleCancel }>关闭</Button>
+          <Button onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

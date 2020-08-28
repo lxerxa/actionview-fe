@@ -126,8 +126,8 @@ export default class List extends Component {
         name: ( 
           <span className='table-td-title'>
             { collection[i].name }
-            { isGlobal && <span style={ { fontWeight: 'normal' } }> (全局)</span> }
-            { collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }
+            { isGlobal && <span style={ { fontWeight: 'normal' } }> (Global)</span> }
+            { collection[i].default && <span style={ { fontWeight: 'normal' } }> (default)</span> }
           </span> ),
         description: collection[i].description ? collection[i].description : '-', 
         operation: !isGlobal && (!collection[i].key || ['Unresolved', 'Fixed'].indexOf(collection[i].key) === -1) ? (
@@ -141,9 +141,9 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              { !collection[i].key && <MenuItem eventKey='1'>编辑</MenuItem> }
+              { !collection[i].key && <MenuItem eventKey='1'>Edit</MenuItem> }
               { pkey === '$_sys_$' && <MenuItem eventKey='3'>查看项目应用</MenuItem> }
-              { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+              { !collection[i].is_used && <MenuItem eventKey='2'>Delete</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -155,7 +155,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -165,8 +165,8 @@ export default class List extends Component {
       <div style={ { marginBottom: '30px' } }>
         <BootstrapTable data={ resolutions } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='description'>描述</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+          <TableHeaderColumn dataField='description'>Description</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && 

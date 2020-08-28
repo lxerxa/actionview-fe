@@ -33,9 +33,9 @@ export default class Header extends Component {
     const { setDefault } = this.props;
     const ecode = await setDefault({ 'defaultValue': defaultValue });
     if (ecode === 0) {
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
-      notify.show('设置失败。', 'error', 2000);
+      notify.show('Setup failed', 'error', 2000);
     }
     this.setState({ defaultSetShow: false });
   }
@@ -55,7 +55,7 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建优先级</Button>
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;New 优先级</Button>
           { !indexLoading && <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }><i className='fa fa-pencil'></i>&nbsp;编辑顺序</Button> }
           <div className={ indexLoading ? 'hide' : 'div-default-set' }>
             <span className='default-set'>默认优先级：</span>
@@ -82,7 +82,7 @@ export default class Header extends Component {
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'>只能删除没有应用到项目问题中的优先级。</div>
+          <div className='info-content'>只能删除没有应用到项目问题中of优先级。</div>
         </div>
         { this.state.createModalShow && 
           <CreateModal 
@@ -94,7 +94,7 @@ export default class Header extends Component {
         { this.state.sortCardsModalShow && 
           <SortCardsModal 
             show 
-            model='优先级'
+            model='Priority'
             close={ this.sortCardsModalClose } 
             cards={ collection } 
             setSort={ setSort } 

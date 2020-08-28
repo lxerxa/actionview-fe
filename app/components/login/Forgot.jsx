@@ -104,9 +104,9 @@ class Forgot extends Component {
             { this.state.alertShow && !submitting && errMsg[this.state.ecode] && <div style={ { marginTop: '10px', color: '#a94442' } }>抱歉，{ errMsg[this.state.ecode] }。</div> }
           </div>
           <div style={ { textAlign: 'left', marginLeft: '5px', marginBottom: '25px' } }>
-          1. 系统管理员请输入：admin@action.view，重置密码链接将发送至已配置的关联邮箱。
+          1. 系统管理员请输入：admin@action.view，重置密码链接将发送至已配置of关联邮箱。
           <br/>
-          2. 仅限本系统内部维护账号的密码找回，不支持外部同步账号。
+          2. 仅限本系统内部维护账号of密码找回，不支持外部同步账号。
           </div>
           <div className='login-footer'>
             <Link to='/login'>返回登录</Link>

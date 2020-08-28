@@ -12,7 +12,7 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.type) {
-    errors.type = '必填';
+    errors.type = 'Required';
   }
   return errors;
 };
@@ -106,7 +106,7 @@ export default class ConvertType2Modal extends Component {
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>移动到父任务</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Move to parent task</ControlLabel>
             <Select.Async 
               clearable={ false } 
               disabled={ submitting } 
@@ -120,7 +120,7 @@ export default class ConvertType2Modal extends Component {
             { parent_id.touched && parent_id.error && <HelpBlock style={ { float: 'right' } }>{ parent_id.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>子任务类型</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>Subtype type</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ typeOptions } 
@@ -135,8 +135,8 @@ export default class ConvertType2Modal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

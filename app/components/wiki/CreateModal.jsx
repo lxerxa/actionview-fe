@@ -31,7 +31,7 @@ export default class CreateModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('新建完成。', 'success', 2000);
+      notify.show('New 完成。', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -73,7 +73,7 @@ export default class CreateModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } bsSize='large' backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>新建文档</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>New 文档</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
           <FormGroup style={ { marginTop: '0px' } } validationState={ this.state.touched && !this.state.name && 'error' || null }>
@@ -104,8 +104,8 @@ export default class CreateModal extends Component {
             style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
             通知项目成员
           </Checkbox>
-          <Button disabled={ loading || !this.state.name } onClick={ this.handleSubmit }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ loading || !this.state.name } onClick={ this.handleSubmit }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

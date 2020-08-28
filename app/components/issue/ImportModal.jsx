@@ -77,7 +77,7 @@ export default class ImportModal extends Component {
         <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>
           <FormGroup>
             { this.state.fid ?
-            <ControlLabel>文件：{ this.state.fname }</ControlLabel>
+            <ControlLabel>File：{ this.state.fname }</ControlLabel>
             :
             <ControlLabel>选择导入Excel文件</ControlLabel> }
             <DropzoneComponent config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
@@ -101,7 +101,7 @@ export default class ImportModal extends Component {
           <Table bordered condensed hover responsive>
             <thead>
               <tr>
-                <th>行（主题）</th>
+                <th>行（Title）</th>
                 <th>错误信息</th>
               </tr>
             </thead>
@@ -125,8 +125,8 @@ export default class ImportModal extends Component {
         <Modal.Footer>
           <a href='/template/import_issue_tpl.xlsx' style={ { float: 'left', marginTop: '5px', marginLeft: '5px' } } download='import_issue_tpl.xlsx'>模版下载</a>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || !this.state.fid } onClick={ this.handleSubmit }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ loading || !this.state.fid } onClick={ this.handleSubmit }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

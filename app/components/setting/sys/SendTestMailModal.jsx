@@ -8,13 +8,13 @@ const img = require('../../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.to) {
-    errors.to = '必填';
+    errors.to = 'Required';
   } else if (!/^(\w-*\.*)+@(\w+[\w|-]*)+(\.\w+[\w|-]*)*(\.\w{2,})+$/.test(values.to)) {
     errors.to = '格式有误';
   }
 
   if (!values.subject) {
-    errors.subject = '必填';
+    errors.subject = 'Required';
   }
   return errors;
 };
@@ -80,8 +80,8 @@ export default class ResetPwdModal extends Component {
             { to.touched && to.error && <HelpBlock style={ { float: 'right' } }>{ to.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ subject.touched && subject.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>主题</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...subject } placeholder='主题'/>
+            <ControlLabel><span className='txt-impt'>*</span>Title</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...subject } placeholder='Title'/>
             { subject.touched && subject.error && <HelpBlock style={ { float: 'right' } }>{ subject.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsTextarea'>
@@ -92,8 +92,8 @@ export default class ResetPwdModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

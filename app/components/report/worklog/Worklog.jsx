@@ -183,7 +183,7 @@ export default class Worklog extends Component {
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='Save filter'><i className='fa fa-save'></i></div>
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>
             <Button title='饼状图' style={ { height: '36px', backgroundColor: this.state.shape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button>
@@ -214,10 +214,10 @@ export default class Worklog extends Component {
               <span style={ { fontSize: '160px', color: '#FFC125' } } >
                 <i className='fa fa-warning'></i>
               </span><br/> 
-              <span>抱歉，暂无满足该检索条件的数据。</span>
+              <span>抱歉，暂无满足该检索条件of数据。</span>
             </div>
           </div> }
-          { data.length > 0 && <div style={ { marginLeft: '10px', float: 'right' } }>注：图表耗费时间值是以分钟(m)为单位</div> }
+          { data.length > 0 && <div style={ { marginLeft: '10px', float: 'right' } }>Note：图表耗费时间值是以分钟(m)为单位</div> }
           { this.state.shape === 'pie' && data.length > 0 &&
           <div className='report-shape-container'>
             <PieChart 
@@ -297,8 +297,8 @@ export default class Worklog extends Component {
         </div> }
         { this.state.worklogListShow &&
         <div id='workloglist' style={ { float: 'left', width: '100%', textAlign: 'center', margin: '15px 0px 30px 0px' } }>
-          <span style={ { fontWeight: '600' } }>{ this.state.showedUser.name || '' } - 工作日志</span>
-          <span title='刷新' onClick={ this.refreshList }><Button bsStyle='link' disabled={ worklogListLoading }><i className='fa fa-refresh'></i></Button></span>
+          <span style={ { fontWeight: '600' } }>{ this.state.showedUser.name || '' } - Work log</span>
+          <span title='Refresh' onClick={ this.refreshList }><Button bsStyle='link' disabled={ worklogListLoading }><i className='fa fa-refresh'></i></Button></span>
           <List
             show
             showedUser={ this.state.showedUser }

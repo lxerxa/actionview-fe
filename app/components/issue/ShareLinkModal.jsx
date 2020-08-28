@@ -32,7 +32,7 @@ export default class ShareLinkModal extends Component {
     return (
       <Modal show onHide={ close } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>分享链接 - { issue.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Share - { issue.no }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormControl
@@ -43,8 +43,8 @@ export default class ShareLinkModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <span style={ { marginRight: '20px', fontSize: '12px' } }>若当前浏览器不支持此复制功能，可手动复制以上链接。</span>
-          <Button onClick={ this.copy.bind(this) }>复制</Button>
-          <Button bsStyle='link' onClick={ close }>关闭</Button>
+          <Button onClick={ this.copy.bind(this) }>Copy</Button>
+          <Button bsStyle='link' onClick={ close }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

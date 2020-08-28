@@ -9,11 +9,11 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.first_name) {
-    errors.first_name = '必填';
+    errors.first_name = 'Required';
   } 
 
   if (!values.email) {
-    errors.email = '必填';
+    errors.email = 'Required';
   } else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
     errors.email = '格式有误';
   } 
@@ -93,7 +93,7 @@ export default class EditModal extends Component {
           <FormGroup controlId='formControlsText' validationState={ first_name.touched && first_name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>姓名</ControlLabel>
             <FormControl type='hidden' { ...id }/>
-            <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='项目名'/>
+            <FormControl disabled={ submitting } type='text' { ...first_name } placeholder='first name'/>
             { first_name.touched && first_name.error && <HelpBlock style={ { float: 'right' } }>{ first_name.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ email.touched && email.error ? 'error' : null }>
@@ -110,8 +110,8 @@ export default class EditModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ !dirty || submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ !dirty || submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

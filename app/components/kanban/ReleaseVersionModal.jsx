@@ -12,7 +12,7 @@ const img = require('../../assets/images/loading.gif');
 const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
-    errors.name = '必填';
+    errors.name = 'Required';
   }
   if (_.findIndex(props.options.versions || [], { name: values.name }) !== -1) {
     errors.name = '该版本已存在';
@@ -94,7 +94,7 @@ export default class ReleaseVersionModal extends Component {
               <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
           {/*<FormGroup controlId='formControlsText' validationState={ end_time.value && end_time.error ? 'error' : null }>
-            <ControlLabel>发布时间</ControlLabel>
+            <ControlLabel>Release date</ControlLabel>
             <DateTime
               locale='zh-cn'
               mode='date'
@@ -107,8 +107,8 @@ export default class ReleaseVersionModal extends Component {
             { end_time.value && end_time.error && <HelpBlock style={ { float: 'right' } }>{ end_time.error }</HelpBlock> }
           </FormGroup>*/}
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>描述</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...description } placeholder='描述'/>
+            <ControlLabel>Description</ControlLabel>
+            <FormControl disabled={ submitting } type='text' { ...description } placeholder='Description'/>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
@@ -121,8 +121,8 @@ export default class ReleaseVersionModal extends Component {
             style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
             通知项目成员
           </Checkbox>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

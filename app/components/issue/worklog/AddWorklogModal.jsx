@@ -15,19 +15,19 @@ export default class AddWorklogModal extends Component {
     const errors = {};
     if (data.id) {
       if (!data.started_at) {
-        errors.started_at = '必填';
+        errors.started_at = 'Required';
       }
       if (!data.spend) {
-        errors.spend = '必填';
+        errors.spend = 'Required';
       }
       if (data.adjust_type == '3' && (!data.leave_estimate || _.trim(data.leave_estimate) == '')) {
-        errors.leave_estimate = '必填';
+        errors.leave_estimate = 'Required';
       } else if (data.adjust_type == '4' && !data.cut) {
-        errors.cut = '必填';
+        errors.cut = 'Required';
       }
     } else {
-      // errors.started_at = '必填';
-      errors.spend = '必填';
+      // errors.started_at = 'Required';
+      errors.spend = 'Required';
     }
 
     const values = {};
@@ -118,7 +118,7 @@ export default class AddWorklogModal extends Component {
 
   changeTT(e, field) {
     if (!e.target.value) {
-      this.state.errors[field] = '必填'
+      this.state.errors[field] = 'Required'
     } else {
       if (!this.ttTest(e.target.value)) {
         this.state.errors[field] = '格式有误';
@@ -132,7 +132,7 @@ export default class AddWorklogModal extends Component {
 
   changeStartedAt(newValue) {
     if (!newValue) {
-      this.state.errors.started_at = '必填'
+      this.state.errors.started_at = 'Required'
     } else {
       if (!moment(newValue).isValid()) {
         this.state.errors.started_at = '格式有误';
@@ -157,9 +157,9 @@ export default class AddWorklogModal extends Component {
     delete this.state.errors.cut;
 
     if (val == '3') {
-      this.state.errors.leave_estimate = '必填';
+      this.state.errors.leave_estimate = 'Required';
     } else if (val == '4') {
-      this.state.errors.cut = '必填';
+      this.state.errors.cut = 'Required';
     }
 
     this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched });
@@ -178,13 +178,13 @@ export default class AddWorklogModal extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑工作日志' : ('添加工作日志' + (issue.no ? (' - ' + issue.no) : '')) }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? 'Edit worklog' : ('Add worklog' + (issue.no ? (' - ' + issue.no) : '')) }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form horizontal style={ { marginTop: '15px' } }>
             <FormGroup validationState={ this.state.touched.started_at && this.state.errors.started_at ? 'error' : null }>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                <span className='txt-impt'>*</span> 开始时间 
+                <span className='txt-impt'>*</span> Start date 
               </Col>
               <Col sm={ 6 }>
                 <DateTime
@@ -202,7 +202,7 @@ export default class AddWorklogModal extends Component {
             </FormGroup>
             <FormGroup controlId='formControlsLabel' validationState={ this.state.touched.spend && this.state.errors.spend ? 'error' : null }>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                <span className='txt-impt'>*</span> 耗费时间
+                <span className='txt-impt'>*</span> Spent time
               </Col>
               <Col sm={ 5 }>
                 <FormControl
@@ -218,7 +218,7 @@ export default class AddWorklogModal extends Component {
             </FormGroup>
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                剩余时间
+                Remaining time
               </Col>
               <Col sm={ 9 }>
                 <RadioGroup
@@ -261,7 +261,7 @@ export default class AddWorklogModal extends Component {
             </FormGroup>
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                备注
+                Comments
               </Col>
               <Col sm={ 8 }>
                 <FormControl
@@ -276,8 +276,8 @@ export default class AddWorklogModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ _.isEqual(this.state.oldValues, this.state.values) || loading || !_.isEmpty(this.state.errors) } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ _.isEqual(this.state.oldValues, this.state.values) || loading || !_.isEmpty(this.state.errors) } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

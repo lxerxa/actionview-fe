@@ -95,7 +95,7 @@ class CreateModal extends Component {
           }
         }
         if (v.required && (!data[v.key] || (_.isArray(data[v.key]) && data[v.key].length <= 0))) {
-          errors[v.key] = '必填';
+          errors[v.key] = 'Required';
         }
       });
       _.extend(values, { type: data.type });
@@ -130,7 +130,7 @@ class CreateModal extends Component {
           }
         }
         if (v.required && !v.defaultValue) {
-          errors[v.key] = '必填';
+          errors[v.key] = 'Required';
         }
       });
     }
@@ -322,7 +322,7 @@ class CreateModal extends Component {
       }
 
       if (v.required && !values[v.key]) {
-        errors[v.key] = '必填';
+        errors[v.key] = 'Required';
       }
     });
 
@@ -418,14 +418,14 @@ class CreateModal extends Component {
         onHide={ close } 
         bsSize='large'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : ('编辑问题' + ' - ' + data.no)) : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? 'Process page' : ('Edit issue' + ' - ' + data.no)) : (isSubtask ? '创建子任务问题' : 'Create issue') }</Modal.Title>
         </Modal.Header>
         <Form horizontal>
           <Modal.Body style={ bodyStyles } ref='createModal'>
             { !isFromWorkflow && !isSubtask &&
             <FormGroup controlId='formControlsLabel'>
               <Col sm={ 2 } componentClass={ ControlLabel }>
-                项目名称
+                Project name
               </Col>
               <Col sm={ 9 }>
                 <div style={ { marginTop: '7px', marginBottom: '6px' } }><span>{ project.name || '-' }</span></div>
@@ -443,7 +443,7 @@ class CreateModal extends Component {
             { !isFromWorkflow &&
             <FormGroup controlId='formControlsSelect' style={ { height: '68px', borderBottom: '1px solid #ddd' } }>
               <Col sm={ 2 } componentClass={ ControlLabel }>
-                <span className='txt-impt'>*</span>类型
+                <span className='txt-impt'>*</span>Type
               </Col>
               <Col sm={ 7 }>
                 <Select 
@@ -455,7 +455,7 @@ class CreateModal extends Component {
                   value={ this.state.values['type'] } 
                   onChange={ this.typeChange.bind(this) } 
                   placeholder='请选择问题类型'/>
-                <div><span style={ { fontSize: '12px' } }>改变问题类型可能造成已填写部分信息的丢失，建议填写信息前先确定问题类型。</span></div>
+                <div><span style={ { fontSize: '12px' } }>Changing the question type may result in the loss of some of the information already filled in. It is recommended to determine the question type before filling in the information.</span></div>
               </Col>
             </FormGroup> }
             { _.map(schema, (v, key) => {
@@ -476,9 +476,9 @@ class CreateModal extends Component {
                       type='text' 
                       disabled={ loading }
                       value={ this.state.values[v.key] } 
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } } 
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = 'Required' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ 'Enter' + v.name } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -494,9 +494,9 @@ class CreateModal extends Component {
                       max={ v.key == 'progress' ? '100' : '' }
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = 'Required' : (e.target.value && isNaN(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ 'Enter' + v.name } />
                   </Col>
                   <Col sm={ 6 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -513,10 +513,10 @@ class CreateModal extends Component {
                       componentClass='textarea'
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = 'Required' : delete this.state.errors[v.key]; this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       style={ { height: '200px' } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ 'Enter' + v.name } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -550,10 +550,10 @@ class CreateModal extends Component {
                       options={ _.map(v.optionValues, (val) => { return { label: val.name, value: val.id } } ) } 
                       onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必选' : delete this.state.errors[v.key]; this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }) } } 
                       className={ this.state.touched[v.key] && this.state.errors[v.key] && 'select-error' }
-                      placeholder={ '选择' + v.name } />
+                      placeholder={ 'Select' + v.name } />
                     { v.key === 'labels' &&
                       <div>
-                        <span style={ { fontSize: '12px' } }>拥有项目管理权限的用户才可创建新的标签。</span>
+                        <span style={ { fontSize: '12px' } }>拥有项目管理权限of用户才可创建新of标签。</span>
                       </div> }
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
@@ -607,7 +607,7 @@ class CreateModal extends Component {
                       timeFormat={ v.type === 'DateTimePicker' ?  'HH:mm' : false } 
                       closeOnSelect={ v.type === 'DatePicker' }
                       value={ this.state.values[v.key] } 
-                      onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = '必填' : (newValue && !moment(newValue).isValid() ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }/>
+                      onChange={ newValue => { v.required && !newValue ? this.state.errors[v.key] = 'Required' : (newValue && !moment(newValue).isValid() ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.touched[v.key] = true; this.state.values[v.key] = newValue; this.setState({ values: this.state.values, errors: this.state.errors, touched: this.state.touched }); } }/>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -646,9 +646,9 @@ class CreateModal extends Component {
                       type='text'
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.urlTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = 'Required' : (e.target.value && !this.urlTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      placeholder={ '输入' + v.name } />
+                      placeholder={ 'Enter' + v.name } />
                   </Col>
                   <Col sm={ 3 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
@@ -663,7 +663,7 @@ class CreateModal extends Component {
                       type='text'
                       disabled={ loading }
                       value={ this.state.values[v.key] }
-                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = '必填' : (e.target.value && !this.ttTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
+                      onChange={ (e) => { v.required && !e.target.value ? this.state.errors[v.key] = 'Required' : (e.target.value && !this.ttTest(e.target.value) ? this.state.errors[v.key] = '格式有误' : delete this.state.errors[v.key]); this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values, errors: this.state.errors }); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '例如：3w 4d 12h 30m' } />
                   </Col>
@@ -682,9 +682,9 @@ class CreateModal extends Component {
             type='submit' 
             disabled={ (data.id && this.getChangedKeys().length <= 0 && isFromWorkflow === false) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } 
             onClick={ this.handleSubmit }>
-            确定
+            Submit
           </Button>
-          <Button bsStyle='link' onClick={ this.handleCancel }>取消</Button>
+          <Button bsStyle='link' onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

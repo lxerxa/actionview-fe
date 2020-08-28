@@ -67,7 +67,7 @@ export default class OperateNotify extends Component {
         </Modal.Header>
         { operate === 'del' && 
         <Modal.Body>
-          目录被删除后，同步的用户信息也将被删除。<br/>
+          目录被删除后，同步of用户信息也将被删除。<br/>
           是否删除【{ data.name }】该目录？
         </Modal.Body> }
         { operate === 'validate' &&
@@ -80,8 +80,8 @@ export default class OperateNotify extends Component {
           是否禁用【{ data.name }】该目录？
         </Modal.Body> }
         <Modal.Footer>
-          <Button onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

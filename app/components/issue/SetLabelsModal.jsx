@@ -85,12 +85,12 @@ export default class SetLabelsModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '设置标签 - ' + issue.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ 'Set label - ' + issue.no }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormGroup controlId='formControlsText'>
-            <ControlLabel>标签</ControlLabel>
+            <ControlLabel>Label</ControlLabel>
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 ?
             <CreatableSelect
               multi
@@ -111,7 +111,7 @@ export default class SetLabelsModal extends Component {
                 onChange={ (newValue) => { labels.onChange(newValue) } } 
                 placeholder='选择标签'/>
               <div>
-                <span style={ { fontSize: '12px' } }>拥有项目管理权限的用户才可创建新的标签。</span>
+                <span style={ { fontSize: '12px' } }>拥有项目管理权限of用户才可创建新of标签。</span>
               </div>
             </div> }
           </FormGroup>
@@ -119,8 +119,8 @@ export default class SetLabelsModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !submitting && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ submitting ? 'loading' : 'hide' }/>
-          <Button disabled={ submitting || invalid } type='submit'>确定</Button>
-          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ submitting || invalid } type='submit'>Submit</Button>
+          <Button bsStyle='link' disabled={ submitting } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </form>
       </Modal>

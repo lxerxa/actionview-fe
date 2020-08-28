@@ -82,15 +82,15 @@ export default class ConfigModal extends Component {
 
     const special_fields = [
       { key: 'no', name: 'NO' },
-      { key: 'type', name: '类型' },
-      { key: 'state', name: '状态' },
-      { key: 'reporter', name: '报告者' },
-      { key: 'resolver', name: '解决者' },
-      { key: 'closer', name: '关闭者' },
-      { key: 'created_at', name: '创建时间' },
-      { key: 'updated_at', name: '更新时间' },
-      { key: 'resolved_at', name: '解决时间' },
-      { key: 'closed_at', name: '关闭时间' },
+      { key: 'type', name: 'Type' },
+      { key: 'state', name: 'Status' },
+      { key: 'reporter', name: 'Reporter' },
+      { key: 'resolver', name: 'Resolver' },
+      { key: 'closer', name: 'Closer' },
+      { key: 'created_at', name: 'Creation date' },
+      { key: 'updated_at', name: 'Update date' },
+      { key: 'resolved_at', name: 'Resolution date' },
+      { key: 'closed_at', name: 'Close date' },
       { key: 'epic', name: 'Epic' },
       { key: 'sprints', name: 'Sprint' }
     ];
@@ -151,10 +151,10 @@ export default class ConfigModal extends Component {
               } } 
             }
             style={ { float: 'left', margin: '5px 5px' } }>
-            全部选择
+            Select all
           </BootstrapCheckbox>
           <Button onClick={ this.confirm } disabled={ this.state.fields.length <= 0 }>导出</Button>
-          <Button bsStyle='link' onClick={ this.cancel }>取消</Button>
+          <Button bsStyle='link' onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

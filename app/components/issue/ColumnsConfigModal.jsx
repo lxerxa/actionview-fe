@@ -48,7 +48,7 @@ export default class ColumnsConfigModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -130,7 +130,7 @@ export default class ColumnsConfigModal extends Component {
                   clearable={ false } 
                   value={ this.state.addFieldIds } 
                   onChange={ this.handleChange.bind(this) } 
-                  placeholder='选择添加字段(可多选)' 
+                  placeholder='Select a field to add (multiple choices)'
                   multi/>
                 <Button 
                   style={ { float: 'right', marginTop: '15px' } } 
@@ -138,7 +138,7 @@ export default class ColumnsConfigModal extends Component {
                   disabled={ !enableAdd }>添加至列表 >> 
                 </Button>
                 <div style={ { float: 'right', marginTop: '15px' } }>
-                  注意：<br/>1. 问题列表除前三列（编号、类型和主题）外，其它列支持动态配置。<br/>2. 通过上下拖拽改变列的显示顺序，修改文本框数值(单位：px)调整列的显示宽度。
+                  Warning：<br/>1. 问题列表除前三列（编号、类型和主题）外，其它列支持动态配置。<br/>2. 通过上下拖拽改变列of显示顺序，修改文本框数值(单位：px)调整列of显示宽度。
                 </div>
               </Col>
               <Col sm={ 6 }>
@@ -174,8 +174,8 @@ export default class ColumnsConfigModal extends Component {
             style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
             保存作为该项目默认显示列
           </Checkbox> }
-          <Button disabled={ loading || (strCards == JSON.stringify(cards) && !this.state.saveForProject) } onClick={ this.save.bind(this) }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
+          <Button disabled={ loading || (strCards == JSON.stringify(cards) && !this.state.saveForProject) } onClick={ this.save.bind(this) }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

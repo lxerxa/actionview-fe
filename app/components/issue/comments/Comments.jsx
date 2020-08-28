@@ -218,8 +218,8 @@ export default class Comments extends Component {
         <FormGroup>
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '10px' } }>
             <div>
-              <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexComments(issue_id) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortComments() } }><i className='fa fa-sort'></i> 排序</span>
+              <span className='comments-button' title='Refresh' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexComments(issue_id) } }><i className='fa fa-refresh'></i> Refresh</span>
+              <span className='comments-button' title='Sort' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortComments() } }><i className='fa fa-sort'></i> Sort</span>
               { permissions.indexOf('add_comments') !== -1 && 
               <span className='comments-button' title='添加' style={ { marginRight: '10px', float: 'right' } } onClick={ this.showCommentsInputor.bind(this) }><i className='fa fa-comment-o'></i> 添加</span> }
               <span style={ { marginRight: '20px', float: 'right' } }>
@@ -227,7 +227,7 @@ export default class Comments extends Component {
                   style={ { paddingTop: '0px', minHeight: '18px' } }
                   checked={ this.state.displayTimeFormat == 'absolute' ? true : false } 
                   onClick={ this.swapTime.bind(this) }>
-                  显示绝对时间 
+                  Show absolute date
                 </Checkbox>
               </span>
             </div>
@@ -246,7 +246,7 @@ export default class Comments extends Component {
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
               <Button style={ { marginLeft: '10px' } } onClick={ this.addComments } disabled={ loading || _.isEmpty(_.trim(this.state.contents)) }>添加</Button>
-              <Button bsStyle='link' style={ { marginRight: '5px' } } onClick={ () => { this.setState({ addCommentsShow: false }) } } disabled={ loading }>取消</Button>
+              <Button bsStyle='link' style={ { marginRight: '5px' } } onClick={ () => { this.setState({ addCommentsShow: false }) } } disabled={ loading }>Cancel</Button>
             </div>
           </Col>
           <Col sm={ 12 }>
@@ -256,13 +256,13 @@ export default class Comments extends Component {
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>
-                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (val.creator && val.creator.id === currentUser.id ? '我' : val.creator.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.created_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.created_at, currentTime)) + (val.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } } />
+                <span dangerouslySetInnerHTML= { { __html: '<a title="' + (val.creator && (val.creator.name + '(' + val.creator.email + ')')) + '">' + (val.creator && val.creator.id === currentUser.id ? '我' : val.creator.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.created_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.created_at, currentTime)) + (val.edited_flag == 1 ? '<span style="color:red"> - Edited</span>' : '') } } />
                 { ((val.creator && currentUser.id === val.creator.id && permissions.indexOf('delete_self_comments') !== -1) 
                   || permissions.indexOf('delete_comments') !== -1) &&  
-                <span className='comments-button comments-edit-button' style={ { float: 'right', marginLeft: '7px' } } onClick={ this.showDelComments.bind(this, val) } title='删除'><i className='fa fa-trash'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { float: 'right', marginLeft: '7px' } } onClick={ this.showDelComments.bind(this, val) } title='Delete'><i className='fa fa-trash'></i></span> }
                 { ((val.creator && currentUser.id === val.creator.id && permissions.indexOf('edit_self_comments') !== -1) 
                   || permissions.indexOf('edit_comments') !== -1) &&  
-                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) } title='编辑'><i className='fa fa-pencil'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditComments.bind(this, val) } title='Edit'><i className='fa fa-pencil'></i></span> }
                 { permissions.indexOf('add_comments') !== -1 && 
                 <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, {}) } title='回复'><i className='fa fa-reply'></i></span> }
               </div> ); 
@@ -354,13 +354,13 @@ export default class Comments extends Component {
                        return (
                        <li className='reply-contents-item'>
                          <div className='reply-item-header'>
-                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (v.creator.name + '(' + v.creator.email + ')')) + '">' + (v.creator && v.creator.id === currentUser.id ? '我' : v.creator.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.created_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.created_at, currentTime)) + (v.edited_flag == 1 ? '<span style="color:red"> - 已编辑</span>' : '') } }/>
+                           <span dangerouslySetInnerHTML= { { __html: '<a title="' + (v.creator && (v.creator.name + '(' + v.creator.email + ')')) + '">' + (v.creator && v.creator.id === currentUser.id ? '我' : v.creator.name) + '</a> - ' + (this.state.displayTimeFormat == 'absolute' ? moment.unix(val.created_at).format('YYYY/MM/DD HH:mm:ss') : getAgoAt(val.created_at, currentTime)) + (v.edited_flag == 1 ? '<span style="color:red"> - Edited</span>' : '') } }/>
                            { ((v.creator && currentUser.id === v.creator.id && permissions.indexOf('delete_self_comments') !== -1)
                              || permissions.indexOf('delete_comments') !== -1) &&
-                           <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) } title='删除'><i className='fa fa-trash'></i></span> }
+                           <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showDelReply.bind(this, val.id, v) } title='Delete'><i className='fa fa-trash'></i></span> }
                            { ((v.creator && currentUser.id === v.creator.id && permissions.indexOf('edit_self_comments') !== -1) 
                              || permissions.indexOf('edit_comments') !== -1) && 
-                           <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) } title='编辑'><i className='fa fa-pencil'></i></span> }
+                           <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditReply.bind(this, val.id, v) } title='Edit'><i className='fa fa-pencil'></i></span> }
                            { permissions.indexOf('add_comments') !== -1 && 
                            <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, v.creator) } title='回复'><i className='fa fa-reply'></i></span> }
                          </div>

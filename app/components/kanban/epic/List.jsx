@@ -132,10 +132,10 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='2'>删除</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='1'>Edit</MenuItem> }
+              { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='2'>Delete</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
-              <MenuItem eventKey='3'>问题列表</MenuItem>
+              <MenuItem eventKey='3'>List of issues</MenuItem>
               <MenuItem eventKey='4'>Backlog列表</MenuItem>
             </DropdownButton> }
           </div>
@@ -147,7 +147,7 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
@@ -157,7 +157,7 @@ export default class List extends Component {
       <div style={ { marginLeft: '10px', marginTop: '-15px', overflowY: 'auto', height: '100%' } }>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-          <div className='info-content'>若Epic信息修改后，创建、编辑问题页面Epic内容没及时更新，请刷新页面。</div>
+          <div className='info-content'>若Epic信息修改后，Create、编辑问题页面Epic内容没及时更新，请刷新页面。</div>
         </div>
         <BootstrapTable 
           hover
@@ -167,8 +167,8 @@ export default class List extends Component {
           options={ opts } 
           trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='issues'>问题完成情况</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+          <TableHeaderColumn dataField='issues'>Issue completion</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && 

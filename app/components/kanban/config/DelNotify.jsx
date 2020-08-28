@@ -61,13 +61,13 @@ export default class DelNotify extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          确认要删除此{ model === 'column' && '列' }{ model === 'filter' && '过滤器' }? <br/>
+          确认要删除此{ model === 'column' && '列' }{ model === 'filter' && 'Filter' }? <br/>
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

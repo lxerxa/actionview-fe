@@ -112,10 +112,10 @@ Err.enumItems = [
   { code: -12603, msg: '优先级在问题中被使用。' },
 
   // role error code
-  { code: -12700, msg: '角色名称不能为空。' },
+  { code: -12700, msg: 'Role名称不能为空。' },
   { code: -12701, msg: '权限项值不正确。' },
-  { code: -12702, msg: '角色不存在或不属于此项目。' },
-  { code: -12703, msg: '角色在项目中被使用。' },
+  { code: -12702, msg: 'Role不存在或不属于此项目。' },
+  { code: -12703, msg: 'Role在项目中被使用。' },
 
   // event error code
   { code: -12800, msg: '事件名称不能为空。' },

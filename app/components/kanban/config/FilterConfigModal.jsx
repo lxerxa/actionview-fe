@@ -75,7 +75,7 @@ export default class FilterConfigModal extends Component {
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
-      notify.show('设置完成。', 'success', 2000);
+      notify.show('Setup complete', 'success', 2000);
     } else {
       this.setState({ ecode: ecode });
     }
@@ -111,7 +111,7 @@ export default class FilterConfigModal extends Component {
               <FormControl
                 type='text'
                 value={ this.state.name }
-                onChange={ (e) => { this.setState({ name: e.target.value }); if (!e.target.value) { this.state.errors.name = '必填'; this.setState({ errors: this.state.errors }); } else { this.setState({ errors: {} }); } } }
+                onChange={ (e) => { this.setState({ name: e.target.value }); if (!e.target.value) { this.state.errors.name = 'Required'; this.setState({ errors: this.state.errors }); } else { this.setState({ errors: {} }); } } }
                 onBlur={ (e) => { this.state.touched.name = true; this.setState({ touched: this.state.touched }); } }
                 placeholder={ '输入名称' } />
             </Col>
@@ -133,8 +133,8 @@ export default class FilterConfigModal extends Component {
           <Button bsStyle='link' style={ { float: 'left' } } disabled={ loading } onClick={ () => { this.setState({ query: {} }) } }>清空条件</Button>
           <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ (model === 'filter' && !this.state.name) || loading || _.isEmpty(this.state.query) } onClick={ this.handleSubmit }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>取消</Button>
+          <Button disabled={ (model === 'filter' && !this.state.name) || loading || _.isEmpty(this.state.query) } onClick={ this.handleSubmit }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.handleCancel }>Cancel</Button>
         </Modal.Footer>
         </Form>
       </Modal>

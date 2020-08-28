@@ -43,18 +43,18 @@ export default class DelNotify extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除问题 - { data.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>Delete issue - { data.no }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           确认要删除此问题？<br/><br/>
-          如果您完成了这个问题，通常是"解决"或者"关闭"此问题，而不是删除。<br/>
+          如果您完成了这个问题，通常是"解决"或者"Close"此问题，而不是删除。<br/>
           如果此问题有子任务也将一并被删除。<br/> 
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading } onClick={ this.confirm }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>取消</Button>
+          <Button disabled={ loading } onClick={ this.confirm }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

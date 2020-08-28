@@ -32,12 +32,12 @@ export default class PreviewModal extends Component {
           <ListGroup>
             { _.map(data, (val, key) => 
               <ListGroupItem header={ val.name || '' }>
-              { '键值:' + (val.key || '-') + ' - 类型:' + (_.find(FieldTypes, { value: val.type }) ? _.find(FieldTypes, { value: val.type }).label : '') + (val.required ? ' - 必填' : '') }
+              { 'Key value:' + (val.key || '-') + ' - Type:' + (_.find(FieldTypes, { value: val.type }) ? _.find(FieldTypes, { value: val.type }).label : '') + (val.required ? ' - Required' : '') }
               </ListGroupItem> ) }
           </ListGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.handleCancel }>关闭</Button>
+          <Button onClick={ this.handleCancel }>Close</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -15,13 +15,13 @@ import * as SessionActions from 'redux/actions/SessionActions';
 const validate = (values) => {
   const errors = {};
   if (!values.email) {
-    errors.email = '账号不能为空';
+    errors.email = 'Account cannot be empty';
   //} else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
   //  errors.email = '输入格式有误';
   }
 
   if (!values.password) {
-    errors.password = '密码不能为空';
+    errors.password = 'Password cannot be empty';
   }
   return errors;
 };
@@ -151,27 +151,27 @@ class Login extends Component {
           </div>
           <form onSubmit={ handleSubmit(this.handleSubmit) }>
             <FormGroup controlId='formControlsName' validationState={ email.touched && email.error ? 'error' : null }>
-              <FormControl disabled={ submitting } type='text' { ...email } placeholder='用户名/邮箱'/>
+              <FormControl disabled={ submitting } type='text' { ...email } placeholder='Username / email'/>
               { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
             </FormGroup>
             <FormGroup controlId='formControlsPwd' validationState={ password.touched && password.error ? 'error' : null }>
-              <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
+              <FormControl disabled={ submitting } type='password' { ...password } placeholder='Password'/>
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>
-            <Button bsStyle='success' disabled={ submitting } type='submit'>{ submitting ? '登 录 中 ...' : '登 录' }</Button>
+            <Button bsStyle='success' disabled={ submitting } type='submit'>{ submitting ? 'Logging in ...' : 'Log in' }</Button>
             <div style={ { textAlign: 'center', height: '40px' } }>
               { this.state.alertShow && !submitting && 
                 <div style={ { marginTop: '10px', color: '#a94442' } }>
-                  { session.ecode === -10000 && '登录失败，用户名或密码错误。' }   
+                  { session.ecode === -10000 && 'Login failed, user name or password is incorrect.' }
                   { session.ecode === -10004 && session.emsg }   
-                  { session.ecode === -10005 && '用户未激活。' }   
-                  { session.ecode === -10006 && '用户已被禁用。' }   
-                  { session.ecode === -99999 && '系统错误。' }
+                  { session.ecode === -10005 && 'User is not active.' }
+                  { session.ecode === -10006 && 'User has been disabled.' }
+                  { session.ecode === -99999 && 'System error.' }
                 </div> }
             </div>
             <div className='login-footer'>
-              <span>若非该系统用户，请联系系统管理员创建。</span>
-              <Link to='/forgot' style={ { marginLeft: '5px' } }>忘记密码</Link>
+              <span>If you are not a user of the system, please contact the system administrator to create your access.</span>
+              <Link to='/forgot' style={ { marginLeft: '5px' } }>Forgot your password</Link>
               {/*<span className='split'/>
               <Link to='/register'>用户注册</Link> */}
             </div>

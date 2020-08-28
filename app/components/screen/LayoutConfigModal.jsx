@@ -117,7 +117,8 @@ export default class LayoutConfigModal extends Component {
                   clearable={ false } 
                   value={ this.state.addFieldIds } 
                   onChange={ this.handleChange.bind(this) } 
-                  placeholder='选择添加字段(可多选)' 
+                  placeholder='Select a field to add (multiple choices available)
+'
                   multi/>
                 <Button 
                   style={ { float: 'right', marginTop: '15px' } } 
@@ -125,11 +126,11 @@ export default class LayoutConfigModal extends Component {
                   disabled={ !enableAdd }>添加至界面列表 >> 
                 </Button>
                 <div style={ { float: 'right', marginTop: '15px' } }>
-                  注意：如果此页面将作为问题的创建或编辑页面，首先应将 "主题" 字段添加到列表，且将其设置为必填字段。
+                  Warning：如果此页面将作为问题of创建或编辑页面，首先应将 "Title" 字段添加到列表，且将其设置为必填字段。
                 </div>
               </Col>
               <Col sm={ 6 }>
-                { cards.length > 0 && <div style={ { marginBottom: '8px' } }>通过上下拖拽改变显示顺序。</div> }
+                { cards.length > 0 && <div style={ { marginBottom: '8px' } }>Drag up and down to change the display order.</div> }
                 { cards.length > 0 ?
                   cards.map((op, i) => {
                     return (
@@ -151,8 +152,8 @@ export default class LayoutConfigModal extends Component {
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
-          <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>确定</Button>
-          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>取消</Button>
+          <Button disabled={ loading || strCards == JSON.stringify(cards) } onClick={ this.save.bind(this) }>Submit</Button>
+          <Button bsStyle='link' disabled={ loading } onClick={ this.cancel.bind(this) }>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

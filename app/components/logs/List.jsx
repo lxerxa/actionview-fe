@@ -71,14 +71,14 @@ export default class List extends Component {
     if (indexLoading) {
       opts.noDataText = ( <div><img src={ img } className='loading'/></div> );
     } else {
-      opts.noDataText = '暂无数据显示。'; 
+      opts.noDataText = 'No data displayed'; 
     } 
 
     return (
       <div>
         <div style={ { padding: '0px 5px' } }>
           <Button bsStyle='primary' onClick={ this.export.bind(this) }><i className='fa fa-download'></i> 导出</Button>
-          <Button onClick={ this.refresh.bind(this) } style={ { float: 'right' } }><i className='fa fa-refresh'></i> 刷新</Button>
+          <Button onClick={ this.refresh.bind(this) } style={ { float: 'right' } }><i className='fa fa-refresh'></i> Refresh</Button>
         </div>
         <div>
           <BootstrapTable 
@@ -88,10 +88,10 @@ export default class List extends Component {
             options={ opts } 
             trClassName='tr-middle'> 
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='user' width='120'>用户</TableHeaderColumn>
+            <TableHeaderColumn dataField='user' width='120'>User</TableHeaderColumn>
             <TableHeaderColumn dataField='method' width='70'>方法</TableHeaderColumn>
             <TableHeaderColumn dataField='url'>Url</TableHeaderColumn>
-            <TableHeaderColumn dataField='at' width='150'>时间</TableHeaderColumn>
+            <TableHeaderColumn dataField='at' width='150'>Date</TableHeaderColumn>
             <TableHeaderColumn dataField='ip' width='130'>来源IP</TableHeaderColumn>
             <TableHeaderColumn width='80' dataField='operation'/>
           </BootstrapTable>
