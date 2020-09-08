@@ -427,6 +427,17 @@ export default class Container extends Component {
     if (this.props.project.options) {
       _.assign(this.props.issue.options, this.props.project.options);
       _.assign(this.props.issue.options, { epics: this.props.kanban.epics });
+
+      const activeSprint = _.find(this.props.kanban.sprints, { status: 'active' });
+      if (activeSprint) {
+        this.props.issue.options.sprints = this.props.issue.options.sprints || [];
+        const activeIndex = _.findIndex(this.props.issue.options.sprints, { no: activeSprint.no });
+        if (activeIndex === -1) {
+          this.props.issue.options.sprints.unshift({ no: activeSprint.no, name: activeSprint.name });
+        } else {
+          this.props.issue.options.sprints[activeIndex] = { no: activeSprint.no, name: activeSprint.name };
+        }
+      }
     }
 
     let curKanban = {};
