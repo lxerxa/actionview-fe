@@ -65,27 +65,28 @@ export default class PublishModal extends Component {
     close: PropTypes.func.isRequired,
     initializeForm: PropTypes.func.isRequired,
     sprint: PropTypes.object.isRequired,
+    addActiveSprint: PropTypes.func.isRequired,
     publish: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, publish, sprint, close } = this.props;
+    const { values, publish, sprint, addActiveSprint, close } = this.props;
     
-    if (values.start_time)
-    {
+    if (values.start_time) {
       values.start_time = parseInt(moment(values.start_time).startOf('day').format('X'));
     }
-    if (values.complete_time)
-    {
+
+    if (values.complete_time) {
       values.complete_time = parseInt(moment(values.complete_time).endOf('day').format('X'));
     }
 
     values.isSendMsg = this.state.isSendMsg;
 
     const ecode = await publish(values, sprint.no);
-    this.setState({ ecode: ecode });
+    this.setState({ ecode });
 
     if (ecode === 0) {
+      addActiveSprint(sprint);
       notify.show('启动完成。', 'success', 2000);
       close();
     }

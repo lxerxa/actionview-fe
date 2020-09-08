@@ -130,6 +130,7 @@ export default class List extends Component {
     completeSprint: PropTypes.func.isRequired,
     deleteSprint: PropTypes.func.isRequired,
     moveSprintIssue: PropTypes.func.isRequired,
+    addActiveSprint: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
   }
 
@@ -379,6 +380,7 @@ export default class List extends Component {
       completeSprint,
       deleteSprint,
       moveSprintIssue,
+      addActiveSprint,
       user
     } = this.props;
 
@@ -663,6 +665,7 @@ export default class List extends Component {
             show
             close={ this.publishSprintModalClose.bind(this) }
             sprint={ _.find(sprints, { no: this.state.curSprintNo }) }
+            addActiveSprint={ addActiveSprint }
             publish={ publishSprint }
             i18n={ i18n }/> }
         { this.state.deleteSprintShow &&

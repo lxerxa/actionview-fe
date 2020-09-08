@@ -315,3 +315,7 @@ export function multiDel(key, values) {
     promise: (client) => client.request({ url: '/project/' + key + '/issue/batch', method: 'post', data: values })
   });
 }
+
+export function addActiveSprint(sprint) {
+  return { type: 'ISSUE_ACTIVE_SPRINT_ADD', sprint };
+}
