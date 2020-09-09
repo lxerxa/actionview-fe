@@ -385,6 +385,10 @@ export default class Container extends Component {
     this.setState({ mode });
   }
 
+  addActiveSprint(sprint) {
+    this.props.issueActions.addActiveSprint({ no: sprint.no, name: sprint.name });
+  }
+
   componentWillMount() {
     const { params: { key, id } } = this.props;
     this.pid = key;
@@ -533,6 +537,7 @@ export default class Container extends Component {
           publishSprint={ this.publishSprint.bind(this) }
           completeSprint={ this.completeSprint.bind(this) }
           deleteSprint={ this.deleteSprint.bind(this) }
+          addActiveSprint={ this.addActiveSprint.bind(this) }
           user={ this.props.session.user }
           i18n={ this.props.i18n }
           layout={ this.props.layout }
