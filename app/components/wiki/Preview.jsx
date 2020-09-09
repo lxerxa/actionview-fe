@@ -321,6 +321,7 @@ export default class Preview extends Component {
             <span style={ { marginLeft: '10px', cursor: 'pointer', color: '#FF9900' } } title='点击取消收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star'></i></span>
             :
             <span style={ { marginLeft: '10px', cursor: 'pointer' } } title='点击收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star-o'></i></span> }
+          <span style={ { float: 'right', marginRight: '5px' } }><Link to={ '/project/' + project_key + '/wiki' + (item.parent === '0' ? '' : ('/' + item.parent)) }>返回</Link></span>
         </div> }
         <div style={ { marginTop: '15px', marginBottom: '20px', paddingLeft: '5px' } }>
           <div style={ { display: 'none' } }>
