@@ -613,13 +613,6 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_MULTI_STATE_RESET_FAIL:
       return { ...state, loading: false, error: action.error };
 
-    case t.ISSUE_ACTIVE_SPRINT_ADD:
-      if (!state.options.sprints) {
-        state.options.sprints = []; 
-      }
-      state.options.sprints.unshift(action.sprint); 
-      return { ...state };
-
     default:
       return state;
   }
