@@ -15,7 +15,7 @@ export default function wfconfig(state = initialState, action) {
 
   switch (action.type) {
     case t.WFCONFIG_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, saveLoading: false, collection: [] };
 
     case t.WFCONFIG_INDEX_SUCCESS:
       if (action.result.ecode === 0) {

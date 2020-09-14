@@ -14,7 +14,7 @@ const initialState = {
 export default function resolution(state = initialState, action) {
   switch (action.type) {
     case t.EVENTS_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, collection: [] };
 
     case t.EVENTS_INDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {

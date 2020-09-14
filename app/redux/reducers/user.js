@@ -6,7 +6,6 @@ const initialState = {
   collection: [], 
   indexLoading: false, 
   increaseCollection: [], 
-  moreLoading: false, 
   itemLoading: false, 
   item: {}, 
   loading: false, 
@@ -28,7 +27,7 @@ export default function user(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.USER_INDEX:
-      return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, collection: [], increaseCollection: [] };
 
     case t.USER_INDEX_SUCCESS:
       if (action.result.ecode === 0) {

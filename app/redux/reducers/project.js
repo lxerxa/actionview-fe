@@ -19,7 +19,7 @@ const initialState = {
 export default function project(state = initialState, action) {
   switch (action.type) {
     case t.PROJECT_INDEX:
-      return { ...state, indexLoading: true, collection: [], increaseCollection: [] };
+      return { ...state, indexLoading: true, moreLoading: false, loading: false, itemLoading: false, collection: [], increaseCollection: [] };
 
     case t.PROJECT_INDEX_SUCCESS:
       if (action.result.ecode === 0) {

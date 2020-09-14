@@ -15,7 +15,7 @@ const initialState = {
 export default function labels(state = initialState, action) {
   switch (action.type) {
     case t.LABELS_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, collection: [] };
 
     case t.LABELS_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
