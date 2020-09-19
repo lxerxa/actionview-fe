@@ -1,5 +1,27 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, ControlLabel, FormControl, Label, Grid, Row, Col, Table, Tabs, Tab, Form, FormGroup, DropdownButton, MenuItem, ButtonToolbar, ButtonGroup, OverlayTrigger, Popover, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { 
+  Modal, 
+  Button, 
+  ControlLabel, 
+  FormControl, 
+  Label, 
+  Grid, 
+  Row, 
+  Col, 
+  Table, 
+  Tabs, 
+  Tab, 
+  Form, 
+  FormGroup, 
+  DropdownButton, 
+  MenuItem, 
+  ButtonToolbar, 
+  ButtonGroup, 
+  OverlayTrigger, 
+  Popover, 
+  ListGroup, 
+  ListGroupItem 
+} from 'react-bootstrap';
 import { Link } from 'react-router';
 import DropzoneComponent from 'react-dropzone-component';
 import Lightbox from 'react-image-lightbox';
@@ -922,7 +944,7 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px',  borderBottom: '1px solid #ddd' } }>
                       <tbody>
                       { _.map(data.subtasks, (val, key) => {
                         return (<tr key={ 'subtask' + key }>
@@ -957,7 +979,7 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px' } }>
+                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px', borderBottom: '1px solid #ddd' } }>
                       <tbody>
                       { _.map(data.links, (val, key) => {
                         let linkedIssue = {};
@@ -1054,7 +1076,7 @@ export default class DetailBar extends Component {
                     const noImgFiles = _.filter(data[field.key], (f) => { return _.indexOf([ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ], f.type) === -1 });
                     contents = (<div>
                       { noImgFiles.length > 0 &&
-                        <Table condensed hover responsive>
+                        <Table condensed hover responsive style={ { borderBottom: '1px solid #ddd' } }>
                           <tbody>
                             { _.map(noImgFiles, (f, i) => 
                               <tr key={ i }>
