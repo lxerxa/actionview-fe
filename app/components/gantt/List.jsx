@@ -749,7 +749,7 @@ export default class List extends Component {
           }
         },
         resize: function() {
-          $(this).css('top', '0px').css('height', this.configs.blockHeight + 'px');
+          $(this).css('top', '0px').css('height', self.configs.blockHeight + 'px');
         },
         stop: function () {
           const block = $(this);
