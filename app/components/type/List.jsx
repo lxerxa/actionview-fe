@@ -191,14 +191,17 @@ export default class List extends Component {
       indexLoading, 
       loading, 
       del, 
-      update } = this.props;
+      update 
+    } = this.props;
+
     const { 
       operateShow, 
       hoverRowId, 
       willSetScreenTypeIds, 
       settingScreenTypeIds, 
       willSetWorkflowTypeIds, 
-      settingWorkflowTypeIds } = this.state;
+      settingWorkflowTypeIds 
+    } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
