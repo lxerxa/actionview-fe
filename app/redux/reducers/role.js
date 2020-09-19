@@ -16,7 +16,7 @@ export default function role(state = initialState, action) {
   switch (action.type) {
     case t.ROLE_INDEX:
     case t.ROLE_TEAM_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, collection: [] };
 
     case t.ROLE_INDEX_SUCCESS:
     case t.ROLE_TEAM_INDEX_SUCCESS:

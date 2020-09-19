@@ -325,7 +325,7 @@ export default class List extends Component {
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
             { _.findIndex(imgFiles, { id: files[i].id }) === -1 ?
-              <a target='_blank' href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' } download={ files[i].name } style={ { cursor: 'pointer' } }>
+              <a target='_blank' href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' + (files[i].type == 'application/pdf' ? ('/' + files[i].name) : '') } download={ files[i].type == 'application/pdf' ? false : files[i].name } style={ { cursor: 'pointer' } }>
                 { files[i].name }
               </a>
               :
@@ -390,7 +390,7 @@ export default class List extends Component {
           <Lightbox
             mainSrc={ API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[photoIndex].id + '/download' }
             nextSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download' }
-            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/downlaod' }
+            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/download' }
             imageTitle={ imgFiles[photoIndex].name }
             imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + moment.unix(imgFiles[photoIndex].uploaded_at).format('YYYY/MM/DD HH:mm') }
             onCloseRequest={ () => { this.setState({ imgPreviewShow: false }) } }

@@ -12,7 +12,6 @@ const initialState = {
   visitedCollection: [], 
   visitedIndex: -1, 
   optionsLoading: false, 
-  searchLoading: false, 
   filterLoading: false, 
   columnsLoading: false, 
   loading: false, 
@@ -47,7 +46,7 @@ const initialState = {
 export default function issue(state = initialState, action) {
   switch (action.type) {
     case t.ISSUE_INDEX:
-      return { ...state, indexLoading: true, itemLoading: false, collection: [] };
+      return { ...state, indexLoading: true, itemLoading: false, filterLoading: false, columnsLoading: false, collection: [] };
 
     case t.ISSUE_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
@@ -146,7 +145,7 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
-      return { ...state, itemLoading: true, detailFloatStyle: action.floatStyle || state.detailFloatStyle, itemData: { id: action.id }, commentsLoaded: false, historyLoaded: false, worklogLoaded: false, gitCommitsLoaded: false };
+      return { ...state, itemLoading: true, linkLoading: false, detailFloatStyle: action.floatStyle || state.detailFloatStyle, itemData: { id: action.id }, commentsLoaded: false, historyLoaded: false, worklogLoaded: false, gitCommitsLoaded: false };
 
     case t.ISSUE_SHOW_SUCCESS:
       if (action.result.ecode === 0) {
@@ -266,7 +265,7 @@ export default function issue(state = initialState, action) {
       return { ...state, itemLoading: false, loading: false, error: action.error };
 
     case t.ISSUE_COMMENTS_INDEX:
-      return { ...state, commentsIndexLoading: true, commentsCollection: [] };
+      return { ...state, commentsIndexLoading: true, commentsLoading: false, commentsCollection: [] };
 
     case t.ISSUE_COMMENTS_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
@@ -388,7 +387,7 @@ export default function issue(state = initialState, action) {
       return { ...state, gitCommitsSort: state.gitCommitsSort === 'desc' ? 'asc' : 'desc' };
 
     case t.ISSUE_WORKLOG_INDEX:
-      return { ...state, worklogIndexLoading: true, worklogCollection: [] };
+      return { ...state, worklogIndexLoading: true, worklogLoading: false, worklogCollection: [] };
 
     case t.ISSUE_WORKLOG_INDEX_SUCCESS:
       if (action.result.ecode === 0) {

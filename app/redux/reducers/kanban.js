@@ -27,7 +27,7 @@ const initialState = {
 export default function kanban(state = initialState, action) {
   switch (action.type) {
     case t.KANBAN_LIST_GET:
-      return { ...state, loading: true, rankable: true, list: [], sprints: [] };
+      return { ...state, loading: true, rankable: true, configLoading: false, sprintLoading: false, list: [], sprints: [] };
 
     case t.KANBAN_LIST_GET_SUCCESS:
       if (action.result.ecode === 0) {
@@ -162,7 +162,7 @@ export default function kanban(state = initialState, action) {
       return { ...state, sprintLoading: false, error: action.error };
 
     case t.KANBAN_EPIC_INDEX:
-      return { ...state, epics: [], indexEpicLoading: true };
+      return { ...state, epics: [], indexEpicLoading: true, epicLoading: false };
     case t.KANBAN_EPIC_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         state.epics = action.result.data;

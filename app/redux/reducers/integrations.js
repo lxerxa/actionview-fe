@@ -13,7 +13,7 @@ const initialState = {
 export default function resolution(state = initialState, action) {
   switch (action.type) {
     case t.INTEGRATIONS_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, itemLoading: false, collection: [] };
 
     case t.INTEGRATIONS_INDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {

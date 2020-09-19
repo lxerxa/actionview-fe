@@ -15,7 +15,7 @@ const initialState = {
 export default function screen(state = initialState, action) {
   switch (action.type) {
     case t.SCREEN_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, collection: [] };
 
     case t.SCREEN_INDEX_SUCCESS:
       if (action.result.ecode === 0) {

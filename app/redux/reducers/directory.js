@@ -20,7 +20,7 @@ export default function directory(state = initialState, action) {
   switch (action.type) {
 
     case t.DIRECTORY_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, testLoading: false, syncLoading: false, collection: [] };
 
     case t.DIRECTORY_INDEX_SUCCESS:
       if (action.result.ecode === 0) {

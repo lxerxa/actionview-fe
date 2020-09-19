@@ -15,7 +15,7 @@ const initialState = {
 export default function workflow(state = initialState, action) {
   switch (action.type) {
     case t.WORKFLOW_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, collection: [] };
 
     case t.WORKFLOW_INDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {

@@ -15,7 +15,7 @@ const initialState = {
 export default function field(state = initialState, action) {
   switch (action.type) {
     case t.FIELD_INDEX:
-      return { ...state, indexLoading: true, collection: [] };
+      return { ...state, indexLoading: true, loading: false, itemLoading: false, collection: [] };
 
     case t.FIELD_INDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {

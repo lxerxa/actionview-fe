@@ -1083,7 +1083,7 @@ export default class DetailBar extends Component {
                                 <td>
                                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span> 
                                   { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
-                                    <a href={ API_BASENAME + '/project/' + project.key + '/file/' + f.id } download={ f.name }>{ f.name }</a> :
+                                    <a target='_blank' href={ API_BASENAME + '/project/' + project.key + '/file/' + f.id + (f.type == 'application/pdf' ? ('/' + f.name) : '') } download={ f.type == 'application/pdf' ? false : f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }
                                 </td>
                                 { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 && f.uploader.id == user.id)) && 
