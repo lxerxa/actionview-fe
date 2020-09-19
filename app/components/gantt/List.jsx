@@ -748,6 +748,9 @@ export default class List extends Component {
             $(this).children('div.ganttview-block-progress').css('display', 'none');
           }
         },
+        resize: function() {
+          $(this).css('top', '0px').css('height', this.configs.blockHeight + 'px');
+        },
         stop: function () {
           const block = $(this);
           const start = moment.unix(start).subtract(1, 'days').startOf('day').format('X'); 
