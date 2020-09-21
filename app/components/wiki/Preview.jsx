@@ -335,8 +335,8 @@ export default class Preview extends Component {
           </div> }
         </div>
         { item.id && item.attachments && item.attachments.length > 0 &&
-        <div style={ { marginBottom: '0px' } }>
-          <Table id='attachmentlist' condensed hover responsive>
+        <div style={ { marginBottom: '5px' } }>
+          <Table id='attachmentlist' condensed hover responsive style={ { borderBottom: '1px solid #ddd' } }>
             <tbody>
             { _.map(item.attachments, (f, i) =>
               <tr key={ i }>
