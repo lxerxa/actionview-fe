@@ -161,11 +161,12 @@ export default class Grids extends Component {
   }
 
   clickFile(imgFiles, id) {
-    const { project_key } = this.props;
+    const { project_key, collection } = this.props;
 
     const photoIndex = _.findIndex(imgFiles, { id });
     if (photoIndex === -1) {
-      const url = API_BASENAME + '/project/' + project_key + '/document/' + id + '/download';
+      const file = _.find(collection, { id });
+      const url = API_BASENAME + '/project/' + project_key + '/document/' + id + '/download' + (file && file.type == 'application/pdf' ? ('/' + file.name) : '');
       window.open(url, '_blank');
     } else {
       this.setState({ photoIndex, imgPreviewShow: true });
