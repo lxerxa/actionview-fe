@@ -429,7 +429,8 @@ table tr:hover .remove-icon{
 }
 
 .attachment-content:hover {
-  background-color: #f0f0f0
+  background-color: #f0f0f0;
+  box-shadow: 0 0 5px #ccc;
 }
 
 .attachment-thumb {
