@@ -1,16 +1,17 @@
 import React, { PropTypes, Component } from 'react';
-//import { Link } from 'react-router';
+import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { FormGroup, FormControl, ButtonGroup, Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
+import { AreaChart, Area } from 'recharts';
 import Select from 'react-select';
 import ApiClient from '../../../shared/api-client';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const $ = require('$');
-const CreateModal = require('../project/CreateModal2');
-const EditModal = require('../project/EditModal');
-const CloseNotify = require('../project/CloseNotify');
+const CreateModal = require('./CreateModal2');
+const EditModal = require('./EditModal');
+const CloseNotify = require('./CloseNotify');
 const loadingImg = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -27,7 +28,8 @@ export default class List extends Component {
       principal: {},
       name: '', 
       mode: 'card',
-      status: 'active' };
+      status: 'active' 
+    };
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
@@ -231,11 +233,22 @@ export default class List extends Component {
       create, 
       stop, 
       update, 
-      options={} } = this.props;
-    const { willSetPrincipalPids, settingPrincipalPids } = this.state;
-    const { hoverRowId, operateShow } = this.state;
+      options={} 
+    } = this.props;
+
+    const { 
+      hoverRowId, 
+      operateShow,
+      willSetPrincipalPids, 
+      settingPrincipalPids 
+    } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
+
+    let chartWidth = 0;
+    if ($('.cardContainer .card').length > 0) {
+      chartWidth = $('.cardContainer .card').get(0).clientWidth - 10;
+    }
 
     const projects = [];
     const projectNum = collection.length;
@@ -363,14 +376,14 @@ export default class List extends Component {
         </div>
         <div className='clearfix' style={ { marginLeft: this.state.mode === 'card' ? '-15px' : 0 } }>
           { this.state.mode === 'list' &&
-          <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
-            <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-            <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
-            <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-            <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
-            <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
-            <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
-            <TableHeaderColumn width='60' dataField='operation'/>
+            <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+              <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
+              <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
+              <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
+              <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
+              <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
+              <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
+              <TableHeaderColumn width='60' dataField='operation'/>
             </BootstrapTable> }
           { this.state.mode === 'card' && indexLoading &&
             <div style={ { marginTop: '50px', marginBottom: '50px', textAlign: 'center' } }>
@@ -382,23 +395,57 @@ export default class List extends Component {
               您可创建项目 或 联系其他项目管理员将您添加到项目成员中
             </div> }
           { this.state.mode === 'card' && !indexLoading && collection.length > 0 &&
-          collection.map((model, i) => {
-            return (
+            collection.map((model, i) => {
+              return (
               <div className='col-lg-3 col-md-4 col-sm-6 col-xs-12 cardContainer' key={ i }>
                 <div className='card'>
-                  { model.status !== 'active' &&
-                  <div className='status'><Label>已关闭</Label></div> }
                   <div className='content'>
-                    <span className='title'>
+                    <div className='title'>
                       { model.status == 'active'
-                      ? <p className='name'><a href='#' title={ model.name } onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.name }</a></p>
-                      : <p className='name'>{ model.name }</p> }
-                      <p className='key'>{ model.key }</p>
-                    </span>
+                      ? <p className='name'><a href='#' title={ model.name } onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.key + ' - ' + model.name }</a></p>
+                      : <p className='name'>{ model.key + ' - ' + model.name }</p> }
+                    </div>
+                    { !model.stats ?
+                      <div style={ { marginTop: '60px', textAlign: 'center' } }>
+                        <img src={ loadingImg } className='loading'/>
+                      </div>
+                      :
+                      <AreaChart
+                        width={ chartWidth }
+                        height={ 80 }
+                        data={ model.stats.trend || [] }
+                        style={ { margin: '35px auto' } }>
+                        <Area type='monotone' dataKey='new' stroke={ model.status !== 'active' ? '#aaa' : '#337ab7' } fill={ model.status !== 'active' ? '#aaa' : '#337ab7' } strokeWidth={ 1 } />
+                      </AreaChart> }
+                    <div style={ { position: 'absolute', top: '125px', display: 'inline-block', width: '100%', textAlign: 'center', color: '#aaa', fontSize: '12px' } }>
+                      <div style={ { width: '33.33%', display: 'inline-block' } }>
+                        全部<br/>
+                        { !model.stats ? 
+                          <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
+                          : 
+                          (model.status !== 'active' ? model.stats.all : <Link to='#'>{ model.stats.all }</Link>) }
+                      </div>
+                      <div style={ { width: '33.33%', display: 'inline-block' } }>
+                        未解决<br/>
+                        { !model.stats ? 
+                          <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
+                          : 
+                          (model.status !== 'active' ? model.stats.unresolved : <Link to='#'>{ model.stats.unresolved }</Link>) }
+                      </div>
+                      <div style={ { width: '33.33%', display: 'inline-block' } }>
+                        分配给我<br/>
+                        { !model.stats ? 
+                          <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
+                          : 
+                          (model.status !== 'active' ? model.stats.assigntome : <Link to='#'>{ model.stats.assigntome }</Link>) }
+                      </div>
+                    </div>
                   </div>
                   <div className='leader'>
                     <span>负责人: { model.principal.name }</span>
                   </div>
+                  { model.status !== 'active' &&
+                  <div className='status'><Label style={ { backgroundColor: '#aaa' } }>已关闭</Label></div> }
                   { model.principal.id === user.id && 
                   <div className='btns'>
                     { model.status == 'active' && 
@@ -411,8 +458,7 @@ export default class List extends Component {
                   </div> }
                 </div>
               </div>
-            )
-          }) }
+            ) }) }
           { this.state.editModalShow && 
             <EditModal 
               show 

@@ -7,6 +7,7 @@ const initialState = {
   indexLoading: false, 
   increaseCollection: [], 
   moreLoading: false, 
+  statsLoading: false,
   itemLoading: false, 
   item: {}, 
   loading: false, 
@@ -44,6 +45,23 @@ export default function project(state = initialState, action) {
 
     case t.PROJECT_MORE_FAIL:
       return { ...state, moreLoading: false, error: action.error };
+
+    case t.PROJECT_STATS:
+      return { ...state, statsLoading: true };
+
+    case t.PROJECT_STATS_SUCCESS:
+      if (action.result.ecode === 0) {
+        _.forEach(action.result.data, (v) => {
+          const i = _.findIndex(state.collection, { key: v.key });
+          if (i !== -1) {
+            state.collection[i].stats = v.stats;
+          }
+        });
+      }
+      return { ...state, statsLoading: false, ecode: action.result.ecode };
+
+    case t.PROJECT_STATS_FAIL:
+      return { ...state, statsLoading: false, error: action.error };
 
     case t.PROJECT_OPTIONS:
       return { ...state, loading: true };

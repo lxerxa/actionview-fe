@@ -85,6 +85,13 @@ export function getOptions() {
   });
 }
 
+export function loadStats(keys) {
+  return asyncFuncCreator({
+    constant: 'PROJECT_STATS',
+    promise: (client) => client.request({ url: '/project/stats?keys=' + keys.join(',') })
+  });
+}
+
 export function select(id) {
   return { type: 'PROJECT_SELECT', id: id };
 }

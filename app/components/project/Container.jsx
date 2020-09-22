@@ -16,10 +16,11 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-@connect(({ i18n, session, project }) => ({ i18n, session, project }), mapDispatchToProps)
+@connect(({ i18n, layout, session, project }) => ({ i18n, layout, session, project }), mapDispatchToProps)
 export default class Container extends Component {
   constructor(props) {
     super(props);
+    this.loadStats = this.loadStats.bind(this);
   }
 
   static contextTypes = {
@@ -30,6 +31,7 @@ export default class Container extends Component {
     actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    layout: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired
@@ -52,12 +54,25 @@ export default class Container extends Component {
 
   async myIndex(query) {
     await this.props.actions.myIndex(qs.stringify(query || {}));
+    await this.loadStats();
     return this.props.project.ecode;
   }
 
   async more(query) {
     await this.props.actions.more(qs.stringify(query || {}));
+    await this.loadStats();
     return this.props.project.ecode;
+  }
+
+  async loadStats() {
+    const { collection } = this.props.project;
+    const pkeys = [];
+    _.forEach(collection, (v) => {
+      if (!v.stats) {
+        pkeys.push(v.key);
+      }
+    });
+    await this.props.actions.loadStats(pkeys);
   }
 
   async create(values) {
@@ -160,6 +175,7 @@ export default class Container extends Component {
           { ...this.props.project }/>
         :
         <Mylist
+          layout={ this.props.layout }
           index={ this.myIndex.bind(this) }
           more={ this.more.bind(this) }
           entry={ this.entry.bind(this) }

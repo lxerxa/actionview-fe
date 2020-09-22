@@ -741,7 +741,7 @@ table tr:hover .remove-icon{
 
 .card {
   position: relative;
-  height: 200px;
+  height: 206px;
   border: 1px solid #ddd;
 }
 
@@ -760,17 +760,16 @@ table tr:hover .remove-icon{
 
 .card .title {
   position: absolute;
-  top: 50px;  
+  top: 5px;  
+  left: 5px;  
   display: inline-block;
   width: 100%;
   color: #000;
   box-sizing: border-box;
-  text-align: center;
   padding: 5px;
 }
 
 .card .title .name {
-  font-size: 19px;
   margin: 0;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -784,20 +783,24 @@ table tr:hover .remove-icon{
 
 .card .status {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  bottom: 8px;
+  right: 8px;
   z-index: 10;
+  display: block;
+}
+.card:hover .status {
+  display: none;
 }
 .card .leader {
   position: absolute;
   bottom: 5px;
-  left: 5px;
+  left: 10px;
   color: #666;
 }
 .card .btns {
   position: absolute;
   bottom: 5px;
-  right: 5px;
+  right: 8px;
   display: none;
 }
 .card:hover .btns {

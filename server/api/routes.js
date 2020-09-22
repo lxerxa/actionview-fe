@@ -4,8 +4,6 @@ import debug from 'debug';
 
 import marked from 'marked';
 
-import { users } from './data.json';
-
 const simplifyUsers = (collection) => collection
   .map(({ user, seed }) => ({ ...user, seed }))
   .map(({ name, seed, picture }) => ({ name, seed, picture }));
@@ -169,7 +167,14 @@ export default function(router) {
   router.get('/myproject', function(req, res) {
     const startTime = new Date().getTime(); 
     while (new Date().getTime() < startTime + 2000);
-    const results = { ecode: 0, data: [{ id: '1111', status: 'active', name: '演示项目一', description: 'aaaabbbbccc测试测试测试测试测试测试测测试时测试测试测试测试测试测试', key: 'demo', creator: '卢十三', create_time: 144444, principal: { id: 'nhy67ujm', nameAndEmail:'wangwu@aa.com', name: '王五' } },{ id: '2222', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '王五' } },{ id: '3333', name: '演示项目一', key: 'demo', creator: '卢十三', create_time: 144444, principal: { id: 'zzz', name: '王五' } },{ id: '4444', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '王二小' }}] };
+    const results = { ecode: 0, data: [{ id: '1111', status: 'active', name: '演示项目一', description: 'aaaabbbbccc测试测试测试测试测试测试测测试时测试测试测试测试测试测试', key: 'demo', creator: '卢十三', create_time: 144444, principal: { id: 'nhy67ujm', nameAndEmail:'wangwu@aa.com', name: '王五' } },{ id: '2222', name: '演示事例二', key: 'demo2', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '王五' } },{ id: '3333', name: '演示项目一', key: 'demo3', creator: '卢十三', create_time: 144444, principal: { id: 'zzz', name: '王五' } },{ id: '4444', name: '演示事例二', key: 'demo4', creator: '王二小', create_time: 144444, principal: { id: 'zzz', name: '王二小' }}] };
+    return res.status(200).send(results);
+  });
+
+  router.get('/project/stats', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ key: 'demo', stats: { all: 20, unresolved: 15, assigntome: 10, trend: [{ day: '2019/05/02', new: 15 }, { day: '2019/05/03', new: 1 }, { day: '2019/05/04', new: 5 }, { day: '2019/05/05', new: 7 }, { day: '2019/05/06', new: 5 }, { day: '2019/05/07', new: 9 }, { day: '2019/05/08', new: 8 }]} }, { key: 'demo2', stats: { all: 20, unresolved: 15, assigntome: 10, trend: [{ day: '2019/05/02', new: 15 }, { day: '2019/05/03', new: 1 }, { day: '2019/05/04', new: 5 }, { day: '2019/05/05', new: 7 }, { day: '2019/05/06', new: 5 }, { day: '2019/05/07', new: 9 }, { day: '2019/05/08', new: 8 }]} }, { key: 'demo3', stats: { all: 20, unresolved: 15, assigntome: 10, trend: [{ day: '2019/05/02', new: 15 }, { day: '2019/05/03', new: 1 }, { day: '2019/05/04', new: 5 }, { day: '2019/05/05', new: 7 }, { day: '2019/05/06', new: 5 }, { day: '2019/05/07', new: 9 }, { day: '2019/05/08', new: 8 }]} }, { key: 'demo4', stats: { all: 20, unresolved: 15, assigntome: 10, trend: [{ day: '2019/05/02', new: 15 }, { day: '2019/05/03', new: 1 }, { day: '2019/05/04', new: 5 }, { day: '2019/05/05', new: 7 }, { day: '2019/05/06', new: 5 }, { day: '2019/05/07', new: 9 }, { day: '2019/05/08', new: 8 }]} }] };
     return res.status(200).send(results);
   });
 
