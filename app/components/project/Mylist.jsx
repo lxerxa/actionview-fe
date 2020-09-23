@@ -340,6 +340,13 @@ export default class List extends Component {
           </div>
         ),
         status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
+        issues: (
+          <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
+            <li>所有问题 - <Link to={ '/project/' + collection[i].key + '/issue' }>{ collection[i].stats ? collection[i].stats.all : '' }</Link></li>
+            <li>未解决的 - <Link to={ '/project/' + collection[i].key + '/issue?resolution=Unresolved' }>{ collection[i].stats ? collection[i].stats.unresolved : '' }</Link></li>
+            <li>分配给我的 - <Link to={ '/project/' + collection[i].key + '/issue?resolution=Unresolved&assignee=me' }>{ collection[i].stats ? collection[i].stats.assigntome : '' }</Link></li>
+          </ul>
+        ),
         operation: (
           collection[i].principal.id === user.id &&
           <div>
@@ -418,12 +425,13 @@ export default class List extends Component {
         </div>
         <div className='clearfix' style={ { marginLeft: this.state.mode === 'card' ? '-15px' : 0 } }>
           { this.state.mode === 'list' &&
-            <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-middle'>
+            <BootstrapTable data={ projects } bordered={ false } hover options={ opts } trClassName='tr-top'>
               <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
               <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
               <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-              <TableHeaderColumn dataField='key' width='170'>键值</TableHeaderColumn>
-              <TableHeaderColumn dataField='principal' width='320'>责任人</TableHeaderColumn>
+              <TableHeaderColumn dataField='issues' width='170'>问题数</TableHeaderColumn>
+              <TableHeaderColumn dataField='key' width='150'>键值</TableHeaderColumn>
+              <TableHeaderColumn dataField='principal' width='280'>责任人</TableHeaderColumn>
               <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
               <TableHeaderColumn width='60' dataField='operation'/>
             </BootstrapTable> }
