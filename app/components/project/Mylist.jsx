@@ -222,6 +222,11 @@ export default class List extends Component {
     }
   }
 
+  async modeChange() {
+    await this.setState({ mode: this.state.mode == 'list' ? 'card' : 'list' })
+    this.setState({ mode: this.state.mode });
+  }
+
   onRowMouseOver(rowData) {
     if (rowData.id !== this.state.hoverRowId) {
       this.setState({ operateShow: true, hoverRowId: rowData.id });
@@ -262,9 +267,9 @@ export default class List extends Component {
       { value: 'create_time_desc', label: '创建时间 ↓' },
       { value: 'key_asc', label: '健值 ↑' },
       { value: 'key_desc', label: '健值 ↓' },
-      { value: 'all_issues_cnt', label: '问题数' },
+      { value: 'all_issues_cnt', label: '全部问题数' },
       { value: 'unresolved_issues_cnt', label: '未解决问题数' },
-      { value: 'assigntome_cnt', label: '分配给我的问题数' }
+      { value: 'assigntome_issues_cnt', label: '分配给我问题数' }
     ];
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -375,7 +380,7 @@ export default class List extends Component {
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
             <span style={ { float: 'right' } }>
-              <Button onClick={ ()=>{ this.setState({ mode: this.state.mode == 'list' ? 'card' : 'list' }) } }><i className={ this.state.mode == 'list' ? 'fa fa-th' : 'fa fa-list' }></i></Button>
+              <Button onClick={ this.modeChange.bind(this) }><i className={ this.state.mode == 'list' ? 'fa fa-th' : 'fa fa-list' }></i></Button>
             </span>
             <span style={ { float: 'right', marginRight: '10px' } }>
               <DropdownButton
@@ -460,21 +465,21 @@ export default class List extends Component {
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
-                          (model.status !== 'active' ? model.stats.all : <Link to='#'>{ model.stats.all }</Link>) }
+                          (model.status !== 'active' ? model.stats.all : <Link to={ '/project/' + model.key + '/issue' }>{ model.stats.all }</Link>) }
                       </div>
                       <div className='stats-cnt-cell'>
                         未解决<br/>
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
-                          (model.status !== 'active' ? model.stats.unresolved : <Link to='#'>{ model.stats.unresolved }</Link>) }
+                          (model.status !== 'active' ? model.stats.unresolved : <Link to={ '/project/' + model.key + '/issue?resolution=Unresolved' }>{ model.stats.unresolved }</Link>) }
                       </div>
                       <div className='stats-cnt-cell'>
                         分配给我<br/>
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
-                          (model.status !== 'active' ? model.stats.assigntome : <Link to='#'>{ model.stats.assigntome }</Link>) }
+                          (model.status !== 'active' ? model.stats.assigntome : <Link to={ '/project/' + model.key + '/issue?assignee=me&resolution=Unresolved' }>{ model.stats.assigntome }</Link>) }
                       </div>
                     </div>
                   </div>

@@ -131,7 +131,7 @@ export default function project(state = initialState, action) {
     case t.PROJECT_CREATEINDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        state.collection[ind] = action.result.data;
+        _.assign(state.collection[ind], action.result.data);
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
