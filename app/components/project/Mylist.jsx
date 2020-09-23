@@ -28,6 +28,7 @@ export default class List extends Component {
       principal: {},
       name: '', 
       mode: 'card',
+      sortkey: 'default',
       status: 'active' 
     };
 
@@ -92,9 +93,9 @@ export default class List extends Component {
       if(event.keyCode == '13') {  
         const { index } = self.props;
         if (_.trim(self.state.name)) {
-          index({ status: self.state.status, name: _.trim(self.state.name) });
+          index({ status: self.state.status, name: _.trim(self.state.name), sortkey: self.state.sortkey });
         } else {
-          index({ status: self.state.status });
+          index({ status: self.state.status, sortkey: self.state.sortkey });
         }
       }
     });
@@ -143,7 +144,7 @@ export default class List extends Component {
 
   more() {
     const { more, collection } = this.props;
-    more({ status: this.state.status, name: this.state.name, offset_key: collection[collection.length - 1].key });
+    more({ status: this.state.status, name: this.state.name, sortkey: this.state.sortkey, offset_key: collection[collection.length - 1].key });
   }
 
   willSetPrincipal(pid) {
@@ -204,9 +205,20 @@ export default class List extends Component {
 
     const { index } = this.props;
     if (_.trim(this.state.name)) {
-      index({ status: newValue, name: _.trim(this.state.name) });
+      index({ status: newValue, name: _.trim(this.state.name), sortkey: this.state.sortkey });
     } else {
-      index({ status: newValue });
+      index({ status: newValue, sortkey: this.state.sortkey });
+    }
+  }
+
+  sortChange(newValue) {
+    this.setState({ sortkey: newValue });
+
+    const { index } = this.props;
+    if (_.trim(this.state.name)) {
+      index({ status: this.state.status, name: _.trim(this.state.name), sortkey: newValue });
+    } else {
+      index({ status: this.state.status, sortkey: newValue });
     }
   }
 
@@ -242,6 +254,18 @@ export default class List extends Component {
       willSetPrincipalPids, 
       settingPrincipalPids 
     } = this.state;
+
+    const sortOptions = [
+      { value: 'default', label: '默认' },
+      { value: 'activity', label: '活跃度' },
+      { value: 'create_time_asc', label: '创建时间 ↑' },
+      { value: 'create_time_desc', label: '创建时间 ↓' },
+      { value: 'key_asc', label: '健值 ↑' },
+      { value: 'key_desc', label: '健值 ↓' },
+      { value: 'all_issues_cnt', label: '问题数' },
+      { value: 'unresolved_issues_cnt', label: '未解决问题数' },
+      { value: 'assigntome_cnt', label: '分配给我的问题数' }
+    ];
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
@@ -350,11 +374,24 @@ export default class List extends Component {
             <span style={ { float: 'left', width: '20%' } }>
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建项目</Button>
             </span> }
-            <ButtonGroup style={ { float: 'right', marginLeft: '10px' } }>
-              <Button title='卡片模式' style={ { backgroundColor: this.state.mode == 'card' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'card' }) } }><i className='fa fa-th'></i></Button>
-              <Button title='列表模式' style={ { backgroundColor: this.state.mode == 'list' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'list' }) } }><i className='fa fa-list'></i></Button>
-            </ButtonGroup>
-            <span style={ { float: 'right', width: '90px' } }>
+            <span style={ { float: 'right' } }>
+              <Button onClick={ ()=>{ this.setState({ mode: this.state.mode == 'list' ? 'card' : 'list' }) } }><i className={ this.state.mode == 'list' ? 'fa fa-th' : 'fa fa-list' }></i></Button>
+            </span>
+            <span style={ { float: 'right', marginRight: '10px' } }>
+              <DropdownButton
+                pullRight
+                title='排序'
+                onSelect={ this.sortChange.bind(this) }>
+                  { _.map(sortOptions, (v, i) =>
+                    <MenuItem key={ i } eventKey={ v.value }>
+                      <div style={ { display: 'inline-block', width: '20px', textAlign: 'left' } }>
+                        { this.state.sortkey == v.value && <span><i className='fa fa-check'></i></span> }
+                      </div>
+                      <span>{ v.label }</span>
+                    </MenuItem> ) }
+              </DropdownButton>
+            </span>
+            <span style={ { float: 'right', width: '90px', marginRight: '10px' } }>
               <Select
                 simpleValue
                 clearable={ false }
@@ -417,22 +454,22 @@ export default class List extends Component {
                         style={ { margin: '35px auto' } }>
                         <Area type='monotone' dataKey='new' stroke={ model.status !== 'active' ? '#aaa' : '#337ab7' } fill={ model.status !== 'active' ? '#aaa' : '#337ab7' } strokeWidth={ 1 } />
                       </AreaChart> }
-                    <div style={ { position: 'absolute', top: '125px', display: 'inline-block', width: '100%', textAlign: 'center', color: '#aaa', fontSize: '12px' } }>
-                      <div style={ { width: '33.33%', display: 'inline-block' } }>
+                    <div className='stats-cnt'>
+                      <div className='stats-cnt-cell'>
                         全部<br/>
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
                           (model.status !== 'active' ? model.stats.all : <Link to='#'>{ model.stats.all }</Link>) }
                       </div>
-                      <div style={ { width: '33.33%', display: 'inline-block' } }>
+                      <div className='stats-cnt-cell'>
                         未解决<br/>
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
                           (model.status !== 'active' ? model.stats.unresolved : <Link to='#'>{ model.stats.unresolved }</Link>) }
                       </div>
-                      <div style={ { width: '33.33%', display: 'inline-block' } }>
+                      <div className='stats-cnt-cell'>
                         分配给我<br/>
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
@@ -445,7 +482,7 @@ export default class List extends Component {
                     <span>负责人: { model.principal.name }</span>
                   </div>
                   { model.status !== 'active' &&
-                  <div className='status'><Label style={ { backgroundColor: '#aaa' } }>已关闭</Label></div> }
+                  <div className={ model.principal.id === user.id ? 'status' : 'statuss' }><Label style={ { backgroundColor: '#aaa' } }>已关闭</Label></div> }
                   { model.principal.id === user.id && 
                   <div className='btns'>
                     { model.status == 'active' && 
@@ -480,9 +517,9 @@ export default class List extends Component {
               stop={ stop }/> }
         </div>
         { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
-        <ButtonGroup vertical block style={ { marginTop: '15px' } }>
-          <Button onClick={ this.more.bind(this) }>{ <div><img src={ loadingImg } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
-        </ButtonGroup> }
+          <ButtonGroup vertical block style={ { marginTop: '15px' } }>
+            <Button onClick={ this.more.bind(this) }>{ <div><img src={ loadingImg } className={ moreLoading ? 'loading' : 'hide' }/><span>{ moreLoading ? '' : '更多...' }</span></div> }</Button>
+          </ButtonGroup> }
       </div>
     );
   }

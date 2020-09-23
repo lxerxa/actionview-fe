@@ -782,6 +782,14 @@ table tr:hover .remove-icon{
   margin: 0;
 }
 
+.card .statuss {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 10;
+  display: block;
+}
+
 .card .status {
   position: absolute;
   bottom: 8px;
@@ -789,23 +797,42 @@ table tr:hover .remove-icon{
   z-index: 10;
   display: block;
 }
+
 .card:hover .status {
   display: none;
 }
+
 .card .leader {
   position: absolute;
   bottom: 5px;
   left: 10px;
   color: #666;
 }
+
 .card .btns {
   position: absolute;
   bottom: 5px;
   right: 8px;
   display: none;
 }
+
 .card:hover .btns {
   display: block;
+}
+
+.card .stats-cnt {
+  position: absolute; 
+  top: 125px;
+  display: inline-block;
+  width: 100%;
+  text-align: center; 
+  color: #aaa;
+  font-size: 12px;
+}
+
+.card .stats-cnt-cell {
+  width: 33.33%; 
+  display: inline-block;
 }
 
 .menu-active {
