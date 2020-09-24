@@ -429,9 +429,9 @@ export default class List extends Component {
               <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
               <TableHeaderColumn width='50' dataField='no'>NO</TableHeaderColumn>
               <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-              <TableHeaderColumn dataField='issues' width='170'>问题数</TableHeaderColumn>
               <TableHeaderColumn dataField='key' width='150'>键值</TableHeaderColumn>
               <TableHeaderColumn dataField='principal' width='280'>责任人</TableHeaderColumn>
+              <TableHeaderColumn dataField='issues' width='170'>问题数</TableHeaderColumn>
               <TableHeaderColumn dataField='status' width='80'>状态</TableHeaderColumn>
               <TableHeaderColumn width='60' dataField='operation'/>
             </BootstrapTable> }
