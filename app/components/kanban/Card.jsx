@@ -183,6 +183,11 @@ export default class Card extends Component {
     $(findDOMNode(this)).off('mouseup');
   }
 
+  shouldComponentUpdate(newProps, newState) {
+    const { openedIssue, issue } = this.props;
+    return newProps.openedIssue.id && [ newProps.openedIssue.parent_id, newProps.openedIssue.id, openedIssue.parent_id, openedIssue.id ].indexOf(issue.id) === -1 ? false : true;
+  }
+
   handleBlur(e) {
     setTimeout(() => { 
       this.setState({ menuShow: false });
