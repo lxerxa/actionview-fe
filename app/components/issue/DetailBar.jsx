@@ -72,8 +72,8 @@ export default class DetailBar extends Component {
       editProgress: false, 
       editModalShow: false, 
       previewModalShow: false, 
-      subtaskShow: false, 
-      linkShow: false, 
+      subtaskShow: true, 
+      linkShow: true, 
       linkIssueModalShow: false, 
       delLinkModalShow: false, 
       delLinkData: {}, 
@@ -934,7 +934,7 @@ export default class DetailBar extends Component {
                     子任务 
                   </Col>
                   <Col sm={ 9 }>
-                    { data.subtasks.length > 3 &&
+                    { data.subtasks.length > 5 &&
                     <div style={ { marginTop: '7px' } }>
                       共{ data.subtasks.length }个子任务
                       <span style={ { marginLeft: '5px' } }> 
@@ -969,7 +969,7 @@ export default class DetailBar extends Component {
                     链接问题 
                   </Col>
                   <Col sm={ 9 }>
-                    { data.links.length > 3 &&
+                    { data.links.length > 5 &&
                     <div style={ { marginTop: '7px' } }>
                       共{ data.links.length }个问题
                       <span style={ { marginLeft: '5px' } }> 
