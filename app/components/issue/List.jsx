@@ -304,6 +304,10 @@ export default class List extends Component {
           $(this).css('background-color', '');
         }
       });
+    } else {
+      $('.react-bs-container-body table tr').each(function(i) {
+        $(this).css('background-color', '');
+      });
     }
 
     if (parseInt($('.react-bs-table-container th').eq(titleNo).css('width')) < 300) {
@@ -324,9 +328,6 @@ export default class List extends Component {
       this.setState({ detailBarShow: false });
     }, 300);
 
-    $('.react-bs-container-body table tr').each(function(i) {
-      $(this).css('background-color', '');
-    });
     const { cleanRecord } = this.props;
     cleanRecord();
   }
