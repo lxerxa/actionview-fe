@@ -35,7 +35,7 @@ export default class WatcherListModal extends Component {
             <span>暂无关注者</span> }
           </div>
           { watchers.length > 0 &&
-          <Table condensed hover responsive>
+          <Table condensed hover responsive style={ { borderBottom: '1px solid #ddd' } }>
             <tbody>
             { _.map(watchers, (v, key) => {
               return (<tr key={ key }>
