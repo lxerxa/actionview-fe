@@ -38,6 +38,11 @@
   color: red;
 }
 
+.modal-content .ok-ralign {
+  margin-right: 20px;
+  color: #14892c;
+}
+
 .sidebar-header {
   position: absolute; 
   top: 0px; 

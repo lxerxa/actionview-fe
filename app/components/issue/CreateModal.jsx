@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, ControlLabel, FormControl, Form, FormGroup, Col, HelpBlock } from 'react-bootstrap';
+import { Modal, Button, ControlLabel, FormControl, Form, FormGroup, Checkbox as BootstrapCheckbox, Col, HelpBlock } from 'react-bootstrap';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/lib/Creatable';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
@@ -136,9 +136,9 @@ class CreateModal extends Component {
     }
 
     if (isFromWorkflow) {
-      this.state = { ecode: 0, errors, touched: {}, schema, values, oldValues };
+      this.state = { ecode: 0, errors, touched: {}, schema, values, oldValues, createOther: false, preCreated: false };
     } else {
-      this.state = { ecode: 0, errors, touched: {}, typeOptions: typeOkOptions, schema, values, oldValues };
+      this.state = { ecode: 0, errors, touched: {}, typeOptions: typeOkOptions, schema, values, oldValues, createOther: false, preCreated: false };
     }
 
     this.getChangedKeys = this.getChangedKeys.bind(this);
@@ -213,9 +213,24 @@ class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { create, edit, addLabels, close, options, data={}, parent={}, doAction=undefined, action_id='' } = this.props;
+    const { 
+      create, 
+      edit, 
+      addLabels, 
+      close, 
+      options, 
+      data={}, 
+      parent={}, 
+      doAction=undefined, 
+      action_id='' 
+    } = this.props;
     //const schema = _.find(options.types, { id: this.state.values['type'] }).schema;
-    const { schema } = this.state;
+    const { 
+      schema,
+      createOther 
+    } = this.state;
+
+    this.setState({ preCreated: false });
 
     let submitData = {};
     if (!_.isEmpty(data) && data.id) {
@@ -281,8 +296,12 @@ class CreateModal extends Component {
       }
       ecode = await create(submitData);
       if (ecode === 0) {
-        close();
-        notify.show('问题已创建。', 'success', 2000);
+        if (createOther) {
+          this.setState({ preCreated: true });
+        } else {
+          close();
+          notify.show('问题已创建。', 'success', 2000);
+        }
       }
     }
 
@@ -492,7 +511,11 @@ class CreateModal extends Component {
       isFromWorkflow=false 
     } = this.props;
 
-    const { schema } = this.state;
+    const { 
+      schema,
+      createOther,
+      preCreated
+    } = this.state;
 
     const typeOptions = _.map(this.state.typeOptions, function(val) {
       return { 
@@ -781,8 +804,19 @@ class CreateModal extends Component {
           </Modal.Body>
         </Form>
         <Modal.Footer>
-          <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>
+          { this.state.ecode !== 0 && !loading &&
+          <span className='ralign'>{ errMsg[this.state.ecode] }</span> }
+          { preCreated &&
+          <span className='ok-ralign'><i className='fa fa-check'></i> 问题已创建</span> }
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
+          { !data.id &&
+          <BootstrapCheckbox
+            disabled={ loading }
+            checked={ createOther }
+            onClick={ () => { this.setState({ createOther: !createOther }) } }
+            style={ { display: 'inline-block', marginRight: '20px', marginLeft: '10px' } }>
+            创建另外一个 
+          </BootstrapCheckbox> }
           <Button 
             type='submit' 
             disabled={ (data.id && this.getChangedKeys().length <= 0 && isFromWorkflow === false) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } 
