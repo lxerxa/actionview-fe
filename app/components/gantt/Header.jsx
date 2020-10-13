@@ -18,7 +18,8 @@ export default class Header extends Component {
       filterConfigShow: false, 
       searchShow: false, 
       saveFilterShow: false,
-      resetFiltersShow: false };
+      resetFiltersShow: false 
+    };
 
     this.createModalClose = this.createModalClose.bind(this);
     this.saveFilterModalClose = this.saveFilterModalClose.bind(this);
@@ -111,7 +112,8 @@ export default class Header extends Component {
       refresh, 
       query, 
       loading, 
-      project } = this.props;
+      project 
+    } = this.props;
 
     const standardTypes = _.reject(_.reject(options.types || [], { type: 'subtask' }) || [], { disabled: true }) || [];
     const sqlTxt = optionsLoading ? '' : parseQuery(query, options);
