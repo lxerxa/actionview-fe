@@ -319,6 +319,8 @@ class CreateModal extends Component {
   }
 
   typeChange(typeValue) {
+    this.setState({ preCreated: false });
+
     const { options } = this.props;
     const schema = _.find(options.types, { id: typeValue } ).schema;
     if (!schema) {
@@ -410,6 +412,8 @@ class CreateModal extends Component {
   }
 
   onChange(newValue, field) {
+    this.setState({ preCreated: false });
+
     this.state.values[field.key] = newValue;
 
     if ([ 'Text', 'TextArea', 'Number', 'Integer', 'Url', 'TimeTracking' ].indexOf(field.type) === -1) {
@@ -649,7 +653,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.key === 'labels' && options.permissions && options.permissions.indexOf('manage_project') !== -1) {
                 return (
-                <FormGroup key={ key }>
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 7 }>
                     <CreatableSelect
@@ -657,9 +661,12 @@ class CreateModal extends Component {
                       disabled={ loading }
                       value={ this.state.values[v.key] || [] }
                       clearable={ false }
-                      onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); } }
+                      onChange={ (newValue) => { this.onChange(newValue, v); } }
                       options={ _.map(options.labels || [], (val) => { return { label: val.name, value: val.name } } ) }
                       placeholder='选择或输入标签'/>
+                  </Col>
+                  <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
               } else if ([ 'Select', 'MultiSelect', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ].indexOf(v.type) !== -1) {
@@ -715,7 +722,7 @@ class CreateModal extends Component {
                       style={ { marginTop: '7px' } }
                       name={ v.name }
                       selectedValue={ this.state.values[v.key] }
-                      onChange={ newValue => { this.state.values[v.key] = newValue; delete this.state.errors[v.key]; this.setState({ values: this.state.values }) } }>
+                      onChange={ newValue => { this.onChange(newValue, v); } }>
                       { _.map(v.optionValues || [], (val, i) =>
                         <span style={ { marginLeft: '6px' } } key={ i }><Radio disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
                         )

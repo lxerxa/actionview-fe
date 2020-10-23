@@ -226,7 +226,8 @@ export default function issue(state = initialState, action) {
       return { ...state, itemLoading: !action.screen, loading: action.screen, historyLoaded: false, commentsLoaded: false };
 
     case t.ISSUE_ADD_LABELS:
-      state.options.labels = action.newLabels.concat(state.options.labels);
+      const addLabels = _.map(action.newLabels, (v) => { return { name: v, bgColor: '' } })
+      state.options.labels = addLabels.concat(state.options.labels);
       return { ...state, options: state.options };
 
     case t.ISSUE_SET_ASSIGNEE:
