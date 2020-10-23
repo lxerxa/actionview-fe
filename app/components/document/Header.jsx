@@ -182,7 +182,7 @@ export default class Header extends Component {
             </span>
             { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
             <span style={ { float: 'right', marginRight: '10px' } }>
-              <Button onClick={ () => { showCreateFolder(); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
+              <Button onClick={ () => { showCreateFolder(); } } disabled={ indexLoading || itemLoading || !_.isEmpty(query) }>
                 <i className='fa fa-plus'></i>&nbsp;新建目录
               </Button>
             </span> }

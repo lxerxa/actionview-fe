@@ -478,11 +478,11 @@ export default class List extends Component {
                 <Button onClick={ ()=>{ this.setState({ searchShow: !this.state.searchShow }) } }><i className='fa fa-search'></i> 检索{ !_.isEmpty(query) && !searchShow ? '...' : '' }</Button>
               </span>
               <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
-                <Button onClick={ () => { goto('new'); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                <Button onClick={ () => { goto('new'); } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
                   <i className='fa fa-pencil'></i>&nbsp;新建文档
                 </Button>
                 { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
-                <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } style={ { height: '36px' } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
+                <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
                   <i className='fa fa-plus'></i>&nbsp;创建目录
                 </Button> }
               </ButtonGroup>
