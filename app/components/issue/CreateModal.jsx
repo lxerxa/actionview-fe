@@ -653,7 +653,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.key === 'labels' && options.permissions && options.permissions.indexOf('manage_project') !== -1) {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ key }>
                   { title }
                   <Col sm={ 7 }>
                     <CreatableSelect
@@ -661,12 +661,9 @@ class CreateModal extends Component {
                       disabled={ loading }
                       value={ this.state.values[v.key] || [] }
                       clearable={ false }
-                      onChange={ (newValue) => { this.onChange(newValue, v); } }
+                      onChange={ newValue => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values, preCreated: false }); } }
                       options={ _.map(options.labels || [], (val) => { return { label: val.name, value: val.name } } ) }
                       placeholder='选择或输入标签'/>
-                  </Col>
-                  <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
               } else if ([ 'Select', 'MultiSelect', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ].indexOf(v.type) !== -1) {
