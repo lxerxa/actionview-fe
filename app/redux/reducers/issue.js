@@ -226,7 +226,7 @@ export default function issue(state = initialState, action) {
       return { ...state, itemLoading: !action.screen, loading: action.screen, historyLoaded: false, commentsLoaded: false };
 
     case t.ISSUE_ADD_LABELS:
-      const addLabels = _.map(_.filter(action.newLabels, (v) => _.findIndex(state.options.labels, { name: v }) !== -1), (v) => { return { name: v, bgColor: '' } })
+      const addLabels = _.map(_.filter(action.newLabels, (v) => _.findIndex(state.options.labels, { name: v }) === -1), (v) => { return { name: v, bgColor: '' } })
       if (addLabels.length > 0) {
         state.options.labels = addLabels.concat(state.options.labels);
       }
