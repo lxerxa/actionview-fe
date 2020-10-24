@@ -48,7 +48,7 @@ export default class List extends Component {
           <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
         </div>
         { data.filters && data.filters.length > 0 ? 
-        <div style={ { height: '120px', margin: '0px -15px 25px -15px' } }>
+        <div style={ { height: '160px', marginBottom: '20px', padding: '15px 0px', border: 'solid 1px #ddd', backgroundColor: '#f7f7f7', borderRadius: '4px' } }>
           <FormGroup>
           { _.map(data.filters || [], (v, i) => {
             return (
