@@ -282,9 +282,12 @@ export default class Preview extends Component {
             <Button bsStyle='link' style={ { fontSize: '14px', marginRight: '5px' } } disabled={ itemLoading } onClick={ () => { this.setState({ operate: 'delete', delNotifyShow: true }); } }>删除</Button>
           </span> }
           { this.state.operate === 'delete' && itemLoading &&
-           <span style={ { float: 'right', marginRight: '10px' } }>
-            <img src={ loadingImg } className='loading'/>
-           </span> }
+          <span style={ { float: 'right', marginRight: '10px' } }>
+           <img src={ loadingImg } className='loading'/>
+          </span> }
+          <span style={ { float: 'right', marginRight: '5px' } }>
+            <Link to={ '/project/' + project_key + '/wiki' + (item.parent === '0' ? '' : ('/' + item.parent)) }><Button style={ { marginRight: '5px' } }><i className='fa fa-reply'></i> 返回</Button></Link>
+          </span>
         </div> }
         { item.id &&
         <div style={ { paddingLeft: '5px', lineHeight: 2, clear: 'both' } }>
@@ -321,7 +324,6 @@ export default class Preview extends Component {
             <span style={ { marginLeft: '10px', cursor: 'pointer', color: '#FF9900' } } title='点击取消收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star'></i></span>
             :
             <span style={ { marginLeft: '10px', cursor: 'pointer' } } title='点击收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star-o'></i></span> }
-          <span style={ { float: 'right', marginRight: '5px' } }><Link to={ '/project/' + project_key + '/wiki' + (item.parent === '0' ? '' : ('/' + item.parent)) }>返回</Link></span>
         </div> }
         <div style={ { marginTop: '15px', marginBottom: '20px', paddingLeft: '5px' } }>
           <div style={ { display: 'none' } }>
