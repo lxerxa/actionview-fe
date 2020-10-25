@@ -906,44 +906,67 @@ export default class List extends Component {
       convert,
       resetState,
       doAction,
-      user } = this.props;
-    const { mode, collection, selectedIssue } = this.state;
+      user 
+    } = this.props;
+
+    const { 
+      mode, 
+      collection, 
+      selectedIssue,
+      sortkey
+    } = this.state;
 
     return (
       <div>
-        <div style={ { marginTop: '10px' } }>
-          <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'start_time_desc' ? 'start_time_asc' : 'start_time_desc') } }>
-            <span style={ { marginLeft: '5px' } }>
-              { (this.state.sortkey == 'start_time_asc' || this.state.sortkey == 'start_time_desc') && <i className={ this.state.sortkey == 'start_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } 开始时间
-            </span>
-          </a>
-          <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort(this.state.sortkey === 'create_time_desc' ? 'create_time_asc' : 'create_time_desc') } }>
-            <span style={ { marginLeft: '15px' } }>
-              { (this.state.sortkey == 'create_time_asc' || this.state.sortkey == 'create_time_desc') && <i className={ this.state.sortkey == 'create_time_asc' ? 'fa fa-sort-amount-asc' : 'fa fa-sort-amount-desc' }></i> } 创建时间
-            </span>
-          </a>
+        <div style={ { marginTop: '10px', height: '25px' } }>
+          <span>
+            <span style={ { marginRight: '5px' } }>排序:</span> 
+            { sortkey== 'start_time_asc' ?
+              <span>开始时间</span>
+              :
+              <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort('start_time_asc') } }>
+                开始时间
+              </a> }
+            <span className='ganttview-divider'> | </span>
+            { sortkey== 'create_time_asc' ?
+              <span>创建时间</span>
+              :
+              <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort('create_time_asc') } }>
+                创建时间
+              </a> }
+            <span className='ganttview-divider'> | </span>
+            { sortkey== 'title_asc' ?
+              <span>主题</span>
+              :
+              <a href='#' onClick={ (e) => { e.preventDefault(); this.setSort('title_asc') } }>
+                主题 
+              </a> }
+          </span>
+          <span style={ { marginLeft: '20px' } }>
+            <span style={ { marginRight: '5px' } }> 显示:</span>
+            { mode == 'progress' ?
+              <span>按进度</span>
+              :
+              <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('progress'); } }>按进度</a> }
+            <span className='ganttview-divider'> | </span>
+            { mode == 'status' ?
+              <span>按状态</span>
+              :
+              <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按状态</a> }
+          </span>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.locateToday(); } }>
-            <span style={ { marginLeft: '15px' } }>
+            <span style={ { marginLeft: '20px' } }>
               <i className='fa fa-dot-circle-o'></i> 今天 
             </span>
           </a>
-          { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <span style={ { marginLeft: '15px', fontSize: '12px', color: 'red' } }>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span> }
           <span style={ { float: 'right', marginRight: '5px' } }>
-            { mode == 'progress' ?
-            <span>按任务进度</span>
-            :
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('progress'); } }>按任务进度</a> }
-            <span style={ { margin: '0px 2px' } }> | </span>
-            { mode == 'status' ?
-            <span>按问题状态</span>
-            :
-            <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按问题状态</a> }
             <a href='#' onClick={ (e) => {  e.preventDefault(); toggleHeader(); } } style={ { marginLeft: '8px' } }>
-              <span style={ { border: '1px solid #ddd', borderRadius: '2px', padding: '0px 3px' } } title={ isHeaderHidden ? '展示头部' : '隐藏头部' }>
+              <span className='ganttview-header-arrow' title={ isHeaderHidden ? '展示头部' : '隐藏头部' }>
                 <i className={ isHeaderHidden ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up' }></i>
               </span>
             </a>
           </span>
+          { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <span className='ganttview-msg-notice'>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span> }
         </div>
         { indexLoading && 
         <div style={ { textAlign: 'center', paddingTop: '50px' } }>

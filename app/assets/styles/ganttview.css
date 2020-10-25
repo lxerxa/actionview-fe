@@ -4,6 +4,25 @@ Copyright (c) 2010 JC Grubbs - jc.grubbs@devmynd.com
 MIT License Applies
 */
 
+span.ganttview-divider {
+  margin: 0px 2px;
+  color: #aaa;
+}
+
+span.ganttview-header-arrow {
+  border: 1px solid #ddd; 
+  border-radius: 2px; 
+  padding: 0px 3px
+}
+
+span.ganttview-msg-notice {
+  margin-left: 20px; 
+  font-size: 12px; 
+  color: red;
+  float: right;
+  line-height: 20px;
+}
+
 div.ganttview-hzheader-month,
 div.ganttview-hzheader-day,
 div.ganttview-vtheader,
