@@ -281,6 +281,8 @@ export default class List extends Component {
         return b.no - a.no;
       } else if (sortkey == 'create_time_asc') {
         return a.no - b.no;
+      } else if (sortkey == 'title_asc') {
+        return a.title.localeCompare(b.title);
       }
     });
   }
@@ -941,7 +943,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '10px', height: '25px' } }>
           <span>
-            <span style={ { marginRight: '5px' } }>排序:</span> 
+            <span style={ { marginRight: '5px', fontWeight: 600 } }>排序:</span> 
             { sortkey== 'start_time_asc' ?
               <span>开始时间</span>
               :
@@ -963,8 +965,8 @@ export default class List extends Component {
                 主题 
               </a> }
           </span>
-          <span style={ { marginLeft: '20px' } }>
-            <span style={ { marginRight: '5px' } }> 显示:</span>
+          <span style={ { marginLeft: '15px' } }>
+            <span style={ { marginRight: '5px', fontWeight: 600 } }> 显示:</span>
             { mode == 'progress' ?
               <span>按进度</span>
               :
@@ -976,7 +978,7 @@ export default class List extends Component {
               <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按状态</a> }
           </span>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.locateToday(); } }>
-            <span style={ { marginLeft: '20px' } }>
+            <span style={ { marginLeft: '15px' } }>
               <i className='fa fa-dot-circle-o'></i> 今天 
             </span>
           </a>
