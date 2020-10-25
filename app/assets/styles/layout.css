@@ -38,7 +38,7 @@ h1,h2,h3,h4,ol,p,ul {
 
 .toc-container-body {
   position: absolute;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: calc(100% - 50px);
   width: 100%;
   padding: 10px 25px;

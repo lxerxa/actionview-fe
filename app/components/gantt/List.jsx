@@ -31,12 +31,6 @@ export default class List extends Component {
       editModalShow: false
     };
     this.scrollSide = '';
-    this.sortOptions = {
-      'start_time_asc': 'expect_start_time asc,expect_complete_time_asc,no desc',
-      'start_time_desc': 'expect_start_time desc,expect_complete_time desc,no desc',
-      'create_time_asc': 'no asc',
-      'create_time_desc': 'no desc'
-    };
     this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'start_time_asc';
     this.state.mode = window.localStorage && window.localStorage.getItem('gantt-mode') || 'progress';
     this.addVtHeader = this.addVtHeader.bind(this);
@@ -259,6 +253,8 @@ export default class List extends Component {
         return b.no - a.no;
       } else if (sortkey == 'create_time_asc') {
         return a.no - b.no;
+      } else if (sortkey == 'title_asc') {
+        return a.title.localeCompare(b.title);
       }
     });
   }
@@ -824,8 +820,6 @@ export default class List extends Component {
     }
     this.setState({ sortkey });
     this.closeDetail();
-    //const { index, query={} } = this.props;
-    //await index(_.assign({}, query, { 'orderBy': this.sortOptions[sortkey] || 'no desc' }));
   }
 
   selectMode(mode) {
@@ -920,7 +914,7 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '10px', height: '25px' } }>
           <span>
-            <span style={ { marginRight: '5px' } }>排序:</span> 
+            <span style={ { marginRight: '5px', fontWeight: 600 } }>排序:</span> 
             { sortkey== 'start_time_asc' ?
               <span>开始时间</span>
               :
@@ -942,8 +936,8 @@ export default class List extends Component {
                 主题 
               </a> }
           </span>
-          <span style={ { marginLeft: '20px' } }>
-            <span style={ { marginRight: '5px' } }> 显示:</span>
+          <span style={ { marginLeft: '15px' } }>
+            <span style={ { marginRight: '5px', fontWeight: 600 } }> 显示:</span>
             { mode == 'progress' ?
               <span>按进度</span>
               :
@@ -955,7 +949,7 @@ export default class List extends Component {
               <a href='#' onClick={ (e) => { e.preventDefault(); this.selectMode('status'); } }>按状态</a> }
           </span>
           <a href='#' onClick={ (e) => { e.preventDefault(); this.locateToday(); } }>
-            <span style={ { marginLeft: '20px' } }>
+            <span style={ { marginLeft: '15px' } }>
               <i className='fa fa-dot-circle-o'></i> 今天 
             </span>
           </a>
