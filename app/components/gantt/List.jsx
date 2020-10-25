@@ -705,7 +705,7 @@ export default class List extends Component {
       //  self.scrollSide = 'left'; 
       //});
 
-      $('div.ganttview-slide-container').scroll(function() {
+      $('div.ganttview-slide-container').unbind('scroll').scroll(function() {
         setTimeout(function() {
           $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
           $('div.ganttview-slide-container').scrollLeft(_.ceil($('div.ganttview-slide-container').scrollLeft() / cellWidth) * cellWidth);
@@ -716,7 +716,7 @@ export default class List extends Component {
         }, 200);
       });
 
-      $('div.ganttview-vtheader-item').scroll(function() {
+      $('div.ganttview-vtheader-item').unbind('scroll').scroll(function() {
         setTimeout(function() {
           $('div.ganttview-vtheader-series-header-item').css('left', -$('div.ganttview-vtheader-item').scrollLeft());
           if ($('div.ganttview-vtheader-item').scrollTop() === $('div.ganttview-slide-container').scrollTop()) {
