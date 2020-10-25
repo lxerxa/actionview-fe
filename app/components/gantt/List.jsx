@@ -21,6 +21,7 @@ export default class List extends Component {
       minDays: 60 
     };
     this.state = { 
+      scaling: 1,
       range: [], 
       dates: [], 
       foldIssues: [],
@@ -31,12 +32,6 @@ export default class List extends Component {
       editModalShow: false
     };
     this.scrollSide = '';
-    this.sortOptions = {
-      'start_time_asc': 'expect_start_time asc,expect_complete_time_asc,no desc',
-      'start_time_desc': 'expect_start_time desc,expect_complete_time desc,no desc',
-      'create_time_asc': 'no asc',
-      'create_time_desc': 'no desc'
-    };
     this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'start_time_asc';
     this.state.mode = window.localStorage && window.localStorage.getItem('gantt-mode') || 'progress';
     this.addVtHeader = this.addVtHeader.bind(this);
@@ -56,6 +51,7 @@ export default class List extends Component {
     this.locateToday = this.locateToday.bind(this);
     this.getDuration = this.getDuration.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
+    this.changeScaling = this.changeScaling.bind(this);
   }
 
   static propTypes = {
@@ -133,6 +129,32 @@ export default class List extends Component {
     del: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
   };
+
+  changeScaling(sign) {
+    let scaling = this.state.scaling;
+    if (sign == '-') {
+      if (scaling <= 0.6) {
+        return;
+      } 
+      scaling -= 0.2; 
+    } else {
+      if (scaling >= 1) {
+        return;
+      } 
+      scaling += 0.2; 
+    }
+    if (scaling > 1) { 
+      scaling = 1; 
+    }
+    if (scaling < 0.6) { 
+      scaling = 0.6; 
+    }
+
+    scaling = _.round(scaling, 1)
+
+    this.configs.cellWidth = 25 * scaling;
+    this.setState({ scaling });
+  }
 
   async show(id) {
     this.setState({ detailBarShow: true });
@@ -390,7 +412,7 @@ export default class List extends Component {
         </div>
         <div className='ganttview-hzheader-days' style={ { width: w } }>
           { _.map(_.flatten(_.values(dates)), (v) =>
-            <div className={ 'ganttview-hzheader-day ' + (v.date == today ? 'ganttview-today' : (v.notWorking === 1 ? 'ganttview-weekend' : '')) } key={ v.date }>
+            <div className={ 'ganttview-hzheader-day ' + (v.date == today ? 'ganttview-today' : (v.notWorking === 1 ? 'ganttview-weekend' : '')) } style={ { width: cellWidth + 'px' } } key={ v.date }>
               { v.day }
             </div> ) }
         </div>
@@ -415,7 +437,7 @@ export default class List extends Component {
         { _.map(dates2, (v2, key2) => 
           <div 
             className={ 'ganttview-grid-row-cell ' + (v2.date == today ? 'ganttview-today' : (v2.notWorking === 1 ? 'ganttview-weekend' : '')) } 
-            style={ { backgroundColor: markedIssue.id == v.id ? '#FFFACD' : '' } }
+            style={ { backgroundColor: markedIssue.id == v.id ? '#FFFACD' : '', width: cellWidth + 'px' } }
             key={ v2.date }/> ) }
         </div> ) ) }
       </div>);
@@ -824,8 +846,6 @@ export default class List extends Component {
     }
     this.setState({ sortkey });
     this.closeDetail();
-    //const { index, query={} } = this.props;
-    //await index(_.assign({}, query, { 'orderBy': this.sortOptions[sortkey] || 'no desc' }));
   }
 
   selectMode(mode) {
@@ -910,6 +930,7 @@ export default class List extends Component {
     } = this.props;
 
     const { 
+      scaling,
       mode, 
       collection, 
       selectedIssue,
@@ -960,11 +981,15 @@ export default class List extends Component {
             </span>
           </a>
           <span style={ { float: 'right', marginRight: '5px' } }>
-            <a href='#' onClick={ (e) => {  e.preventDefault(); toggleHeader(); } } style={ { marginLeft: '8px' } }>
-              <span className='ganttview-header-arrow' title={ isHeaderHidden ? '展示头部' : '隐藏头部' }>
-                <i className={ isHeaderHidden ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up' }></i>
-              </span>
-            </a>
+            <span title='缩小' className={ scaling <= 0.6 ? 'ganttview-fa-button-disable' : 'ganttview-fa-button' } onClick={ (e) => { this.changeScaling('-') } }>
+              <i className='fa fa-search-minus'></i>
+            </span>
+            <span title='放大' className={ scaling >= 1 ? 'ganttview-fa-button-disable' : 'ganttview-fa-button' } onClick={ (e) => { this.changeScaling('+') } }>
+              <i className='fa fa-search-plus'></i>
+            </span>
+            <span className='ganttview-fa-button' title={ isHeaderHidden ? '展示头部' : '隐藏头部' } onClick={ toggleHeader }>
+              <i className={ isHeaderHidden ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up' }></i>
+            </span>
           </span>
           { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <span className='ganttview-msg-notice'>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span> }
         </div>
