@@ -1,7 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Modal, Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import Select from 'react-select';
 import _ from 'lodash';
+import ApiClient from '../../../shared/api-client';
 import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
@@ -16,7 +18,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'group',
-  fields: [ 'id', 'name', 'description' ],
+  fields: [ 'id', 'name', 'principal', 'description' ],
   validate
 })
 export default class EditModal extends Component {
@@ -54,6 +56,17 @@ export default class EditModal extends Component {
     }
   }
 
+  async searchUsers(input) {
+    input = input.toLowerCase();
+    if (!input)
+    {
+      return { options: [] };
+    }
+    const api = new ApiClient;
+    const results = await api.request( { url: '/user/search?s=' + input } );
+    return { options: _.map(results.data, (val) => { val.name = val.name + '(' + val.email + ')'; return val; }) };
+  }
+
   handleCancel() {
     const { close, submitting } = this.props;
     if (submitting) {
@@ -69,7 +82,7 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, description }, dirty, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { id, name, principal, description }, dirty, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -83,6 +96,19 @@ export default class EditModal extends Component {
             <FormControl type='hidden' { ...id }/>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='组名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
+          </FormGroup>
+          <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : null }>
+            <ControlLabel>负责人</ControlLabel>
+            <Select.Async
+              clearable={ false }
+              disabled={ submitting }
+              options={ [] }
+              value={ principal.value }
+              onChange={ (newValue) => { principal.onChange(newValue) } }
+              valueKey='id'
+              labelKey='name'
+              loadOptions={ this.searchUsers.bind(this) }
+              placeholder='输入负责任(默认是系统管理员)'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

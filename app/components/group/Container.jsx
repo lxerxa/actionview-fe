@@ -8,6 +8,7 @@ import * as GroupActions from 'redux/actions/GroupActions';
 
 const qs = require('qs');
 const List = require('./List');
+const Mylist = require('./Mylist');
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -75,15 +76,18 @@ export default class Container extends Component {
   render() {
     const { i18n, session, location: { pathname, query={} } } = this.props;
 
-    if (_.isEmpty(session.user)) {
-      return (<div/>);
-    } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
-      notify.show(i18n.errMsg[-10002], 'warning', 2000);
-      return (<div/>);
+    if (pathname.indexOf('admin') === 1) {
+      if (_.isEmpty(session.user)) {
+        return (<div/>);
+      } else if (!session.user.permissions || !session.user.permissions.sys_admin) {
+        notify.show(i18n.errMsg[-10002], 'warning', 2000);
+        return (<div/>);
+      }
     }
 
     return (
       <div className='doc-container'>
+        { pathname.indexOf('admin') === 1 ?
         <List 
           index={ this.index.bind(this) } 
           entry={ this.entry.bind(this) } 
@@ -96,6 +100,18 @@ export default class Container extends Component {
           query={ query }
           i18n={ i18n }
           { ...this.props.group }/>
+        :
+        <Mylist
+          index={ this.index.bind(this) }
+          entry={ this.entry.bind(this) }
+          refresh={ this.refresh.bind(this) }
+          create={ this.create.bind(this) }
+          select={ this.props.actions.select }
+          update={ this.update.bind(this) }
+          del={ this.del.bind(this) }
+          query={ query }
+          i18n={ i18n }
+          { ...this.props.group }/> }
       </div>
     );
   }

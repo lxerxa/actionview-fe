@@ -234,6 +234,10 @@ export default (
         path='/mysetting' 
         onEnter={ ()=> { document.title = '个人设置' + suffix; } } 
         getComponent={ MysettingContainer }/>
+      <Route
+        path='/mygroup'
+        onEnter={ ()=> { document.title = '我的群组' + suffix; } }
+        getComponent={ GroupContainer }/>
       <Route 
         path='/project/:key' 
         component={ Project }>

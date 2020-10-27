@@ -129,6 +129,13 @@ export default function(router) {
     return res.status(200).send(results);
   });
 
+  router.get('/mygroup', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: [{ id: '1111', name: '王五111', users:['aa', 'bb']}, {id: '111122', name: '王五111',  users:[ { id: 'aa', name : 'aa' } , { id: 'bb', name: 'bb'}, { id: 'cc', name: 'cc' } ]},  { id: '111111', name: '王五11331', description: '111111111111111111', status: 'invalid', users:['aa', 'bb', 'cc', 'dd']}, { id: '11133111', name: '王五111333' }], options: { total: 4 }};
+    return res.status(200).send(results);
+  });
+
   router.delete('/group/:id', function(req, res) {
     const startTime = new Date().getTime();
     while (new Date().getTime() < startTime + 2000);

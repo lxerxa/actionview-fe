@@ -60,6 +60,8 @@ export default class Header extends Component {
 
     if (eventKey === 'setting') {
       entry('/mysetting');
+    } else if (eventKey === 'mygroup') {
+      entry('/mygroup');
     } else if (eventKey === 'about') {
       this.setState({ aboutShow: true });
     } else if (eventKey === 'logout') {
@@ -146,6 +148,7 @@ export default class Header extends Component {
     const patten11 = new RegExp('^/admin/directory$');
     const patten12 = new RegExp('^/admin/logs$');
     const patten13 = new RegExp('^/admin/calendar$');
+    const patten14 = new RegExp('^/mygroup$');
 
     let modulename = '';
     if (patten0.exec(pathname)) {
@@ -188,6 +191,8 @@ export default class Header extends Component {
       modulename = '日志';
     } else if (patten13.exec(pathname)) {
       modulename = '日历管理';
+    } else if (patten14.exec(pathname)) {
+      modulename = '我的群组';
     } else {
       modulename = '其他';
     }
@@ -212,6 +217,8 @@ export default class Header extends Component {
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='about'>关于</MenuItem>
+            <MenuItem divider />
+            <MenuItem eventKey='mygroup'>我的群组</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
             <MenuItem eventKey='logout'>退出</MenuItem>

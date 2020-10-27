@@ -13,7 +13,6 @@ const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const UsersConfigModal = require('./UsersConfigModal');
 const OperateNotify = require('./OperateNotify');
-const MultiOperateNotify = require('./MultiOperateNotify');
 
 const img = require('../../assets/images/loading.gif');
 
@@ -25,21 +24,15 @@ export default class List extends Component {
       editModalShow: false, 
       usersConfigModalShow: false, 
       operateNotifyShow: false, 
-      operate: '',
       operateShow: false, 
-      multiOperateNotifyShow: false,
-      multiOperate: '',
       hoverRowId: '', 
-      selectedIds: [],
-      name: '', 
-      directory: null 
+      name: '' 
     }; 
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.usersConfigModalClose = this.usersConfigModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
-    this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.refresh = this.refresh.bind(this);
   }
 
@@ -58,8 +51,7 @@ export default class List extends Component {
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
-    del: PropTypes.func.isRequired,
-    multiDel: PropTypes.func.isRequired
+    del: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -87,10 +79,6 @@ export default class List extends Component {
 
   operateNotifyClose() {
     this.setState({ operateNotifyShow: false });
-  }
-
-  multiOperateNotifyClose() {
-    this.setState({ multiOperateNotifyShow: false });
   }
 
   edit(id) {
@@ -122,7 +110,6 @@ export default class List extends Component {
     }
 
     this.state.name = newQuery.name || '';
-    this.state.directory = newQuery.directory || null;
   }
 
   operateNotify(id) {
@@ -147,18 +134,11 @@ export default class List extends Component {
     }
   }
 
-  multiOperateSelect(eventKey) {
-    this.setState({ multiOperateNotifyShow: true, multiOperate: eventKey });
-  }
-
   refresh() {
     const { refresh } = this.props;
     const query = {};
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
-    }
-    if (this.state.directory) {
-      query.directory = this.state.directory;
     }
     refresh(query);
   }
@@ -173,43 +153,6 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
-  onSelectAll(isSelected, rows) {
-    if (isSelected) {
-      const length = rows.length;
-      for (let i = 0; i < length; i++) {
-        this.state.selectedIds.push(rows[i].id);
-      }
-    } else {
-      this.state.selectedIds = [];
-    }
-    this.setState({ selectedIds: this.state.selectedIds });
-  }
-
-  onSelect(row, isSelected) {
-    if (isSelected) {
-      this.state.selectedIds.push(row.id);
-    } else {
-      const newSelectedIds = [];
-      const length = this.state.selectedIds.length;
-      for (let i = 0; i < length; i++) {
-        if (this.state.selectedIds[i] !== row.id) {
-          newSelectedIds.push(this.state.selectedIds[i]);
-        }
-      }
-      this.state.selectedIds = newSelectedIds;
-    }
-    this.setState({ selectedIds: this.state.selectedIds });
-  }
-
-  cancelSelected() {
-    this.setState({ selectedIds: [] });
-  }
-
-  directoryChange(newValue) {
-    this.state.directory = newValue;
-    this.refresh(); 
-  }
-
   render() {
     const { 
       i18n, 
@@ -222,7 +165,6 @@ export default class List extends Component {
       refresh, 
       create, 
       del, 
-      multiDel, 
       update, 
       options, 
       query 
@@ -243,15 +185,15 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         count: collection[i].users ? <Link to={ '/admin/user?group=' + collection[i].id }>{ collection[i].users.length }</Link> : 0,
-        directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
+        principal: collection[i].principal && collection[i].principal.id ? collection[i].principal.name : '系统管理员', 
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
-            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
+            <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='view'>查看人员</MenuItem>
-              { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='config'>配置人员</MenuItem> }
-              { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='edit'>编辑</MenuItem> }
-              { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='del'>删除</MenuItem> }
+              <MenuItem eventKey='config'>配置人员</MenuItem>
+              <MenuItem eventKey='edit'>编辑</MenuItem>
+              <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -269,38 +211,10 @@ export default class List extends Component {
     opts.onRowMouseOver = this.onRowMouseOver.bind(this);
     // opts.onMouseLeave = this.onMouseLeave.bind(this);
 
-    let selectRowProp = {};
-    if (groups.length > 0) {
-      selectRowProp = {
-        mode: 'checkbox',
-        selected: this.state.selectedIds,
-        onSelect: this.onSelect.bind(this),
-        onSelectAll: this.onSelectAll.bind(this)
-      };
-    }
-
-    let multiDelShow = false;
-    _.map(collection, (v) => {
-      if (_.indexOf(this.state.selectedIds, v.id) === -1) {
-        return;
-      }
-      if (!v.directory || v.directory == 'self') {
-        multiDelShow = true;
-      }
-    });
-
     return (
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '18%' } }>
-              <Select
-                simpleValue
-                placeholder='用户目录'
-                value={ this.state.directory }
-                onChange={ this.directoryChange.bind(this) }
-                options={ _.map(options.directories || [], (val) => { return { label: val.name, value: val.id } }) }/>
-            </span>
             <span style={ { float: 'right', width: '20%', marginRight: '10px' } }>
               <FormControl
                 type='text'
@@ -310,13 +224,6 @@ export default class List extends Component {
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '组名查询...' } />
             </span>
-            { this.state.selectedIds.length > 0 &&
-            <span style={ { float: 'left', marginRight: '10px' } }>
-              <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                { !multiDelShow && <MenuItem disabled eventKey='null'>无</MenuItem> }
-                { multiDelShow && <MenuItem eventKey='del'>删除</MenuItem> }
-              </DropdownButton>
-            </span> }
             <span style={ { float: 'left', marginRight: '20px' } }>
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建组</Button>
             </span>
@@ -331,11 +238,11 @@ export default class List extends Component {
               </span>
             </div>
           </div>
-          <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
+          <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
+            <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
             <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
-            <TableHeaderColumn dataField='directory'>目录</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && 
@@ -365,17 +272,6 @@ export default class List extends Component {
               data={ selectedItem } 
               operate={ this.state.operate } 
               del={ del } 
-              i18n={ i18n }/> }
-          { this.state.multiOperateNotifyShow && 
-            <MultiOperateNotify 
-              show 
-              close={ this.multiOperateNotifyClose } 
-              collection={ collection }
-              multiDel={ multiDel } 
-              ids={ this.state.selectedIds } 
-              cancelSelected={ this.cancelSelected.bind(this) } 
-              operate={ this.state.multiOperate } 
-              loading={ loading } 
               i18n={ i18n }/> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
