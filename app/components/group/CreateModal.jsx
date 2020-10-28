@@ -18,7 +18,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'group',
-  fields: [ 'name', 'principal', 'description' ],
+  fields: [ 'name', 'principal', 'scope', 'description' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -31,6 +31,7 @@ export default class CreateModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    mode: PropTypes.string,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     values: PropTypes.object,
@@ -52,8 +53,16 @@ export default class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { values, create, close } = this.props;
-    const ecode = await create(values);
+    const { mode, values, create, close } = this.props;
+
+    let principal = '';
+    if (mode == 'admin') {
+      principal = values.principal && values.principal.id || ''; 
+    } else {
+      principal = 'self';
+    }
+
+    const ecode = await create({ ...values, principal });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -73,7 +82,16 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { name, principal, description }, handleSubmit, invalid, submitting } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      mode,
+      fields: { name, principal, scope, description }, 
+      handleSubmit, 
+      invalid, 
+      submitting 
+    } = this.props;
+
+    const scopeOptions = [{ label: '公开（所有人可对其授权）', value: 1 }, { label: '私有（仅负责人可对其授权）', value: 2 }, { label: '成员可见（仅组成员和负责人可对其授权）', value: 3 }];
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -82,12 +100,13 @@ export default class CreateModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
+          <FormGroup validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>组名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='组名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : null }>
+          { mode == 'admin' &&
+          <FormGroup validationState={ principal.touched && principal.error ? 'error' : null }>
             <ControlLabel>负责人</ControlLabel>
             <Select.Async
               clearable={ false }
@@ -99,6 +118,17 @@ export default class CreateModal extends Component {
               labelKey='name'
               loadOptions={ this.searchUsers.bind(this) }
               placeholder='输入负责人(默认是系统管理员)'/>
+          </FormGroup> }
+          <FormGroup>
+            <ControlLabel>公开范围</ControlLabel>
+            <Select
+              disabled={ submitting }
+              options={ scopeOptions }
+              simpleValue
+              clearable={ false }
+              value={ scope.value || 1 }
+              onChange={ newValue => { scope.onChange(newValue) } }
+              placeholder='请选择公开范围'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>

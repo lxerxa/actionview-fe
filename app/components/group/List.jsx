@@ -348,6 +348,7 @@ export default class List extends Component {
           { this.state.createModalShow && 
             <CreateModal 
               show 
+              mode='admin'
               close={ this.createModalClose } 
               create={ create } 
               i18n={ i18n }/> }

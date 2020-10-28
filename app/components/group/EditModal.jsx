@@ -18,7 +18,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'group',
-  fields: [ 'id', 'name', 'principal', 'description' ],
+  fields: [ 'id', 'name', 'principal', 'scope', 'description' ],
   validate
 })
 export default class EditModal extends Component {
@@ -46,7 +46,7 @@ export default class EditModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update(values.id, _.omit(values, ['id']));
+    const ecode = await update(values.id, _.omit({ ...values, principal: values.principal && values.principal.id || '' }, ['id']));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -82,7 +82,16 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, name, principal, description }, dirty, handleSubmit, invalid, submitting } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      fields: { id, name, principal, scope, description }, 
+      dirty, 
+      handleSubmit, 
+      invalid, 
+      submitting 
+    } = this.props;
+
+    const scopeOptions = [{ label: '公开（所有人可对其授权）', value: 1 }, { label: '私有（仅负责人可对其授权）', value: 2 }, { label: '成员可见（仅组成员和负责人可对其授权）', value: 3 }];
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -97,7 +106,7 @@ export default class EditModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='组名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : null }>
+          <FormGroup validationState={ principal.touched && principal.error ? 'error' : null }>
             <ControlLabel>负责人</ControlLabel>
             <Select.Async
               clearable={ false }
@@ -109,6 +118,17 @@ export default class EditModal extends Component {
               labelKey='name'
               loadOptions={ this.searchUsers.bind(this) }
               placeholder='输入负责任(默认是系统管理员)'/>
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>公开范围</ControlLabel>
+            <Select
+              disabled={ submitting }
+              options={ scopeOptions }
+              simpleValue
+              clearable={ false }
+              value={ scope.value || 1 }
+              onChange={ newValue => { scope.onChange(newValue) } }
+              placeholder='请选择公开范围'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
