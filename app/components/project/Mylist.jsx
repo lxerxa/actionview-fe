@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const $ = require('$');
-const CreateModal = require('./CreateModal2');
+const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const CloseNotify = require('./CloseNotify');
 const loadingImg = require('../../assets/images/loading.gif');

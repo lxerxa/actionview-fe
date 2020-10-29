@@ -58,6 +58,7 @@ export default class CreateModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    mode: PropTypes.object,
     asyncValidating: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -69,8 +70,16 @@ export default class CreateModal extends Component {
   }
 
   async handleSubmit() {
-    const { values, create, close } = this.props;
-    const ecode = await create({ ...values, principal: values.principal && values.principal.id || '' });
+    const { mode, values, create, close } = this.props;
+
+    let principal = '';
+    if (mode == 'admin') {
+      principal = values.principal && values.principal.id || '';
+    } else {
+      principal = 'self';
+    }
+
+    const ecode = await create({ ...values, principal });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -101,7 +110,15 @@ export default class CreateModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, asyncValidating, fields: { name, key, principal, description }, handleSubmit, invalid, submitting } = this.props;
+    const { 
+      i18n: { errMsg }, 
+      mode,
+      asyncValidating, 
+      fields: { name, key, principal, description }, 
+      handleSubmit, 
+      invalid, 
+      submitting 
+    } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -124,6 +141,7 @@ export default class CreateModal extends Component {
             </FormControl.Feedback>
             { key.touched && key.error && <HelpBlock style={ { float: 'right' } }>{ key.error }</HelpBlock> }
           </FormGroup>
+          { mode == 'admin' &&
           <FormGroup controlId='formControlsText' validationState={ principal.touched && principal.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>责任人</ControlLabel>
             <Select.Async 
@@ -137,7 +155,7 @@ export default class CreateModal extends Component {
               loadOptions={ this.searchUsers.bind(this) } 
               placeholder='输入责任人'/>
             { principal.touched && principal.error && <HelpBlock style={ { float: 'right' } }>{ principal.error }</HelpBlock> }
-          </FormGroup>
+          </FormGroup> }
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...description } placeholder='项目描述'/>
