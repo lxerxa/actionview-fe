@@ -232,6 +232,8 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
+    const scopeOptions = { '1': '公开', '2': '私有', '3': '成员可见' };
+
     const groups = [];
     const groupNum = collection.length;
     for (let i = 0; i < groupNum; i++) {
@@ -242,7 +244,9 @@ export default class List extends Component {
             <span className='table-td-title'>{ collection[i].name || '-' }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
+        principal: collection[i].principal && collection[i].principal.name || '系统管理员',
         count: collection[i].users ? <Link to={ '/admin/user?group=' + collection[i].id }>{ collection[i].users.length }</Link> : 0,
+        scope: collection[i].scope && scopeOptions[collection[i].scope] || '公开', 
         directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
         operation: (
           <div>
@@ -334,7 +338,9 @@ export default class List extends Component {
           <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle' selectRow={ selectRowProp }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
+            <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
             <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
+            <TableHeaderColumn dataField='scope'>公开范围</TableHeaderColumn>
             <TableHeaderColumn dataField='directory'>目录</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>

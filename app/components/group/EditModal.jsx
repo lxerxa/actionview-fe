@@ -91,7 +91,7 @@ export default class EditModal extends Component {
       submitting 
     } = this.props;
 
-    const scopeOptions = [{ label: '公开（所有人可对其授权）', value: 1 }, { label: '私有（仅负责人可对其授权）', value: 2 }, { label: '成员可见（仅组成员和负责人可对其授权）', value: 3 }];
+    const scopeOptions = [{ label: '公开（所有人可对其授权）', value: '1' }, { label: '私有（仅负责人可对其授权）', value: '2' }, { label: '成员可见（仅组成员和负责人可对其授权）', value: '3' }];
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -117,7 +117,7 @@ export default class EditModal extends Component {
               valueKey='id'
               labelKey='name'
               loadOptions={ this.searchUsers.bind(this) }
-              placeholder='输入负责任(默认是系统管理员)'/>
+              placeholder='输入负责人(默认是系统管理员)'/>
           </FormGroup>
           <FormGroup>
             <ControlLabel>公开范围</ControlLabel>

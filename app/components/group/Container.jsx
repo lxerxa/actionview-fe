@@ -35,8 +35,11 @@ export default class Container extends Component {
     group: PropTypes.object.isRequired
   }
 
-  refresh(query) {
-    const pathname = '/admin/group';
+  refresh(query, from) {
+    let pathname = '/admin/group';
+    if (from == 'my') {
+      pathname = '/mygroup';
+    }
     this.context.router.push({ pathname, query });
   }
 
@@ -102,6 +105,7 @@ export default class Container extends Component {
           { ...this.props.group }/>
         :
         <Mylist
+          user={ this.props.session.user }
           index={ this.index.bind(this) }
           entry={ this.entry.bind(this) }
           refresh={ this.refresh.bind(this) }

@@ -26,7 +26,8 @@ export default class List extends Component {
       operateNotifyShow: false, 
       operateShow: false, 
       hoverRowId: '', 
-      name: '' 
+      name: '',
+      scale: null 
     }; 
 
     this.createModalClose = this.createModalClose.bind(this);
@@ -39,6 +40,7 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     options: PropTypes.object,
+    user: PropTypes.object.isRequired,
     collection: PropTypes.array.isRequired,
     selectedItem: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
@@ -57,10 +59,14 @@ export default class List extends Component {
   componentWillMount() {
     const { index, query={} } = this.props;
     if (query.name) this.state.name = query.name;
+    if (query.scale) this.state.scale = query.scale;
 
     const newQuery = {};
     if (this.state.name) {
       newQuery.name = this.state.name;
+    }
+    if (this.state.scale) {
+      newQuery.scale = this.state.scale;
     }
     index(newQuery);
   }
@@ -112,6 +118,11 @@ export default class List extends Component {
     this.state.name = newQuery.name || '';
   }
 
+  scaleChange(newValue) {
+    this.state.scale = newValue;
+    this.refresh();
+  }
+
   operateNotify(id) {
     this.setState({ operateNotifyShow: true });
     const { select } = this.props;
@@ -140,7 +151,10 @@ export default class List extends Component {
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
-    refresh(query);
+    if (this.state.scale) {
+      query.scale = this.state.scale;
+    }
+    refresh(query, 'my');
   }
 
   onRowMouseOver(rowData) {
@@ -156,6 +170,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n, 
+      user,
       collection, 
       selectedItem, 
       loading, 
@@ -174,6 +189,9 @@ export default class List extends Component {
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
+    const scopeOptions = { '1': '公开', '2': '私有', '3': '成员可见' };
+    const scaleOptions = [ { value: 'myprincipal', label: '我负责的' }, { value: 'myjoin', label: '我参与的' } ];
+
     const groups = [];
     const groupNum = collection.length;
     for (let i = 0; i < groupNum; i++) {
@@ -185,10 +203,11 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         count: collection[i].users ? <Link to={ '/admin/user?group=' + collection[i].id }>{ collection[i].users.length }</Link> : 0,
-        principal: collection[i].principal && collection[i].principal.id ? collection[i].principal.name : '系统管理员', 
+        principal: collection[i].principal && collection[i].principal.name || '系统管理员', 
+        scope: collection[i].scope && scopeOptions[collection[i].scope] || '公开', 
         operation: (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading && (collection[i].principal && collection[i].principal.id !== user.id) &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='view'>查看人员</MenuItem>
               <MenuItem eventKey='config'>配置人员</MenuItem>
@@ -215,14 +234,22 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '20%', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '20%' } }>
               <FormControl
                 type='text'
                 id='gname'
-                style={ { height: '37px' } }
+                style={ { height: '36px' } }
                 value={ this.state.name }
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '组名查询...' } />
+            </span>
+            <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='范围'
+                value={ this.state.scale }
+                onChange={ this.scaleChange.bind(this) }
+                options={ scaleOptions }/>
             </span>
             <span style={ { float: 'left', marginRight: '20px' } }>
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建组</Button>
@@ -243,6 +270,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
             <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
             <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
+            <TableHeaderColumn dataField='scope'>公开范围</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && 

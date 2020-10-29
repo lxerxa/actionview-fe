@@ -91,7 +91,7 @@ export default class CreateModal extends Component {
       submitting 
     } = this.props;
 
-    const scopeOptions = [{ label: '公开（所有人可对其授权）', value: 1 }, { label: '私有（仅负责人可对其授权）', value: 2 }, { label: '成员可见（仅组成员和负责人可对其授权）', value: 3 }];
+    const scopeOptions = [{ label: '公开（所有人可对其授权）', value: '1' }, { label: '私有（仅负责人可对其授权）', value: '2' }, { label: '成员可见（仅组成员和负责人可对其授权）', value: '3' }];
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
