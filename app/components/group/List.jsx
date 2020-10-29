@@ -14,6 +14,7 @@ const EditModal = require('./EditModal');
 const UsersConfigModal = require('./UsersConfigModal');
 const OperateNotify = require('./OperateNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
+const ViewUsersModal = require('./ViewUsersModal');
 
 const img = require('../../assets/images/loading.gif');
 
@@ -23,6 +24,7 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
+      viewUsersModalShow: false, 
       usersConfigModalShow: false, 
       operateNotifyShow: false, 
       operate: '',
@@ -32,6 +34,7 @@ export default class List extends Component {
       hoverRowId: '', 
       selectedIds: [],
       name: '', 
+      public_scope: null, 
       directory: null 
     }; 
 
@@ -40,6 +43,7 @@ export default class List extends Component {
     this.usersConfigModalClose = this.usersConfigModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
+    this.viewUsers = this.viewUsers.bind(this);
     this.refresh = this.refresh.bind(this);
   }
 
@@ -70,6 +74,12 @@ export default class List extends Component {
     if (this.state.name) {
       newQuery.name = this.state.name;
     }
+    if (this.state.directory) {
+      newQuery.directory = this.state.directory;
+    }
+    if (this.state.public_scope) {
+      newQuery.public_scope = this.state.public_scope;
+    }
     index(newQuery);
   }
 
@@ -79,6 +89,10 @@ export default class List extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  viewUsersModalClose() {
+    this.setState({ viewUsersModalShow: false });
   }
 
   usersConfigModalClose() {
@@ -91,18 +105,6 @@ export default class List extends Component {
 
   multiOperateNotifyClose() {
     this.setState({ multiOperateNotifyShow: false });
-  }
-
-  edit(id) {
-    this.setState({ editModalShow: true });
-    const { select } = this.props;
-    select(id);
-  }
-
-  config(id) {
-    this.setState({ usersConfigModalShow: true });
-    const { select } = this.props;
-    select(id);
   }
 
   componentDidMount() {
@@ -122,6 +124,7 @@ export default class List extends Component {
     }
 
     this.state.name = newQuery.name || '';
+    this.state.public_scope = newQuery.public_scope || null;
     this.state.directory = newQuery.directory || null;
   }
 
@@ -133,17 +136,17 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { entry } = this.props;
+    const { select, entry } = this.props;
+    select(hoverRowId);
 
     if (eventKey === 'edit') {
-      this.edit(hoverRowId);
+      this.setState({ editModalShow: true });
     } else if (eventKey === 'view') {
       entry('/admin/user', { group: hoverRowId });
     } else if (eventKey === 'config') {
-      this.config(hoverRowId);
+      this.setState({ usersConfigModalShow: true });
     } else {
-      this.operateNotify(hoverRowId);
-      this.setState({ operate: eventKey });
+      this.setState({ operateNotifyShow: true, operate: eventKey });
     }
   }
 
@@ -159,6 +162,9 @@ export default class List extends Component {
     }
     if (this.state.directory) {
       query.directory = this.state.directory;
+    }
+    if (this.state.public_scope) {
+      query.public_scope = this.state.public_scope;
     }
     refresh(query);
   }
@@ -201,6 +207,13 @@ export default class List extends Component {
     this.setState({ selectedIds: this.state.selectedIds });
   }
 
+  viewUsers() {
+    const { hoverRowId } = this.state;
+    const { select } = this.props;
+    select(hoverRowId);
+    this.setState({ viewUsersModalShow: true });
+  }
+
   cancelSelected() {
     this.setState({ selectedIds: [] });
   }
@@ -208,6 +221,11 @@ export default class List extends Component {
   directoryChange(newValue) {
     this.state.directory = newValue;
     this.refresh(); 
+  }
+
+  scopeChange(newValue) {
+    this.state.public_scope = newValue;
+    this.refresh();
   }
 
   render() {
@@ -245,14 +263,14 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         principal: collection[i].principal && collection[i].principal.name || '系统管理员',
-        count: collection[i].users ? <Link to={ '/admin/user?group=' + collection[i].id }>{ collection[i].users.length }</Link> : 0,
-        scope: collection[i].scope && scopeOptions[collection[i].scope] || '公开', 
+        count: collection[i].users ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
+        public_scope: collection[i].public_scope && scopeOptions[collection[i].public_scope] || '公开', 
         directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } id={ `dropdown-basic-${i}` } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='view'>查看人员</MenuItem>
+              <MenuItem eventKey='view'>跳至人员列表</MenuItem>
               { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='config'>配置人员</MenuItem> }
               { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='edit'>编辑</MenuItem> }
               { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='del'>删除</MenuItem> }
@@ -305,6 +323,14 @@ export default class List extends Component {
                 onChange={ this.directoryChange.bind(this) }
                 options={ _.map(options.directories || [], (val) => { return { label: val.name, value: val.id } }) }/>
             </span>
+            <span style={ { float: 'right', width: '130px', marginRight: '10px' } }>
+              <Select
+                simpleValue
+                placeholder='公开范围'
+                value={ this.state.public_scope }
+                onChange={ this.scopeChange.bind(this) }
+                options={ _.map(scopeOptions, (v, k) => { return { value: k, label: v } }) }/>
+            </span>
             <span style={ { float: 'right', width: '20%', marginRight: '10px' } }>
               <FormControl
                 type='text'
@@ -340,7 +366,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
             <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
             <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
-            <TableHeaderColumn dataField='scope'>公开范围</TableHeaderColumn>
+            <TableHeaderColumn dataField='public_scope'>公开范围</TableHeaderColumn>
             <TableHeaderColumn dataField='directory'>目录</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
@@ -384,6 +410,11 @@ export default class List extends Component {
               operate={ this.state.multiOperate } 
               loading={ loading } 
               i18n={ i18n }/> }
+          { this.state.viewUsersModalShow &&
+            <ViewUsersModal
+              show
+              close={ this.viewUsersModalClose.bind(this) }
+              users={ selectedItem.users || [] } /> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

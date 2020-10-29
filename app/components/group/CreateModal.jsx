@@ -18,7 +18,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'group',
-  fields: [ 'name', 'principal', 'scope', 'description' ],
+  fields: [ 'name', 'principal', 'public_scope', 'description' ],
   validate
 })
 export default class CreateModal extends Component {
@@ -85,7 +85,7 @@ export default class CreateModal extends Component {
     const { 
       i18n: { errMsg }, 
       mode,
-      fields: { name, principal, scope, description }, 
+      fields: { name, principal, public_scope, description }, 
       handleSubmit, 
       invalid, 
       submitting 
@@ -126,8 +126,8 @@ export default class CreateModal extends Component {
               options={ scopeOptions }
               simpleValue
               clearable={ false }
-              value={ scope.value || 1 }
-              onChange={ newValue => { scope.onChange(newValue) } }
+              value={ public_scope.value || 1 }
+              onChange={ newValue => { public_scope.onChange(newValue) } }
               placeholder='请选择公开范围'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>

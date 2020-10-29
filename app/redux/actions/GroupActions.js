@@ -7,6 +7,13 @@ export function index(qs) {
   });
 }
 
+export function myGroup(qs) {
+  return asyncFuncCreator({
+    constant: 'GROUP_INDEX',
+    promise: (client) => client.request({ url: '/mygroup' + (qs ? '?' + qs : '') })
+  });
+}
+
 export function create(values) {
   return asyncFuncCreator({
     constant: 'GROUP_CREATE',

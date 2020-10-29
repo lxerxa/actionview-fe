@@ -18,7 +18,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'group',
-  fields: [ 'id', 'name', 'principal', 'scope', 'description' ],
+  fields: [ 'id', 'name', 'principal', 'public_scope', 'description' ],
   validate
 })
 export default class EditModal extends Component {
@@ -84,7 +84,7 @@ export default class EditModal extends Component {
   render() {
     const { 
       i18n: { errMsg }, 
-      fields: { id, name, principal, scope, description }, 
+      fields: { id, name, principal, public_scope, description }, 
       dirty, 
       handleSubmit, 
       invalid, 
@@ -126,8 +126,8 @@ export default class EditModal extends Component {
               options={ scopeOptions }
               simpleValue
               clearable={ false }
-              value={ scope.value || 1 }
-              onChange={ newValue => { scope.onChange(newValue) } }
+              value={ public_scope.value || 1 }
+              onChange={ newValue => { public_scope.onChange(newValue) } }
               placeholder='请选择公开范围'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>

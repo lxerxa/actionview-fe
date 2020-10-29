@@ -54,6 +54,13 @@ export default class Container extends Component {
     return this.props.group.ecode;
   }
 
+  async myGroup(query) {
+    if (!query) { query = {} }
+    if (!query.page) { query.page = 1; }
+    await this.props.actions.myGroup(qs.stringify(query));
+    return this.props.group.ecode;
+  }
+
   async create(values) {
     await this.props.actions.create(values);
     return this.props.group.ecode;
@@ -106,7 +113,7 @@ export default class Container extends Component {
         :
         <Mylist
           user={ this.props.session.user }
-          index={ this.index.bind(this) }
+          index={ this.myGroup.bind(this) }
           entry={ this.entry.bind(this) }
           refresh={ this.refresh.bind(this) }
           create={ this.create.bind(this) }

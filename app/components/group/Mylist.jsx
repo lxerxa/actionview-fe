@@ -13,6 +13,7 @@ const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const UsersConfigModal = require('./UsersConfigModal');
 const OperateNotify = require('./OperateNotify');
+const ViewUsersModal = require('./ViewUsersModal');
 
 const img = require('../../assets/images/loading.gif');
 
@@ -22,6 +23,7 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
+      viewUsersModalShow: false, 
       usersConfigModalShow: false, 
       operateNotifyShow: false, 
       operateShow: false, 
@@ -32,8 +34,10 @@ export default class List extends Component {
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
+    this.viewUsersModalClose = this.viewUsersModalClose.bind(this);
     this.usersConfigModalClose = this.usersConfigModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
+    this.viewUsers = this.viewUsers.bind(this);
     this.refresh = this.refresh.bind(this);
   }
 
@@ -79,24 +83,16 @@ export default class List extends Component {
     this.setState({ editModalShow: false });
   }
 
+  viewUsersModalClose() {
+    this.setState({ viewUsersModalShow: false });
+  }
+
   usersConfigModalClose() {
     this.setState({ usersConfigModalShow: false });
   }
 
   operateNotifyClose() {
     this.setState({ operateNotifyShow: false });
-  }
-
-  edit(id) {
-    this.setState({ editModalShow: true });
-    const { select } = this.props;
-    select(id);
-  }
-
-  config(id) {
-    this.setState({ usersConfigModalShow: true });
-    const { select } = this.props;
-    select(id);
   }
 
   componentDidMount() {
@@ -116,6 +112,7 @@ export default class List extends Component {
     }
 
     this.state.name = newQuery.name || '';
+    this.state.scale = newQuery.scale || null;
   }
 
   scaleChange(newValue) {
@@ -123,26 +120,25 @@ export default class List extends Component {
     this.refresh();
   }
 
-  operateNotify(id) {
-    this.setState({ operateNotifyShow: true });
-    const { select } = this.props;
-    select(id);
-  }
-
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { entry } = this.props;
+    const { select, entry } = this.props;
+    select(hoverRowId);
 
     if (eventKey === 'edit') {
-      this.edit(hoverRowId);
-    } else if (eventKey === 'view') {
-      entry('/admin/user', { group: hoverRowId });
+      this.setState({ editModalShow: true });
     } else if (eventKey === 'config') {
-      this.config(hoverRowId);
+      this.setState({ usersConfigModalShow: true });
     } else {
-      this.operateNotify(hoverRowId);
-      this.setState({ operate: eventKey });
+      this.setState({ operateNotifyShow: true, operate: eventKey });
     }
+  }
+
+  viewUsers() {
+    const { hoverRowId } = this.state;
+    const { select } = this.props;
+    select(hoverRowId);
+    this.setState({ viewUsersModalShow: true });
   }
 
   refresh() {
@@ -202,14 +198,13 @@ export default class List extends Component {
             <span className='table-td-title'>{ collection[i].name || '-' }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
-        count: collection[i].users ? <Link to={ '/admin/user?group=' + collection[i].id }>{ collection[i].users.length }</Link> : 0,
+        count: collection[i].users ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
         principal: collection[i].principal && collection[i].principal.name || '系统管理员', 
-        scope: collection[i].scope && scopeOptions[collection[i].scope] || '公开', 
+        public_scope: collection[i].public_scope && scopeOptions[collection[i].public_scope] || '公开', 
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading && (collection[i].principal && collection[i].principal.id !== user.id) &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='view'>查看人员</MenuItem>
               <MenuItem eventKey='config'>配置人员</MenuItem>
               <MenuItem eventKey='edit'>编辑</MenuItem>
               <MenuItem eventKey='del'>删除</MenuItem>
@@ -243,10 +238,10 @@ export default class List extends Component {
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '组名查询...' } />
             </span>
-            <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
+            <span style={ { float: 'right', width: '130px', marginRight: '10px' } }>
               <Select
                 simpleValue
-                placeholder='范围'
+                placeholder='全部'
                 value={ this.state.scale }
                 onChange={ this.scaleChange.bind(this) }
                 options={ scaleOptions }/>
@@ -270,7 +265,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
             <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
             <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
-            <TableHeaderColumn dataField='scope'>公开范围</TableHeaderColumn>
+            <TableHeaderColumn dataField='public_scope'>公开范围</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
           { this.state.editModalShow && 
@@ -301,6 +296,11 @@ export default class List extends Component {
               operate={ this.state.operate } 
               del={ del } 
               i18n={ i18n }/> }
+          { this.state.viewUsersModalShow &&
+            <ViewUsersModal
+              show
+              close={ this.viewUsersModalClose.bind(this) }
+              users={ selectedItem.users || [] } /> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList
