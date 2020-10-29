@@ -46,7 +46,7 @@ export default class EditModal extends Component {
 
   async handleSubmit() {
     const { values, update, close } = this.props;
-    const ecode = await update(values.id, _.omit({ ...values, principal: values.principal && values.principal.id || '' }, ['id']));
+    const ecode = await update(values.id, _.omit({ ...values, principal: values.principal && values.principal.id || '', public_scope: values.public_scope || '1' }, ['id']));
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -126,7 +126,7 @@ export default class EditModal extends Component {
               options={ scopeOptions }
               simpleValue
               clearable={ false }
-              value={ public_scope.value || 1 }
+              value={ public_scope.value || '1' }
               onChange={ newValue => { public_scope.onChange(newValue) } }
               placeholder='请选择公开范围'/>
           </FormGroup>

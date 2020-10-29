@@ -229,7 +229,15 @@ export default class List extends Component {
       <div>
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '20%' } }>
+            <span style={ { float: 'right', width: '130px' } }>
+              <Select
+                simpleValue
+                placeholder='全部'
+                value={ this.state.scale }
+                onChange={ this.scaleChange.bind(this) }
+                options={ scaleOptions }/>
+            </span>
+            <span style={ { float: 'right', width: '20%', marginRight: '10px' } }>
               <FormControl
                 type='text'
                 id='gname'
@@ -238,28 +246,12 @@ export default class List extends Component {
                 onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 placeholder={ '组名查询...' } />
             </span>
-            <span style={ { float: 'right', width: '130px', marginRight: '10px' } }>
-              <Select
-                simpleValue
-                placeholder='全部'
-                value={ this.state.scale }
-                onChange={ this.scaleChange.bind(this) }
-                options={ scaleOptions }/>
-            </span>
             <span style={ { float: 'left', marginRight: '20px' } }>
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建组</Button>
             </span>
           </FormGroup>
         </div>
         <div>
-          <div className='info-col'>
-            <div className='info-icon'><i className='fa fa-info-circle'></i></div>
-            <div className='info-content'>
-              <span>
-                从外部用户目录同步过来的用户组，不能对其做任何操作。
-              </span>
-            </div>
-          </div>
           <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>

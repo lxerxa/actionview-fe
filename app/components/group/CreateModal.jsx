@@ -62,7 +62,8 @@ export default class CreateModal extends Component {
       principal = 'self';
     }
 
-    const ecode = await create({ ...values, principal });
+    console.log(values);
+    const ecode = await create({ ...values, principal, public_scope: values.public_scope || '1' });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -126,7 +127,7 @@ export default class CreateModal extends Component {
               options={ scopeOptions }
               simpleValue
               clearable={ false }
-              value={ public_scope.value || 1 }
+              value={ public_scope.value || '1' }
               onChange={ newValue => { public_scope.onChange(newValue) } }
               placeholder='请选择公开范围'/>
           </FormGroup>

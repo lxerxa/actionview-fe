@@ -36,7 +36,7 @@ export default class UserListModal extends Component {
             { _.map(users, (v, key) => {
               return (<tr key={ key }>
                 <td>
-                  <span>{ v.name }</span>
+                  <span>{ v.first_name }</span>
                   <span style={ { color: '#aaa' } }>{ ' - ' + v.email }</span>
                 </td>
               </tr>); }) }
