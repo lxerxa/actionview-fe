@@ -69,6 +69,8 @@ export default class List extends Component {
   componentWillMount() {
     const { index, query={} } = this.props;
     if (query.name) this.state.name = query.name;
+    if (query.directory) this.state.directory = query.directory;
+    if (query.public_scope) this.state.public_scope = query.public_scope;
 
     const newQuery = {};
     if (this.state.name) {
@@ -365,7 +367,7 @@ export default class List extends Component {
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
             <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
-            <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
+            <TableHeaderColumn dataField='count'>成员个数</TableHeaderColumn>
             <TableHeaderColumn dataField='public_scope'>公开范围</TableHeaderColumn>
             <TableHeaderColumn dataField='directory'>目录</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
@@ -390,6 +392,7 @@ export default class List extends Component {
               close={ this.usersConfigModalClose }
               config={ update }
               data={ selectedItem }
+              loading={ loading }
               i18n={ i18n }/> }
           { this.state.operateNotifyShow && 
             <OperateNotify 

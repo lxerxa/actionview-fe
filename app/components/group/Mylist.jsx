@@ -129,7 +129,7 @@ export default class List extends Component {
       this.setState({ editModalShow: true });
     } else if (eventKey === 'config') {
       this.setState({ usersConfigModalShow: true });
-    } else {
+    } else if (eventKey === 'del') {
       this.setState({ operateNotifyShow: true, operate: eventKey });
     }
   }
@@ -203,7 +203,7 @@ export default class List extends Component {
         public_scope: collection[i].public_scope && scopeOptions[collection[i].public_scope] || '公开', 
         operation: (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading && (collection[i].principal && collection[i].principal.id !== user.id) &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading && collection[i].principal && collection[i].principal.id == user.id &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='config'>配置人员</MenuItem>
               <MenuItem eventKey='edit'>编辑</MenuItem>
@@ -252,11 +252,17 @@ export default class List extends Component {
           </FormGroup>
         </div>
         <div>
+          <div className='info-col'>
+            <div className='info-icon'><i className='fa fa-info-circle'></i></div>
+            <div className='info-content'>
+              公开范围：公开 - 所有人可对其授权；私有 - 仅负责人可对其授权；成员可见 - 仅组成员和负责人可对其授权。 
+            </div>
+          </div>
           <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle'>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='name'>组名</TableHeaderColumn>
             <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
-            <TableHeaderColumn dataField='count'>用户个数</TableHeaderColumn>
+            <TableHeaderColumn dataField='count'>成员个数</TableHeaderColumn>
             <TableHeaderColumn dataField='public_scope'>公开范围</TableHeaderColumn>
             <TableHeaderColumn width='60' dataField='operation'/>
           </BootstrapTable>
@@ -279,6 +285,7 @@ export default class List extends Component {
               close={ this.usersConfigModalClose }
               config={ update }
               data={ selectedItem }
+              loading={ loading }
               i18n={ i18n }/> }
           { this.state.operateNotifyShow && 
             <OperateNotify 
