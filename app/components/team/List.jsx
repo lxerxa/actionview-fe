@@ -19,7 +19,8 @@ export default class List extends Component {
       users: {}, 
       willSetGroupRoleIds: [],
       settingGroupRoleIds: [],
-      groups: {} };
+      groups: {} 
+    };
     this.searchUsers = this.searchUsers.bind(this);
     this.searchGroups = this.searchGroups.bind(this);
   }
