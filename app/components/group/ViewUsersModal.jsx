@@ -21,6 +21,8 @@ export default class UserListModal extends Component {
   render() {
     const { users } = this.props;
 
+    users.sort((a, b) => a.first_name.localeCompare(b.first_name));
+
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>

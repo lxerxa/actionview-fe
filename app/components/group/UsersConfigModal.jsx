@@ -14,7 +14,7 @@ export default class UsersConfigModal extends Component {
     super(props);
     this.state = { 
       addUsers: [], 
-      users: this.props.data.users ? _.clone(this.props.data.users) : [], 
+      users: this.props.data.users ? _.clone(this.props.data.users).sort((a, b) => a.first_name.localeCompare(b.first_name)) : [], 
       ecode: 0 };
   }
 
@@ -114,10 +114,10 @@ export default class UsersConfigModal extends Component {
                   labelKey='nameAndEmail'
                   loadOptions={ this.searchUsers }
                   placeholder='请输入用户'/>
-                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) }>添加至用户列表 >> </Button>
+                <Button style={ { float: 'right', marginTop: '15px' } } onClick={ this.add.bind(this) }>添加至成员列表 >> </Button>
               </Col>
               <Col sm={ 6 }>
-                { users.length > 0 && <div style={ { marginBottom: '8px' } }>用户列表 - { users.length }</div> }
+                { users.length > 0 && <div style={ { marginBottom: '8px' } }>成员列表 - { users.length }</div> }
                 { users.length > 0 ?
                   users.map((op, i) => {
                     return (
