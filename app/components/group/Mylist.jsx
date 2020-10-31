@@ -205,7 +205,7 @@ export default class List extends Component {
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading && collection[i].principal && collection[i].principal.id == user.id &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='config'>配置人员</MenuItem>
+              <MenuItem eventKey='config'>成员配置</MenuItem>
               <MenuItem eventKey='edit'>编辑</MenuItem>
               <MenuItem eventKey='del'>删除</MenuItem>
             </DropdownButton> }
@@ -255,7 +255,7 @@ export default class List extends Component {
           <div className='info-col'>
             <div className='info-icon'><i className='fa fa-info-circle'></i></div>
             <div className='info-content'>
-              公开范围：公开 - 所有人可对其授权；私有 - 仅负责人可对其授权；成员可见 - 仅组成员和负责人可对其授权。 
+              公开范围：公开 - 所有人可对其授权；私有 - 仅负责人可对其授权；成员可见 - 仅负责人和组成员可对其授权。 
             </div>
           </div>
           <BootstrapTable data={ groups } bordered={ false } hover options={ opts } trClassName='tr-middle'>
