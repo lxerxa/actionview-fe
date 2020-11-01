@@ -217,8 +217,8 @@ export default class Header extends Component {
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='about'>关于</MenuItem>
-            <MenuItem divider />
-            <MenuItem eventKey='mygroup'>我的群组</MenuItem>
+            { session.user && session.user.email && session.user.email !== 'admin@action.view' && <MenuItem divider /> }
+            { session.user && session.user.email && session.user.email !== 'admin@action.view' && <MenuItem eventKey='mygroup'>我的群组</MenuItem> }
             <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
             <MenuItem eventKey='logout'>退出</MenuItem>
