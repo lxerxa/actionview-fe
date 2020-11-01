@@ -775,7 +775,7 @@ export default class DetailBar extends Component {
                       { options.permissions && options.permissions.indexOf('assign_issue') !== -1 ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                         <span>
-                          <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
+                          <div style={ { display: 'inline-block', float: 'left', margin: '5px 0px 3px 5px' } }>
                             { data['assignee'] && data['assignee'].name || '-' }
                           </div>
                         </span>
