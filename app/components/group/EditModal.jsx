@@ -109,7 +109,7 @@ export default class EditModal extends Component {
           <FormGroup validationState={ principal.touched && principal.error ? 'error' : null }>
             <ControlLabel>负责人</ControlLabel>
             <Select.Async
-              clearable={ false }
+              clearable={ true }
               disabled={ submitting }
               options={ [] }
               value={ principal.value }
