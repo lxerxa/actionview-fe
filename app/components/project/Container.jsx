@@ -75,8 +75,11 @@ export default class Container extends Component {
     await this.props.actions.loadStats(pkeys);
   }
 
-  async create(values) {
+  async create(values, mode) {
     await this.props.actions.create(values);
+    if (this.props.project.ecode == 0 && mode != 'admin') {
+      this.props.actions.loadStats([ values.key ]);
+    }
     return this.props.project.ecode;
   }
 

@@ -764,7 +764,7 @@ export default class List extends Component {
         self.clickBar(block);
       });
 
-      $('div.ganttview-block-movable').resizable({
+      $('div.ganttview-block-movable').unbind('resizable').resizable({
         grid: cellWidth, 
         handles: 'e,w',
         start: function() {
@@ -786,7 +786,7 @@ export default class List extends Component {
         }
       });
 
-      $('div.ganttview-block-movable').draggable({
+      $('div.ganttview-block-movable').unbind('draggable').draggable({
         axis: 'x', 
         grid: [cellWidth, cellWidth],
         stop: function () {
@@ -983,10 +983,10 @@ export default class List extends Component {
             </span>
           </a>
           <span style={ { float: 'right', marginRight: '5px' } }>
-            <span title='缩小' className={ scaling <= 0.6 ? 'ganttview-fa-button-disable' : 'ganttview-fa-button' } onClick={ (e) => { this.changeScaling('-') } }>
+            <span title='缩小' className={ scaling <= 0.6 || collection.length <= 0 ? 'ganttview-fa-button-disable' : 'ganttview-fa-button' } onClick={ (e) => { this.changeScaling('-') } }>
               <i className='fa fa-search-minus'></i>
             </span>
-            <span title='放大' className={ scaling >= 1 ? 'ganttview-fa-button-disable' : 'ganttview-fa-button' } onClick={ (e) => { this.changeScaling('+') } }>
+            <span title='放大' className={ scaling >= 1 || collection.length <= 0 ? 'ganttview-fa-button-disable' : 'ganttview-fa-button' } onClick={ (e) => { this.changeScaling('+') } }>
               <i className='fa fa-search-plus'></i>
             </span>
             <span className='ganttview-fa-button' title={ isHeaderHidden ? '展示头部' : '隐藏头部' } onClick={ toggleHeader }>

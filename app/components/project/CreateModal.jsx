@@ -13,7 +13,7 @@ const validate = (values, props) => {
   if (!values.name) {
     errors.name = '必填';
   } 
-  if (!values.principal) {
+  if (props.mode == 'admin' && !values.principal) {
     errors.principal = '必填';
   } 
   if (!values.key) {
@@ -79,7 +79,7 @@ export default class CreateModal extends Component {
       principal = 'self';
     }
 
-    const ecode = await create({ ...values, principal });
+    const ecode = await create({ ...values, principal }, mode);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
