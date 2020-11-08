@@ -21,7 +21,8 @@ export default class List extends Component {
       operateNotifyShow: false, 
       operate: '',
       operateShow: false, 
-      hoverRowId: '' }; 
+      hoverRowId: '' 
+    }; 
 
     this.createModalClose = this.createModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
@@ -101,7 +102,8 @@ export default class List extends Component {
       del, 
       test, 
       update, 
-      options } = this.props;
+      options 
+    } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );

@@ -26,7 +26,8 @@ export default class List extends Component {
       delNotifyShow: false, 
       viewUsedShow: false, 
       operateShow: false, 
-      hoverRowId: '' };
+      hoverRowId: '' 
+    };
 
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
@@ -118,7 +119,8 @@ export default class List extends Component {
       del, 
       update, 
       viewUsed, 
-      usedProjects } = this.props;
+      usedProjects 
+    } = this.props;
 
     const { hoverRowId, operateShow } = this.state;
 

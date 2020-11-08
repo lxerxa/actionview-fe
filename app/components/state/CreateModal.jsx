@@ -85,12 +85,12 @@ export default class CreateModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
+          <FormGroup validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>名称</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='问题状态名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup>
             <ControlLabel><span className='txt-impt'>*</span>类别</ControlLabel>
             <Select
               disabled={ submitting }
@@ -102,7 +102,7 @@ export default class CreateModal extends Component {
               onChange={ newValue => { category.onChange(newValue) } }
               placeholder='请选择类别'/>
           </FormGroup>
-          <FormGroup controlId='formControlsText'>
+          <FormGroup>
             <ControlLabel>描述</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...description } placeholder='状态描述'/>
           </FormGroup>
