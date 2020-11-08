@@ -130,6 +130,7 @@ export default class Header extends Component {
       { key: 'events', name: '通知事件' },
       { key: 'options', name: '选项' },
       { key: 'labels', name: '标签管理' },
+      { key: 'reminds', name: '提醒' },
       { key: 'integrations', name: '外部用户' },
       { key: 'webhooks', name: 'Webhooks' }
     ];

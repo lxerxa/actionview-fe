@@ -1441,6 +1441,22 @@ const testdata = {
   });
   /******************labels*****************/
 
+  /******************labels*****************/
+  router.get('/project/:key/reminds', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results={ecode: 0, data:[{id: '1111', name: '测试111', status: 'enabled'}, {id: '2222', name: '测试222', status: 'disabled' }]};
+    return res.status(200).send(results);
+  });
+
+  router.post('/project/:key/reminds', function(req, res) {
+    const startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + 2000);
+    const results = { ecode: 0, data: { name: 'aaaa', description: 'ttttt', status: 'enabled' } };
+    return res.status(200).send(results);
+  });
+  /******************labels*****************/
+
   /******************integrations*****************/
   router.get('/project/:key/integrations', function(req, res) {
     const startTime = new Date().getTime();

@@ -208,6 +208,12 @@ const CalendarContainer = (location, cb) => {
   }, 'calendar')
 };
 
+const RemindsContainer = (location, cb) => {
+  require.ensure([], require => {
+    cb(null, require('./components/reminds/Container'))
+  }, 'reminds')
+};
+
 export default (
   <Route path='/' component={ Layout }>
     <IndexRoute component={ Login }/>
@@ -268,6 +274,7 @@ export default (
         <Route path='labels' getComponent={ LabelsContainer }/>
         <Route path='integrations' getComponent={ IntegrationsContainer }/>
         <Route path='webhooks' getComponent={ WebhooksContainer }/>
+        <Route path='reminds' getComponent={ RemindsContainer }/>
       </Route>
       <Route 
         path='/admin/project' 

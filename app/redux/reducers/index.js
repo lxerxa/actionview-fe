@@ -27,6 +27,7 @@ export { default as document } from './document';
 export { default as wiki } from './wiki';
 export { default as report } from './report';
 export { default as labels } from './labels';
+export { default as reminds } from './reminds';
 export { default as integrations } from './integrations';
 export { default as webhooks } from './webhooks';
 export { default as logs } from './logs';
