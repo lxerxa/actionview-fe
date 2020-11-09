@@ -215,7 +215,7 @@ export default class List extends Component {
     const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
     const animateStyles = {};
     const left = parseInt($('.animate-dialog').css('left'));
-    if (left < 260) {
+    if (left < layout.containerWidth - width - 10) {
       animateStyles.left = left - width;
     } else {
       animateStyles.right = - width;
