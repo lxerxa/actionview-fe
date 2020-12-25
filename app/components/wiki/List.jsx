@@ -349,7 +349,7 @@ export default class List extends Component {
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
             <Link to={ '/project/' + project_key + '/wiki/' + v.id }>{ v.name }</Link>
             { v.favorited &&
-            <span title='点击取消收藏' style={ { float: 'right', color: '#FF9900', cursor: 'pointer' } } onClick={ (e) => { this.favorite(v.id) } }><i className='fa fa-star'></i></span> }
+            <span title='点击取消收藏' style={ { float: 'right', color: '#FFD300', cursor: 'pointer' } } onClick={ (e) => { this.favorite(v.id) } }><i className='fa fa-star'></i></span> }
           </div> ),
         operation: (
           <div>
@@ -394,7 +394,7 @@ export default class List extends Component {
               { files[i].parent != directory && 
               <Link to={ '/project/' + project_key + '/wiki' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
               { files[i].favorited &&
-              <span title='点击取消收藏' style={ { float: 'left', color: '#FF9900', cursor: 'pointer', marginRight: '10px' } } onClick={ (e) => { this.favorite(files[i].id) } }><i className='fa fa-star'></i></span> }
+              <span title='点击取消收藏' style={ { float: 'left', color: '#FFD300', cursor: 'pointer', marginRight: '10px' } } onClick={ (e) => { this.favorite(files[i].id) } }><i className='fa fa-star'></i></span> }
               { files[i].creator &&
               <span style={ { marginRight: '15px', float: 'left' } }>
                 { files[i].creator.name + '  ' + moment.unix(files[i].created_at).format('YYYY/MM/DD HH:mm') }

@@ -321,7 +321,7 @@ export default class Preview extends Component {
             <span style={ { marginLeft: '8px' } }><a href='#' onClick={ (e) => { e.preventDefault(); this.refresh(); } } title={ isNewestVer ? '刷新' : '最新版' }><i className='fa fa-refresh'></i></a></span>
           </span> }
           { item.favorited ?
-            <span style={ { marginLeft: '10px', cursor: 'pointer', color: '#FF9900' } } title='点击取消收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star'></i></span>
+            <span style={ { marginLeft: '10px', cursor: 'pointer', color: '#FFD300' } } title='点击取消收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star'></i></span>
             :
             <span style={ { marginLeft: '10px', cursor: 'pointer' } } title='点击收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star-o'></i></span> }
         </div> }
