@@ -809,9 +809,10 @@ table tr:hover .remove-icon{
 
 .card .leader {
   position: absolute;
-  bottom: 5px;
+  bottom: 7px;
   left: 10px;
   color: #666;
+  font-size: 12px;
 }
 
 .card .btns {
@@ -1226,7 +1227,7 @@ div.filepicker {
   width: 250px;
   height: calc(100% - 50px);
   border-right: 1px solid #dedede;
-  overflow: scroll;
+  overflow: auto;
   margin-left: -5px;
   margin-top: -15px;
   padding-top: 18px;
@@ -1250,4 +1251,12 @@ div.filepicker {
   background-color: #f7f7f7;
   border-radius: 4px;
   border: 1px solid #ddd;
+}
+
+.Select-menu-outer {
+  z-index: 1000;
+}
+
+.control-label {
+  font-weight: 400;
 }
