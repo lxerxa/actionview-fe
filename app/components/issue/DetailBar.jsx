@@ -767,7 +767,7 @@ export default class DetailBar extends Component {
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    经办人
+                    负责人
                   </Col>
                   <Col sm={ editAssignee ? 7 : 3 }>
                     { !editAssignee ?
@@ -796,7 +796,7 @@ export default class DetailBar extends Component {
                         options={ assigneeOptions } 
                         value={ newAssignee || data['assignee'].id } 
                         onChange={ this.handleAssigneeSelectChange.bind(this) } 
-                        placeholder='选择经办人'/>
+                        placeholder='选择负责人'/>
                       <div style={ { float: 'right' } }>
                         <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
@@ -813,6 +813,24 @@ export default class DetailBar extends Component {
                       <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
                     </div>
                   </Col> }
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    更新时间
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px', marginLeft: '5px' } }>
+                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    创建时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
                 </FormGroup>
                 { data.labels && data.labels.length > 0 &&
                 <FormGroup>

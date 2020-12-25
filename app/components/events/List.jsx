@@ -167,7 +167,7 @@ export default class List extends Component {
               _.map(collection[i].notifications, function(v, i) { 
                 let name = '';
                 if (v == 'assignee') {
-                  name = '当前经办人';
+                  name = '当前负责人';
                 } else if (v == 'reporter') {
                   name = '报告者';
                 } else if (v == 'project_principal') {

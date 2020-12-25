@@ -300,7 +300,7 @@ export default class List extends Component {
           NO
         </div>
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          经办人
+          负责人
         </div>
         { mode == 'progress' &&
         <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>

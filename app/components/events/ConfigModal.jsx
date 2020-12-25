@@ -148,7 +148,7 @@ export default class ConfigModal extends Component {
                   <div style={ { width: '50%', display: 'inline-block' } }>
                     <label style={ { fontWeight: 400 } }>
                       <Checkbox disabled={ loading } value='assignee'/>
-                      <span>当前经办人</span>
+                      <span>当前负责人</span>
                     </label>
                   </div>
                 </li>

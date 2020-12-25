@@ -177,7 +177,7 @@ export default class List extends Component {
         <Panel 
           header={ 
             <div>
-              <span>未解决问题：按经办人</span>
+              <span>未解决问题：按负责人</span>
               <span className='exchange-icon' onClick={ () => this.setState({ assigneeShowModel: this.state.assigneeShowModel == 'detail' ? 'percentage' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
           { data.assignee_unresolved_issues && !_.isEmpty(data.assignee_unresolved_issues) ?
@@ -185,7 +185,7 @@ export default class List extends Component {
             { this.state.assigneeShowModel == 'detail' && 
             <thead>
               <tr>
-                <th>经办人</th>
+                <th>负责人</th>
                 <th>问题</th>
                 { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
               </tr>
@@ -193,7 +193,7 @@ export default class List extends Component {
             { this.state.assigneeShowModel == 'percentage' &&
             <thead>
               <tr>
-                <th>经办人</th>
+                <th>负责人</th>
                 <th>问题</th>
                 <th>百分比</th>
               </tr>

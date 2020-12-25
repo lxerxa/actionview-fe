@@ -30,6 +30,8 @@ export default class Header extends Component {
     const { recents, session, getSess } = this.props;
     if (!session.user.id) {
       await getSess();
+      $('#main-loading').css({ 'width': '0px', 'height': '0px', 'background': 'none', 'display': 'none' });
+      $('#main-loading img').css({ 'display': 'none' });
     }
     
     if (this.props.session.user.id) {

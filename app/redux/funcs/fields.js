@@ -12,7 +12,7 @@ export function arrange(options) {
     { key: 'effect_versions', name: '影响版本', type: 'MultiVersion' },
     { key: 'labels', name: '标签', type: 'MultiSelect' },
     { key: 'reporter', name: '报告者', type: 'SingleUser' },
-    { key: 'assignee', name: '经办人', type: 'SingleUser' },
+    { key: 'assignee', name: '负责人', type: 'SingleUser' },
     { key: 'resolver', name: '解决者', type: 'SingleUser' },
     { key: 'closer', name: '关闭者', type: 'SingleUser' },
     { key: 'created_at', name: '创建时间', type: 'DateTimePicker' },

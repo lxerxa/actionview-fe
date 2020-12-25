@@ -256,7 +256,7 @@ export default class AddActionModal extends Component {
     //screenOptions.unshift( { label: '流程备注页面', value: 'comments' } );;
 
     const relationOptions = [{ label: '全部满足', value: 'and' }, { label: '满足任何一个即可', value: 'or' }];
-    const someOptions = [ { id: 'assignee', name: '经办人' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
+    const someOptions = [ { id: 'assignee', name: '负责人' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
     const assigneeOptions = [ { id: 'me', name: '当前用户' }, { id: 'reporter', name: '报告人' }, { id: 'principal', name: '项目负责人' } ];
 
     const userOptions = (options.users || []).sort(function(a, b) { return a.email.localeCompare(b.email); });
@@ -427,7 +427,7 @@ export default class AddActionModal extends Component {
                       onChange={ (e) => this.setState({ assigneeParam: e.target.value }) }
                       disabled={ (_.indexOf(this.state.postFunctions, 'assignIssue') !== -1 && !submitting) ? false : true }
                       style={ _.indexOf(this.state.postFunctions, 'assignIssue') !== -1 ? selectEnableStyles : selectDisabledStyles }> 
-                      <option value='' key=''>请选择经办人</option>
+                      <option value='' key=''>请选择负责人</option>
                       { assigneeOptions.map( assigneeOption => <option value={ assigneeOption.id } key={ assigneeOption.id }>{ assigneeOption.name }</option> ) }
                     </select>
                   </li>
