@@ -133,7 +133,7 @@ export default class EditModal extends Component {
             <span style={ { marginLeft: '10px' } }>{ data.title }</span>
           </FormGroup>
           <div>
-            <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ expect_start_time.value && expect_start_time.error ? 'error' : null }>
+            <FormGroup style={ { width: '47%', display: 'inline-block' } } validationState={ expect_start_time.value && expect_start_time.error ? 'error' : null }>
               <ControlLabel>期望开始时间</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
@@ -146,7 +146,7 @@ export default class EditModal extends Component {
               { expect_start_time.value && expect_start_time.error && 
                 <HelpBlock style={ { float: 'right' } }>{ expect_start_time.error }</HelpBlock> }
             </FormGroup>
-            <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } } validationState={ expect_complete_time.value && expect_complete_time.error ? 'error' : null }>
+            <FormGroup style={ { width: '47%', display: 'inline-block', float: 'right' } } validationState={ expect_complete_time.value && expect_complete_time.error ? 'error' : null }>
               <ControlLabel>期望完成时间</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
@@ -159,7 +159,7 @@ export default class EditModal extends Component {
               { expect_complete_time.value && expect_complete_time.error && <HelpBlock style={ { float: 'right' } }>{ expect_complete_time.error }</HelpBlock> }
             </FormGroup>
           </div>
-          <FormGroup validationState={ progress.touched && progress.error ? 'error' : null }>
+          <FormGroup style={ { marginBottom: '0px' } } validationState={ progress.touched && progress.error ? 'error' : null }>
             <ControlLabel>进度</ControlLabel>
             <FormControl 
               disabled={ submitting } 
