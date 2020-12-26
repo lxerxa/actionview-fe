@@ -33,6 +33,7 @@ export default class List extends Component {
       createFolderShow: false,
       searchShow: false,
       name: '', 
+      contents: '', 
       myfavorite: ''
     };
 
@@ -81,6 +82,9 @@ export default class List extends Component {
     if (query.name) {
       newQuery.name = this.state.name = query.name;
     }
+    if (query.contents) {
+      newQuery.contents = this.state.contents = query.contents;
+    }
     if (query.updated_at) {
       newQuery.updated_at = this.state.updated_at = query.updated_at;
     }
@@ -119,6 +123,7 @@ export default class List extends Component {
     }
 
     this.state.name = newQuery.name || '';
+    this.state.contents = newQuery.contents || '';
     this.state.updated_at = newQuery.updated_at || null;
     this.state.myfavorite = newQuery.myfavorite || '';
   }
@@ -209,6 +214,9 @@ export default class List extends Component {
     }
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
+    }
+    if (_.trim(this.state.contents)) {
+      query.contents = _.trim(this.state.contents);
     }
     if (this.state.myfavorite == '1') {
       query.myfavorite = '1';
@@ -498,6 +506,15 @@ export default class List extends Component {
                   style={ { display: 'inline-block' } }>
                   我收藏的 
                 </Checkbox>
+              </span>
+              <span style={ { float: 'right', width: '195px', marginRight: '10px' } }>
+                <FormControl
+                  type='text'
+                  style={ { height: '36px' } }
+                  value={ this.state.contents }
+                  onChange={ (e) => { this.setState({ contents: e.target.value }) } }
+                  onKeyDown={ (e) => { if (e.keyCode == '13') { this.reload(); } } }
+                  placeholder='内容查询...' />
               </span>
               <span style={ { float: 'right', width: '165px', marginRight: '10px' } }>
                 <FormControl
