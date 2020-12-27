@@ -930,6 +930,28 @@ table tr:hover .remove-icon{
   -webkit-border-radius: 4px;
 }
 
+.project-inprogress-label {
+  border: 1px solid #f0a100;
+  color: #f0a100;
+  font-size: 12px;
+  padding: 1px 5px;
+  font-weight: 600;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+
+.project-close-label {
+  border: 1px solid #777;
+  color: #777;
+  font-size: 12px;
+  padding: 1px 5px;
+  font-weight: 600;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+
 .workflow-config-notice {
   margin-top: 20px;
   margin-bottom: 10px;
