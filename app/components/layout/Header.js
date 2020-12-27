@@ -109,7 +109,7 @@ export default class Header extends Component {
 
     const Modules = [
       { key: 'myproject', name: '项目中心' }, 
-      { key: 'summary', name: '概要' }, 
+      { key: 'summary', name: '概览' }, 
       { key: 'issue', name: '问题' }, 
       { key: 'activity', name: '活动' },
       { key: 'kanban', name: '看板' },
@@ -156,7 +156,7 @@ export default class Header extends Component {
     if (patten0.exec(pathname)) {
       modulename = '项目中心';
     } else if (patten1.exec(pathname)) {
-      modulename = (curProject.key ? curProject.key + ' - ' : '') + '概要';
+      modulename = (curProject.key ? curProject.key + ' - ' : '') + '概览';
     } else if (patten3.exec(pathname)) {
       modulename = (curProject.key ? curProject.key + ' - ' : '') + '工作流配置';
     } else if (patten2.exec(pathname)) {
