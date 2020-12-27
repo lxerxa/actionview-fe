@@ -111,7 +111,7 @@ export default class ConfigModal extends Component {
               <ui className='list-unstyled clearfix'>
                 { this.rows(Permissions.files) }
               </ui>
-              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>备注</ControlLabel>
+              <ControlLabel style={ { marginTop: '10px', marginBottom: '0px' } }>评论</ControlLabel>
               <ui className='list-unstyled clearfix'>
                 { this.rows(Permissions.comments) }
               </ui>

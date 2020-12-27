@@ -41,15 +41,15 @@ export default class List extends Component {
       </div>
       :
       <div style={ { marginTop: '20px', marginBottom: '30px' } }>
-        <div style={ { marginBottom: '15px' } }>
-          <span style={ { fontSize: '19px' } }>{ project.name || '-' }</span>
-          <span style={ { marginLeft: '15px', fontSize: '14px' } }>键值：{ project.key || '-' }</span>
-          <span style={ { marginLeft: '15px', fontSize: '14px' } }>负责人：{ project.principal && project.principal.name || '-' }</span>
-          <span style={ { marginLeft: '15px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis' } }>备注：{ project.description || '-' }</span>
+        <div style={ { padding: '15px', paddingRight: '50px', backgroundColor: '#f5f5f5', marginBottom: '20px', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
+          <span style={ { fontSize: '16px' } }>{ project.name || '-' }</span>
+          <span style={ { marginLeft: '15px' } }>{ project.status == 'active' ? <span className='project-inprogress-label'>进行中</span> : <span className='project-close-label'>已归档</span> }</span>
+          <span style={ { marginLeft: '15px', color: '#909090' } }>键值：</span><span>{ project.key || '-' }</span>
+          <span style={ { marginLeft: '15px', color: '#909090' } }>负责人：</span><span>{ project.principal && project.principal.name || '-' }</span>
+          <span style={ { marginLeft: '15px', color: '#909090' } }>描述：</span><span>{ project.description || '-' }</span>
         </div>
         { data.filters && data.filters.length > 0 ? 
-        <div style={ { height: '160px', marginBottom: '20px', padding: '15px 0px', border: 'solid 1px #ddd', backgroundColor: '#f7f7f7', borderRadius: '4px' } }>
-          <FormGroup>
+        <div style={ { height: '160px', marginBottom: '20px', padding: '16px 0px', backgroundColor: '#f5f5f5', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
           { _.map(data.filters || [], (v, i) => {
             return (
             <Col sm={ 3 } key={ i }>
@@ -60,10 +60,9 @@ export default class List extends Component {
                 <div style={ { fontSize: '14px', color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' } } title={ v.name }>{ v.name }</div>
               </div>
             </Col> ) }) }
-          </FormGroup>
         </div> 
         :
-        <div style={ { paddingLeft: '5px', marginBottom: '20px' } }>
+        <div style={ { marginBottom: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue' }>全部问题</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }>未解决的</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?assignee=me&resolution=Unresolved' }>分配给我的</Link></span>
@@ -177,7 +176,7 @@ export default class List extends Component {
         <Panel 
           header={ 
             <div>
-              <span>未解决问题：按负责人</span>
+              <span>未解决问题：按经办人</span>
               <span className='exchange-icon' onClick={ () => this.setState({ assigneeShowModel: this.state.assigneeShowModel == 'detail' ? 'percentage' : 'detail' }) } title='切换'><i className='fa fa-retweet'></i></span>
             </div> }>
           { data.assignee_unresolved_issues && !_.isEmpty(data.assignee_unresolved_issues) ?
@@ -185,7 +184,7 @@ export default class List extends Component {
             { this.state.assigneeShowModel == 'detail' && 
             <thead>
               <tr>
-                <th>负责人</th>
+                <th>经办人</th>
                 <th>问题</th>
                 { _.map(options.types || [], (v) => { return (<th key={ v.id }>{ v.name }</th>) }) }
               </tr>
@@ -193,7 +192,7 @@ export default class List extends Component {
             { this.state.assigneeShowModel == 'percentage' &&
             <thead>
               <tr>
-                <th>负责人</th>
+                <th>经办人</th>
                 <th>问题</th>
                 <th>百分比</th>
               </tr>

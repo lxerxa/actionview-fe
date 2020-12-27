@@ -28,7 +28,7 @@ export default class DelCommentsModal extends Component {
     this.setState({ ecode: ecode });
     if (ecode === 0) {
       close();
-      notify.show('备注已删除。', 'success', 2000);
+      notify.show('评论已删除。', 'success', 2000);
     }
   }
 
@@ -43,10 +43,10 @@ export default class DelCommentsModal extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>删除备注</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>删除评论</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          此备注添加于 { moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') }<br/><br/>
+          此评论添加于 { moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') }<br/><br/>
           确认要删除吗？
         </Modal.Body>
         <Modal.Footer>

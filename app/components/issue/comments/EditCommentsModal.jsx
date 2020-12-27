@@ -81,7 +81,7 @@ export default class EditCommentsModal extends Component {
       this.setState({ ecode });
       if (ecode === 0) {
         close();
-        notify.show('已更新备注。', 'success', 2000);
+        notify.show('已更新评论。', 'success', 2000);
       }
     }
   }
@@ -163,9 +163,9 @@ export default class EditCommentsModal extends Component {
 
     let title = '';
     if (data.id) {
-      title = '编辑备注';
+      title = '编辑评论';
     } else {
-      title = '回复备注';
+      title = '回复评论';
     }
 
     return (
@@ -182,7 +182,7 @@ export default class EditCommentsModal extends Component {
               onChange={ (e) => { this.setState({ contents: e.target.value }) } }
               onKeyDown={ (e) => { if (e.keyCode == '13' && e.ctrlKey && this.state.oldContents != this.state.contents) { this.confirm(); } } }
               value={ this.state.contents } 
-              placeholder='支持@项目成员，Ctrl+Enter发布备注。'/>
+              placeholder='支持@项目成员，Ctrl+Enter发布评论。'/>
           </div>
         </Modal.Body>
         <Modal.Footer>

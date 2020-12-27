@@ -37,14 +37,14 @@ export default class WorkflowCommentsModal extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>流程备注</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>流程评论</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormControl
             componentClass='textarea'
             style={ { height: '150px' } }
             onChange={ (e) => { this.setState({ comments: e.target.value }) } }
-            placeholder='输入备注'
+            placeholder='输入评论'
             value={ this.state.comments } />
         </Modal.Body>
         <Modal.Footer>

@@ -273,7 +273,7 @@ export default class Preview extends Component {
           { !_.isEmpty(item.attachments) &&
           <a href='#attachmentlist'>
             <span style={ { paddingTop: '8px', float: 'left' } } title={ item.attachments.length + '个附件' }>
-              <i className='fa fa-paperclip'></i>
+              <i className='fa fa-paperclip fa-rotate-90'></i>
             </span>
           </a> }
           { (!isCheckin || (isCheckin && item.checkin.user.id === user.id)) && !(this.state.operate === 'delete' && itemLoading) &&

@@ -622,7 +622,7 @@ export default class DetailBar extends Component {
 
     const commentsTab = (
       <div>
-        <span style={ { paddingRight: '6px' } }>备注{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
+        <span style={ { paddingRight: '6px' } }>评论{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
       </div>);
 
     const worklogTab = (
@@ -1212,6 +1212,16 @@ export default class DetailBar extends Component {
                 }) }
               </Form>
             </Tab>
+            <Tab eventKey={ 3 } title='改动纪录'>
+              <History
+                issue_id={ data.id }
+                currentTime={ options.current_time || 0 }
+                currentUser={ user }
+                collection={ historyCollection }
+                indexHistory={ indexHistory }
+                sortHistory={ sortHistory }
+                indexLoading={ historyIndexLoading } />
+            </Tab>
             <Tab eventKey={ 2 } title={ commentsTab }>
               <Comments 
                 i18n={ i18n }
@@ -1230,16 +1240,6 @@ export default class DetailBar extends Component {
                 editComments={ editComments } 
                 delComments={ delComments } 
                 itemLoading={ commentsItemLoading }/>
-            </Tab>
-            <Tab eventKey={ 3 } title='改动纪录'>
-              <History 
-                issue_id={ data.id }
-                currentTime={ options.current_time || 0 }
-                currentUser={ user }
-                collection={ historyCollection } 
-                indexHistory={ indexHistory } 
-                sortHistory={ sortHistory } 
-                indexLoading={ historyIndexLoading } />
             </Tab>
             <Tab eventKey={ 4 } title={ worklogTab }>
               <Worklog 

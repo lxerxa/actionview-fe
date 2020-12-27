@@ -112,7 +112,7 @@ export default class List extends Component {
     select(id);
     const ecode = await reopen(id);
     if (ecode === 0) {
-      notify.show('项目已打开。', 'success', 2000);    
+      notify.show('已取消归档。', 'success', 2000);    
     } else {
       notify.show('打开失败。', 'error', 2000);    
     }
@@ -339,7 +339,7 @@ export default class List extends Component {
           <img src={ loadingImg } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
-        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
+        status: collection[i].status == 'active' ? <span className='project-inprogress-label'>进行中</span> : <span className='project-close-label'>已归档</span>,
         issues: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             <li>所有问题 - <Link to={ '/project/' + collection[i].key + '/issue' }>{ collection[i].stats ? collection[i].stats.all : '' }</Link></li>
@@ -360,8 +360,8 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               { collection[i].status == 'active' && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
-              { collection[i].status == 'active' && <MenuItem eventKey='4'>重建索引</MenuItem> }
+              { collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> : <MenuItem eventKey='3'>取消归档</MenuItem> }
+              {/* collection[i].status == 'active' && <MenuItem eventKey='4'>重建索引</MenuItem> */}
             </DropdownButton> }
             <img src={ loadingImg } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -410,7 +410,7 @@ export default class List extends Component {
                 placeholder='项目状态'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '进行中' }, { value: 'closed', label: '已归档' }] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
@@ -451,9 +451,7 @@ export default class List extends Component {
                 <div className='card'>
                   <div className='content'>
                     <div className='title'>
-                      { model.status == 'active'
-                      ? <p className='name'><a href='#' title={ model.name } onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.key + ' - ' + model.name }</a></p>
-                      : <p className='name'>{ model.key + ' - ' + model.name }</p> }
+                      <p className='name'><a href='#' title={ model.name } onClick={ (e) => { e.preventDefault(); this.entry(model.key); } }>{ model.key + ' - ' + model.name }</a></p>
                     </div>
                     { !model.stats ?
                       <div style={ { marginTop: '60px', textAlign: 'center' } }>
@@ -473,21 +471,21 @@ export default class List extends Component {
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
-                          (model.status !== 'active' ? model.stats.all : <Link to={ '/project/' + model.key + '/issue' }>{ model.stats.all }</Link>) }
+                          <Link to={ '/project/' + model.key + '/issue' }>{ model.stats.all }</Link> }
                       </div>
                       <div className='stats-cnt-cell'>
                         未解决<br/>
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
-                          (model.status !== 'active' ? model.stats.unresolved : <Link to={ '/project/' + model.key + '/issue?resolution=Unresolved' }>{ model.stats.unresolved }</Link>) }
+                          <Link to={ '/project/' + model.key + '/issue?resolution=Unresolved' }>{ model.stats.unresolved }</Link> }
                       </div>
                       <div className='stats-cnt-cell'>
                         分配给我<br/>
                         { !model.stats ? 
                           <img style={ { height: '12px', width: '12px' } } src={ loadingImg } className='loading'/> 
                           : 
-                          (model.status !== 'active' ? model.stats.assigntome : <Link to={ '/project/' + model.key + '/issue?assignee=me&resolution=Unresolved' }>{ model.stats.assigntome }</Link>) }
+                          <Link to={ '/project/' + model.key + '/issue?assignee=me&resolution=Unresolved' }>{ model.stats.assigntome }</Link> }
                       </div>
                     </div>
                   </div>
@@ -495,16 +493,16 @@ export default class List extends Component {
                     <span>负责人: { model.principal.name }</span>
                   </div>
                   { model.status !== 'active' &&
-                  <div className={ model.principal.id === user.id ? 'status' : 'statuss' }><Label style={ { backgroundColor: '#aaa' } }>已关闭</Label></div> }
+                  <div className={ model.principal.id === user.id ? 'status' : 'statuss' }><span className='project-close-label'>已归档</span></div> }
                   { model.principal.id === user.id && 
                   <div className='btns'>
                     { model.status == 'active' && 
-                      <span style={ { marginLeft: '3px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span> }
-                    { model.status == 'active' && 
-                      <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-refresh' aria-hidden='true'></i></span> }
+                      <span style={ { marginLeft: '5px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span> }
+                    {/* model.status == 'active' && 
+                      <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-refresh' aria-hidden='true'></i></span> */}
                     { model.status === 'active' 
-                    ? <span style={ { marginLeft: '3px' } } title='关闭' onClick={ this.closeNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-toggle-off' aria-hidden='true'></i></span>
-                    : <span style={ { marginLeft: '3px' } } title='重新打开' onClick={ this.reopen.bind(this, model.id) } className='comments-button'><i className='fa fa-toggle-on' aria-hidden='true'></i></span> }
+                    ? <span style={ { marginLeft: '5px' } } title='归档' onClick={ this.closeNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-lock' aria-hidden='true'></i></span>
+                    : <span style={ { marginLeft: '5px' } } title='取消归档' onClick={ this.reopen.bind(this, model.id) } className='comments-button'><i className='fa fa-unlock' aria-hidden='true'></i></span> }
                   </div> }
                 </div>
               </div>

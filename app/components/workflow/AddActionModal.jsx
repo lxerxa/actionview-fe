@@ -449,7 +449,7 @@ export default class AddActionModal extends Component {
                   </li>
                   <li>
                     <Checkbox disabled={ submitting } value='addComments'/>
-                    <span>如果用户输入了备注，将备注添加到问题中</span>
+                    <span>如果用户输入了备注，将备注添加到问题评论中</span>
                   </li>
                   <li style={ { display: 'none' } }>
                     <Checkbox disabled={ submitting } value='updIssue'/>

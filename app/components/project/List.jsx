@@ -154,7 +154,7 @@ export default class List extends Component {
     select(id);
     const ecode = await reopen(id);
     if (ecode === 0) {
-      notify.show('项目已打开。', 'success', 2000);    
+      notify.show('已取消归档。', 'success', 2000);    
     } else {
       notify.show('打开失败。', 'error', 2000);    
     }
@@ -387,7 +387,7 @@ export default class List extends Component {
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
-        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
+        status: collection[i].status == 'active' ? <span className='project-inprogress-label'>进行中</span> : <span className='project-close-label'>已归档</span>,
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
@@ -400,7 +400,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
+              { collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> : <MenuItem eventKey='3'>取消归档</MenuItem> }
               <MenuItem eventKey='4'>重建索引</MenuItem>
               <MenuItem eventKey='5'>删除</MenuItem>
             </DropdownButton> }
@@ -441,7 +441,7 @@ export default class List extends Component {
                 placeholder='项目状态'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '进行中' }, { value: 'closed', label: '已归档' }] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <Select
@@ -463,7 +463,7 @@ export default class List extends Component {
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                <MenuItem eventKey='close'>关闭</MenuItem>
+                <MenuItem eventKey='close'>归档</MenuItem>
                 <MenuItem eventKey='reopen'>重新打开</MenuItem>
                 <MenuItem eventKey='create_index'>重建索引</MenuItem>
               </DropdownButton>

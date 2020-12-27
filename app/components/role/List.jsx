@@ -112,7 +112,7 @@ export default class List extends Component {
       { key: 'project', name: '项目' }, 
       { key: 'issue', name: '问题' }, 
       { key: 'files', name: '附件' }, 
-      { key: 'comments', name: '备注' }, 
+      { key: 'comments', name: '评论' }, 
       { key: 'worklogs', name: '工作日志' } 
     ];
 

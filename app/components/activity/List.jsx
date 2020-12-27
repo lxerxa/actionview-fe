@@ -341,9 +341,9 @@ export default class List extends Component {
             { collection[i].event_key == 'add_file' && <span>上传了文档 { collection[i].data }</span> }
             { collection[i].event_key == 'del_file' && <span>删除了文档 <span style={ ltStyles }>{ collection[i].data }</span></span> }
 
-            { collection[i].event_key == 'add_comments'   && <span>添加了备注</span> }
-            { collection[i].event_key == 'edit_comments'  && <span>编辑了备注</span> }
-            { collection[i].event_key == 'del_comments'   && <span>删除了备注</span> }
+            { collection[i].event_key == 'add_comments'   && <span>添加了评论</span> }
+            { collection[i].event_key == 'edit_comments'  && <span>编辑了评论</span> }
+            { collection[i].event_key == 'del_comments'   && <span>删除了评论</span> }
             { comments &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
               <li style={ collection[i].event_key == 'del_comments' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: comments } }/>
@@ -358,7 +358,7 @@ export default class List extends Component {
               { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
               { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
               { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }
-              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: '备注 : ' + _.escape(collection[i].data.comments).replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
+              { collection[i].data && collection[i].data.comments         && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } dangerouslySetInnerHTML={ { __html: '评论 : ' + _.escape(collection[i].data.comments).replace(/(\r\n)|(\n)/g, '<br/>') } }/> }
             </ul> }
             {/* (collection[i].event_key == 'create_version' || collection[i].event_key == 'edit_version') &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
@@ -383,7 +383,7 @@ export default class List extends Component {
       <div style={ { paddingTop: '15px', paddingBottom: '20px' } }>
         <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.category } onSelect={ this.handleSelect.bind(this) }>
           <NavItem eventKey='all' href='#'>全部</NavItem>
-          <NavItem eventKey='comments' href='#'>备注</NavItem>
+          <NavItem eventKey='comments' href='#'>评论</NavItem>
           <NavItem eventKey='worklog' href='#'>工作日志</NavItem>
         </Nav>
         <Button style={ { float: 'right' } } onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i>&nbsp;刷新</Button>

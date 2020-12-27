@@ -394,7 +394,7 @@ export default class List extends Component {
             </Link>
             { !_.isEmpty(files[i].attachments) &&
             <span style={ { marginLeft: '8px' } } title={ files[i].attachments.length + '个附件' }>
-              <i className='fa fa-paperclip'></i>
+              <i className='fa fa-paperclip fa-rotate-90'></i>
             </span> } 
             { !_.isEmpty(files[i].checkin) &&
             <span style={ { marginLeft: '8px', color: '#f0ad4e' } } title={ '该文档被' + ( files[i].checkin.user ? (files[i].checkin.user.id == user.id ? '我' : (files[i].checkin.user.name || '')) : '' ) + '于 ' + ( files[i].checkin.at ? moment.unix(files[i].checkin.at).format('YYYY/MM/DD HH:mm') : '' ) + ' 锁定。' }><i className='fa fa-lock'></i></span> }
