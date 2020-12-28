@@ -1013,10 +1013,11 @@ export default class DetailBar extends Component {
                           const relationOutIndex = _.findIndex(options.relations || [], { out: relation });
                           if (relationOutIndex !== -1) {
                             relation = options.relations[relationOutIndex].in || '';
-                          }
-                          const relationInIndex = _.findIndex(options.relations || [], { in: relation });
-                          if (relationInIndex !== -1) {
-                            relation = options.relations[relationInIndex].out || '';
+                          } else {
+                            const relationInIndex = _.findIndex(options.relations || [], { in: relation });
+                            if (relationInIndex !== -1) {
+                              relation = options.relations[relationInIndex].out || '';
+                            }
                           }
                           linkIssueId = val.src.id;
                         }
