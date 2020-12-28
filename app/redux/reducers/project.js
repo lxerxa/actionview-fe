@@ -119,13 +119,13 @@ export default function project(state = initialState, action) {
 
     case t.PROJECT_UPDATE:
       return { ...state, loading: true };
-    case t.PROJECT_CLOSE:
+    case t.PROJECT_ARCHIVE:
     case t.PROJECT_DELETE:
     case t.PROJECT_REOPEN:
     case t.PROJECT_CREATEINDEX:
       return { ...state, itemLoading: true };
 
-    case t.PROJECT_CLOSE_SUCCESS:
+    case t.PROJECT_ARCHIVE_SUCCESS:
     case t.PROJECT_REOPEN_SUCCESS:
     case t.PROJECT_UPDATE_SUCCESS:
     case t.PROJECT_CREATEINDEX_SUCCESS:
@@ -141,23 +141,23 @@ export default function project(state = initialState, action) {
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 
-    case t.PROJECT_CLOSE_FAIL:
+    case t.PROJECT_ARCHIVE_FAIL:
     case t.PROJECT_DELETE_FAIL:
     case t.PROJECT_REOPEN_FAIL:
     case t.PROJECT_UPDATE_FAIL:
     case t.PROJECT_CRAETEINDEX_FAIL:
       return { ...state, itemLoading: false, error: action.error };
 
-    case t.PROJECT_MULTI_CLOSE:
+    case t.PROJECT_MULTI_ARCHIVE:
     case t.PROJECT_MULTI_REOPEN:
     case t.PROJECT_MULTI_CREATEINDEX:
       return { ...state, loading: false };
 
-    case t.PROJECT_MULTI_CLOSE_SUCCESS:
+    case t.PROJECT_MULTI_ARCHIVE_SUCCESS:
       if (action.result.ecode === 0) {
         _.map(state.collection, (v, i) => {
           if (action.ids.indexOf(v.id) !== -1) {
-            state.collection[i].status = 'closed';
+            state.collection[i].status = 'archived';
           }
         });
       }
@@ -174,7 +174,7 @@ export default function project(state = initialState, action) {
     case t.PROJECT_MULTI_CREATEINDEX_SUCCESS:
       return { ...state, loading: false };
 
-    case t.PROJECT_MULTI_CLOSE_FAIL:
+    case t.PROJECT_MULTI_ARCHIVE_FAIL:
     case t.PROJECT_MULTI_REOPEN_FAIL:
     case t.PROJECT_MULTI_CREATEINDEX_FAIL:
       return { ...state, loading: false, error: action.error };

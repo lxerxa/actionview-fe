@@ -11,7 +11,7 @@ import { notify } from 'react-notify-toast';
 const $ = require('$');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
-const CloseNotify = require('./CloseNotify');
+const ArchiveNotify = require('./ArchiveNotify');
 const loadingImg = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -20,7 +20,7 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
-      closeNotifyShow: false, 
+      archiveNotifyShow: false, 
       operateShow: false, 
       hoverRowId: '', 
       willSetPrincipalPids: [], 
@@ -34,7 +34,7 @@ export default class List extends Component {
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
-    this.closeNotifyClose = this.closeNotifyClose.bind(this);
+    this.archiveNotifyClose = this.archiveNotifyClose.bind(this);
     this.entry = this.entry.bind(this);
   }
 
@@ -56,7 +56,7 @@ export default class List extends Component {
     update: PropTypes.func.isRequired,
     reopen: PropTypes.func.isRequired,
     createIndex: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired
+    archive: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -72,8 +72,8 @@ export default class List extends Component {
     this.setState({ editModalShow: false });
   }
 
-  closeNotifyClose() {
-    this.setState({ closeNotifyShow: false });
+  archiveNotifyClose() {
+    this.setState({ archiveNotifyShow: false });
   }
 
   edit(id) {
@@ -101,8 +101,8 @@ export default class List extends Component {
     });
   }
 
-  closeNotify(id) {
-    this.setState({ closeNotifyShow: true });
+  archiveNotify(id) {
+    this.setState({ archiveNotifyShow: true });
     const { select } = this.props;
     select(id);
   }
@@ -134,7 +134,7 @@ export default class List extends Component {
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
-      this.closeNotify(hoverRowId);
+      this.archiveNotify(hoverRowId);
     } else if (eventKey === '3') {
       this.reopen(hoverRowId);
     } else if (eventKey === '4') {
@@ -248,7 +248,7 @@ export default class List extends Component {
       itemLoading, 
       moreLoading, 
       create, 
-      stop, 
+      archive, 
       update, 
       options={} 
     } = this.props;
@@ -360,7 +360,8 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               { collection[i].status == 'active' && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> : <MenuItem eventKey='3'>取消归档</MenuItem> }
+              { collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> }
+              {/* collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> : <MenuItem eventKey='3'>取消归档</MenuItem> */}
               {/* collection[i].status == 'active' && <MenuItem eventKey='4'>重建索引</MenuItem> */}
             </DropdownButton> }
             <img src={ loadingImg } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
@@ -410,7 +411,7 @@ export default class List extends Component {
                 placeholder='项目状态'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '进行中' }, { value: 'closed', label: '已归档' }] }/>
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '进行中' }, { value: 'archived', label: '已归档' }] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
@@ -493,16 +494,15 @@ export default class List extends Component {
                     <span>负责人: { model.principal.name }</span>
                   </div>
                   { model.status !== 'active' &&
-                  <div className={ model.principal.id === user.id ? 'status' : 'statuss' }><span className='project-close-label'>已归档</span></div> }
+                  <div className='statuss'><span className='project-close-label'>已归档</span></div> }
                   { model.principal.id === user.id && 
                   <div className='btns'>
                     { model.status == 'active' && 
                       <span style={ { marginLeft: '5px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span> }
                     {/* model.status == 'active' && 
                       <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-refresh' aria-hidden='true'></i></span> */}
-                    { model.status === 'active' 
-                    ? <span style={ { marginLeft: '5px' } } title='归档' onClick={ this.closeNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-lock' aria-hidden='true'></i></span>
-                    : <span style={ { marginLeft: '5px' } } title='取消归档' onClick={ this.reopen.bind(this, model.id) } className='comments-button'><i className='fa fa-unlock' aria-hidden='true'></i></span> }
+                    { model.status === 'active' && 
+                      <span style={ { marginLeft: '5px' } } title='归档' onClick={ this.archiveNotify.bind(this, model.id) } className='comments-button'><i className='fa fa-archive' aria-hidden='true'></i></span> }
                   </div> }
                 </div>
               </div>
@@ -520,12 +520,12 @@ export default class List extends Component {
               close={ this.createModalClose } 
               create={ create } 
               i18n={ i18n }/> }
-          { this.state.closeNotifyShow && 
-            <CloseNotify 
+          { this.state.archiveNotifyShow && 
+            <ArchiveNotify 
               show 
-              close={ this.closeNotifyClose } 
+              close={ this.archiveNotifyClose } 
               data={ selectedItem } 
-              stop={ stop }/> }
+              archive={ archive }/> }
         </div>
         { increaseCollection.length > 0 && increaseCollection.length % (options.limit || 4) === 0 && 
           <ButtonGroup vertical block style={ { marginTop: '15px' } }>

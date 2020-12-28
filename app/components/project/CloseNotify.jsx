@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 
-export default class CloseNotify extends Component {
+export default class ArchiveNotify extends Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
@@ -16,9 +16,9 @@ export default class CloseNotify extends Component {
   }
 
   async confirm() {
-    const { close, stop, data } = this.props;
+    const { close, archive, data } = this.props;
     close();
-    const ecode = await stop(data.id);
+    const ecode = await achive(data.id);
     if (ecode === 0) {
       notify.show('项目已归档。', 'success', 2000);    
     } else {
