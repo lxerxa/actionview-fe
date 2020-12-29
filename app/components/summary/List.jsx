@@ -41,15 +41,15 @@ export default class List extends Component {
       </div>
       :
       <div style={ { marginTop: '20px', marginBottom: '30px' } }>
-        <div style={ { padding: '15px', paddingRight: '50px', backgroundColor: '#f5f5f5', marginBottom: '20px', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
+        <div style={ { padding: '15px', paddingRight: '50px', backgroundColor: '#f7f7f7', marginBottom: '20px', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
           <span style={ { fontSize: '16px' } }>{ project.name || '-' }</span>
-          <span style={ { marginLeft: '15px' } }>{ project.status == 'active' ? <span className='project-inprogress-label'>进行中</span> : <span className='project-close-label'>已归档</span> }</span>
+          <span style={ { marginLeft: '15px' } }>{ project.status == 'active' ? <span className='project-inprogress-label'>活动中</span> : <span className='project-close-label'>已归档</span> }</span>
           <span style={ { marginLeft: '15px', color: '#909090' } }>键值：</span><span>{ project.key || '-' }</span>
           <span style={ { marginLeft: '15px', color: '#909090' } }>负责人：</span><span>{ project.principal && project.principal.name || '-' }</span>
           <span style={ { marginLeft: '15px', color: '#909090' } }>描述：</span><span>{ project.description || '-' }</span>
         </div>
         { data.filters && data.filters.length > 0 ? 
-        <div style={ { height: '160px', marginBottom: '20px', padding: '16px 0px', backgroundColor: '#f5f5f5', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
+        <div style={ { height: '160px', marginBottom: '20px', padding: '16px 0px', backgroundColor: '#f7f7f7', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
           { _.map(data.filters || [], (v, i) => {
             return (
             <Col sm={ 3 } key={ i }>
@@ -62,7 +62,7 @@ export default class List extends Component {
             </Col> ) }) }
         </div> 
         :
-        <div style={ { marginBottom: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
+        <div style={ { marginBottom: '20px', padding: '15px', backgroundColor: '#f7f7f7', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue' }>全部问题</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolution=Unresolved' }>未解决的</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?assignee=me&resolution=Unresolved' }>分配给我的</Link></span>

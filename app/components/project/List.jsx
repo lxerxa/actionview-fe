@@ -166,7 +166,7 @@ export default class List extends Component {
     select(id);
     const ecode = await createIndex(id);
     if (ecode === 0) {
-      notify.show('索引已创建。', 'success', 2000);
+      notify.show('索引已重建。', 'success', 2000);
     } else {
       notify.show('创建失败。', 'error', 2000);
     }
@@ -389,7 +389,7 @@ export default class List extends Component {
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
-        status: collection[i].status == 'active' ? <span className='project-inprogress-label'>进行中</span> : <span className='project-close-label'>已归档</span>,
+        status: collection[i].status == 'active' ? <span className='project-inprogress-label'>活动中</span> : <span className='project-close-label'>已归档</span>,
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
@@ -443,7 +443,7 @@ export default class List extends Component {
                 placeholder='项目状态'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '进行中' }, { value: 'archived', label: '已归档' }] }/>
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'archived', label: '已归档' }] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <Select

@@ -313,7 +313,7 @@ export default class Preview extends Component {
           </span>
           :
           <span>
-            { !_.isEmpty(item.checkin) && ((item.checkin.user && item.checkin.user.id === user.id) || options.permissions && options.permissions.indexOf('manage_project') !== -1) &&
+            { !_.isEmpty(item.checkin) && ((item.checkin.user && item.checkin.user.id === user.id) || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) &&
             <span style={ { marginLeft: '8px' } }><a href='#' title='解锁' onClick={ (e) => { e.preventDefault(); this.checkout(); } }><i className='fa fa-unlock'></i></a></span> } 
             { _.isEmpty(item.checkin) && 
             <span style={ { marginLeft: '8px' } }><a href='#' title='锁定' onClick={ (e) => { e.preventDefault(); this.checkin(); } }><i className='fa fa-lock'></i></a></span> }

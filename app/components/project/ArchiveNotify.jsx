@@ -40,6 +40,7 @@ export default class ArchiveNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>项目归档</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          项目归档后将不可恢复，请慎重。<br/>
           确认要将【{ data.name }】此项目归档？
         </Modal.Body>
         <Modal.Footer>

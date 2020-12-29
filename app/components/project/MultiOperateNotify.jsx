@@ -20,12 +20,20 @@ export default class MultiOperateNotify extends Component {
     close: PropTypes.func.isRequired,
     cancelSelected: PropTypes.func.isRequired,
     multiReopen: PropTypes.func.isRequired,
-    multiStop: PropTypes.func.isRequired,
+    multiArchive: PropTypes.func.isRequired,
     multiCreateIndex: PropTypes.func.isRequired
   }
 
   async confirm() {
-    const { multiStop, multiReopen, multiCreateIndex, cancelSelected, ids=[], operate, close } = this.props;
+    const { 
+      multiArchive, 
+      multiReopen, 
+      multiCreateIndex, 
+      cancelSelected, 
+      ids=[], 
+      operate, 
+      close 
+    } = this.props;
 
     if (ids.length <= 0) {
       return;
@@ -35,8 +43,8 @@ export default class MultiOperateNotify extends Component {
     if (operate == 'reopen') {
       ecode = await multiReopen(ids);
       msg = '已取消归档。'; 
-    } else if (operate == 'close') {
-      ecode = await multiStop(ids);
+    } else if (operate == 'archive') {
+      ecode = await multiArchive(ids);
       msg = '项目已归档。'; 
     } else if (operate == 'create_index') {
       ecode = await multiCreateIndex(ids);

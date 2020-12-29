@@ -339,7 +339,7 @@ export default class List extends Component {
           <img src={ loadingImg } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
-        status: collection[i].status == 'active' ? <span className='project-inprogress-label'>进行中</span> : <span className='project-close-label'>已归档</span>,
+        status: collection[i].status == 'active' ? <span className='project-inprogress-label'>活动中</span> : <span className='project-close-label'>已归档</span>,
         issues: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             <li>所有问题 - <Link to={ '/project/' + collection[i].key + '/issue' }>{ collection[i].stats ? collection[i].stats.all : '' }</Link></li>
@@ -411,7 +411,7 @@ export default class List extends Component {
                 placeholder='项目状态'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '进行中' }, { value: 'archived', label: '已归档' }] }/>
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'archived', label: '已归档' }] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <FormControl
