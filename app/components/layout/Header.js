@@ -117,7 +117,7 @@ export default class Header extends Component {
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
       { key: 'report', name: '报告' },
-      { key: 'document', name: '文档' },
+      { key: 'document', name: '文件' },
       { key: 'wiki', name: 'Wiki' },
       { key: 'team', name: '项目成员' },
       { key: 'config', name: '配置概要' },
