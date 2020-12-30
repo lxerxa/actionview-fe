@@ -353,7 +353,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].principal ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '5px 3px' } }> 
                     { collection[i].principal.name || '-' }
                   </div>
                 </span>
@@ -466,7 +466,7 @@ export default class List extends Component {
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
                 <MenuItem eventKey='archive'>归档</MenuItem>
-                <MenuItem eventKey='reopen'>重新打开</MenuItem>
+                <MenuItem eventKey='reopen'>取消归档</MenuItem>
                 <MenuItem eventKey='create_index'>重建索引</MenuItem>
               </DropdownButton>
             </span> }

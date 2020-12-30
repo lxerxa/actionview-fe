@@ -11,14 +11,14 @@ export default class ArchiveNotify extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired,
+    archive: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
   }
 
   async confirm() {
     const { close, archive, data } = this.props;
     close();
-    const ecode = await achive(data.id);
+    const ecode = await archive(data.id);
     if (ecode === 0) {
       notify.show('项目已归档。', 'success', 2000);    
     } else {
@@ -40,7 +40,7 @@ export default class ArchiveNotify extends Component {
           <Modal.Title id='contained-modal-title-la'>项目归档</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          项目归档后将不可恢复，请慎重。<br/>
+          归档后项目将变成完全只读。<br/>
           确认要将【{ data.name }】此项目归档？
         </Modal.Body>
         <Modal.Footer>

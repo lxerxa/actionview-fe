@@ -350,7 +350,10 @@ export default class List extends Component {
         operation: (
           collection[i].principal.id === user.id &&
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
+          { operateShow 
+            && collection[i].status == 'active'
+            && hoverRowId === collection[i].id 
+            && !itemLoading &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -359,8 +362,8 @@ export default class List extends Component {
               title={ node } 
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
-              { collection[i].status == 'active' && <MenuItem eventKey='1'>编辑</MenuItem> }
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> }
+              <MenuItem eventKey='1'>编辑</MenuItem>
+              <MenuItem eventKey='2'>归档</MenuItem>
               {/* collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> : <MenuItem eventKey='3'>取消归档</MenuItem> */}
               {/* collection[i].status == 'active' && <MenuItem eventKey='4'>重建索引</MenuItem> */}
             </DropdownButton> }
