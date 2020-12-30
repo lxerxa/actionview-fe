@@ -43,7 +43,7 @@ export default class Preview extends Component {
     i18n: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    project_key: PropTypes.string.isRequired,
+    project: PropTypes.string.isRequired,
     wid: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,
@@ -164,8 +164,8 @@ export default class Preview extends Component {
   }
 
   downloadAll() {
-    const { project_key, wid } = this.props;
-    const url = API_BASENAME + '/project/' + project_key + '/wiki/' + wid + '/download';
+    const { project, wid } = this.props;
+    const url = API_BASENAME + '/project/' + project.key + '/wiki/' + wid + '/download';
     window.open(url, '_blank');
   }
 
@@ -197,7 +197,7 @@ export default class Preview extends Component {
       i18n, 
       options, 
       user, 
-      project_key, 
+      project, 
       loading, 
       itemDetailLoading, 
       itemLoading, 
@@ -220,7 +220,7 @@ export default class Preview extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: API_BASENAME + '/project/' + project_key + '/wiki/' + item.id + '/upload'
+      postUrl: API_BASENAME + '/project/' + project.key + '/wiki/' + item.id + '/upload'
     };
     const djsConfig = {
       addRemoveLinks: true
@@ -263,9 +263,9 @@ export default class Preview extends Component {
             <Breadcrumb style={ { marginBottom: '0px', backgroundColor: '#fff', paddingLeft: '5px', marginTop: '0px' } }>
             { _.map(options.path || [], (v, i) => {
               if (i === 0) {
-                return (<Breadcrumb.Item key={ i } disabled={ itemLoading }><Link to={ '/project/' + project_key + '/wiki' }>根目录</Link></Breadcrumb.Item>);
+                return (<Breadcrumb.Item key={ i } disabled={ itemLoading }><Link to={ '/project/' + project.key + '/wiki' }>根目录</Link></Breadcrumb.Item>);
               } else {
-                return (<Breadcrumb.Item key={ i } disabled={ itemLoading }><Link to={ '/project/' + project_key + '/wiki/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
+                return (<Breadcrumb.Item key={ i } disabled={ itemLoading }><Link to={ '/project/' + project.key + '/wiki/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
               }
             }) }
             </Breadcrumb>
@@ -276,7 +276,7 @@ export default class Preview extends Component {
               <i className='fa fa-paperclip fa-rotate-90'></i>
             </span>
           </a> }
-          { (!isCheckin || (isCheckin && item.checkin.user.id === user.id)) && !(this.state.operate === 'delete' && itemLoading) &&
+          { (!isCheckin || (isCheckin && item.checkin.user.id === user.id)) && !(this.state.operate === 'delete' && itemLoading) && project.status == 'active' &&
           <span style={ { float: 'right' } }>
             <Button style={ { marginRight: '5px' } } disabled={ itemLoading } onClick={ this.edit.bind(this) }><i className='fa fa-pencil'></i> 编辑</Button>
             <Button bsStyle='link' style={ { fontSize: '14px', marginRight: '5px' } } disabled={ itemLoading } onClick={ () => { this.setState({ operate: 'delete', delNotifyShow: true }); } }>删除</Button>
@@ -286,7 +286,7 @@ export default class Preview extends Component {
            <img src={ loadingImg } className='loading'/>
           </span> }
           <span style={ { float: 'right', marginRight: '5px' } }>
-            <Link to={ '/project/' + project_key + '/wiki' + (item.parent === '0' ? '' : ('/' + item.parent)) }><Button style={ { marginRight: '5px' } }><i className='fa fa-reply'></i> 返回</Button></Link>
+            <Link to={ '/project/' + project.key + '/wiki' + (item.parent === '0' ? '' : ('/' + item.parent)) }><Button style={ { marginRight: '5px' } }><i className='fa fa-reply'></i> 返回</Button></Link>
           </span>
         </div> }
         { item.id &&
@@ -344,7 +344,7 @@ export default class Preview extends Component {
               <tr key={ i }>
                 <td>
                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span>
-                  <a href={ API_BASENAME + '/project/' + project_key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
+                  <a href={ API_BASENAME + '/project/' + project.key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
                  </td>
                  <td width='10%'>
                    <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YYYY/MM/DD HH:mm') }</div>
@@ -359,7 +359,7 @@ export default class Preview extends Component {
             </tbody>
           </Table>
         </div> }
-        { item.id &&
+        { item.id && project.status == 'active' &&
         <div style={ { marginTop: '0px' } }>
           <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
         </div> }
