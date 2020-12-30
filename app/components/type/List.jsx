@@ -237,7 +237,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].screen_id ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '5px 3px' } }> 
                     { _.find(screens, { id: collection[i].screen_id }) ? _.find(screens, { id: collection[i].screen_id }).name : '-' } 
                   </div>
                 </span> :
@@ -278,7 +278,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].workflow_id ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px 3px 6px 3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '5px 3px' } }> 
                     { _.find(workflows, { id: collection[i].workflow_id }) ? _.find(workflows, { id: collection[i].workflow_id }).name : '-' } 
                   </div>
                 </span> :
