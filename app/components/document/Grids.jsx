@@ -42,7 +42,7 @@ export default class Grids extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    project_key: PropTypes.string.isRequired,
+    project: PropTypes.string.isRequired,
     directory: PropTypes.string.isRequired,
     options: PropTypes.object,
     collection: PropTypes.array.isRequired,
@@ -111,7 +111,7 @@ export default class Grids extends Component {
     e.stopPropagation();
 
     const { currentId } = this.state;
-    const { select, project_key } = this.props;
+    const { select, project } = this.props;
     await select(currentId);
 
     if (eventKey === 'rename') {
@@ -123,7 +123,7 @@ export default class Grids extends Component {
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
-      const url = API_BASENAME + '/project/' + project_key + '/document/' + currentId + '/download';
+      const url = API_BASENAME + '/project/' + project.key + '/document/' + currentId + '/download';
       window.open(url, '_blank');
     } else if (eventKey === 'favorite') {
       this.favorite();
@@ -131,8 +131,8 @@ export default class Grids extends Component {
   }
 
   downloadAll() {
-    const { project_key, directory } = this.props;
-    const url = API_BASENAME + '/project/' + project_key + '/document/' + directory + '/download';
+    const { project, directory } = this.props;
+    const url = API_BASENAME + '/project/' + project.key + '/document/' + directory + '/download';
     window.open(url, '_blank');
   }
 
@@ -161,12 +161,12 @@ export default class Grids extends Component {
   }
 
   clickFile(imgFiles, id) {
-    const { project_key, collection } = this.props;
+    const { project, collection } = this.props;
 
     const photoIndex = _.findIndex(imgFiles, { id });
     if (photoIndex === -1) {
       const file = _.find(collection, { id });
-      const url = API_BASENAME + '/project/' + project_key + '/document/' + id + '/download' + (file && file.type == 'application/pdf' ? ('/' + file.name) : '');
+      const url = API_BASENAME + '/project/' + project.key + '/document/' + id + '/download' + (file && file.type == 'application/pdf' ? ('/' + file.name) : '');
       window.open(url, '_blank');
     } else {
       this.setState({ photoIndex, imgPreviewShow: true });
@@ -177,7 +177,7 @@ export default class Grids extends Component {
     const { 
       i18n, 
       user,
-      project_key,
+      project,
       directory,
       collection, 
       selectedItem, 
@@ -204,7 +204,7 @@ export default class Grids extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: API_BASENAME + '/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
+      postUrl: API_BASENAME + '/project/' + project.key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
     };
     const djsConfig = {
       addRemoveLinks: true
@@ -230,7 +230,7 @@ export default class Grids extends Component {
             { !indexLoading && options.path && options.path.length > 1 && _.isEmpty(query) && 
             <div className='grid-view-item'>
               <div className='file-content'>
-                <Link to={ '/project/' + project_key + '/document' + (options.path[options.path.length - 2].id !== '0' ? ('/' + options.path[options.path.length - 2].id ) : '') } style={ { textDecoration: 'none' } }>
+                <Link to={ '/project/' + project.key + '/document' + (options.path[options.path.length - 2].id !== '0' ? ('/' + options.path[options.path.length - 2].id ) : '') } style={ { textDecoration: 'none' } }>
                   <div className='file-thumb'>
                     <div style={ { fontSize: '80px', color: '#FFD300', marginBottom: '30px' } }>..</div> 
                   </div>
@@ -263,7 +263,7 @@ export default class Grids extends Component {
               :
               <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
                 <div className='file-content'>
-                  { this.state.currentId == v.id &&
+                  { this.state.currentId == v.id && project.status == 'active' &&
                   <div className='operate-icon'>
                     <DropdownButton
                       bsStyle='link'
@@ -283,7 +283,7 @@ export default class Grids extends Component {
                   <div className='favorite-icon'>
                     <span onClick={ this.clickFavorite.bind(this) }><i className='fa fa-star'></i></span>
                   </div> }
-                  <Link to={ '/project/' + project_key + '/document/' + v.id }>
+                  <Link to={ '/project/' + project.key + '/document/' + v.id }>
                     <div className='file-thumb'>
                       <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
                     </div>
@@ -302,12 +302,12 @@ export default class Grids extends Component {
                 edit={ update }
                 cancel={ this.cancelEditCard }
                 mode='editFile'
-                imgsrc={ v.thumbnails_index ? API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' : '' }
+                imgsrc={ v.thumbnails_index ? API_BASENAME + '/project/' + project.key + '/document/' + v.id + '/downloadthumbnails' : '' }
                 fileIconCss={ getFileIconCss(v.name) }/>
               :
               <div className='grid-view-item' title={ v.name } onMouseOver={ () => { this.setState({ currentId: v.id }) } } onMouseLeave={ () => { this.setState({ currentId: '' }) } }>
                 <div className='file-content' onClick={ this.clickFile.bind(this, imgFiles, v.id) }>
-                  { this.state.currentId == v.id &&
+                  { this.state.currentId == v.id && project.status == 'active' &&
                   <div className='operate-icon'>
                     <DropdownButton
                       bsStyle='link'
@@ -329,7 +329,7 @@ export default class Grids extends Component {
                   </div> }
                   <div className='file-thumb'>
                     { v.thumbnails_index ?
-                      <img src={ API_BASENAME + '/project/' + project_key + '/document/' + v.id + '/downloadthumbnails' }/>
+                      <img src={ API_BASENAME + '/project/' + project.key + '/document/' + v.id + '/downloadthumbnails' }/>
                       :
                       <span style={ { fontSize: '80px', color: '#aaa' } }>
                         <i className={ getFileIconCss(v.name) }></i>
@@ -345,18 +345,18 @@ export default class Grids extends Component {
 
         { imgPreviewShow &&
           <Lightbox
-            mainSrc={ API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[photoIndex].id + '/download' }
-            nextSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download' }
-            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/download' }
+            mainSrc={ API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[photoIndex].id + '/download' }
+            nextSrc={  API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download' }
+            prevSrc={  API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/download' }
             imageTitle={ imgFiles[photoIndex].name }
             imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + moment.unix(imgFiles[photoIndex].uploaded_at).format('YYYY/MM/DD HH:mm') }
             onCloseRequest={ () => { this.setState({ imgPreviewShow: false }) } }
             onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
             onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
-
-        <div style={ { marginTop: '15px' } }>
-          <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
-        </div>
+        { project.status == 'active' &&
+          <div style={ { marginTop: '15px' } }>
+            <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+          </div> }
         <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
           { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
           { collection.length > 1 && _.isEmpty(query) && options.path.length > 1 && 
@@ -368,7 +368,7 @@ export default class Grids extends Component {
         { this.state.copyModalShow &&
         <CopyModal 
           show
-          project_key={ project_key }
+          project_key={ project.key }
           close={ () => { this.setState({ copyModalShow: false }); } }
           copy={ copy }
           data={ selectedItem }
@@ -376,7 +376,7 @@ export default class Grids extends Component {
         { this.state.moveModalShow &&
         <MoveModal
           show
-          project_key={ project_key }
+          project_key={ project.key }
           close={ () => { this.setState({ moveModalShow: false }); } }
           move={ move }
           data={ selectedItem }

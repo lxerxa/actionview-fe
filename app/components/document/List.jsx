@@ -43,7 +43,7 @@ export default class List extends Component {
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    project_key: PropTypes.string.isRequired,
+    project: PropTypes.object.isRequired,
     directory: PropTypes.string.isRequired,
     options: PropTypes.object,
     collection: PropTypes.array.isRequired,
@@ -106,7 +106,7 @@ export default class List extends Component {
 
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { select, project_key } = this.props;
+    const { select, project } = this.props;
     await select(hoverRowId);
 
     if (eventKey === 'rename') {
@@ -118,7 +118,7 @@ export default class List extends Component {
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
-      const url = API_BASENAME + '/project/' + project_key + '/document/' + hoverRowId + '/download';
+      const url = API_BASENAME + '/project/' + project.key + '/document/' + hoverRowId + '/download';
       window.open(url, '_blank');
     } else if (eventKey === 'favorite') {
       this.favorite();
@@ -126,8 +126,8 @@ export default class List extends Component {
   }
 
   downloadAll() {
-    const { project_key, directory } = this.props;
-    const url = API_BASENAME + '/project/' + project_key + '/document/' + directory + '/download';
+    const { project, directory } = this.props;
+    const url = API_BASENAME + '/project/' + project.key + '/document/' + directory + '/download';
     window.open(url, '_blank');
   }
 
@@ -166,7 +166,6 @@ export default class List extends Component {
   }
 
   previewImg(imgFiles, id) {
-    const { project_key } = this.props;
     const photoIndex = _.findIndex(imgFiles, { id });
     this.setState({ photoIndex, imgPreviewShow: true });
   }
@@ -175,7 +174,7 @@ export default class List extends Component {
     const { 
       i18n, 
       user,
-      project_key,
+      project,
       directory,
       collection, 
       selectedItem, 
@@ -202,7 +201,7 @@ export default class List extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: API_BASENAME + '/project/' + project_key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
+      postUrl: API_BASENAME + '/project/' + project.key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
     };
     const djsConfig = {
       addRemoveLinks: true
@@ -223,7 +222,7 @@ export default class List extends Component {
         name: (
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-arrow-up'></i></span>
-            <Link to={ '/project/' + project_key + '/document' + (parent.id !== '0' ? ( '/' + parent.id ) : '') }>返回上级</Link>
+            <Link to={ '/project/' + project.key + '/document' + (parent.id !== '0' ? ( '/' + parent.id ) : '') }>返回上级</Link>
           </div> ),
         operation: (<div/>)
       });
@@ -268,13 +267,16 @@ export default class List extends Component {
         name: (
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
-            <Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link>
+            <Link to={ '/project/' + project.key + '/document/' + v.id }>{ v.name }</Link>
             { v.favorited &&
             <span title='点击取消收藏' style={ { float: 'right', color: '#FFD300', cursor: 'pointer' } } onClick={ (e) => { this.favorite(v.id) } }><i className='fa fa-star'></i></span> }
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === v.id && !itemLoading &&
+          { operateShow 
+            && project.status == 'active'
+            && hoverRowId === v.id 
+            && !itemLoading &&
             <DropdownButton
               pullRight
               bsStyle='link'
@@ -325,7 +327,7 @@ export default class List extends Component {
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
             { _.findIndex(imgFiles, { id: files[i].id }) === -1 ?
-              <a target='_blank' href={ API_BASENAME + '/project/' + project_key + '/document/' + files[i].id + '/download' + (files[i].type == 'application/pdf' ? ('/' + files[i].name) : '') } download={ files[i].type == 'application/pdf' ? false : files[i].name } style={ { cursor: 'pointer' } }>
+              <a target='_blank' href={ API_BASENAME + '/project/' + project.key + '/document/' + files[i].id + '/download' + (files[i].type == 'application/pdf' ? ('/' + files[i].name) : '') } download={ files[i].type == 'application/pdf' ? false : files[i].name } style={ { cursor: 'pointer' } }>
                 { files[i].name }
               </a>
               :
@@ -334,7 +336,7 @@ export default class List extends Component {
               </a> }
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
-              <Link to={ '/project/' + project_key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '10px', float: 'left' } }>打开目录</span></Link> }
+              <Link to={ '/project/' + project.key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '10px', float: 'left' } }>打开目录</span></Link> }
               { files[i].favorited &&
               <span title='点击取消收藏' style={ { float: 'left', color: '#FFD300', cursor: 'pointer', marginRight: '10px' } } onClick={ (e) => { this.favorite(files[i].id) } }><i className='fa fa-star'></i></span> }
               { files[i].uploader &&
@@ -346,7 +348,10 @@ export default class List extends Component {
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === files[i].id && !itemLoading &&
+          { operateShow 
+            && project.status == 'active'
+            && hoverRowId === files[i].id 
+            && !itemLoading &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -388,18 +393,19 @@ export default class List extends Component {
 
         { imgPreviewShow &&
           <Lightbox
-            mainSrc={ API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[photoIndex].id + '/download' }
-            nextSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download' }
-            prevSrc={  API_BASENAME + '/project/' + project_key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/download' }
+            mainSrc={ API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[photoIndex].id + '/download' }
+            nextSrc={  API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download' }
+            prevSrc={  API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/download' }
             imageTitle={ imgFiles[photoIndex].name }
             imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + moment.unix(imgFiles[photoIndex].uploaded_at).format('YYYY/MM/DD HH:mm') }
             onCloseRequest={ () => { this.setState({ imgPreviewShow: false }) } }
             onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
             onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
 
-        <div style={ { marginTop: '15px' } }>
-          <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
-        </div>
+        { project.status == 'active' &&
+          <div style={ { marginTop: '15px' } }>
+            <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+          </div> }
         <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
           { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }
           { collection.length > 1 && _.isEmpty(query) && options.path.length > 1 && 
@@ -411,7 +417,7 @@ export default class List extends Component {
         { this.state.copyModalShow &&
         <CopyModal 
           show
-          project_key={ project_key }
+          project_key={ project.key }
           close={ () => { this.setState({ copyModalShow: false }); } }
           copy={ copy }
           data={ selectedItem }
@@ -419,7 +425,7 @@ export default class List extends Component {
         { this.state.moveModalShow &&
         <MoveModal
           show
-          project_key={ project_key }
+          project_key={ project.key }
           close={ () => { this.setState({ moveModalShow: false }); } }
           move={ move }
           data={ selectedItem }
