@@ -20,7 +20,7 @@ const initialState = {
 export default function project(state = initialState, action) {
   switch (action.type) {
     case t.PROJECT_INDEX:
-      return { ...state, indexLoading: true, moreLoading: false, loading: false, itemLoading: false, collection: [], increaseCollection: [] };
+      return { ...state, indexLoading: true, moreLoading: false, loading: false, itemLoading: false, item: {}, collection: [], increaseCollection: [] };
 
     case t.PROJECT_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
@@ -131,7 +131,13 @@ export default function project(state = initialState, action) {
     case t.PROJECT_CREATEINDEX_SUCCESS:
       if ( action.result.ecode === 0 ) {
         const ind = _.findIndex(state.collection, { id: action.result.data.id });
-        _.assign(state.collection[ind], action.result.data);
+        if (ind !== -1) {
+          _.assign(state.collection[ind], action.result.data);
+        }
+        if (!_.isEmpty(state.item)) {
+          state.item = action.result.data; 
+          _.assign(state.options, action.result.options || {});
+        }
       }
       return { ...state, itemLoading: false, ecode: action.result.ecode };
 

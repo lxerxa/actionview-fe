@@ -8,6 +8,8 @@ import _ from 'lodash';
 
 const qs = require('qs');
 const img = require('../../assets/images/loading.gif');
+const ArchiveNotify = require('../project/ArchiveNotify');
+const EditModal = require('../project/EditModal');
 
 export default class List extends Component {
   constructor(props) {
@@ -17,20 +19,37 @@ export default class List extends Component {
       pulseStatItems: [ 'new', 'resolve', 'close' ], 
       assigneeShowModel: 'percentage', 
       priorityShowModel: 'percentage', 
-      moduleShowModel: 'percentage' };
+      moduleShowModel: 'percentage', 
+      editModalShow: false,
+      archiveNotifyShow: false
+    };
   }
 
   static propTypes = {
+    i18n: PropTypes.object.isRequired,
     layout: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
+    update: PropTypes.func.isRequired,
+    archive: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired
   }
 
   render() {
-    const { layout, project, data, options, loading } = this.props;
+    const { 
+      i18n, 
+      layout, 
+      user, 
+      project, 
+      data, 
+      update,
+      archive,
+      options, 
+      loading 
+    } = this.props;
 
     const filterStyle = { marginRight: '50px' };
     const bgColors = [ '#58ca9a', '#ee706d', '#f7da47', '#447eff' ];   
@@ -41,12 +60,17 @@ export default class List extends Component {
       </div>
       :
       <div style={ { marginTop: '20px', marginBottom: '30px' } }>
-        <div style={ { padding: '15px', paddingRight: '50px', backgroundColor: '#f7f7f7', marginBottom: '20px', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
+        <div className='project-summary-header'>
           <span style={ { fontSize: '16px' } }>{ project.name || '-' }</span>
           <span style={ { marginLeft: '15px' } }>{ project.status == 'active' ? <span className='project-inprogress-label'>活动中</span> : <span className='project-close-label'>已归档</span> }</span>
-          <span style={ { marginLeft: '15px', color: '#909090' } }>键值：</span><span>{ project.key || '-' }</span>
-          <span style={ { marginLeft: '15px', color: '#909090' } }>负责人：</span><span>{ project.principal && project.principal.name || '-' }</span>
-          <span style={ { marginLeft: '15px', color: '#909090' } }>描述：</span><span>{ project.description || '-' }</span>
+          <span className='item-title'>键值：</span><span>{ project.key || '-' }</span>
+          <span className='item-title'>负责人：</span><span>{ project.principal && project.principal.name || '-' }</span>
+          <span className='item-title'>描述：</span><span>{ project.description || '-' }</span>
+          { project.status == 'active' && project.principal && project.principal.id == user.id &&
+            <span style={ { float: 'right' } }>
+              <span className='project-summary-button' onClick={ () => { this.setState({ editModalShow: true }); } } title='编辑'><i className='fa fa-pencil'></i></span>
+              <span className='project-summary-button' onClick={ () => { this.setState({ archiveNotifyShow: true }); } } title='归档'><i className='fa fa-archive'></i></span>
+            </span> }
         </div>
         { data.filters && data.filters.length > 0 ? 
         <div style={ { height: '160px', marginBottom: '20px', padding: '16px 0px', backgroundColor: '#f7f7f7', borderRadius: '4px', borderBottom: '1px solid #ddd' } }>
@@ -446,6 +470,19 @@ export default class List extends Component {
           :
           <div>暂无信息</div> }
         </Panel>
+        { this.state.editModalShow &&
+          <EditModal
+            show
+            close={ () => { this.setState({ editModalShow: false }) } }
+            update={ update }
+            data={ project }
+            i18n={ i18n }/> }
+        { this.state.archiveNotifyShow &&
+          <ArchiveNotify
+            show
+            close={ () => { this.setState({ archiveNotifyShow: false }) } }
+            data={ project }
+            archive={ archive }/> }
       </div>
     );
   }
