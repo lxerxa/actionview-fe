@@ -3,7 +3,7 @@ exports.default = {
     base: {
       listStyle: 'none',
       backgroundColor: '#fff',
-      margin: 0,
+      margin: '0px 0px 25px 0px',
       padding: 0,
       fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
       fontSize: '14px'

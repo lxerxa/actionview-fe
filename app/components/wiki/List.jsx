@@ -33,6 +33,7 @@ export default class List extends Component {
       createFolderShow: false,
       searchShow: false,
       name: '', 
+      contents: '', 
       myfavorite: ''
     };
 
@@ -48,7 +49,7 @@ export default class List extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    project_key: PropTypes.string.isRequired,
+    project: PropTypes.object.isRequired,
     directory: PropTypes.string.isRequired,
     options: PropTypes.object,
     user: PropTypes.object.isRequired,
@@ -80,6 +81,9 @@ export default class List extends Component {
     const newQuery = {};
     if (query.name) {
       newQuery.name = this.state.name = query.name;
+    }
+    if (query.contents) {
+      newQuery.contents = this.state.contents = query.contents;
     }
     if (query.updated_at) {
       newQuery.updated_at = this.state.updated_at = query.updated_at;
@@ -119,6 +123,7 @@ export default class List extends Component {
     }
 
     this.state.name = newQuery.name || '';
+    this.state.contents = newQuery.contents || '';
     this.state.updated_at = newQuery.updated_at || null;
     this.state.myfavorite = newQuery.myfavorite || '';
   }
@@ -154,7 +159,7 @@ export default class List extends Component {
 
   async operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { select, project_key, checkin, checkout, user, goto } = this.props;
+    const { select, project, checkin, checkout, user, goto } = this.props;
     await select(hoverRowId);
 
     if (eventKey === 'checkin') {
@@ -210,6 +215,9 @@ export default class List extends Component {
     if (_.trim(this.state.name)) {
       query.name = _.trim(this.state.name);
     }
+    if (_.trim(this.state.contents)) {
+      query.contents = _.trim(this.state.contents);
+    }
     if (this.state.myfavorite == '1') {
       query.myfavorite = '1';
     }
@@ -233,7 +241,7 @@ export default class List extends Component {
   render() {
     const { 
       i18n, 
-      project_key,
+      project,
       directory,
       collection, 
       selectedItem, 
@@ -289,7 +297,7 @@ export default class List extends Component {
       homeHeader = (
         <span style={ { fontWeight: 400, fontSize: '14px' } }>
           <i className='fa fa-file-text-o'></i>
-          <span style={ { marginLeft: '8px' } }><Link to={ '/project/' + project_key + '/wiki/root/' + options.home.id }>{ options.home.name }</Link></span>
+          <span style={ { marginLeft: '8px' } }><Link to={ '/project/' + project.key + '/wiki/root/' + options.home.id }>{ options.home.name }</Link></span>
           <span style={ { float: 'right', fontWeight: 400, fontSize: '14px' } }>最近修改：{ options.home.editor && options.home.editor.name ? options.home.editor.name : (options.home.creator && options.home.creator.name || '') }于 { options.home.updated_at ? moment.unix(options.home.updated_at).format('YYYY/MM/DD HH:mm') : moment.unix(options.home.created_at).format('YYYY/MM/DD HH:mm') }</span>
         </span>);
     }
@@ -304,7 +312,7 @@ export default class List extends Component {
         name: (
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-arrow-up'></i></span>
-            <Link to={ '/project/' + project_key + '/wiki' + (parent.id !== '0' ? ( '/' + parent.id ) : '') }>返回上级</Link>
+            <Link to={ '/project/' + project.key + '/wiki' + (parent.id !== '0' ? ( '/' + parent.id ) : '') }>返回上级</Link>
           </div> ),
         operation: (<div/>)
       });
@@ -347,13 +355,16 @@ export default class List extends Component {
         name: (
           <div>
             <span style={ { marginRight: '5px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
-            <Link to={ '/project/' + project_key + '/wiki/' + v.id }>{ v.name }</Link>
+            <Link to={ '/project/' + project.key + '/wiki/' + v.id }>{ v.name }</Link>
             { v.favorited &&
-            <span title='点击取消收藏' style={ { float: 'right', color: '#FF9900', cursor: 'pointer' } } onClick={ (e) => { this.favorite(v.id) } }><i className='fa fa-star'></i></span> }
+            <span title='点击取消收藏' style={ { float: 'right', color: '#FFD300', cursor: 'pointer' } } onClick={ (e) => { this.favorite(v.id) } }><i className='fa fa-star'></i></span> }
           </div> ),
         operation: (
           <div>
-          { operateShow && hoverRowId === v.id && !itemLoading  &&
+          { operateShow 
+            && project.status == 'active'
+            && hoverRowId === v.id 
+            && !itemLoading  &&
             <DropdownButton
               pullRight
               bsStyle='link'
@@ -381,20 +392,20 @@ export default class List extends Component {
         name: ( 
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className='fa fa-file-text-o'></i></span>
-            <Link to={ '/project/' + project_key + '/wiki/' + (files[i].parent == '0' ? 'root' : files[i].parent)  + '/' + files[i].id }>
+            <Link to={ '/project/' + project.key + '/wiki/' + (files[i].parent == '0' ? 'root' : files[i].parent)  + '/' + files[i].id }>
               { files[i].name }
             </Link>
             { !_.isEmpty(files[i].attachments) &&
             <span style={ { marginLeft: '8px' } } title={ files[i].attachments.length + '个附件' }>
-              <i className='fa fa-paperclip'></i>
+              <i className='fa fa-paperclip fa-rotate-90'></i>
             </span> } 
             { !_.isEmpty(files[i].checkin) &&
             <span style={ { marginLeft: '8px', color: '#f0ad4e' } } title={ '该文档被' + ( files[i].checkin.user ? (files[i].checkin.user.id == user.id ? '我' : (files[i].checkin.user.name || '')) : '' ) + '于 ' + ( files[i].checkin.at ? moment.unix(files[i].checkin.at).format('YYYY/MM/DD HH:mm') : '' ) + ' 锁定。' }><i className='fa fa-lock'></i></span> }
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
-              <Link to={ '/project/' + project_key + '/wiki' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
+              <Link to={ '/project/' + project.key + '/wiki' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '15px', float: 'left' } }>打开目录</span></Link> }
               { files[i].favorited &&
-              <span title='点击取消收藏' style={ { float: 'left', color: '#FF9900', cursor: 'pointer', marginRight: '10px' } } onClick={ (e) => { this.favorite(files[i].id) } }><i className='fa fa-star'></i></span> }
+              <span title='点击取消收藏' style={ { float: 'left', color: '#FFD300', cursor: 'pointer', marginRight: '10px' } } onClick={ (e) => { this.favorite(files[i].id) } }><i className='fa fa-star'></i></span> }
               { files[i].creator &&
               <span style={ { marginRight: '15px', float: 'left' } }>
                 { files[i].creator.name + '  ' + moment.unix(files[i].created_at).format('YYYY/MM/DD HH:mm') }
@@ -404,9 +415,10 @@ export default class List extends Component {
         operation: (
           <div>
           { operateShow 
+            && project.status == 'active'
             && hoverRowId === files[i].id 
             && !itemLoading 
-            && (!(!_.isEmpty(files[i].checkin) && files[i].checkin.user.id !== user.id) || options.permissions && options.permissions.indexOf('manage_project') !== -1) &&
+            && (!(!_.isEmpty(files[i].checkin) && files[i].checkin.user.id !== user.id) || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) &&
             <DropdownButton 
               pullRight 
               bsStyle='link' 
@@ -451,9 +463,9 @@ export default class List extends Component {
                   if (i === options.path.length - 1) {
                     return (<Breadcrumb.Item active key={ i }>{ i === 0 ? '根目录' : v.name }</Breadcrumb.Item>);
                   } else if (i === 0) {
-                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/wiki' }>根目录</Link></Breadcrumb.Item>);
+                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project.key + '/wiki' }>根目录</Link></Breadcrumb.Item>);
                   } else {
-                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/wiki/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
+                    return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project.key + '/wiki/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
                   }
                 }) }
               </Breadcrumb>
@@ -477,6 +489,7 @@ export default class List extends Component {
               <span style={ { float: 'right', marginRight: '10px' } }>
                 <Button onClick={ ()=>{ this.setState({ searchShow: !this.state.searchShow }) } }><i className='fa fa-search'></i> 检索{ !_.isEmpty(query) && !searchShow ? '...' : '' }</Button>
               </span>
+              { project.status == 'active' &&
               <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
                 <Button onClick={ () => { goto('new'); } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
                   <i className='fa fa-pencil'></i>&nbsp;新建文档
@@ -485,7 +498,7 @@ export default class List extends Component {
                 <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
                   <i className='fa fa-plus'></i>&nbsp;创建目录
                 </Button> }
-              </ButtonGroup>
+              </ButtonGroup> }
             </span>
           </FormGroup>
           { searchShow &&
@@ -498,6 +511,15 @@ export default class List extends Component {
                   style={ { display: 'inline-block' } }>
                   我收藏的 
                 </Checkbox>
+              </span>
+              <span style={ { float: 'right', width: '195px', marginRight: '10px' } }>
+                <FormControl
+                  type='text'
+                  style={ { height: '36px' } }
+                  value={ this.state.contents }
+                  onChange={ (e) => { this.setState({ contents: e.target.value }) } }
+                  onKeyDown={ (e) => { if (e.keyCode == '13') { this.reload(); } } }
+                  placeholder='内容查询...' />
               </span>
               <span style={ { float: 'right', width: '165px', marginRight: '10px' } }>
                 <FormControl
@@ -556,7 +578,7 @@ export default class List extends Component {
           { this.state.copyModalShow &&
             <CopyModal
               show
-              project_key={ project_key }
+              project_key={ project.key }
               close={ () => { this.setState({ copyModalShow: false }); } }
               copy={ copy }
               data={ selectedItem }
@@ -565,7 +587,7 @@ export default class List extends Component {
           { this.state.moveModalShow &&
             <MoveModal
               show
-              project_key={ project_key }
+              project_key={ project.key }
               close={ () => { this.setState({ moveModalShow: false }); } }
               move={ move }
               data={ selectedItem }

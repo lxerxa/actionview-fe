@@ -30,6 +30,8 @@ export default class Header extends Component {
     const { recents, session, getSess } = this.props;
     if (!session.user.id) {
       await getSess();
+      $('#main-loading').css({ 'width': '0px', 'height': '0px', 'background': 'none', 'display': 'none' });
+      $('#main-loading img').css({ 'display': 'none' });
     }
     
     if (this.props.session.user.id) {
@@ -107,7 +109,7 @@ export default class Header extends Component {
 
     const Modules = [
       { key: 'myproject', name: '项目中心' }, 
-      { key: 'summary', name: '概要' }, 
+      { key: 'summary', name: '概览' }, 
       { key: 'issue', name: '问题' }, 
       { key: 'activity', name: '活动' },
       { key: 'kanban', name: '看板' },
@@ -115,7 +117,7 @@ export default class Header extends Component {
       { key: 'module', name: '模块' },
       { key: 'version', name: '版本' },
       { key: 'report', name: '报告' },
-      { key: 'document', name: '文档' },
+      { key: 'document', name: '文件' },
       { key: 'wiki', name: 'Wiki' },
       { key: 'team', name: '项目成员' },
       { key: 'config', name: '配置概要' },
@@ -155,7 +157,7 @@ export default class Header extends Component {
     if (patten0.exec(pathname)) {
       modulename = '项目中心';
     } else if (patten1.exec(pathname)) {
-      modulename = (curProject.key ? curProject.key + ' - ' : '') + '概要';
+      modulename = (curProject.key ? curProject.key + ' - ' : '') + '概览';
     } else if (patten3.exec(pathname)) {
       modulename = (curProject.key ? curProject.key + ' - ' : '') + '工作流配置';
     } else if (patten2.exec(pathname)) {

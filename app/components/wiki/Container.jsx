@@ -231,7 +231,7 @@ export default class Container extends Component {
     if (this.mode == 'preview') {
       contents = (<Preview
         i18n={ i18n }
-        project_key={ this.pid }
+        project={ this.props.project.item }
         goto={ this.goto.bind(this) }
         wid={ this.wid }
         favorite={ this.favorite.bind(this) }
@@ -249,7 +249,7 @@ export default class Container extends Component {
         { ...this.props.wiki }/>);
     } else if (this.mode == 'list') {
       contents = (<List
-        project_key={ this.pid }
+        project={ this.props.project.item }
         directory={ this.directory == 'root' ? '0' : this.directory }
         index={ this.index.bind(this) }
         reload={ this.reload.bind(this) }
@@ -274,7 +274,7 @@ export default class Container extends Component {
     } else if (this.mode == 'new') {
       contents = (<Create
         i18n={ i18n }
-        project_key={ this.pid }
+        project={ this.props.project.item }
         setRouterNotifyFlg={ (v) => { this.routerNotifyFlg = v; } }
         goto={ this.goto.bind(this) }
         isHome={ query.home }
@@ -284,7 +284,7 @@ export default class Container extends Component {
     } else if (this.mode == 'edit') {
       contents = (<Edit
         i18n={ i18n }
-        project_key={ this.pid }
+        project={ this.props.project.item }
         setRouterNotifyFlg={ (v) => { this.routerNotifyFlg = v; } }
         goto={ this.goto.bind(this) }
         get={ this.show.bind(this) }

@@ -167,7 +167,7 @@ export class IssueFilterList extends Component {
 
     const memberFields = [
       { key: 'reporter', name: '报告者', type: 'MultiSelect', optionValues: userOptions },
-      { key: 'assignee', name: '经办人', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'assignee', name: '负责人', type: 'MultiSelect', optionValues: userOptions },
       { key: 'resolver', name: '解决者', type: 'MultiSelect', optionValues: userOptions },
       { key: 'closer', name: '关闭者', type: 'MultiSelect', optionValues: userOptions },
       { key: 'watcher', name: '关注者', type: 'MultiSelect', optionValues: [ { id: 'me', name: '当前用户' } ] }
@@ -328,7 +328,7 @@ export function parseQuery(query, options) {
     { key: 'labels', name: '标签', type: 'MultiSelect' },
     { key: 'description', name: '描述', type: 'TextArea' },
     { key: 'reporter', name : '报告人', type: 'MultiSelect', optionValues: userOptions },
-    { key: 'assignee', name: '经办人', type: 'MultiSelect', optionValues: userOptions },
+    { key: 'assignee', name: '负责人', type: 'MultiSelect', optionValues: userOptions },
     { key: 'watcher', name : '关注者', type: 'MultiSelect', optionValues: userOptions },
     { key: 'resolver', name : '解决者', type: 'MultiSelect', optionValues: userOptions },
     { key: 'closer', name : '关闭者', type: 'MultiSelect', optionValues: userOptions },

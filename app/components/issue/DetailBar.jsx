@@ -622,7 +622,7 @@ export default class DetailBar extends Component {
 
     const commentsTab = (
       <div>
-        <span style={ { paddingRight: '6px' } }>备注{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
+        <span style={ { paddingRight: '6px' } }>评论{ !itemLoading && '(' + (data.comments_num > 99 ? '99+' : (data.comments_num || 0)) + ')' }</span>
       </div>);
 
     const worklogTab = (
@@ -767,7 +767,7 @@ export default class DetailBar extends Component {
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    经办人
+                    负责人
                   </Col>
                   <Col sm={ editAssignee ? 7 : 3 }>
                     { !editAssignee ?
@@ -796,7 +796,7 @@ export default class DetailBar extends Component {
                         options={ assigneeOptions } 
                         value={ newAssignee || data['assignee'].id } 
                         onChange={ this.handleAssigneeSelectChange.bind(this) } 
-                        placeholder='选择经办人'/>
+                        placeholder='选择负责人'/>
                       <div style={ { float: 'right' } }>
                         <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
@@ -813,6 +813,24 @@ export default class DetailBar extends Component {
                       <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
                     </div>
                   </Col> }
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    更新时间
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px', marginLeft: '5px' } }>
+                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    创建时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
                 </FormGroup>
                 { data.labels && data.labels.length > 0 &&
                 <FormGroup>
@@ -995,10 +1013,11 @@ export default class DetailBar extends Component {
                           const relationOutIndex = _.findIndex(options.relations || [], { out: relation });
                           if (relationOutIndex !== -1) {
                             relation = options.relations[relationOutIndex].in || '';
-                          }
-                          const relationInIndex = _.findIndex(options.relations || [], { in: relation });
-                          if (relationInIndex !== -1) {
-                            relation = options.relations[relationInIndex].out || '';
+                          } else {
+                            const relationInIndex = _.findIndex(options.relations || [], { in: relation });
+                            if (relationInIndex !== -1) {
+                              relation = options.relations[relationInIndex].out || '';
+                            }
                           }
                           linkIssueId = val.src.id;
                         }
@@ -1194,6 +1213,16 @@ export default class DetailBar extends Component {
                 }) }
               </Form>
             </Tab>
+            <Tab eventKey={ 3 } title='改动纪录'>
+              <History
+                issue_id={ data.id }
+                currentTime={ options.current_time || 0 }
+                currentUser={ user }
+                collection={ historyCollection }
+                indexHistory={ indexHistory }
+                sortHistory={ sortHistory }
+                indexLoading={ historyIndexLoading } />
+            </Tab>
             <Tab eventKey={ 2 } title={ commentsTab }>
               <Comments 
                 i18n={ i18n }
@@ -1212,16 +1241,6 @@ export default class DetailBar extends Component {
                 editComments={ editComments } 
                 delComments={ delComments } 
                 itemLoading={ commentsItemLoading }/>
-            </Tab>
-            <Tab eventKey={ 3 } title='改动纪录'>
-              <History 
-                issue_id={ data.id }
-                currentTime={ options.current_time || 0 }
-                currentUser={ user }
-                collection={ historyCollection } 
-                indexHistory={ indexHistory } 
-                sortHistory={ sortHistory } 
-                indexLoading={ historyIndexLoading } />
             </Tab>
             <Tab eventKey={ 4 } title={ worklogTab }>
               <Worklog 

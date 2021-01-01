@@ -133,7 +133,7 @@ export default class Tree extends Component {
               { props.node.d == 1 ?
               <div style={ props.style.folder }><i className={ props.node.toggled ? 'fa fa-folder-open' : 'fa fa-folder' }></i></div>
               :
-              <div style={ props.style.text }><i className='fa fa-file-text-o'></i></div> }
+              <div style={ props.style.text }/> }
               { props.node.name }
             </div>
           </div>

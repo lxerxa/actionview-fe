@@ -92,9 +92,9 @@ export default class Comments extends Component {
     const ecode = await addComments(issue_id, { contents: this.state.contents, atWho: _.map(newAtWho, (v) => _.find(users, { id: v }) ) }); 
     if (ecode === 0) {
       this.setState({ addCommentsShow: false, contents: '', atWho: [] });
-      notify.show('已添加备注。', 'success', 2000);
+      notify.show('已添加评论。', 'success', 2000);
     } else {
-      notify.show('备注添加失败。', 'error', 2000);
+      notify.show('评论添加失败。', 'error', 2000);
     }
   }
 
@@ -241,7 +241,7 @@ export default class Comments extends Component {
                 onChange={ (e) => { this.setState({ contents: e.target.value }) } }
                 value={ this.state.contents } 
                 onKeyDown={ (e) => { if (e.keyCode == '13' && e.ctrlKey && !_.isEmpty(_.trim(this.state.contents))) { this.addComments(); } } }
-                placeholder='支持@项目成员，Ctrl+Enter发布备注。' />
+                placeholder='支持@项目成员，Ctrl+Enter发布评论。' />
             </div>
             <div style={ { textAlign: 'right', marginBottom: '10px' } }>
               <img src={ img } className={ loading ? 'loading' : 'hide' } />
@@ -252,7 +252,7 @@ export default class Comments extends Component {
           <Col sm={ 12 }>
           { indexLoading && <div style={ { width: '100%', textAlign: 'center', marginTop: '15px' } }><img src={ img } className='loading' /></div> }
           { collection.length <= 0 && !indexLoading ?
-            <div style={ { width: '100%', textAlign: 'left', marginTop: '10px', marginLeft: '10px' } }>暂无备注。</div>
+            <div style={ { width: '100%', textAlign: 'left', marginTop: '10px', marginLeft: '10px' } }>暂无评论。</div>
             :
             _.map(collection, (val, i) => {
               const header = ( <div style={ { fontSize: '12px' } }>

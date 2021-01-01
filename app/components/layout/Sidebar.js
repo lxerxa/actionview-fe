@@ -245,7 +245,7 @@ export default class Sidebar extends Component {
             <h4 onClick={ toggleShow('projectSummary') } ><i className={ this.state.projectSummaryShow ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o' } />项目概述</h4>
             { project.options.permissions && project.options.permissions.length > 0 &&
             <ul className={ !this.state.projectSummaryShow && 'hide' }>
-              <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active' id='summary'>概要</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active' id='summary'>概览</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/issue' } activeClassName='menu-active'>问题</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active' id='kanban'>看板</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/gantt' } activeClassName='menu-active' id='gantt'>甘特图</Link></li>
@@ -253,7 +253,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/module' } activeClassName='menu-active'>模块</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/version' } activeClassName='menu-active'>版本</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/report' } activeClassName='menu-active' id='report'>报告</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/document' } activeClassName='menu-active' id='document'>文档</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/document' } activeClassName='menu-active' id='document'>文件</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/wiki' } activeClassName='menu-active' id='wiki'>Wiki</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/team' } activeClassName='menu-active'>成员</Link></li>
             </ul> }

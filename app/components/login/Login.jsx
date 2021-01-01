@@ -74,6 +74,8 @@ class Login extends Component {
     const { actions, session, projectActions } = this.props;
     if (!session.invalid) {
       await actions.getSess();
+      $('#main-loading').css({ 'width': '0px', 'height': '0px', 'background': 'none', 'display': 'none' });
+      $('#main-loading img').css({ 'display': 'none' });
       const { session } = this.props;
       if (session.ecode === 0 && session.user.id) {
         if (session.user.email === 'admin@action.view') {

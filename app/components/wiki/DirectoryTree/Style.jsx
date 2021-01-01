@@ -3,7 +3,7 @@ exports.default = {
     base: {
       listStyle: 'none',
       backgroundColor: '#fff',
-      margin: 0,
+      margin: '0px 0px 25px 0px',
       padding: 0,
       fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
       fontSize: '14px'
@@ -72,8 +72,12 @@ exports.default = {
         },
         text: {
           float: 'left',
-          color: '#777',
-          marginRight: '5px'
+          backgroundColor: '#777',
+          marginTop: '12px',
+          marginRight: '8px',
+          width: '4px',
+          height: '4px',
+          borderRadius: '8px' 
         },
         folder: {
           float: 'left',

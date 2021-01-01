@@ -20,12 +20,20 @@ export default class MultiOperateNotify extends Component {
     close: PropTypes.func.isRequired,
     cancelSelected: PropTypes.func.isRequired,
     multiReopen: PropTypes.func.isRequired,
-    multiStop: PropTypes.func.isRequired,
+    multiArchive: PropTypes.func.isRequired,
     multiCreateIndex: PropTypes.func.isRequired
   }
 
   async confirm() {
-    const { multiStop, multiReopen, multiCreateIndex, cancelSelected, ids=[], operate, close } = this.props;
+    const { 
+      multiArchive, 
+      multiReopen, 
+      multiCreateIndex, 
+      cancelSelected, 
+      ids=[], 
+      operate, 
+      close 
+    } = this.props;
 
     if (ids.length <= 0) {
       return;
@@ -34,10 +42,10 @@ export default class MultiOperateNotify extends Component {
     let ecode = 0, msg = '';
     if (operate == 'reopen') {
       ecode = await multiReopen(ids);
-      msg = '项目已打开。'; 
-    } else if (operate == 'close') {
-      ecode = await multiStop(ids);
-      msg = '项目已关闭。'; 
+      msg = '已取消归档。'; 
+    } else if (operate == 'archive') {
+      ecode = await multiArchive(ids);
+      msg = '项目已归档。'; 
     } else if (operate == 'create_index') {
       ecode = await multiCreateIndex(ids);
       msg = '索引已创建。'; 
@@ -63,7 +71,7 @@ export default class MultiOperateNotify extends Component {
 
   render() {
     const { i18n: { errMsg }, operate, loading } = this.props;
-    const operateTitle = operate === 'reopen' ? '重新打开' : (operate === 'create_index' ? '重新索引' : '关闭');
+    const operateTitle = operate === 'reopen' ? '取消归档' : (operate === 'create_index' ? '重新索引' : '归档');
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

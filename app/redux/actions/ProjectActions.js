@@ -35,10 +35,10 @@ export function update(id, values) {
   });
 }
 
-export function close(id) {
+export function archive(id) {
   return asyncFuncCreator({
-    constant: 'PROJECT_CLOSE',
-    promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: { status: 'closed' } })
+    constant: 'PROJECT_ARCHIVE',
+    promise: (client) => client.request({ url: '/project/' + id, method: 'put', data: { status: 'archived' } })
   });
 }
 
@@ -104,11 +104,11 @@ export function multiReopen(ids) {
   });
 }
 
-export function multiClose(ids) {
+export function multiArchive(ids) {
   return asyncFuncCreator({
-    constant: 'PROJECT_MULTI_CLOSE',
+    constant: 'PROJECT_MULTI_ARCHIVE',
     ids,
-    promise: (client) => client.request({ url: '/project/batch/status', method: 'post', data: { ids, status: 'closed' } })
+    promise: (client) => client.request({ url: '/project/batch/status', method: 'post', data: { ids, status: 'archived' } })
   });
 }
 

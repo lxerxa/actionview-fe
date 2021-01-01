@@ -11,7 +11,7 @@ const $ = require('$');
 const PaginationList = require('../share/PaginationList');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
-const CloseNotify = require('./CloseNotify');
+const ArchiveNotify = require('./ArchiveNotify');
 const DelNotify = require('./DelNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
 const img = require('../../assets/images/loading.gif');
@@ -22,7 +22,7 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
-      closeNotifyShow: false, 
+      archiveNotifyShow: false, 
       delNotifyShow: false, 
       operateShow: false, 
       multiOperateNotifyShow: false,
@@ -34,11 +34,12 @@ export default class List extends Component {
       principal: {},
       principal_id: null,
       name: '', 
-      status: 'active' };
+      status: 'active' 
+    };
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
-    this.closeNotifyClose = this.closeNotifyClose.bind(this);
+    this.archiveNotifyClose = this.archiveNotifyClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
     this.entry = this.entry.bind(this);
@@ -64,9 +65,9 @@ export default class List extends Component {
     reopen: PropTypes.func.isRequired,
     createIndex: PropTypes.func.isRequired,
     multiReopen: PropTypes.func.isRequired,
-    multiStop: PropTypes.func.isRequired,
+    multiArchive: PropTypes.func.isRequired,
     multiCreateIndex: PropTypes.func.isRequired,
-    stop: PropTypes.func.isRequired,
+    archive: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -93,8 +94,8 @@ export default class List extends Component {
     this.setState({ editModalShow: false });
   }
 
-  closeNotifyClose() {
-    this.setState({ closeNotifyShow: false });
+  archiveNotifyClose() {
+    this.setState({ archiveNotifyShow: false });
   }
 
   delNotifyClose() {
@@ -137,8 +138,8 @@ export default class List extends Component {
     this.state.principal_id = newQuery.principal_id || null;
   }
 
-  closeNotify(id) {
-    this.setState({ closeNotifyShow: true });
+  archiveNotify(id) {
+    this.setState({ archiveNotifyShow: true });
     const { select } = this.props;
     select(id);
   }
@@ -154,7 +155,7 @@ export default class List extends Component {
     select(id);
     const ecode = await reopen(id);
     if (ecode === 0) {
-      notify.show('项目已打开。', 'success', 2000);    
+      notify.show('已取消归档。', 'success', 2000);    
     } else {
       notify.show('打开失败。', 'error', 2000);    
     }
@@ -165,7 +166,7 @@ export default class List extends Component {
     select(id);
     const ecode = await createIndex(id);
     if (ecode === 0) {
-      notify.show('索引已创建。', 'success', 2000);
+      notify.show('索引已重建。', 'success', 2000);
     } else {
       notify.show('创建失败。', 'error', 2000);
     }
@@ -177,7 +178,7 @@ export default class List extends Component {
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
-      this.closeNotify(hoverRowId);
+      this.archiveNotify(hoverRowId);
     } else if (eventKey === '3') {
       this.reopen(hoverRowId);
     } else if (eventKey === '4') {
@@ -321,13 +322,14 @@ export default class List extends Component {
       refresh, 
       create, 
       del, 
-      stop, 
-      multiStop, 
+      archive, 
+      multiArchive, 
       multiReopen, 
       multiCreateIndex, 
       update, 
       options, 
-      query } = this.props;
+      query 
+    } = this.props;
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
 
@@ -351,7 +353,7 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].principal ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '5px 3px' } }> 
                     { collection[i].principal.name || '-' }
                   </div>
                 </span>
@@ -387,7 +389,7 @@ export default class List extends Component {
           <img src={ img } style={ { float: 'right' } } className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'loading' : 'hide' }/>
           </div>
         ),
-        status: collection[i].status == 'active' ? <Label bsStyle='success'>活动中</Label> : <Label>已关闭</Label>,
+        status: collection[i].status == 'active' ? <span className='project-inprogress-label'>活动中</span> : <span className='project-close-label'>已归档</span>,
         operation: (
           <div>
           { operateShow && hoverRowId === collection[i].id && !itemLoading &&
@@ -400,7 +402,7 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='1'>编辑</MenuItem>
-              { collection[i].status == 'active' ? <MenuItem eventKey='2'>关闭</MenuItem> : <MenuItem eventKey='3'>重新打开</MenuItem> }
+              { collection[i].status == 'active' ? <MenuItem eventKey='2'>归档</MenuItem> : <MenuItem eventKey='3'>取消归档</MenuItem> }
               <MenuItem eventKey='4'>重建索引</MenuItem>
               <MenuItem eventKey='5'>删除</MenuItem>
             </DropdownButton> }
@@ -441,7 +443,7 @@ export default class List extends Component {
                 placeholder='项目状态'
                 value={ this.state.status }
                 onChange={ this.statusChange.bind(this) }
-                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'closed', label: '已关闭' }] }/>
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '活动中' }, { value: 'archived', label: '已归档' }] }/>
             </span>
             <span style={ { float: 'right', width: '22%', marginRight: '10px' } }>
               <Select
@@ -463,8 +465,8 @@ export default class List extends Component {
             { this.state.selectedIds.length > 0 &&
             <span style={ { float: 'left', marginRight: '10px' } }>
               <DropdownButton title='操作' onSelect={ this.multiOperateSelect.bind(this) }>
-                <MenuItem eventKey='close'>关闭</MenuItem>
-                <MenuItem eventKey='reopen'>重新打开</MenuItem>
+                <MenuItem eventKey='archive'>归档</MenuItem>
+                <MenuItem eventKey='reopen'>取消归档</MenuItem>
                 <MenuItem eventKey='create_index'>重建索引</MenuItem>
               </DropdownButton>
             </span> }
@@ -498,12 +500,12 @@ export default class List extends Component {
               close={ this.createModalClose } 
               create={ create } 
               i18n={ i18n }/> }
-          { this.state.closeNotifyShow && 
-            <CloseNotify 
+          { this.state.archiveNotifyShow && 
+            <ArchiveNotify 
               show 
-              close={ this.closeNotifyClose } 
+              close={ this.archiveNotifyClose } 
               data={ selectedItem } 
-              stop={ stop }/> }
+              archive={ archive }/> }
           { this.state.delNotifyShow &&
             <DelNotify
               show
@@ -515,7 +517,7 @@ export default class List extends Component {
               show 
               close={ this.multiOperateNotifyClose } 
               multiReopen={ multiReopen } 
-              multiStop={ multiStop } 
+              multiArchive={ multiArchive } 
               multiCreateIndex={ multiCreateIndex } 
               ids={ this.state.selectedIds } 
               cancelSelected={ this.cancelSelected.bind(this) } 

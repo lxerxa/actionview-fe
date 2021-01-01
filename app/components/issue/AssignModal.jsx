@@ -70,7 +70,7 @@ export default class AssignModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
-          <Modal.Title id='contained-modal-title-la'>{ '分配经办人 - ' + issue.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '分配负责人 - ' + issue.no }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
@@ -83,7 +83,7 @@ export default class AssignModal extends Component {
               options={ assigneeOptions } 
               value={ assignee.value } 
               onChange={ (newValue) => { assignee.onChange(newValue) } } 
-              placeholder='选择经办人'/>
+              placeholder='选择负责人'/>
             { assignee.touched && assignee.error && <HelpBlock style={ { float: 'right' } }>{ assignee.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>

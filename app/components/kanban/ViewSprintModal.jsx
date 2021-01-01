@@ -66,7 +66,7 @@ export default class ViewSprintModal extends Component {
           <Table hover responsive>
             <thead>
               <tr>
-                <th>经办人</th>
+                <th>负责人</th>
                 <th>问题数</th>
                 <th>故事点数</th>
               </tr>

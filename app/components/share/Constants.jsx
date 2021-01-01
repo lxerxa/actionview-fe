@@ -44,11 +44,11 @@ export const Permissions = {
     { id: 'exec_workflow', name: '执行流程' }
   ],
   comments: [
-    { id: 'add_comments', name: '添加备注' },
-    { id: 'edit_comments', name: '编辑备注' },
-    { id: 'edit_self_comments', name: '编辑自己的备注' },
-    { id: 'delete_comments', name: '删除备注' },
-    { id: 'delete_self_comments', name: '删除自己的备注' }
+    { id: 'add_comments', name: '添加评论' },
+    { id: 'edit_comments', name: '编辑评论' },
+    { id: 'edit_self_comments', name: '编辑自己的评论' },
+    { id: 'delete_comments', name: '删除评论' },
+    { id: 'delete_self_comments', name: '删除自己的评论' }
   ],
   worklogs: [
     { id: 'add_worklog', name: '添加工作日志' },

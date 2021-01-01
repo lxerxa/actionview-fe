@@ -303,7 +303,7 @@ export default class List extends Component {
                 options={ defaultAssigneeOptions } 
                 value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee } 
                 onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } 
-                placeholder='默认经办人(项目负责人)'/>
+                placeholder='默认负责人(项目负责人)'/>
               <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
                 <Button className='edit-ok-button' onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-cancel-button' onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
@@ -351,7 +351,7 @@ export default class List extends Component {
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
           <TableHeaderColumn dataField='principal'>负责人</TableHeaderColumn>
-          <TableHeaderColumn dataField='defaultAssignee'>默认经办人</TableHeaderColumn>
+          <TableHeaderColumn dataField='defaultAssignee'>默认负责人</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
         { this.state.editModalShow && 

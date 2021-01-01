@@ -88,9 +88,9 @@ export default class Container extends Component {
     return this.props.project.ecode;
   }
 
-  async close(id) {
+  async archive(id) {
     const { actions } = this.props;
-    await actions.close(id);
+    await actions.archive(id);
     return this.props.project.ecode;
   }
 
@@ -112,9 +112,9 @@ export default class Container extends Component {
     return this.props.project.ecode;
   }
 
-  async multiClose(ids) {
+  async multiArchive(ids) {
     const { actions } = this.props;
-    await actions.multiClose(ids);
+    await actions.multiArchive(ids);
     return this.props.project.ecode;
   }
 
@@ -165,11 +165,11 @@ export default class Container extends Component {
           show={ this.show.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
-          stop={ this.close.bind(this) } 
+          archive={ this.archive.bind(this) } 
           del={ this.del.bind(this) } 
           reopen={ this.reopen.bind(this) } 
           createIndex={ this.createIndex.bind(this) }
-          multiStop={ this.multiClose.bind(this) }
+          multiArchive={ this.multiArchive.bind(this) }
           multiReopen={ this.multiReopen.bind(this) }
           multiCreateIndex={ this.multiCreateIndex.bind(this) }
           getOptions={ this.getOptions.bind(this) } 
@@ -186,7 +186,7 @@ export default class Container extends Component {
           select={ this.props.actions.select } 
           show={ this.show.bind(this) }
           update={ this.update.bind(this) }
-          stop={ this.close.bind(this) }
+          archive={ this.archive.bind(this) }
           reopen={ this.reopen.bind(this) }
           createIndex={ this.createIndex.bind(this) }
           user={ this.props.session.user }

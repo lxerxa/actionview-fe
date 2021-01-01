@@ -168,7 +168,7 @@ export default class Container extends Component {
         <div style={ { marginLeft: this.state.directoryShow ? '260px' : '0px' } }>
           <Header
             user={ this.props.session.user }
-            project_key={ this.pid }
+            project={ this.props.project.item }
             directory={ this.directory }
             index={ this.index.bind(this) }
             refresh={ this.refresh.bind(this) }
@@ -183,7 +183,7 @@ export default class Container extends Component {
           { this.state.mode == 'grids' ?
           <Grids
             user={ this.props.session.user }
-            project_key={ this.pid }
+            project={ this.props.project.item }
             directory={ this.directory }
             index={ this.index.bind(this) } 
             refresh={ this.refresh.bind(this) } 
@@ -203,7 +203,7 @@ export default class Container extends Component {
             :
           <List
             user={ this.props.session.user }
-            project_key={ this.pid }
+            project={ this.props.project.item }
             directory={ this.directory }
             index={ this.index.bind(this) }
             refresh={ this.refresh.bind(this) }

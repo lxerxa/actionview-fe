@@ -91,7 +91,7 @@ export default class ResetStateModal extends Component {
               options={ assigneeOptions }
               value={ assignee.value || null }
               onChange={ (newValue) => { assignee.onChange(newValue) } }
-              placeholder='选择经办人'/>
+              placeholder='选择负责人'/>
             { assignee.touched && assignee.error && <HelpBlock style={ { float: 'right' } }>{ assignee.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ resolution.touched && resolution.error ? 'error' : null }>

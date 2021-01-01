@@ -23,7 +23,7 @@ export default class Header extends Component {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    project_key: PropTypes.string.isRequired,
+    project: PropTypes.object.isRequired,
     directory: PropTypes.string.isRequired,
     options: PropTypes.object,
     collection: PropTypes.array.isRequired,
@@ -111,7 +111,7 @@ export default class Header extends Component {
   render() {
     const { 
       user,
-      project_key,
+      project,
       directory,
       collection, 
       itemLoading, 
@@ -151,9 +151,9 @@ export default class Header extends Component {
                 if (i === options.path.length - 1) {
                   return (<Breadcrumb.Item active key={ i }>{ i === 0 ? '根目录' : v.name }</Breadcrumb.Item>);
                 } else if (i === 0) {
-                  return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document' }>根目录</Link></Breadcrumb.Item>);
+                  return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project.key + '/document' }>根目录</Link></Breadcrumb.Item>);
                 } else {
-                  return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project_key + '/document/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
+                  return (<Breadcrumb.Item key={ i } disabled={ indexLoading }><Link to={ '/project/' + project.key + '/document/' + v.id }>{ v.name }</Link></Breadcrumb.Item>);
                 }
               }) }
             </Breadcrumb>

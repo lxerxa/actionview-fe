@@ -100,14 +100,14 @@ export default class CreateModal extends Component {
               placeholder='选择责任人'/>
           </FormGroup>
           <FormGroup controlId='formControlsSelect'>
-            <ControlLabel>默认经办人</ControlLabel>
+            <ControlLabel>默认负责人</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ assigneeOptions } 
               clearable={ true } 
               value={ defaultAssignee.value } 
               onChange={ newValue => { defaultAssignee.onChange(newValue) } } 
-              placeholder='默认经办人(项目负责人)'/>
+              placeholder='默认负责人(项目负责人)'/>
           </FormGroup>
           <FormGroup controlId='formControlsText'>
             <ControlLabel>描述</ControlLabel>
