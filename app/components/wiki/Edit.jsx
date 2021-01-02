@@ -22,7 +22,7 @@ export default class Edit extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
-    project_key: PropTypes.string.isRequired,
+    project: PropTypes.object.isRequired,
     path: PropTypes.array.isRequired,
     wid: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
@@ -82,7 +82,7 @@ export default class Edit extends Component {
   }
 
   componentDidMount() {
-    const { project_key } = this.props;
+    const { project } = this.props;
 
     const fileeditDOM = document.getElementById('fileedit');
     if (fileeditDOM) {
@@ -107,7 +107,7 @@ export default class Edit extends Component {
       $(function() {
         const inlineAttachmentConfig = {
           allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: API_BASENAME + '/project/' + project_key + '/file'
+          uploadUrl: API_BASENAME + '/project/' + project.key + '/file'
         };
 
         inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig);
