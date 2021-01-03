@@ -43,7 +43,7 @@ export default class Preview extends Component {
     i18n: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    project: PropTypes.string.isRequired,
+    project: PropTypes.object.isRequired,
     wid: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
     itemLoading: PropTypes.bool.isRequired,

@@ -3,7 +3,6 @@ import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, 
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
-const $ = require('$');
 const inlineAttachment = require('inlineAttachment2');
 const SimpleMDE = require('SimpleMDE');
 const img = require('../../assets/images/loading.gif');
@@ -84,14 +83,11 @@ export default class Create extends Component {
         }
       });
 
-      $(function() {
-        const inlineAttachmentConfig = {
-          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: API_BASENAME + '/project/' + project.key + '/file'
-        };
-
-        inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig); 
-      });
+      const inlineAttachmentConfig = {
+        allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+        uploadUrl: API_BASENAME + '/project/' + project.key + '/file'
+      };
+      inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig); 
     }
   }
 

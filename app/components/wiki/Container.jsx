@@ -306,7 +306,7 @@ export default class Container extends Component {
             directory={ this.directory == 'root' ? '0' : this.directory }
             wid={ this.wid }
             goto={ this.goto2.bind(this) }
-            childrenLoading={ this.props.wiki.childLoading }
+            childrenLoading={ this.props.wiki.childrenLoading }
             treeLoading={ this.props.wiki.treeLoading }
             data={ this.props.wiki.tree }
             getDirTree={ this.getDirTree.bind(this) }
