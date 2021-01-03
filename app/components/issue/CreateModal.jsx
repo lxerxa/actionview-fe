@@ -13,6 +13,7 @@ import { findDOMNode } from 'react-dom';
 const $ = require('$');
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
+const RichTextEditor = require('./RichTextEditor');
 
 const { API_BASENAME } = process.env;
 
@@ -416,7 +417,7 @@ class CreateModal extends Component {
 
     this.state.values[field.key] = newValue;
 
-    if ([ 'Text', 'TextArea', 'Number', 'Integer', 'Url', 'TimeTracking' ].indexOf(field.type) === -1) {
+    if ([ 'Text', 'TextArea', 'RichTextEditor', 'Number', 'Integer', 'Url', 'TimeTracking' ].indexOf(field.type) === -1) {
       this.state.touched[field.key] = true;
     }
 
@@ -428,6 +429,12 @@ class CreateModal extends Component {
 
     if ([ 'Text', 'TextArea' ].indexOf(field.type) !== -1) {
       if (newValue && field.maxLength && _.trim(newValue).length > field.maxLength) {
+        this.state.errors[field.key] = '字数必须在' + field.maxLength + '字之内';
+        this.setState({ values: this.state.values });
+        return;
+      }
+    } else if ('RichTextEditor' == field.type) {
+      if (newValue && field.maxLength && _.trim(newValue.replace(/<.*?>/g, '')).length > field.maxLength) {
         this.state.errors[field.key] = '字数必须在' + field.maxLength + '字之内';
         this.setState({ values: this.state.values });
         return;
@@ -629,6 +636,23 @@ class CreateModal extends Component {
                   </Col>
                   <Col sm={ 7 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                     { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
+                  </Col>
+                </FormGroup> );
+              } else if (v.type === 'RichTextEditor') {
+                return (
+                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                  { title }
+                  <Col sm={ 9 }>
+                    <RichTextEditor
+                      id={ 'field-richeditor-' + v.key }
+                      value={ this.state.values[v.key] || '' }
+                      placeholder={ '请输入' + v.name }
+                      uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                      onBlur={ (newValue) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
+                      onChange={ (newValue) => { this.onChange(newValue, v); } }/>
+                  </Col>
+                  <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                   { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
               } else if (v.type === 'TextArea') {

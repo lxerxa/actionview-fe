@@ -4,6 +4,7 @@ export const FieldTypes =  [
   { value: 'Number', label: '数值字段' },
   { value: 'Text', label: '文本框单行' },
   { value: 'TextArea', label: '文本框多行' },
+  { value: 'RichTextEditor', label: '富文本' },
   { value: 'Select', label: '选择列表(单行)' },
   { value: 'MultiSelect', label: '选择列表(多行)' },
   { value: 'CheckboxGroup', label: '复选按钮' },
