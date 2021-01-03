@@ -1311,3 +1311,16 @@ div.filepicker {
 .project-summary-header:hover .project-summary-button {
   display: inline-block;
 }
+
+.rich-text-editor {
+  margin-top: 7px;
+}
+
+.has-error .rich-text-editor {
+  border: 1px solid #a94442;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.modal-dialog .CodeMirror, .modal-dialog .CodeMirror-scroll {
+  min-height: 250px;
+}
