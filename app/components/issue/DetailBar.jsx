@@ -490,7 +490,9 @@ export default class DetailBar extends Component {
   }
 
   extractImg(txt, field_key) {
-    const html = marked(txt);
+    const markedOptions = { breaks: true };
+    marked.setOptions(markedOptions);
+    let html = marked(txt);
     const images = html.match(/<img[^>]+\/>/ig);
     const imgFileUrls = [];
     if (images) {
