@@ -1035,6 +1035,8 @@ table tr:hover .remove-icon{
 .inline-img {
   cursor: pointer;
   border: 1px solid #f0f0f0;
+  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 .inline-img:hover {

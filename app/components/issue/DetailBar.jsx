@@ -32,6 +32,7 @@ import { getFileIconCss } from '../share/Funcs';
 
 const $ = require('$');
 const moment = require('moment');
+const marked = require('marked');
 const CreateModal = require('./CreateModal');
 const Comments = require('./comments/Comments');
 const History = require('./history/History');
@@ -97,6 +98,7 @@ export default class DetailBar extends Component {
     this.goTo = this.goTo.bind(this);
     this.watch = this.watch.bind(this);
     this.getLabelStyle = this.getLabelStyle.bind(this);
+    this.createLightbox = this.createLightbox.bind(this);
   }
 
   static propTypes = {
@@ -186,7 +188,8 @@ export default class DetailBar extends Component {
       historyLoaded, 
       gitCommitsLoaded, 
       worklogLoaded, 
-      data } = this.props;
+      data 
+    } = this.props;
 
     this.setState({ tabKey });
     if (tabKey === 2 && !commentsLoaded) {
@@ -462,6 +465,8 @@ export default class DetailBar extends Component {
     if (targetid.indexOf('inlineimg-') === 0) {
       fieldkey = targetid.substring(10, targetid.lastIndexOf('-'));
       imgInd = targetid.substr(targetid.lastIndexOf('-') + 1) - 0;
+    } else {
+      return;
     }
 
     this.state.inlinePreviewShow[fieldkey] = true;
@@ -482,6 +487,64 @@ export default class DetailBar extends Component {
       };
     }
     return style;
+  }
+
+  extractImg(txt, field_key) {
+    const html = marked(txt);
+    const images = html.match(/<img[^>]+\/>/ig);
+    const imgFileUrls = [];
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const pattern = new RegExp('^<img src="([^"]+)"(.*)\/>$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$1;
+          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + imgurl + '"/>');
+          imgFileUrls.push(imgurl);
+        }
+      });
+    }
+    return { html, imgFileUrls };
+  }
+
+  extractImg2(txt, field_key) {
+    const images = txt.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+    const imgFileUrls = [];
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const imgurls = v.match(/http(s)?:\/\/([^\)]+)/ig);
+        const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
+        if (pattern.exec(imgurls[0])) {
+          const imgurl = RegExp.$1;
+          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + imgurl + '/thumbnail"/></div>');
+          imgFileUrls.push(imgurl);
+        }
+      });
+      txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
+    }
+
+    const links = txt.match(/\[.*?\]\(.*?\)/ig);
+    if (links) {
+      _.forEach(links, (v, i) => {
+        const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+        pattern.exec(v);
+        txt = txt.replace(v, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+      });
+    }
+    return { html: txt.replace(/(\r\n)|(\n)/g, '<br/>'), imgFileUrls };
+  }
+
+  createLightbox(field_key, imgFiles, photoIndex) {
+    const { project } = this.props;
+    return (
+      <Lightbox
+        mainSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
+        nextSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
+        prevSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+        imageTitle={ imgFiles[photoIndex].name }
+        imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
+        onCloseRequest={ () => { this.state.previewShow[field_key] = false; this.setState({ previewShow: this.state.previewShow }) } }
+        onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+        onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
 
   componentDidMount() {
@@ -854,7 +917,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     解决版本 
                   </Col>
-                  <Col sm={ 7 }>
+                  <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
                      { _.find(options.versions, { id: data.resolve_version }) ? _.find(options.versions, { id: data.resolve_version }).name : '-' }
                     </div>
@@ -1140,61 +1203,27 @@ export default class DetailBar extends Component {
                           eventHandlers={ eventHandlers } 
                           djsConfig={ djsConfig } />
                       </div> }
-                      { previewShow[field.key] &&
-                        <Lightbox
-                          mainSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
-                          nextSrc={  API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
-                          prevSrc={  API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
-                          imageTitle={ imgFiles[photoIndex].name }
-                          imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
-                          onCloseRequest={ () => { this.state.previewShow[field.key] = false; this.setState({ previewShow: this.state.previewShow }) } }
-                          onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
-                          onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
+                      { previewShow[field.key] && this.createLightbox(field.key, imgFiles, photoIndex) }
                     </div>);
                   } else if (field.type === 'TextArea') {
-                    let txt = _.escape(data[field.key]);
-
-                    const images = txt.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
-                    const imgFileUrls = [];
-                    if (images) {
-                      _.forEach(images, (v, i) => {
-                        const imgurls = v.match(/http(s)?:\/\/([^\)]+)/ig); 
-                        const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
-                        if (pattern.exec(imgurls[0])) {
-                          const imgurl = RegExp.$1;
-                          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field.key + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
-                          imgFileUrls.push(imgurl);
-                        }
-                      });
-                      txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
-                    }
-
-                    const links = txt.match(/\[.*?\]\(.*?\)/ig);
-                    if (links) {
-                      _.forEach(links, (v, i) => {
-                        const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
-                        pattern.exec(v);
-                        txt = txt.replace(v, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
-                      });
-                    }
-
+                    const { html, imgFileUrls } = this.extractImg2(_.escape(data[field.key]), field.key);
                     contents = ( 
                       <div>
                         <div 
                           onClick={ this.previewInlineImg.bind(this) } 
                           style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
-                          dangerouslySetInnerHTML={ { __html: txt.replace(/(\r\n)|(\n)/g, '<br/>') } } /> 
-                      { inlinePreviewShow[field.key] && 
-                        <Lightbox
-                          mainSrc={  imgFileUrls[photoIndex] }
-                          nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
-                          prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
-                          imageTitle=''
-                          imageCaption=''
-                          onCloseRequest={ () => { this.state.inlinePreviewShow[field.key] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
-                          onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
-                          onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+                          dangerouslySetInnerHTML={ { __html: html } } /> 
+                        { inlinePreviewShow[field.key] && this.createLightbox(field.key, imgFileUrls, photoIndex) }
                       </div>); 
+                  } else if (field.type === 'RichTextEditor') {
+                    const { html, imgFileUrls } = this.extractImg(data[field.key], field.key);
+                    contents = (
+                      <div>
+                        <div
+                          onClick={ this.previewInlineImg.bind(this) }
+                          dangerouslySetInnerHTML={ { __html: html } } />
+                          { inlinePreviewShow[field.key] && this.createLightbox(field.key, imgFileUrls, photoIndex) }
+                      </div>);
                   } else {
                     contents = data[field.key];
                   }

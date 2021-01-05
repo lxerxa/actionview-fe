@@ -276,7 +276,7 @@ export default class Comments extends Component {
                   const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
                   if (pattern.exec(imgurls[0])) {
                     const imgurl = RegExp.$1;
-                    contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + val.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
+                    contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + val.id + '-' + i + '" src="' + imgurl + '/thumbnail"/></div>');
                     imgFileUrls.push(imgurl);
                   }
                 });

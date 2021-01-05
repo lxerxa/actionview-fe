@@ -158,23 +158,21 @@ class CreateModal extends Component {
     const { project, options } = this.props;
     if (options.permissions && options.permissions.indexOf('upload_file') !== -1) {
       const self = this;
-      $(function() {
-        $('#create-issue-dialog textarea').inlineattachment({
-          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: API_BASENAME + '/project/' + project.key + '/file',
-          onFileUploaded: (editor, filename) => { 
-            const fieldkey = editor.getAttr('id').substr(15); 
-            self.state.values[fieldkey] = editor.getValue(); 
-            delete self.state.errors[fieldkey]; 
-            self.setState({ values: self.state.values }); 
-          },
-          onFileReceived: (editor, file) => { 
-            const fieldkey = editor.getAttr('id').substr(15); 
-            self.state.values[fieldkey] = editor.getValue(); 
-            delete self.state.errors[fieldkey]; 
-            self.setState({ values: self.state.values }); 
-          }
-        });
+      $('#create-issue-dialog textarea').inlineattachment({
+        allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+        uploadUrl: API_BASENAME + '/project/' + project.key + '/file',
+        onFileUploaded: (editor, filename) => { 
+          const fieldkey = editor.getAttr('id').substr(15); 
+          self.state.values[fieldkey] = editor.getValue(); 
+          delete self.state.errors[fieldkey]; 
+          self.setState({ values: self.state.values }); 
+        },
+        onFileReceived: (editor, file) => { 
+          const fieldkey = editor.getAttr('id').substr(15); 
+          self.state.values[fieldkey] = editor.getValue(); 
+          delete self.state.errors[fieldkey]; 
+          self.setState({ values: self.state.values }); 
+        }
       });
     }
   }
