@@ -99,6 +99,7 @@ export default class DetailBar extends Component {
     this.watch = this.watch.bind(this);
     this.getLabelStyle = this.getLabelStyle.bind(this);
     this.createLightbox = this.createLightbox.bind(this);
+    this.createLightbox2 = this.createLightbox2.bind(this);
   }
 
   static propTypes = {
@@ -544,6 +545,20 @@ export default class DetailBar extends Component {
         prevSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
         imageTitle={ imgFiles[photoIndex].name }
         imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
+        onCloseRequest={ () => { this.state.previewShow[field_key] = false; this.setState({ previewShow: this.state.previewShow }) } }
+        onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+        onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
+  }
+
+  createLightbox2(field_key, imgFiles, photoIndex) {
+    const { project } = this.props;
+    return (
+      <Lightbox
+        mainSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[photoIndex] }
+        nextSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length] }
+        prevSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+        imageTitle=''
+        imageCaption=''
         onCloseRequest={ () => { this.state.previewShow[field_key] = false; this.setState({ previewShow: this.state.previewShow }) } }
         onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
@@ -1215,7 +1230,7 @@ export default class DetailBar extends Component {
                           onClick={ this.previewInlineImg.bind(this) } 
                           style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
                           dangerouslySetInnerHTML={ { __html: html } } /> 
-                        { inlinePreviewShow[field.key] && this.createLightbox(field.key, imgFileUrls, photoIndex) }
+                        { inlinePreviewShow[field.key] && this.createLightbox2(field.key, imgFileUrls, photoIndex) }
                       </div>); 
                   } else if (field.type === 'RichTextEditor') {
                     const { html, imgFileUrls } = this.extractImg(data[field.key], field.key);
@@ -1224,7 +1239,7 @@ export default class DetailBar extends Component {
                         <div
                           onClick={ this.previewInlineImg.bind(this) }
                           dangerouslySetInnerHTML={ { __html: html } } />
-                          { inlinePreviewShow[field.key] && this.createLightbox(field.key, imgFileUrls, photoIndex) }
+                          { inlinePreviewShow[field.key] && this.createLightbox2(field.key, imgFileUrls, photoIndex) }
                       </div>);
                   } else {
                     contents = data[field.key];
