@@ -280,7 +280,6 @@ export default class Sidebar extends Component {
             { project.options.permissions && project.options.permissions.indexOf('manage_project') !== -1 &&
             <ul className={ !this.state.projectSettingsShow && 'hide' }>
               <li><Link to={ '/project/' + project.item.key + '/labels' } activeClassName='menu-active'>标签管理</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/reminds' } activeClassName='menu-active'>提醒</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/integrations' } activeClassName='menu-active'>外部用户</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/webhooks' } activeClassName='menu-active'>Webhooks</Link></li>
             </ul> }
