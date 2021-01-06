@@ -490,35 +490,19 @@ export default class DetailBar extends Component {
     return style;
   }
 
-  extractImg(txt, field_key) {
-    const markedOptions = { breaks: true };
-    marked.setOptions(markedOptions);
-    let html = marked(txt);
-    const images = html.match(/<img[^>]+\/>/ig);
-    const imgFileUrls = [];
-    if (images) {
-      _.forEach(images, (v, i) => {
-        const pattern = new RegExp('^<img src="([^"]+)"(.*)\/>$');
-        if (pattern.exec(v)) {
-          const imgurl = RegExp.$1;
-          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + imgurl + '"/>');
-          imgFileUrls.push(imgurl);
-        }
-      });
-    }
-    return { html, imgFileUrls };
-  }
-
   extractImg2(txt, field_key) {
-    const images = txt.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
+    const images = txt.match(/!\[(.*?)\]\((.*?)\)/ig);
     const imgFileUrls = [];
     if (images) {
       _.forEach(images, (v, i) => {
-        const imgurls = v.match(/http(s)?:\/\/([^\)]+)/ig);
-        const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
-        if (pattern.exec(imgurls[0])) {
-          const imgurl = RegExp.$1;
-          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + imgurl + '/thumbnail"/></div>');
+        const pattern = new RegExp('^!\\[(.*?)\\]\\((.*?)\\)$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$2;
+          if (!imgurl) {
+            return;
+          }
+          const alt = RegExp.$1 || '';
+          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
           imgFileUrls.push(imgurl);
         }
       });
@@ -528,12 +512,34 @@ export default class DetailBar extends Component {
     const links = txt.match(/\[.*?\]\(.*?\)/ig);
     if (links) {
       _.forEach(links, (v, i) => {
-        const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
+        const pattern = new RegExp('^\\[(.*?)\\]\\((.*?)\\)$');
         pattern.exec(v);
-        txt = txt.replace(v, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
+        txt = txt.replace(v, '<a target="_blank" href="' + RegExp.$2 + '">' + RegExp.$1 + '</a>');
       });
     }
     return { html: txt.replace(/(\r\n)|(\n)/g, '<br/>'), imgFileUrls };
+  }
+
+  extractImg(txt, field_key) {
+    const markedOptions = { breaks: true };
+    marked.setOptions(markedOptions);
+    let html = marked(txt);
+    const images = html.match(/<img(.*?)>/ig);
+    const imgFileUrls = [];
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const pattern = new RegExp('^<img src="(.*?)"(.*?)>$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$1;
+          if (!imgurl) {
+            return;
+          }
+          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '"/>');
+          imgFileUrls.push(imgurl);
+        }
+      });
+    }
+    return { html, imgFileUrls };
   }
 
   createLightbox(field_key, imgFiles, photoIndex) {
@@ -551,15 +557,14 @@ export default class DetailBar extends Component {
   }
 
   createLightbox2(field_key, imgFiles, photoIndex) {
-    const { project } = this.props;
     return (
       <Lightbox
-        mainSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[photoIndex] }
-        nextSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length] }
-        prevSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+        mainSrc={ imgFiles[photoIndex] }
+        nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
+        prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
         imageTitle=''
         imageCaption=''
-        onCloseRequest={ () => { this.state.previewShow[field_key] = false; this.setState({ previewShow: this.state.previewShow }) } }
+        onCloseRequest={ () => { this.state.inlinePreviewShow[field_key] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
         onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
