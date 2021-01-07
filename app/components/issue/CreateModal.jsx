@@ -845,7 +845,7 @@ class CreateModal extends Component {
           </BootstrapCheckbox> }
           <Button 
             type='submit' 
-            disabled={ (data.id && this.getChangedKeys().length <= 0 && isFromWorkflow === false) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading } 
+            disabled={ (data.id && this.getChangedKeys().length <= 0 && isFromWorkflow === false) || _.isEmpty(schema) || !_.isEmpty(this.state.errors) || loading || preCreated } 
             onClick={ this.handleSubmit }>
             确定
           </Button>
