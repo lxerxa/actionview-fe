@@ -3,12 +3,13 @@ import { Link } from 'react-router';
 import { Button, Label, DropdownButton, MenuItem, Breadcrumb, Table } from 'react-bootstrap';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
+import Lightbox from 'react-image-lightbox';
 import { notify } from 'react-notify-toast';
 import { getFileIconCss } from '../share/Funcs';
 
 const moment = require('moment');
 const loadingImg = require('../../assets/images/loading.gif');
-const SimpleMDE = require('SimpleMDE');
+const marked = require('marked');
 
 const DelNotify = require('./DelNotify');
 const CheckoutNotify = require('./CheckoutNotify');
@@ -17,7 +18,6 @@ const EditModal = require('./EditModal');
 const VersionView = require('./VersionView');
 
 const { API_BASENAME } = process.env;
-let simplemde = {};
 
 export default class Preview extends Component {
   constructor(props) {
@@ -25,18 +25,23 @@ export default class Preview extends Component {
     this.state = { 
       operate: '', 
       version: '', 
+      inlinePreviewShow: false,
+      photoIndex: 0, 
       delNotifyShow: false, 
       checkoutNotifyShow: false, 
       editModalShow: false, 
       versionViewShow: false, 
       selectedFile: {},
-      delFileShow: false };
+      delFileShow: false 
+    };
     this.refresh = this.refresh.bind(this);
     this.checkin = this.checkin.bind(this);
     this.checkout = this.checkout.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.downloadAll = this.downloadAll.bind(this);
     this.delFileModalClose = this.delFileModalClose.bind(this);
+    this.previewInlineImg = this.previewInlineImg.bind(this);
+    this.createLightbox = this.createLightbox.bind(this);
   }
 
   static propTypes = {
@@ -192,6 +197,55 @@ export default class Preview extends Component {
     }
   }
 
+  extractImg(txt) {
+    let html = txt;
+    const images = html.match(/<img(.*?)>/ig);
+    const imgFileUrls = [];
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const pattern = new RegExp('^<img src="(.*?)"(.*?)>$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$1;
+          if (!imgurl) {
+            return;
+          }
+          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + i + '" src="' + imgurl + '"/>');
+          imgFileUrls.push(imgurl);
+        }
+      });
+    }
+    return { html, imgFileUrls };
+  }
+
+  createLightbox(imgFiles, photoIndex) {
+    return (
+      <Lightbox
+        mainSrc={ imgFiles[photoIndex] }
+        nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
+        prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+        imageTitle=''
+        imageCaption=''
+        onCloseRequest={ () => { this.setState({ inlinePreviewShow: false }) } }
+        onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+        onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
+  }
+
+  previewInlineImg(e) {
+    const targetid = e.target.id;
+    if (!targetid) {
+      return;
+    }
+
+    let imgInd = -1;
+    if (targetid.indexOf('inlineimg-') === 0) {
+      imgInd = targetid.substr(targetid.lastIndexOf('-') + 1) - 0;
+    } else {
+      return;
+    }
+
+    this.setState({ inlinePreviewShow: true, photoIndex: imgInd });
+  }
+
   render() {
     const { 
       i18n, 
@@ -231,12 +285,8 @@ export default class Preview extends Component {
       error: (localfile) => { notify.show('文档上传失败。', 'error', 2000); this.dropzone.removeFile(localfile); }
     }
 
-    let contents = '';
-    const filepreviewDOM = document.getElementById('filepreview');
-    if (filepreviewDOM && item.contents) {
-      simplemde = new SimpleMDE({ element: filepreviewDOM, autoDownloadFontAwesome: false });
-      contents = simplemde.markdown(item.contents);
-    }
+    marked.setOptions({ breaks: true });
+    const { html, imgFileUrls } = this.extractImg(marked(_.escape(item.contents || '')));
 
     let isNewestVer = true;
     if (item.versions && item.version < item.versions.length) {
@@ -326,15 +376,13 @@ export default class Preview extends Component {
             <span style={ { marginLeft: '10px', cursor: 'pointer' } } title='点击收藏' onClick={ this.favorite.bind(this) }><i className='fa fa-star-o'></i></span> }
         </div> }
         <div style={ { marginTop: '15px', marginBottom: '20px', paddingLeft: '5px' } }>
-          <div style={ { display: 'none' } }>
-            <textarea name='field' id='filepreview'></textarea>
-          </div>
-          { item.id && contents && 
-          <div id='wiki-contents' dangerouslySetInnerHTML= { { __html: contents } }/> }
-          { item.id && !contents && 
-          <div style={ { height: '200px', textAlign: 'center' } }>
-            <div style={ { paddingTop: '80px', color: '#999' } }>暂无内容</div> 
-          </div> }
+          { item.id && html && 
+            <div id='wiki-contents' onClick={ this.previewInlineImg } dangerouslySetInnerHTML= { { __html: html } }/> }
+          { this.state.inlinePreviewShow && this.createLightbox(imgFileUrls, this.state.photoIndex) }
+          { item.id && !html && 
+            <div style={ { height: '200px', textAlign: 'center' } }>
+              <div style={ { paddingTop: '80px', color: '#999' } }>暂无内容</div> 
+            </div> }
         </div>
         { item.id && item.attachments && item.attachments.length > 0 &&
         <div style={ { marginBottom: '5px' } }>

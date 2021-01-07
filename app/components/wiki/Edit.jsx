@@ -104,14 +104,12 @@ export default class Edit extends Component {
         }
       });
 
-      $(function() {
-        const inlineAttachmentConfig = {
-          allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: API_BASENAME + '/project/' + project.key + '/file'
-        };
+      const inlineAttachmentConfig = {
+        allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+        uploadUrl: API_BASENAME + '/project/' + project.key + '/file'
+      };
 
-        inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig);
-      });
+      inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig);
     }
   }
 

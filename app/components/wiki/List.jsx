@@ -5,9 +5,11 @@ import { Panel, FormGroup, FormControl, ButtonGroup, Button, Breadcrumb, Dropdow
 import Select from 'react-select';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
+import Lightbox from 'react-image-lightbox';
 import { notify } from 'react-notify-toast';
 
 const moment = require('moment');
+const marked = require('marked');
 const DelNotify = require('./DelNotify');
 const CheckoutNotify = require('./CheckoutNotify');
 const CopyModal = require('./CopyModal');
@@ -32,6 +34,8 @@ export default class List extends Component {
       editRowId: '',
       createFolderShow: false,
       searchShow: false,
+      inlinePreviewShow: false,
+      photoIndex: 0,
       name: '', 
       contents: '', 
       myfavorite: ''
@@ -45,6 +49,8 @@ export default class List extends Component {
     this.cancelEditRow = this.cancelEditRow.bind(this);
     this.initEditRow = this.initEditRow.bind(this);
     this.favorite = this.favorite.bind(this);
+    this.previewInlineImg = this.previewInlineImg.bind(this);
+    this.createLightbox = this.createLightbox.bind(this);
   }
 
   static propTypes = {
@@ -238,6 +244,55 @@ export default class List extends Component {
     sort(newValue);
   }
 
+  extractImg(txt) {
+    let html = txt;
+    const images = html.match(/<img(.*?)>/ig);
+    const imgFileUrls = [];
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const pattern = new RegExp('^<img src="(.*?)"(.*?)>$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$1;
+          if (!imgurl) {
+            return;
+          }
+          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + i + '" src="' + imgurl + '"/>');
+          imgFileUrls.push(imgurl);
+        }
+      });
+    }
+    return { html, imgFileUrls };
+  }
+
+  createLightbox(imgFiles, photoIndex) {
+    return (
+      <Lightbox
+        mainSrc={ imgFiles[photoIndex] }
+        nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
+        prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+        imageTitle=''
+        imageCaption=''
+        onCloseRequest={ () => { this.setState({ inlinePreviewShow: false }) } }
+        onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+        onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
+  }
+
+  previewInlineImg(e) {
+    const targetid = e.target.id;
+    if (!targetid) {
+      return;
+    }
+
+    let imgInd = -1;
+    if (targetid.indexOf('inlineimg-') === 0) {
+      imgInd = targetid.substr(targetid.lastIndexOf('-') + 1) - 0;
+    } else {
+      return;
+    }
+
+    this.setState({ inlinePreviewShow: true, photoIndex: imgInd });
+  }
+
   render() {
     const { 
       i18n, 
@@ -265,6 +320,8 @@ export default class List extends Component {
     } = this.props;
 
     const { 
+      inlinePreviewShow,
+      photoIndex,
       createFolderShow, 
       searchShow,
       editRowId, 
@@ -288,12 +345,16 @@ export default class List extends Component {
       { value: 'name_desc', label: '名称 ↓' }
     ];
 
-    let contents = '';
+    let homehtml = '';
     let homeHeader = '';
-    const filepreviewDOM = document.getElementById('homepreview');
-    if (filepreviewDOM && options.home && options.home.contents) {
-      simplemde = new SimpleMDE({ element: filepreviewDOM, autoDownloadFontAwesome: false });
-      contents = simplemde.markdown(_.escape(options.home.contents));
+    let imgFiles = [];
+    if (options.home && options.home.contents) {
+
+      marked.setOptions({ breaks: true });
+      const { html, imgFileUrls } = this.extractImg(marked(_.escape(options.home.contents || '')));
+      homehtml = html;
+      imgFiles = imgFileUrls;
+
       homeHeader = (
         <span style={ { fontWeight: 400, fontSize: '14px' } }>
           <span style={  { float: 'left', backgroundColor: '#777', marginTop: '8px', marginRight: '8px', width: '4px', height: '4px', borderRadius: '8px' } }/>
@@ -556,13 +617,10 @@ export default class List extends Component {
           </div> }
           { !indexLoading && options.home && options.home.id && _.isEmpty(query) &&
           <Panel header={ homeHeader } style={ { marginTop: '10px' } }>
-            <div id='homewiki-contents' dangerouslySetInnerHTML= { { __html: contents } } />
+            <div id='homewiki-contents' onClick={ this.previewInlineImg } dangerouslySetInnerHTML= { { __html: homehtml } } />
+            { inlinePreviewShow && this.createLightbox(imgFiles, photoIndex) }
           </Panel> }
-          <div style={ { marginBottom: '40px' } }>
-            <div style={ { display: 'none' } }>
-              <textarea name='field' id='homepreview'></textarea>
-            </div>
-          </div>
+          <div style={ { marginBottom: '40px' } }/>
           { this.state.delNotifyShow &&
             <DelNotify
               show

@@ -521,8 +521,7 @@ export default class DetailBar extends Component {
   }
 
   extractImg(txt, field_key) {
-    const markedOptions = { breaks: true };
-    marked.setOptions(markedOptions);
+    marked.setOptions({ breaks: true });
     let html = marked(txt);
     const images = html.match(/<img(.*?)>/ig);
     const imgFileUrls = [];
@@ -1238,7 +1237,7 @@ export default class DetailBar extends Component {
                         { inlinePreviewShow[field.key] && this.createLightbox2(field.key, imgFileUrls, photoIndex) }
                       </div>); 
                   } else if (field.type === 'RichTextEditor') {
-                    const { html, imgFileUrls } = this.extractImg(data[field.key], field.key);
+                    const { html, imgFileUrls } = this.extractImg(_.escape(data[field.key]), field.key);
                     contents = (
                       <div>
                         <div

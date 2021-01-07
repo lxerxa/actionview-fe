@@ -34,6 +34,8 @@ export default class Comments extends Component {
 
     this.addAtWho = this.addAtWho.bind(this);
     this.addComments = this.addComments.bind(this);
+    this.previewInlineImg = this.previewInlineImg.bind(this);
+    this.createLightbox = this.createLightbox.bind(this);
   }
 
   static propTypes = {
@@ -127,27 +129,68 @@ export default class Comments extends Component {
     }
   }
 
-  previewInlineImg(e) {
-    const { permissions } = this.props;
-
-    if (permissions.indexOf('download_file') === -1) {
-      notify.show('权限不足。', 'error', 2000);
-      return;
+  extractImg(txt, atWho, cid) {
+    const images = txt.match(/!\[(.*?)\]\((.*?)\)/ig);
+    const imgFileUrls = [];
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const pattern = new RegExp('^!\\[(.*?)\\]\\((.*?)\\)$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$2;
+          if (!imgurl) {
+            return;
+          }
+          const alt = RegExp.$1 || '';
+          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + cid + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
+          imgFileUrls.push(imgurl);
+        }
+      });
+      txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
     }
 
+    const links = txt.match(/\[.*?\]\(.*?\)/ig);
+    if (links) {
+      _.forEach(links, (v, i) => {
+        const pattern = new RegExp('^\\[(.*?)\\]\\((.*?)\\)$');
+        pattern.exec(v);
+        txt = txt.replace(v, '<a target="_blank" href="' + RegExp.$2 + '">' + RegExp.$1 + '</a>');
+      });
+    }
+
+    _.map(atWho || [], (v) => {
+      txt = txt.replace(eval('/@' + v.name + '/'), '<a title="' + v.name + '(' + v.email + ')' + '">@' + v.name + '</a>');
+    });
+
+    return { html: txt.replace(/(\r\n)|(\n)/g, '<br/>'), imgFileUrls };
+  }
+
+  createLightbox(cid, imgFiles, photoIndex) {
+    return (
+      <Lightbox
+        mainSrc={ imgFiles[photoIndex] }
+        nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
+        prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+        imageTitle=''
+        imageCaption=''
+        onCloseRequest={ () => { this.state.inlinePreviewShow[cid] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
+        onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
+        onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
+  }
+
+  previewInlineImg(e) {
     const targetid = e.target.id;
     if (!targetid) {
       return;
     }
 
-    let fieldkey = '';
+    let cid = '';
     let imgInd = -1;
     if (targetid.indexOf('inlineimg-') === 0) {
-      fieldkey = targetid.substring(10, targetid.lastIndexOf('-'));
+      cid = targetid.substring(10, targetid.lastIndexOf('-'));
       imgInd = targetid.substr(targetid.lastIndexOf('-') + 1) - 0;
     }
 
-    this.state.inlinePreviewShow[fieldkey] = true;
+    this.state.inlinePreviewShow[cid] = true;
     this.setState({ inlinePreviewShow: this.state.inlinePreviewShow, photoIndex: imgInd });
   }
 
@@ -266,90 +309,26 @@ export default class Comments extends Component {
                 { permissions.indexOf('add_comments') !== -1 && 
                 <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, {}) } title='回复'><i className='fa fa-reply'></i></span> }
               </div> ); 
+
               let contents = val.contents ? _.escape(val.contents) : '-';
-
-              const images = contents.match(/!\[file\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
-              const imgFileUrls = [];
-              if (images) {
-                _.forEach(images, (pv, i) => {
-                  const imgurls = pv.match(/http(s)?:\/\/([^\)]+)/ig);
-                  const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
-                  if (pattern.exec(imgurls[0])) {
-                    const imgurl = RegExp.$1;
-                    contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + val.id + '-' + i + '" src="' + imgurl + '/thumbnail"/></div>');
-                    imgFileUrls.push(imgurl);
-                  }
-                });
-                contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
-              }
-
-              const links = contents.match(/\[.*?\]\(.*?\)/ig);
-              if (links) {
-                _.forEach(links, (lv, i) => {
-                  const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
-                  if (pattern.exec(lv)) {
-                    contents = contents.replace(lv, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
-                  }
-                });
-              }
-
-              _.map(val.atWho || [], (v) => {
-                contents = contents.replace(eval('/@' + v.name + '/'), '<a title="' + v.name + '(' + v.email + ')' + '">@' + v.name + '</a>');
-              });
-              contents = contents.replace(/(\r\n)|(\n)/g, '<br/>'); 
+              const { html, imgFileUrls } = this.extractImg(contents, val.atWho, val.id);
 
               return (
                 <Panel header={ header } key={ i } style={ { marginBottom: '15px' } }>
                   <div 
-                    onClick={ this.previewInlineImg.bind(this) } 
+                    onClick={ this.previewInlineImg } 
                     style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
-                    dangerouslySetInnerHTML={ { __html: contents } }/>
+                    dangerouslySetInnerHTML={ { __html: html } }/>
 
-                  { inlinePreviewShow[val.id] &&
-                  <Lightbox
-                    mainSrc={  imgFileUrls[photoIndex] }
-                    nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
-                    prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
-                    imageTitle=''
-                    imageCaption=''
-                    onCloseRequest={ () => { this.state.inlinePreviewShow[val.id] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
-                    onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
-                    onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+                  { inlinePreviewShow[val.id] && this.createLightbox(val.id, imgFileUrls, photoIndex) }
 
                   { val.reply && val.reply.length > 0 &&
                   <div className='reply-region'>
                     <ul className='reply-contents'>
                      { _.map(val.reply, (v, i) => {
+
                        let contents = v.contents ? _.escape(v.contents) : '-';
-
-                       const images = contents.match(/!\[.*?\]\(http(s)?:\/\/(.*?)\)((\r\n)|(\n))?/ig);
-                       const imgFileUrls = [];
-                       if (images) {
-                         _.forEach(images, (pv, i) => {
-                           const imgurls = pv.match(/http(s)?:\/\/([^\)]+)/ig);
-                           const pattern = new RegExp('^http[s]?:\/\/[^\/]+(.+)$');
-                           pattern.exec(imgurls[0]);
-                           const imgurl = RegExp.$1;
-                           contents = contents.replace(pv, '<div><img class="inline-img" id="inlineimg-' + v.id + '-' + i + '" style="margin-bottom:5px; margin-right:10px;" src="' + imgurl + '/thumbnail"/></div>');
-                           imgFileUrls.push(imgurl);
-                         });
-                         contents = contents.replace(/<\/div>(\s*?)<div>/ig, '');
-                       }
-
-                       const links = contents.match(/\[.*?\]\(.*?\)/ig);
-                       if (links) {
-                         _.forEach(links, (lv, i) => {
-                           const pattern = new RegExp('^\\[([^\\]]*)\\]\\(([^\\)]*)\\)$');
-                           if (pattern.exec(lv)) {
-                             contents = contents.replace(lv, '<a target=\'_blank\' href=\'' + RegExp.$2 + '\'>' + RegExp.$1 + '</a>');
-                           }
-                         });
-                       }
-
-                       _.map(v.atWho || [], (value) => {
-                         contents = contents.replace(eval('/@' + value.name + '/'), '<a title="' + value.name + '(' + value.email + ')' + '">@' + value.name + '</a>');
-                       });
-                       contents = contents.replace(/(\r\n)|(\n)/g, '<br/>'); 
+                       const { html, imgFileUrls } = this.extractImg(contents, v.atWho, v.id);
 
                        return (
                        <li className='reply-contents-item'>
@@ -365,20 +344,11 @@ export default class Comments extends Component {
                            <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showAddReply.bind(this, val.id, v.creator) } title='回复'><i className='fa fa-reply'></i></span> }
                          </div>
                          <div 
-                           onClick={ this.previewInlineImg.bind(this) }
+                           onClick={ this.previewInlineImg }
                            style={ { lineHeight: '24px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
-                           dangerouslySetInnerHTML={ { __html: contents } }/>
- 
-                           { inlinePreviewShow[v.id] &&
-                           <Lightbox
-                             mainSrc={  imgFileUrls[photoIndex] }
-                             nextSrc={  imgFileUrls[(photoIndex + 1) % imgFileUrls.length] }
-                             prevSrc={  imgFileUrls[(photoIndex + imgFileUrls.length - 1) % imgFileUrls.length] }
-                             imageTitle=''
-                             imageCaption=''
-                             onCloseRequest={ () => { this.state.inlinePreviewShow[v.id] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
-                             onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFileUrls.length - 1) % imgFileUrls.length }) }
-                             onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFileUrls.length }) } /> }
+                           dangerouslySetInnerHTML={ { __html: html } }/>
+
+                         { inlinePreviewShow[v.id] && this.createLightbox(v.id, imgFileUrls, photoIndex) }
 
                        </li> ) } ) }
                     </ul>
