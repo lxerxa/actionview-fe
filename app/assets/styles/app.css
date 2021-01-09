@@ -1018,20 +1018,6 @@ table tr:hover .remove-icon{
   max-width: 100%
 }
 
-#wiki-contents p > img {
-  max-width: 100%
-}
-
-#homewiki-contents p > img {
-  max-width: 100%
-}
-
-#wiki-contents table td, #wiki-contents table th, #homewiki-contents table td, #homewiki-contents table th {
-  border: 1px solid #ddd;
-  padding: 5px;
-  text-align: left;
-}
-
 .inline-img {
   cursor: pointer;
   border: 1px solid #f0f0f0;
@@ -1282,10 +1268,6 @@ div.filepicker {
   z-index: 1000;
 }
 
-.control-label {
-  font-weight: 400;
-}
-
 .project-summary-header {
   padding: 15px; 
   background-color: #f7f7f7; 
@@ -1327,3 +1309,15 @@ div.filepicker {
 .modal-dialog .CodeMirror, .modal-dialog .CodeMirror-scroll {
   min-height: 250px;
 }
+
+.issue-text-field {
+  border-radius: 4px;
+  padding: 5px 10px;
+  border: 1px solid #dedede;
+  min-height: 90px;
+}
+
+.issue-text-field:hover {
+  border: 1px solid #bbb;
+}
+

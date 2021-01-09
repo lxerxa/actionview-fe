@@ -19,7 +19,6 @@ if (BROWSER) {
   require('react-select/dist/react-select.css');
   require('react-bootstrap-table/css/react-bootstrap-table.css');
   require('react-datetime/css/react-datetime.css');
-  require('simplemde/dist/simplemde.min.css');
   require('rc-tabs/assets/index.css');
   require('mermaid/dist/mermaid.css');
   require('react-dropzone-component/styles/filepicker.css');
@@ -32,6 +31,8 @@ if (BROWSER) {
   require('assets/styles/jquery.atwho.css');
   require('assets/styles/jquery-ui.css');
   require('assets/styles/ganttview.css');
+  require('assets/styles/github-markdown.css');
+  require('simplemde/dist/simplemde.min.css');
 }
 
 (async function() {
