@@ -36,6 +36,7 @@ export default class List extends Component {
       moveIssueShow: false,
       workflowScreenShow: false, 
       movedData: {},
+      curColNo: -1,
       curSprintNo: 0,
       drop_issue_id: '', 
       action_id: '' 
@@ -233,6 +234,7 @@ export default class List extends Component {
 
   async issueView(id, colNo) {
     this.state.detailBarShow = true;
+    this.state.curColNo = colNo;
 
     const { mode, show, record, curKanban, sprints } = this.props;
 
@@ -585,7 +587,7 @@ export default class List extends Component {
             forward={ forward }
             visitedIndex={ visitedIndex }
             visitedCollection={ visitedCollection }
-            issueCollection={ [] }
+            issueCollection={ _.findIndex(columnIssues[this.state.curColNo] || [], { no: itemData.no }) === -1 ? [] : columnIssues[this.state.curColNo] }
             show = { show }
             detailFloatStyle={ detailFloatStyle }
             itemLoading={ itemLoading }
