@@ -351,7 +351,7 @@ export default class List extends Component {
     if (options.home && options.home.contents) {
 
       marked.setOptions({ breaks: true });
-      const { html, imgFileUrls } = this.extractImg(marked(_.escape(options.home.contents || '')));
+      const { html, imgFileUrls } = this.extractImg(marked(options.home.contents || ''));
       homehtml = html;
       imgFiles = imgFileUrls;
 
@@ -617,7 +617,7 @@ export default class List extends Component {
           </div> }
           { !indexLoading && options.home && options.home.id && _.isEmpty(query) &&
           <Panel header={ homeHeader } style={ { marginTop: '10px' } }>
-            <div id='homewiki-contents' onClick={ this.previewInlineImg } dangerouslySetInnerHTML= { { __html: homehtml } } />
+            <div id='homewiki-contents' className='markdown-body' onClick={ this.previewInlineImg } dangerouslySetInnerHTML= { { __html: homehtml } } />
             { inlinePreviewShow && this.createLightbox(imgFiles, photoIndex) }
           </Panel> }
           <div style={ { marginBottom: '40px' } }/>

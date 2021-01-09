@@ -114,7 +114,9 @@ export default class Create extends Component {
           </InputGroup>
         </FormGroup>
         <FormGroup>
-          <textarea name='field' id='fileedit'></textarea>
+          <div className='markdown-body'>
+            <textarea name='field' id='fileedit'></textarea>
+          </div>
         </FormGroup>
         <div style={ { float: 'right', marginTop: '-5px' } }>
           <span style={ { marginRight: '20px', color: 'red' } }>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

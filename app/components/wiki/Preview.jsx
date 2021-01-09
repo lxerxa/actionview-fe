@@ -286,7 +286,7 @@ export default class Preview extends Component {
     }
 
     marked.setOptions({ breaks: true });
-    const { html, imgFileUrls } = this.extractImg(marked(_.escape(item.contents || '')));
+    const { html, imgFileUrls } = this.extractImg(marked(item.contents || ''));
 
     let isNewestVer = true;
     if (item.versions && item.version < item.versions.length) {
@@ -377,7 +377,7 @@ export default class Preview extends Component {
         </div> }
         <div style={ { marginTop: '15px', marginBottom: '20px', paddingLeft: '5px' } }>
           { item.id && html && 
-            <div id='wiki-contents' onClick={ this.previewInlineImg } dangerouslySetInnerHTML= { { __html: html } }/> }
+            <div id='wiki-contents' className='markdown-body' onClick={ this.previewInlineImg } dangerouslySetInnerHTML= { { __html: html } }/> }
           { this.state.inlinePreviewShow && this.createLightbox(imgFileUrls, this.state.photoIndex) }
           { item.id && !html && 
             <div style={ { height: '200px', textAlign: 'center' } }>

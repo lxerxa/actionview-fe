@@ -140,7 +140,9 @@ export default class Edit extends Component {
             </InputGroup>
           </FormGroup>
           <FormGroup>
-            <textarea name='field' id='fileedit'></textarea>
+            <div className='markdown-body'>
+              <textarea name='field' id='fileedit'></textarea>
+            </div>
           </FormGroup>
         </div>
         <div style={ { float: 'right', marginTop: '-5px', display: itemLoading || itemDetailLoading ? 'none' : '' } }>
