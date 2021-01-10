@@ -1299,6 +1299,7 @@ div.filepicker {
 
 .rich-text-editor {
   margin-top: 7px;
+  border-radius: 4px;
 }
 
 .has-error .rich-text-editor {

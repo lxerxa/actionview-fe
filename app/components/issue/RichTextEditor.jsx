@@ -60,19 +60,32 @@ class TextEditor extends React.Component {
       uploadUrl: uploadUrl 
     };
     inlineAttachment.editors.codemirror4.attach(this.editor.codemirror, inlineAttachmentConfig);
-
-    //this.editor.codemirror.options.readOnly = true;
   }
 
   componentWillReceiveProps(nextProps) {
     this.editor.codemirror.options.readOnly = nextProps.disabled && true;
   }
 
+  componentWillUnmount() {
+    delete this.editor.codemirror;
+    delete this.editor;
+  }
+
+  //componentDidUpdate(preProps) {
+  //  if (preProps.id != this.props.id) {
+  //    delete this.editor.codemirror;
+  //    delete this.editor;
+  //    const parentNode = document.getElementById(this.props.id + '-parent'); 
+  //    parentNode.innerHTML = '<textarea id="' + this.props.id + '"></textarea>';
+  //    this.create();
+  //  }
+  //}
+
   render() {
     const { id } = this.props;
 
     return (
-      <div className='rich-text-editor'>
+      <div className='rich-text-editor markdown-body'>
         <textarea id={ id }></textarea>
       </div>
     );

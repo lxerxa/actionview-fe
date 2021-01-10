@@ -541,10 +541,6 @@ export default class List extends Component {
           </div> );
 
       _.forEach(display_columns, (val) => {
-        if (!item[val.key] && !_.isNumber(item[val.key])) {
-          issue[val.key] = '-';
-          return;
-        }
         if (val.key === 'priority') {
           const priorityInd = _.findIndex(options.priorities, { id: item.priority });
           const priorityStyle = { marginLeft: '14px' };
@@ -563,6 +559,11 @@ export default class List extends Component {
           const contents = item[val.key] ? _.escape(item[val.key]).replace(/(\r\n)|(\n)/g, '<br/>') : '-';
           issue[val.key] = <span style={ textStyle } dangerouslySetInnerHTML={ { __html: contents } }/>;
         } else {
+          if (!item[val.key] && !_.isNumber(item[val.key])) {
+            issue[val.key] = '-';
+            return;
+          }
+
           let contents = '';
           if (val.key === 'sprints') {
             contents = item['sprints'] && item['sprints'].length > 0 ? item['sprints'].join(',') : '-'; 

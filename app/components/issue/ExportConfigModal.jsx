@@ -57,7 +57,7 @@ export default class ConfigModal extends Component {
 
     const defined_field_keys = [];
     _.forEach(options.fields || [], (f) => {
-      if (f.type !== 'File') {
+      if (f.type !== 'File' && f.type !== 'RichTextEditor') {
         defined_field_keys.push(f.key);
       }
     });

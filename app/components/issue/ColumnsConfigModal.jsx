@@ -112,7 +112,7 @@ export default class ColumnsConfigModal extends Component {
     const { cards, strCards, enableAdd } = this.state;
     const { i18n: { errMsg }, loading, options } = this.props;
 
-    const fields = _.reject(options.fields || [], (v) => v.type === 'File' || [ 'type', 'reporter', 'created_at', 'title', 'labels' ].indexOf(v.key) !== -1);
+    const fields = _.reject(options.fields || [], (v) => v.type === 'File' || v.type === 'RichTextEditor' || [ 'type', 'reporter', 'created_at', 'title', 'labels' ].indexOf(v.key) !== -1);
     const newFields = _.map(fields, (v) => { return { value: v.key, label: v.name } });
 
     return (

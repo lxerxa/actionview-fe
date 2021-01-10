@@ -491,7 +491,7 @@ class CreateModal extends Component {
 
   getPlaceholder(field) {
     let placeHolder = '输入' + field.name;
-    if (field.type == 'Text' || field.type == 'TextArea') {
+    if (field.type == 'Text' || field.type == 'TextArea' || field.type == 'RichTextEditor') {
       if (field.maxLength) {
         placeHolder += '(字数' + field.maxLength + '字之内)';
       }
@@ -592,23 +592,24 @@ class CreateModal extends Component {
               </Col>
             </FormGroup> }
             { _.map(schema, (v, key) => {
+              const prefix = this.state.values['type'];
 
               const title = (
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
-                    { v.required && <span className='txt-impt'>*</span> }
-                    { v.name }
-                  </Col>
+                <Col sm={ 2 } componentClass={ ControlLabel }>
+                  { v.required && <span className='txt-impt'>*</span> }
+                  { v.name }
+                </Col>
               );
 
               if (v.type === 'Text') {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl 
                       type='text' 
                       disabled={ loading }
-                      value={ this.state.values[v.key] } 
+                      value={ this.state.values[v.key] || '' } 
                       onChange={ (e) => { this.onChange(e.target.value, v); } } 
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ this.getPlaceholder(v) } />
@@ -619,7 +620,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'Number' || v.type == 'Integer') { 
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 3 }>
                     <FormControl
@@ -627,7 +628,7 @@ class CreateModal extends Component {
                       max={ v.maxValue || v.maxValue === 0 ? v.maxValue : '' }
                       min={ v.minValue || v.minValue === 0 ? v.minValue : '' }
                       disabled={ loading }
-                      value={ this.state.values[v.key] }
+                      value={ this.state.values[v.key] || '' }
                       onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ this.getPlaceholder(v) } />
@@ -638,32 +639,32 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'RichTextEditor') {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <RichTextEditor
-                      id={ 'field-richeditor-' + v.key }
+                      id={ prefix +'-field-richeditor-' + v.key }
                       value={ this.state.values[v.key] || '' }
-                      placeholder={ '请输入' + v.name }
+                      placeholder={ this.getPlaceholder(v) }
                       uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
                       onBlur={ (newValue) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       onChange={ (newValue) => { this.onChange(newValue, v); } }/>
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
-                   { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
+                    { this.state.touched[v.key] && (this.state.errors[v.key] || '') }
                   </Col>
                 </FormGroup> );
               } else if (v.type === 'TextArea') {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <FormControl
-                      id={ 'field-textarea-' + v.key }
-                      ref={ 'field-textarea-' + v.key }
+                      id={ prefix + '-field-textarea-' + v.key }
+                      ref={ prefix + '-field-textarea-' + v.key }
                       componentClass='textarea'
                       disabled={ loading }
-                      value={ this.state.values[v.key] }
+                      value={ this.state.values[v.key] || '' }
                       onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       style={ { height: '200px' } }
@@ -675,7 +676,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.key === 'labels' && options.permissions && options.permissions.indexOf('manage_project') !== -1) {
                 return (
-                <FormGroup key={ key }>
+                <FormGroup key={ prefix + key }>
                   { title }
                   <Col sm={ 7 }>
                     <CreatableSelect
@@ -690,7 +691,7 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if ([ 'Select', 'MultiSelect', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser' ].indexOf(v.type) !== -1) {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 7 }>
                     <Select 
@@ -714,13 +715,13 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'CheckboxGroup') {
                 return (
-                <FormGroup key={ key } validationState={ this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
                     <CheckboxGroup
                       style={ { marginTop: '7px' } }
                       name={ v.name }
-                      value={ this.state.values[v.key] }
+                      value={ this.state.values[v.key] || [] }
                       onChange={ newValue => { this.onChange(newValue, v); } }>
                       { _.map(v.optionValues || [], (val, i) => 
                         <span style={ { marginLeft: '6px' } } key={ i }>
@@ -734,13 +735,13 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'RadioGroup') {
                 return (
-                <FormGroup key={ key }>
+                <FormGroup key={ prefix + key }>
                   { title }
                   <Col sm={ 9 }>
                     <RadioGroup
                       style={ { marginTop: '7px' } }
                       name={ v.name }
-                      selectedValue={ this.state.values[v.key] }
+                      selectedValue={ this.state.values[v.key] || '' }
                       onChange={ newValue => { this.onChange(newValue, v); } }>
                       { _.map(v.optionValues || [], (val, i) =>
                         <span style={ { marginLeft: '6px' } } key={ i }><Radio disabled={ loading } value={ val.id }/>{ ' ' + val.name + ' ' }</span>
@@ -751,7 +752,7 @@ class CreateModal extends Component {
                 </FormGroup> ); 
               } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 4 }>
                     <DateTime 
@@ -760,7 +761,7 @@ class CreateModal extends Component {
                       dateFormat={ 'YYYY/MM/DD' }
                       timeFormat={ v.type === 'DateTimePicker' ?  'HH:mm' : false } 
                       closeOnSelect={ v.type === 'DatePicker' }
-                      value={ this.state.values[v.key] } 
+                      value={ this.state.values[v.key] || '' } 
                       onChange={ newValue => { this.onChange(newValue, v); } }/>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
@@ -783,7 +784,7 @@ class CreateModal extends Component {
                   removedfile: this.removedfile.bind(this)
                 }
                 return (
-                <FormGroup key={ key }>
+                <FormGroup key={ prefix + key }>
                   { title }
                   <Col sm={ 7 }>
                     <div style={ { marginTop: '7px' } }>
@@ -793,13 +794,13 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'Url') {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 7 }>
                     <FormControl
                       type='text'
                       disabled={ loading }
-                      value={ this.state.values[v.key] }
+                      value={ this.state.values[v.key] || '' }
                       onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '输入' + v.name } />
@@ -810,13 +811,13 @@ class CreateModal extends Component {
                 </FormGroup> );
               } else if (v.type === 'TimeTracking') {
                 return (
-                <FormGroup key={ key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 4 }>
                     <FormControl
                       type='text'
                       disabled={ loading }
-                      value={ this.state.values[v.key] }
+                      value={ this.state.values[v.key] || '' }
                       onChange={ (e) => { this.onChange(e.target.value, v); } }
                       onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       placeholder={ '例如：3w 4d 12h 30m' } />

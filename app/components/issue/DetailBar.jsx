@@ -100,6 +100,7 @@ export default class DetailBar extends Component {
     this.getLabelStyle = this.getLabelStyle.bind(this);
     this.createLightbox = this.createLightbox.bind(this);
     this.createLightbox2 = this.createLightbox2.bind(this);
+    this.getDescContents = this.getDescContents.bind(this);
   }
 
   static propTypes = {
@@ -568,12 +569,28 @@ export default class DetailBar extends Component {
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
 
+  getDescContents(txt, fieldKey) {
+    if (!txt) {
+      return (<div className='issue-text-field' style={ { marginTop: '7px', color: '#909090' } }>未设置</div>);
+    }
+
+    const { inlinePreviewShow, photoIndex } = this.state;
+    const { html, imgFileUrls } = this.extractImg(txt, fieldKey);
+    return (
+      <div className='issue-text-field markdown-body' style={ { marginTop: '7px' } }>
+        <div
+          onClick={ this.previewInlineImg.bind(this) }
+          dangerouslySetInnerHTML={ { __html: html } } />
+        { inlinePreviewShow[fieldKey] && this.createLightbox2(fieldKey, imgFileUrls, photoIndex) }
+      </div>);
+  }
+
   componentDidMount() {
     $('.animate-dialog .nav-tabs>li>a:first').css('border-left', '0px');
 
     const { detailFloatStyle={}, layout } = this.props;
 
-    const width = _.min([ _.max([ layout.containerWidth / 2, 600 ]), 1000 ]);
+    const width = _.min([ _.max([ layout.containerWidth / 2, 660 ]), 1000 ]);
     const initialStyles = { width: width + 'px' };
     const animateStyles = {};
 
@@ -719,7 +736,7 @@ export default class DetailBar extends Component {
         <span style={ { paddingRight: '6px' } }>Git提交{ !itemLoading && '(' + (data.gitcommits_num > 99 ? '99+' : (data.gitcommits_num || 0)) + ')' }</span>
       </div>);
 
-    const width = _.min([ _.max([ layout.containerWidth / 2, 600 ]), 1000 ]) + 'px';
+    const width = _.min([ _.max([ layout.containerWidth / 2, 660 ]), 1000 ]) + 'px';
 
     return (
       <div 
@@ -835,10 +852,9 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px' } }>
-                      { priorityInd !== -1 &&
-                      <div className='circle' style={ priorityStyle }/> }
-                      { priorityInd !== -1 ? options.priorities[priorityInd].name : '-' }
-                      </div>
+                      { priorityInd !== -1 && <div className='circle' style={ priorityStyle }/> }
+                      { priorityInd !== -1 ? options.priorities[priorityInd].name : <span style={ { color: '#909090' } }>未设置</span> }
+                    </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
                     解决结果
@@ -900,11 +916,19 @@ export default class DetailBar extends Component {
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
+                    描述
+                  </Col>
+                  <Col sm={ 9 }>
+                    { this.getDescContents(data.descriptions, 'descriptions') }
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
                     更新时间
                   </Col>
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px', marginLeft: '5px' } }>
-                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : '-' }
+                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : (data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-') }
                     </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
@@ -1004,7 +1028,7 @@ export default class DetailBar extends Component {
                       { options.permissions && options.permissions.indexOf('edit_issue') !== -1 ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                         <span>
-                          <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }>
+                          <div style={ { display: 'inline-block', float: 'left', margin: '5px 0px 3px 5px' } }>
                             { (data['progress'] || '0') + '%' }
                           </div>
                         </span>
@@ -1126,7 +1150,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if ([ 'title', 'resolution', 'priority', 'assignee', 'epic', 'labels', 'resolve_version', 'expect_start_time', 'expect_complete_time', 'progress' ].indexOf(field.key) !== -1) {
+                  if ([ 'title', 'resolution', 'priority', 'assignee', 'descriptions', 'epic', 'labels', 'resolve_version', 'expect_start_time', 'expect_complete_time', 'progress' ].indexOf(field.key) !== -1) {
                     return;
                   }
                   if (field.type === 'File') {
@@ -1229,7 +1253,7 @@ export default class DetailBar extends Component {
                   } else if (field.type === 'TextArea') {
                     const { html, imgFileUrls } = this.extractImg2(_.escape(data[field.key]), field.key);
                     contents = ( 
-                      <div>
+                      <div className='issue-text-field'>
                         <div 
                           onClick={ this.previewInlineImg.bind(this) } 
                           style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
@@ -1239,7 +1263,7 @@ export default class DetailBar extends Component {
                   } else if (field.type === 'RichTextEditor') {
                     const { html, imgFileUrls } = this.extractImg(_.escape(data[field.key]), field.key);
                     contents = (
-                      <div>
+                      <div className='issue-text-field markdown-body'>
                         <div
                           onClick={ this.previewInlineImg.bind(this) }
                           dangerouslySetInnerHTML={ { __html: html } } />
