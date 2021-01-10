@@ -139,7 +139,7 @@ export default class DefaultValueConfigModal extends Component {
           value={ defaultValue.value || null } 
           onChange={ newValue => { defaultValue.onChange(newValue) } } 
           placeholder='设置默认值'/> ); 
-    } else if (data.type === 'TextArea') {
+    } else if (data.type === 'TextArea' || data.type === 'RichTextEditor') {
       defaultComponent = ( 
         <FormControl 
           componentClass='textarea' 
@@ -196,7 +196,7 @@ export default class DefaultValueConfigModal extends Component {
               { maxValue.error && <HelpBlock>{ maxValue.error }</HelpBlock> }
             </FormGroup>
           </div> }
-          { (data.type == 'TextArea' || data.type == 'Text')  &&
+          { (data.type == 'TextArea' || data.type == 'Text' || data.type == 'RichTextEditor')  &&
           <FormGroup style={ { width: '45%' } } validationState={ maxLength.value && maxLength.error ? 'error' : null }>
             <ControlLabel>最大长度</ControlLabel>
             <FormControl
