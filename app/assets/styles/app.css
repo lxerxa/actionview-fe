@@ -1308,10 +1308,15 @@ div.filepicker {
 }
 
 .modal-dialog .CodeMirror, .modal-dialog .CodeMirror-scroll {
-  min-height: 250px;
+  min-height: 200px;
+}
+
+.tab-content .CodeMirror, .tab-content .CodeMirror-scroll {
+  min-height: 150px;
 }
 
 .issue-text-field {
+  position: relative;
   border-radius: 4px;
   padding: 5px 10px;
   border: 1px solid #dedede;
@@ -1320,5 +1325,29 @@ div.filepicker {
 
 .issue-text-field:hover {
   border: 1px solid #bbb;
+}
+
+.issue-text-field .edit-button {
+  width: 25px;
+  height: 25px;
+  background-color: #dedede;
+  border-left: 1px solid #dedede;
+  border-bottom: 1px solid #dedede;
+  padding-left: 7px;
+  padding-top: 2px;
+  cursor: pointer;
+  color: #5f5f5f;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+}
+
+.issue-text-field:hover .edit-button {
+  display: block;
+}
+
+.issue-text-field .edit-button:hover {
+  color: #000;
 }
 

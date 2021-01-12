@@ -645,6 +645,7 @@ class CreateModal extends Component {
                     <RichTextEditor
                       id={ prefix +'-field-richeditor-' + v.key }
                       value={ this.state.values[v.key] || '' }
+                      disabled={ loading }
                       placeholder={ this.getPlaceholder(v) }
                       uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
                       onBlur={ (newValue) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }

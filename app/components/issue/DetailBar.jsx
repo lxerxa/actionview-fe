@@ -54,6 +54,7 @@ const WorkflowCommentsModal = require('./WorkflowCommentsModal');
 const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const WatcherListModal = require('./WatcherListModal');
+const RichTextEditor = require('./RichTextEditor');
 
 const { API_BASENAME } = process.env;
 
@@ -91,6 +92,8 @@ export default class DetailBar extends Component {
       delNotifyShow: false,
       copyModalShow: false,
       watchersModalShow: false,
+      newItemValues: [],
+      editingItems: [],
       action_id: '' 
     };
     this.delFileModalClose = this.delFileModalClose.bind(this);
@@ -100,7 +103,7 @@ export default class DetailBar extends Component {
     this.getLabelStyle = this.getLabelStyle.bind(this);
     this.createLightbox = this.createLightbox.bind(this);
     this.createLightbox2 = this.createLightbox2.bind(this);
-    this.getDescContents = this.getDescContents.bind(this);
+    this.getRichTextItemContents = this.getRichTextItemContents.bind(this);
   }
 
   static propTypes = {
@@ -569,15 +572,39 @@ export default class DetailBar extends Component {
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
 
-  getDescContents(txt, fieldKey) {
+  getRichTextItemContents(txt, fieldKey) {
+    const { editingItems, newItemValues } = this.state;
+    const { project } = this.props;
+
+    if (editingItems[fieldKey]) {
+      return (
+        <div>
+          <RichTextEditor
+            id={ 'field-richeditor-' + fieldKey }
+            value={ txt || '' }
+            placeholder='输入描述'
+            uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+            onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/> 
+          <div style={ { float: 'right' } }>
+            <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) } disabled={ newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
+            <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
+          </div>
+        </div> );
+    }
+
     if (!txt) {
-      return (<div className='issue-text-field' style={ { marginTop: '7px', color: '#909090' } }>未设置</div>);
+      return (
+        <div className='issue-text-field' style={ { marginTop: '7px', color: '#909090' } }>
+          <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }><i className='fa fa-pencil'></i></div>
+          未设置
+        </div>);
     }
 
     const { inlinePreviewShow, photoIndex } = this.state;
     const { html, imgFileUrls } = this.extractImg(txt, fieldKey);
     return (
       <div className='issue-text-field markdown-body' style={ { marginTop: '7px' } }>
+        <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems, newItemValues }); } }><i className='fa fa-pencil'></i></div>
         <div
           onClick={ this.previewInlineImg.bind(this) }
           dangerouslySetInnerHTML={ { __html: html } } />
@@ -919,7 +946,7 @@ export default class DetailBar extends Component {
                     描述
                   </Col>
                   <Col sm={ 9 }>
-                    { this.getDescContents(data.descriptions, 'descriptions') }
+                    { this.getRichTextItemContents(data.descriptions, 'descriptions') }
                   </Col>
                 </FormGroup>
                 <FormGroup>
