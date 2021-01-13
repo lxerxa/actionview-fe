@@ -572,7 +572,7 @@ export default class DetailBar extends Component {
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
 
-  getRichTextItemContents(txt, fieldKey) {
+  getRichTextItemContents(txt, fieldKey, fieldName, required) {
     const { editingItems, newItemValues } = this.state;
     const { project } = this.props;
 
@@ -582,11 +582,11 @@ export default class DetailBar extends Component {
           <RichTextEditor
             id={ 'field-richeditor-' + fieldKey }
             value={ txt || '' }
-            placeholder='输入描述'
+            placeholder={ '输入' + fieldName }
             uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
             onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/> 
-          <div style={ { float: 'right' } }>
-            <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) } disabled={ newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
+          <div className='edit-button-group'>
+            <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) } disabled={ txt == newItemValues[fieldKey] || (required && !newItemValues[fieldKey]) || newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
             <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
           </div>
         </div> );
@@ -735,6 +735,12 @@ export default class DetailBar extends Component {
     let stateClassName = '';
     if (stateInd !== -1) {
       stateClassName = 'state-' + options.states[stateInd].category + '-label';
+    }
+
+    let descRequired = false;
+    const fi = _.findIndex(schema, { key: 'descriptions' });
+    if (fi !== -1) {
+      descRequired = schema[fi].required && true;
     }
 
     let selectedEpic = {};
@@ -924,7 +930,7 @@ export default class DetailBar extends Component {
                         value={ newAssignee || data['assignee'].id } 
                         onChange={ this.handleAssigneeSelectChange.bind(this) } 
                         placeholder='选择负责人'/>
-                      <div style={ { float: 'right' } }>
+                      <div className='edit-button-group'>
                         <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
                       </div>
@@ -946,7 +952,7 @@ export default class DetailBar extends Component {
                     描述
                   </Col>
                   <Col sm={ 9 }>
-                    { this.getRichTextItemContents(data.descriptions, 'descriptions') }
+                    { this.getRichTextItemContents(data.descriptions, 'descriptions', '描述', descRequired) }
                   </Col>
                 </FormGroup>
                 <FormGroup>
@@ -1074,7 +1080,7 @@ export default class DetailBar extends Component {
                         value={ this.state.newProgress } 
                         onChange={ (e) => { this.setState({ newProgress: e.target.value }) } }
                         placeholder='进度值'/>
-                      <div style={ { float: 'right' } }>
+                      <div className='edit-button-group'>
                         <Button className='edit-ok-button' onClick={ this.setProgress.bind(this) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetProgress.bind(this) }><i className='fa fa-close'></i></Button>
                       </div>

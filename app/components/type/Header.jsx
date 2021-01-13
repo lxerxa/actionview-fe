@@ -86,7 +86,7 @@ export default class Header extends Component {
                   </FormControl>
                 </div>
                 <img src={ img } className={ defaultLoading ? 'loading' : 'hide' }/>
-                <div className={ defaultLoading ? 'hide' : 'edit-field-content' }>
+                <div className={ defaultLoading ? 'hide' : 'edit-field-content edit-button-group' }>
                   <Button className='edit-ok-button' onClick={ this.setDefaultValue }>
                     <i className='fa fa-check'></i>
                   </Button>
@@ -97,7 +97,7 @@ export default class Header extends Component {
               </div>
               :
               <span className='default-set editable-field'>
-                <span>{ collection[defaultIndex] ? collection[defaultIndex].name : '无' }</span>
+                <span style={ { paddingRight: '10px' } }>{ collection[defaultIndex] ? collection[defaultIndex].name : '无' }</span>
                 <Button className='edit-icon' onClick={ () => { this.setState({ defaultSetShow: true }); } }>
                   <i className='fa fa-pencil'></i>
                 </Button>

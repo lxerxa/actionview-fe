@@ -259,7 +259,7 @@ export default class List extends Component {
                 value={ _.isUndefined(this.state.principal[collection[i].id]) ? collection[i].principal.id : this.state.principal[collection[i].id] } 
                 onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } 
                 placeholder='请选择用户'/>
-              <div className={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
+              <div className={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-cancel-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
               </div>
@@ -304,7 +304,7 @@ export default class List extends Component {
                 value={ this.state.defaultAssignee[collection[i].id] || collection[i].defaultAssignee } 
                 onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } 
                 placeholder='默认负责人(项目负责人)'/>
-              <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
+              <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
                 <Button className='edit-ok-button' onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
                 <Button className='edit-cancel-button' onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
               </div>

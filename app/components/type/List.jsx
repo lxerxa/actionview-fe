@@ -258,7 +258,7 @@ export default class List extends Component {
                 value={ this.state.screen[collection[i].id] || collection[i].screen_id } 
                 onChange={ this.handleScreenSelectChange.bind(this, collection[i].id) } 
                 placeholder='请选择界面'/>
-              <div className={ _.indexOf(settingScreenTypeIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
+              <div className={ _.indexOf(settingScreenTypeIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
                 <Button className='edit-ok-button' onClick={ this.setScreen.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>
@@ -297,7 +297,7 @@ export default class List extends Component {
                 value={ this.state.workflow[collection[i].id] || collection[i].workflow_id } 
                 onChange={ this.handleWorkflowSelectChange.bind(this, collection[i].id) } 
                 placeholder='请选择工作流'/>
-              <div className={ _.indexOf(settingWorkflowTypeIds, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
+              <div className={ _.indexOf(settingWorkflowTypeIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
                 <Button className='edit-ok-button' onClick={ this.setWorkflow.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>
