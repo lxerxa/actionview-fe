@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { FormControl } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 import Lightbox from 'react-image-lightbox';
 
@@ -77,9 +78,10 @@ class MultiRowsTextReader extends React.Component {
   }
 
   static propTypes = {
+    isImgPreviewed: PropTypes.bool,
     isEditable: PropTypes.bool,
     onEdit: PropTypes.bool,
-    key: PropTypes.string.isRequired,
+    fieldKey: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired
   }
 
@@ -115,6 +117,12 @@ class MultiRowsTextReader extends React.Component {
 
   previewInlineImg(e) {
 
+    const { isImgPreviewed } = this.props;
+    if (!isImgPreviewed) {
+      notify.show('权限不足。', 'error', 2000);
+      return;
+    }
+
     const targetid = e.target.id;
     if (!targetid) {
       return;
@@ -134,12 +142,12 @@ class MultiRowsTextReader extends React.Component {
     const { 
       isEditable, 
       onEdit,
-      key, 
+      fieldKey, 
       value='' 
     } = this.props;
     const { inlinePreviewShow, photoIndex } = this.state;
 
-    const { html, imgFiles } = this.extractImg(key, value);
+    const { html, imgFiles } = this.extractImg(fieldKey, value);
 
     return (
       <div className='issue-text-field'>

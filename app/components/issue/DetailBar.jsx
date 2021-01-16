@@ -536,9 +536,10 @@ export default class DetailBar extends Component {
 
     return (
       <MultiRowsTextReader
+        isImgPreviewed={ options.permissions && options.permissions.indexOf('download_file') !== -1 }
         isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
         onEdit={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }
-        key={ fieldKey }
+        fieldKey={ fieldKey }
         value={ txt }/>);
   }
 
@@ -564,9 +565,10 @@ export default class DetailBar extends Component {
 
     return (
       <RichTextReader
+        isImgPreviewed={ options.permissions && options.permissions.indexOf('download_file') !== -1 }
         isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
         onEdit={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }
-        key={ fieldKey }
+        fieldKey={ fieldKey }
         value={ txt }/>);
   }
 
