@@ -326,7 +326,7 @@ export default class List extends Component {
                 labelKey='nameAndEmail' 
                 loadOptions={ this.searchUsers } 
                 placeholder='请输入用户'/>
-              <div className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'hide' : '' } style={ { float: 'right' } }>
+              <div className={ _.indexOf(settingPrincipalPids, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
                 <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>

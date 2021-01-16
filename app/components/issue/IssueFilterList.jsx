@@ -119,6 +119,7 @@ export class IssueFilterList extends Component {
             <Col sm={ 12 / columns - 1 }>
               <Interval
                 value={ this.state.values[v.key] }
+                onBlur={ this.onChange }
                 keyPress={ (e) => { if (e.keyCode == '13') { this.onChange(); } } }
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }/>
             </Col>
@@ -301,6 +302,7 @@ export class IssueFilterList extends Component {
               </FormGroup> )
           }) }
         </div> }
+        <div style={ { color: 'red', marginLeft: '5px' } }>注：文本框检索 - 输入内容后回车即可检索。</div>
       </Form>
     );
   }
