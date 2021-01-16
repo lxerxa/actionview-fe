@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
+import { notify } from 'react-notify-toast';
 import Lightbox from 'react-image-lightbox';
 
 const inlineAttachment = require('inlineAttachment2');
@@ -103,9 +104,10 @@ class RichTextReader extends React.Component {
   }
 
   static propTypes = {
+    isImgPreviewed: PropTypes.bool,
     isEditable: PropTypes.bool,
     onEdit: PropTypes.func,
-    key: PropTypes.string.isRequired,
+    fieldKey: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired
   }
 
@@ -132,6 +134,12 @@ class RichTextReader extends React.Component {
 
   previewInlineImg(e) {
 
+    const { isImgPreviewed } = this.props;
+    if (!isImgPreviewed) {
+      notify.show('权限不足。', 'error', 2000);
+      return;
+    }
+
     const targetid = e.target.id;
     if (!targetid) {
       return;
@@ -151,14 +159,12 @@ class RichTextReader extends React.Component {
     const { 
       isEditable, 
       onEdit,
-      key, 
+      fieldKey, 
       value 
     } = this.props;
     const { inlinePreviewShow, photoIndex } = this.state;
 
-    const { html, imgFiles } = this.extractImg(key, value || '');
-
-    console.log(html);
+    const { html, imgFiles } = this.extractImg(fieldKey, value || '');
 
     return (
       <div className='issue-text-field markdown-body'>
