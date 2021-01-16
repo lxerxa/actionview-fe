@@ -159,8 +159,8 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
-  async setProgress(id, values) {
-    await this.props.issueActions.setProgress(this.pid, id, values);
+  async setItemValue(id, values) {
+    await this.props.issueActions.setItemValue(this.pid, id, values);
     return this.props.issue.ecode;
   }
 
@@ -491,7 +491,7 @@ export default class Container extends Component {
           edit={ this.edit.bind(this) }
           create={ this.create.bind(this) }
           setAssignee={ this.setAssignee.bind(this) }
-          setProgress={ this.setProgress.bind(this) }
+          setItemValue={ this.setItemValue.bind(this) }
           setLabels={ this.setLabels.bind(this) }
           addLabels={ this.props.issueActions.addLabels }
           delFile={ this.delFile.bind(this) }

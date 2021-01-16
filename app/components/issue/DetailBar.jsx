@@ -103,6 +103,7 @@ export default class DetailBar extends Component {
     this.createLightbox = this.createLightbox.bind(this);
     this.createLightbox2 = this.createLightbox2.bind(this);
     this.getRichTextItemContents = this.getRichTextItemContents.bind(this);
+    this.getTextAreaItemContents = this.getTextAreaItemContents.bind(this);
   }
 
   static propTypes = {
@@ -585,10 +586,12 @@ export default class DetailBar extends Component {
     if (editingItems[fieldKey]) {
       return (
         <div>
-          <FormControl
-            type='number'
-            value={ newItemValues[fieldKey] || 0 }
-            onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } } />
+          <MultiRowsTextEditor
+            id={ 'field-textarea-' + fieldKey }
+            value={ txt || '' }
+            placeholder={ '输入' + fieldName }
+            uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+            onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/>
           <div className='edit-button-group'>
             <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ txt == newItemValues[fieldKey] || (required && !newItemValues[fieldKey]) || newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
             <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
@@ -639,7 +642,7 @@ export default class DetailBar extends Component {
 
     if (!txt) {
       return (
-        <div className='issue-text-field' style={ { marginTop: '7px', color: '#909090' } }>
+        <div className='issue-text-field' style={ { color: '#909090' } }>
           <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }><i className='fa fa-pencil'></i></div>
           未设置
         </div>);
@@ -1006,7 +1009,9 @@ export default class DetailBar extends Component {
                     描述
                   </Col>
                   <Col sm={ 9 }>
-                    { this.getRichTextItemContents(data.descriptions, 'descriptions', '描述', descRequired) }
+                    <div style={ { marginTop: '7px' } }>
+                      { this.getRichTextItemContents(data.descriptions, 'descriptions', '描述', descRequired) }
+                    </div>
                   </Col>
                 </FormGroup>
                 <FormGroup>
@@ -1349,20 +1354,9 @@ export default class DetailBar extends Component {
                       { previewShow[field.key] && this.createLightbox(field.key, imgFiles, photoIndex) }
                     </div>);
                   } else if (field.type === 'TextArea') {
-                    const { html, imgFileUrls } = this.extractImg2(_.escape(data[field.key]), field.key);
-                    contents = ( 
-                      <div className='issue-text-field'>
-                        <div 
-                          onClick={ this.previewInlineImg.bind(this) } 
-                          style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } 
-                          dangerouslySetInnerHTML={ { __html: html } } /> 
-                        { inlinePreviewShow[field.key] && this.createLightbox2(field.key, imgFileUrls, photoIndex) }
-                      </div>); 
+                    contents = this.getTextAreaItemContents(data[field.key], field.key, field.name, field.required);
                   } else if (field.type === 'RichTextEditor') {
-                    contents = (
-                      <RichTextReader
-                        key={ field.key }
-                        value={ data[field.key] } />);
+                    contents = this.getRichTextItemContents(data[field.key], field.key, field.name, field.required);
                   } else {
                     contents = data[field.key];
                   }

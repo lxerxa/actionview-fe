@@ -9,7 +9,8 @@ import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { findDOMNode } from 'react-dom';
-import { RichTextEditor, RichTextReader } from './RichTextEditor';
+import { RichTextEditor } from './RichText';
+import { MultiRowsTextEditor } from './MultiRowsText';
 
 const $ = require('$');
 const moment = require('moment');
@@ -153,27 +154,6 @@ class CreateModal extends Component {
     const rect = dom.getBoundingClientRect();
     if (rect.height < 580) {
       dom.style.overflow = 'visible';
-    }
-
-    const { project, options } = this.props;
-    if (options.permissions && options.permissions.indexOf('upload_file') !== -1) {
-      const self = this;
-      $('#create-issue-dialog textarea').inlineattachment({
-        allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-        uploadUrl: API_BASENAME + '/project/' + project.key + '/file',
-        onFileUploaded: (editor, filename) => { 
-          const fieldkey = editor.getAttr('id').substr(15); 
-          self.state.values[fieldkey] = editor.getValue(); 
-          delete self.state.errors[fieldkey]; 
-          self.setState({ values: self.state.values }); 
-        },
-        onFileReceived: (editor, file) => { 
-          const fieldkey = editor.getAttr('id').substr(15); 
-          self.state.values[fieldkey] = editor.getValue(); 
-          delete self.state.errors[fieldkey]; 
-          self.setState({ values: self.state.values }); 
-        }
-      });
     }
   }
 
@@ -660,14 +640,12 @@ class CreateModal extends Component {
                 <FormGroup key={ prefix + key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
                   { title }
                   <Col sm={ 9 }>
-                    <FormControl
+                    <MultiRowsTextEditor
                       id={ prefix + '-field-textarea-' + v.key }
-                      ref={ prefix + '-field-textarea-' + v.key }
-                      componentClass='textarea'
                       disabled={ loading }
                       value={ this.state.values[v.key] || '' }
-                      onChange={ (e) => { this.onChange(e.target.value, v); } }
-                      onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
+                      onChange={ (newValue) => { this.onChange(newValue, v); } }
+                      onBlur={ () => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       style={ { height: '200px' } }
                       placeholder={ this.getPlaceholder(v) } />
                   </Col>
