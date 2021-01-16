@@ -425,14 +425,8 @@ class CreateModal extends Component {
       return;
     }
 
-    if ([ 'Text', 'TextArea' ].indexOf(field.type) !== -1) {
+    if ([ 'Text', 'TextArea', 'RichTextEditor' ].indexOf(field.type) !== -1) {
       if (newValue && field.maxLength && _.trim(newValue).length > field.maxLength) {
-        this.state.errors[field.key] = '字数必须在' + field.maxLength + '字之内';
-        this.setState({ values: this.state.values });
-        return;
-      }
-    } else if ('RichTextEditor' == field.type) {
-      if (newValue && field.maxLength && _.trim(newValue.replace(/<.*?>/g, '')).length > field.maxLength) {
         this.state.errors[field.key] = '字数必须在' + field.maxLength + '字之内';
         this.setState({ values: this.state.values });
         return;
