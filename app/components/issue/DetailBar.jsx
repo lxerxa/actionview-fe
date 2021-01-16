@@ -29,6 +29,8 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { getFileIconCss } from '../share/Funcs';
+import { RichTextEditor, RichTextReader } from './RichText';
+import { MultiRowsTextEditor, MultiRowsTextReader } from './MultiRowsText';
 
 const $ = require('$');
 const moment = require('moment');
@@ -54,7 +56,6 @@ const WorkflowCommentsModal = require('./WorkflowCommentsModal');
 const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const WatcherListModal = require('./WatcherListModal');
-const RichTextEditor = require('./RichTextEditor');
 
 const { API_BASENAME } = process.env;
 
@@ -70,8 +71,6 @@ export default class DetailBar extends Component {
       photoIndex: 0, 
       newAssignee: null,
       editAssignee: false, 
-      newProgress: 0,
-      editProgress: false, 
       editModalShow: false, 
       previewModalShow: false, 
       subtaskShow: true, 
@@ -128,7 +127,7 @@ export default class DetailBar extends Component {
     delFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     setAssignee: PropTypes.func.isRequired,
-    setProgress: PropTypes.func.isRequired,
+    setItemValue: PropTypes.func.isRequired,
     setLabels: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
@@ -179,7 +178,7 @@ export default class DetailBar extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.itemLoading) {
-      this.setState({ tabKey: 1, editAssignee: false });
+      this.setState({ tabKey: 1, editAssignee: false, editingItems: [] });
     }
   }
 
@@ -282,19 +281,26 @@ export default class DetailBar extends Component {
     this.setState({ editAssignee: false, newAssignee: null });
   }
 
-  async setProgress() {
-    const { setProgress, data } = this.props;
-    const ecode = await setProgress(data.id, { progress: this.state.newProgress - 0 });
+  async setItemValue(key, value) {
+    const { setItemValue, data } = this.props;
+    const { editingItems, newItemValues } = this.state;
+
+    const ecode = await setItemValue(data.id, { [ key ]: value });
     if (ecode === 0) {
-      this.setState({ editProgress: false, newProgress: 0 });
+      editingItems[key] = false;
+      newItemValues[key] = '';
+      this.setState({ editingItems, newItemValues });
       notify.show('已更新。', 'success', 2000);
     } else {
       notify.show('更新失败。', 'error', 2000);
     }
   }
 
-  cancelSetProgress() {
-    this.setState({ editProgress: false, newProgress: 0 });
+  cancelSetItem(key) {
+    const { editingItems, newItemValues } = this.state;
+    editingItems[key] = false;
+    newItemValues[key] = '';
+    this.setState({ editingItems, newItemValues });
   }
 
   handleAssigneeSelectChange(value) {
@@ -572,21 +578,19 @@ export default class DetailBar extends Component {
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
 
-  getRichTextItemContents(txt, fieldKey, fieldName, required) {
+  getTextAreaItemContents(txt, fieldKey, fieldName, required) {
     const { editingItems, newItemValues } = this.state;
     const { project } = this.props;
 
     if (editingItems[fieldKey]) {
       return (
         <div>
-          <RichTextEditor
-            id={ 'field-richeditor-' + fieldKey }
-            value={ txt || '' }
-            placeholder={ '输入' + fieldName }
-            uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
-            onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/> 
+          <FormControl
+            type='number'
+            value={ newItemValues[fieldKey] || 0 }
+            onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } } />
           <div className='edit-button-group'>
-            <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) } disabled={ txt == newItemValues[fieldKey] || (required && !newItemValues[fieldKey]) || newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
+            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ txt == newItemValues[fieldKey] || (required && !newItemValues[fieldKey]) || newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
             <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
           </div>
         </div> );
@@ -603,13 +607,48 @@ export default class DetailBar extends Component {
     const { inlinePreviewShow, photoIndex } = this.state;
     const { html, imgFileUrls } = this.extractImg(txt, fieldKey);
     return (
-      <div className='issue-text-field markdown-body' style={ { marginTop: '7px' } }>
+      <div className='issue-text-field' style={ { marginTop: '7px' } }>
         <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems, newItemValues }); } }><i className='fa fa-pencil'></i></div>
         <div
           onClick={ this.previewInlineImg.bind(this) }
+          style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }
           dangerouslySetInnerHTML={ { __html: html } } />
         { inlinePreviewShow[fieldKey] && this.createLightbox2(fieldKey, imgFileUrls, photoIndex) }
       </div>);
+  }
+
+  getRichTextItemContents(txt, fieldKey, fieldName, required) {
+    const { editingItems, newItemValues } = this.state;
+    const { project } = this.props;
+
+    if (editingItems[fieldKey]) {
+      return (
+        <div>
+          <RichTextEditor
+            id={ 'field-richeditor-' + fieldKey }
+            value={ txt || '' }
+            placeholder={ '输入' + fieldName }
+            uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+            onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/> 
+          <div className='edit-button-group'>
+            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ txt == newItemValues[fieldKey] || (required && !newItemValues[fieldKey]) || newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
+            <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
+          </div>
+        </div> );
+    }
+
+    if (!txt) {
+      return (
+        <div className='issue-text-field' style={ { marginTop: '7px', color: '#909090' } }>
+          <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }><i className='fa fa-pencil'></i></div>
+          未设置
+        </div>);
+    }
+
+    return (
+      <RichTextReader
+        key={ fieldKey }
+        value={ txt }/>)
   }
 
   componentDidMount() {
@@ -656,7 +695,7 @@ export default class DetailBar extends Component {
       move,
       convert,
       setAssignee,
-      setProgress,
+      setItemValue,
       setLabels,
       addLabels,
       resetState,
@@ -701,11 +740,26 @@ export default class DetailBar extends Component {
       photoIndex, 
       newAssignee, 
       editAssignee, 
-      editProgress, 
+      editingItems,
+      newItemValues,
       delFileShow, 
       selectedFile, 
       action_id 
     } = this.state;
+
+    const specialFields = [
+      'title', 
+      'resolution', 
+      'priority', 
+      'assignee', 
+      'descriptions', 
+      'epic', 
+      'labels', 
+      'resolve_version', 
+      'expect_start_time', 
+      'expect_complete_time', 
+      'progress'
+    ];
 
     const panelStyle = { marginBottom: '0px', borderTop: '0px', borderRadius: '0px' };
 
@@ -1056,7 +1110,7 @@ export default class DetailBar extends Component {
                     进度
                   </Col>
                   <Col sm={ 3 }>
-                    { !editProgress ?
+                    { !editingItems['progress'] ?
                     <div style={ { marginTop: '4px' } }>
                       { options.permissions && options.permissions.indexOf('edit_issue') !== -1 ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
@@ -1065,7 +1119,7 @@ export default class DetailBar extends Component {
                             { (data['progress'] || '0') + '%' }
                           </div>
                         </span>
-                        <span className='edit-icon-zone edit-icon' onClick={ () => { this.setState({ editProgress: true, newProgress: data['progress'] || 0 }) } }><i className='fa fa-pencil'></i></span>
+                        <span className='edit-icon-zone edit-icon' onClick={ () => { editingItems['progress'] = false; newItemValues['progress'] = data['progress'] || 0;  this.setState({ editingItems, newItemValues }) } }><i className='fa fa-pencil'></i></span>
                       </div> 
                       : 
                       <div style={ { marginTop: '7px' } }>
@@ -1077,12 +1131,12 @@ export default class DetailBar extends Component {
                       <FormControl 
                         type='number' 
                         min='0'
-                        value={ this.state.newProgress } 
-                        onChange={ (e) => { this.setState({ newProgress: e.target.value }) } }
+                        value={ newItemValues['progress'] || 0 } 
+                        onChange={ (e) => { newItemValues['progress'] = e.target.value; this.setState({ newItemValues }) } }
                         placeholder='进度值'/>
                       <div className='edit-button-group'>
-                        <Button className='edit-ok-button' onClick={ this.setProgress.bind(this) }><i className='fa fa-check'></i></Button>
-                        <Button className='edit-cancel-button' onClick={ this.cancelSetProgress.bind(this) }><i className='fa fa-close'></i></Button>
+                        <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, 'progress', newItemValues['progress'] - 0) }><i className='fa fa-check'></i></Button>
+                        <Button className='edit-cancel-button' onClick={ this.cancelSetItem.bind(this, 'progress') }><i className='fa fa-close'></i></Button>
                       </div>
                     </div> }
                   </Col>
@@ -1103,20 +1157,25 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.subtaskShow && data.subtasks.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px',  borderBottom: '1px solid #ddd' } }>
+                    <Table 
+                      condensed 
+                      hover 
+                      responsive 
+                      className={ (!this.state.subtaskShow && data.subtasks.length > 5) ? 'hide' : '' } 
+                      style={ { marginTop: '10px', marginBottom: '0px',  borderBottom: '1px solid #ddd' } }>
                       <tbody>
-                      { _.map(data.subtasks, (val, key) => {
-                        return (<tr key={ 'subtask' + key }>
-                          <td>
-                            <a href='#' style={ val.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>
-                            { val.no } - { val.title }
-                            </a>
-                          </td>
-                          <td style={ { whiteSpace: 'nowrap', width: '10px', textAlign: 'center' } }>
-                            { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
-                          </td>
-                        </tr>); 
-                      }) }
+                        { _.map(data.subtasks, (val, key) => (
+                          <tr key={ 'subtask' + key }>
+                            <td>
+                              <a href='#' style={ val.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>
+                                { val.no } - { val.title }
+                              </a>
+                            </td>
+                            <td style={ { whiteSpace: 'nowrap', width: '10px', textAlign: 'center' } }>
+                              { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
+                            </td>
+                          </tr>) 
+                          ) }
                       </tbody>
                     </Table>
                   </Col>
@@ -1138,52 +1197,58 @@ export default class DetailBar extends Component {
                         </a>
                       </span>
                     </div> }
-                    <Table condensed hover responsive className={ (!this.state.linkShow && data.links.length > 5) ? 'hide' : '' } style={ { marginTop: '10px', marginBottom: '0px', borderBottom: '1px solid #ddd' } }>
+                    <Table 
+                      condensed 
+                      hover 
+                      responsive 
+                      className={ (!this.state.linkShow && data.links.length > 5) ? 'hide' : '' } 
+                      style={ { marginTop: '10px', marginBottom: '0px', borderBottom: '1px solid #ddd' } }>
                       <tbody>
-                      { _.map(data.links, (val, key) => {
-                        let linkedIssue = {};
-                        let relation = '';
-                        let linkIssueId = ''
-                        if (val.src.id == data.id) {
-                          linkedIssue = val.dest;
-                          relation = val.relation;
-                          linkIssueId = val.dest.id;
-                        } else if (val.dest.id == data.id) {
-                          linkedIssue = val.src;
-                          relation = val.relation;
-                          const relationOutIndex = _.findIndex(options.relations || [], { out: relation });
-                          if (relationOutIndex !== -1) {
-                            relation = options.relations[relationOutIndex].in || '';
-                          } else {
-                            const relationInIndex = _.findIndex(options.relations || [], { in: relation });
-                            if (relationInIndex !== -1) {
-                              relation = options.relations[relationInIndex].out || '';
+                        { _.map(data.links, (val, key) => {
+                          let linkedIssue = {};
+                          let relation = '';
+                          let linkIssueId = ''
+                          if (val.src.id == data.id) {
+                            linkedIssue = val.dest;
+                            relation = val.relation;
+                            linkIssueId = val.dest.id;
+                          } else if (val.dest.id == data.id) {
+                            linkedIssue = val.src;
+                            relation = val.relation;
+                            const relationOutIndex = _.findIndex(options.relations || [], { out: relation });
+                            if (relationOutIndex !== -1) {
+                              relation = options.relations[relationOutIndex].in || '';
+                            } else {
+                              const relationInIndex = _.findIndex(options.relations || [], { in: relation });
+                              if (relationInIndex !== -1) {
+                                relation = options.relations[relationInIndex].out || '';
+                              }
                             }
+                            linkIssueId = val.src.id;
                           }
-                          linkIssueId = val.src.id;
-                        }
-                        return (<tr key={ 'link' + key }>
-                          <td>
-                            { relation }
-                            <br/>
-                            <a href='#' style={ linkedIssue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>
-                              { linkedIssue.no } - { linkedIssue.title }
-                            </a>
-                          </td>
-                          <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', textAlign: 'center', width: '10px' } }>
-                            { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }
-                          </td>
-                          <td style={ { verticalAlign: 'middle', width: '10px' } }>
-                            { options.permissions && options.permissions.indexOf('link_issue') !== -1 ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
-                          </td>
-                        </tr>); 
-                      }) }
+                          return (
+                            <tr key={ 'link' + key }>
+                              <td>
+                                { relation }
+                                <br/>
+                                <a href='#' style={ linkedIssue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>
+                                  { linkedIssue.no } - { linkedIssue.title }
+                                </a>
+                              </td>
+                              <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', textAlign: 'center', width: '10px' } }>
+                                { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }
+                              </td>
+                              <td style={ { verticalAlign: 'middle', width: '10px' } }>
+                                { options.permissions && options.permissions.indexOf('link_issue') !== -1 ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
+                              </td>
+                            </tr>); 
+                        }) }
                       </tbody>
                     </Table>
                   </Col>
                 </FormGroup> }
                 { _.map(schema, (field, key) => {
-                  if ([ 'title', 'resolution', 'priority', 'assignee', 'descriptions', 'epic', 'labels', 'resolve_version', 'expect_start_time', 'expect_complete_time', 'progress' ].indexOf(field.key) !== -1) {
+                  if (specialFields.indexOf(field.key) !== -1) {
                     return;
                   }
                   if (field.type === 'File') {
@@ -1294,14 +1359,10 @@ export default class DetailBar extends Component {
                         { inlinePreviewShow[field.key] && this.createLightbox2(field.key, imgFileUrls, photoIndex) }
                       </div>); 
                   } else if (field.type === 'RichTextEditor') {
-                    const { html, imgFileUrls } = this.extractImg(_.escape(data[field.key]), field.key);
                     contents = (
-                      <div className='issue-text-field markdown-body'>
-                        <div
-                          onClick={ this.previewInlineImg.bind(this) }
-                          dangerouslySetInnerHTML={ { __html: html } } />
-                          { inlinePreviewShow[field.key] && this.createLightbox2(field.key, imgFileUrls, photoIndex) }
-                      </div>);
+                      <RichTextReader
+                        key={ field.key }
+                        value={ data[field.key] } />);
                   } else {
                     contents = data[field.key];
                   }

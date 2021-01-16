@@ -9,11 +9,11 @@ import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { findDOMNode } from 'react-dom';
+import { RichTextEditor, RichTextReader } from './RichTextEditor';
 
 const $ = require('$');
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
-const RichTextEditor = require('./RichTextEditor');
 
 const { API_BASENAME } = process.env;
 

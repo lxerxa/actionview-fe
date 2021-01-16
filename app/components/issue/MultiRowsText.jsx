@@ -1,15 +1,15 @@
 import React, { PropTypes, Component } from 'react';
+import { FormControl } from 'react-bootstrap';
 import _ from 'lodash';
 import Lightbox from 'react-image-lightbox';
 
+const $ = require('$');
 const inlineAttachment = require('inlineAttachment2');
-const SimpleMDE = require('SimpleMDE');
-const marked = require('marked');
 
-class RichTextEditor extends React.Component {
+class MultiRowsTextEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.editor = null;
+    //this.state = { value: props.value };
   }
 
   static propTypes = {
@@ -27,75 +27,47 @@ class RichTextEditor extends React.Component {
     const { 
       id, 
       uploadUrl, 
-      onChange, 
-      onBlur, 
-      value, 
-      disabled,
-      placeholder 
+      onChange 
     } = this.props;
 
-    const DOM = document.getElementById(id);
-
-    this.editor = new SimpleMDE({
-      element: DOM,
-      placeholder: placeholder,
-      previewRender: (text) => this.editor.markdown(text),
-      autoDownloadFontAwesome: false,
-      showIcons: ['table'],
-      hideIcons: ['side-by-side', 'fullscreen'],
-      spellChecker: false,
-      status: false
-    }); 
-
     const self = this;
-    this.editor.codemirror.on('change', function() {
-      onChange(self.editor.value());
-    });
-
-    this.editor.codemirror.on('blur', function() {
-      onBlur && onBlur();
-    });
-
-    this.editor.value(value || '');
-
-    const inlineAttachmentConfig = {
+    $('#' + id).inlineattachment({
       allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-      uploadUrl: uploadUrl 
-    };
-    inlineAttachment.editors.codemirror4.attach(this.editor.codemirror, inlineAttachmentConfig);
+      uploadUrl: uploadUrl,
+      onFileUploaded: (editor, filename) => {
+        onChange(editor.getValue());
+      },
+      onFileReceived: (editor, file) => {
+        onChange(editor.getValue());
+      }
+    });
   }
-
-  componentWillReceiveProps(nextProps) {
-    this.editor.codemirror.options.readOnly = nextProps.disabled && true;
-  }
-
-  componentWillUnmount() {
-    delete this.editor.codemirror;
-    delete this.editor;
-  }
-
-  //componentDidUpdate(preProps) {
-  //  if (preProps.id != this.props.id) {
-  //    delete this.editor.codemirror;
-  //    delete this.editor;
-  //    const parentNode = document.getElementById(this.props.id + '-parent'); 
-  //    parentNode.innerHTML = '<textarea id="' + this.props.id + '"></textarea>';
-  //    this.create();
-  //  }
-  //}
 
   render() {
-    const { id } = this.props;
+    const { 
+      id,
+      value,
+      disabled,
+      onChange,
+      onBlur,
+      placeholder
+    } = this.props;
 
     return (
-      <div className='rich-text-editor markdown-body'>
-        <textarea id={ id }></textarea>
-      </div>
+      <FormControl
+        id={ id }
+        componentClass='textarea'
+        disabled={ disabled }
+        value={ value }
+        onChange={ (e) => { onChange(e.target.value); } }
+        onBlur={ onBlur }
+        style={ { height: '200px' } }
+        placeholder={ placeholder } />
     );
   }
 }
 
-class RichTextReader extends React.Component {
+class MultiRowsTextReader extends React.Component {
   constructor(props) {
     super(props);
     this.state = { photoIndex: 0, inlinePreviewShow: false };
@@ -107,25 +79,34 @@ class RichTextReader extends React.Component {
     value: PropTypes.string.isRequired
   }
 
-  extractImg(key, value) {
-    marked.setOptions({ breaks: true });
-    let html = marked(value);
-    const images = html.match(/<img(.*?)>/ig);
+  extractImg(key, txt) {
+    const images = txt.match(/!\[(.*?)\]\((.*?)\)/ig);
     const imgFiles = [];
     if (images) {
       _.forEach(images, (v, i) => {
-        const pattern = new RegExp('^<img src="(.*?)"(.*?)>$');
+        const pattern = new RegExp('^!\\[(.*?)\\]\\((.*?)\\)$');
         if (pattern.exec(v)) {
-          const imgurl = RegExp.$1;
+          const imgurl = RegExp.$2;
           if (!imgurl) {
             return;
           }
-          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '"/>');
+          const alt = RegExp.$1 || '';
+          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
           imgFiles.push(imgurl);
         }
       });
+      txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
     }
-    return { html, imgFiles };
+
+    const links = txt.match(/\[.*?\]\(.*?\)/ig);
+    if (links) {
+      _.forEach(links, (v, i) => {
+        const pattern = new RegExp('^\\[(.*?)\\]\\((.*?)\\)$');
+        pattern.exec(v);
+        txt = txt.replace(v, '<a target="_blank" href="' + RegExp.$2 + '">' + RegExp.$1 + '</a>');
+      });
+    }
+    return { html: txt.replace(/(\r\n)|(\n)/g, '<br/>'), imgFiles };
   }
 
   previewInlineImg(e) {
@@ -152,7 +133,7 @@ class RichTextReader extends React.Component {
     const { html, imgFiles } = this.extractImg(key, value);
 
     return (
-      <div className='issue-text-field markdown-body'>
+      <div className='issue-text-field'>
         <div
           onClick={ this.previewInlineImg.bind(this) }
           dangerouslySetInnerHTML={ { __html: html } } />
@@ -172,6 +153,6 @@ class RichTextReader extends React.Component {
 }
 
 module.exports = {
-  RichTextEditor,
-  RichTextReader
+  MultiRowsTextEditor,
+  MultiRowsTextReader
 }
