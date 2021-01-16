@@ -103,6 +103,8 @@ class RichTextReader extends React.Component {
   }
 
   static propTypes = {
+    isEditable: PropTypes.bool,
+    onEdit: PropTypes.func,
     key: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired
   }
@@ -146,16 +148,25 @@ class RichTextReader extends React.Component {
   }
 
   render() {
-    const { key, value } = this.props;
+    const { 
+      isEditable, 
+      onEdit,
+      key, 
+      value 
+    } = this.props;
     const { inlinePreviewShow, photoIndex } = this.state;
 
-    const { html, imgFiles } = this.extractImg(key, value);
+    const { html, imgFiles } = this.extractImg(key, value || '');
+
+    console.log(html);
 
     return (
       <div className='issue-text-field markdown-body'>
+        { isEditable &&
+          <div className='edit-button' onClick={ () => { onEdit && onEdit() } }><i className='fa fa-pencil'></i></div> }
         <div
           onClick={ this.previewInlineImg.bind(this) }
-          dangerouslySetInnerHTML={ { __html: html } } />
+          dangerouslySetInnerHTML={ { __html: html || '<span style="color: #909090">未设置</span>' } } />
         { inlinePreviewShow &&
           <Lightbox
             mainSrc={ imgFiles[photoIndex] }

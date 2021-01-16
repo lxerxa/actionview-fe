@@ -646,7 +646,8 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] || '' }
                       onChange={ (newValue) => { this.onChange(newValue, v); } }
                       onBlur={ () => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      style={ { height: '200px' } }
+                      uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                      style={ { height: '180px' } }
                       placeholder={ this.getPlaceholder(v) } />
                   </Col>
                   <Col sm={ 1 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>

@@ -9,7 +9,7 @@ const inlineAttachment = require('inlineAttachment2');
 class MultiRowsTextEditor extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = { value: props.value };
+    this.state = { value: props.value };
   }
 
   static propTypes = {
@@ -35,9 +35,11 @@ class MultiRowsTextEditor extends React.Component {
       allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
       uploadUrl: uploadUrl,
       onFileUploaded: (editor, filename) => {
+        self.setState({ value: editor.getValue() });
         onChange(editor.getValue());
       },
       onFileReceived: (editor, file) => {
+        self.setState({ value: editor.getValue() });
         onChange(editor.getValue());
       }
     });
@@ -58,10 +60,10 @@ class MultiRowsTextEditor extends React.Component {
         id={ id }
         componentClass='textarea'
         disabled={ disabled }
-        value={ value }
-        onChange={ (e) => { onChange(e.target.value); } }
+        value={ this.state.value }
+        onChange={ (e) => { this.setState({ value: e.target.value }); onChange(e.target.value); } }
         onBlur={ onBlur }
-        style={ { height: '200px' } }
+        style={ { height: '180px' } }
         placeholder={ placeholder } />
     );
   }
@@ -75,6 +77,8 @@ class MultiRowsTextReader extends React.Component {
   }
 
   static propTypes = {
+    isEditable: PropTypes.bool,
+    onEdit: PropTypes.bool,
     key: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired
   }
@@ -127,16 +131,23 @@ class MultiRowsTextReader extends React.Component {
   }
 
   render() {
-    const { key, value } = this.props;
+    const { 
+      isEditable, 
+      onEdit,
+      key, 
+      value='' 
+    } = this.props;
     const { inlinePreviewShow, photoIndex } = this.state;
 
     const { html, imgFiles } = this.extractImg(key, value);
 
     return (
       <div className='issue-text-field'>
+        { isEditable &&
+          <div className='edit-button' onClick={ () => { onEdit && onEdit() } }><i className='fa fa-pencil'></i></div> }
         <div
           onClick={ this.previewInlineImg.bind(this) }
-          dangerouslySetInnerHTML={ { __html: html } } />
+          dangerouslySetInnerHTML={ { __html: html || '<span style="color: #909090">未设置</span>' } } />
         { inlinePreviewShow &&
           <Lightbox
             mainSrc={ imgFiles[photoIndex] }

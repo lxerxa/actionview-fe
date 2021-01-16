@@ -101,7 +101,6 @@ export default class DetailBar extends Component {
     this.watch = this.watch.bind(this);
     this.getLabelStyle = this.getLabelStyle.bind(this);
     this.createLightbox = this.createLightbox.bind(this);
-    this.createLightbox2 = this.createLightbox2.bind(this);
     this.getRichTextItemContents = this.getRichTextItemContents.bind(this);
     this.getTextAreaItemContents = this.getTextAreaItemContents.bind(this);
   }
@@ -501,57 +500,6 @@ export default class DetailBar extends Component {
     return style;
   }
 
-  extractImg2(txt, field_key) {
-    const images = txt.match(/!\[(.*?)\]\((.*?)\)/ig);
-    const imgFileUrls = [];
-    if (images) {
-      _.forEach(images, (v, i) => {
-        const pattern = new RegExp('^!\\[(.*?)\\]\\((.*?)\\)$');
-        if (pattern.exec(v)) {
-          const imgurl = RegExp.$2;
-          if (!imgurl) {
-            return;
-          }
-          const alt = RegExp.$1 || '';
-          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
-          imgFileUrls.push(imgurl);
-        }
-      });
-      txt = txt.replace(/<\/div>(\s*?)<div>/ig, '');
-    }
-
-    const links = txt.match(/\[.*?\]\(.*?\)/ig);
-    if (links) {
-      _.forEach(links, (v, i) => {
-        const pattern = new RegExp('^\\[(.*?)\\]\\((.*?)\\)$');
-        pattern.exec(v);
-        txt = txt.replace(v, '<a target="_blank" href="' + RegExp.$2 + '">' + RegExp.$1 + '</a>');
-      });
-    }
-    return { html: txt.replace(/(\r\n)|(\n)/g, '<br/>'), imgFileUrls };
-  }
-
-  extractImg(txt, field_key) {
-    marked.setOptions({ breaks: true });
-    let html = marked(txt);
-    const images = html.match(/<img(.*?)>/ig);
-    const imgFileUrls = [];
-    if (images) {
-      _.forEach(images, (v, i) => {
-        const pattern = new RegExp('^<img src="(.*?)"(.*?)>$');
-        if (pattern.exec(v)) {
-          const imgurl = RegExp.$1;
-          if (!imgurl) {
-            return;
-          }
-          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + field_key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '"/>');
-          imgFileUrls.push(imgurl);
-        }
-      });
-    }
-    return { html, imgFileUrls };
-  }
-
   createLightbox(field_key, imgFiles, photoIndex) {
     const { project } = this.props;
     return (
@@ -566,22 +514,9 @@ export default class DetailBar extends Component {
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
 
-  createLightbox2(field_key, imgFiles, photoIndex) {
-    return (
-      <Lightbox
-        mainSrc={ imgFiles[photoIndex] }
-        nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
-        prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
-        imageTitle=''
-        imageCaption=''
-        onCloseRequest={ () => { this.state.inlinePreviewShow[field_key] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
-        onMovePrevRequest={ () => this.setState({ photoIndex: (photoIndex + imgFiles.length - 1) % imgFiles.length }) }
-        onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
-  }
-
   getTextAreaItemContents(txt, fieldKey, fieldName, required) {
     const { editingItems, newItemValues } = this.state;
-    const { project } = this.props;
+    const { project, options } = this.props;
 
     if (editingItems[fieldKey]) {
       return (
@@ -599,30 +534,17 @@ export default class DetailBar extends Component {
         </div> );
     }
 
-    if (!txt) {
-      return (
-        <div className='issue-text-field' style={ { marginTop: '7px', color: '#909090' } }>
-          <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }><i className='fa fa-pencil'></i></div>
-          未设置
-        </div>);
-    }
-
-    const { inlinePreviewShow, photoIndex } = this.state;
-    const { html, imgFileUrls } = this.extractImg(txt, fieldKey);
     return (
-      <div className='issue-text-field' style={ { marginTop: '7px' } }>
-        <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems, newItemValues }); } }><i className='fa fa-pencil'></i></div>
-        <div
-          onClick={ this.previewInlineImg.bind(this) }
-          style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }
-          dangerouslySetInnerHTML={ { __html: html } } />
-        { inlinePreviewShow[fieldKey] && this.createLightbox2(fieldKey, imgFileUrls, photoIndex) }
-      </div>);
+      <MultiRowsTextReader
+        isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
+        onEdit={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }
+        key={ fieldKey }
+        value={ txt }/>);
   }
 
   getRichTextItemContents(txt, fieldKey, fieldName, required) {
     const { editingItems, newItemValues } = this.state;
-    const { project } = this.props;
+    const { project, options } = this.props;
 
     if (editingItems[fieldKey]) {
       return (
@@ -640,18 +562,12 @@ export default class DetailBar extends Component {
         </div> );
     }
 
-    if (!txt) {
-      return (
-        <div className='issue-text-field' style={ { color: '#909090' } }>
-          <div className='edit-button' onClick={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }><i className='fa fa-pencil'></i></div>
-          未设置
-        </div>);
-    }
-
     return (
       <RichTextReader
+        isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
+        onEdit={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }
         key={ fieldKey }
-        value={ txt }/>)
+        value={ txt }/>);
   }
 
   componentDidMount() {
