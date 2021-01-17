@@ -1042,7 +1042,7 @@ export default class DetailBar extends Component {
                             { (data['progress'] || '0') + '%' }
                           </div>
                         </span>
-                        <span className='edit-icon-zone edit-icon' onClick={ () => { editingItems['progress'] = false; newItemValues['progress'] = data['progress'] || 0;  this.setState({ editingItems, newItemValues }) } }><i className='fa fa-pencil'></i></span>
+                        <span className='edit-icon-zone edit-icon' onClick={ () => { editingItems['progress'] = true; newItemValues['progress'] = data['progress'] || 0;  this.setState({ editingItems, newItemValues }) } }><i className='fa fa-pencil'></i></span>
                       </div> 
                       : 
                       <div style={ { marginTop: '7px' } }>

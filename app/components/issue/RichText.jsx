@@ -67,7 +67,9 @@ class RichTextEditor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.editor.codemirror.options.readOnly = nextProps.disabled && true;
+    if (this.editor && this.editor.codemirror) {
+      this.editor.codemirror.options.readOnly = nextProps.disabled && true;
+    }
   }
 
   componentWillUnmount() {
