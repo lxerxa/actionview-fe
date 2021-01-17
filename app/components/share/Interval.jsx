@@ -66,7 +66,7 @@ export default class Interval extends Component {
           <FormControl
             type='text'
             value={ this.state.max }
-            onBlur={ onBlur }
+            onBlur={ () => { onBlur && onBlur() } }
             onKeyDown={ (e) => { keyPress(e); } }
             onChange={ (e) => { this.onChange({ max: e.target.value }) } }
             placeholder={ '输入结束值' }/>

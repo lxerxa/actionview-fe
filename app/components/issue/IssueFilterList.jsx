@@ -62,7 +62,7 @@ export class IssueFilterList extends Component {
   }
 
   groupFields(fields, columns=3) {
-    const { textInputChange=false } = this.props;
+    const { textInputChange=false, values } = this.props;
 
     const filters = [];
     _.forEach(fields, (v) => {
@@ -76,7 +76,7 @@ export class IssueFilterList extends Component {
               <FormControl
                 type='text'
                 value={ this.state.values[v.key] || '' }
-                onBlur={ this.onChange }
+                onBlur={ () => { this.state.values[v.key] != values[v.key] && this.onChange() } }
                 onKeyDown={ (e) => { if (e.keyCode == '13') { this.onChange(); } } }
                 onChange={ (e) => { this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }
                 placeholder={ '输入' + (v.desc || v.name) } />
@@ -120,7 +120,7 @@ export class IssueFilterList extends Component {
             <Col sm={ 12 / columns - 1 }>
               <Interval
                 value={ this.state.values[v.key] }
-                onBlur={ this.onChange }
+                onBlur={ () => { this.state.values[v.key] != values[v.key] && this.onChange() } }
                 keyPress={ (e) => { if (e.keyCode == '13') { this.onChange(); } } }
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }/>
             </Col>
