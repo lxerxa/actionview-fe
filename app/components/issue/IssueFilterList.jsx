@@ -66,7 +66,7 @@ export class IssueFilterList extends Component {
 
     const filters = [];
     _.forEach(fields, (v) => {
-      if (v.type === 'Text' || v.type === 'TextArea' || v.type === 'Url') {
+      if (v.type === 'Text' || v.type === 'TextArea' || v.type === 'RichTextEditor' || v.type === 'Url') {
         filters.push(
           <div>
             <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -76,6 +76,7 @@ export class IssueFilterList extends Component {
               <FormControl
                 type='text'
                 value={ this.state.values[v.key] || '' }
+                onBlur={ this.onChange }
                 onKeyDown={ (e) => { if (e.keyCode == '13') { this.onChange(); } } }
                 onChange={ (e) => { this.state.values[v.key] = e.target.value; this.setState({ values: this.state.values }); if (textInputChange) { this.onChange(); } } }
                 placeholder={ '输入' + (v.desc || v.name) } />
@@ -302,7 +303,6 @@ export class IssueFilterList extends Component {
               </FormGroup> )
           }) }
         </div> }
-        <div style={ { color: 'red', marginLeft: '5px' } }>注：文本框检索 - 输入内容后回车即可检索。</div>
       </Form>
     );
   }
@@ -328,7 +328,7 @@ export function parseQuery(query, options) {
     { key: 'resolve_version', type: 'MultiSelect', name: '解决版本', optionValues: versions  },
     { key: 'effect_versions', type: 'MultiSelect', name: '影响版本', optionValues: versions },
     { key: 'labels', name: '标签', type: 'MultiSelect' },
-    { key: 'description', name: '描述', type: 'TextArea' },
+    { key: 'descriptions', name: '描述', type: 'RichTextEditor' },
     { key: 'reporter', name : '报告人', type: 'MultiSelect', optionValues: userOptions },
     { key: 'assignee', name: '负责人', type: 'MultiSelect', optionValues: userOptions },
     { key: 'watcher', name : '关注者', type: 'MultiSelect', optionValues: userOptions },
@@ -369,7 +369,7 @@ export function parseQuery(query, options) {
   for(let i = 0; i < sections.length; i++) {
     const v = sections[i];
     if (query[v.key]) {
-      if ('labels' == v.key || [ 'Text', 'TextArea', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
+      if ('labels' == v.key || [ 'Text', 'TextArea', 'RichTextEditor', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
         queryConds.push(v.name + '～' + query[v.key]);
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
         const queryNames = [];

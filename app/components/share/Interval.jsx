@@ -10,13 +10,15 @@ export default class Interval extends Component {
     super(props);
     this.state = { 
       min: '', 
-      max: '' };
+      max: '' 
+    };
     this.getValue = this.getValue.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   static propTypes = {
     keyPress: PropTypes.func,
+    onBlur: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.string
   }
@@ -32,7 +34,7 @@ export default class Interval extends Component {
   async onChange(data) {
     const { onChange } = this.props;
     await this.setState(data);
-    onChange(this.getValue());
+    onChange && onChange(this.getValue());
   }
 
   getValue() {
@@ -46,7 +48,7 @@ export default class Interval extends Component {
   }
 
   render() {
-    const { keyPress } = this.props;
+    const { keyPress, onBlur } = this.props;
 
     return (
       <div style={ { display: 'inline' } }>
@@ -54,6 +56,7 @@ export default class Interval extends Component {
           <FormControl
             type='text'
             value={ this.state.min }
+            onBlur={ () => { onBlur && onBlur() } }
             onKeyDown={ (e) => { keyPress(e); } }
             onChange={ (e) => { this.onChange({ min: e.target.value }) } }
             placeholder={ '输入开始值' }/>
@@ -63,6 +66,7 @@ export default class Interval extends Component {
           <FormControl
             type='text'
             value={ this.state.max }
+            onBlur={ onBlur }
             onKeyDown={ (e) => { keyPress(e); } }
             onChange={ (e) => { this.onChange({ max: e.target.value }) } }
             placeholder={ '输入结束值' }/>
