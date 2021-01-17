@@ -30,7 +30,7 @@ const validate = (values, props) => {
 
   if (values.start_time && values.end_time) {
     if (values.start_time > values.end_time) {
-      errors.start_time = '开始时间要早于完成时间';
+      errors.start_time = '计划开始时间要早于计划完成时间';
     }
   }
 
@@ -123,7 +123,7 @@ export default class EditModal extends Component {
           </FormGroup>
           <div>
             <FormGroup style={ { width: '45%', display: 'inline-block' } } validationState={ start_time.value && start_time.error ? 'error' : null }>
-              <ControlLabel>开始时间</ControlLabel>
+              <ControlLabel>计划开始时间</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 
@@ -135,7 +135,7 @@ export default class EditModal extends Component {
               { start_time.value && start_time.error && <HelpBlock style={ { float: 'right' } }>{ start_time.error }</HelpBlock> }
             </FormGroup>
             <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } } validationState={ end_time.value && end_time.error ? 'error' : null }>
-              <ControlLabel>完成时间</ControlLabel>
+              <ControlLabel>计划完成时间</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 

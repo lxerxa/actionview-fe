@@ -42,7 +42,7 @@ export default class DetailModal extends Component {
             </FormGroup>
             <FormGroup>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                开始时间 
+                计划开始时间 
               </Col>
               <Col sm={ 9 }>
                 <div style={ { marginTop: '7px' } }>
@@ -52,7 +52,7 @@ export default class DetailModal extends Component {
             </FormGroup>
             <FormGroup>
               <Col sm={ 3 } componentClass={ ControlLabel }>
-                完成时间
+                计划完成时间
               </Col>
               <Col sm={ 9 }>
                 <div style={ { marginTop: '7px' } }>

@@ -282,13 +282,13 @@ export default class List extends Component {
               <div style={ { display: 'table', width: '100%' } }>
               { collection[i].defaultAssignee ?
                 <span>
-                  <div style={ { display: 'inline-block', float: 'left', margin: '3px' } }> 
+                  <div style={ { display: 'inline-block', float: 'left', margin: '5px 3px' } }> 
                     { _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }) ? _.find(defaultAssigneeOptions, { value: collection[i].defaultAssignee }).label : '-' } 
                   </div>
                 </span> 
                 :
                 <span>
-                  <div style={ { display: 'inline-block', margin: '3px' } }>-</div>
+                  <div style={ { display: 'inline-block', margin: '5px 3px' } }>-</div>
                 </span> }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
               </div>

@@ -232,7 +232,7 @@ export default class Grids extends Component {
               <div className='file-content'>
                 <Link to={ '/project/' + project.key + '/document' + (options.path[options.path.length - 2].id !== '0' ? ('/' + options.path[options.path.length - 2].id ) : '') } style={ { textDecoration: 'none' } }>
                   <div className='file-thumb'>
-                    <div style={ { fontSize: '80px', color: '#FFD300', marginBottom: '30px' } }>..</div> 
+                    <div style={ { fontSize: '85px', color: '#FFD300', marginBottom: '30px' } }>..</div> 
                   </div>
                   <div className='file-title-container'>
                     <div className='file-title'>返回上级</div>
@@ -285,7 +285,7 @@ export default class Grids extends Component {
                   </div> }
                   <Link to={ '/project/' + project.key + '/document/' + v.id }>
                     <div className='file-thumb'>
-                      <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
+                      <span style={ { fontSize: '85px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
                     </div>
                     <div className='file-title-container'>
                       <div className='file-title'>{ v.name }</div>
@@ -331,7 +331,7 @@ export default class Grids extends Component {
                     { v.thumbnails_index ?
                       <img src={ API_BASENAME + '/project/' + project.key + '/document/' + v.id + '/downloadthumbnails' }/>
                       :
-                      <span style={ { fontSize: '80px', color: '#aaa' } }>
+                      <span style={ { fontSize: '85px', color: '#aaa' } }>
                         <i className={ getFileIconCss(v.name) }></i>
                       </span> }
                     </div>

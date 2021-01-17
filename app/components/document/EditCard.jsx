@@ -101,14 +101,14 @@ export default class EditCard extends Component {
         <div className='file-content'>
           { (mode === 'createFolder' || mode === 'editFolder') &&
             <div className='file-thumb'>
-              <span style={ { fontSize: '80px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
+              <span style={ { fontSize: '85px', color: '#FFD300' } }><i className='fa fa-folder'></i></span>
             </div> }
           { mode === 'editFile' && 
             <div className='file-thumb'>
               { imgsrc ?
                 <img src={ imgsrc } />
                 :
-                <span style={ { fontSize: '80px', color: '#aaa' } }><i className={ fileIconCss }></i></span> }
+                <span style={ { fontSize: '85px', color: '#aaa' } }><i className={ fileIconCss }></i></span> }
             </div> }
           <div className='file-title-container'>
             <FormControl 
@@ -118,7 +118,7 @@ export default class EditCard extends Component {
               value={ this.state.name } 
               onKeyDown={ (e) => { if (e.keyCode == '13' && !(this.state.name === this.state.oldname || !this.state.name)) { this.confirm(); } } }
               onChange={ (e) => { this.setState({ name: _.trim(e.target.value) }) } }
-              style={ { height: '30px', width: '85px', display: 'inline-block' } }/>
+              style={ { height: '30px', width: '95px', display: 'inline-block' } }/>
             { !loading &&
             <Button disabled={ this.state.name === this.state.oldname || !this.state.name } style={ { marginLeft: '5px', padding: '4px 10px' } } onClick={ this.confirm }>确定</Button> }
             { !loading &&

@@ -221,9 +221,9 @@ export default class List extends Component {
         <BootstrapTable data={ versions } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
-          <TableHeaderColumn dataField='start_time' width='120'>开始时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='end_time' width='120'>完成时间</TableHeaderColumn>
-          <TableHeaderColumn dataField='released_time' width='120'>发布时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='start_time' width='130'>计划开始时间</TableHeaderColumn>
+          <TableHeaderColumn dataField='end_time' width='130'>计划完成时间</TableHeaderColumn>
+          {/*<TableHeaderColumn dataField='released_time' width='130'>发布时间</TableHeaderColumn>*/}
           <TableHeaderColumn dataField='issues' width='150'>问题完成情况</TableHeaderColumn>
           <TableHeaderColumn dataField='status' width='100'>状态</TableHeaderColumn>
           <TableHeaderColumn width='80' dataField='operation'/>
