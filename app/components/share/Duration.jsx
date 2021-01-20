@@ -9,16 +9,18 @@ export default class Duration extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      options: !_.isEmpty(props.options) ? props.options : [ 'fixed', 'current_variable', 'inside_variable', 'outside_variable' ],
-      mode: 'fixed', 
+      options: !_.isEmpty(props.options) ? props.options : [ 'fixed', 'variable' ],
+      mode: 'fixed',
       start_time: '', 
       end_time: '', 
-      current_variable: '', 
-      inside_variable: '', 
-      outside_variable: '' 
+      start_direct: '', // current: 当前，past：过去，future：将来
+      start_value: '',
+      end_direct: '', // current: 当前，past：过去，future：将来
+      end_value: ''
     };
     this.getValue = this.getValue.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.startDirectChange = this.startDirectChange.bind(this);
   }
 
   static propTypes = {
@@ -27,30 +29,88 @@ export default class Duration extends Component {
     value: PropTypes.string
   }
 
+  startDirectChange(newValue) {
+    const { start_value } = this.state;
+    this.onChange({ start_direct: newValue, start_value: '' });
+    /*
+    if (newValue == 'current') {
+      if (start_value.length == 1) {
+        this.onChange({ start_direct: newValue, start_value: newValue });
+      } else {
+        this.onChange({ start_direct: newValue, start_value: '' });
+      }
+    } else {
+      if (start_value.length > 1) {
+        this.onChange({ start_direct: newValue, start_value: newValue });
+      } else {
+        this.onChange({ start_direct: newValue, start_value: '' });
+      }
+    }*/
+  }
+
   componentWillReceiveProps(nextProps) {
 
-    let mode = 'fixed', start_time = '', end_time = '', current_variable = '', inside_variable = '', outside_variable = '';
-    const suffix_list = [ 'w', 'm', 'y' ];
+    let {
+      mode,
+      start_time,
+      end_time,
+      start_direct,
+      start_value,
+      end_direct,
+      end_value
+    } = this.state;
+
+    const suffix_list = [ 'd', 'w', 'm', 'y' ];
 
     const duration = nextProps.value || '';
-    if (!duration || duration.indexOf('~') !== -1) {
-      mode = 'fixed'; 
-      const sections = duration.split('~');
-      start_time = sections[0] ? moment(sections[0]) : '';
-      end_time = sections[1] ? moment(sections[1]) : '';
-    } else if ([ '0d', '0w', '0m', '0y' ].indexOf(duration) !== -1) {
-      mode = 'current_variable';
-      current_variable = duration;
-    } else if (suffix_list.indexOf(duration.substr(duration.length - 1)) !== -1) {
-      if (_.startsWith(duration, '-')) {
-        mode = 'outside_variable';
-        outside_variable = duration;
+    const sections = duration.split('~');
+    if (sections.length > 0) {
+      let unit = '';
+      if (sections[0]) {
+        unit = sections[0].charAt(sections[0].length - 1);
+      } else if (sections[1]) {
+        unit = sections[1].charAt(sections[1].length - 1);
+      }
+
+      if (suffix_list.indexOf(unit) !== -1) {
+        mode = 'variable';
+      }
+
+      if (mode == 'fixed') {
+        start_time = sections[0] || '';
+        end_time = sections[1] || '';
       } else {
-        mode = 'inside_variable';
-        inside_variable = duration;
+        if (sections[0]) {
+          const firstChar = sections[0].charAt(0);
+          if (firstChar == '-') {
+            start_direct = 'past';
+            start_value = sections[0].substr(1);
+          } else if (firstChar == '0') {
+            start_direct = 'current';
+            start_value = sections[0].substr(1);
+          } else {
+            start_direct = 'future';
+            start_value = sections[0];
+          }
+        }
+
+        if (sections[1]) {
+          const firstChar = sections[1].charAt(0);
+          if (firstChar == '-') {
+            end_direct = 'past';
+            end_value = sections[1].substr(1);
+          } else if (firstChar == '0') {
+            end_direct = 'current';
+            end_value = sections[1].substr(1);;
+          } else {
+            end_direct = 'future';
+            end_value = sections[1];
+          }
+        }
       }
     }
-    this.setState({ mode, start_time, end_time, current_variable, inside_variable, outside_variable });
+
+    this.setState({ mode, start_time, end_time, start_direct, start_value, end_direct, end_value });
   }
 
   async onChange(data) {
@@ -63,7 +123,15 @@ export default class Duration extends Component {
   }
 
   getValue() {
-    const { start_time, end_time, mode, current_variable, inside_variable, outside_variable } = this.state;
+    const { 
+      mode, 
+      start_time, 
+      end_time, 
+      start_direct, 
+      start_value, 
+      end_direct, 
+      end_value 
+    } = this.state;
 
     if (mode === 'fixed') {
       if (start_time || end_time) {
@@ -71,12 +139,29 @@ export default class Duration extends Component {
       } else {
         return '';
       }
-    } else if (mode === 'current_variable') {
-      return current_variable;
-    } else if (mode === 'outside_variable') {
-      return outside_variable;
-    } else if (mode === 'inside_variable') {
-      return inside_variable;
+    } else if (mode === 'variable') {
+      let tmp_start_time = '', tmp_end_time = '';
+      if (start_direct && start_value) {
+        if (start_direct == 'current') {
+          tmp_start_time = '0' + start_value;
+        } else if (start_direct == 'past') {
+          tmp_start_time = '-' + start_value;
+        } else if (start_direct == 'future') {
+          tmp_start_time = start_value;
+        }
+      }
+
+      if (end_direct && end_value) {
+        if (end_direct == 'current') {
+          tmp_end_time = '0' + end_value;
+        } else if (end_direct == 'past') {
+          tmp_end_time = '-' + end_value;
+        } else if (end_direct == 'future') {
+          tmp_end_time = end_value;
+        }
+      }
+
+      return !tmp_start_time && !tmp_end_time ? '' : (tmp_start_time + '~' + tmp_end_time);
     } else {
       return '';
     }
@@ -84,14 +169,35 @@ export default class Duration extends Component {
 
   render() {
 
+    const { 
+      options,
+      mode, 
+      start_time, 
+      end_time, 
+      start_direct, 
+      start_value, 
+      end_direct, 
+      end_value 
+    } = this.state;
+
     const modeOptions = [
       { value: 'fixed', label: '固定时间段' }, 
-      { value: 'current_variable', label: '当前时间段' }, 
-      { value: 'inside_variable', label: '时间段之内' }, 
-      { value: 'outside_variable', label: '时间段之外' }
+      { value: 'variable', label: '动态时间段' }
     ];
 
-    const variable_durations = [
+    const directOptions = [
+      { value: 'current', label: '当前' },
+      { value: 'past', label: '过去' },
+      { value: 'future', label: '未来' }
+    ];
+
+    const variableDurations = [
+      { value: '1d', label: '1天' },
+      { value: '2d', label: '2天' },
+      { value: '3d', label: '3天' },
+      { value: '4d', label: '4天' },
+      { value: '5d', label: '5天' },
+      { value: '6d', label: '6天' },
       { value: '1w', label: '1周' },
       { value: '2w', label: '2周' },
       { value: '3w', label: '3周' },
@@ -110,67 +216,53 @@ export default class Duration extends Component {
       { value: '2y', label: '2年' }
     ];
 
-    const current_variable_durations = [
-      { value: '0d', label: '当天' },
-      { value: '0w', label: '当前周' },
-      { value: '0m', label: '当月' },
-      { value: '0y', label: '当前年' }
+    const currentVariableDurations = [
+      { value: 'd', label: '天' },
+      { value: 'w', label: '周' },
+      { value: 'm', label: '月' },
+      { value: 'y', label: '年' }
     ];
 
     return (
       <div style={ { display: 'inline' } } onClick={ (e) => { e.stopPropagation(); } }>
-        { this.state.options.length > 1 &&
-        <div style={ { width: '26%', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
+        { options.length > 1 &&
+        <div style={ { width: '140px', display: 'inline-block', float: 'left', paddingRight: '10px' } }>
           <Select
             options={ _.filter(modeOptions, (v) => this.state.options.indexOf(v.value) !== -1) }
             disabled={ false }
             simpleValue
             searchable={ false }
             clearable={ false }
-            value={ this.state.mode }
+            value={ mode }
             onChange={ (newValue) => { this.setState({ mode: newValue }) } }
             placeholder='请选择'/>
         </div> }
-        { this.state.mode === 'current_variable' &&
-        <div style={ { width: '40%', display: 'inline-block', float: 'left' } }>
+        { mode === 'variable' &&
+        <div style={ { width: '100px', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
           <Select
-            options={ current_variable_durations }
+            options={ directOptions }
             disabled={ false }
             simpleValue
             searchable={ false }
             clearable={ true }
-            value={ this.state.current_variable || null }
-            onChange={ (newValue) => { this.onChange({ current_variable: newValue }); } }
+            value={ start_direct || null }
+            onChange={ (newValue) => { if (start_value) { this.onChange({ start_direct: newValue, start_value: '' }); } else { this.setState({ start_direct: newValue }) } } }
             placeholder='请选择'/>
         </div> }
-        { this.state.mode === 'outside_variable' &&
-        <div style={ { width: '40%', display: 'inline-block', float: 'left' } }>
+        { this.state.mode === 'variable' &&
+        <div style={ { width: '110px', display: 'inline-block', float: 'left' } }>
           <Select
-            options={ _.map(variable_durations, (v) => { return { value: '-' + v.value, label: v.label } }) }
+            options={ !start_direct ? [] : (start_direct == 'current' ? currentVariableDurations : variableDurations) }
             disabled={ false }
             simpleValue
             searchable={ false }
             clearable={ true }
-            value={ this.state.outside_variable || null }
-            onChange={ (newValue) => { this.onChange({ outside_variable: newValue }); } }
+            value={ start_value || null }
+            onChange={ (newValue) => { this.onChange({ start_value: newValue }); } }
             placeholder='请选择'/>
         </div> }
-        { this.state.mode === 'outside_variable' && <span style={ { float: 'left', marginTop: '8px', marginLeft: '2px' } }>之外</span> }
-        { this.state.mode === 'inside_variable' &&
-        <div style={ { width: '40%', display: 'inline-block', float: 'left' } }>
-          <Select
-            options={ variable_durations }
-            disabled={ false }
-            simpleValue
-            searchable={ false }
-            clearable={ true }
-            value={ this.state.inside_variable || null }
-            onChange={ (newValue) => { this.onChange({ inside_variable: newValue }); } }
-            placeholder='请选择'/>
-        </div> }
-        { this.state.mode === 'inside_variable' && <span style={ { float: 'left', marginTop: '8px', marginLeft: '2px' } }>之内</span> }
         { this.state.mode === 'fixed' &&
-        <div style={ { width: '34%', display: 'inline-block', float: 'left' } }>
+        <div style={ { width: '200px', display: 'inline-block', float: 'left' } }>
           <DateTime
             mode='date'
             locale='zh-cn'
@@ -178,12 +270,36 @@ export default class Duration extends Component {
             timeFormat={ false }
             closeOnSelect={ true }
             inputProps={ { placeholder: '请选择' } }
-            value={ this.state.start_time }
+            value={ start_time }
             onChange={ (newValue) => { this.onChange({ start_time: newValue }); } }/>
         </div> }
-        { this.state.mode === 'fixed' && <div style={ { float: 'left', width: '6%', marginTop: '8px', textAlign: 'center' } }>～</div> }
+        <div style={ { float: 'left', width: '30px', marginTop: '8px', textAlign: 'center' } }>～</div>
+        { this.state.mode === 'variable' &&
+        <div style={ { width: '110px', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
+          <Select
+            options={ directOptions }
+            disabled={ false }
+            simpleValue
+            searchable={ false }
+            clearable={ true }
+            value={ end_direct || null }
+            onChange={ (newValue) => { if (end_value) { this.onChange({ end_direct: newValue, end_value: '' }); } else { this.setState({ end_direct: newValue }); } } }
+            placeholder='请选择'/>
+        </div> }
+        { this.state.mode === 'variable' &&
+        <div style={ { width: '120px', display: 'inline-block', float: 'left' } }>
+          <Select
+            options={ !end_direct ? [] : (end_direct == 'current' ? currentVariableDurations : variableDurations) }
+            disabled={ false }
+            simpleValue
+            searchable={ false }
+            clearable={ true }
+            value={ end_value || null }
+            onChange={ (newValue) => { this.onChange({ end_value: newValue }); } }
+            placeholder='请选择'/>
+        </div> }
         { this.state.mode === 'fixed' &&  
-        <div style={ { width: '34%', display: 'inline-block', float: 'right' } }>
+        <div style={ { width: '200px', display: 'inline-block', float: 'left' } }>
           <DateTime
             mode='date'
             locale='zh-cn'
@@ -192,7 +308,7 @@ export default class Duration extends Component {
             closeOnSelect={ true }
             input={ true }
             inputProps={ { placeholder: '请选择' } }
-            value={ this.state.end_time }
+            value={ end_time }
             onChange={ (newValue) => { this.onChange({ end_time: newValue }); } }/>
         </div> }
       </div>
