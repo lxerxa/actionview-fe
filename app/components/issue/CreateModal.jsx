@@ -736,6 +736,7 @@ class CreateModal extends Component {
                       timeFormat={ v.type === 'DateTimePicker' ?  'HH:mm' : false } 
                       closeOnSelect={ v.type === 'DatePicker' }
                       value={ this.state.values[v.key] || '' } 
+                      inputProps={ { placeholder: '选择时间' } }
                       onChange={ newValue => { this.onChange(newValue, v); } }/>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
