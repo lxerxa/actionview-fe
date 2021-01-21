@@ -20,7 +20,6 @@ export default class Duration extends Component {
     };
     this.getValue = this.getValue.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.startDirectChange = this.startDirectChange.bind(this);
   }
 
   static propTypes = {
@@ -29,42 +28,20 @@ export default class Duration extends Component {
     value: PropTypes.string
   }
 
-  startDirectChange(newValue) {
-    const { start_value } = this.state;
-    this.onChange({ start_direct: newValue, start_value: '' });
-    /*
-    if (newValue == 'current') {
-      if (start_value.length == 1) {
-        this.onChange({ start_direct: newValue, start_value: newValue });
-      } else {
-        this.onChange({ start_direct: newValue, start_value: '' });
-      }
-    } else {
-      if (start_value.length > 1) {
-        this.onChange({ start_direct: newValue, start_value: newValue });
-      } else {
-        this.onChange({ start_direct: newValue, start_value: '' });
-      }
-    }*/
-  }
-
   componentWillReceiveProps(nextProps) {
 
-    let {
-      mode,
-      start_time,
-      end_time,
-      start_direct,
-      start_value,
-      end_direct,
-      end_value
-    } = this.state;
+    if (_.isEqual(nextProps.value, this.props.value)) {
+      return;
+    }
+
+    let mode = this.state.mode, start_time = '', end_time = '', start_direct = '', start_value = '', end_direct = '', end_value = '';
 
     const suffix_list = [ 'd', 'w', 'm', 'y' ];
 
     const duration = nextProps.value || '';
-    const sections = duration.split('~');
-    if (sections.length > 0) {
+    if (duration) {
+      const sections = duration.split('~');
+
       let unit = '';
       if (sections[0]) {
         unit = sections[0].charAt(sections[0].length - 1);
@@ -74,6 +51,8 @@ export default class Duration extends Component {
 
       if (suffix_list.indexOf(unit) !== -1) {
         mode = 'variable';
+      } else {
+        mode = 'fixed';
       }
 
       if (mode == 'fixed') {
@@ -238,30 +217,30 @@ export default class Duration extends Component {
             placeholder='请选择'/>
         </div> }
         { mode === 'variable' &&
-        <div style={ { width: '100px', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
+        <div style={ { width: '85px', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
           <Select
             options={ directOptions }
             disabled={ false }
             simpleValue
             searchable={ false }
-            clearable={ true }
+            clearable={ false }
             value={ start_direct || null }
-            onChange={ (newValue) => { if (start_value) { this.onChange({ start_direct: newValue, start_value: '' }); } else { this.setState({ start_direct: newValue }) } } }
+            onChange={ (newValue) => { this.setState({ start_direct: newValue, start_value: '' }) } }
             placeholder='请选择'/>
         </div> }
-        { this.state.mode === 'variable' &&
-        <div style={ { width: '110px', display: 'inline-block', float: 'left' } }>
+        { mode === 'variable' &&
+        <div style={ { width: '100px', display: 'inline-block', float: 'left' } }>
           <Select
             options={ !start_direct ? [] : (start_direct == 'current' ? currentVariableDurations : variableDurations) }
             disabled={ false }
             simpleValue
             searchable={ false }
-            clearable={ true }
+            clearable={ false }
             value={ start_value || null }
             onChange={ (newValue) => { this.onChange({ start_value: newValue }); } }
             placeholder='请选择'/>
         </div> }
-        { this.state.mode === 'fixed' &&
+        { mode === 'fixed' &&
         <div style={ { width: '200px', display: 'inline-block', float: 'left' } }>
           <DateTime
             mode='date'
@@ -273,32 +252,34 @@ export default class Duration extends Component {
             value={ start_time }
             onChange={ (newValue) => { this.onChange({ start_time: newValue }); } }/>
         </div> }
+
         <div style={ { float: 'left', width: '30px', marginTop: '8px', textAlign: 'center' } }>～</div>
-        { this.state.mode === 'variable' &&
-        <div style={ { width: '110px', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
+
+        { mode === 'variable' &&
+        <div style={ { width: '85px', display: 'inline-block', float: 'left', paddingRight: '5px' } }>
           <Select
             options={ directOptions }
             disabled={ false }
             simpleValue
             searchable={ false }
-            clearable={ true }
+            clearable={ false }
             value={ end_direct || null }
-            onChange={ (newValue) => { if (end_value) { this.onChange({ end_direct: newValue, end_value: '' }); } else { this.setState({ end_direct: newValue }); } } }
+            onChange={ (newValue) => { this.setState({ end_direct: newValue, end_value: '' }); } }
             placeholder='请选择'/>
         </div> }
-        { this.state.mode === 'variable' &&
-        <div style={ { width: '120px', display: 'inline-block', float: 'left' } }>
+        { mode === 'variable' &&
+        <div style={ { width: '100px', display: 'inline-block', float: 'left' } }>
           <Select
             options={ !end_direct ? [] : (end_direct == 'current' ? currentVariableDurations : variableDurations) }
             disabled={ false }
             simpleValue
             searchable={ false }
-            clearable={ true }
+            clearable={ false }
             value={ end_value || null }
             onChange={ (newValue) => { this.onChange({ end_value: newValue }); } }
             placeholder='请选择'/>
         </div> }
-        { this.state.mode === 'fixed' &&  
+        { mode === 'fixed' &&  
         <div style={ { width: '200px', display: 'inline-block', float: 'left' } }>
           <DateTime
             mode='date'
