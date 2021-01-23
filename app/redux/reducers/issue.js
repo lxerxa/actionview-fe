@@ -5,6 +5,7 @@ import { arrange } from '../funcs/fields';
 const initialState = { 
   ecode: 0, 
   emsg: '',
+  requested_at: 0,
   collection: [], 
   itemData: {}, 
   options: {}, 
@@ -46,10 +47,13 @@ const initialState = {
 export default function issue(state = initialState, action) {
   switch (action.type) {
     case t.ISSUE_INDEX:
-      return { ...state, indexLoading: true, itemLoading: false, filterLoading: false, columnsLoading: false, collection: [] };
+      return { ...state, indexLoading: true, itemLoading: false, filterLoading: false, columnsLoading: false, collection: [], requested_at: action.requested_at };
 
     case t.ISSUE_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
+        if (action.result.options && action.result.options.requested_at && action.result.options.requested_at < state.requested_at) {
+          return;
+        }
         _.assign(state.options, action.result.options || {});
         state.collection = action.result.data;
       }

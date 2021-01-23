@@ -56,7 +56,8 @@ const validate = (values, props) => {
     'is_accu',
     'interval',
     'recorded_at',
-    'scale'
+    'scale',
+    'requested_at'
   ];
 
   if (!values.key) {
