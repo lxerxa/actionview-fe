@@ -1,9 +1,18 @@
 import { asyncFuncCreator } from '../utils';
 
 export function index(key, qs) {
+
+  const now_stamp = Date.now();
+  if (qs) {
+    qs += '&requested_at=' + now_stamp;
+  } else {
+    qs = 'requested_at=' + now_stamp;
+  }
+
   return asyncFuncCreator({
     constant: 'ISSUE_INDEX',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue' + (qs ? '?' + qs : '') })
+    requested_at: now_stamp, 
+    promise: (client) => client.request({ url: '/project/' + key + '/issue?' + qs })
   });
 }
 
