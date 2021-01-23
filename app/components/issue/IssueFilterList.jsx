@@ -98,7 +98,7 @@ export class IssueFilterList extends Component {
                 placeholder={ '选择' +  v.name }/>
             </Col>
           </div> );
-      } else if ([ 'Duration', 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
+      } else if ([ 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
         filters.push(
           <div>
             <Col sm={ 1 } componentClass={ ControlLabel }>
@@ -106,7 +106,6 @@ export class IssueFilterList extends Component {
             </Col>
             <Col sm={ 12 / columns - 1 }>
               <Duration
-                options={ (v.type === 'DatePicker' || v.type === 'DateTimePicker') ? [ 'fixed', 'current_variable' ] : (v.options || []) }
                 value={ this.state.values[v.key] }
                 onChange={ (newValue) => { this.state.values[v.key] = newValue; this.onChange(); } }/>
             </Col>
@@ -177,14 +176,14 @@ export class IssueFilterList extends Component {
     const memberFilterSections = this.groupFields(_.reject(memberFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
 
     const timeFields = [
-      { key: 'created_at', name: '创建时间', type: 'Duration' },
-      { key: 'updated_at', name: '更新时间', type: 'Duration' },
-      { key: 'resolved_at', name: '解决时间', type: 'Duration' },
-      { key: 'closed_at', name: '关闭时间', type: 'Duration' },
-      { key: 'expect_start_time', name: '期望开始', type: 'Duration', options: [ 'fixed', 'current_variable' ] },
-      { key: 'expect_complete_time', name: '期望完成', type: 'Duration', options: [ 'fixed', 'current_variable' ] }
+      { key: 'created_at', name: '创建时间', type: 'DateTimePicker' },
+      { key: 'updated_at', name: '更新时间', type: 'DateTimePicker' },
+      { key: 'resolved_at', name: '解决时间', type: 'DateTimePicker' },
+      { key: 'closed_at', name: '关闭时间', type: 'DateTimePicker' },
+      { key: 'expect_start_time', name: '期望开始', type: 'DatePicker' },
+      { key: 'expect_complete_time', name: '期望完成', type: 'DatePicker' }
     ];
-    const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 2);
+    const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 1);
 
     const agileFields = [
       { key: 'epic', name: 'Epic', type: 'MultiSelect', optionValues: epics },
@@ -201,7 +200,8 @@ export class IssueFilterList extends Component {
         v.optionValues = versions; 
       }
     });
-    const othersFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1 || notShowTypes.indexOf(v.type) !== -1), columns || 2);
+    const othersDateFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1 || notShowTypes.indexOf(v.type) !== -1 || (v.type !== 'DatePicker' && v.type !== 'DateTimePicker')), 1);
+    const othersNoDateFilterSections = this.groupFields(_.reject(othersFields, (v) => notShowFields.indexOf(v.key) !== -1 || notShowTypes.indexOf(v.type) !== -1 || v.type == 'DatePicker' ||  v.type == 'DateTimePicker'), columns || 2);
 
     return (
       <Form 
@@ -296,7 +296,13 @@ export class IssueFilterList extends Component {
               { this.state.othersFilterShow ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i> }
             </span>
           </div>
-          { _.map(othersFilterSections, (v, i) => {
+          { _.map(othersNoDateFilterSections, (v, i) => {
+            return (
+              <FormGroup key={ i } style={ { display: !this.state.othersFilterShow ? 'none' : '' } }>
+                { v }
+              </FormGroup> )
+          }) }
+          { _.map(othersDateFilterSections, (v, i) => {
             return (
               <FormGroup key={ i } style={ { display: !this.state.othersFilterShow ? 'none' : '' } }>
                 { v }
@@ -334,12 +340,12 @@ export function parseQuery(query, options) {
     { key: 'watcher', name : '关注者', type: 'MultiSelect', optionValues: userOptions },
     { key: 'resolver', name : '解决者', type: 'MultiSelect', optionValues: userOptions },
     { key: 'closer', name : '关闭者', type: 'MultiSelect', optionValues: userOptions },
-    { key: 'created_at', name: '创建时间', type: 'Duration' },
-    { key: 'updated_at', name : '更新时间', type: 'Duration' },
-    { key: 'resolved_at', name : '解决时间', type: 'Duration' },
-    { key: 'closed_at', name : '关闭时间', type: 'Duration' },
-    { key: 'expect_start_time', name : '期望开始时间', type: 'Duration' },
-    { key: 'expect_complete_time', name : '期望完成时间', type: 'Duration' },
+    { key: 'created_at', name: '创建时间', type: 'DateTimePicker' },
+    { key: 'updated_at', name : '更新时间', type: 'DateTimePicker' },
+    { key: 'resolved_at', name : '解决时间', type: 'DateTimePicker' },
+    { key: 'closed_at', name : '关闭时间', type: 'DateTimePicker' },
+    { key: 'expect_start_time', name : '期望开始时间', type: 'DatePicker' },
+    { key: 'expect_complete_time', name : '期望完成时间', type: 'DatePicker' },
     { key: 'epic', type: 'MultiSelect', name: 'Epic', optionValues: epics },
     { key: 'sprints', type: 'Select', name: 'Sprint', optionValues: sprintOptions }
   ];
@@ -357,7 +363,7 @@ export function parseQuery(query, options) {
 
   const currentDurations = {
     '0d': '当天',
-    '0w': '当前周',
+    '0w': '本周',
     '0m': '当月',
     '0y': '当前年'
   };
@@ -370,7 +376,7 @@ export function parseQuery(query, options) {
     const v = sections[i];
     if (query[v.key]) {
       if ('labels' == v.key || [ 'Text', 'TextArea', 'RichTextEditor', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
-        queryConds.push(v.name + '～' + query[v.key]);
+        queryConds.push(v.name + ': ' + query[v.key]);
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
         const queryNames = [];
         const queryValues = query[v.key].split(',');
@@ -378,26 +384,55 @@ export function parseQuery(query, options) {
           if ((index = _.findIndex(v.optionValues, { id: queryValues[j] })) !== -1) {
             queryNames.push(v.optionValues[index].name);
           } else {
-            return v.name + '～' + errorMsg;
+            return v.name + ': ' + errorMsg;
           }
         }
-        queryConds.push(v.name + '～' + queryNames.join(', '));
-      } else if ([ 'Duration', 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
-        let cond = '';
-        const timeUnits = { w: '周', m: '月', y: '年' };
-        if ([ '0d', '0w', '0m', '0y' ].indexOf(query[v.key]) !== -1) {
-          cond = currentDurations[query[v.key]];
-        } else if (_.endsWith(query[v.key], 'w') || _.endsWith(query[v.key], 'm') || _.endsWith(query[v.key], 'y')) {
-          const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
-          if (pattern.exec(query[v.key])) {
-            cond = RegExp.$2 + timeUnits[RegExp.$3] + (RegExp.$1 === '-' ? '外' : '内');
+        queryConds.push(v.name + ': ' + queryNames.join(', '));
+      } else if ([ 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
+        let cond = '', startCond = '', endCond = '';
+        const timeUnits = { d: '天', w: '周', m: '个月', y: '年' };
+        const sections = query[v.key].split('~');
+        if ([ '0d', '0w', '0m', '0y' ].indexOf(sections[0]) !== -1) {
+          startCond = currentDurations[sections[0]];
+        } else if ([ 'd', 'w', 'm', 'y' ].indexOf(sections[0].charAt(sections[0].length - 1)) !== -1) {
+          const pattern = new RegExp('^(-?)(\\d+)(d|w|m|y)$');
+          if (pattern.exec(sections[0])) {
+            if (RegExp.$2 == '0') {
+              startCond = '当天';
+            } else {
+              startCond = (RegExp.$1 === '-' ? '前' : '后') + RegExp.$2 + timeUnits[RegExp.$3];
+            }
           } else {
-            return v.name + errorMsg;
+            return v.name + ': ' + errorMsg;
           }
         } else {
-          cond = query[v.key];
+          startCond = sections[0];
         }
-        queryConds.push(v.name + '～' + cond);
+
+        if (sections[1]) {
+          if ([ '0d', '0w', '0m', '0y' ].indexOf(sections[1]) !== -1) {
+            endCond = currentDurations[sections[1]];
+          } else if ([ 'd', 'w', 'm', 'y' ].indexOf(sections[1].charAt(sections[1].length - 1)) !== -1) {
+            const pattern = new RegExp('^(-?)(\\d+)(d|w|m|y)$');
+            if (pattern.exec(sections[1])) {
+              endCond = (RegExp.$1 === '-' ? '过去' : '未来') + RegExp.$2 + timeUnits[RegExp.$3];
+            } else {
+              return v.name + errorMsg;
+            }
+          } else {
+            startCond = sections[1];
+          }
+        }
+
+        console.log(startCond, endCond);
+
+        if (sections.length > 1) {
+          cond = startCond + '~' + endCond;
+        } else {
+          cond = startCond;
+        }
+
+        queryConds.push(v.name + ': ' + cond);
       }
     }
   }
