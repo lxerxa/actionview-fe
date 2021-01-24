@@ -729,21 +729,24 @@ export default class List extends Component {
             refresh={ refresh }/> 
           : '' }
         { this.state.delNotifyShow && 
-          <DelNotify show 
+          <DelNotify 
+            show 
             close={ this.delNotifyClose } 
             data={ selectedItem } 
             loading = { itemLoading }
             del={ del }
             i18n={ i18n }/> }
         { this.state.addWorklogShow &&
-          <AddWorklogModal show
+          <AddWorklogModal 
+            show
             issue={ selectedItem }
             close={ () => { this.setState({ addWorklogShow: false }) } }
             loading = { worklogLoading }
             add={ addWorklog }
             i18n={ i18n }/> }
         { this.state.editModalShow && 
-          <CreateModal show 
+          <CreateModal 
+            show 
             close={ () => { this.setState({ editModalShow: false }); } } 
             options={ options } 
             addLabels={ addLabels } 
@@ -754,7 +757,8 @@ export default class List extends Component {
             data={ selectedItem }
             i18n={ i18n }/> }
         { this.state.createSubtaskModalShow && 
-          <CreateModal show 
+          <CreateModal 
+            show 
             close={ () => { this.setState({ createSubtaskModalShow: false }); } } 
             options={ options } 
             create={ create } 
@@ -764,7 +768,8 @@ export default class List extends Component {
             isSubtask={ true }
             i18n={ i18n }/> }
         { this.state.convertTypeModalShow &&
-          <ConvertTypeModal show
+          <ConvertTypeModal 
+            show
             close={ () => { this.setState({ convertTypeModalShow: false }); } }
             options={ options }
             convert={ convert }
@@ -772,7 +777,8 @@ export default class List extends Component {
             issue={ selectedItem }
             i18n={ i18n }/> }
         { this.state.convertType2ModalShow &&
-          <ConvertType2Modal show
+          <ConvertType2Modal 
+            show
             close={ () => { this.setState({ convertType2ModalShow: false }); } }
             options={ options }
             project={ project } 
@@ -781,7 +787,8 @@ export default class List extends Component {
             issue={ selectedItem }
             i18n={ i18n }/> }
         { this.state.moveModalShow &&
-          <MoveModal show
+          <MoveModal 
+            show
             close={ () => { this.setState({ moveModalShow: false }); } }
             options={ options }
             project={ project } 
@@ -790,7 +797,8 @@ export default class List extends Component {
             issue={ selectedItem }
             i18n={ i18n }/> }
         { this.state.assignModalShow &&
-          <AssignModal show
+          <AssignModal 
+            show
             close={ () => { this.setState({ assignModalShow: false }); } }
             options={ options }
             setAssignee={ setAssignee }
@@ -806,19 +814,22 @@ export default class List extends Component {
             issue={ selectedItem }
             i18n={ i18n }/> }
         { this.state.shareModalShow &&
-          <ShareLinkModal show
+          <ShareLinkModal 
+            show
             close={ () => { this.setState({ shareModalShow: false }); } }
             project={ project }
             issue={ selectedItem }/> }
         { this.state.resetModalShow &&
-          <ResetStateModal show
+          <ResetStateModal 
+            show
             close={ () => { this.setState({ resetModalShow: false }); } }
             options={ options }
             resetState={ resetState }
             issue={ selectedItem }
             i18n={ i18n }/> }
         { this.state.copyModalShow &&
-          <CopyModal show
+          <CopyModal 
+            show
             close={ () => { this.setState({ copyModalShow: false }); } }
             options={ options }
             loading={ loading }

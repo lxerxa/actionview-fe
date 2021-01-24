@@ -7,6 +7,10 @@ import Select from 'react-select';
 import CreatableSelect from 'react-select/lib/Creatable';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import { RichTextEditor } from './RichText';
+import { MultiRowsTextEditor } from './MultiRowsText';
+
+const { API_BASENAME } = process.env;
 
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -34,6 +38,7 @@ export default class MultiEditModal extends Component {
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired,
     query: PropTypes.object.isRequired,
@@ -199,7 +204,7 @@ export default class MultiEditModal extends Component {
 
   getPlaceholder(field) {
     let placeHolder = '输入' + field.name;
-    if (field.type == 'Text' || field.type == 'TextArea') {
+    if (field.type == 'Text' || field.type == 'TextArea' || field.type == 'RichTextEditor') {
       if (field.maxLength) {
         placeHolder += '(字数' + field.maxLength + '字之内)';
       }
@@ -218,6 +223,7 @@ export default class MultiEditModal extends Component {
   render() {
     const { 
       i18n: { errMsg }, 
+      project,
       options, 
       issueIds, 
       loading
@@ -337,14 +343,35 @@ export default class MultiEditModal extends Component {
                       { v.name }
                     </Col>
                     <Col sm={ 8 }>
-                      <FormControl
-                        componentClass='textarea'
+                      <MultiRowsTextEditor
+                        id={ 'field-textarea-' + v.key }
                         disabled={ loading }
                         value={ this.state.values[v.key] || '' }
-                        onChange={ (e) => { this.onChange(e.target.value, v); } }
-                        onBlur={ (e) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                        style={ { height: '150px' } }
+                        onChange={ (newValue) => { this.onChange(newValue, v); } }
+                        onBlur={ () => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
+                        uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                        style={ { height: '180px' } }
                         placeholder={ this.getPlaceholder(v) } />
+                    </Col>
+                    <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
+                      { this.state.touched[v.key] && this.state.errors[v.key] || '' }
+                    </Col>
+                  </FormGroup> )
+              } else if (v.type === 'RichTextEditor') {
+                return (
+                  <FormGroup key={ v.key }>
+                    <Col sm={ 2 } componentClass={ ControlLabel } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                      { v.name }
+                    </Col>
+                    <Col sm={ 8 }>
+                      <RichTextEditor
+                        id={ 'field-richeditor-' + v.key }
+                        value={ this.state.values[v.key] || '' }
+                        disabled={ loading }
+                        placeholder={ this.getPlaceholder(v) }
+                        uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                        onBlur={ (newValue) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
+                        onChange={ (newValue) => { this.onChange(newValue, v); } }/>
                     </Col>
                     <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
                       { this.state.touched[v.key] && this.state.errors[v.key] || '' }

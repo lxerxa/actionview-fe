@@ -334,6 +334,7 @@ export default class Header extends Component {
           <MultiEditModal
             show
             close={ this.multiEditModalClose }
+            project={ project } 
             index={ index }
             query={ query }
             issueIds={ selectedIds }
