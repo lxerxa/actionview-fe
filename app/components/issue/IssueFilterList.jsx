@@ -183,7 +183,7 @@ export class IssueFilterList extends Component {
       { key: 'expect_start_time', name: '期望开始', type: 'DatePicker' },
       { key: 'expect_complete_time', name: '期望完成', type: 'DatePicker' }
     ];
-    const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 1);
+    const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), 1);
 
     const agileFields = [
       { key: 'epic', name: 'Epic', type: 'MultiSelect', optionValues: epics },
@@ -423,8 +423,6 @@ export function parseQuery(query, options) {
             startCond = sections[1];
           }
         }
-
-        console.log(startCond, endCond);
 
         if (sections.length > 1) {
           cond = startCond + '~' + endCond;

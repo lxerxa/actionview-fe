@@ -9,7 +9,7 @@ export default class Duration extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      options: !_.isEmpty(props.options) ? props.options : [ 'fixed', 'current_duration', 'variable_duration' ],
+      options: !_.isEmpty(props.options) ? props.options : [ 'fixed', 'current_duration', 'past_duration', 'variable_duration' ],
       mode: 'fixed',
       start_time: '', 
       end_time: '', 
@@ -34,7 +34,7 @@ export default class Duration extends Component {
       return;
     }
 
-    let mode = this.state.mode, start_time = '', end_time = '', current_value = '', start_direct = this.state.start_direct, start_value = '', end_direct = this.state.end_direct, end_value = '';
+    let mode = this.state.mode, start_time = '', end_time = '', past_value = '', current_value = '', start_direct = this.state.start_direct, start_value = '', end_direct = this.state.end_direct, end_value = '';
 
     const suffix_list = [ 'd', 'w', 'm', 'y' ];
 
@@ -109,6 +109,7 @@ export default class Duration extends Component {
       start_time, 
       end_time, 
       current_value,
+      past_value,
       start_direct, 
       start_value, 
       end_direct, 
@@ -123,6 +124,8 @@ export default class Duration extends Component {
       }
     } else if (mode === 'current_duration') {
       return current_value;
+    } else if (mode === 'past_duration') {
+      return past_value + '~';
     } else if (mode === 'variable_duration') {
       let tmp_start_time = '', tmp_end_time = '';
       if (start_direct && start_value) {
@@ -141,8 +144,6 @@ export default class Duration extends Component {
         }
       }
 
-      console.log(tmp_start_time, tmp_end_time);
-
       return !tmp_start_time && !tmp_end_time ? '' : (tmp_start_time + '~' + tmp_end_time);
     } else {
       return '';
@@ -157,6 +158,7 @@ export default class Duration extends Component {
       start_time, 
       end_time, 
       current_value,
+      past_value,
       start_direct, 
       start_value, 
       end_direct, 
@@ -165,11 +167,12 @@ export default class Duration extends Component {
 
     const modeOptions = [
       { value: 'fixed', label: '固定时间段' }, 
-      { value: 'current_duration', label: '当前时间时' },
+      { value: 'current_duration', label: '当前时间段' },
+      { value: 'past_duration', label: '过去时间段内' },
       { value: 'variable_duration', label: '动态时间段' }
     ];
 
-    const current_durations = [
+    const currentDurations = [
       { value: '0d', label: '当天' },
       { value: '0w', label: '当前周' },
       { value: '0m', label: '当月' },
@@ -207,6 +210,25 @@ export default class Duration extends Component {
       { value: '2y', label: '2年' }
     ];
 
+    const pastVariableDurations = [
+      { value: '1w', label: '1周' },
+      { value: '2w', label: '2周' },
+      { value: '3w', label: '3周' },
+      { value: '1m', label: '1个月' },
+      { value: '2m', label: '2个月' },
+      { value: '3m', label: '3个月' },
+      { value: '4m', label: '4个月' },
+      { value: '5m', label: '5个月' },
+      { value: '6m', label: '6个月' },
+      { value: '7m', label: '7个月' },
+      { value: '8m', label: '8个月' },
+      { value: '9m', label: '9个月' },
+      { value: '10m', label: '10个月' },
+      { value: '11m', label: '11个月' },
+      { value: '1y', label: '1年' },
+      { value: '2y', label: '2年' }
+    ];
+
     const currentVariableDurations = [
       { value: 'd', label: '天' },
       { value: 'w', label: '周' },
@@ -217,7 +239,7 @@ export default class Duration extends Component {
     return (
       <div style={ { display: 'inline' } } onClick={ (e) => { e.stopPropagation(); } }>
         { options.length > 1 &&
-        <div style={ { width: '135px', display: 'inline-block', float: 'left', paddingRight: '10px' } }>
+        <div style={ { width: '140px', display: 'inline-block', float: 'left', paddingRight: '10px' } }>
           <Select
             options={ _.filter(modeOptions, (v) => this.state.options.indexOf(v.value) !== -1) }
             disabled={ false }
@@ -231,13 +253,25 @@ export default class Duration extends Component {
         { this.state.mode === 'current_duration' &&
         <div style={ { width: '140px', display: 'inline-block', float: 'left' } }>
           <Select
-            options={ current_durations }
+            options={ currentDurations }
             disabled={ false }
             simpleValue
             searchable={ false }
             clearable={ true }
             value={ current_value || null }
             onChange={ (newValue) => { this.onChange({ current_value: newValue }); } }
+            placeholder='请选择'/>
+        </div> }
+        { this.state.mode === 'past_duration' &&
+        <div style={ { width: '140px', display: 'inline-block', float: 'left' } }>
+          <Select
+            options={ pastVariableDurations }
+            disabled={ false }
+            simpleValue
+            searchable={ false }
+            clearable={ true }
+            value={ past_value || null }
+            onChange={ (newValue) => { this.onChange({ past_value: newValue }); } }
             placeholder='请选择'/>
         </div> }
         { mode === 'variable_duration' &&
