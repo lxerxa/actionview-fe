@@ -80,7 +80,7 @@ class MultiRowsTextReader extends React.Component {
   static propTypes = {
     isImgPreviewed: PropTypes.bool,
     isEditable: PropTypes.bool,
-    onEdit: PropTypes.bool,
+    onEdit: PropTypes.func,
     fieldKey: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired
   }

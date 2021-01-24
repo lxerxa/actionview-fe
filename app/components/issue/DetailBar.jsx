@@ -528,8 +528,8 @@ export default class DetailBar extends Component {
             uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
             onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/>
           <div className='edit-button-group'>
-            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ txt == newItemValues[fieldKey] || (required && !newItemValues[fieldKey]) || newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
-            <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
+            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) }><i className='fa fa-check'></i></Button>
+            <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
           </div>
         </div> );
     }
@@ -538,7 +538,7 @@ export default class DetailBar extends Component {
       <MultiRowsTextReader
         isImgPreviewed={ options.permissions && options.permissions.indexOf('download_file') !== -1 }
         isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
-        onEdit={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }
+        onEdit={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }
         fieldKey={ fieldKey }
         value={ txt }/>);
   }
@@ -548,6 +548,7 @@ export default class DetailBar extends Component {
     const { project, options } = this.props;
 
     if (editingItems[fieldKey]) {
+      console.log(txt, newItemValues[fieldKey], _.isEqual(txt, newItemValues[fieldKey]));
       return (
         <div>
           <RichTextEditor
@@ -557,7 +558,7 @@ export default class DetailBar extends Component {
             uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
             onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/> 
           <div className='edit-button-group'>
-            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ txt == newItemValues[fieldKey] || (required && !newItemValues[fieldKey]) || newItemValues[fieldKey] == txt }><i className='fa fa-check'></i></Button>
+            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) }><i className='fa fa-check'></i></Button>
             <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
           </div>
         </div> );
@@ -567,7 +568,7 @@ export default class DetailBar extends Component {
       <RichTextReader
         isImgPreviewed={ options.permissions && options.permissions.indexOf('download_file') !== -1 }
         isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
-        onEdit={ () => { editingItems[fieldKey] = true; this.setState({ editingItems }); } }
+        onEdit={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }
         fieldKey={ fieldKey }
         value={ txt }/>);
   }
