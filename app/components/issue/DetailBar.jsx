@@ -514,7 +514,7 @@ export default class DetailBar extends Component {
         onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> );
   }
 
-  getTextAreaItemContents(txt, fieldKey, fieldName, required) {
+  getTextAreaItemContents(txt, fieldKey, fieldName, required, maxLength) {
     const { editingItems, newItemValues } = this.state;
     const { project, options } = this.props;
 
@@ -524,11 +524,11 @@ export default class DetailBar extends Component {
           <MultiRowsTextEditor
             id={ 'field-textarea-' + fieldKey }
             value={ txt || '' }
-            placeholder={ '输入' + fieldName }
+            placeholder={ '输入' + fieldName + (maxLength && maxLength > 0 ? ('(字数' + maxLength + '字之内)') : '') }
             uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
             onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/>
           <div className='edit-button-group'>
-            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) }><i className='fa fa-check'></i></Button>
+            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) || (maxLength && maxLength > 0 && _.trim(newItemValues[fieldKey] || '').length > maxLength) }><i className='fa fa-check'></i></Button>
             <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
           </div>
         </div> );
@@ -543,7 +543,7 @@ export default class DetailBar extends Component {
         value={ txt }/>);
   }
 
-  getRichTextItemContents(txt, fieldKey, fieldName, required) {
+  getRichTextItemContents(txt, fieldKey, fieldName, required, maxLength) {
     const { editingItems, newItemValues } = this.state;
     const { project, options } = this.props;
 
@@ -553,11 +553,11 @@ export default class DetailBar extends Component {
           <RichTextEditor
             id={ 'field-richeditor-' + fieldKey }
             value={ txt || '' }
-            placeholder={ '输入' + fieldName }
+            placeholder={ '输入' + fieldName + (maxLength && maxLength > 0 ? ('(字数' + maxLength + '字之内)') : '') }
             uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
             onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/> 
           <div className='edit-button-group'>
-            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) }><i className='fa fa-check'></i></Button>
+            <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) || (maxLength && maxLength > 0 && _.trim(newItemValues[fieldKey] || '').length > maxLength) }><i className='fa fa-check'></i></Button>
             <Button className='edit-cancel-button' onClick={ () => { editingItems[fieldKey] = false; this.setState({ editingItems }); } }><i className='fa fa-close'></i></Button>
           </div>
         </div> );
@@ -1272,9 +1272,9 @@ export default class DetailBar extends Component {
                       { previewShow[field.key] && this.createLightbox(field.key, imgFiles, photoIndex) }
                     </div>);
                   } else if (field.type === 'TextArea') {
-                    contents = this.getTextAreaItemContents(data[field.key], field.key, field.name, field.required);
+                    contents = this.getTextAreaItemContents(data[field.key], field.key, field.name, field.required, field.maxLength);
                   } else if (field.type === 'RichTextEditor') {
-                    contents = this.getRichTextItemContents(data[field.key], field.key, field.name, field.required);
+                    contents = this.getRichTextItemContents(data[field.key], field.key, field.name, field.required, field.maxLength);
                   } else {
                     contents = data[field.key];
                   }
