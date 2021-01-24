@@ -150,7 +150,7 @@ export default class MultiEditModal extends Component {
   onChange(newValue, field) {
     this.state.values[field.key] = newValue;
 
-    if ([ 'Text', 'TextArea' ].indexOf(field.type) !== -1) {
+    if ([ 'Text', 'TextArea', 'RichTextEditor' ].indexOf(field.type) !== -1) {
       if (newValue && field.maxLength && _.trim(newValue) > field.maxLength) {
         this.state.errors[field.key] = '字数必须在' + field.maxLength + '之内';
         this.setState({ values: this.state.values });
@@ -338,8 +338,8 @@ export default class MultiEditModal extends Component {
                   </FormGroup> )
               } else if (v.type === 'TextArea') {
                 return (
-                  <FormGroup key={ v.key }>
-                    <Col sm={ 2 } componentClass={ ControlLabel } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                  <FormGroup key={ v.key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                    <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
                     <Col sm={ 8 }>
@@ -359,8 +359,8 @@ export default class MultiEditModal extends Component {
                   </FormGroup> )
               } else if (v.type === 'RichTextEditor') {
                 return (
-                  <FormGroup key={ v.key }>
-                    <Col sm={ 2 } componentClass={ ControlLabel } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                  <FormGroup key={ v.key } validationState={ this.state.touched[v.key] && this.state.errors[v.key] ? 'error' : null }>
+                    <Col sm={ 2 } componentClass={ ControlLabel }>
                       { v.name }
                     </Col>
                     <Col sm={ 8 }>
