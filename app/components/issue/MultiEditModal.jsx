@@ -151,7 +151,7 @@ export default class MultiEditModal extends Component {
     this.state.values[field.key] = newValue;
 
     if ([ 'Text', 'TextArea', 'RichTextEditor' ].indexOf(field.type) !== -1) {
-      if (newValue && field.maxLength && _.trim(newValue) > field.maxLength) {
+      if (newValue && field.maxLength && _.trim(newValue).length > field.maxLength) {
         this.state.errors[field.key] = '字数必须在' + field.maxLength + '之内';
         this.setState({ values: this.state.values });
         return;
