@@ -29,6 +29,10 @@ export default class Duration extends Component {
 
   componentWillReceiveProps(nextProps) {
 
+    if (nextProps.value == this.props.value) {
+      return;
+    }
+
     let mode = 'fixed', start_time = '', end_time = '', current_variable = '', inside_variable = '', outside_variable = '';
     const suffix_list = [ 'w', 'm', 'y' ];
 
