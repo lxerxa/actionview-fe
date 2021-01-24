@@ -548,7 +548,6 @@ export default class DetailBar extends Component {
     const { project, options } = this.props;
 
     if (editingItems[fieldKey]) {
-      console.log(txt, newItemValues[fieldKey], _.isEqual(txt, newItemValues[fieldKey]));
       return (
         <div>
           <RichTextEditor
