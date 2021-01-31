@@ -1021,10 +1021,6 @@ table tr:hover .remove-icon{
   white-space: nowrap;
 }
 
-.CodeMirror, .CodeMirror-scroll {
-  min-height: 500px;
-}
-
 .inline-img {
   cursor: pointer;
   border: 1px solid #f0f0f0;
@@ -1312,6 +1308,10 @@ div.filepicker {
 .has-error .rich-text-editor {
   border: 1px solid #a94442;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.wiki-body .CodeMirror, .wiki-body .CodeMirror-scroll {
+  min-height: 500px;
 }
 
 .modal-dialog .CodeMirror, .modal-dialog .CodeMirror-scroll {
