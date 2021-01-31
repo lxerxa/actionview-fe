@@ -117,7 +117,7 @@ export default class Edit extends Component {
     const { i18n: { errMsg }, data, itemLoading, itemDetailLoading, loading, path } = this.props;
 
     return (
-      <div style={ { marginTop: '15px' } }>
+      <div style={ { marginTop: '15px' } } className='wiki-body'>
         <div style={ { textAlign: 'center', paddingTop: '25px', display: !itemLoading && !itemDetailLoading ? 'none' : '' } }>
           <img src={ img } className='loading'/>
         </div>

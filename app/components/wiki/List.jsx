@@ -17,9 +17,6 @@ const MoveModal = require('./MoveModal');
 const EditModal = require('./EditModal');
 const EditRow = require('./EditRow');
 const img = require('../../assets/images/loading.gif');
-const SimpleMDE = require('SimpleMDE');
-
-let simplemde = {};
 
 export default class List extends Component {
   constructor(props) {
@@ -33,7 +30,7 @@ export default class List extends Component {
       hoverRowId: '', 
       editRowId: '',
       createFolderShow: false,
-      searchShow: false,
+      searchShow: !_.isEmpty(props.query),
       inlinePreviewShow: false,
       photoIndex: 0,
       name: '', 
