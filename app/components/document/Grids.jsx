@@ -207,6 +207,7 @@ export default class Grids extends Component {
       postUrl: API_BASENAME + '/project/' + project.key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
     };
     const djsConfig = {
+      dictDefaultMessage: '点击和拖动文件至此',
       addRemoveLinks: true
     };
     const eventHandlers = {
@@ -355,7 +356,11 @@ export default class Grids extends Component {
             onMoveNextRequest={ () => this.setState({ photoIndex: (photoIndex + 1) % imgFiles.length }) } /> }
         { project.status == 'active' &&
           <div style={ { marginTop: '15px' } }>
-            <DropzoneComponent style={ { height: '200px' } } config={ componentConfig } eventHandlers={ eventHandlers } djsConfig={ djsConfig } />
+            <DropzoneComponent 
+              style={ { height: '200px' } } 
+              config={ componentConfig } 
+              eventHandlers={ eventHandlers } 
+              djsConfig={ djsConfig } />
           </div> }
         <div style={ { marginLeft: '5px', marginTop: '15px', marginBottom: '20px' } }>
           { !indexLoading && collection.length > 0 && <span>共计 文件夹 { _.filter(collection, { d: 1 }).length } 个，文件 { _.reject(collection, { d: 1 }).length } 个。</span> }

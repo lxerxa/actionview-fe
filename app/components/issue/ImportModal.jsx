@@ -62,6 +62,7 @@ export default class ImportModal extends Component {
       postUrl: API_BASENAME + '/tmpfile'
     };
     const djsConfig = {
+      dictDefaultMessage: '点击和拖动文件至此',
       addRemoveLinks: true
     };
     const eventHandlers = {
