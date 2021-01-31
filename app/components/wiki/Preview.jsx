@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { createHistory } from 'history';
 import { Link } from 'react-router';
 import { Button, Label, DropdownButton, MenuItem, Breadcrumb, Table } from 'react-bootstrap';
 import DropzoneComponent from 'react-dropzone-component';
@@ -7,6 +8,7 @@ import Lightbox from 'react-image-lightbox';
 import { notify } from 'react-notify-toast';
 import { getFileIconCss } from '../share/Funcs';
 
+const history = createHistory();
 const moment = require('moment');
 const loadingImg = require('../../assets/images/loading.gif');
 const marked = require('marked');
@@ -328,7 +330,7 @@ export default class Preview extends Component {
           </a> }
           { (!isCheckin || (isCheckin && item.checkin.user.id === user.id)) && !(this.state.operate === 'delete' && itemLoading) && project.status == 'active' &&
           <span style={ { float: 'right' } }>
-            <Button style={ { marginRight: '5px' } } disabled={ itemLoading } onClick={ this.edit.bind(this) }><i className='fa fa-pencil'></i> 编辑</Button>
+            <Button style={ { marginRight: '5px' } } disabled={ itemLoading } onClick={ this.edit.bind(this) }><i className='fa fa-edit'></i> 编辑</Button>
             <Button bsStyle='link' style={ { fontSize: '14px', marginRight: '5px' } } disabled={ itemLoading } onClick={ () => { this.setState({ operate: 'delete', delNotifyShow: true }); } }>删除</Button>
           </span> }
           { this.state.operate === 'delete' && itemLoading &&
@@ -336,7 +338,7 @@ export default class Preview extends Component {
            <img src={ loadingImg } className='loading'/>
           </span> }
           <span style={ { float: 'right', marginRight: '5px' } }>
-            <Link to={ '/project/' + project.key + '/wiki' + (item.parent === '0' ? '' : ('/' + item.parent)) }><Button style={ { marginRight: '5px' } }><i className='fa fa-reply'></i> 返回</Button></Link>
+            <Button style={ { marginRight: '5px' } } onClick={ () => { history.goBack(); } }><i className='fa fa-reply'></i> 返回</Button>
           </span>
         </div> }
         { item.id &&

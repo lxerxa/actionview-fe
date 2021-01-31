@@ -607,14 +607,21 @@ table tr:hover .remove-icon{
   line-height: 20px;
 }
 
-.no-avatar {
+.small-avatar {
+  width: 12px;
+  height: 12px;
+  text-decoration: 'blink';
+  border-radius: 50%;
+}
+
+.default-avatar {
   width: 28px;
   height: 28px;
   text-decoration: 'blink';
   border-radius: 50%;
 }
 
-.big-no-avatar {
+.big-avatar {
   width: 80px;
   height: 80px;
   text-decoration: 'blink';

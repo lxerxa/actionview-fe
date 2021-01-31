@@ -244,7 +244,7 @@ export default class Worklog extends Component {
                 <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showDelWorklog.bind(this, val) }><i className='fa fa-trash' title='删除'></i></span> }
                 { ((val.recorder && currentUser.id === val.recorder.id && permissions.indexOf('edit_self_worklog') !== -1) 
                   || permissions.indexOf('edit_worklog') !== -1) &&  
-                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditWorklog.bind(this, val) }><i className='fa fa-pencil' title='编辑'></i></span> }
+                <span className='comments-button comments-edit-button' style={ { marginLeft: '7px', float: 'right' } } onClick={ this.showEditWorklog.bind(this, val) }><i className='fa fa-edit' title='编辑'></i></span> }
               </div> ); 
               let comments = val.comments ? _.escape(val.comments) : '-';
               comments = comments.replace(/(\r\n)|(\n)/g, '<br/>'); 

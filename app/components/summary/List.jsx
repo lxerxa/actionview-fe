@@ -68,7 +68,7 @@ export default class List extends Component {
           <span className='item-title'>描述：</span><span>{ project.description || '-' }</span>
           { project.status == 'active' && project.principal && project.principal.id == user.id &&
             <span style={ { float: 'right' } }>
-              <span className='project-summary-button' onClick={ () => { this.setState({ editModalShow: true }); } } title='编辑'><i className='fa fa-pencil'></i></span>
+              <span className='project-summary-button' onClick={ () => { this.setState({ editModalShow: true }); } } title='编辑'><i className='fa fa-edit'></i></span>
               <span className='project-summary-button' onClick={ () => { this.setState({ archiveNotifyShow: true }); } } title='归档'><i className='fa fa-archive'></i></span>
             </span> }
         </div>

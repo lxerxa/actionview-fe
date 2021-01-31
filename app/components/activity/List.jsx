@@ -263,7 +263,7 @@ export default class List extends Component {
 
       activities.push({
         id: collection[i].id,
-        avatar: ( <img src={ collection[i].user.avatar ? API_BASENAME + '/getavatar?fid=' + collection[i].user.avatar : no_avatar } className='no-avatar'/> ),
+        avatar: ( <img src={ collection[i].user.avatar ? API_BASENAME + '/getavatar?fid=' + collection[i].user.avatar : no_avatar } className='default-avatar'/> ),
         summary: (
           <div>
             <span style={ { marginRight: '5px' } }><b>{ user.id === collection[i].user.id ? '我' : collection[i].user.name }</b></span>

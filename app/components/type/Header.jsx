@@ -74,7 +74,7 @@ export default class Header extends Component {
           </Button>
           { !indexLoading && 
             <Button className='create-btn' onClick={ () => { this.setState({ sortCardsModalShow: true }); } }>
-              <i className='fa fa-pencil'></i>&nbsp;编辑顺序
+              <i className='fa fa-edit'></i>&nbsp;编辑顺序
             </Button> }
           <div className={ indexLoading ? 'hide' : 'div-default-set' }>
             <span className='default-set'>默认类型：</span>

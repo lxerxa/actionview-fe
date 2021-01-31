@@ -436,7 +436,7 @@ export default class Header extends Component {
           { !indexEpicLoading &&  
           <div style={ { display: 'inline-block', float: 'left', marginRight: '10px' } }>
             <Button onClick={ () => { this.setState({ sortCardsModalShow: true }) } }>
-              <i className='fa fa-pencil' aria-hidden='true'></i> 编辑顺序
+              <i className='fa fa-edit' aria-hidden='true'></i> 编辑顺序
             </Button>
           </div> }
         </div> }

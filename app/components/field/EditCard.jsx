@@ -141,7 +141,7 @@ export default class Card extends Component {
         </span> }
         { !!edit && !this.state.editing && 
         <span style={ styles } onClick={ this.edit.bind(this) } title='编辑' className='rm-icon'>
-          <i className='fa fa-pencil'></i>
+          <i className='fa fa-edit'></i>
         </span> }
       </div>
     ));
