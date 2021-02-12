@@ -7,7 +7,7 @@ const inlineAttachment = require('inlineAttachment2');
 const SimpleMDE = require('SimpleMDE');
 const img = require('../../assets/images/loading.gif');
 
-let simplemde = {};
+let simplemde = null;
 
 const { API_BASENAME } = process.env;
 
@@ -95,7 +95,7 @@ export default class Create extends Component {
     const { i18n: { errMsg }, loading, path } = this.props;
 
     return (
-      <div style={ { marginTop: '15px' } } className='wiki-body'>
+      <div className='wiki-body'>
         <div style={ { fontSize: '25px', fontWeight: 400, marginBottom: '5px' } }>
           新建Wiki
         </div>

@@ -1212,7 +1212,7 @@ export default class DetailBar extends Component {
                     const djsConfig = {
                       parallelUploads: 1,
                       addRemoveLinks: false,
-                      dictDefaultMessage: '点击和拖动文件至此',
+                      dictDefaultMessage: '点击或拖拽文件至此',
                       paramName: field.key
                     };
                     const eventHandlers = {

@@ -1049,6 +1049,14 @@ table tr:hover .remove-icon{
   border-radius: 0px;
 }
 
+.wiki-body {
+  margin-top: 15px;
+}
+
+.wiki-body .CodeMirror, .wiki-body .CodeMirror-scroll {
+  min-height: 500px;
+}
+
 .report-container td {
   width: 25%
 }
