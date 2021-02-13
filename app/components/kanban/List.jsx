@@ -587,7 +587,7 @@ export default class List extends Component {
             forward={ forward }
             visitedIndex={ visitedIndex }
             visitedCollection={ visitedCollection }
-            issueCollection={ _.findIndex(columnIssues[this.state.curColNo] || [], { no: itemData.no }) === -1 ? [] : columnIssues[this.state.curColNo] }
+            issueCollection={ mode == 'history' ? [] : (_.findIndex(columnIssues[this.state.curColNo] || [], { no: itemData.no }) === -1 ? [] : columnIssues[this.state.curColNo]) }
             show = { show }
             detailFloatStyle={ detailFloatStyle }
             itemLoading={ itemLoading }
