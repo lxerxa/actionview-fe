@@ -735,6 +735,7 @@ class CreateModal extends Component {
                       dateFormat={ 'YYYY/MM/DD' }
                       timeFormat={ v.type === 'DateTimePicker' ?  'HH:mm' : false } 
                       closeOnSelect={ v.type === 'DatePicker' }
+                      inputProps={ { placeholder: '选择' + (v.type === 'DatePicker' ? '日期' : '时间') } }
                       value={ this.state.values[v.key] || '' } 
                       inputProps={ { placeholder: '选择时间' } }
                       onChange={ newValue => { this.onChange(newValue, v); } }/>
@@ -749,7 +750,7 @@ class CreateModal extends Component {
                   postUrl: API_BASENAME + '/project/' + project.key + '/file'
                 };
                 const djsConfig = {
-                  dictDefaultMessage: '点击和拖动文件至此',
+                  dictDefaultMessage: '点击或拖拽文件至此',
                   addRemoveLinks: true,
                   paramName: v.key
                 };

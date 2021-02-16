@@ -43,7 +43,7 @@ export default class Header extends Component {
           <Button
             className='create-btn'
             onClick={ () => { this.setState({ sortCardsModalShow: true }); } }>
-            <i className='fa fa-pencil'></i>&nbsp;编辑顺序
+            <i className='fa fa-edit'></i>&nbsp;编辑顺序
           </Button> }
         </div>
         <div className='info-col'>

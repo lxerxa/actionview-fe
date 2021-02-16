@@ -550,7 +550,7 @@ export default class List extends Component {
               { project.status == 'active' &&
               <ButtonGroup style={ { float: 'right', marginRight: '10px' } }>
                 <Button onClick={ () => { goto('new'); } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>
-                  <i className='fa fa-pencil'></i>&nbsp;新建文档
+                  <i className='fa fa-edit'></i>&nbsp;新建文档
                 </Button>
                 { options.permissions && options.permissions.indexOf('manage_project') !== -1 &&
                 <Button onClick={ () => { this.cancelEditRow(); this.setState({ createFolderShow: true }); } } disabled={ indexLoading || itemLoading || loading || !_.isEmpty(query) }>

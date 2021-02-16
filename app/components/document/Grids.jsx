@@ -207,7 +207,7 @@ export default class Grids extends Component {
       postUrl: API_BASENAME + '/project/' + project.key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
     };
     const djsConfig = {
-      dictDefaultMessage: '点击和拖动文件至此',
+      dictDefaultMessage: '点击或拖拽文件至此',
       addRemoveLinks: true
     };
     const eventHandlers = {

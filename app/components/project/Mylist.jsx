@@ -501,7 +501,7 @@ export default class List extends Component {
                   { model.principal.id === user.id && 
                   <div className='btns'>
                     { model.status == 'active' && 
-                      <span style={ { marginLeft: '5px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-pencil' aria-hidden='true'></i></span> }
+                      <span style={ { marginLeft: '5px' } } title='编辑' onClick={ this.edit.bind(this, model.id) } className='comments-button'><i className='fa fa-edit' aria-hidden='true'></i></span> }
                     {/* model.status == 'active' && 
                       <span style={ { marginLeft: '3px' } } title='重建索引' onClick={ this.createIndex.bind(this, model.id) } className='comments-button'><i className='fa fa-refresh' aria-hidden='true'></i></span> */}
                     { model.status === 'active' && 

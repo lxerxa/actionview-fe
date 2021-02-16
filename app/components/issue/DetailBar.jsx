@@ -778,7 +778,7 @@ export default class DetailBar extends Component {
               </div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '15px', marginBottom: '40px', marginLeft: '15px' } }>
                 <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
-                  { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-pencil'></i> 编辑</Button> }
+                  { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-edit'></i> 编辑</Button> }
                   { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
                     data.wfactions && data.wfactions.length <= 4 ?
                     <ButtonGroup style={ { marginLeft: '10px' } }>
@@ -1212,7 +1212,7 @@ export default class DetailBar extends Component {
                     const djsConfig = {
                       parallelUploads: 1,
                       addRemoveLinks: false,
-                      dictDefaultMessage: '点击和拖动文件至此',
+                      dictDefaultMessage: '点击或拖拽文件至此',
                       paramName: field.key
                     };
                     const eventHandlers = {

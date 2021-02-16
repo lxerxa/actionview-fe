@@ -607,14 +607,21 @@ table tr:hover .remove-icon{
   line-height: 20px;
 }
 
-.no-avatar {
+.small-avatar {
+  width: 12px;
+  height: 12px;
+  text-decoration: 'blink';
+  border-radius: 50%;
+}
+
+.default-avatar {
   width: 28px;
   height: 28px;
   text-decoration: 'blink';
   border-radius: 50%;
 }
 
-.big-no-avatar {
+.big-avatar {
   width: 80px;
   height: 80px;
   text-decoration: 'blink';
@@ -1040,6 +1047,14 @@ table tr:hover .remove-icon{
 .animate-dialog .nav-tabs > li.active > a:hover {
   border-top-color: transparent;
   border-radius: 0px;
+}
+
+.wiki-body {
+  margin-top: 15px;
+}
+
+.wiki-body .CodeMirror, .wiki-body .CodeMirror-scroll {
+  min-height: 500px;
 }
 
 .report-container td {

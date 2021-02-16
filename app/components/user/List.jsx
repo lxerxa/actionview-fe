@@ -355,7 +355,7 @@ export default class List extends Component {
               <Button onClick={ () => { this.setState({ createModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-plus'></i>&nbsp;新建用户</Button>
             </span>
             <span style={ { float: 'left', width: '20%' } }>
-              <Button onClick={ () => { this.setState({ importModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-users'></i>&nbsp;批量导入</Button>
+              <Button onClick={ () => { this.setState({ importModalShow: true }); } } disabled={ indexLoading }><i className='fa fa-upload'></i>&nbsp;批量导入</Button>
             </span>
           </FormGroup>
         </div>
