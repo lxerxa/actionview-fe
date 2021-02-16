@@ -737,6 +737,7 @@ class CreateModal extends Component {
                       closeOnSelect={ v.type === 'DatePicker' }
                       inputProps={ { placeholder: '选择' + (v.type === 'DatePicker' ? '日期' : '时间') } }
                       value={ this.state.values[v.key] || '' } 
+                      inputProps={ { placeholder: '选择时间' } }
                       onChange={ newValue => { this.onChange(newValue, v); } }/>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel } style={ { textAlign: 'left' } }>
