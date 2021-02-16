@@ -393,7 +393,7 @@ export function parseQuery(query, options) {
             if (RegExp.$2 == '0') {
               startCond = '当天';
             } else {
-              startCond = (RegExp.$1 === '-' ? '前' : '后') + RegExp.$2 + timeUnits[RegExp.$3];
+              startCond = '距今' + (RegExp.$1 === '-' ? '前' : '后') + RegExp.$2 + timeUnits[RegExp.$3];
             }
           } else {
             return v.name + ': ' + errorMsg;
@@ -408,7 +408,7 @@ export function parseQuery(query, options) {
           } else if ([ 'd', 'w', 'm', 'y' ].indexOf(sections[1].charAt(sections[1].length - 1)) !== -1) {
             const pattern = new RegExp('^(-?)(\\d+)(d|w|m|y)$');
             if (pattern.exec(sections[1])) {
-              endCond = (RegExp.$1 === '-' ? '过去' : '未来') + RegExp.$2 + timeUnits[RegExp.$3];
+              endCond = '距今' + (RegExp.$1 === '-' ? '前' : '后') + RegExp.$2 + timeUnits[RegExp.$3];
             } else {
               return v.name + errorMsg;
             }
