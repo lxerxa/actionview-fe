@@ -17,7 +17,13 @@ export default class Duration extends Component {
       start_value: '',
       end_value: '' 
     };
+
+    if (props.value) {
+      this.setValue(props.value);
+    }
+
     this.getValue = this.getValue.bind(this);
+    this.setValue = this.setValue.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -27,17 +33,12 @@ export default class Duration extends Component {
     value: PropTypes.string
   }
 
-  componentWillReceiveProps(nextProps) {
-
-    if (_.isEqual(nextProps.value, this.props.value)) {
-      return;
-    }
-
+  setValue(value) {
     let mode = this.state.mode, start_time = '', end_time = '', current_value = '', start_value = '', end_value = '';
 
     const suffix_list = [ 'd', 'w', 'm', 'y' ];
 
-    const duration = nextProps.value || '';
+    const duration = value || '';
     if (!duration) {
       return;
     }
@@ -73,10 +74,23 @@ export default class Duration extends Component {
         end_value = parseInt(sections[1]);
       }
     } else {
-      current_value = sections[0]; 
+      current_value = sections[0];
     }
 
-    this.setState({ mode, start_time, end_time, current_value, start_value, end_value });
+    this.state.mode = mode;
+    this.state.start_time = start_time;
+    this.state.end_time = end_time;
+    this.state.current_value = current_value;
+    this.state.start_value = start_value;
+    this.state.end_value = end_value; 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (_.isEqual(nextProps.value, this.props.value)) {
+      return;
+    }
+
+    this.setValue(nextProps.value);
   }
 
   async onChange(data) {
