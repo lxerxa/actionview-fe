@@ -125,19 +125,53 @@ export default class Trend extends Component {
       query, 
       saveFilter } = this.props;
 
-    const units = { w: '周', m: '月', y: '年' };
+    const currentDurations = {
+      '0d': '当天',
+      '0w': '本周',
+      '0m': '当月',
+      '0y': '当前年'
+    };
+    const units = { d: '天', w: '周', m: '月', y: '年' };
+
     let sqlTxt = '';
     if (!optionsLoading) {
       const stat_time = query['stat_time'];
       if (stat_time) {
-        if (_.endsWith(stat_time, 'w') || _.endsWith(stat_time, 'm') || _.endsWith(stat_time, 'y')) {
-          const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
-          if (pattern.exec(stat_time)) {
-            sqlTxt = '统计时间～' + RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '外' : '内');
+        let startCond = '', endCond = '';
+        const sections = stat_time.split('~');
+
+        if ([ '0d', '0w', '0m', '0y' ].indexOf(sections[0]) !== -1) {
+          startCond = currentDurations[sections[0]];
+        } else if ([ 'd', 'w', 'm', 'y' ].indexOf(sections[0].charAt(sections[0].length - 1)) !== -1) {
+          const pattern = new RegExp('^(-?)(\\d+)(d|w|m|y)$');
+          if (pattern.exec(sections[0])) {
+            if (RegExp.$2 == '0') {
+              startCond = '当天';
+            } else {
+              startCond = RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '前' : '后');
+            }
           }
         } else {
-          sqlTxt = '统计时间～' + stat_time;
+          startCond = sections[0];
         }
+
+        if (sections[1]) {
+          if ([ '0d', '0w', '0m', '0y' ].indexOf(sections[1]) !== -1) {
+            endCond = currentDurations[sections[1]];
+          } else if ([ 'd', 'w', 'm', 'y' ].indexOf(sections[1].charAt(sections[1].length - 1)) !== -1) {
+            const pattern = new RegExp('^(-?)(\\d+)(d|w|m|y)$');
+            if (pattern.exec(sections[1])) {
+              if (RegExp.$2 == '0') {
+                endCond = '当天';
+              } else {
+                endCond = RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '前' : '后');
+              }
+            }
+          } else {
+            endCond = sections[1];
+          }
+        }
+        sqlTxt = '统计时间～' + startCond + '~' + endCond;
       }
 
       sqlTxt += ' | 是否累计～' + (query.is_accu === '1' ? '是' : '否');
@@ -176,7 +210,7 @@ export default class Trend extends Component {
             </Col>
             <Col sm={ 6 }>
               <Duration
-                options={ [ 'fixed', 'inside_variable' ] }
+                options={ [ 'fixed', 'variable_duration' ] }
                 value={ this.state.stat_time }
                 onChange={ (newValue) => { this.state.stat_time = newValue; this.search(); } }/>
             </Col>
