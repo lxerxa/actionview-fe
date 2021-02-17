@@ -92,10 +92,10 @@ export default class List extends Component {
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?assignee=me&resolution=Unresolved' }>分配给我的</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?reporter=me' }>我报告的</Link></span>
           <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?watcher=me' }>我关注的</Link></span>
-          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?created_at=2w~' }>最近增加的</Link></span>
-          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?updated_at=2w~' }>最近更新的</Link></span>
-          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolved_at=2w~' }>最近解决的</Link></span>
-          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?closed_at=2w~' }>最近关闭的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?created_at=-14d~' }>最近增加的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?updated_at=-14d~' }>最近更新的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?resolved_at=-14d~' }>最近解决的</Link></span>
+          <span style={ filterStyle }><Link to={ '/project/' + project.key + '/issue?closed_at=-14d~' }>最近关闭的</Link></span>
         </div> }
         <Panel
           style={ { height: '320px' } }
@@ -116,39 +116,39 @@ export default class List extends Component {
             <tbody>
               <tr>
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?created_at=2w~' }>
+                  <Link to={ '/project/' + project.key + '/issue?created_at=-14d~' }>
                     新建问题
                   </Link>
                 </td>
                 { _.map(data.trend || [], (v, i) => <td key={ i }><Link to={ '/project/' + project.key + '/issue?created_at=' + v.day + '~' + v.day }>{ v.new }</Link></td>) }
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?created_at=2w~' }>
+                  <Link to={ '/project/' + project.key + '/issue?created_at=-14d~' }>
                     { _.reduce(data.trend || [], (sum, v) => { return sum + v.new }, 0) }
                   </Link>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?resolved_at=2w~' }>
+                  <Link to={ '/project/' + project.key + '/issue?resolved_at=-14d~' }>
                     解决问题
                   </Link>
                 </td>
                 { _.map(data.trend || [], (v, i) => <td key={ i }><Link to={ '/project/' + project.key + '/issue?resolved_at=' + v.day + '~' + v.day }>{ v.resolved }</Link></td>) }
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?resolved_at=2w~' }>
+                  <Link to={ '/project/' + project.key + '/issue?resolved_at=-14d~' }>
                     { _.reduce(data.trend || [], (sum, v) => { return sum + v.resolved }, 0) }
                   </Link>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?closed_at=2w~' }>
+                  <Link to={ '/project/' + project.key + '/issue?closed_at=-14d~' }>
                     关闭问题
                   </Link>
                 </td>
                 { _.map(data.trend || [], (v, i) => <td key={ i }><Link to={ '/project/' + project.key + '/issue?closed_at=' + v.day + '~' + v.day }>{ v.closed }</Link></td>) }
                 <td>
-                  <Link to={ '/project/' + project.key + '/issue?closed_at=2w~' }>
+                  <Link to={ '/project/' + project.key + '/issue?closed_at=-14d~' }>
                     { _.reduce(data.trend || [], (sum, v) => { return sum + v.closed }, 0) }
                   </Link>
                 </td>

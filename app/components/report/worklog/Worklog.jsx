@@ -123,19 +123,53 @@ export default class Worklog extends Component {
     }
     //data = [];
 
-    const units = { w: '周', m: '月', y: '年' };
+    const currentDurations = {
+      '0d': '当天',
+      '0w': '本周',
+      '0m': '当月',
+      '0y': '当前年'
+    };
+    const units = { d: '天', w: '周', m: '月', y: '年' };
+
     let sqlTxt = '';
     if (!optionsLoading) {
       const recorded_at = query['recorded_at'];
       if (recorded_at) {
-        if (_.endsWith(recorded_at, 'w') || _.endsWith(recorded_at, 'm') || _.endsWith(recorded_at, 'y')) {
-          const pattern = new RegExp('^(-?)(\\d+)(w|m|y)$');
-          if (pattern.exec(recorded_at)) {
-            sqlTxt = '填报时间～' + RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '外' : '内');
+        let startCond = '', endCond = '';
+        const sections = recorded_at.split('~');
+
+        if ([ '0d', '0w', '0m', '0y' ].indexOf(sections[0]) !== -1) {
+          startCond = currentDurations[sections[0]];
+        } else if ([ 'd', 'w', 'm', 'y' ].indexOf(sections[0].charAt(sections[0].length - 1)) !== -1) {
+          const pattern = new RegExp('^(-?)(\\d+)(d|w|m|y)$');
+          if (pattern.exec(sections[0])) {
+            if (RegExp.$2 == '0') {
+              startCond = '当天';
+            } else {
+              startCond = RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '前' : '后');
+            }
           }
         } else {
-          sqlTxt = '填报时间～' + recorded_at;
+          startCond = sections[0];
         }
+
+        if (sections[1]) {
+          if ([ '0d', '0w', '0m', '0y' ].indexOf(sections[1]) !== -1) {
+            endCond = currentDurations[sections[1]];
+          } else if ([ 'd', 'w', 'm', 'y' ].indexOf(sections[1].charAt(sections[1].length - 1)) !== -1) {
+            const pattern = new RegExp('^(-?)(\\d+)(d|w|m|y)$');
+            if (pattern.exec(sections[1])) {
+              if (RegExp.$2 == '0') {
+                endCond = '当天';
+              } else {
+                endCond = RegExp.$2 + units[RegExp.$3] + (RegExp.$1 === '-' ? '前' : '后');
+              }
+            }
+          } else {
+            endCond = sections[1];
+          }
+        }
+        sqlTxt = '填报时间～' + startCond + '~' + endCond;
       }
       const issueSqlTxt = parseQuery(query, options);
       if (sqlTxt && issueSqlTxt) {
@@ -160,7 +194,7 @@ export default class Worklog extends Component {
             </Col>
             <Col sm={ 5 }>
               <Duration
-                options={ [ 'fixed', 'inside_variable' ] }
+                options={ [ 'fixed', 'variable_duration' ] }
                 value={ this.state.recorded_at }
                 onChange={ (newValue) => { this.state.recorded_at = newValue; this.search(); } }/>
             </Col>
