@@ -164,7 +164,7 @@ export default class Duration extends Component {
     return (
       <div style={ { display: 'inline' } } onClick={ (e) => { e.stopPropagation(); } }>
         { options.length > 1 &&
-        <div style={ { width: '120px', display: 'inline-block', float: 'left', paddingRight: '10px' } }>
+        <div style={ { width: '26%', display: 'inline-block', float: 'left', paddingRight: '10px' } }>
           <Select
             options={ _.filter(modeOptions, (v) => this.state.options.indexOf(v.value) !== -1) }
             disabled={ false }
@@ -188,7 +188,7 @@ export default class Duration extends Component {
             placeholder='请选择'/>
         </div> }
         { mode === 'variable_duration' &&
-        <div style={ { float: 'left', marginTop: '9px', paddingRight: '5px' } }>
+        <div style={ { float: 'left', marginTop: '9px', paddingRight: '5px', fontSize: '12px' } }>
           距今
         </div> }
         { mode === 'variable_duration' &&
@@ -218,10 +218,10 @@ export default class Duration extends Component {
         </div> }
 
         { (mode === 'variable_duration' || mode === 'fixed') &&
-        <div style={ { float: 'left', width: '20px', marginTop: '8px', textAlign: 'center' } }>～</div> }
+        <div style={ { float: 'left', width: '6%', marginTop: '8px', textAlign: 'center' } }>～</div> }
 
         { mode === 'variable_duration' &&
-        <div style={ { float: 'left', marginTop: '9px', paddingRight: '5px' } }>
+        <div style={ { float: 'left', marginTop: '9px', paddingRight: '5px', fontSize: '12px' } }>
           距今
         </div> }
         { mode === 'variable_duration' &&
