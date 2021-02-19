@@ -103,7 +103,7 @@ export default class Regressions extends Component {
       const stat_dimension = query['stat_dimension'];
       if (stat_dimension) {
         const ind = _.findIndex(stat_dimensions, { key: stat_dimension });
-        sqlTxt = '统计维度～' + (ind !== -1 ? stat_dimensions[ind].name : '');
+        sqlTxt = '统计维度: ' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
       const his_resolvers = query['his_resolvers'];
@@ -117,7 +117,7 @@ export default class Regressions extends Component {
           }
         });
         if (resolverNames.length > 0) {
-          sqlTxt = (sqlTxt ? (sqlTxt + ' | ') : '') + '历史解决者～' + resolverNames.join(',');
+          sqlTxt = (sqlTxt ? (sqlTxt + ' | ') : '') + '历史解决者: ' + resolverNames.join(',');
         }
       }
 

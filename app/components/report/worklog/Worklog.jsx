@@ -169,7 +169,7 @@ export default class Worklog extends Component {
             endCond = sections[1];
           }
         }
-        sqlTxt = '填报时间～' + startCond + '~' + endCond;
+        sqlTxt = '填报时间: ' + startCond + '~' + endCond;
       }
       const issueSqlTxt = parseQuery(query, options);
       if (sqlTxt && issueSqlTxt) {

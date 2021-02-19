@@ -108,13 +108,13 @@ export default class Issues extends Component {
       const stat_x = query['stat_x'];
       if (stat_x) {
         const ind = _.findIndex(stat_dimensions, { key: stat_x });
-        sqlTxt = 'X轴～' + (ind !== -1 ? stat_dimensions[ind].name : '');
+        sqlTxt = 'X轴: ' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
       const stat_y = query['stat_y'];
       if (stat_y) {
         const ind = _.findIndex(stat_dimensions, { key: stat_y });
-        sqlTxt += (stat_x ? ' | ' : '') + 'Y轴～' + (ind !== -1 ? stat_dimensions[ind].name : '');
+        sqlTxt += (stat_x ? ' | ' : '') + 'Y轴: ' + (ind !== -1 ? stat_dimensions[ind].name : '');
       }
 
       const issueSqlTxt = parseQuery(query, options);

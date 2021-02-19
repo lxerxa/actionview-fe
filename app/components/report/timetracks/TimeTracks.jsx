@@ -120,7 +120,7 @@ export default class TimeTracks extends Component {
 
     let sqlTxt = '';
     if (!optionsLoading) {
-      sqlTxt = '统计范围～' + (query.scale === 'only' ? '仅包含有初始预估时间的' : '所有问题');
+      sqlTxt = '统计范围: ' + (query.scale === 'only' ? '仅包含有初始预估时间的' : '所有问题');
       const issueSqlTxt = parseQuery(query, options);
       if (issueSqlTxt) {
         sqlTxt += ' | ' + issueSqlTxt;

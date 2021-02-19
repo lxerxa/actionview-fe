@@ -171,14 +171,14 @@ export default class Trend extends Component {
             endCond = sections[1];
           }
         }
-        sqlTxt = '统计时间～' + startCond + '~' + endCond;
+        sqlTxt = '统计时间: ' + startCond + '~' + endCond;
       }
 
-      sqlTxt += ' | 是否累计～' + (query.is_accu === '1' ? '是' : '否');
+      sqlTxt += ' | 是否累计: ' + (query.is_accu === '1' ? '是' : '否');
 
       const intervals = { 'day': '天', 'week': '周', 'month': '月' };
       const interval = query['interval'] || 'day';
-      sqlTxt += ' | 时间间隔～' + intervals[interval];
+      sqlTxt += ' | 时间间隔: ' + intervals[interval];
 
       const issueSqlTxt = parseQuery(query, options);
       if (sqlTxt && issueSqlTxt) {
