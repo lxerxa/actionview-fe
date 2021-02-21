@@ -176,11 +176,13 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_FILTER_SAVE:
     case t.ISSUE_FILTERS_CONFIG:
+    case t.ISSUE_FILTERS_DEL:
     case t.ISSUE_FILTERS_RESET:
       return { ...state, filterLoading: true };
 
     case t.ISSUE_FILTER_SAVE_SUCCESS:
     case t.ISSUE_FILTERS_CONFIG_SUCCESS:
+    case t.ISSUE_FILTERS_DEL_SUCCESS:
     case t.ISSUE_FILTERS_RESET_SUCCESS:
       if ( action.result.ecode === 0 ) {
         state.options.filters = action.result.data;
@@ -189,6 +191,7 @@ export default function issue(state = initialState, action) {
 
     case t.ISSUE_FILTER_SAVE_FAIL:
     case t.ISSUE_FILTERS_CONFIG_FAIL:
+    case t.ISSUE_FILTERS_DEL_FAIL:
     case t.ISSUE_FILTERS_RESET_FAIL:
       return { ...state, filterLoading: false, error: action.error };
 

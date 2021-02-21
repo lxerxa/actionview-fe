@@ -102,6 +102,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async delFilters(values) {
+    await this.props.actions.delFilters(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
   async setAssignee(id, values, modalFlag) {
     await this.props.actions.setAssignee(this.pid, id, values, modalFlag);
     return this.props.issue.ecode;
@@ -263,12 +268,14 @@ export default class Container extends Component {
           saveFilter={ this.saveFilter.bind(this) }
           resetFilters={ this.resetFilters.bind(this) }
           configFilters={ this.configFilters.bind(this) }
+          delFilters={ this.delFilters.bind(this) }
           getOptions={ this.getOptions.bind(this) }
           query={ query }
           refresh={ this.refresh.bind(this) }
           index={ this.index.bind(this) }
           project={ this.props.project.item }
           closeDetailBar={ this.closeDetailBar.bind(this) }
+          user={ this.props.session.user }
           i18n={ this.props.i18n }
           { ...this.props.issue }/> }
         <List ref='list' 

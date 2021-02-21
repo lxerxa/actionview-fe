@@ -30,6 +30,7 @@ export default class FilterConfigModal extends Component {
     i18n: PropTypes.object.isRequired,
     title: PropTypes.string,
     loading: PropTypes.bool,
+    isRemovable: PropTypes.bool,
     config: PropTypes.func.isRequired,
     filters: PropTypes.array.isRequired,
     close: PropTypes.func.isRequired
@@ -78,7 +79,7 @@ export default class FilterConfigModal extends Component {
 
   render() {
     const { cards, strCards } = this.state;
-    const { i18n: { errMsg }, loading, title } = this.props;
+    const { i18n: { errMsg }, loading, title, isRemovable=true } = this.props;
 
     return (
       <Modal show onHide={ this.cancel.bind(this) } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -96,7 +97,7 @@ export default class FilterConfigModal extends Component {
                   id={ op.id }
                   text={ op.text }
                   moveCard={ this.moveCard }
-                  deleteCard={ this.deleteCard.bind(this, i) }/>
+                  deleteCard={ isRemovable ? this.deleteCard.bind(this, i) : null }/>
               );
             }) 
             :

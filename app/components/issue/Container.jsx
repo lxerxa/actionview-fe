@@ -122,6 +122,11 @@ export default class Container extends Component {
     return this.props.issue.ecode;
   }
 
+  async delFilters(values) {
+    await this.props.actions.delFilters(this.pid, values);
+    return this.props.issue.ecode;
+  }
+
   async resetFilters() {
     await this.props.actions.resetFilters(this.pid);
     return this.props.issue.ecode;
@@ -309,6 +314,7 @@ export default class Container extends Component {
           setColumns={ this.setColumns.bind(this) } 
           resetColumns={ this.resetColumns.bind(this) } 
           configFilters={ this.configFilters.bind(this) } 
+          delFilters={ this.delFilters.bind(this) } 
           getOptions={ this.getOptions.bind(this) } 
           query={ query } 
           refresh={ this.refresh.bind(this) } 
@@ -321,6 +327,7 @@ export default class Container extends Component {
           selectedIds={ this.state.selectedIds }
           isBatchHandle={ this.state.isBatchHandle }
           switchBatch={ this.switchBatch.bind(this) }
+          user={ this.props.session.user }
           i18n={ this.props.i18n }
           { ...this.props.issue }/>
         <List ref='list' 

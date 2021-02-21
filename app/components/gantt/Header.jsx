@@ -7,6 +7,7 @@ const CreateModal = require('../issue/CreateModal');
 const SaveFilterModal = require('../issue/SaveFilterModal');
 const ResetFiltersNotify = require('../issue/ResetFiltersNotify');
 const FilterConfigModal = require('../share/FilterConfigModal');
+const FilterDelModal = require('../issue/DelFiltersModal');
 
 const img = require('../../assets/images/loading.gif');
 
@@ -16,6 +17,7 @@ export default class Header extends Component {
     this.state = { 
       createModalShow: false, 
       filterConfigShow: false, 
+      filterDelShow: false,
       searchShow: false, 
       saveFilterShow: false,
       resetFiltersShow: false 
@@ -25,15 +27,18 @@ export default class Header extends Component {
     this.saveFilterModalClose = this.saveFilterModalClose.bind(this);
     this.resetFiltersNotifyClose = this.resetFiltersNotifyClose.bind(this);
     this.filterConfigModalClose = this.filterConfigModalClose.bind(this);
+    this.filterDelModalClose = this.filterDelModalClose.bind(this);
   }
 
   static propTypes = {
     i18n: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     addLabels: PropTypes.func.isRequired,
     saveFilter: PropTypes.func.isRequired,
     resetFilters: PropTypes.func.isRequired,
     configFilters: PropTypes.func.isRequired,
+    delFilters: PropTypes.func.isRequired,
     index: PropTypes.func,
     refresh: PropTypes.func,
     getOptions: PropTypes.func,
@@ -67,6 +72,10 @@ export default class Header extends Component {
     this.setState({ filterConfigShow: false });
   }
 
+  filterDelModalClose() {
+    this.setState({ filterDelShow: false });
+  }
+
   selectFilter(eventKey) {
     const { refresh, options={} } = this.props;
 
@@ -74,8 +83,8 @@ export default class Header extends Component {
       this.setState({ filterConfigShow: true });
     } else if(eventKey == 'saveFilter') {
       this.setState({ saveFilterShow : true });
-    } else if(eventKey == 'resetFilters') {
-      this.setState({ 'resetFiltersShow' : true });
+    } else if(eventKey == 'filterDel') {
+      this.setState({ filterDelShow : true });
     } else {
       const filters = options.filters || [];
       const filter = _.find(filters, { id: eventKey }) || {};
@@ -99,12 +108,14 @@ export default class Header extends Component {
   render() {
     const { 
       i18n, 
+      user,
       index,
       create, 
       addLabels, 
       saveFilter, 
       resetFilters, 
       configFilters, 
+      delFilters, 
       indexLoading, 
       optionsLoading, 
       filterLoading, 
@@ -127,8 +138,8 @@ export default class Header extends Component {
               <MenuItem disabled>无</MenuItem> }
             <MenuItem divider/>
             <MenuItem eventKey='saveFilter'>保存当前检索</MenuItem>
-            <MenuItem eventKey='filterConfig'>过滤器管理</MenuItem>
-            <MenuItem eventKey='resetFilters'>过滤器重置</MenuItem>
+            <MenuItem eventKey='filterConfig'>过滤器排序</MenuItem>
+            <MenuItem eventKey='filterDel'>过滤器删除</MenuItem>
           </DropdownButton>
           <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
@@ -148,13 +159,22 @@ export default class Header extends Component {
           </div> }
         </div>
         { this.state.filterConfigShow && 
-        <FilterConfigModal 
-          show 
-          close={ this.filterConfigModalClose } 
-          loading={ filterLoading } 
-          config={ configFilters } 
-          filters={ options.filters || [] } 
-          i18n={ i18n }/> }
+          <FilterConfigModal 
+            show 
+            isRemovable={ false }
+            close={ this.filterConfigModalClose } 
+            loading={ filterLoading } 
+            config={ configFilters } 
+            filters={ options.filters || [] } 
+            i18n={ i18n }/> }
+        { this.state.filterDelShow &&
+          <FilterDelModal
+            show
+            close={ this.filterDelModalClose }
+            loading={ filterLoading }
+            del={ delFilters }
+            data={ _.filter(options.filters || [], (v) => v.creator == user.id) }
+            i18n={ i18n }/> }
         <IssueFilterList 
           values={ query } 
           searchShow={ this.state.searchShow } 
@@ -162,32 +182,32 @@ export default class Header extends Component {
           options={ options } 
           onChange={ (newValue) => { refresh(_.assign({}, newValue, { page: undefined })) } } />
         { this.state.createModalShow && 
-        <CreateModal 
-          show 
-          close={ this.createModalClose } 
-          options={ options } 
-          create={ create } 
-          addLabels={ addLabels } 
-          loading={ loading } 
-          project={ project } 
-          i18n={ i18n }/> }
+          <CreateModal 
+            show 
+            close={ this.createModalClose } 
+            options={ options } 
+            create={ create } 
+            addLabels={ addLabels } 
+            loading={ loading } 
+            project={ project } 
+            i18n={ i18n }/> }
         { this.state.saveFilterShow && 
-        <SaveFilterModal 
-          show 
-          close={ this.saveFilterModalClose } 
-          filters={ options.filters || [] } 
-          create={ saveFilter } 
-          query={ query } 
-          loading={ filterLoading } 
-          sqlTxt={ sqlTxt } 
-          i18n={ i18n }/> }
+          <SaveFilterModal 
+            show 
+            close={ this.saveFilterModalClose } 
+            filters={ options.filters || [] } 
+            create={ saveFilter } 
+            query={ query } 
+            loading={ filterLoading } 
+            sqlTxt={ sqlTxt } 
+            i18n={ i18n }/> }
         { this.state.resetFiltersShow &&
-        <ResetFiltersNotify
-          show
-          close={ this.resetFiltersNotifyClose }
-          reset={ resetFilters }
-          loading={ filterLoading }
-          i18n={ i18n }/> }
+          <ResetFiltersNotify
+            show
+            close={ this.resetFiltersNotifyClose }
+            reset={ resetFilters }
+            loading={ filterLoading }
+            i18n={ i18n }/> }
       </div>
     );
   }
