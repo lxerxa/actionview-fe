@@ -200,6 +200,7 @@ export default class Header extends Component {
             query={ query } 
             loading={ filterLoading } 
             sqlTxt={ sqlTxt } 
+            options={ options }
             i18n={ i18n }/> }
         { this.state.resetFiltersShow &&
           <ResetFiltersNotify
