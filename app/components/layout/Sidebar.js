@@ -117,6 +117,11 @@ export default class Sidebar extends Component {
     } else {
       $('#kanban').removeClass('menu-active');
     }
+    if (/^\/project\/(\w+)\/gantt(\/\w+)?$/.test(pathname)) {
+      $('#gantt').addClass('menu-active');
+    } else {
+      $('#gantt').removeClass('menu-active');
+    }
     if (/^\/project\/(\w+)\/workflow(\/\w+)?$/.test(pathname)) {
       $('#workflow').addClass('menu-active');
     } else {
@@ -248,7 +253,7 @@ export default class Sidebar extends Component {
               <li><Link to={ '/project/' + project.item.key + '/summary' } activeClassName='menu-active' id='summary'>概览</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/issue' } activeClassName='menu-active'>问题</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/kanban' } activeClassName='menu-active' id='kanban'>看板</Link></li>
-              <li><Link to={ '/project/' + project.item.key + '/gantt' } activeClassName='menu-active' id='gantt'>甘特图</Link></li>
+              <li><Link to={ '/project/' + project.item.key + '/gantt/filter' } activeClassName='menu-active' id='gantt'>甘特图</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/activity' } activeClassName='menu-active'>活动</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/module' } activeClassName='menu-active'>模块</Link></li>
               <li><Link to={ '/project/' + project.item.key + '/version' } activeClassName='menu-active'>版本</Link></li>

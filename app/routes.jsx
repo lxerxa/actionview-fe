@@ -8,6 +8,7 @@ import Forgot from './components/login/Forgot';
 import ResetPwd from './components/login/ResetPwd';
 import Register from './components/login/Register';
 import Project from './components/project/Project';
+import GanttFilter from './components/gantt/FilterContainer';
 import Scheme from './components/scheme/Scheme';
 
 const suffix = ' - ActionView';
@@ -269,6 +270,7 @@ export default (
         <Route path='activity' getComponent={ ActivityContainer }/>
         <Route path='kanban(/:id)' getComponent={ KanbanContainer }/>
         <Route path='gantt' getComponent={ GanttContainer }/>
+        <Route path='gantt/filter' component={ GanttFilter }/>
         <Route path='document(/:id)' getComponent={ DocumentContainer }/>
         <Route path='wiki(/:dir)(/:wid)(/:mode)' getComponent={ WikiContainer }/>
         <Route path='labels' getComponent={ LabelsContainer }/>
