@@ -11,6 +11,10 @@ const img = require('../../assets/images/loading.gif');
 const PaginationList = require('../share/PaginationList');
 const EditModal = require('./EditModal');
 const DetailBar = require('../issue/DetailBar');
+const Grids = require('./Grids');
+const VtHeader = require('./VtHeader');
+const HzHeader = require('./HzHeader');
+const Blocks = require('./Blocks');
 
 export default class List extends Component {
   constructor(props) {
@@ -34,10 +38,6 @@ export default class List extends Component {
     this.scrollSide = '';
     this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'start_time_asc';
     this.state.mode = window.localStorage && window.localStorage.getItem('gantt-mode') || 'progress';
-    this.addVtHeader = this.addVtHeader.bind(this);
-    this.addHzHeader = this.addHzHeader.bind(this);
-    this.addGrid = this.addGrid.bind(this);
-    this.addBlocks = this.addBlocks.bind(this);
     this.setBoundaryDatesFromData = this.setBoundaryDatesFromData.bind(this);
     this.setDates = this.setDates.bind(this);
     this.updateData = this.updateData.bind(this);
@@ -47,9 +47,9 @@ export default class List extends Component {
     this.fold = this.fold.bind(this);
     this.setSort = this.setSort.bind(this);
     this.selectMode = this.selectMode.bind(this);
+    this.mark = this.mark.bind(this);
     this.locate = this.locate.bind(this);
     this.locateToday = this.locateToday.bind(this);
-    this.getDuration = this.getDuration.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
     this.changeScaling = this.changeScaling.bind(this);
   }
@@ -164,6 +164,13 @@ export default class List extends Component {
       record();
     }
   }
+
+  //shouldComponentUpdate(newProps, newState) {
+  //  if (!_.isEqual(newProps.query, this.props.query)) {
+  //    return false;
+  //  }
+  //  return true;
+  //}
 
   async componentWillMount() {
     const { index, query={} } = this.props;
@@ -287,258 +294,6 @@ export default class List extends Component {
     });
   }
 
-  addVtHeader() {
-    const { collection, mode, foldIssues, markedIssue } = this.state;
-    const { options: { states=[] } } = this.props;
-
-    const header = (
-      <div className='ganttview-vtheader-series-header-item'>
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '400px' } }>
-          主题
-        </div>
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '60px' } }>
-          NO
-        </div>
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          负责人
-        </div>
-        { mode == 'progress' &&
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
-          进度
-        </div> }
-        { mode == 'status' &&
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '80px' } }>
-          状态
-        </div> }
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          开始时间
-        </div>
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          完成时间
-        </div>
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '90px' } }>
-          工期(天)
-        </div>
-        <div className='ganttview-vtheader-series-header-item-cell' style={ { width: '50px' } }/>
-      </div>
-    );
-
-    return (
-      <div className='ganttview-vtheader'>
-        <div className='ganttview-vtheader-item'>
-          <div className='ganttview-vtheader-series' style={ { width: '950px' } }>
-            { header }
-            { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
-            <div className='ganttview-vtheader-series-item' key={ key } id={ v.id } onClick={ (e) => { e.preventDefault(); this.setState({ markedIssue: markedIssue.id == v.id ? {} : v }); } }>
-              <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
-                <span style={ { paddingRight: '5px', paddingLeft: v.parent && v.parent.id ? '12px' : '0px', visibility: v.hasSubtasks ? 'visible' : 'hidden', cursor: 'pointer' } }>
-                  { foldIssues.indexOf(v.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.fold(v.id) } }><i className='fa fa-minus-square-o'></i></a> }
-                </span>
-                <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.show(v.id) } } title={ v.title }>
-                  <span style={ { marginLeft: '3px' } }>{ v.title }</span>
-                </a>
-              </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '60px' } }>
-                { v.no } 
-              </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                { v.assignee && v.assignee.name || '-' } 
-              </div>
-              { mode == 'progress' &&
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>
-                { v.progress ? v.progress + '%' : '0%' } 
-              </div> }
-              { mode == 'status' &&
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '80px' } }>
-                { _.findIndex(states, { id: v.state }) !== -1 ? <span className={ 'state-' + _.find(states, { id: v.state }).category + '-label' }>{ _.find(states, { id: v.state }).name }</span> : '-' } 
-              </div> }
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                { v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : '-' } 
-              </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                { v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : '-' }
-              </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '90px' } }>
-                { v.expect_complete_time && v.expect_start_time ? this.getDuration(v.expect_start_time, v.expect_complete_time) : '-' }
-              </div>
-              <div className='ganttview-vtheader-series-item-cell' style={ { width: '50px' } }>
-                <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); this.locate(v.expect_start_time || v.expect_complete_time || v.created_at); } }>
-                  <i className='fa fa-dot-circle-o'></i>
-                </a> 
-              </div>
-            </div> ) ) }
-          </div>
-        </div>
-      </div>);
-  }
-
-  getDuration(start_time, complete_time) {
-    const { options: { singulars=[] } } = this.props;
-
-    const new_start_time = moment.unix(start_time).startOf('day').format('X') - 0; 
-    const new_complete_time = moment.unix(complete_time).startOf('day').format('X') - 0; 
-
-    let duration = 0;
-    for (let i = new_start_time; i <= new_complete_time; i = i + 3600 * 24) {
-      const m = moment.unix(i);
-      const date = m.format('YYYY/MM/DD');
-      const index = _.findIndex(singulars, { date });
-      if (index !== -1) {
-        if (singulars[index].notWorking !== 1) {
-          duration += 1;
-        }
-        continue;
-      }
-
-      const week = m.format('d'); 
-      if (week % 6 !== 0) {
-        duration += 1;
-      }
-    }
-    return duration;
-  }
-
-  addHzHeader() {  
-    const cellWidth = this.configs.cellWidth; 
-    const { dates } = this.state;
-    const { options: { today = '' } } = this.props;
-
-    const w = _.flatten(_.values(dates)).length * cellWidth + 'px';
-    return (
-      <div className='ganttview-hzheader'>
-        <div className='ganttview-hzheader-months' style={ { width: w } }>
-        { _.map(dates, (v, key) =>
-          <div className='ganttview-hzheader-month' key={ v.date } style={ { width: v.length * cellWidth + 'px' } }>
-            { key }
-          </div> ) }
-        </div>
-        <div className='ganttview-hzheader-days' style={ { width: w } }>
-          { _.map(_.flatten(_.values(dates)), (v) =>
-            <div className={ 'ganttview-hzheader-day ' + (v.date == today ? 'ganttview-today' : (v.notWorking === 1 ? 'ganttview-weekend' : '')) } style={ { width: cellWidth + 'px' } } key={ v.date }>
-              { v.day }
-            </div> ) }
-        </div>
-      </div>);
-  }
-
-  addGrid() {
-    const cellWidth = this.configs.cellWidth;
-    const { collection, dates, foldIssues, markedIssue } = this.state;
-    const { options: { today = '' } } = this.props;
-
-    const dates2 = _.flatten(_.values(dates));
-    return (
-      <div 
-        className='ganttview-grid' 
-        style={ { width: dates2.length * cellWidth + 'px' } }>
-      { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
-        <div 
-          className='ganttview-grid-row' 
-          style={ { width: dates2.length * cellWidth + 'px' } } 
-          key={ v.id }>
-        { _.map(dates2, (v2, key2) => 
-          <div 
-            className={ 'ganttview-grid-row-cell ' + (v2.date == today ? 'ganttview-today' : (v2.notWorking === 1 ? 'ganttview-weekend' : '')) } 
-            style={ { backgroundColor: markedIssue.id == v.id ? '#FFFACD' : '', width: cellWidth + 'px' } }
-            key={ v2.date }/> ) }
-        </div> ) ) }
-      </div>);
-  }
-
-  addBlocks() {
-    const cellWidth = this.configs.cellWidth;
-    const blockHeight = this.configs.blockHeight;
-
-    const { options: { states=[] } } = this.props;
-    const { mode, collection, range, foldIssues } = this.state;
-    const origin = range[0];
-
-    const stateColors = { new : '#ccc', inprogress: '#3db9d3', completed: '#3c9445' };
-
-    return (
-      <div className='ganttview-blocks'>
-      { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => {
-        const popover=(
-          <Popover id='popover-trigger-hover' style={ { maxWidth: '350px', padding: '15px 0px' } }>
-            <Grid>
-              <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>主题</Col>
-                <Col sm={ 8 }><div style={ { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' } }>{ v.title }</div></Col>
-              </Row>
-              <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
-                <Col sm={ 8 }>{ v.expect_start_time ? moment.unix(v.expect_start_time).format('YYYY/MM/DD') : <span style={ { fontStyle: 'italic', color: '#aaa' } }>未指定</span> }</Col>
-              </Row>
-              <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>结束时间</Col>
-                <Col sm={ 8 }>{ v.expect_complete_time ? moment.unix(v.expect_complete_time).format('YYYY/MM/DD') : <span style={ { fontStyle: 'italic', color: '#aaa' } }>未指定</span> }</Col>
-              </Row>
-              { mode == 'progress' &&
-              <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>进度</Col>
-                <Col sm={ 8 }>{ v.progress ? v.progress + '%' : '0%' }</Col>
-              </Row> }
-              { mode == 'status' &&
-              <Row>
-                <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>状态</Col>
-                <Col sm={ 8 }>{ _.findIndex(states, { id: v.state }) != -1 ? <span className={ 'state-' + _.find(states, { id: v.state }).category + '-label' }>{ _.find(states, { id: v.state }).name }</span>: '-' }</Col>
-              </Row> }
-            </Grid>
-          </Popover>);
-
-        const start = moment.unix(v.expect_start_time || v.expect_complete_time || v.created_at).startOf('day').format('X');
-        const end = moment.unix(v.expect_complete_time || v.expect_start_time || v.created_at).startOf('day').format('X');
-        const size = (end - start) / 3600 / 24 + 1;
-        const offset = (start - origin) / 3600 / 24;
-
-        const width = size * cellWidth - 3;
-
-        let backgroundColor = '#ccc';
-        if (mode == 'progress') {
-          if ((!v.expect_start_time || !v.expect_complete_time) && (!v.progress || v.progress < 100)) {
-            backgroundColor = '#555';
-          } else {
-            backgroundColor = v.hasSubtasks ? '#65c16f' : '#3db9d3';
-          }
-        } else if (mode == 'status') {
-          const stateInd = _.findIndex(states, { id: v.state });
-          if (stateInd !== -1) {
-            const category = states[stateInd].category;
-            if ((!v.expect_start_time || !v.expect_complete_time) && category !== 'completed') {
-              backgroundColor = '#555';
-            } else {
-              backgroundColor = stateColors[category]; 
-            }
-          }
-        }
-
-        const progressBGColor = v.hasSubtasks ? '#3c9445' : '#2898b0';
-
-        return (
-          <div className='ganttview-block-container' key={ v.id }>
-            <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='top' overlay={ popover }>
-              { v.hasSubtasks && foldIssues.indexOf(v.id) === -1 ?
-              <div className='ganttview-block-parent' 
-                id={ v.id }
-                style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px' } }>
-                <div className='ganttview-block-parent-left'/>
-                <div className='ganttview-block-parent-right'/>
-              </div>
-              :
-              <div 
-                className={ 'ganttview-block ' + (v.hasSubtasks ? '' : 'ganttview-block-movable') } 
-                id={ v.id }
-                style={ { width: width + 'px', height: blockHeight + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor } }>
-                { mode == 'progress' &&
-                <div 
-                  className='ganttview-block-progress' 
-                  style={ { height: blockHeight + 'px', width: (width * _.min([ _.max([ v.progress || 0, 0 ]), 100 ]) / 100) + 'px', backgroundColor: progressBGColor } }/> }
-              </div> }
-            </OverlayTrigger>
-          </div> ) } ) }
-      </div> );
-  }
-
   locateToday() {
     const cellWidth = this.configs.cellWidth;
     const { options: { today='' } } = this.props;
@@ -563,6 +318,11 @@ export default class List extends Component {
     const offset = _.floor((target - start) / 3600 / 24 - 1) * cellWidth;
     const container = $('div.ganttview-slide-container');
     container.scrollLeft(offset);
+  }
+
+  mark(v) {
+    const { markedIssue } = this.state;
+    this.setState({ markedIssue: markedIssue.id == v.id ? {} : v });
   }
 
   async updateData(block) {
@@ -936,7 +696,11 @@ export default class List extends Component {
       mode, 
       collection, 
       selectedIssue,
-      sortkey
+      sortkey,
+      foldIssues,
+      dates,
+      range,
+      markedIssue
     } = this.state;
 
     return (
@@ -1008,11 +772,36 @@ export default class List extends Component {
         </div> }
         { !indexLoading && collection.length > 0 &&  
         <div className='ganttview'>
-          { this.addVtHeader() }
+          <VtHeader
+            collection={ collection }
+            foldIssues={ foldIssues }
+            markedIssue={ markedIssue }
+            options={ options }
+            mode={ mode }
+            show={ this.show }
+            locate={ this.locate }
+            mark={ this.mark }
+            fold={ this.fold } />
           <div className='ganttview-slide-container'>
-            { this.addHzHeader() }
-            { this.addGrid() }
-            { this.addBlocks() }
+            <HzHeader
+              cellWidth={ this.configs.cellWidth }
+              dates={ dates }
+              today={ options.today || '' } />
+            <Grids
+              cellWidth={ this.configs.cellWidth }
+              collection={ collection }
+              dates={ dates }
+              foldIssues={ foldIssues }
+              markedIssue={ markedIssue }
+              today={ options.today || '' } />
+            <Blocks
+              cellWidth={ this.configs.cellWidth }
+              blockHeight={ this.configs.blockHeight }
+              collection={ collection }
+              range={ range }
+              mode={ mode }
+              foldIssues={ foldIssues }
+              options={ options } />
           </div>
         </div> }
         { this.state.editModalShow &&
