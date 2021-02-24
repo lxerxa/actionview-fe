@@ -8,8 +8,15 @@ export default class HzHeader extends Component {
 
   static propTypes = {
     cellWidth: PropTypes.number.isRequired,
-    dates: PropTypes.array.isRequired,
+    dates: PropTypes.object.isRequired,
     today: PropTypes.string.isRequired
+  }
+
+  shouldComponentUpdate(newProps, newState) {
+    if (newProps.cellWidth != this.props.cellWidth && !_.isEqual(_.keys(newProps.keys), _.keys(this.props.dates))) {
+      return true;
+    }
+    return false;
   }
 
   render() {
@@ -24,13 +31,13 @@ export default class HzHeader extends Component {
       <div className='ganttview-hzheader'>
         <div className='ganttview-hzheader-months' style={ { width: w } }>
         { _.map(dates, (v, key) =>
-          <div className='ganttview-hzheader-month' key={ v.date } style={ { width: v.length * cellWidth + 'px' } }>
+          <div className='ganttview-hzheader-month' key={ key } style={ { width: v.length * cellWidth + 'px' } }>
             { key }
           </div> ) }
         </div>
         <div className='ganttview-hzheader-days' style={ { width: w } }>
-          { _.map(_.flatten(_.values(dates)), (v) =>
-            <div className={ 'ganttview-hzheader-day ' + (v.date == today ? 'ganttview-today' : (v.notWorking === 1 ? 'ganttview-weekend' : '')) } style={ { width: cellWidth + 'px' } } key={ v.date }>
+          { _.map(_.flatten(_.values(dates)), (v, key) =>
+            <div className={ 'ganttview-hzheader-day ' + (v.date == today ? 'ganttview-today' : (v.notWorking === 1 ? 'ganttview-weekend' : '')) } style={ { width: cellWidth + 'px' } } key={ key }>
               { v.day }
             </div> ) }
         </div>
