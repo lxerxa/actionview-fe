@@ -775,7 +775,7 @@ export default class List extends Component {
           <VtHeader
             collection={ collection }
             foldIssues={ foldIssues }
-            markedIssue={ markedIssue }
+            selectedIssue={ itemData }
             options={ options }
             mode={ mode }
             show={ this.show }
@@ -798,9 +798,10 @@ export default class List extends Component {
               cellWidth={ this.configs.cellWidth }
               blockHeight={ this.configs.blockHeight }
               collection={ collection }
-              range={ range }
+              origin={ range[0] }
               mode={ mode }
               foldIssues={ foldIssues }
+              selectedIssue={ itemData }
               options={ options } />
           </div>
         </div> }

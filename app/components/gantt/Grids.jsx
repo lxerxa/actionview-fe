@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 
+const GridItem = require('./GridItem');
+
 export default class Grids extends Component {
   constructor(props) {
     super(props);
@@ -9,7 +11,7 @@ export default class Grids extends Component {
   static propTypes = {
     cellWidth: PropTypes.number.isRequired,
     collection: PropTypes.array.isRequired,
-    dates: PropTypes.array.isRequired,
+    dates: PropTypes.object.isRequired,
     foldIssues: PropTypes.array.isRequired,
     markedIssue: PropTypes.object.isRequired,
     today: PropTypes.string.isRequired
@@ -31,16 +33,14 @@ export default class Grids extends Component {
         className='ganttview-grid'
         style={ { width: dates2.length * cellWidth + 'px' } }>
       { _.map(_.reject(collection, (v) => v.parent && foldIssues.indexOf(v.parent.id) != -1), (v, key) => (
-        <div
-          className='ganttview-grid-row'
-          style={ { width: dates2.length * cellWidth + 'px' } }
-          key={ v.id }>
-        { _.map(dates2, (v2, key2) =>
-          <div
-            className={ 'ganttview-grid-row-cell ' + (v2.date == today ? 'ganttview-today' : (v2.notWorking === 1 ? 'ganttview-weekend' : '')) }
-            style={ { backgroundColor: markedIssue.id == v.id ? '#FFFACD' : '', width: cellWidth + 'px' } }
-            key={ v2.date }/> ) }
-        </div> ) ) }
+        <GridItem
+          key={ v.id }
+          cellWidth={ cellWidth }
+          dates={ dates2 }
+          issue={ v }
+          markedIssue={ markedIssue }
+          today={ today } />
+        ) ) }
       </div>);
   }
 }
