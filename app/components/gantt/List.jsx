@@ -591,14 +591,15 @@ export default class List extends Component {
   }
 
   fold(issueId) {
-    const index = this.state.foldIssues.indexOf(issueId);
+    const foldIssues = [ ...this.state.foldIssues ];
+    const index = foldIssues.indexOf(issueId);
     if (index !== -1) {
-      this.state.foldIssues.splice(index, 1);
+      foldIssues.splice(index, 1);
     } else {
-      this.state.foldIssues.push(issueId);
+      foldIssues.push(issueId);
     }
 
-    this.setState({ foldIssues: this.state.foldIssues });
+    this.setState({ foldIssues });
   }
 
   async setSort(sortkey) {
