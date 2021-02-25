@@ -11,7 +11,6 @@ export default class VtHeader extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     foldIssues: PropTypes.array.isRequired,
-    selectedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired,
     show: PropTypes.func.isRequired,
@@ -26,7 +25,6 @@ export default class VtHeader extends Component {
       collection, 
       mode, 
       foldIssues, 
-      selectedIssue,
       show, 
       locate, 
       mark, 
@@ -79,7 +77,6 @@ export default class VtHeader extends Component {
                 mark={ mark }
                 fold={ fold }
                 foldIssues={ foldIssues }
-                selectedIssue={ selectedIssue }
                 issue={ v }
                 key={ v.id } />
             ) }

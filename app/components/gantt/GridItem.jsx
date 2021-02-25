@@ -16,7 +16,8 @@ export default class GridItem extends Component {
  
   shouldComponentUpdate(newProps, newState) {
     if (newProps.cellWidth != this.props.cellWidth 
-      || !_.isEqual(_.keys(newProps.dates), _.keys(this.props.dates))
+      || newProps.dates.length != this.props.dates.length 
+      || newProps.dates[0] != this.props.dates[0]
       || newProps.markedIssue.id == this.props.issue.id
       || this.props.markedIssue.id == this.props.issue.id) {
       return true;
@@ -36,11 +37,10 @@ export default class GridItem extends Component {
     return (
       <div
         className='ganttview-grid-row'
-        style={ { width: dates.length * cellWidth + 'px' } }
-        key={ issue.id }>
+        style={ { width: dates.length * cellWidth + 'px' } }>
         { _.map(dates, (v, key) =>
           <div
-            className={ 'ganttview-grid-row-cell ' + (issue.date == today ? 'ganttview-today' : (issue.notWorking === 1 ? 'ganttview-weekend' : '')) }
+            className={ 'ganttview-grid-row-cell ' + (v.date == today ? 'ganttview-today' : (v.notWorking === 1 ? 'ganttview-weekend' : '')) }
             style={ { backgroundColor: markedIssue.id == issue.id ? '#FFFACD' : '', width: cellWidth + 'px' } }
             key={ v.date }/> ) }
       </div>);

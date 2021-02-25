@@ -12,12 +12,12 @@ export default class HzHeader extends Component {
     today: PropTypes.string.isRequired
   }
 
-  shouldComponentUpdate(newProps, newState) {
-    if (newProps.cellWidth != this.props.cellWidth && !_.isEqual(_.keys(newProps.keys), _.keys(this.props.dates))) {
-      return true;
-    }
-    return false;
-  }
+  //shouldComponentUpdate(newProps, newState) {
+  //  if (newProps.cellWidth != this.props.cellWidth && !_.isEqual(_.keys(newProps.dates), _.keys(this.props.dates))) {
+  //    return true;
+  //  }
+  //  return false;
+  //}
 
   render() {
     const { 

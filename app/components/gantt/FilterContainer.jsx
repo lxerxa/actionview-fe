@@ -64,13 +64,13 @@ export default class FilterContainer extends Component {
       </div>
       :
       <div style={ { marginTop: '15px' } }>
-        <div style={ { fontSize: '16px', marginBottom: '5px' } }>
-          过滤器
+        <div style={ { fontSize: '16px', marginBottom: '8px' } }>
+          选择过滤器
         </div>
         <ListGroup>
           { _.map(options.filters, (v) =>
-            <ListGroupItem header={ v.name } href='#' onClick={ this.go.bind(this, v.query || {}) }>
-              { parseQuery(v.query || {}, options) }
+            <ListGroupItem href='#' onClick={ this.go.bind(this, v.query || {}) }>
+              <b>{ v.name }</b> - { _.isEmpty(v.query) ? '全部问题' : parseQuery(v.query || {}, options) }
             </ListGroupItem>
             ) }
         </ListGroup>

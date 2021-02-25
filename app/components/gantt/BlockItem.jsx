@@ -15,24 +15,22 @@ export default class BlockItem extends Component {
     origin: PropTypes.number.isRequired,
     foldIssues: PropTypes.array.isRequired,
     issue: PropTypes.object.isRequired,
-    selectedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired
   }
 
-  shouldComponentUpdate(newProps, newState) {
-    if (newProps.cellWidth != this.props.cellWidth
-      || newProps.origin != this.props.origin
-      || newProps.mode != this.props.mode
-      || this.props.foldIssues.indexOf(this.props.issue.id) !== -1
-      || newProps.foldIssues.indexOf(this.props.issue.id) !== -1
-      || !_.isEqual(newProps.issue, this.props.issue)
-      || this.props.issue.id == newProps.selectedIssue.id 
-      || this.props.issue.id == newProps.selectedIssue.parent_id) {
-      return true;
-    }
-    return false;
-  }
+  //shouldComponentUpdate(newProps, newState) {
+  //  if (newProps.cellWidth != this.props.cellWidth
+  //    || newProps.origin != this.props.origin
+  //    || newProps.mode != this.props.mode
+  //    || this.props.foldIssues.indexOf(this.props.issue.id) !== -1
+  //    || newProps.foldIssues.indexOf(this.props.issue.id) !== -1
+  //    || this.props.issue.id == newProps.selectedIssue.id 
+  //    || this.props.issue.id == newProps.selectedIssue.parent_id) {
+  //    return true;
+  //  }
+  //  return false;
+  //}
 
   render() {
     const { 

@@ -15,7 +15,6 @@ export default class Blocks extends Component {
     collection: PropTypes.array.isRequired,
     origin: PropTypes.number.isRequired,
     foldIssues: PropTypes.array.isRequired,
-    selectedIssue: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired
   }
@@ -27,7 +26,6 @@ export default class Blocks extends Component {
       collection, 
       origin, 
       foldIssues, 
-      selectedIssue,
       options,
       mode
     } = this.props;
@@ -41,7 +39,6 @@ export default class Blocks extends Component {
             blockHeight={ blockHeight }
             issue={ v }
             foldIssues={ foldIssues }
-            selectedIssue={ selectedIssue }
             origin={ origin }
             mode={ mode }
             options={ options }/>
