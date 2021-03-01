@@ -566,7 +566,15 @@ export default class List extends Component {
 
           let contents = '';
           if (val.key === 'sprints') {
-            contents = item['sprints'] && item['sprints'].length > 0 ? item['sprints'].join(',') : '-'; 
+            const sprintNos = item['sprints'] && item['sprints'].length > 0 ? item['sprints'] : [];
+            const sprintNames = []; 
+            _.forEach(sprintNos, (v) => {
+              const sprint = _.find(options.sprints || [], { no: v });
+              if (sprint && sprint.name) {
+                sprintNames.push(sprint.name);
+              }
+            });
+            contents = sprintNames.length > 0 ? sprintNames.join(',') : '-'; 
           } else if (val.type === 'SingleUser') {
             contents = item[val.key].name; 
           } else if (val.type === 'MultiUser') {
