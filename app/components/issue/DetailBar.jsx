@@ -826,9 +826,9 @@ export default class DetailBar extends Component {
                     <div style={ { marginTop: '7px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
                       { data.parent && 
                         <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>
-                          { data.parent.no + '-' + data.parent.title }
+                          { data.parent.no + '-' + (data.parent.title || '') }
                         </a> }
-                      { data.parent && ' / ' }{ data.no + '-' + data.title }
+                      { data.parent && ' / ' }{ data.no + '-' + (data.title || '') }
                     </div>
                   </Col>
                 </FormGroup>
