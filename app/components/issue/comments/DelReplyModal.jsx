@@ -23,7 +23,7 @@ export default class DelCommentsModal extends Component {
 
   async confirm() {
     const { issue_id, close, edit, data } = this.props;
-    const ecode = await edit(issue_id, data.comments_id, { reply_id: data.id, operation: 'delReply' });
+    const ecode = await edit(issue_id, data.parent_id, { reply_id: data.id, operation: 'delReply' });
     this.setState({ ecode: ecode });
     if (ecode === 0) {
       close();

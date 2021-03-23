@@ -252,7 +252,8 @@ export default class Comments extends Component {
       editComments, 
       users, 
       project, 
-      issue_id } = this.props;
+      issue_id 
+    } = this.props;
 
     const { inlinePreviewShow, photoIndex } = this.state;
 
