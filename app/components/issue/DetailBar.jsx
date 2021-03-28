@@ -95,6 +95,7 @@ export default class DetailBar extends Component {
       editingItems: [],
       action_id: '' 
     };
+    this.isAllowable = this.isAllowable.bind(this);
     this.delFileModalClose = this.delFileModalClose.bind(this);
     this.uploadSuccess = this.uploadSuccess.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -182,6 +183,20 @@ export default class DetailBar extends Component {
     }
   }
 
+  isAllowable(permission, oid) {
+    const { options, user } = this.props;
+
+    if (!options.permissions) {
+      return false;
+    }
+
+    if (permission.indexOf('_self_') !== -1) {
+      return oid == user.id && options.permissions.indexOf(permission) !== -1; 
+    } else {
+      return options.permissions.indexOf(permission) !== -1; 
+    }
+  }
+
   handleTabSelect(tabKey) {
     const { 
       indexComments, 
@@ -227,7 +242,7 @@ export default class DetailBar extends Component {
 
   openPreview(index, fieldkey) {
     const { options } = this.props;
-    if (options.permissions && options.permissions.indexOf('download_file') !== -1) {
+    if (this.isAllowable('download_file')) {
       this.state.previewShow[fieldkey] = true;
       this.setState({ previewShow: this.state.previewShow, photoIndex: index });
     } else {
@@ -461,7 +476,7 @@ export default class DetailBar extends Component {
   previewInlineImg(e) {
     const { options } = this.props;
 
-    if (options.permissions && options.permissions.indexOf('download_file') === -1) {
+    if (!this.isAllowable('download_file')) {
       notify.show('权限不足。', 'error', 2000);
       return;
     }
@@ -516,7 +531,7 @@ export default class DetailBar extends Component {
 
   getTextAreaItemContents(txt, fieldKey, fieldName, required, maxLength) {
     const { editingItems, newItemValues } = this.state;
-    const { project, options } = this.props;
+    const { project, data, options } = this.props;
 
     if (editingItems[fieldKey]) {
       return (
@@ -536,8 +551,8 @@ export default class DetailBar extends Component {
 
     return (
       <MultiRowsTextReader
-        isImgPreviewed={ options.permissions && options.permissions.indexOf('download_file') !== -1 }
-        isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
+        isImgPreviewed={ this.isAllowable('download_file') }
+        isEditable={ this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id) }
         onEdit={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }
         fieldKey={ fieldKey }
         value={ txt }/>);
@@ -545,7 +560,7 @@ export default class DetailBar extends Component {
 
   getRichTextItemContents(txt, fieldKey, fieldName, required, maxLength) {
     const { editingItems, newItemValues } = this.state;
-    const { project, options } = this.props;
+    const { project, data, options } = this.props;
 
     if (editingItems[fieldKey]) {
       return (
@@ -565,8 +580,8 @@ export default class DetailBar extends Component {
 
     return (
       <RichTextReader
-        isImgPreviewed={ options.permissions && options.permissions.indexOf('download_file') !== -1 }
-        isEditable={ options.permissions && options.permissions.indexOf('edit_issue') !== -1 }
+        isImgPreviewed={ this.isAllowable('download_file') }
+        isEditable={ this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id) }
         onEdit={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }
         fieldKey={ fieldKey }
         value={ txt }/>);
@@ -778,8 +793,8 @@ export default class DetailBar extends Component {
               </div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '15px', marginBottom: '40px', marginLeft: '15px' } }>
                 <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
-                  { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-edit'></i> 编辑</Button> }
-                  { options.permissions && options.permissions.indexOf('exec_workflow') !== -1 && (
+                  { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-edit'></i> 编辑</Button> }
+                  { this.isAllowable('exec_workflow') && (
                     data.wfactions && data.wfactions.length <= 4 ?
                     <ButtonGroup style={ { marginLeft: '10px' } }>
                     { _.map(data.wfactions || [], (v, i) => {
@@ -797,24 +812,24 @@ export default class DetailBar extends Component {
                   <div style={ { float: 'right' } }>
                     <DropdownButton pullRight title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
-                      { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
+                      { this.isAllowable('assign_issue') && <MenuItem eventKey='assign'>分配</MenuItem> }
+                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
                       <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && ((options.permissions.indexOf('edit_issue') !== -1 && !data.hasSubtasks) || options.permissions.indexOf('create_issue') !== -1) && <MenuItem divider/> }
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
-                      { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
-                      { data.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && (((this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && !data.hasSubtasks) || this.isAllowable('create_issue')) && <MenuItem divider/> }
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+                      { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem divider/> }
+                      { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                       { options.permissions && (_.intersection(options.permissions, ['link_issue', 'create_issue']).length > 0 || (options.permissions.indexOf('move_issue') !== -1 && data.parent_id)) && <MenuItem divider/> }
-                      { options.permissions && options.permissions.indexOf('move_issue') !== -1 && data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('link_issue') !== -1 && <MenuItem eventKey='link'>链接</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
-                      { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
-                      { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
-                      { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+                      { this.isAllowable('move_issue') && data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+                      { this.isAllowable('link_issue') && <MenuItem eventKey='link'>链接</MenuItem> }
+                      { this.isAllowable('create_issue') && <MenuItem eventKey='copy'>复制</MenuItem> }
+                      { (this.isAllowable('reset_issue') || this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', data.reporter.id)) && <MenuItem divider/> }
+                      { this.isAllowable('reset_issue') && <MenuItem eventKey='reset'>重置状态</MenuItem> }
+                      { (this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', data.reporter.id)) && <MenuItem eventKey='del'>删除</MenuItem> }
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
@@ -826,9 +841,9 @@ export default class DetailBar extends Component {
                     <div style={ { marginTop: '7px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
                       { data.parent && 
                         <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>
-                          { data.parent.no + '-' + (data.parent.title || '') }
+                          { data.parent.no + '-' + data.parent.title }
                         </a> }
-                      { data.parent && ' / ' }{ data.no + '-' + (data.title || '') }
+                      { data.parent && ' / ' }{ data.no + '-' + data.title }
                     </div>
                   </Col>
                 </FormGroup>
@@ -880,7 +895,7 @@ export default class DetailBar extends Component {
                   <Col sm={ editAssignee ? 7 : 3 }>
                     { !editAssignee ?
                     <div style={ { marginTop: '4px' } }>
-                      { options.permissions && options.permissions.indexOf('assign_issue') !== -1 ?
+                      { this.isAllowable('assign_issue') ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                         <span>
                           <div style={ { display: 'inline-block', float: 'left', margin: '5px 0px 3px 5px' } }>
@@ -893,7 +908,7 @@ export default class DetailBar extends Component {
                       <div style={ { marginTop: '7px' } }>
                         <span>{ data['assignee'] && data['assignee'].name || '-' }</span>
                       </div> }
-                      { (!data['assignee'] || data['assignee'].id !== user.id) && options.permissions && options.permissions.indexOf('assigned_issue') !== -1 &&
+                      { (!data['assignee'] || data['assignee'].id !== user.id) && this.isAllowable('assigned_issue') &&
                       <span style={ { float: 'left', marginLeft: '5px' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span> }
                     </div>
                     :
@@ -1035,7 +1050,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 }>
                     { !editingItems['progress'] ?
                     <div style={ { marginTop: '4px' } }>
-                      { options.permissions && options.permissions.indexOf('edit_issue') !== -1 ?
+                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                         <span>
                           <div style={ { display: 'inline-block', float: 'left', margin: '5px 0px 3px 5px' } }>
@@ -1162,7 +1177,7 @@ export default class DetailBar extends Component {
                                 { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }
                               </td>
                               <td style={ { verticalAlign: 'middle', width: '10px' } }>
-                                { options.permissions && options.permissions.indexOf('link_issue') !== -1 ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
+                                { this.isAllowable('link_issue') ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
                               </td>
                             </tr>); 
                         }) }
@@ -1175,7 +1190,7 @@ export default class DetailBar extends Component {
                     return;
                   }
                   if (field.type === 'File') {
-                    if (options.permissions && options.permissions.indexOf('upload_file') === -1 && _.isEmpty(data[field.key])) {
+                    if (!this.isAllowable('upload_file') && _.isEmpty(data[field.key])) {
                       return;
                     }
                   } else if (_.isEmpty(data[field.key]) && !_.isNumber(data[field.key])) {
@@ -1231,11 +1246,11 @@ export default class DetailBar extends Component {
                               <tr key={ i }>
                                 <td>
                                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span> 
-                                  { options.permissions && options.permissions.indexOf('download_file') !== -1 ? 
+                                  { this.isAllowable('download_file') ? 
                                     <a target='_blank' href={ API_BASENAME + '/project/' + project.key + '/file/' + f.id + (f.type == 'application/pdf' ? ('/' + f.name) : '') } download={ f.type == 'application/pdf' ? false : f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }
                                 </td>
-                                { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 && f.uploader.id == user.id)) && 
+                                { (this.isAllowable('remove_file') || this.isAllowable('remove_self_file', f.uploader.id)) && 
                                   <td width='2%'>
                                     <span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }>
                                       <i className='fa fa-trash'></i>
@@ -1256,14 +1271,14 @@ export default class DetailBar extends Component {
                                 </div>
                                 <div className='attachment-title-container'>
                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>
-                                   { options.permissions && (options.permissions.indexOf('remove_file') !== -1 || (options.permissions.indexOf('remove_self_file') !== -1 && f.uploader.id == user.id)) && 
+                                   { (this.isAllowable('remove_file') || this.isAllowable('remove_self_file', f.uploader.id)) && 
                                      <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
                                 </div>
                               </div>
                             </Col> ) }
                           </Row>
                         </Grid> }
-                      { options.permissions && options.permissions.indexOf('upload_file') !== -1 &&
+                      { this.isAllowable('upload_file') &&
                       <div style={ { marginTop: '8px' } }>
                         <DropzoneComponent 
                           config={ componentConfig } 

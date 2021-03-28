@@ -46,6 +46,7 @@ export default class List extends Component {
       display_columns: []
     };
 
+    this.isAllowable = this.isAllowable.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
     this.show = this.show.bind(this);
@@ -155,6 +156,20 @@ export default class List extends Component {
 
   delNotifyClose() {
     this.setState({ delNotifyShow: false });
+  }
+
+  isAllowable(permission, oid) {
+    const { options, user } = this.props;
+
+    if (!options.permissions) {
+      return false;
+    }
+
+    if (permission.indexOf('_self_') !== -1) {
+      return oid == user.id && options.permissions.indexOf(permission) !== -1;
+    } else {
+      return options.permissions.indexOf(permission) !== -1;
+    }
   }
 
   async operateSelect(eventKey) {
@@ -518,25 +533,25 @@ export default class List extends Component {
               title={ node }
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='view'>查看</MenuItem>
-              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='edit'>编辑</MenuItem> }
-              { options.permissions && options.permissions.indexOf('assign_issue') !== -1 && <MenuItem eventKey='assign'>分配</MenuItem> }
-              { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
+              { this.isAllowable('edit_issue') && <MenuItem eventKey='edit'>编辑</MenuItem> }
+              { this.isAllowable('assign_issue') && <MenuItem eventKey='assign'>分配</MenuItem> }
+              { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
               <MenuItem divider/>
               <MenuItem eventKey='watch'>{ item.watching ? '取消关注' : '关注' }</MenuItem>
               <MenuItem eventKey='share'>分享链接</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
-              { !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('edit_issue') !== -1 && !item.hasSubtasks)) && <MenuItem divider/> }
-              { !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-              { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
-              { item.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem divider/> }
-              { item.parent_id && options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
-              { options.permissions && (options.permissions.indexOf('create_issue') !== -1 || (options.permissions.indexOf('move_issue') !== -1 && item.parent_id)) && <MenuItem divider/> }
-              { options.permissions && options.permissions.indexOf('move_issue') !== -1 && item.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
-              { options.permissions && options.permissions.indexOf('create_issue') !== -1 && <MenuItem eventKey='copy'>复制</MenuItem> }
-              { options.permissions && _.intersection(options.permissions, ['reset_issue', 'delete_issue']).length > 0 && <MenuItem divider/> }
-              { options.permissions && options.permissions.indexOf('reset_issue') !== -1 && <MenuItem eventKey='reset'>重置状态</MenuItem> }
-              { options.permissions && options.permissions.indexOf('delete_issue') !== -1 && <MenuItem eventKey='del'>删除</MenuItem> }
+              { !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('create_issue') || (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && !item.hasSubtasks) && <MenuItem divider/> }
+              { !item.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
+              { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+              { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem divider/> }
+              { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
+              { (this.isAllowable('create_issue') || (this.isAllowable('move_issue') && item.parent_id)) && <MenuItem divider/> }
+              { this.isAllowable('move_issue') && item.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
+              { this.isAllowable('create_issue') && <MenuItem eventKey='copy'>复制</MenuItem> }
+              { (this.isAllowable('reset_issue') || this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', item.reporter.id)) && <MenuItem divider/> }
+              { this.isAllowable('reset_issue') && <MenuItem eventKey='reset'>重置状态</MenuItem> }
+              { (this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', item.reporter.id)) && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
           </div> );
 
@@ -566,15 +581,7 @@ export default class List extends Component {
 
           let contents = '';
           if (val.key === 'sprints') {
-            const sprintNos = item['sprints'] && item['sprints'].length > 0 ? item['sprints'] : [];
-            const sprintNames = []; 
-            _.forEach(sprintNos, (v) => {
-              const sprint = _.find(options.sprints || [], { no: v });
-              if (sprint && sprint.name) {
-                sprintNames.push(sprint.name);
-              }
-            });
-            contents = sprintNames.length > 0 ? sprintNames.join(',') : '-'; 
+            contents = item['sprints'] && item['sprints'].length > 0 ? item['sprints'].join(',') : '-'; 
           } else if (val.type === 'SingleUser') {
             contents = item[val.key].name; 
           } else if (val.type === 'MultiUser') {

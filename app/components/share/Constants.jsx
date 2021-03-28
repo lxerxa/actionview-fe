@@ -34,7 +34,9 @@ export const Permissions = {
   issue: [
     { id: 'create_issue', name: '创建问题' },
     { id: 'edit_issue', name: '编辑问题' },
+    { id: 'edit_self_issue', name: '编辑自己创建的问题' },
     { id: 'delete_issue', name: '删除问题' },
+    { id: 'delete_self_issue', name: '删除自己创建的问题' },
     { id: 'assign_issue', name: '分配问题' },
     { id: 'assigned_issue', name: '被分配问题' },
     { id: 'resolve_issue', name: '解决问题' },
