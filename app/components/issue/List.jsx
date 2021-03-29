@@ -533,25 +533,25 @@ export default class List extends Component {
               title={ node }
               onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='view'>查看</MenuItem>
-              { this.isAllowable('edit_issue') && <MenuItem eventKey='edit'>编辑</MenuItem> }
+              { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='edit'>编辑</MenuItem> }
               { this.isAllowable('assign_issue') && <MenuItem eventKey='assign'>分配</MenuItem> }
-              { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
+              { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
               <MenuItem divider/>
               <MenuItem eventKey='watch'>{ item.watching ? '取消关注' : '关注' }</MenuItem>
               <MenuItem eventKey='share'>分享链接</MenuItem>
               <MenuItem divider/>
               <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
-              { !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('create_issue') || (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && !item.hasSubtasks) && <MenuItem divider/> }
+              { !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('create_issue') || (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && !item.hasSubtasks) && <MenuItem divider/> }
               { !item.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-              { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
-              { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem divider/> }
-              { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter.id)) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
+              { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+              { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem divider/> }
+              { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
               { (this.isAllowable('create_issue') || (this.isAllowable('move_issue') && item.parent_id)) && <MenuItem divider/> }
               { this.isAllowable('move_issue') && item.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
               { this.isAllowable('create_issue') && <MenuItem eventKey='copy'>复制</MenuItem> }
-              { (this.isAllowable('reset_issue') || this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', item.reporter.id)) && <MenuItem divider/> }
+              { (this.isAllowable('reset_issue') || this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem divider/> }
               { this.isAllowable('reset_issue') && <MenuItem eventKey='reset'>重置状态</MenuItem> }
-              { (this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', item.reporter.id)) && <MenuItem eventKey='del'>删除</MenuItem> }
+              { (this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
           </div> );
 

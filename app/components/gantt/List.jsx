@@ -433,7 +433,7 @@ export default class List extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { itemData, options, isHeaderHidden } = this.props;
+    const { itemData, options, isHeaderHidden, user } = this.props;
     const { collection, markedIssue } = this.state;
 
     const self = this;
@@ -515,7 +515,7 @@ export default class List extends Component {
         return false;
       }*/
 
-      if (options.permissions && options.permissions.indexOf('edit_issue') === -1) {
+      if (options.permissions && !(options.permissions.indexOf('edit_issue') !== -1 || (options.permissions.indexOf('edit_self_issue') !== -1 && ((itemData.reporter && itemData.reporter.id || '') == user.id)))) {
         return;
       }
 
@@ -591,15 +591,14 @@ export default class List extends Component {
   }
 
   fold(issueId) {
-    const foldIssues = [ ...this.state.foldIssues ];
-    const index = foldIssues.indexOf(issueId);
+    const index = this.state.foldIssues.indexOf(issueId);
     if (index !== -1) {
-      foldIssues.splice(index, 1);
+      this.state.foldIssues.splice(index, 1);
     } else {
-      foldIssues.push(issueId);
+      this.state.foldIssues.push(issueId);
     }
 
-    this.setState({ foldIssues });
+    this.setState({ foldIssues: this.state.foldIssues });
   }
 
   async setSort(sortkey) {
@@ -758,7 +757,7 @@ export default class List extends Component {
               <i className={ isHeaderHidden ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up' }></i>
             </span>
           </span>
-          { options.permissions && options.permissions.indexOf('edit_issue') !== -1 && <span className='ganttview-msg-notice'>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span> }
+          { options.permissions && (options.permissions.indexOf('edit_issue') !== -1 || options.permissions.indexOf('edit_self_issue') !== -1) && <span className='ganttview-msg-notice'>注：移动或调整任务条将改变任务的开始时间和完成时间，也可通过双击任务条修改。</span> }
         </div>
         { indexLoading && 
         <div style={ { textAlign: 'center', paddingTop: '50px' } }>
@@ -776,6 +775,7 @@ export default class List extends Component {
           <VtHeader
             collection={ collection }
             foldIssues={ foldIssues }
+            selectedIssue={ itemData }
             options={ options }
             mode={ mode }
             show={ this.show }
@@ -801,6 +801,7 @@ export default class List extends Component {
               origin={ range[0] }
               mode={ mode }
               foldIssues={ foldIssues }
+              selectedIssue={ itemData }
               options={ options } />
           </div>
         </div> }

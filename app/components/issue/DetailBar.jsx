@@ -552,7 +552,7 @@ export default class DetailBar extends Component {
     return (
       <MultiRowsTextReader
         isImgPreviewed={ this.isAllowable('download_file') }
-        isEditable={ this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id) }
+        isEditable={ this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '') }
         onEdit={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }
         fieldKey={ fieldKey }
         value={ txt }/>);
@@ -581,7 +581,7 @@ export default class DetailBar extends Component {
     return (
       <RichTextReader
         isImgPreviewed={ this.isAllowable('download_file') }
-        isEditable={ this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id) }
+        isEditable={ this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '') }
         onEdit={ () => { editingItems[fieldKey] = true; newItemValues[fieldKey] = txt; this.setState({ editingItems }); } }
         fieldKey={ fieldKey }
         value={ txt }/>);
@@ -793,7 +793,7 @@ export default class DetailBar extends Component {
               </div>
               <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '15px', marginBottom: '40px', marginLeft: '15px' } }>
                 <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
-                  { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-edit'></i> 编辑</Button> }
+                  { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-edit'></i> 编辑</Button> }
                   { this.isAllowable('exec_workflow') && (
                     data.wfactions && data.wfactions.length <= 4 ?
                     <ButtonGroup style={ { marginLeft: '10px' } }>
@@ -813,23 +813,23 @@ export default class DetailBar extends Component {
                     <DropdownButton pullRight title='更多' onSelect={ this.operateSelect.bind(this) }>
                       <MenuItem eventKey='refresh'>刷新</MenuItem>
                       { this.isAllowable('assign_issue') && <MenuItem eventKey='assign'>分配</MenuItem> }
-                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
+                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
                       <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && (((this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && !data.hasSubtasks) || this.isAllowable('create_issue')) && <MenuItem divider/> }
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && (((this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && !data.hasSubtasks) || this.isAllowable('create_issue')) && <MenuItem divider/> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
-                      { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem divider/> }
-                      { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
+                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+                      { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem divider/> }
+                      { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                       { options.permissions && (_.intersection(options.permissions, ['link_issue', 'create_issue']).length > 0 || (options.permissions.indexOf('move_issue') !== -1 && data.parent_id)) && <MenuItem divider/> }
                       { this.isAllowable('move_issue') && data.parent_id && <MenuItem eventKey='move'>移动</MenuItem> }
                       { this.isAllowable('link_issue') && <MenuItem eventKey='link'>链接</MenuItem> }
                       { this.isAllowable('create_issue') && <MenuItem eventKey='copy'>复制</MenuItem> }
-                      { (this.isAllowable('reset_issue') || this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', data.reporter.id)) && <MenuItem divider/> }
+                      { (this.isAllowable('reset_issue') || this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem divider/> }
                       { this.isAllowable('reset_issue') && <MenuItem eventKey='reset'>重置状态</MenuItem> }
-                      { (this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', data.reporter.id)) && <MenuItem eventKey='del'>删除</MenuItem> }
+                      { (this.isAllowable('delete_issue') || this.isAllowable('delete_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='del'>删除</MenuItem> }
                     </DropdownButton>
                   </div>
                 </ButtonToolbar>
@@ -1050,7 +1050,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 }>
                     { !editingItems['progress'] ?
                     <div style={ { marginTop: '4px' } }>
-                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter.id)) ?
+                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) ?
                       <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
                         <span>
                           <div style={ { display: 'inline-block', float: 'left', margin: '5px 0px 3px 5px' } }>
@@ -1250,7 +1250,7 @@ export default class DetailBar extends Component {
                                     <a target='_blank' href={ API_BASENAME + '/project/' + project.key + '/file/' + f.id + (f.type == 'application/pdf' ? ('/' + f.name) : '') } download={ f.type == 'application/pdf' ? false : f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }
                                 </td>
-                                { (this.isAllowable('remove_file') || this.isAllowable('remove_self_file', f.uploader.id)) && 
+                                { (this.isAllowable('remove_file') || this.isAllowable('remove_self_file', f.uploader && f.uploader.id || '')) && 
                                   <td width='2%'>
                                     <span className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }>
                                       <i className='fa fa-trash'></i>
@@ -1271,7 +1271,7 @@ export default class DetailBar extends Component {
                                 </div>
                                 <div className='attachment-title-container'>
                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>
-                                   { (this.isAllowable('remove_file') || this.isAllowable('remove_self_file', f.uploader.id)) && 
+                                   { (this.isAllowable('remove_file') || this.isAllowable('remove_self_file', f.uploader && f.uploader.id || '')) && 
                                      <div className='remove-icon' onClick={ this.delFileNotify.bind(this, field.key, f.id, f.name) }><i className='fa fa-trash'></i></div> }
                                 </div>
                               </div>
