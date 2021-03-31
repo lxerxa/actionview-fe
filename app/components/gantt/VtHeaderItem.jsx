@@ -103,7 +103,7 @@ export default class VtHeaderItem extends Component {
     );
 
     return (
-      <div className='ganttview-vtheader-series-item' id={ issue.id } onClick={ (e) => { e.preventDefault(); mark(issue); } }>
+      <div className='ganttview-vtheader-series-item' data-id={ issue.id } onClick={ (e) => { e.preventDefault(); mark(issue); } }>
         <div className='ganttview-vtheader-series-item-cell' style={ { textAlign: 'left', width: '400px' } }>
           <span style={ { paddingRight: '5px', paddingLeft: issue.parent && issue.parent.id ? '12px' : '0px', visibility: issue.hasSubtasks ? 'visible' : 'hidden', cursor: 'pointer' } }>
             { foldIssues.indexOf(issue.id) !== -1 ? <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); fold(issue.id) } }><i className='fa fa-plus-square-o'></i></a> : <a href='#' onClick={ (e) => { e.preventDefault(); e.stopPropagation(); fold(issue.id) } }><i className='fa fa-minus-square-o'></i></a> }

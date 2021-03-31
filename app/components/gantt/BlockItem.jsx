@@ -106,7 +106,8 @@ export default class BlockItem extends Component {
         <OverlayTrigger trigger={ [ 'hover', 'focus' ] } rootClose placement='top' overlay={ popover }>
           { issue.hasSubtasks && foldIssues.indexOf(issue.id) === -1 ?
           <div className='ganttview-block-parent'
-            id={ issue.id }
+            id={ issue.id + '-block' }
+            data-id={ issue.id }
             style={ { width: width + 'px', marginLeft: (offset * cellWidth + 1) + 'px' } }>
             <div className='ganttview-block-parent-left'/>
             <div className='ganttview-block-parent-right'/>
@@ -114,7 +115,8 @@ export default class BlockItem extends Component {
           :
           <div
             className={ 'ganttview-block ' + (issue.hasSubtasks ? '' : 'ganttview-block-movable') }
-            id={ issue.id }
+            id={ issue.id + '-block' }
+            data-id={ issue.id }
             style={ { width: width + 'px', height: blockHeight + 'px', marginLeft: (offset * cellWidth + 1) + 'px', backgroundColor } }>
             { mode == 'progress' &&
             <div
