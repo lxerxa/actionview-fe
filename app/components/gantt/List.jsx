@@ -345,7 +345,7 @@ export default class List extends Component {
     const numberOfDays = _.round(width / cellWidth);
     const newEnd = _.add(newStart, (numberOfDays - 1) * 3600 * 24);
 
-    const ecode = await edit(block.attr('id'), { expect_start_time: newStart, expect_complete_time: newEnd });
+    const ecode = await edit(block.attr('data-id'), { expect_start_time: newStart, expect_complete_time: newEnd });
     if (ecode === 0) {
       notify.show('已更新。', 'success', 2000);
     } else {
@@ -439,18 +439,18 @@ export default class List extends Component {
     const self = this;
 
     $('.ganttview-vtheader-series-item').each(function(i) {
-      if (markedIssue.id === $(this).attr('id')) {
+      if (markedIssue.id === $(this).attr('data-id')) {
         $(this).css('background-color', '#FFFACD');
-      } else if (itemData.id === $(this).attr('id') && self.state.detailBarShow) {
+      } else if (itemData.id === $(this).attr('data-id') && self.state.detailBarShow) {
         $(this).css('background-color', '#e6f7ff');
       } else {
         $(this).css('background-color', '');
       }
     });
 
-    if (collection.length > 0) {
-      const cellWidth = this.configs.cellWidth;
+    const cellWidth = this.configs.cellWidth;
 
+    if (collection.length > 0) {
       let isIE = false; 
       if (navigator.userAgent.indexOf('compatible') !== -1 || navigator.userAgent.indexOf('MSIE') !== -1 || navigator.userAgent.indexOf('Trident') !== -1) {
         isIE = true;
@@ -486,45 +486,29 @@ export default class List extends Component {
           $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
         }, 200);
       });
+    }
 
-      /*$('div.ganttview-slide-container').get(0).onmousewheel = function(e) {
-        if (e.wheelDelta > 0) {
-          $('div.ganttview-slide-container').scrollTop($('div.ganttview-slide-container').scrollTop() - 30);
-        } else {
-          $('div.ganttview-slide-container').scrollTop($('div.ganttview-slide-container').scrollTop() + 30);
-        }
+    if (!(options.permissions && (options.permissions.indexOf('edit_issue') !== -1 || options.permissions.indexOf('edit_self_issue') !== -1))) {
+      return;
+    }
 
-        $('div.ganttview-vtheader-item').scrollTop($('div.ganttview-slide-container').scrollTop());
-        $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
-        return false;
-      }
-
-      if (isFF) {
-        $('div.ganttview-vtheader-item').css('overflowY', 'auto');
-      }
-
-      $('div.ganttview-vtheader-item').get(0).onmousewheel = function(e) {
-        if (e.wheelDelta > 0) {
-          $('div.ganttview-vtheader-item').scrollTop($('div.ganttview-vtheader-item').scrollTop() - 30);
-        } else {
-          $('div.ganttview-vtheader-item').scrollTop($('div.ganttview-vtheader-item').scrollTop() + 30);
-        }
-
-        $('div.ganttview-slide-container').scrollTop($('div.ganttview-vtheader-item').scrollTop());
-        $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
-        return false;
-      }*/
-
-      if (options.permissions && !(options.permissions.indexOf('edit_issue') !== -1 || (options.permissions.indexOf('edit_self_issue') !== -1 && ((itemData.reporter && itemData.reporter.id || '') == user.id)))) {
+    _.forEach(collection, (v) => {
+      if (v.hasSubtasks) {
         return;
       }
 
-      $('div.ganttview-block-movable').unbind('dblclick').bind('dblclick', function() {
+      if (options.permissions.indexOf('edit_issue') === -1) {
+        if ((v.reporter && v.reporter.id) != user.id) {
+          return;
+        }
+      } 
+
+      $('#' + v.id + '-block').unbind('dblclick').bind('dblclick', function() {
         const block = $(this);
         self.clickBar(block);
       });
 
-      $('div.ganttview-block-movable').unbind('resizable').resizable({
+      $('#' + v.id + '-block').unbind('resizable').resizable({
         grid: cellWidth, 
         handles: 'e,w',
         start: function() {
@@ -546,7 +530,7 @@ export default class List extends Component {
         }
       });
 
-      $('div.ganttview-block-movable').unbind('draggable').draggable({
+      $('#' + v.id + '-block').unbind('draggable').draggable({
         axis: 'x', 
         grid: [cellWidth, cellWidth],
         stop: function () {
@@ -555,13 +539,13 @@ export default class List extends Component {
           //callback(block.data('block-data'));
         }
       });
-    }
+    });
   }
 
   clickBar(block) {
     const { collection } = this.props;
 
-    const id = block.attr('id')
+    const id = block.attr('data-id')
     const issue = _.find(collection, { id });
 
     this.setState({ editModalShow: true, selectedIssue: issue });
