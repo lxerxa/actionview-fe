@@ -78,7 +78,7 @@ export default class EditModal extends Component {
     } else {
       submitValues.expect_complete_time = '';
     }
-    if (values.progress) {
+    if (values.progress || values.progress === 0) {
       submitValues.progress = values.progress - 0;
     } else {
       submitValues.progress = '';
