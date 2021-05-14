@@ -52,8 +52,11 @@ const validate = (values) => {
   if (!values.group_name_attr) {
     errors.group_name_attr = '必填';
   }
-  if (!values.group_membership_attr) {
-    errors.group_membership_attr = '必填';
+  if (!values.groupuser_attr) {
+    errors.groupuser_attr = '必填';
+  }
+  if (!values.usergroup_attr) {
+    errors.usergroup_attr = '必填';
   }
   return errors;
 };
@@ -78,7 +81,8 @@ const validate = (values) => {
     'group_object_class',
     'group_object_filter',
     'group_name_attr', 
-    'group_membership_attr'
+    'groupuser_attr',
+    'usergroup_attr'
   ],
   validate
 })
@@ -158,7 +162,8 @@ export default class AddLDAPModal extends Component {
       newData.group_object_class = 'groupOfUniqueNames';
       newData.group_object_filter = '(objectClass=groupOfUniqueNames)';
       newData.group_name_attr = 'cn';
-      newData.group_membership_attr = 'uniqueMember';
+      newData.groupuser_attr = 'uniqueMember';
+      newData.usergroup_attr = 'memberOf';
     }
     newData.admin_password = '';
     initializeForm(newData);
@@ -185,7 +190,9 @@ export default class AddLDAPModal extends Component {
         group_object_class,
         group_object_filter,
         group_name_attr,
-        group_membership_attr }, 
+        groupuser_attr,
+        usergroup_attr
+      }, 
       handleSubmit, 
       invalid, 
       dirty,
@@ -310,10 +317,19 @@ export default class AddLDAPModal extends Component {
                   <FormControl disabled={ submitting } type='text' { ...group_name_attr } placeholder='组名属性'/>
                   { group_name_attr.touched && group_name_attr.error && <HelpBlock style={ { float: 'right' } }>{ group_name_attr.error }</HelpBlock> }
                 </FormGroup>
-                <FormGroup controlId='formControlsText' validationState={ group_membership_attr.touched && group_membership_attr.error ? 'error' : null }>
-                  <ControlLabel><span className='txt-impt'>*</span>组成员属性</ControlLabel>
-                  <FormControl disabled={ submitting } type='text' { ...group_membership_attr } placeholder='组成员属性'/>
-                  { group_membership_attr.touched && group_membership_attr.error && <HelpBlock style={ { float: 'right' } }>{ group_membership_attr.error }</HelpBlock> }
+              </div>
+            </TabPane>
+            <TabPane tab='组成员' key='5'>
+              <div style={ { paddingTop: '15px' } }>
+                <FormGroup controlId='formControlsText' validationState={ groupuser_attr.touched && groupuser_attr.error ? 'error' : null }>
+                  <ControlLabel><span className='txt-impt'>*</span>组成员属性(组加载成员时使用)</ControlLabel>
+                  <FormControl disabled={ submitting } type='text' { ...groupuser_attr } placeholder='组成员属性'/>
+                  { groupuser_attr.touched && groupuser_attr.error && <HelpBlock style={ { float: 'right' } }>{ groupuser_attr.error }</HelpBlock> }
+                </FormGroup>
+                <FormGroup controlId='formControlsText' validationState={ usergroup_attr.touched && usergroup_attr.error ? 'error' : null }>
+                  <ControlLabel><span className='txt-impt'>*</span>成员组属性(成员查找组时使用)</ControlLabel>
+                  <FormControl disabled={ submitting } type='text' { ...usergroup_attr } placeholder='成员组属性'/>
+                  { usergroup_attr.touched && usergroup_attr.error && <HelpBlock style={ { float: 'right' } }>{ usergroup_attr.error }</HelpBlock> }
                 </FormGroup>
               </div>
             </TabPane>
