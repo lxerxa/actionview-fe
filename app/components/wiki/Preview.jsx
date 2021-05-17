@@ -339,7 +339,9 @@ export default class Preview extends Component {
            <img src={ loadingImg } className='loading'/>
           </span> }
           <span style={ { float: 'right', marginRight: '5px' } }>
-            <Button style={ { marginRight: '5px' } } onClick={ () => { history.goBack(); } }><i className='fa fa-reply'></i> 返回</Button>
+            <Link to={ '/project/' + project.key + '/wiki' + (item.parent != '0' ? ('/' + item.parent) : '') }>
+              <Button style={ { marginRight: '5px' } }><i className='fa fa-reply'></i> 返回目录</Button>
+            </Link>
           </span>
         </div> }
         { item.id &&
@@ -389,6 +391,7 @@ export default class Preview extends Component {
         </div>
         { item.id && item.attachments && item.attachments.length > 0 &&
         <div style={ { marginBottom: '5px' } }>
+          <div style={ { marginLeft: '2px', marginBottom: '5px', fontWeight: 600 } }>附件：</div>
           <Table id='attachmentlist' condensed hover responsive style={ { borderBottom: '1px solid #ddd' } }>
             <tbody>
             { _.map(item.attachments, (f, i) =>
