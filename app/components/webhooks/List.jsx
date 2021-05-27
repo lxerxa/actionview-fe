@@ -122,7 +122,7 @@ export default class List extends Component {
 
       directories.push({
         id: collection[i].id,
-        request_url: collection[i].request_url, 
+        request_url: <div style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>{ collection[i].request_url }</div>, 
         events: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             { _.isEmpty(events) ? '-' : _.map(events, function(v, i) { return (<li key={ i }>{ v }</li>) }) }
