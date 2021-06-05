@@ -949,19 +949,19 @@ export default class DetailBar extends Component {
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    更新时间
+                    创建时间
                   </Col>
                   <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px', marginLeft: '5px' } }>
-                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : (data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-') }
+                    <div style={ { marginTop: '7px' } }>
+                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
                     </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
-                    创建时间
+                    更新时间
                   </Col>
                   <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    <div style={ { marginTop: '7px', marginLeft: '5px' } }>
+                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : (data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-') }
                     </div>
                   </Col>
                 </FormGroup>
