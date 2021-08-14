@@ -64,6 +64,10 @@ class ResetPwd extends Component {
     const { actions } = this.props;
     const { location: { query={} } } = this.props;
     await actions.resetpwdAccess(query && query.code || '');
+
+    $('#main-loading').css({ 'width': '0px', 'height': '0px', 'background': 'none', 'display': 'none' });
+    $('#main-loading img').css({ 'display': 'none' });
+
     const { user } = this.props;
     if (user.ecode === 0) {
       this.setState({ emailShow: true, ecode: 0 });
