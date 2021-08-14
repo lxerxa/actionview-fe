@@ -11,6 +11,9 @@ const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
   const errors = {};
+  if (!values.parent_id) {
+    errors.parent_id = '必填';
+  }
   if (!values.type) {
     errors.type = '必填';
   }
