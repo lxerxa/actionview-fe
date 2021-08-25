@@ -21,7 +21,13 @@ const { API_BASENAME } = process.env;
 class CreateModal extends Component {
   constructor(props) {
     super(props);
-    const { options, data={}, isSubtask=false, isFromWorkflow=false, action_id='' } = this.props;
+    const { 
+      options, 
+      data={}, 
+      isSubtask=false, 
+      isFromWorkflow=false, 
+      action_id='' 
+    } = this.props;
 
     const typeTmpOptions = [];
     if (!isFromWorkflow) {
@@ -40,7 +46,7 @@ class CreateModal extends Component {
       }
     }
 
-    let defaultIndex = -1, schema = [], errors={}, values={}, oldValues={}, typeOkOptions=[];
+    let defaultIndex = -1, schema = [], errors={}, values={}, originalValues={}, oldValues={}, typeOkOptions=[];
     if (!_.isEmpty(data) && data.id) {
       if (isFromWorkflow) {
         const action = _.find(data.wfactions, { id: action_id });
@@ -60,40 +66,29 @@ class CreateModal extends Component {
       _.map(schema, (v) => {
         if (!_.isUndefined(data[v.key])) {
           if (v.key == 'assignee' && data[v.key].id) {
-            values[v.key] = data[v.key].id; // assignee
-            oldValues[v.key] = data[v.key].id; // assignee
+            oldValues[v.key] = values[v.key] = data[v.key].id; // assignee
           } else if (v.type == 'SingleUser' && data[v.key].id) {
-            values[v.key] = data[v.key].id;
-            oldValues[v.key] = data[v.key].id;
+            oldValues[v.key] = values[v.key] = data[v.key].id;
           } else if (v.type == 'MultiUser' && _.isArray(data[v.key])) {
-            values[v.key] = _.map(data[v.key], (v) => v.id).join(',');
-            oldValues[v.key] = _.map(data[v.key], (v) => v.id).join(',');
+            oldValues[v.key] = values[v.key] = _.map(data[v.key], (v) => v.id).join(',');
           } else if ((v.type == 'MultiSelect' || v.type == 'MultiVersion') && _.isArray(data[v.key])) {
-            values[v.key] = data[v.key].join(',');
-            oldValues[v.key] = data[v.key].join(',');
+            oldValues[v.key] = values[v.key] = data[v.key].join(',');
           } else if (v.type == 'CheckboxGroup' && _.isString(data[v.key])) {
-            values[v.key] = data[v.key].split(',');
-            oldValues[v.key] = data[v.key].split(',');
+            oldValues[v.key] = values[v.key] = data[v.key].split(',');
           } else if (v.key == 'labels') {
             if (options.permissions && options.permissions.indexOf('manage_project') !== -1) {
-              values[v.key] = _.map(data[v.key] || [], (v) => { return { value: v, label: v } });
-              oldValues[v.key] = _.map(data[v.key] || [], (v) => { return { value: v, label: v } });
+              oldValues[v.key] = values[v.key] = _.map(data[v.key] || [], (v) => { return { value: v, label: v } });
             } else {
-              values[v.key] = (data[v.key] || []).join(',');
-              oldValues[v.key] = (data[v.key] || []).join(','); 
+              oldValues[v.key] = values[v.key] = (data[v.key] || []).join(',');
             }
           } else if (v.type == 'File' && _.isArray(data[v.key])) {
-            values[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
-            oldValues[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
+            oldValues[v.key] = values[v.key] = _.map(data[v.key], (v) => { return v.id || v; }); // files
           } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
-            values[v.key] = data[v.key] && moment.unix(data[v.key]);
-            oldValues[v.key] = data[v.key] && moment.unix(data[v.key]);
+            oldValues[v.key] = values[v.key] = data[v.key] && moment.unix(data[v.key]);
           } else if (v.type === 'Number' || v.type === 'Integer') {
-            values[v.key] = data[v.key] + '';
-            oldValues[v.key] = data[v.key] + '';
+            oldValues[v.key] = values[v.key] = data[v.key] + '';
           } else {
-            values[v.key] = data[v.key];
-            oldValues[v.key] = data[v.key];
+            oldValues[v.key] = values[v.key] = data[v.key];
           }
         }
         if (v.required && (!data[v.key] || (_.isArray(data[v.key]) && data[v.key].length <= 0))) {
@@ -115,20 +110,20 @@ class CreateModal extends Component {
       }
 
       if (!typeOkOptions[defaultIndex]) {
-        values['type'] = ''; 
+        originalValues['type'] = values['type'] = ''; 
         schema = [];
       } else {
-        values['type'] = typeOkOptions[defaultIndex].id;
+        originalValues['type'] = values['type'] = typeOkOptions[defaultIndex].id;
         schema = typeOkOptions[defaultIndex].schema;
       }
       _.map(schema || [], (v) => {
         if (v.defaultValue) {
           if (v.type === 'MultiSelect' && _.isArray(v.defaultValue)) {
-            values[v.key] = v.defaultValue.join(',');
+            originalValues[v.key] = values[v.key] = v.defaultValue.join(',');
           } else if (v.type === 'CheckboxGroup' && _.isString(v.defaultValue)) {
-            values[v.key] = v.defaultValue.split(',');
+            originalValues[v.key] = values[v.key] = v.defaultValue.split(',');
           } else {
-            values[v.key] = v.defaultValue;
+            originalValues[v.key] = values[v.key] = v.defaultValue;
           }
         }
         if (v.required && !v.defaultValue) {
@@ -138,12 +133,34 @@ class CreateModal extends Component {
     }
 
     if (isFromWorkflow) {
-      this.state = { ecode: 0, errors, touched: {}, schema, values, oldValues, createOther: false, preCreated: false };
+      this.state = { 
+        ecode: 0, 
+        errors, 
+        touched: {}, 
+        schema, 
+        values, 
+        originalValues,
+        oldValues, 
+        createOther: false, 
+        preCreated: false 
+      };
     } else {
-      this.state = { ecode: 0, errors, touched: {}, typeOptions: typeOkOptions, schema, values, oldValues, createOther: false, preCreated: false };
+      this.state = { 
+        ecode: 0, 
+        errors, 
+        touched: {}, 
+        typeOptions: typeOkOptions, 
+        schema, 
+        values, 
+        originalValues,
+        oldValues, 
+        createOther: false, 
+        preCreated: false 
+      };
     }
 
     this.getChangedKeys = this.getChangedKeys.bind(this);
+    this.getChangedKeysForOriginal = this.getChangedKeysForOriginal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -189,6 +206,23 @@ class CreateModal extends Component {
       }
     });
     return diffKeys; 
+  }
+
+  getChangedKeysForOriginal() {
+    const diffKeys = [];
+    _.mapKeys(this.state.values, (val, key) => {
+      if (_.isEmpty(this.state.originalValues[key]) && _.isEmpty(val)) {
+        return;
+      }
+      if (val instanceof moment && this.state.originalValues[key] instanceof moment) {
+        if (!val.isSame(this.state.oldValues[key])) {
+          diffKeys.push(key);
+        }
+      } else if (!_.isEqual(val, this.state.originalValues[key])) {
+        diffKeys.push(key);
+      }
+    });
+    return diffKeys;
   }
 
   async handleSubmit() {
@@ -292,7 +326,21 @@ class CreateModal extends Component {
   }
 
   handleCancel() {
-    const { close } = this.props;
+    const { 
+      close, 
+      loading, 
+      data={}, 
+      isFromWorkflow=false 
+    } = this.props;
+    if (loading) {
+      return;
+    }
+
+    const closeConfirm = !isFromWorkflow && ((data.id && this.getChangedKeys().length > 0) || (!data.id && this.getChangedKeysForOriginal().length > 0));
+    if (closeConfirm && !confirm('确认要关闭该页面？')) {
+      return;
+    }
+
     this.setState({ ecode: 0 });
     close();
   }
@@ -485,7 +533,6 @@ class CreateModal extends Component {
     const { 
       i18n: { errMsg }, 
       options, 
-      close, 
       loading, 
       project, 
       data={}, 
@@ -522,7 +569,7 @@ class CreateModal extends Component {
         id='create-issue-dialog'
         backdrop='static'
         aria-labelledby='contained-modal-title-sm'
-        onHide={ close } 
+        onHide={ this.handleCancel } 
         bsSize='large'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : ('编辑问题' + ' - ' + data.no)) : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
