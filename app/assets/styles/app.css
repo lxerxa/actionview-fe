@@ -1373,3 +1373,22 @@ div.filepicker {
   color: #000;
 }
 
+.reminds-new-header {
+  font-size: 25px; 
+  font-weight: 400; 
+  margin-bottom: 25px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.reminds-body {
+  margin-top: 15px;
+}
+
+.reminds-body .form-group {
+  margin-bottom: 25px;
+}
+
+.custom-modal {
+  width: 90%;
+}

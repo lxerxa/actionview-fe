@@ -46,7 +46,12 @@ export default class MoreFilterModal extends Component {
     const { query, oldQuery } = this.state;
 
     return (
-      <Modal show onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
+      <Modal 
+        show 
+        onHide={ this.handleCancel } 
+        backdrop='static' 
+        aria-labelledby='contained-modal-title-sm' 
+        dialogClassName='custom-modal'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>更多过滤</Modal.Title>
         </Modal.Header>
