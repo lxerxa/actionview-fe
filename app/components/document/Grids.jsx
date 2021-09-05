@@ -281,7 +281,7 @@ export default class Grids extends Component {
                     </DropdownButton>
                   </div> }
                   { v.favorited &&
-                  <div className='favorite-icon'>
+                  <div className='favorite-icon' title='点击取消收藏'>
                     <span onClick={ this.clickFavorite.bind(this) }><i className='fa fa-star'></i></span>
                   </div> }
                   <Link to={ '/project/' + project.key + '/document/' + v.id }>
@@ -325,7 +325,7 @@ export default class Grids extends Component {
                     </DropdownButton>
                   </div> }
                   { v.favorited &&
-                  <div className='favorite-icon'>
+                  <div className='favorite-icon' title='点击取消收藏'>
                     <span onClick={ this.clickFavorite.bind(this) }><i className='fa fa-star'></i></span>
                   </div> }
                   <div className='file-thumb'>
