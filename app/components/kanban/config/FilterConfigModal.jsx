@@ -100,7 +100,7 @@ export default class FilterConfigModal extends Component {
         onHide={ this.handleCancel } 
         backdrop='static' 
         aria-labelledby='contained-modal-title-sm'
-        dialogClassName='custom-modal'>
+        dialogClassName='custom-modal-90'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>{ model == 'global' ? '全局过滤器' : ( no === -1 ? '添加快速过滤器' : '编辑快速过滤器' ) }</Modal.Title>
         </Modal.Header>

@@ -57,7 +57,12 @@ export default class PreviewModal extends Component {
     const { name, collection, close } = this.props;
 
     return (
-      <Modal show onHide={ close } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
+      <Modal 
+        show 
+        onHide={ close } 
+        backdrop='static' 
+        dialogClassName='custom-modal-90'
+        aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>工作流预览{ name ? (' - ' + name) : '' }</Modal.Title>
         </Modal.Header>

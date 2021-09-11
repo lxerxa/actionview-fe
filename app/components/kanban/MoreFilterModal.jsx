@@ -51,7 +51,7 @@ export default class MoreFilterModal extends Component {
         onHide={ this.handleCancel } 
         backdrop='static' 
         aria-labelledby='contained-modal-title-sm' 
-        dialogClassName='custom-modal'>
+        dialogClassName='custom-modal-90'>
         <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
           <Modal.Title id='contained-modal-title-la'>更多过滤</Modal.Title>
         </Modal.Header>
