@@ -29,7 +29,7 @@ export default class AboutModal extends Component {
         <Modal.Body style={ { overflow: 'auto' } }>
           <div style={ { margin: '20px 0px', textAlign: 'center' } }><img src={ logo } width={ 150 }/></div>
           <div style={ { textAlign: 'center' } }>
-            <span>当前版本: 1.12.6</span>
+            <span>当前版本: 1.12.7</span>
             <a href='https://github.com/lxerxa/actionview/releases' target='_blank'><span style={ { marginLeft: '10px' } }>新版变化</span></a>
           </div>
           <div style={ { marginTop: '30px' } }>
