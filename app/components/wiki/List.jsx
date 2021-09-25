@@ -486,13 +486,13 @@ export default class List extends Component {
               id={ `dropdown-basic-${i}` } 
               onClick={ this.cancelEditRow }
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='edit'>编辑</MenuItem>
+              { (_.isEmpty(files[i].checkin) || files[i].checkin.user.id == user.id) && <MenuItem eventKey='edit'>编辑</MenuItem> }
               <MenuItem eventKey='favorite'>{ files[i].favorited ? '取消收藏' : '收藏' }</MenuItem>
               { _.isEmpty(files[i].checkin) && <MenuItem eventKey='checkin'>加锁</MenuItem> }
               { !_.isEmpty(files[i].checkin) && (files[i].checkin.user.id == user.id || (options.permissions && options.permissions.indexOf('manage_project') !== -1)) && <MenuItem eventKey='checkout'>解锁</MenuItem> }
               <MenuItem eventKey='copy'>复制</MenuItem>
-              <MenuItem eventKey='move'>移动</MenuItem>
-              <MenuItem eventKey='del'>删除</MenuItem>
+              { (_.isEmpty(files[i].checkin) || files[i].checkin.user.id == user.id) && <MenuItem eventKey='move'>移动</MenuItem> }
+              { (_.isEmpty(files[i].checkin) || files[i].checkin.user.id == user.id) && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === files[i].id) ? 'loading' : 'hide' }/>
           </div>
