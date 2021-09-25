@@ -128,7 +128,7 @@ export default class ConfigModal extends Component {
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>通知设置 - { data.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { maxHeight: '420px', overflow: 'auto' } }>

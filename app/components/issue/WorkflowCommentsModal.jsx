@@ -36,7 +36,7 @@ export default class WorkflowCommentsModal extends Component {
   render() {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>流程评论</Modal.Title>
         </Modal.Header>
         <Modal.Body>

@@ -82,7 +82,7 @@ export default class ReleaseVersionModal extends Component {
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>版本发布</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>

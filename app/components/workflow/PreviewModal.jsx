@@ -63,7 +63,7 @@ export default class PreviewModal extends Component {
         backdrop='static' 
         dialogClassName='custom-modal-90'
         aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>工作流预览{ name ? (' - ' + name) : '' }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { maxHeight: '580px', overflow: 'auto' } }>

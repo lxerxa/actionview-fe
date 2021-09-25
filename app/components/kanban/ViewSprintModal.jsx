@@ -58,7 +58,7 @@ export default class ViewSprintModal extends Component {
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>工作量查看 - { curSprint.name }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>

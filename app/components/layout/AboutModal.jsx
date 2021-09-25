@@ -23,7 +23,7 @@ export default class AboutModal extends Component {
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>关于</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { overflow: 'auto' } }>

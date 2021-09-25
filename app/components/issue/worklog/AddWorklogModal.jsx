@@ -177,7 +177,7 @@ export default class AddWorklogModal extends Component {
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>{ data.id ? '编辑工作日志' : ('添加工作日志' + (issue.no ? (' - ' + issue.no) : '')) }</Modal.Title>
         </Modal.Header>
         <Modal.Body>

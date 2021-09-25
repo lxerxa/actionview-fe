@@ -54,7 +54,7 @@ export default class DelNotify extends Component {
 
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton style={ { background: '#f0f0f0', height: '50px' } }>
+        <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-la'>
             { model === 'column' && ('删除列 - ' + (_.find(config.columns, { no }) && _.find(config.columns, { no }).name || '')) } 
             { model === 'filter' && ('删除过滤器 - ' +  (_.find(config.filters, { no }) && _.find(config.filters, { no }).name || '')) }
