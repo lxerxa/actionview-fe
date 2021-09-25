@@ -532,7 +532,7 @@ export default class List extends Component {
               style={ { textDecoration: 'blink' ,color: '#000' } }
               title={ node }
               onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='view'>查看</MenuItem>
+              {/* <MenuItem eventKey='view'>查看</MenuItem> */}
               { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='edit'>编辑</MenuItem> }
               { this.isAllowable('assign_issue') && <MenuItem eventKey='assign'>分配</MenuItem> }
               { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
