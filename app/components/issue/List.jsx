@@ -536,7 +536,7 @@ export default class List extends Component {
               { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='edit'>编辑</MenuItem> }
               { this.isAllowable('assign_issue') && <MenuItem eventKey='assign'>分配</MenuItem> }
               { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
-              <MenuItem divider/>
+              { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '') || this.isAllowable('assign_issue')) && <MenuItem divider/> }
               <MenuItem eventKey='watch'>{ item.watching ? '取消关注' : '关注' }</MenuItem>
               <MenuItem eventKey='share'>分享链接</MenuItem>
               <MenuItem divider/>
