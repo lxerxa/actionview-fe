@@ -52,7 +52,7 @@ export default function issue(state = initialState, action) {
     case t.ISSUE_INDEX_SUCCESS:
       if (action.result.ecode === 0) {
         if (action.result.options && action.result.options.requested_at && action.result.options.requested_at < state.requested_at) {
-          return;
+          return { ...state };
         }
         _.assign(state.options, action.result.options || {});
         state.collection = action.result.data;
