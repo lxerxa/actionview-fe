@@ -14,7 +14,6 @@ export default {
   },
   module: {
     ...baseConfig.module,
-    devtool: 'inline-source-map',
     loaders: [
       ...baseConfig.module.loaders,
 	        {
