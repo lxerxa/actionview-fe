@@ -777,6 +777,7 @@
   max-width: 100%;
   box-sizing: initial;
   background-color: #fff;
+  border: 1px solid #fff;
 }
 
 .markdown-body img[align=right] {
