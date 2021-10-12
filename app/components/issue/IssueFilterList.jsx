@@ -418,7 +418,7 @@ export function parseQuery(query, options) {
               return v.name + errorMsg;
             }
           } else {
-            startCond = sections[1];
+            endCond = sections[1];
           }
         }
 
