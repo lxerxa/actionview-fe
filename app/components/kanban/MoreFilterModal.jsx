@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button, Form, FormControl, FormGroup, ControlLabel, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
-import { IssueFilterList, parseQuery } from '../issue/IssueFilterList';
+import { IssueFilterList } from '../issue/IssueFilterList';
 
 const img = require('../../assets/images/loading.gif');
 
@@ -57,21 +57,18 @@ export default class MoreFilterModal extends Component {
         </Modal.Header>
         <Form horizontal onKeyUp={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body style={ { maxHeight: '580px', overflow: 'auto', paddingBottom: '0px' } }>
-          <div className='cond-txt'>
-            { !_.isEmpty(query) ? parseQuery(query, options) : '全部' }
-          </div>
           <IssueFilterList
+            visable
             values={ this.state.query }
+            styles={ { marginTop: '0px' } }
             textInputChange={ true }
             onChange={ (newValue) => { this.setState({ query: newValue }) } }
             columns={ 2 }
             notShowFields={ [ 'title', 'resolved_at', 'closed_at', 'resolver', 'closer', 'watcher' ] }
             notShowBlocks={ [ 'agile' ] }
-            searchShow={ true }
             options={ options }/>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle='link' style={ { float: 'left' } } onClick={ () => { this.setState({ query: {} }) } }>清空条件</Button>
           <Button onClick={ this.handleSubmit } disabled={ _.isEqual(oldQuery, query) }>确定</Button>
           <Button bsStyle='link' onClick={ this.handleCancel }>取消</Button>
         </Modal.Footer>

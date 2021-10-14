@@ -123,7 +123,8 @@ export default class Trend extends Component {
       trendLoading, 
       refresh, 
       query, 
-      saveFilter } = this.props;
+      saveFilter
+    } = this.props;
 
     const currentDurations = {
       '0d': '当天',
@@ -281,7 +282,7 @@ export default class Trend extends Component {
         </Form>
         <IssueFilterList
           values={ query }
-          searchShow={ this.state.issueFilterShow }
+          visable={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           notShowBlocks={ [ 'time' ] }
           options={ options }
@@ -290,7 +291,6 @@ export default class Trend extends Component {
           { query.stat_time && sqlTxt &&
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
-            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>

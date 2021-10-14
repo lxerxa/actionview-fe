@@ -3,7 +3,7 @@ import { Modal, Button, Form, FormControl, FormGroup, ControlLabel, Col } from '
 import Select from 'react-select';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
-import { IssueFilterList, parseQuery } from '../../issue/IssueFilterList';
+import { IssueFilterList } from '../../issue/IssueFilterList';
 
 const img = require('../../../assets/images/loading.gif');
 
@@ -125,21 +125,18 @@ export default class FilterConfigModal extends Component {
               { this.state.touched.name && (this.state.errors.name || '') }
             </Col>
           </FormGroup> }
-          <div className='cond-txt'>
-            { !_.isEmpty(_.omit(this.state.query, [ 'subtask' ])) ? parseQuery(this.state.query, options) : '全部' }
-          </div>
           <IssueFilterList
+            visable
+            styles={ { marginTop: model == 'global' ? '0px' : '10px' } }
             values={ this.state.query }
             textInputChange={ true }
             onChange={ (newValue) => { this.setState({ query: newValue }) } }
             columns={ 2 }
             notShowFields={ [ 'title', 'resolved_at', 'closed_at', 'resolver', 'closer', 'watcher' ] }
             notShowBlocks={ [ 'agile' ] }
-            searchShow={ true }
             options={ options }/>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle='link' style={ { float: 'left' } } disabled={ loading } onClick={ () => { this.setState({ query: {} }) } }>清空条件</Button>
           <span className='ralign'>{ this.state.ecode !== 0 && errMsg[this.state.ecode] }</span>
           <img src={ img } className={ loading ? 'loading' : 'hide' }/>
           <Button disabled={ (model === 'filter' && (!this.state.name || _.isEmpty(this.state.query))) || loading } onClick={ this.handleSubmit }>确定</Button>

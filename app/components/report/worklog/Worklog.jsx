@@ -107,7 +107,8 @@ export default class Worklog extends Component {
       worklogDetailLoading, 
       refresh, 
       query, 
-      saveFilter } = this.props;
+      saveFilter 
+    } = this.props;
 
     const w2m = (options.w2d || 5) * (options.d2h || 8) * 60;
     const d2m = (options.d2h || 8) * 60;
@@ -210,7 +211,7 @@ export default class Worklog extends Component {
         </Form>
         <IssueFilterList
           values={ query }
-          searchShow={ this.state.issueFilterShow }
+          visable={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           options={ options }
           onChange={ (newValue) => { refresh(newValue) } } />
@@ -218,7 +219,6 @@ export default class Worklog extends Component {
           { sqlTxt &&
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
-            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
           <ButtonGroup className='report-shape-buttongroup'>

@@ -254,9 +254,12 @@ export default class Header extends Component {
           </div>
           { sqlTxt &&
           <div className='cond-bar'>
-            <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
-            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='cond-contents' title={ sqlTxt }>
+              <b>检索条件</b>：{ sqlTxt }
+            </div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'>
+              <i className='fa fa-save'></i>
+            </div>
           </div> }
         </div>
         { this.state.filterConfigShow && 
@@ -276,12 +279,15 @@ export default class Header extends Component {
             del={ delFilters }
             data={ _.filter(options.filters || [], (v) => v.creator == user.id) }
             i18n={ i18n }/> }
-        <IssueFilterList 
-          values={ query } 
-          searchShow={ this.state.searchShow } 
-          indexLoading={ indexLoading } 
-          options={ options } 
-          onChange={ (newValue) => { refresh(_.assign({}, newValue, { page: undefined })) } } />
+        { !optionsLoading && 
+          <IssueFilterList 
+            savable
+            values={ query } 
+            visable={ this.state.searchShow } 
+            indexLoading={ indexLoading } 
+            options={ options } 
+            onSave={ () => { this.setState({ saveFilterShow: true }) } }
+            onChange={ (newValue) => { refresh(_.assign({}, newValue, { page: undefined })) } } /> }
         { this.state.createModalShow && 
           <CreateModal 
             show 

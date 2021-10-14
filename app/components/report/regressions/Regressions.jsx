@@ -91,7 +91,8 @@ export default class Regressions extends Component {
       regressionsLoading, 
       refresh, 
       query, 
-      saveFilter } = this.props;
+      saveFilter 
+    } = this.props;
 
     const users = options.users || [];
 
@@ -194,7 +195,7 @@ export default class Regressions extends Component {
         </Form>
         <IssueFilterList
           values={ query }
-          searchShow={ this.state.issueFilterShow }
+          visable={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           options={ options }
           onChange={ (newValue) => { refresh(newValue) } } />
@@ -202,7 +203,6 @@ export default class Regressions extends Component {
           { sqlTxt &&
           <div className='cond-bar' style={ { marginTop: '0px', float: 'left' } }>
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
-            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-remove'></i></div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
         </div>

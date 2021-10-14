@@ -325,10 +325,55 @@
 #search-form {
   margin-top: 10px; 
   margin-bottom: 15px; 
-  padding: 15px 10px 10px 10px; 
+  padding: 15px 10px; 
   border: 1px #ddd solid;
   background-color: #f7f7f7; 
   border-radius: 4px;
+  line-height: 2;
+}
+
+.cond-list-container {
+  padding: 0px 5px;
+}
+
+.cond-list-container .cond-list-title {
+  vertical-align: top; 
+  display: inline-block; 
+  vertical-align: top; 
+  font-weight: 600;
+  width: 80px;
+  padding-bottom: 5px;
+}
+
+.cond-list-container .cond-list-view-1 {
+  display: inline-block;
+  width: calc(100% - 135px);
+}
+
+.cond-list-container .cond-list-view-2 {
+  display: inline-block;
+  width: calc(100% - 190px);
+}
+
+.cond-list-container .cond-list-view-3 {
+  display: inline-block;
+  width: calc(100% - 245px);
+}
+
+.cond-list-container .cond-list-label {
+  display: inline-block; 
+  border-radius: 4px; 
+  border: 1px solid #ccc; 
+  font-size: 12px; 
+  padding: 0px 5px; 
+  margin-right: 5px; 
+  margin-bottom: 5px; 
+  color: #777;
+}
+
+.cond-list-container .cond-list-opt {
+  vertical-align: top; 
+  display: inline-block;
 }
 
 .searcher {
