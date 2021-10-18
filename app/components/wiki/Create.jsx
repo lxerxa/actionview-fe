@@ -14,7 +14,12 @@ const { API_BASENAME } = process.env;
 export default class Create extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, name: '', touched: false, isSendMsg: true };
+    this.state = { 
+      ecode: 0, 
+      name: '', 
+      touched: false, 
+      isSendMsg: false 
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }

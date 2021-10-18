@@ -15,7 +15,14 @@ const { API_BASENAME } = process.env;
 export default class Edit extends Component {
   constructor(props) {
     super(props);
-    this.state = { ecode: 0, emsg: '', name: '', contents: '', touched: false, isSendMsg: true };
+    this.state = { 
+      ecode: 0, 
+      emsg: '', 
+      name: '', 
+      contents: '', 
+      touched: false, 
+      isSendMsg: false 
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
