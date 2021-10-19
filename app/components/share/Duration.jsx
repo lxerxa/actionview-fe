@@ -39,10 +39,6 @@ export default class Duration extends Component {
     const suffix_list = [ 'd', 'w', 'm', 'y' ];
 
     const duration = value || '';
-    if (!duration) {
-      return;
-    }
-
     const sections = duration.split('~');
 
     let unit = '';
