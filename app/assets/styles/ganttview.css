@@ -51,7 +51,7 @@ div.ganttview-grid-row-cell {
 
 div.ganttview-hzheader {
   position: absolute;
-  z-index: 2;
+  z-index: 30;
   opacity: 1;
   background-color: #fff;
   border-bottom: 1px solid #f0f0f0;
@@ -213,10 +213,11 @@ div.ganttview-blocks {
 
 div.ganttview-block-container {
     height: 31px;
-    padding-top: 5px;
+    padding-top: 6px;
 }
 
 div.ganttview-block {
+    z-index: 20;
     position: relative;
     height: 23px;
     background-color: #ddd;

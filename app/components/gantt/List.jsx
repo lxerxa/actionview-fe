@@ -21,7 +21,7 @@ export default class List extends Component {
     super(props);
     this.configs = { 
       cellWidth: 25, 
-      blockHeight: 21, 
+      blockHeight: 20, 
       minDays: 60 
     };
     this.state = { 
@@ -30,6 +30,7 @@ export default class List extends Component {
       dates: [], 
       foldIssues: [],
       collection: [], 
+      linkedData: [],
       selectedIssue: {}, 
       markedIssue: {}, 
       detailBarShow: false,
@@ -52,6 +53,8 @@ export default class List extends Component {
     this.locateToday = this.locateToday.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
     this.changeScaling = this.changeScaling.bind(this);
+    this.drawLinks = this.drawLinks.bind(this);
+    this.getSrcAndDestXY = this.getSrcAndDestXY.bind(this);
   }
 
   static propTypes = {
@@ -191,12 +194,143 @@ export default class List extends Component {
       } else {
         this.arrangeData(this.arrangeCollection(nextProps.collection, this.state.collection));
       }
+      this.arrangeLinkedData(this.state.collection);
       this.setBoundaryDatesFromData(this.state.collection);
       this.setDates(singulars);
     } else {
       this.state.collection = [];
       this.state.markedIssue = {};
     }
+  }
+
+  arrangeLinkedData(collection) {
+    const allIssues = [];
+    _.forEach(collection, (v) => {
+      if (v.parent && v.parent.id) {
+        if (_.findIndex(allIssues, { id: v.parent.id }) === -1) {
+          allIssues.push(v.parent);
+        }
+      }
+      allIssues.push(v);
+    });
+
+    const linkedData = [];
+    _.forEach(allIssues, (v) => {
+      _.forEach(v.links, (v2) => {
+        if (v2.relation == 'blocks') {
+          linkedData.push({ src_id: v2.src.id, dest_id: v2.dest.id });
+        }
+      });
+    });
+
+    this.state.linkedData = _.filter(linkedData, v => _.findIndex(allIssues, { id: v.src_id }) !== -1 && _.findIndex(allIssues, { id: v.dest_id }) !== -1);
+  }
+
+  drawLinks() {
+    const { range, linkedData, collection } = this.state;
+
+    const container = $('.ganttview-slide-container');
+    if (container.find('canvas').length <= 0) {
+      return;
+    }
+
+    $('canvas').attr('height', $('div.ganttview-grid').css('height'));
+    $('canvas').attr('width', $('div.ganttview-grid').css('width'));
+
+    const ctx = container.find('canvas')[0].getContext('2d');
+
+    const cellWidth = this.configs.cellWidth;
+    const offset = 10;
+    const origin = range[0];
+
+    const endArrows = [];
+
+    _.forEach(linkedData, (v) => {
+
+      let { sx, sy, ex, ey } = this.getSrcAndDestXY(v.src_id, v.dest_id);
+
+      //sx = sx - container.scrollLeft();
+      //ex = ex - container.scrollLeft();
+      sy = sy + container.scrollTop();
+      ey = ey + container.scrollTop();
+
+      console.log(sy, sx, ey, ex);
+
+      //绘制连接线条
+      ctx.beginPath();
+      ctx.strokeStyle = 'red';
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(sx + cellWidth / 2 - 2, sy);
+
+      let thirdY = 0;
+      if (ey > sy) {
+        thirdY = sy + 15;
+      } else {
+        thirdY = sy - 15;
+      }
+      ctx.lineTo(sx + cellWidth / 2 - 2, thirdY);
+
+      let forthX = 0;
+      let forthY = 0;
+      if (ex - sx >= cellWidth) {
+        forthX = sx + cellWidth / 2 - 2;
+        forthY = ey;
+      } else {
+        forthX = ex - cellWidth / 2;
+        forthY = thirdY;
+      }
+      ctx.lineTo(forthX, forthY);
+
+      ctx.lineTo(ex - cellWidth / 2, ey);
+      ctx.lineTo(ex, ey);
+      ctx.stroke();
+
+      if (endArrows.indexOf(v.dest_id) === -1) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'red';
+        ctx.moveTo(ex - cellWidth / 3, ey - 4);
+        ctx.lineTo(ex, ey);
+        ctx.lineTo(ex - cellWidth / 3, ey + 4);
+        ctx.fillStyle = 'red';
+        ctx.closePath();
+        ctx.fill();
+      }
+    });
+  }
+
+  getSrcAndDestXY(srcId, destId) {
+    const cellWidth = this.configs.cellWidth;
+
+    const { range, collection } = this.state;
+    const origin = range[0];
+
+    const sDiv = $('#' + srcId + '-block');
+    const eDiv = $('#' + destId + '-block');
+    if (sDiv.length <= 0 || eDiv.length <= 0) {
+      return null;
+    }
+
+    const srcIssue = _.find(collection, { id: srcId });
+    const destIssue = _.find(collection, { id: destId });
+    if (!srcIssue || !destIssue) {
+      return null;
+    }
+
+    const sStart = moment.unix(srcIssue.expect_start_time || srcIssue.expect_complete_time || srcIssue.created_at).startOf('day').format('X');
+    const sEnd = moment.unix(srcIssue.expect_complete_time || srcIssue.expect_start_time || srcIssue.created_at).startOf('day').format('X');
+    const sSize = (sEnd - sStart) / 3600 / 24 + 1;
+    const sOffset = (sStart - origin) / 3600 / 24;
+
+    const sy = sDiv.position().top + 10;
+    const sx = sSize * cellWidth - 3 + sOffset * cellWidth;
+
+    const eStart = moment.unix(destIssue.expect_start_time || destIssue.expect_complete_time || destIssue.created_at).startOf('day').format('X');
+    const eOffset = (eStart - origin) / 3600 / 24;
+
+    const ey = eDiv.position().top + 10;
+    const ex = eOffset * cellWidth;
+
+    return { sx, sy, ex, ey };
   }
 
   arrangeCollection(pc, sc) {
@@ -540,6 +674,8 @@ export default class List extends Component {
         }
       });
     });
+
+    this.drawLinks();
   }
 
   clickBar(block) {
@@ -687,6 +823,8 @@ export default class List extends Component {
       markedIssue
     } = this.state;
 
+    const canvasStyle = { 'position': 'absolute', 'top': '0px', 'left': '0px', 'zIndex': 10, 'marginTop': '0px', 'marginLeft': '0px' };
+
     return (
       <div>
         <div style={ { marginTop: '10px', height: '25px' } }>
@@ -787,6 +925,7 @@ export default class List extends Component {
               foldIssues={ foldIssues }
               selectedIssue={ itemData }
               options={ options } />
+            <canvas style={ canvasStyle } />
           </div>
         </div> }
         { this.state.editModalShow &&
