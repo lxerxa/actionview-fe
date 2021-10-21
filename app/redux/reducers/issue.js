@@ -492,6 +492,15 @@ export default function issue(state = initialState, action) {
           }
           state.itemData.links.push(action.result.data);
         }
+
+        // for ganttview
+        const ind = _.findIndex(state.collection, { id: action.result.data.src.id });
+        if (ind !== -1) {
+          if (!state.collection[ind].links) {
+            state.collection[ind].links = [];
+          }
+          state.collection[ind].links.push(action.result.data);
+        }
       }
       return { ...state, linkLoading: false, ecode: action.result.ecode };
 
@@ -509,6 +518,15 @@ export default function issue(state = initialState, action) {
             state.itemData.links.splice(linkIndex, 1);
           }
         }
+
+        // for ganttview
+        _.forEach(state.collection, (v) => {
+          _.forEach(v.links || [], (v2, i) => {
+            if (v2.id == action.id) {
+              v.links.splice(i, 1);
+            }
+          });
+        });
       }
       return { ...state, linkLoading: false, ecode: action.result.ecode };
 
