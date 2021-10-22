@@ -257,6 +257,7 @@ export default class Header extends Component {
             <div className='cond-contents' title={ sqlTxt }>
               <b>检索条件</b>：{ sqlTxt }
             </div>
+            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-undo'></i></div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'>
               <i className='fa fa-save'></i>
             </div>

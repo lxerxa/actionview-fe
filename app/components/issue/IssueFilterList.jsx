@@ -70,7 +70,7 @@ export class IssueFilterList extends Component {
   }
 
   removeAllConds(keys) {
-    const removableKeys = keys.concat([ 'page', 'orderBy' ]);
+    const removableKeys = keys.concat([ 'orderBy' ]);
 
     console.log(removableKeys);
 
