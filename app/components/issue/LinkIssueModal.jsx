@@ -85,7 +85,7 @@ export default class LinkIssueModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, loading, options: { relations=[] } } = this.props;
+    const { i18n: { errMsg }, loading, issue, options: { relations=[] } } = this.props;
 
     const relationOptions = [];
     _.forEach(relations, (v) => {
@@ -100,7 +100,7 @@ export default class LinkIssueModal extends Component {
     return (
       <Modal show onHide={ this.cancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>链接问题</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '链接问题 - ' + issue.no }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormGroup controlId='formControlsSelect'>
