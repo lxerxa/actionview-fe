@@ -25,7 +25,6 @@ export default class List extends Component {
       minDays: 60 
     };
     this.state = { 
-      scaling: 1,
       range: [], 
       dates: [], 
       foldIssues: [],
@@ -39,6 +38,7 @@ export default class List extends Component {
     this.scrollSide = '';
     this.state.sortkey = window.localStorage && window.localStorage.getItem('gantt-sortkey') || 'start_time_asc';
     this.state.mode = window.localStorage && window.localStorage.getItem('gantt-mode') || 'progress';
+    this.state.scaling = parseFloat(window.localStorage && window.localStorage.getItem('gantt-scaling') || '1');
     this.setBoundaryDatesFromData = this.setBoundaryDatesFromData.bind(this);
     this.setDates = this.setDates.bind(this);
     this.updateData = this.updateData.bind(this);
@@ -154,8 +154,10 @@ export default class List extends Component {
     }
 
     scaling = _.round(scaling, 1)
+    if (window.localStorage) {
+      window.localStorage.setItem('gantt-scaling', scaling);
+    }
 
-    this.configs.cellWidth = 25 * scaling;
     this.setState({ scaling });
   }
 
@@ -608,12 +610,16 @@ export default class List extends Component {
       let ssi = 0, ssj = 0;
       $('div.ganttview-slide-container').unbind('scroll').scroll(function() {
         ssi++;
+        if (parseInt($('div.ganttview-hzheader').css('top')) != $('div.ganttview-slide-container').scrollTop()) {
+          $('div.ganttview-hzheader').css('display', 'none');
+        }
         setTimeout(function() {
           ssj++;
           if (ssi > ssj) {
             return;
           }
           $('div.ganttview-hzheader').css('top', $('div.ganttview-slide-container').scrollTop());
+          $('div.ganttview-hzheader').css('display', '');
           $('div.ganttview-slide-container').scrollLeft(_.ceil($('div.ganttview-slide-container').scrollLeft() / cellWidth) * cellWidth);
           self.setState({});
           if ($('div.ganttview-vtheader-item').scrollTop() === $('div.ganttview-slide-container').scrollTop()) {
@@ -841,6 +847,8 @@ export default class List extends Component {
       range,
       markedIssue
     } = this.state;
+
+    this.configs.cellWidth = 25 * scaling;
 
     const canvasStyle = { 'position': 'absolute', 'top': '0px', 'left': '0px', 'zIndex': 10, 'marginTop': '0px', 'marginLeft': '0px' };
 

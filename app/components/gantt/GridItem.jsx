@@ -27,8 +27,8 @@ export default class GridItem extends Component {
       today=''
     } = this.props;
 
-    const lsn = _.max([ _.floor(offset / cellWidth) - 30, 0 ]);
-    const ren = _.min([ _.floor((offset + clientWidth) / cellWidth) + 30, dates.length ]);
+    const lsn = _.max([ _.floor(offset / cellWidth) - 15, 0 ]);
+    const ren = _.min([ _.floor((offset + clientWidth) / cellWidth) + 15, dates.length ]);
 
     return (
       <div
