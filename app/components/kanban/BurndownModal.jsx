@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import { Modal, ButtonGroup, Button } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
@@ -64,20 +65,26 @@ export default class PreviewModal extends Component {
       }
     }
 
+
     return (
-      <Modal show onHide={ this.handleCancel } backdrop='static' bsSize='large' aria-labelledby='contained-modal-title-sm'>
-        <Modal.Header closeButton>
+      <Modal
+        show 
+        onHide={ this.handleCancel } 
+        backdrop='static' 
+        dialogClassName='custom-modal-90'
+        aria-labelledby='contained-modal-title-sm'>
+        <Modal.Header closeButton ref='header'>
           <Modal.Title id='contained-modal-title-la'>燃尽图{ ' - ' + 'Sprint ' + no }</Modal.Title>
         </Modal.Header>
         { loading &&
-        <Modal.Body style={ { height: '500px', overflow: 'auto' } }>
-          <div style={ { textAlign: 'center', marginTop: '180px' } }>
+        <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
+          <div style={ { textAlign: 'center', marginTop: '235px' } }>
             <img src={ img } className='loading'/>
           </div>
         </Modal.Body> }
         { !loading &&
-        <Modal.Body style={ { height: '500px', overflow: 'auto' } }>
-          <ButtonGroup style={ { float: 'right', marginRight: '110px' } }>
+        <Modal.Body style={ { height: '580px', overflow: 'auto' } }>
+          <ButtonGroup style={ { float: 'right', marginRight: '55px' } }>
             <Button title='问题数' style={ { backgroundColor: this.state.mode == 'issueCount' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'issueCount' }) } }>问题数</Button>
             <Button title='故事点' style={ { backgroundColor: this.state.mode == 'storyPoints' && '#eee' } } onClick={ ()=>{ this.setState({ mode: 'storyPoints' }) } }>故事点数</Button>
           </ButtonGroup> 
@@ -87,7 +94,10 @@ export default class PreviewModal extends Component {
               <span style={ { marginLeft: '3px' } }>显示非工作日</span>
             </label>
           </CheckboxGroup>
-          <LineChart width={ 760 } height={ 420 } style={ { marginTop: '45px' } }>
+          <LineChart 
+            height={ 500 } 
+            width={ findDOMNode(this.refs.header).getBoundingClientRect().width - 80 }
+            style={ { marginTop: '45px' } }>
             <XAxis dataKey='day' type='category' allowDuplicatedCategory={ false } />
             <YAxis dataKey='value'/>
             <CartesianGrid strokeDasharray='3 3'/>
