@@ -193,13 +193,13 @@ export default class Worklog extends Component {
             <Col sm={ 1 } componentClass={ ControlLabel }>
               填报时间
             </Col>
-            <Col sm={ 5 }>
+            <Col sm={ 6 }>
               <Duration
                 options={ [ 'fixed', 'variable_duration' ] }
                 value={ this.state.recorded_at }
                 onChange={ (newValue) => { this.state.recorded_at = newValue; this.search(); } }/>
             </Col>
-            <Col sm={ 6 }>
+            <Col sm={ 5 }>
               <Button
                 bsStyle='link'
                 onClick={ () => { this.setState({ issueFilterShow: !this.state.issueFilterShow }) } }
