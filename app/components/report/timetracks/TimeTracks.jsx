@@ -248,6 +248,7 @@ export default class TimeTracks extends Component {
             visable={ this.state.issueFilterShow }
             notShowFields={ [ 'watcher' ] }
             options={ options }
+            onHide={ () => { this.setState({ issueFilterShow: false }) } }
             onChange={ (newValue) => { refresh(newValue) } } />
         </div>
         <div className='report-conds-style'>

@@ -27,11 +27,11 @@ export class IssueFilterList extends Component {
 
   static propTypes = {
     removable: PropTypes.bool,
-    savable: PropTypes.bool,
     foldable: PropTypes.bool,
     textInputChange: PropTypes.bool,
     onChange: PropTypes.func,
     onSave: PropTypes.func,
+    onHide: PropTypes.func,
     columns: PropTypes.number,
     styles: PropTypes.object,
     values: PropTypes.object,
@@ -178,7 +178,6 @@ export class IssueFilterList extends Component {
   render() {
     const { 
       foldable=false,
-      savable=false,
       removable=true,
       columns,
       styles={},
@@ -187,6 +186,7 @@ export class IssueFilterList extends Component {
       notShowFields=[],
       notShowBlocks=[],
       notShowTypes=[],
+      onHide,
       onSave,
       options,
       options: { types=[], states=[], priorities=[], resolutions=[], modules=[], versions=[], epics=[], sprints=[], labels=[], users=[], fields=[] } 
@@ -251,10 +251,17 @@ export class IssueFilterList extends Component {
     const searchedFieldKeys = _.union(_.map(baseFields, v => v.key), _.map(memberFields, v => v.key), _.map(timeFields, v => v.key), _.map(agileFields, v => v.key), _.map(othersFields, v => v.key));
     const conds = _parseQuery(values, options);
 
-    let condListStyle = 'cond-list-view-1';
-    if (savable) {
-      condListStyle = 'cond-list-view-2';
+    let buttonNum = 0;
+    if (onHide) {
+      buttonNum++;
     }
+    if (removable && conds.length > 0) {
+      buttonNum++;
+    }
+    if (onSave && conds.length > 0) {
+      buttonNum++;
+    }
+    const condListStyle = 'cond-list-view-' + _.max([ buttonNum, 1 ]);
 
     return (
       <div 
@@ -285,9 +292,13 @@ export class IssueFilterList extends Component {
             <Button bsStyle='link' onClick={ () => { this.removeAllConds(searchedFieldKeys) } } style={ { paddingTop: '0px' } }>
               清空
             </Button> }
-            { savable && conds.length > 0 &&
+            { onSave && conds.length > 0 &&
             <Button bsStyle='link' onClick={ onSave } style={ { paddingTop: '0px' } }>
               保存
+            </Button> }
+            { onHide &&
+            <Button bsStyle='link' onClick={ onHide } style={ { paddingTop: '0px' } }>
+              隐藏 
             </Button> }
           </div>
         </div>

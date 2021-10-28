@@ -198,6 +198,7 @@ export default class Regressions extends Component {
           visable={ this.state.issueFilterShow }
           notShowFields={ [ 'watcher' ] }
           options={ options }
+          onHide={ () => { this.setState({ issueFilterShow: false }) } }
           onChange={ (newValue) => { refresh(newValue) } } />
         <div className='report-conds-style'>
           { sqlTxt &&

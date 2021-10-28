@@ -286,6 +286,7 @@ export default class Trend extends Component {
           notShowFields={ [ 'watcher' ] }
           notShowBlocks={ [ 'time' ] }
           options={ options }
+          onHide={ () => { this.setState({ issueFilterShow: false }) } }
           onChange={ (newValue) => { refresh(newValue) } } />
         <div className='report-conds-style'>
           { query.stat_time && sqlTxt &&

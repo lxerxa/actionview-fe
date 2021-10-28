@@ -180,6 +180,8 @@ export default class Header extends Component {
           visable={ this.state.searchShow } 
           indexLoading={ indexLoading } 
           options={ options } 
+          onHide={ () => { this.setState({ searchShow: false }) } }
+          onSave={ () => { this.setState({ saveFilterShow: true }) } }
           onChange={ (newValue) => { refresh(_.assign({}, newValue, { page: undefined })) } } />
         { this.state.createModalShow && 
           <CreateModal 
