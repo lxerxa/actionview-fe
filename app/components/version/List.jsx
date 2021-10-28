@@ -39,6 +39,8 @@ export default class List extends Component {
     indexLoading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
+    gotoIssueList: PropTypes.func.isRequired,
+    gotoGantt: PropTypes.func.isRequired,
     query: PropTypes.object,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
@@ -101,6 +103,7 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
+    const { gotoIssueList, gotoGantt } = this.props;
     if (eventKey === 'view') {
       this.view(hoverRowId);
     } else if (eventKey === 'edit') {
@@ -109,6 +112,10 @@ export default class List extends Component {
       this.delNotify(hoverRowId);
     } else if (eventKey === 'release' || eventKey === 'unrelease') {
       this.release(hoverRowId);
+    } else if (eventKey === 'issuelist') {
+      gotoIssueList(hoverRowId);
+    } else if (eventKey === 'gantt') {
+      gotoGantt(hoverRowId);
     }
   }
 
@@ -135,7 +142,8 @@ export default class List extends Component {
       loading, 
       del, 
       release, 
-      update } = this.props;
+      update 
+    } = this.props;
     const { hoverRowId, operateShow } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
@@ -197,6 +205,9 @@ export default class List extends Component {
               {/* collection[i].status == 'released' ? <MenuItem eventKey='unrelease'>取消发布</MenuItem> : <MenuItem eventKey='release'>发布</MenuItem> */}
               { collection[i].status != 'released' && <MenuItem eventKey='release'>发布</MenuItem> }
               <MenuItem eventKey='del'>删除</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='issuelist'>问题列表</MenuItem>
+              <MenuItem eventKey='gantt'>甘特图</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>

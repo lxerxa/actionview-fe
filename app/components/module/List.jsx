@@ -23,7 +23,8 @@ export default class List extends Component {
       willSetDefalutAssigneeModuleIds: [], 
       settingDefaultAssigneeModuleIds: [] , 
       principal: {}, 
-      defaultAssignee: {} };
+      defaultAssignee: {} 
+    };
     this.editModalClose = this.editModalClose.bind(this);
     this.delNotifyClose = this.delNotifyClose.bind(this);
   }
@@ -38,6 +39,7 @@ export default class List extends Component {
     loading: PropTypes.bool.isRequired,
     index: PropTypes.func.isRequired,
     gotoIssueList: PropTypes.func.isRequired,
+    gotoGantt: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
@@ -70,7 +72,7 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { gotoIssueList } = this.props;
+    const { gotoIssueList, gotoGantt } = this.props;
 
     if (eventKey === '1') {
       this.edit(hoverRowId);
@@ -78,6 +80,8 @@ export default class List extends Component {
       this.delNotify(hoverRowId);
     } else if (eventKey === '3') {
       gotoIssueList(hoverRowId);
+    } else if (eventKey === '4') {
+      gotoGantt(hoverRowId);
     }
   }
 
@@ -187,7 +191,8 @@ export default class List extends Component {
       itemLoading, 
       loading, 
       del, 
-      update } = this.props;
+      update 
+    } = this.props;
 
     const { 
       hoverRowId, 
@@ -195,7 +200,8 @@ export default class List extends Component {
       willSetPrincipalModuleIds, 
       settingPrincipalModuleIds, 
       willSetDefalutAssigneeModuleIds, 
-      settingDefaultAssigneeModuleIds } = this.state;
+      settingDefaultAssigneeModuleIds 
+    } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
 
@@ -204,7 +210,11 @@ export default class List extends Component {
       return { label: val.name + '(' + val.email + ')', value: val.id };
     });
 
-    const defaultAssigneeOptions = [ { value: 'projectPrincipal', label: '项目负责人' }, { value: 'modulePrincipal', label: '模块负责人' }, { value: 'none', label: '未分配' } ];
+    const defaultAssigneeOptions = [ 
+      { value: 'projectPrincipal', label: '项目负责人' }, 
+      { value: 'modulePrincipal', label: '模块负责人' }, 
+      { value: 'none', label: '未分配' } 
+    ];
 
     const modules = [];
     const moduleNum = collection.length;
@@ -328,6 +338,7 @@ export default class List extends Component {
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem eventKey='2'>删除</MenuItem> }
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
               <MenuItem eventKey='3'>问题列表</MenuItem>
+              <MenuItem eventKey='4'>甘特图</MenuItem>
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>

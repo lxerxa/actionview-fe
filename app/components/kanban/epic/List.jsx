@@ -31,6 +31,7 @@ export default class List extends Component {
     loading: PropTypes.bool.isRequired,
     gotoBacklog: PropTypes.func.isRequired,
     gotoIssueList: PropTypes.func.isRequired,
+    gotoGantt: PropTypes.func.isRequired,
     index: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
@@ -64,16 +65,18 @@ export default class List extends Component {
 
   operateSelect(eventKey) {
     const { hoverRowId } = this.state;
-    const { gotoBacklog, gotoIssueList } = this.props;
+    const { gotoBacklog, gotoIssueList, gotoGantt } = this.props;
 
     if (eventKey === '1') {
       this.edit(hoverRowId);
     } else if (eventKey === '2') {
       this.delNotify(hoverRowId);
     } else if (eventKey === '3') {
-      gotoIssueList(hoverRowId);
+      gotoIssueList({ epic: hoverRowId });
     } else if (eventKey === '4') {
       gotoBacklog(hoverRowId);
+    } else if (eventKey === '5') {
+      gotoGantt({ epic: hoverRowId });
     }
   }
 
@@ -137,6 +140,7 @@ export default class List extends Component {
               { options.permissions && options.permissions.indexOf('manage_project') !== -1 && <MenuItem divider/> }
               <MenuItem eventKey='3'>问题列表</MenuItem>
               <MenuItem eventKey='4'>Backlog列表</MenuItem>
+              <MenuItem eventKey='5'>甘特图</MenuItem>
             </DropdownButton> }
           </div>
         )

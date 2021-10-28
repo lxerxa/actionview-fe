@@ -79,6 +79,8 @@ export default class Header extends Component {
     sprintLog: PropTypes.object,
     sprintLogLoading: PropTypes.bool,
     goto: PropTypes.func,
+    gotoIssueList: PropTypes.func,
+    gotoGantt: PropTypes.func,
     selectFilter: PropTypes.func,
     index: PropTypes.func,
     options: PropTypes.object
@@ -118,6 +120,34 @@ export default class Header extends Component {
     } else {
       const { goto } = this.props;
       goto(eventKey);
+    }
+  }
+
+  moreSelect(eventKey) {
+    const { sprints=[], gotoIssueList, gotoGantt } = this.props;
+    if (eventKey === 'burndown') {
+      this.setState({ burndownModalShow: true });
+    } else if (eventKey === 'gotoIssue') {
+      const activeSprint = _.find(sprints || [], { status: 'active' });
+      if (activeSprint) {
+        gotoIssueList({ sprints: activeSprint.no });
+      }
+    } else if (eventKey === 'gotoGantt') {
+      const activeSprint = _.find(sprints || [], { status: 'active' });
+      if (activeSprint) {
+        gotoGantt({ sprints: activeSprint.no });
+      }
+    }
+  }
+
+  hisMoreSelect(eventKey) {
+    const { selectedFilter, gotoIssueList, gotoGantt } = this.props;
+    if (eventKey === 'burndown') {
+      this.setState({ hisBurndownModalShow: true });
+    } else if (eventKey === 'gotoIssue') {
+      gotoIssueList({ sprints: selectedFilter });
+    } else if (eventKey === 'gotoGantt') {
+      gotoGantt({ sprints: selectedFilter });
     }
   }
 
@@ -362,11 +392,16 @@ export default class Header extends Component {
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
           { curKanban.type == 'scrum' && !_.isEmpty(activeSprint) &&
-          <span style={ { float: 'right', marginRight: '10px' } } title='燃尽图'>
-            <Button onClick={ () => { this.setState({ burndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
+          <span style={ { float: 'right', marginRight: '10px' } }>
+            <DropdownButton pullRight title='更多' onSelect={ this.moreSelect.bind(this) }>
+              <MenuItem eventKey='burndown'>燃尽图</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='gotoIssue'>跳至问题列表</MenuItem>
+              <MenuItem eventKey='gotoGantt'>跳至甘特图</MenuItem>
+            </DropdownButton>
           </span> }
-          <span style={ { float: 'right', marginRight: '10px' } } title='更多过滤'>
-            <Button onClick={ () => { this.setState({ moreFilterModalShow: true }) } }><i className='fa fa-filter' aria-hidden='true'></i> 更多过滤{ !_.isEmpty(this.state.query) ? '...' : '' }</Button>
+          <span style={ { float: 'right', marginRight: '10px' } } title='附加过滤'>
+            <Button onClick={ () => { this.setState({ moreFilterModalShow: true }) } }><i className='fa fa-filter' aria-hidden='true'></i> 附加过滤{ !_.isEmpty(this.state.query) ? '...' : '' }</Button>
           </span>
         </div> }
         { mode === 'backlog' && !_.isEmpty(curKanban) &&
@@ -422,7 +457,12 @@ export default class Header extends Component {
             <Button onClick={ this.hideHeader.bind(this) }><i className='fa fa-angle-double-up' aria-hidden='true'></i></Button>
           </span>
           <span style={ { float: 'right', marginRight: '10px' } } title='燃尽图'>
-            <Button onClick={ () => { this.setState({ hisBurndownModalShow: true }) } }><i className='fa fa-line-chart' aria-hidden='true'></i> 燃尽图</Button>
+            <DropdownButton pullRight title='更多' onSelect={ this.hisMoreSelect.bind(this) }>
+              <MenuItem eventKey='burndown'>燃尽图</MenuItem>
+              <MenuItem divider/>
+              <MenuItem eventKey='gotoIssue'>跳至问题列表</MenuItem>
+              <MenuItem eventKey='gotoGantt'>跳至甘特图</MenuItem>
+            </DropdownButton>
           </span>
         </div> }
 

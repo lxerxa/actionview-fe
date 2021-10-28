@@ -53,6 +53,10 @@ export default class Container extends Component {
     this.context.router.push({ pathname: '/project/' + this.pid + '/issue', query: { module } });
   }
 
+  gotoGantt(module) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/gantt', query: { module } });
+  }
+
   async del(values) {
     const { actions } = this.props;
     await actions.del(this.pid, values);
@@ -84,6 +88,7 @@ export default class Container extends Component {
         <List 
           index={ this.index.bind(this) } 
           gotoIssueList={ this.gotoIssueList.bind(this) } 
+          gotoGantt={ this.gotoGantt.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
           del={ this.del.bind(this) } 

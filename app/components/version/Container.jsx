@@ -40,6 +40,14 @@ export default class Container extends Component {
     this.context.router.push({ pathname, query });
   }
 
+  gotoIssueList(version) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/issue', query: { resolve_version: version } });
+  }
+
+  gotoGantt(version) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/gantt', query: { resolve_version: version } });
+  }
+
   async index(query) {
     query = query || {};
     if (!query.page) { query.page = 1; }
@@ -96,6 +104,8 @@ export default class Container extends Component {
           query={ query }
           index={ this.index.bind(this) } 
           refresh={ this.refresh.bind(this) }
+          gotoIssueList={ this.gotoIssueList.bind(this) } 
+          gotoGantt={ this.gotoGantt.bind(this) } 
           select={ this.props.actions.select } 
           release={ this.release.bind(this) } 
           update={ this.update.bind(this) } 

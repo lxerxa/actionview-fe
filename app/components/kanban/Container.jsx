@@ -39,6 +39,7 @@ export default class Container extends Component {
     this.goto = this.goto.bind(this);
     this.gotoBacklog = this.gotoBacklog.bind(this);
     this.gotoIssueList = this.gotoIssueList.bind(this);
+    this.gotoGantt = this.gotoGantt.bind(this);
   }
 
   static contextTypes = {
@@ -76,8 +77,12 @@ export default class Container extends Component {
     this.refs.header.handleSelectEV(epic, 'epic');
   }
 
-  gotoIssueList(epic) {
-    this.context.router.push({ pathname: '/project/' + this.pid + '/issue', query: { epic } });
+  gotoIssueList(query) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/issue', query });
+  }
+
+  gotoGantt(query) {
+    this.context.router.push({ pathname: '/project/' + this.pid + '/gantt', query });
   }
 
   async index(query) {
@@ -462,6 +467,8 @@ export default class Container extends Component {
           sprintLog={ this.props.kanban.sprintLog }
           sprintLogLoading={ this.props.kanban.sprintLogLoading }
           goto={ this.goto }
+          gotoIssueList={ this.gotoIssueList }
+          gotoGantt={ this.gotoGantt }
           selectedFilter={ this.state.filter }
           selectFilter={ (filter) => { this.setState({ filter }) } }
           index={ this.index.bind(this) } 
@@ -555,6 +562,7 @@ export default class Container extends Component {
           selectedItem={ this.props.kanban.selectedEpicItem }
           gotoBacklog={ this.gotoBacklog.bind(this) }
           gotoIssueList={ this.gotoIssueList.bind(this) }
+          gotoGantt={ this.gotoGantt.bind(this) }
           select={ this.props.actions.selectEpic }
           index={ this.indexEpic.bind(this) }
           create={ this.createEpic.bind(this) }
