@@ -265,7 +265,7 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         principal: collection[i].principal && collection[i].principal.name || '系统管理员',
-        count: collection[i].users ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
+        count: collection[i].users && collection[i].users.length > 0 ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
         public_scope: collection[i].public_scope && scopeOptions[collection[i].public_scope] || '公开', 
         directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
         operation: (

@@ -656,22 +656,33 @@ table tr:hover .remove-icon{
 .small-avatar {
   width: 12px;
   height: 12px;
-  text-decoration: 'blink';
+  text-decoration: blink;
   border-radius: 50%;
+  border: 1px solid #dedede;
 }
 
 .default-avatar {
   width: 28px;
   height: 28px;
-  text-decoration: 'blink';
+  text-decoration: blink;
   border-radius: 50%;
+  border: 1px solid #dedede;
+}
+
+.middle-avatar {
+  width: 60px;
+  height: 60px;
+  text-decoration: blink;
+  border-radius: 50%;
+  border: 1px solid #dedede;
 }
 
 .big-avatar {
   width: 80px;
   height: 80px;
-  text-decoration: 'blink';
+  text-decoration: blink;
   border-radius: 50%;
+  border: 1px solid #dedede;
 }
 
 .reset-pwd-msg {
@@ -1437,4 +1448,26 @@ div.filepicker {
 
 .custom-modal-90 {
   width: 90%;
+}
+
+.users-grid-view .grid-view-container {
+  position: relative;
+  display: table;
+}
+
+.users-grid-view .grid-view-container .grid-view-item {
+  float: left;
+  margin: 15px 15px 0 0;
+  width: 160px;
+  text-align: center;
+  position: relative;
+}
+
+.users-grid-view .grid-view-container .grid-view-item-name {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  margin-top: 5px;
+  white-space: nowrap;
 }
