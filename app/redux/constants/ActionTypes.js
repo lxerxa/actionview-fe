@@ -27,6 +27,7 @@ export default generateConstants([
 
   'GROUP_CREATE(ASYNC)',
   'GROUP_UPDATE(ASYNC)',
+  'GROUP_COPY(ASYNC)',
   'GROUP_INDEX(ASYNC)',
   'GROUP_DELETE(ASYNC)',
   'GROUP_MULTI_DELETE(ASYNC)',

@@ -6,6 +6,7 @@ import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
 import { notify } from 'react-notify-toast';
 
+const $ = require('$');
 const img = require('../../assets/images/loading.gif');
 
 const validate = (values, props) => {
@@ -17,11 +18,11 @@ const validate = (values, props) => {
 };
 
 @reduxForm({
-  form: 'group',
-  fields: [ 'name', 'principal', 'public_scope', 'description' ],
+  form: 'copy_group',
+  fields: [ 'id', 'name', 'principal', 'public_scope', 'description' ],
   validate
 })
-export default class CreateModal extends Component {
+export default class EditModal extends Component {
   constructor(props) {
     super(props);
     this.state = { ecode: 0 };
@@ -38,7 +39,30 @@ export default class CreateModal extends Component {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired
+    data: PropTypes.object.isRequired,
+    initializeForm: PropTypes.func.isRequired,
+    copy: PropTypes.func.isRequired
+  }
+
+  async handleSubmit() {
+
+    const { mode, values, copy, close } = this.props;
+
+    let principal = '';
+    if (mode == 'admin') {
+      principal = values.principal && values.principal.id || '';
+    } else {
+      principal = 'self';
+    }
+
+    const ecode = await copy({ ...values, source_id: values.id, principal, public_scope: values.public_scope || '1' });
+    if (ecode === 0) {
+      this.setState({ ecode: 0 });
+      close();
+      notify.show('复制完成。', 'success', 2000);
+    } else {
+      this.setState({ ecode: ecode });
+    }
   }
 
   async searchUsers(input) {
@@ -52,26 +76,6 @@ export default class CreateModal extends Component {
     return { options: _.map(results.data, (val) => { val.name = val.name + '(' + val.email + ')'; return val; }) };
   }
 
-  async handleSubmit() {
-    const { mode, values, create, close } = this.props;
-
-    let principal = '';
-    if (mode == 'admin') {
-      principal = values.principal && values.principal.id || ''; 
-    } else {
-      principal = 'self';
-    }
-
-    const ecode = await create({ ...values, principal, public_scope: values.public_scope || '1' });
-    if (ecode === 0) {
-      this.setState({ ecode: 0 });
-      close();
-      notify.show('新建完成。', 'success', 2000);
-    } else {
-      this.setState({ ecode: ecode });
-    }
-  }
-
   handleCancel() {
     const { close, submitting } = this.props;
     if (submitting) {
@@ -81,11 +85,22 @@ export default class CreateModal extends Component {
     close();
   }
 
+  handleEntry() {
+    $('input[name=name]').select();
+  }
+
+  componentWillMount() {
+    const { initializeForm, data } = this.props;
+    const copyData = _.clone(data);
+    _.extend(copyData, { name: '复制 - ' + data.name });
+    initializeForm(copyData);
+  }
+
   render() {
     const { 
       i18n: { errMsg }, 
       mode,
-      fields: { name, principal, public_scope, description }, 
+      fields: { id, name, principal, public_scope, description }, 
       handleSubmit, 
       invalid, 
       submitting 
@@ -94,17 +109,18 @@ export default class CreateModal extends Component {
     const scopeOptions = [
       { label: '公开（所有人可对其授权）', value: '1' }, 
       { label: '私有（仅负责人可对其授权）', value: '2' }, 
-      { label: '成员可见（仅负责人和组成员可对其授权）', value: '3' }
+      { label: '成员可见（仅组成员和负责人可对其授权）', value: '3' }
     ];
 
     return (
-      <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
+      <Modal show onHide={ this.handleCancel } onEntered={ this.handleEntry } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>新建组</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>复制用户组</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup validationState={ name.touched && name.error ? 'error' : null }>
+          <FormControl type='hidden' { ...id }/>
+          <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>组名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='组名'/>
             { name.touched && name.error && <HelpBlock style={ { float: 'right' } }>{ name.error }</HelpBlock> }

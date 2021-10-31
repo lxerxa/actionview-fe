@@ -11,6 +11,7 @@ const $ = require('$');
 const PaginationList = require('../share/PaginationList');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
+const CopyModal = require('./CopyModal');
 const UsersConfigModal = require('./UsersConfigModal');
 const OperateNotify = require('./OperateNotify');
 const ViewUsersModal = require('./ViewUsersModal');
@@ -23,6 +24,7 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
+      copyModalShow: false, 
       viewUsersModalShow: false, 
       usersConfigModalShow: false, 
       operateNotifyShow: false, 
@@ -34,6 +36,7 @@ export default class List extends Component {
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
+    this.copyModalClose = this.copyModalClose.bind(this);
     this.viewUsersModalClose = this.viewUsersModalClose.bind(this);
     this.usersConfigModalClose = this.usersConfigModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
@@ -56,6 +59,7 @@ export default class List extends Component {
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    copy: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired
   }
@@ -81,6 +85,10 @@ export default class List extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  copyModalClose() {
+    this.setState({ copyModalShow: false });
   }
 
   viewUsersModalClose() {
@@ -129,6 +137,8 @@ export default class List extends Component {
       this.setState({ editModalShow: true });
     } else if (eventKey === 'config') {
       this.setState({ usersConfigModalShow: true });
+    } else if (eventKey === 'copy') {
+      this.setState({ copyModalShow: true });
     } else if (eventKey === 'del') {
       this.setState({ operateNotifyShow: true, operate: eventKey });
     }
@@ -177,6 +187,7 @@ export default class List extends Component {
       create, 
       del, 
       update, 
+      copy, 
       options, 
       query 
     } = this.props;
@@ -198,16 +209,17 @@ export default class List extends Component {
             <span className='table-td-title'>{ collection[i].name || '-' }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
-        count: collection[i].users && collection[i].users.length > 0 ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
+        count: collection[i].users ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
         principal: collection[i].principal && collection[i].principal.name || '系统管理员', 
         public_scope: collection[i].public_scope && scopeOptions[collection[i].public_scope] || '公开', 
         operation: (
           <div>
-          { operateShow && hoverRowId === collection[i].id && !itemLoading && collection[i].principal && collection[i].principal.id == user.id &&
+          { operateShow && hoverRowId === collection[i].id && !itemLoading &&
             <DropdownButton pullRight bsStyle='link' style={ { textDecoration: 'blink' ,color: '#000' } } key={ i } title={ node } onSelect={ this.operateSelect.bind(this) }>
-              <MenuItem eventKey='config'>成员配置</MenuItem>
-              <MenuItem eventKey='edit'>编辑</MenuItem>
-              <MenuItem eventKey='del'>删除</MenuItem>
+              { collection[i].principal && collection[i].principal.id == user.id && <MenuItem eventKey='config'>成员配置</MenuItem> }
+              { collection[i].principal && collection[i].principal.id == user.id && <MenuItem eventKey='edit'>编辑</MenuItem> }
+              <MenuItem eventKey='copy'>复制</MenuItem>
+              { collection[i].principal && collection[i].principal.id == user.id && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
           </div>
@@ -279,6 +291,13 @@ export default class List extends Component {
               close={ this.createModalClose } 
               create={ create } 
               i18n={ i18n }/> }
+          { this.state.copyModalShow &&
+            <CopyModal
+              show
+              close={ this.copyModalClose }
+              copy={ copy }
+              data={ selectedItem }
+              i18n={ i18n }/> }
           { this.state.usersConfigModalShow &&
             <UsersConfigModal
               show
@@ -299,7 +318,7 @@ export default class List extends Component {
             <ViewUsersModal
               show
               close={ this.viewUsersModalClose.bind(this) }
-              users={ selectedItem.users || [] } /> }
+              data={ selectedItem } /> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

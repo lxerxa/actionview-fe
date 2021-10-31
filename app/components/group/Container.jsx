@@ -71,6 +71,11 @@ export default class Container extends Component {
     return this.props.group.ecode;
   }
 
+  async copy(values) {
+    await this.props.actions.copy(values);
+    return this.props.group.ecode;
+  }
+
   async del(id) {
     const { actions } = this.props;
     await actions.del(id);
@@ -105,6 +110,7 @@ export default class Container extends Component {
           create={ this.create.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
+          copy={ this.copy.bind(this) } 
           del={ this.del.bind(this) } 
           multiDel={ this.multiDel.bind(this) }
           query={ query }
@@ -119,6 +125,7 @@ export default class Container extends Component {
           create={ this.create.bind(this) }
           select={ this.props.actions.select }
           update={ this.update.bind(this) }
+          copy={ this.copy.bind(this) } 
           del={ this.del.bind(this) }
           query={ query }
           i18n={ i18n }

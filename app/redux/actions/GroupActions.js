@@ -28,6 +28,13 @@ export function update(id, values) {
   });
 }
 
+export function copy(values) {
+  return asyncFuncCreator({
+    constant: 'GROUP_COPY',
+    promise: (client) => client.request({ url: '/group/copy', method: 'post', data: values })
+  });
+}
+
 export function del(id) {
   return asyncFuncCreator({
     constant: 'GROUP_DELETE',

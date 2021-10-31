@@ -11,6 +11,7 @@ const $ = require('$');
 const PaginationList = require('../share/PaginationList');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
+const CopyModal = require('./CopyModal');
 const UsersConfigModal = require('./UsersConfigModal');
 const OperateNotify = require('./OperateNotify');
 const MultiOperateNotify = require('./MultiOperateNotify');
@@ -24,6 +25,7 @@ export default class List extends Component {
     this.state = { 
       createModalShow: false, 
       editModalShow: false, 
+      copyModalShow: false, 
       viewUsersModalShow: false, 
       usersConfigModalShow: false, 
       operateNotifyShow: false, 
@@ -40,6 +42,7 @@ export default class List extends Component {
 
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
+    this.copyModalClose = this.copyModalClose.bind(this);
     this.usersConfigModalClose = this.usersConfigModalClose.bind(this);
     this.operateNotifyClose = this.operateNotifyClose.bind(this);
     this.multiOperateNotifyClose = this.multiOperateNotifyClose.bind(this);
@@ -61,6 +64,7 @@ export default class List extends Component {
     select: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+    copy: PropTypes.func.isRequired,
     entry: PropTypes.func.isRequired,
     del: PropTypes.func.isRequired,
     multiDel: PropTypes.func.isRequired
@@ -91,6 +95,10 @@ export default class List extends Component {
 
   editModalClose() {
     this.setState({ editModalShow: false });
+  }
+
+  copyModalClose() {
+    this.setState({ copyModalShow: false });
   }
 
   viewUsersModalClose() {
@@ -147,6 +155,8 @@ export default class List extends Component {
       entry('/admin/user', { group: hoverRowId });
     } else if (eventKey === 'config') {
       this.setState({ usersConfigModalShow: true });
+    } else if (eventKey === 'copy') {
+      this.setState({ copyModalShow: true });
     } else {
       this.setState({ operateNotifyShow: true, operate: eventKey });
     }
@@ -241,6 +251,7 @@ export default class List extends Component {
       index, 
       refresh, 
       create, 
+      copy, 
       del, 
       multiDel, 
       update, 
@@ -265,7 +276,7 @@ export default class List extends Component {
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
         principal: collection[i].principal && collection[i].principal.name || '系统管理员',
-        count: collection[i].users && collection[i].users.length > 0 ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
+        count: collection[i].users ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
         public_scope: collection[i].public_scope && scopeOptions[collection[i].public_scope] || '公开', 
         directory: collection[i].directory && collection[i].directory !== 'self' && _.find(options.directories, { id: collection[i].directory }) ? _.find(options.directories, { id: collection[i].directory }).name : '-',
         operation: (
@@ -275,6 +286,7 @@ export default class List extends Component {
               <MenuItem eventKey='view'>跳至用户列表</MenuItem>
               { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='config'>成员配置</MenuItem> }
               { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='edit'>编辑</MenuItem> }
+              <MenuItem eventKey='copy'>复制</MenuItem>
               { (!collection[i].directory || collection[i].directory === 'self') && <MenuItem eventKey='del'>删除</MenuItem> }
             </DropdownButton> }
             <img src={ img } className={ (itemLoading && selectedItem.id === collection[i].id) ? 'loading' : 'hide' }/>
@@ -386,6 +398,14 @@ export default class List extends Component {
               close={ this.createModalClose } 
               create={ create } 
               i18n={ i18n }/> }
+          { this.state.copyModalShow &&
+            <CopyModal
+              show
+              mode='admin'
+              close={ this.copyModalClose }
+              copy={ copy }
+              data={ selectedItem } 
+              i18n={ i18n }/> }
           { this.state.usersConfigModalShow &&
             <UsersConfigModal
               show
@@ -417,7 +437,7 @@ export default class List extends Component {
             <ViewUsersModal
               show
               close={ this.viewUsersModalClose.bind(this) }
-              users={ selectedItem.users || [] } /> }
+              data={ selectedItem } /> }
         </div>
         { !indexLoading && options.total && options.total > 0 ?
           <PaginationList

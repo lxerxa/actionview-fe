@@ -29,15 +29,18 @@ export default function group(state = initialState, action) {
       return { ...state, indexLoading: false, error: action.error };
 
     case t.GROUP_CREATE:
+    case t.GROUP_COPY:
       return { ...state, loading: true };
 
     case t.GROUP_CREATE_SUCCESS:
+    case t.GROUP_COPY_SUCCESS:
       if (action.result.ecode === 0) {
         state.collection.unshift(action.result.data);
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
     case t.GROUP_CREATE_FAIL:
+    case t.GROUP_COPY_FAIL:
       return { ...state, loading: false, error: action.error };
 
     case t.GROUP_UPDATE:

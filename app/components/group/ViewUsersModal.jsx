@@ -14,7 +14,7 @@ export default class UserListModal extends Component {
 
   static propTypes = {
     close: PropTypes.func.isRequired,
-    users: PropTypes.array.isRequired
+    data: PropTypes.object.isRequired
   }
 
   handleCancel() {
@@ -23,14 +23,14 @@ export default class UserListModal extends Component {
   }
 
   render() {
-    const { users } = this.props;
+    const { data: { name='', users=[] } } = this.props;
 
     users.sort((a, b) => a.first_name.localeCompare(b.first_name));
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>成员列表</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>成员列表 - { name }</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ { height: '420px', overflow: 'auto' } }>
           { users.length <= 0 &&
