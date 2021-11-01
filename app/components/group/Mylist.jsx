@@ -209,7 +209,7 @@ export default class List extends Component {
             <span className='table-td-title'>{ collection[i].name || '-' }</span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div> ),
-        count: collection[i].users ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
+        count: collection[i].users && collection[i].users.length > 0 ? <a href='#' onClick={ (e) => { e.preventDefault(); this.viewUsers(); } }>{ collection[i].users.length }</a> : 0,
         principal: collection[i].principal && collection[i].principal.name || '系统管理员', 
         public_scope: collection[i].public_scope && scopeOptions[collection[i].public_scope] || '公开', 
         operation: (

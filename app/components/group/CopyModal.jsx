@@ -19,7 +19,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'copy_group',
-  fields: [ 'id', 'name', 'principal', 'public_scope', 'description' ],
+  fields: [ 'source_id', 'name', 'principal', 'public_scope', 'description' ],
   validate
 })
 export default class EditModal extends Component {
@@ -55,7 +55,7 @@ export default class EditModal extends Component {
       principal = 'self';
     }
 
-    const ecode = await copy({ ...values, source_id: values.id, principal, public_scope: values.public_scope || '1' });
+    const ecode = await copy({ ...values, principal, public_scope: values.public_scope || '1' });
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -92,7 +92,7 @@ export default class EditModal extends Component {
   componentWillMount() {
     const { initializeForm, data } = this.props;
     const copyData = _.clone(data);
-    _.extend(copyData, { name: '复制 - ' + data.name });
+    _.extend(copyData, { name: '复制 - ' + data.name, source_id: data.id });
     initializeForm(copyData);
   }
 
@@ -100,7 +100,7 @@ export default class EditModal extends Component {
     const { 
       i18n: { errMsg }, 
       mode,
-      fields: { id, name, principal, public_scope, description }, 
+      fields: { source_id, name, principal, public_scope, description }, 
       handleSubmit, 
       invalid, 
       submitting 
@@ -119,7 +119,7 @@ export default class EditModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormControl type='hidden' { ...id }/>
+          <FormControl type='hidden' { ...source_id }/>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>组名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...name } placeholder='组名'/>

@@ -83,7 +83,6 @@ export default class CopyModal extends Component {
         </Modal.Header>
         <form 
           onSubmit={ handleSubmit(this.handleSubmit) } 
-          onEntered={ () => { $('input[name=name]').select(); } } 
           onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
           <FormControl type='hidden' { ...id }/>

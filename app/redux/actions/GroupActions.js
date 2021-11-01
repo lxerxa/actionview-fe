@@ -31,7 +31,7 @@ export function update(id, values) {
 export function copy(values) {
   return asyncFuncCreator({
     constant: 'GROUP_COPY',
-    promise: (client) => client.request({ url: '/group/copy', method: 'post', data: values })
+    promise: (client) => client.request({ url: '/group', method: 'post', data: values })
   });
 }
 
