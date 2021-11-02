@@ -14,6 +14,10 @@ const validate = (values, props) => {
   if (!values.new_password) {
     errors.new_password = '必填';
   }
+  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^ ]{8,}$/;
+  if (!re.test(values.new_password)) {
+    errors.new_password = '密码必须包含字母大小写、数字，至少8位';
+  }
   if (!values.new_password2) {
     errors.new_password2 = '必填';
   }

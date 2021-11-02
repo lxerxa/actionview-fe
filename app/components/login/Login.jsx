@@ -4,6 +4,7 @@ import { reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { notify } from 'react-notify-toast';
 
 const brand = require('../../assets/images/brand.png');
 const $ = require('$');
@@ -117,6 +118,9 @@ class Login extends Component {
     await actions.create(values);
     const { session } = this.props;
     if (session.ecode === 0 && session.user && session.user.id) {
+      if (!session.user.directory && values.password == 'actionview') {
+        notify.show('登录密码是初始密码，为保证安全请尽快修改。', 'warning', 3000);
+      }
       if (query.request_url) {
         let requests = decodeURI(query.request_url).split('?');
         let pathname = requests.shift();
