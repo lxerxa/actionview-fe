@@ -28,10 +28,10 @@ export default class List extends Component {
       principal: {},
       name: '', 
       mode: 'card',
-      sortkey: 'default',
       status: 'active' 
     };
 
+    this.state.sortkey = window.localStorage && window.localStorage.getItem('myprojects-sortkey') || 'default';
     this.createModalClose = this.createModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
     this.archiveNotifyClose = this.archiveNotifyClose.bind(this);
@@ -61,7 +61,7 @@ export default class List extends Component {
 
   componentWillMount() {
     const { index } = this.props;
-    index({ status: this.state.status });
+    index({ status: this.state.status, sortkey: this.state.sortkey });
   }
 
   createModalClose() {
@@ -212,6 +212,9 @@ export default class List extends Component {
   }
 
   sortChange(newValue) {
+    if (window.localStorage) {
+      window.localStorage.setItem('myprojects-sortkey', newValue);
+    }
     this.setState({ sortkey: newValue });
 
     const { index } = this.props;
@@ -466,7 +469,7 @@ export default class List extends Component {
                         width={ chartWidth }
                         height={ 80 }
                         data={ model.stats.trend || [] }
-                        style={ { margin: '35px auto' } }>
+                        style={ { margin: '40px auto' } }>
                         <Area type='monotone' dataKey='new' stroke={ model.status !== 'active' ? '#aaa' : '#337ab7' } fill={ model.status !== 'active' ? '#aaa' : '#337ab7' } strokeWidth={ 1 } />
                       </AreaChart> }
                     <div className='stats-cnt'>
