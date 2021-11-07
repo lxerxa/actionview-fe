@@ -8,7 +8,7 @@ const img = require('../../assets/images/loading.gif');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { createModalShow: false };
+    this.state = { createModalShow: false, skey: '' };
     this.createModalClose = this.createModalClose.bind(this);
   }
 
@@ -18,6 +18,7 @@ export default class Header extends Component {
     indexLoading: PropTypes.bool,
     collection: PropTypes.array,
     options: PropTypes.object,
+    search: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired
   }
 
@@ -26,7 +27,15 @@ export default class Header extends Component {
   }
 
   render() {
-    const { i18n, isSysConfig, create, indexLoading, collection, options } = this.props;
+    const { 
+      i18n, 
+      isSysConfig, 
+      create, 
+      search, 
+      indexLoading, 
+      collection, 
+      options 
+    } = this.props;
 
     return (
       <div>
@@ -37,6 +46,15 @@ export default class Header extends Component {
             disabled={ indexLoading }>
             <i className='fa fa-plus'></i>&nbsp;新建字段
           </Button>
+          <span style={ { float: 'right', width: '22%', marginTop: '10px' } }>
+            <FormControl
+              type='text'
+              style={ { height: '36px' } }
+              value={ this.state.skey }
+              onChange={ (e) => { this.setState({ skey: e.target.value }) } }
+              onKeyDown={ (e) => { if (e.keyCode == '13') { search(e.target.value) } } }
+              placeholder={ '名称、键值查询...' } />
+          </span>
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>

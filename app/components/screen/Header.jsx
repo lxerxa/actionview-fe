@@ -29,7 +29,9 @@ export default class Header extends Component {
     return (
       <div>
         <div style={ { marginTop: '5px' } }>
-          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i>&nbsp;新建界面</Button>
+          <Button className='create-btn' onClick={ () => { this.setState({ createModalShow: true }); } }>
+            <i className='fa fa-plus'></i>&nbsp;新建界面
+          </Button>
         </div>
         <div className='info-col'>
           <div className='info-icon'><i className='fa fa-info-circle'></i></div>

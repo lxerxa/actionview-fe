@@ -131,7 +131,8 @@ export default class List extends Component {
       update, 
       viewUsed,
       usedProjects,
-      options } = this.props;
+      options 
+    } = this.props;
     const { operateShow, hoverRowId } = this.state;
 
     const node = ( <span><i className='fa fa-cog'></i></span> );
