@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as FieldActions from 'redux/actions/FieldActions';
+import _ from 'lodash';
 
 const Header = require('./Header');
 const List = require('./List');
@@ -17,7 +18,9 @@ function mapDispatchToProps(dispatch) {
 export default class Container extends Component {
   constructor(props) {
     super(props);
+    this.state = { searchkey: '' };
     this.pid = '';
+    this.filter = this.filter.bind(this);
   }
 
   static propTypes = {
@@ -31,6 +34,10 @@ export default class Container extends Component {
   async index() {
     await this.props.actions.index(this.pid);
     return this.props.field.ecode;
+  }
+
+  search(key) {
+    this.setState({ searchKey: key });
   }
 
   async create(values) {
@@ -64,18 +71,31 @@ export default class Container extends Component {
     }
   }
 
+  filter(skey) {
+    const { field: { collection } } = this.props;
+    if (skey) {
+      return _.filter(collection, (v) => v.name.indexOf(skey) !== -1 || v.key.indexOf(skey) !== -1);
+    } else {
+      return collection;
+    }
+  }
+
   render() {
     const { location: { pathname='' } } = this.props;
+    const { searchKey } = this.state;
+
     return (
       <div>
         <Header 
           isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           create={ this.create.bind(this) } 
+          search={ this.search.bind(this) }
           i18n={ this.props.i18n }
-          { ...this.props.field }/>
+          { ...this.props.field } />
         <List 
           isSysConfig={ /^\/admin\/scheme/.test(pathname) }
           pkey={ this.pid }
+          searchKey={ this.state.searchKey }
           index={ this.index.bind(this) } 
           select={ this.props.actions.select } 
           update={ this.update.bind(this) } 
@@ -83,7 +103,8 @@ export default class Container extends Component {
           delNotify={ this.props.actions.delNotify } 
           viewUsed={ this.viewUsed.bind(this) }
           i18n={ this.props.i18n }
-          { ...this.props.field }/>
+          { ...this.props.field }
+          collection={ this.filter(searchKey) } />
       </div>
     );
   }
