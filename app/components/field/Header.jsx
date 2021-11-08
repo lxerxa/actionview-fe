@@ -48,6 +48,7 @@ export default class Header extends Component {
           </Button>
           <span style={ { float: 'right', width: '22%', marginTop: '10px' } }>
             <FormControl
+              disabled={ indexLoading }
               type='text'
               style={ { height: '36px' } }
               value={ this.state.skey }
