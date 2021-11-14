@@ -90,7 +90,7 @@ export default class ResetPwdModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsNew' validationState={ new_password.touched && new_password.error ? 'error' : null }>
             <ControlLabel><span className='txt-impt'>*</span>新密码</ControlLabel>
-            <FormControl disabled={ submitting } type='password' { ...new_password } placeholder='新密码'/>
+            <FormControl disabled={ submitting } type='password' { ...new_password } placeholder='新密码必须包含字母大小写、数字，至少8位'/>
             { new_password.touched && new_password.error && <HelpBlock style={ { float: 'right' } }>{ new_password.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsNew2' validationState={ new_password2.touched && new_password2.error ? 'error' : null }>
