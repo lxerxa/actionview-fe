@@ -278,6 +278,10 @@ export default class DetailBar extends Component {
   }
 
   editAssignee() {
+    const { data } = this.props;
+    if (data['assignee'] && data['assignee'].id) {
+      this.state.newAssignee = data['assignee'].id;
+    }
     this.setState({ editAssignee: true });
   }
 
@@ -816,7 +820,7 @@ export default class DetailBar extends Component {
                       { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
-                      <MenuItem eventKey='watchers' disabled={ !data.watchers || data.watchers.length <= 0 }><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
+                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && (((this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && !data.hasSubtasks) || this.isAllowable('create_issue')) && <MenuItem divider/> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
@@ -921,7 +925,7 @@ export default class DetailBar extends Component {
                         onChange={ this.handleAssigneeSelectChange.bind(this) } 
                         placeholder='选择负责人'/>
                       <div className='edit-button-group'>
-                        <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
+                        <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) } disabled={ newAssignee == data['assignee'].id }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
                       </div>
                     </div> }
