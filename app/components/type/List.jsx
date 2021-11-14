@@ -69,9 +69,13 @@ export default class List extends Component {
     select(id);
   }
 
-  willSetScreen(typeId) {
+  willSetScreen(typeId, ind) {
+    const { collection } = this.props;
+    if (collection[ind].screen_id) {
+      this.state.screen[collection[ind].id] = collection[ind].screen_id;
+    }
     this.state.willSetScreenTypeIds.push(typeId);
-    this.setState({ willSetScreenTypeIds: this.state.willSetScreenTypeIds });
+    this.setState({});
   }
 
   cancelSetScreen(typeId) {
@@ -80,12 +84,12 @@ export default class List extends Component {
     // clean permission in the state
     this.state.screen[typeId] = undefined;
 
-    this.setState({ willSetScreenTypeIds: this.state.willSetScreenTypeIds, screen: this.state.screen });
+    this.setState({});
   }
 
   async setScreen(typeId) {
     this.state.settingScreenTypeIds.push(typeId);
-    this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds });
+    this.setState({});
 
     const { update } = this.props;
     const ecode = await update({ screen_id: this.state.screen[typeId], id: typeId });
@@ -98,13 +102,13 @@ export default class List extends Component {
       const settingIndex = _.indexOf(this.state.settingScreenTypeIds, typeId);
       this.state.settingScreenTypeIds.splice(settingIndex, 1);
 
-      this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds, willSetScreenTypeIds: this.state.willSetScreenTypeIds });
+      this.setState({});
     } else {
       notify.show('设置失败。', 'error', 2000);
 
       const settingIndex = _.indexOf(this.state.settingScreenTypeIds, typeId);
       this.state.settingScreenTypeIds.splice(settingIndex, 1);
-      this.setState({ settingScreenTypeIds: this.state.settingScreenTypeIds });
+      this.setState({});
     }
   }
 
@@ -113,9 +117,13 @@ export default class List extends Component {
     this.setState({ screen: this.state.screen });
   }
 
-  willSetWorkflow(typeId) {
+  willSetWorkflow(typeId, ind) {
+    const { collection } = this.props;
+    if (collection[ind].workflow_id) {
+      this.state.workflow[collection[ind].id] = collection[ind].workflow_id;
+    }
     this.state.willSetWorkflowTypeIds.push(typeId);
-    this.setState({ willSetWorkflowTypeIds: this.state.willSetWorkflowTypeIds });
+    this.setState({});
   }
 
   cancelSetWorkflow(typeId) {
@@ -124,12 +132,12 @@ export default class List extends Component {
     // clean permission in the state
     this.state.workflow[typeId] = undefined;
 
-    this.setState({ willSetWorkflowTypeIds: this.state.willSetWorkflowTypeIds, workflow: this.state.workflow });
+    this.setState({});
   }
 
   async setWorkflow(typeId) {
     this.state.settingWorkflowTypeIds.push(typeId);
-    this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds });
+    this.setState({});
 
     const { update } = this.props;
     const ecode = await update({ workflow_id: this.state.workflow[typeId], id: typeId });
@@ -142,19 +150,19 @@ export default class List extends Component {
       const settingIndex = _.indexOf(this.state.settingWorkflowTypeIds, typeId);
       this.state.settingWorkflowTypeIds.splice(settingIndex, 1);
 
-      this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds, willSetWorkflowTypeIds: this.state.willSetWorkflowTypeIds });
+      this.setState({});
     } else {
       notify.show('设置失败。', 'error', 2000);
 
       const settingIndex = _.indexOf(this.state.settingWorkflowTypeIds, typeId);
       this.state.settingWorkflowTypeIds.splice(settingIndex, 1);
-      this.setState({ settingWorkflowTypeIds: this.state.settingWorkflowTypeIds });
+      this.setState({});
     }
   }
 
   handleWorkflowSelectChange(typeId, value) {
     this.state.workflow[typeId] = value;
-    this.setState({ workflow: this.state.workflow });
+    this.setState({});
   }
 
   operateSelect(eventKey) {
@@ -242,7 +250,7 @@ export default class List extends Component {
                   </div>
                 </span> :
                 '-' }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetScreen.bind(this, collection[i].id) }>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetScreen.bind(this, collection[i].id, i) }>
                   <i className='fa fa-pencil'></i>
                 </span>
               </div>
@@ -259,10 +267,15 @@ export default class List extends Component {
                 onChange={ this.handleScreenSelectChange.bind(this, collection[i].id) } 
                 placeholder='请选择界面'/>
               <div className={ _.indexOf(settingScreenTypeIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
-                <Button className='edit-ok-button' onClick={ this.setScreen.bind(this, collection[i].id) }>
+                <Button 
+                  className='edit-ok-button' 
+                  disabled={ collection[i].screen_id == this.state.screen[collection[i].id] }
+                  onClick={ this.setScreen.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>
-                <Button className='edit-cancel-button' onClick={ this.cancelSetScreen.bind(this, collection[i].id) }>
+                <Button 
+                  className='edit-cancel-button' 
+                  onClick={ this.cancelSetScreen.bind(this, collection[i].id) }>
                   <i className='fa fa-close'></i>
                 </Button>
               </div>
@@ -283,7 +296,7 @@ export default class List extends Component {
                   </div>
                 </span> :
                 '-' }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id, i) }><i className='fa fa-pencil'></i></span>
               </div>
             </div>
             :
@@ -298,10 +311,15 @@ export default class List extends Component {
                 onChange={ this.handleWorkflowSelectChange.bind(this, collection[i].id) } 
                 placeholder='请选择工作流'/>
               <div className={ _.indexOf(settingWorkflowTypeIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
-                <Button className='edit-ok-button' onClick={ this.setWorkflow.bind(this, collection[i].id) }>
+                <Button 
+                  className='edit-ok-button' 
+                  disabled={ collection[i].workflow_id == this.state.workflow[collection[i].id] }
+                  onClick={ this.setWorkflow.bind(this, collection[i].id) }>
                   <i className='fa fa-check'></i>
                 </Button>
-                <Button className='edit-cancel-button' onClick={ this.cancelSetWorkflow.bind(this, collection[i].id) }>
+                <Button 
+                  className='edit-cancel-button' 
+                  onClick={ this.cancelSetWorkflow.bind(this, collection[i].id) }>
                   <i className='fa fa-close'></i>
                 </Button>
               </div>

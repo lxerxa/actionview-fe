@@ -95,9 +95,13 @@ export default class List extends Component {
     this.setState({ operateShow: false, hoverRowId: '' });
   }
 
-  willSetPrincipal(moduleId) {
+  willSetPrincipal(moduleId, ind) {
+    const { collection } = this.props;
+    if (collection[ind].principal && collection[ind].principal.id) {
+      this.state.principal[collection[ind].id] = collection[ind].principal.id;
+    }
     this.state.willSetPrincipalModuleIds.push(moduleId);
-    this.setState({ willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds });
+    this.setState({});
   }
 
   cancelSetPrincipal(moduleId) {
@@ -106,12 +110,12 @@ export default class List extends Component {
     // clean permission in the state
     this.state.principal[moduleId] = undefined;
 
-    this.setState({ willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds, principal: this.state.principal });
+    this.setState({});
   }
 
   async setPrincipal(moduleId) {
     this.state.settingPrincipalModuleIds.push(moduleId);
-    this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
+    this.setState({});
 
     const { update } = this.props;
     const ecode = await update({ principal: this.state.principal[moduleId] || '', id: moduleId });
@@ -122,25 +126,29 @@ export default class List extends Component {
       const settingIndex = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
       this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
 
-      this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds, willSetPrincipalModuleIds: this.state.willSetPrincipalModuleIds });
+      this.setState({});
       notify.show('设置完成。', 'success', 2000);
     } else {
       const settingIndex = _.indexOf(this.state.settingPrincipalModuleIds, moduleId);
       this.state.settingPrincipalModuleIds.splice(settingIndex, 1);
 
-      this.setState({ settingPrincipalModuleIds: this.state.settingPrincipalModuleIds });
+      this.setState({});
       notify.show('设置失败。', 'error', 2000);
     }
   }
 
   handlePrincipalSelectChange(moduleId, value) {
     this.state.principal[moduleId] = value;
-    this.setState({ principal: this.state.principal });
+    this.setState({});
   }
 
-  willSetDefaultAssignee(moduleId) {
+  willSetDefaultAssignee(moduleId, ind) {
+    const { collection } = this.props;
+    if (collection[ind].defaultAssignee) {
+      this.state.defaultAssignee[collection[ind].id] = collection[ind].defaultAssignee;
+    }
     this.state.willSetDefalutAssigneeModuleIds.push(moduleId);
-    this.setState({ willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds });
+    this.setState({});
   }
 
   cancelSetDefaultAssignee(moduleId) {
@@ -149,12 +157,12 @@ export default class List extends Component {
     // clean permission in the state
     this.state.defaultAssignee[moduleId] = undefined;
 
-    this.setState({ willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds, defaultAssignee: this.state.defaultAssignee });
+    this.setState({});
   }
 
   async setDefaultAssignee(moduleId) {
     this.state.settingDefaultAssigneeModuleIds.push(moduleId);
-    this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
+    this.setState({});
 
     const { update } = this.props;
     const ecode = await update({ defaultAssignee: this.state.defaultAssignee[moduleId] || '', id: moduleId });
@@ -165,20 +173,20 @@ export default class List extends Component {
       const settingIndex = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
       this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
 
-      this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds, willSetDefalutAssigneeModuleIds: this.state.willSetDefalutAssigneeModuleIds });
+      this.setState({});
       notify.show('设置完成。', 'success', 2000);
     } else {
       const settingIndex = _.indexOf(this.state.settingDefaultAssigneeModuleIds, moduleId);
       this.state.settingDefaultAssigneeModuleIds.splice(settingIndex, 1);
 
-      this.setState({ settingDefaultAssigneeModuleIds: this.state.settingDefaultAssigneeModuleIds });
+      this.setState({});
       notify.show('设置失败。', 'error', 2000);
     }
   }
 
   handleDefaultAssigneeSelectChange(moduleId, value) {
     this.state.defaultAssignee[moduleId] = value;
-    this.setState({ defaultAssignee: this.state.defaultAssignee });
+    this.setState({});
   }
 
   render() {
@@ -256,7 +264,7 @@ export default class List extends Component {
                 <span>
                   <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
                 </span> }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id, i) }><i className='fa fa-pencil'></i></span>
               </div>
             </div>
             :
@@ -270,8 +278,17 @@ export default class List extends Component {
                 onChange={ this.handlePrincipalSelectChange.bind(this, collection[i].id) } 
                 placeholder='请选择用户'/>
               <div className={ _.indexOf(settingPrincipalModuleIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
-                <Button className='edit-ok-button' onClick={ this.setPrincipal.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-cancel-button' onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
+                <Button 
+                  className='edit-ok-button' 
+                  onClick={ this.setPrincipal.bind(this, collection[i].id) } 
+                  disabled={ collection[i].principal.id == this.state.principal[collection[i].id] }>
+                  <i className='fa fa-check'></i>
+                </Button>
+                <Button 
+                  className='edit-cancel-button' 
+                  onClick={ this.cancelSetPrincipal.bind(this, collection[i].id) }>
+                  <i className='fa fa-close'></i>
+                </Button>
               </div>
             </div>
           }
@@ -315,8 +332,17 @@ export default class List extends Component {
                 onChange={ this.handleDefaultAssigneeSelectChange.bind(this, collection[i].id) } 
                 placeholder='默认负责人(项目负责人)'/>
               <div className={ _.indexOf(settingDefaultAssigneeModuleIds, collection[i].id) !== -1 ? 'hide' : 'edit-button-group' }>
-                <Button className='edit-ok-button' onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-check'></i></Button>
-                <Button className='edit-cancel-button' onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }><i className='fa fa-close'></i></Button>
+                <Button 
+                  className='edit-ok-button' 
+                  disabled={ collection[i].defaultAssignee == this.state.defaultAssignee[collection[i].id] }
+                  onClick={ this.setDefaultAssignee.bind(this, collection[i].id) }>
+                  <i className='fa fa-check'></i>
+                </Button>
+                <Button 
+                  className='edit-cancel-button' 
+                  onClick={ this.cancelSetDefaultAssignee.bind(this, collection[i].id) }>
+                  <i className='fa fa-close'></i>
+                </Button>
               </div>
             </div>
           }
