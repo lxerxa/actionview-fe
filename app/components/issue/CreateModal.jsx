@@ -91,7 +91,7 @@ class CreateModal extends Component {
             oldValues[v.key] = values[v.key] = data[v.key];
           }
         }
-        if (v.required && (!data[v.key] || (_.isArray(data[v.key]) && data[v.key].length <= 0))) {
+        if (v.required && ((data[v.key] !== 0 && !data[v.key]) || (_.isArray(data[v.key]) && data[v.key].length <= 0))) {
           errors[v.key] = '必填';
         }
       });
