@@ -572,7 +572,7 @@ class CreateModal extends Component {
         onHide={ this.handleCancel } 
         bsSize='large'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : ('编辑问题' + ' - ' + data.no)) : (isSubtask ? '创建子任务问题' : '创建问题') }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ data.id ? (isFromWorkflow ? '流程页面' : ('编辑问题' + ' - ' + data.no)) : (isSubtask ? '创建子问题' : '创建问题') }</Modal.Title>
         </Modal.Header>
         <Form horizontal>
           <Modal.Body style={ bodyStyles } ref='createModal'>

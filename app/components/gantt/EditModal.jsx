@@ -124,17 +124,13 @@ export default class EditModal extends Component {
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-la'>{ '问题编辑 - ' + data.no }</Modal.Title>
+          <Modal.Title id='contained-modal-title-la'>{ '周期进度 - ' + data.no }</Modal.Title>
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup>
-            <ControlLabel>主题</ControlLabel>
-            <span style={ { marginLeft: '10px' } }>{ data.title }</span>
-          </FormGroup>
           <div>
             <FormGroup style={ { width: '47%', display: 'inline-block' } } validationState={ expect_start_time.value && expect_start_time.error ? 'error' : null }>
-              <ControlLabel>期望开始时间</ControlLabel>
+              <ControlLabel>计划开始时间</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 
@@ -147,7 +143,7 @@ export default class EditModal extends Component {
                 <HelpBlock style={ { float: 'right' } }>{ expect_start_time.error }</HelpBlock> }
             </FormGroup>
             <FormGroup style={ { width: '47%', display: 'inline-block', float: 'right' } } validationState={ expect_complete_time.value && expect_complete_time.error ? 'error' : null }>
-              <ControlLabel>期望完成时间</ControlLabel>
+              <ControlLabel>计划完成时间</ControlLabel>
               <DateTime 
                 locale='zh-cn' 
                 mode='date' 

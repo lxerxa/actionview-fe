@@ -56,6 +56,7 @@ const WorkflowCommentsModal = require('./WorkflowCommentsModal');
 const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const WatcherListModal = require('./WatcherListModal');
+const PeriodEditModal = require('../gantt/EditModal');
 
 const { API_BASENAME } = process.env;
 
@@ -91,6 +92,7 @@ export default class DetailBar extends Component {
       delNotifyShow: false,
       copyModalShow: false,
       watchersModalShow: false,
+      periodModalShow: false,
       newItemValues: [],
       editingItems: [],
       action_id: '' 
@@ -278,10 +280,6 @@ export default class DetailBar extends Component {
   }
 
   editAssignee() {
-    const { data } = this.props;
-    if (data['assignee'] && data['assignee'].id) {
-      this.state.newAssignee = data['assignee'].id;
-    }
     this.setState({ editAssignee: true });
   }
 
@@ -820,7 +818,7 @@ export default class DetailBar extends Component {
                       { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='setLabels'>设置标签</MenuItem> }
                       <MenuItem divider/>
                       <MenuItem eventKey='watch'>{ data.watching ? '取消关注' : '关注' }</MenuItem>
-                      <MenuItem eventKey='watchers'><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
+                      <MenuItem eventKey='watchers' disabled={ !data.watchers || data.watchers.length <= 0 }><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && (((this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && !data.hasSubtasks) || this.isAllowable('create_issue')) && <MenuItem divider/> }
                       { !data.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
@@ -880,7 +878,7 @@ export default class DetailBar extends Component {
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px' } }>
                       { priorityInd !== -1 && <div className='circle' style={ priorityStyle }/> }
-                      { priorityInd !== -1 ? options.priorities[priorityInd].name : <span style={ { color: '#909090' } }>未设置</span> }
+                      { priorityInd !== -1 ? options.priorities[priorityInd].name : <span className='issue-contents-nosetting'>未设置</span> }
                     </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
@@ -925,21 +923,11 @@ export default class DetailBar extends Component {
                         onChange={ this.handleAssigneeSelectChange.bind(this) } 
                         placeholder='选择负责人'/>
                       <div className='edit-button-group'>
-                        <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) } disabled={ newAssignee == data['assignee'].id }><i className='fa fa-check'></i></Button>
+                        <Button className='edit-ok-button' onClick={ this.setAssignee.bind(this) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetAssignee.bind(this) }><i className='fa fa-close'></i></Button>
                       </div>
                     </div> }
                   </Col>
-                  { !editAssignee && 
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
-                    报告人 
-                  </Col> }
-                  { !editAssignee && 
-                  <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>
-                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
-                    </div>
-                  </Col> }
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
@@ -953,242 +941,34 @@ export default class DetailBar extends Component {
                 </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
-                    创建时间
-                  </Col>
-                  <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
-                    </div>
-                  </Col>
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
-                    更新时间
-                  </Col>
-                  <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px', marginLeft: '5px' } }>
-                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : (data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-') }
-                    </div>
-                  </Col>
-                </FormGroup>
-                { data.labels && data.labels.length > 0 &&
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
                     标签 
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
-                    { _.map(data.labels, (v, i) => 
+                    { data.labels && data.labels.length > 0 ?
+                      _.map(data.labels, (v, i) => 
                       <Link to={ '/project/' + project.key + '/issue?labels=' + v } key={ i }>
                         <span title={ v } className='issue-label' style={ this.getLabelStyle(v) }>
                           { v }
                         </span>
-                      </Link>
-                      ) }
+                      </Link> ) 
+                      :
+                      <span className='issue-contents-nosetting'>未设置</span>
+                    }
                     </div>
                   </Col>
-                </FormGroup> }
-                { data.resolve_version &&
+                </FormGroup>
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     解决版本 
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
-                     { _.find(options.versions, { id: data.resolve_version }) ? _.find(options.versions, { id: data.resolve_version }).name : '-' }
+                     { _.find(options.versions, { id: data.resolve_version }) ? _.find(options.versions, { id: data.resolve_version }).name : <span className='issue-contents-nosetting'>未设置</span> }
                     </div>
                   </Col>
-                </FormGroup> }
-                { data.epic &&
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    Epic
-                  </Col>
-                  <Col sm={ 9 }>
-                    <div style={ { marginTop: '7px' } }>
-                      <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
-                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px', float: 'left' } } title={ selectedEpic.name || '-' } >
-                          { selectedEpic.name || '-' }
-                        </span>
-                      </Link>
-                    </div>
-                  </Col>
-                </FormGroup> }
-                { data.sprints && data.sprints.length > 0 &&
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    Sprint
-                  </Col>
-                  <Col sm={ 9 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { _.map(data.sprints, (v) => { return _.find(options.sprints, { no: v }).name }).join(', ') }
-                    </div>
-                  </Col>
-                </FormGroup> }
-                { (data.expect_start_time || data.expect_complete_time) &&
-                <FormGroup>
-                  { data.expect_start_time &&
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    期望开始时间
-                  </Col> }
-                  { data.expect_start_time &&
-                  <Col sm={ 2 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { moment.unix(data.expect_start_time).format('YYYY/MM/DD') }
-                    </div>
-                  </Col> }
-                  { data.expect_complete_time &&
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    期望完成时间
-                  </Col> }
-                  { data.expect_complete_time &&
-                  <Col sm={ data.expect_start_time ? 2 : 4 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { moment.unix(data.expect_complete_time).format('YYYY/MM/DD') }
-                    </div>
-                  </Col> }
-                </FormGroup> }
-                { _.isNumber(data.progress) &&
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    进度
-                  </Col>
-                  <Col sm={ 3 }>
-                    { !editingItems['progress'] ?
-                    <div style={ { marginTop: '4px' } }>
-                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) ?
-                      <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
-                        <span>
-                          <div style={ { display: 'inline-block', float: 'left', margin: '5px 0px 3px 5px' } }>
-                            { (data['progress'] || '0') + '%' }
-                          </div>
-                        </span>
-                        <span className='edit-icon-zone edit-icon' onClick={ () => { editingItems['progress'] = true; newItemValues['progress'] = data['progress'] || 0;  this.setState({ editingItems, newItemValues }) } }><i className='fa fa-pencil'></i></span>
-                      </div> 
-                      : 
-                      <div style={ { marginTop: '7px' } }>
-                        <span>{ (data['progress'] || '0') + '%' }</span>
-                      </div> }
-                    </div>
-                    :
-                    <div style={ { marginTop: '0px' } }>
-                      <FormControl 
-                        type='number' 
-                        min='0'
-                        value={ newItemValues['progress'] || 0 } 
-                        onChange={ (e) => { newItemValues['progress'] = e.target.value; this.setState({ newItemValues }) } }
-                        placeholder='进度值'/>
-                      <div className='edit-button-group'>
-                        <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, 'progress', newItemValues['progress'] - 0) }><i className='fa fa-check'></i></Button>
-                        <Button className='edit-cancel-button' onClick={ this.cancelSetItem.bind(this, 'progress') }><i className='fa fa-close'></i></Button>
-                      </div>
-                    </div> }
-                  </Col>
-                </FormGroup> }
-                { data.subtasks && data.subtasks.length > 0 &&
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    子任务 
-                  </Col>
-                  <Col sm={ 9 }>
-                    { data.subtasks.length > 5 &&
-                    <div style={ { marginTop: '7px' } }>
-                      共{ data.subtasks.length }个子任务
-                      <span style={ { marginLeft: '5px' } }> 
-                        <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>
-                          { this.state.subtaskShow ? '收起' : '展开' } 
-                          <i className={ this.state.subtaskShow ?  'fa fa-angle-up' : 'fa fa-angle-down' }></i>
-                        </a>
-                      </span>
-                    </div> }
-                    <Table 
-                      condensed 
-                      hover 
-                      responsive 
-                      className={ (!this.state.subtaskShow && data.subtasks.length > 5) ? 'hide' : '' } 
-                      style={ { marginTop: '10px', marginBottom: '0px',  borderBottom: '1px solid #ddd' } }>
-                      <tbody>
-                        { _.map(data.subtasks, (val, key) => (
-                          <tr key={ 'subtask' + key }>
-                            <td>
-                              <a href='#' style={ val.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>
-                                { val.no } - { val.title }
-                              </a>
-                            </td>
-                            <td style={ { whiteSpace: 'nowrap', width: '10px', textAlign: 'center' } }>
-                              { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
-                            </td>
-                          </tr>) 
-                          ) }
-                      </tbody>
-                    </Table>
-                  </Col>
-                </FormGroup> }
+                </FormGroup>
 
-                { data.links && data.links.length > 0 &&
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    链接问题 
-                  </Col>
-                  <Col sm={ 9 }>
-                    { data.links.length > 5 &&
-                    <div style={ { marginTop: '7px' } }>
-                      共{ data.links.length }个问题
-                      <span style={ { marginLeft: '5px' } }> 
-                        <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>
-                          { this.state.linkShow ? '收起' : '展开' } 
-                          <i className={ this.state.linkShow ?  'fa fa-angle-up' : 'fa fa-angle-down' }></i>
-                        </a>
-                      </span>
-                    </div> }
-                    <Table 
-                      condensed 
-                      hover 
-                      responsive 
-                      className={ (!this.state.linkShow && data.links.length > 5) ? 'hide' : '' } 
-                      style={ { marginTop: '10px', marginBottom: '0px', borderBottom: '1px solid #ddd' } }>
-                      <tbody>
-                        { _.map(data.links, (val, key) => {
-                          let linkedIssue = {};
-                          let relation = '';
-                          let linkIssueId = ''
-                          if (val.src.id == data.id) {
-                            linkedIssue = val.dest;
-                            relation = val.relation;
-                            linkIssueId = val.dest.id;
-                          } else if (val.dest.id == data.id) {
-                            linkedIssue = val.src;
-                            relation = val.relation;
-                            const relationOutIndex = _.findIndex(options.relations || [], { out: relation });
-                            if (relationOutIndex !== -1) {
-                              relation = options.relations[relationOutIndex].in || '';
-                            } else {
-                              const relationInIndex = _.findIndex(options.relations || [], { in: relation });
-                              if (relationInIndex !== -1) {
-                                relation = options.relations[relationInIndex].out || '';
-                              }
-                            }
-                            linkIssueId = val.src.id;
-                          }
-                          return (
-                            <tr key={ 'link' + key }>
-                              <td>
-                                { relation }
-                                <br/>
-                                <a href='#' style={ linkedIssue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>
-                                  { linkedIssue.no } - { linkedIssue.title }
-                                </a>
-                              </td>
-                              <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', textAlign: 'center', width: '10px' } }>
-                                { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }
-                              </td>
-                              <td style={ { verticalAlign: 'middle', width: '10px' } }>
-                                { this.isAllowable('link_issue') ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
-                              </td>
-                            </tr>); 
-                        }) }
-                      </tbody>
-                    </Table>
-                  </Col>
-                </FormGroup> }
                 { _.map(schema, (field, key) => {
                   if (specialFields.indexOf(field.key) !== -1) {
                     return;
@@ -1198,7 +978,18 @@ export default class DetailBar extends Component {
                       return;
                     }
                   } else if (_.isEmpty(data[field.key]) && !_.isNumber(data[field.key])) {
-                    return;
+                    return (
+                      <FormGroup key={ 'form-' + key }>
+                        <Col sm={ 3 } componentClass={ ControlLabel }>
+                          { field.name || '-' }
+                        </Col>
+                        <Col sm={ 9 }>
+                          <div style={ { marginTop: '7px' } }>
+                            <span style={ { color: '#909090' } }>未设置</span>
+                          </div>
+                        </Col>
+                      </FormGroup>
+                    );
                   }
 
                   let contents = '';
@@ -1311,6 +1102,329 @@ export default class DetailBar extends Component {
                     </FormGroup>
                   );
                 }) }
+
+                <div className='issue-contents-diviver'>
+                  <span className='issue-contents-diviver-title'>
+                    迭代  
+                  </span>
+                </div>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    Epic
+                  </Col>
+                  <Col sm={ 9 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
+                        { selectedEpic.name ?
+                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px', float: 'left' } } title={ selectedEpic.name || '-' } >
+                          { selectedEpic.name }
+                        </span>
+                        :
+                        <span className='issue-contents-nosetting'>未设置</span> }
+                      </Link>
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    Sprint
+                  </Col>
+                  <Col sm={ 9 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.sprints && data.sprints.length > 0 ? 
+                        _.map(data.sprints, (v) => { return _.find(options.sprints, { no: v }).name }).join(', ')
+                        :
+                       <span className='issue-contents-nosetting'>未设置</span> }
+                    </div>
+                  </Col>
+                </FormGroup>
+
+                <div className='issue-contents-diviver'>
+                  <span className='issue-contents-diviver-title'>
+                    周期进度
+                  </span>
+                  { this.isAllowable('edit_issue') &&
+                  <span 
+                    className='comments-button issue-block-edit-button'
+                    title='设置' 
+                    onClick={ () => { this.setState({ periodModalShow: true }); } }>
+                    <i className='fa fa-edit'></i>
+                  </span> }
+                </div>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    计划开始时间
+                  </Col>
+                  <Col sm={ 2 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.expect_start_time ? moment.unix(data.expect_start_time).format('YYYY/MM/DD') : <span className='issue-contents-nosetting'>未设置</span> }
+                    </div>
+                  </Col>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    计划完成时间
+                  </Col>
+                  <Col sm={ 2 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.expect_start_time ? moment.unix(data.expect_complete_time).format('YYYY/MM/DD') : <span className='issue-contents-nosetting'>未设置</span> }
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    进度
+                  </Col>
+                  <Col sm={ 3 }>
+                    { !editingItems['progress'] ?
+                    <div style={ { marginTop: '4px' } }>
+                      { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) ?
+                      <div className='editable-list-field' style={ { display: 'table', width: '100%' } }>
+                        <div style={ { display: 'inline-block', float: 'left', margin: '5px 0px 3px 5px' } }>
+                          { _.isNumber(data.progress) ? data.progress + '%' : <span className='issue-contents-nosetting'>未设置</span> }
+                        </div>
+                        <span 
+                          className='edit-icon-zone edit-icon' 
+                          onClick={ () => { editingItems['progress'] = true; newItemValues['progress'] = data['progress'] || 0;  this.setState({ editingItems, newItemValues }) } }>
+                          <i className='fa fa-pencil'></i>
+                        </span>
+                      </div> 
+                      : 
+                      <div style={ { marginTop: '7px' } }>
+                        { _.isNumber(data.progress) ? data.progress + '%' : <span className='issue-contents-nosetting'>未设置</span> }
+                      </div> }
+                    </div>
+                    :
+                    <div style={ { marginTop: '0px' } }>
+                      <FormControl 
+                        type='number' 
+                        min='0'
+                        value={ newItemValues['progress'] || 0 } 
+                        onChange={ (e) => { newItemValues['progress'] = e.target.value; this.setState({ newItemValues }) } }
+                        placeholder='进度值'/>
+                      <div className='edit-button-group'>
+                        <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, 'progress', newItemValues['progress'] - 0) }><i className='fa fa-check'></i></Button>
+                        <Button className='edit-cancel-button' onClick={ this.cancelSetItem.bind(this, 'progress') }><i className='fa fa-close'></i></Button>
+                      </div>
+                    </div> }
+                  </Col>
+                </FormGroup>
+
+                <div className='issue-contents-diviver'>
+                  <span className='issue-contents-diviver-title'>
+                    人员时间 
+                  </span>
+                </div>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    创建者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    创建时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    更新者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    更新时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : (data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-') }
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    解决者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['resolver'] && data['resolver'].name || '-' }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    解决时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.resolved_at ? moment.unix(data.resolved_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    关闭者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['closer'] && data['closer'].name || '-' }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    关闭时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.closed_at ? moment.unix(data.closed_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                </FormGroup>
+
+                { !data.parent_id &&
+                <div className='issue-contents-diviver'>
+                  <div className='issue-contents-diviver-title'>
+                    子问题 
+                  </div>
+                  { subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') &&
+                  <span
+                    className='comments-button issue-block-edit-button'
+                    title='创建子问题'
+                    onClick={ () => { this.setState({ createSubtaskModalShow: true }); } }>
+                    <i className='fa fa-plus'></i>
+                  </span> }
+                </div> }
+                { !data.parent_id && (!data.subtasks || data.subtasks.length <= 0) && 
+                <div className='issue-block-emtpy'>
+                  暂无子问题
+                </div> }
+                { !data.parent_id && data.subtasks && data.subtasks.length > 0 &&
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    子问题 
+                  </Col>
+                  <Col sm={ 9 }>
+                    { data.subtasks.length > 5 &&
+                    <div style={ { marginTop: '7px' } }>
+                      共{ data.subtasks.length }个子问题
+                      <span style={ { marginLeft: '5px' } }> 
+                        <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>
+                          { this.state.subtaskShow ? '收起' : '展开' } 
+                          <i className={ this.state.subtaskShow ?  'fa fa-angle-up' : 'fa fa-angle-down' }></i>
+                        </a>
+                      </span>
+                    </div> }
+                    <Table 
+                      condensed 
+                      hover 
+                      responsive 
+                      className={ (!this.state.subtaskShow && data.subtasks.length > 5) ? 'hide' : '' } 
+                      style={ { marginTop: '10px', marginBottom: '0px',  borderBottom: '1px solid #ddd' } }>
+                      <tbody>
+                        { _.map(data.subtasks, (val, key) => (
+                          <tr key={ 'subtask' + key }>
+                            <td>
+                              <a href='#' style={ val.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>
+                                { val.no } - { val.title }
+                              </a>
+                            </td>
+                            <td style={ { whiteSpace: 'nowrap', width: '10px', textAlign: 'center' } }>
+                              { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
+                            </td>
+                          </tr>) 
+                          ) }
+                      </tbody>
+                    </Table>
+                  </Col>
+                </FormGroup> }
+
+                <div className='issue-contents-diviver'>
+                  <span className='issue-contents-diviver-title'>
+                    链接问题 
+                  </span>
+                  { this.isAllowable('link_issue') &&
+                  <span
+                    className='comments-button issue-block-edit-button'
+                    title='创建链接'
+                    onClick={ () => { this.setState({ linkIssueModalShow: true }); } }>
+                    <i className='fa fa-plus'></i>
+                  </span> }
+                </div>
+                { (!data.links || data.links.length <= 0) &&
+                <div className='issue-block-emtpy'>
+                  暂无链接问题
+                </div> }
+                { data.links && data.links.length > 0 &&
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    链接问题 
+                  </Col>
+                  <Col sm={ 9 }>
+                    { data.links.length > 5 &&
+                    <div style={ { marginTop: '7px' } }>
+                      共{ data.links.length }个问题
+                      <span style={ { marginLeft: '5px' } }> 
+                        <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>
+                          { this.state.linkShow ? '收起' : '展开' } 
+                          <i className={ this.state.linkShow ?  'fa fa-angle-up' : 'fa fa-angle-down' }></i>
+                        </a>
+                      </span>
+                    </div> }
+                    <Table 
+                      condensed 
+                      hover 
+                      responsive 
+                      className={ (!this.state.linkShow && data.links.length > 5) ? 'hide' : '' } 
+                      style={ { marginTop: '10px', marginBottom: '0px', borderBottom: '1px solid #ddd' } }>
+                      <tbody>
+                        { _.map(data.links, (val, key) => {
+                          let linkedIssue = {};
+                          let relation = '';
+                          let linkIssueId = ''
+                          if (val.src.id == data.id) {
+                            linkedIssue = val.dest;
+                            relation = val.relation;
+                            linkIssueId = val.dest.id;
+                          } else if (val.dest.id == data.id) {
+                            linkedIssue = val.src;
+                            relation = val.relation;
+                            const relationOutIndex = _.findIndex(options.relations || [], { out: relation });
+                            if (relationOutIndex !== -1) {
+                              relation = options.relations[relationOutIndex].in || '';
+                            } else {
+                              const relationInIndex = _.findIndex(options.relations || [], { in: relation });
+                              if (relationInIndex !== -1) {
+                                relation = options.relations[relationInIndex].out || '';
+                              }
+                            }
+                            linkIssueId = val.src.id;
+                          }
+                          return (
+                            <tr key={ 'link' + key }>
+                              <td>
+                                { relation }
+                                <br/>
+                                <a href='#' style={ linkedIssue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>
+                                  { linkedIssue.no } - { linkedIssue.title }
+                                </a>
+                              </td>
+                              <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', textAlign: 'center', width: '10px' } }>
+                                { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }
+                              </td>
+                              <td style={ { verticalAlign: 'middle', width: '10px', paddingRight: '8px' } }>
+                                { this.isAllowable('link_issue') ? <span className='remove-icon' onClick={ this.delLink.bind(this, { title: linkedIssue.title, id: val.id }) }><i className='fa fa-trash'></i></span> : '' }
+                              </td>
+                            </tr>); 
+                        }) }
+                      </tbody>
+                    </Table>
+                  </Col>
+                </FormGroup> }
               </Form>
             </Tab>
             <Tab eventKey={ 3 } title='改动纪录'>
@@ -1534,6 +1648,14 @@ export default class DetailBar extends Component {
             issue_no={ data.no }
             watchers={ data.watchers || [] }
             i18n={ i18n }/> }
+        { this.state.periodModalShow &&
+          <PeriodEditModal
+            show
+            close={ () => { this.setState({ periodModalShow: false }); } }
+            edit={ edit }
+            data={ data }
+            i18n={ i18n }/> }
+
       </div>
     );
   }

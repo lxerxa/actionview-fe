@@ -1471,3 +1471,34 @@ div.filepicker {
   margin-top: 5px;
   white-space: nowrap;
 }
+
+.issue-contents-diviver {
+  position: relative;
+  width: 100%;
+  min-width: 100%;
+  margin: 24px 0px 12px 0px;
+  border-top: 1px solid transparent;
+  border-top-color: #eee;
+}
+
+.issue-contents-diviver-title {
+  display: inline-block;
+  margin-top: 12px;
+  margin-left: 20px;
+  background-color: #fff;
+}
+
+.issue-block-emtpy {
+  margin-left: 20px;
+  color: #909090;
+}
+
+.issue-contents-nosetting {
+  color: #909090;
+}
+
+.issue-block-edit-button {
+  margin-top: 12px;
+  margin-right: 20px;
+  float: right;
+}
