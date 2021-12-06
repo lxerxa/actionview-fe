@@ -23,6 +23,26 @@ export default class ViewSprintModal extends Component {
     close();
   }
 
+  add(n1, n2) {
+    let r1, r2;
+    try {
+      r1 = n1.toString().split('.')[1].length;
+    } catch (e) {
+      r1 = 0;
+    }
+
+    try {
+      r2 = n2.toString().split('.')[1].length;
+    } catch (e) {
+      r2 = 0;
+    }
+
+    let pow = Math.max(r1, r2);
+    let base = Math.pow(10, pow);
+
+    return _.add(n1 * base, n2 * base) / base;
+  }
+
   render() {
     const { sprintNo, sprints, collection } = this.props;
 
@@ -43,17 +63,17 @@ export default class ViewSprintModal extends Component {
     _.map(issues, (v) => {
       if (!v.assignee || !v.assignee.id) {
         unassignedIssues.issue_count = _.add(unassignedIssues.issue_count, 1);
-        unassignedIssues.story_points = _.add(unassignedIssues.story_points, v.story_points || 0);
+        unassignedIssues.story_points = this.add(unassignedIssues.story_points, v.story_points || 0);
       } else {
         if (!issuesByAssignee[v.assignee.id]) {
           issuesByAssignee[v.assignee.id] = { assignee: v.assignee, issue_count: 1, story_points: v.story_points || 0 } 
         } else {
           issuesByAssignee[v.assignee.id].issue_count = _.add(issuesByAssignee[v.assignee.id].issue_count, 1); 
-          issuesByAssignee[v.assignee.id].story_points = _.add(issuesByAssignee[v.assignee.id].story_points, v.story_points || 0); 
+          issuesByAssignee[v.assignee.id].story_points = this.add(issuesByAssignee[v.assignee.id].story_points, v.story_points || 0); 
         }
       }
       total_issue_count += 1;
-      total_story_points += (v.story_points || 0);
+      total_story_points = this.add(total_story_points, v.story_points || 0);
     });
 
     return (
