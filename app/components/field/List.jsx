@@ -22,8 +22,6 @@ const sysFields = [
   'resolve_version', 
   'effect_versions',
   'progress',
-  'expect_start_time',
-  'expect_complete_time',
   'related_users',
   'descriptions', 
   'epic',
@@ -31,6 +29,11 @@ const sysFields = [
   'original_estimate',
   'story_points',
   'attachments' 
+];
+
+const periodFields = [
+  'expect_start_time',
+  'expect_complete_time'
 ];
 
 export default class List extends Component {
@@ -171,8 +174,8 @@ export default class List extends Component {
                 { (collection[i].type === 'Select.Async' || collection[i].type === 'MultiSelect.Async') && <MenuItem eventKey='5'>数据源配置</MenuItem> }
                 { [ 'File', 'SingleVersion', 'MultiVersion', 'SingleUser', 'MultiUser', 'TimeTracking', 'DateTimePicker' ].indexOf(collection[i].type) === -1 && <MenuItem eventKey='3'>属性配置</MenuItem> }
                 <MenuItem eventKey='1'>编辑</MenuItem>
-                { pkey === '$_sys_$' && <MenuItem eventKey='6'>查看项目应用</MenuItem> }
-                { !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
+                { periodFields.indexOf(collection[i].key) === -1 && pkey === '$_sys_$' && <MenuItem eventKey='6'>查看项目应用</MenuItem> }
+                { periodFields.indexOf(collection[i].key) === -1 && !collection[i].is_used && <MenuItem eventKey='2'>删除</MenuItem> }
               </DropdownButton>
             }
             <img src={ img } className={ itemLoading && selectedItem.id === collection[i].id ? 'loading' : 'hide' }/>
