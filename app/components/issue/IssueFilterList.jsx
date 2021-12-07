@@ -226,8 +226,8 @@ export class IssueFilterList extends Component {
       { key: 'updated_at', name: '更新时间', type: 'DateTimePicker' },
       { key: 'resolved_at', name: '解决时间', type: 'DateTimePicker' },
       { key: 'closed_at', name: '关闭时间', type: 'DateTimePicker' },
-      { key: 'expect_start_time', name: '期望开始', type: 'DatePicker' },
-      { key: 'expect_complete_time', name: '期望完成', type: 'DatePicker' }
+      { key: 'expect_start_time', name: '计划开始', type: 'DatePicker' },
+      { key: 'expect_complete_time', name: '计划完成', type: 'DatePicker' }
     ];
     const timeFilterSections = this.groupFields(_.reject(timeFields, (v) => notShowFields.indexOf(v.key) !== -1), 2);
 
