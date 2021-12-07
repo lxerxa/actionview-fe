@@ -23,7 +23,7 @@ const validate = (values, props) => {
       errors.defaultValue = '格式错误';
     }
   } else if (data.type === 'DatePicker') {
-    if (values.defaultValue && !moment(values.defaultValue).isValid()) {
+    if (values.defaultValue && (isNaN(values.defaultValue) || !/^-?\d+$/.test(values.defaultValue))) {
       errors.defaultValue = '格式错误';
     }
   }
@@ -77,7 +77,7 @@ export default class DefaultValueConfigModal extends Component {
     if ((data.type === 'MultiSelect' || data.type === 'CheckboxGroup') && _.isArray(data.defaultValue)) {
       data.defaultValue = data.defaultValue && data.defaultValue.join(',');
     } else if (data.type === 'DatePicker' && data.defaultValue) {
-      data.defaultValue = moment.unix(data.defaultValue);
+      data.defaultValue = parseInt(data.defaultValue);
     }
 
     initializeForm(data);
@@ -86,14 +86,15 @@ export default class DefaultValueConfigModal extends Component {
   async handleSubmit() {
     const { values, config, close, data } = this.props;
 
-    const submittedData = {};
-    if (values.defaultValue && data.type === 'DatePicker') {
-      submittedData.defaultValue = parseInt(moment(values.defaultValue).startOf('day').format('X')); 
+    const submittedData = { id: data.id };
+    console.log(values.defaultValue, data.type);
+    if ((values.defaultValue || values.defaultValue === 0) && data.type === 'DatePicker') {
+      submittedData.defaultValue = values.defaultValue + 'd'; 
     } else {
       submittedData.defaultValue = values.defaultValue; 
     }
     //alert(JSON.stringify(values));
-    const ecode = await config(values);
+    const ecode = await config(submittedData);
     if (ecode === 0) {
       this.setState({ ecode: 0 });
       close();
@@ -147,15 +148,16 @@ export default class DefaultValueConfigModal extends Component {
           placeholder='输入默认值'/> );
     } else if (data.type === 'DatePicker') {
       defaultComponent = ( 
-       <DateTime 
-         style={ { width: '80%' } }
-         locale='zh-cn'
-         mode='date' 
-         closeOnSelect 
-         dateFormat='YYYY/MM/DD' 
-         timeFormat= { false } 
-         value={ defaultValue.value } 
-         onChange={ newValue => { defaultValue.onChange(newValue) } }/> );
+        <div>
+          <span style={ { marginRight: '5px' } }>距今</span>
+          <FormControl
+            style={ { width: '25%', display: 'inline-block' } }
+            type='number'
+            { ...defaultValue }
+            placeholder='请输入' />
+         <span style={ { marginLeft: '5px' } }>天</span>
+         <span style={ { marginLeft: '5px', fontSize: '12px' } }>【注：0 - 表示当天；空 - 清空默认值】</span>
+        </div>);
     } else {
       defaultComponent = ( 
         <FormControl 
