@@ -1315,7 +1315,6 @@ export default class DetailBar extends Component {
                       <span style={ { marginLeft: '5px' } }> 
                         <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ subtaskShow: !this.state.subtaskShow }) } }>
                           { this.state.subtaskShow ? '收起' : '展开' } 
-                          <i className={ this.state.subtaskShow ?  'fa fa-angle-up' : 'fa fa-angle-down' }></i>
                         </a>
                       </span>
                     </div> }
@@ -1371,7 +1370,6 @@ export default class DetailBar extends Component {
                       <span style={ { marginLeft: '5px' } }> 
                         <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ linkShow: !this.state.linkShow }) } }>
                           { this.state.linkShow ? '收起' : '展开' } 
-                          <i className={ this.state.linkShow ?  'fa fa-angle-up' : 'fa fa-angle-down' }></i>
                         </a>
                       </span>
                     </div> }
