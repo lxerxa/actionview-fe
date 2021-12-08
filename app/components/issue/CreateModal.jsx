@@ -122,6 +122,8 @@ class CreateModal extends Component {
             originalValues[v.key] = values[v.key] = v.defaultValue.join(',');
           } else if (v.type === 'CheckboxGroup' && _.isString(v.defaultValue)) {
             originalValues[v.key] = values[v.key] = v.defaultValue.split(',');
+          } else if (v.type === 'DatePicker') {
+            originalValues[v.key] = values[v.key] = moment.unix(v.defaultValue);
           } else {
             originalValues[v.key] = values[v.key] = v.defaultValue;
           }
@@ -215,7 +217,7 @@ class CreateModal extends Component {
         return;
       }
       if (val instanceof moment && this.state.originalValues[key] instanceof moment) {
-        if (!val.isSame(this.state.oldValues[key])) {
+        if (!val.isSame(this.state.originalValues[key])) {
           diffKeys.push(key);
         }
       } else if (!_.isEqual(val, this.state.originalValues[key])) {
