@@ -260,6 +260,10 @@ export default class TimeTracks extends Component {
         </div>
         { !indexLoading && collection.length > 0 && <Summary options={ options } values={ total }/> }
         <div style={ { marginBottom: '30px' } }>
+          { collection.length >= 1000 &&
+            <div style={ { color: 'red' } }>
+              <span>注：最多统计满足当前检索条件下的1000条结果。</span>
+            </div> }
           <BootstrapTable selectRow={ selectRowProp } data={ timetracks } bordered={ false } headerStyle={ { backgroundColor: '#fff' } } hover options={ opts }>
             <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='type' width='50'>类型</TableHeaderColumn>
@@ -272,7 +276,7 @@ export default class TimeTracks extends Component {
           </BootstrapTable>
           { collection.length > 0 &&
           <div>
-            <span>共计 { timetracks.length } 条</span>
+            <span>共计 { collection.length } 条</span>
           </div> }
         </div>
         { this.state.saveFilterShow &&

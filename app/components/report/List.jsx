@@ -161,16 +161,6 @@ export default class List extends Component {
             </tbody>
           </Table>
         </Panel>
-        <Panel header={ blockHeaders['others'] }>
-          <Table responsive hover>
-            <thead><tr>
-              <td>待定</td>
-              <td>待定</td>
-              <td/>
-              <td/>
-            </tr></thead>
-          </Table>
-        </Panel>
         { this.state.resetShow &&
           <ResetNotify 
             show
