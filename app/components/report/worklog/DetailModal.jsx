@@ -77,7 +77,7 @@ export default class DetailModal extends Component {
               return (
                 <tr key={ key } style={ { backgroundColor: _.findIndex(parts, { id: v.id }) === -1 && '#e5e5e5' } }>
                   <td>{ v.recorder.name || '-' }</td>
-                  <td>{ v.started_at ? moment.unix(v.started_at).format('YY/MM/DD HH:mm:ss') : '-' }</td>
+                  <td>{ v.started_at ? moment.unix(v.started_at).format('YYYY/MM/DD HH:mm:ss') : '-' }</td>
                   <td>{ v.spend || '-' }</td>
                   <td width='45%' dangerouslySetInnerHTML={ { __html: _.escape(v.comments).replace(/(\r\n)|(\n)/g, '<br/>') || '-' } }/>
                 </tr>); }) }

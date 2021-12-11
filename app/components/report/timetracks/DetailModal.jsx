@@ -9,7 +9,6 @@ const img = require('../../../assets/images/loading.gif');
 export default class DetailModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { showAll: false };
     this.handleCancel = this.handleCancel.bind(this);
   }
 
@@ -73,7 +72,7 @@ export default class DetailModal extends Component {
               return (
                 <tr key={ key }>
                   <td>{ v.recorder.name || '-' }</td>
-                  <td>{ v.started_at ? moment.unix(v.started_at).format('YY/MM/DD HH:mm:ss') : '-' }</td>
+                  <td>{ v.started_at ? moment.unix(v.started_at).format('YYYY/MM/DD HH:mm:ss') : '-' }</td>
                   <td>{ v.spend || '-' }</td>
                   <td width='45%' dangerouslySetInnerHTML={ { __html: _.escape(v.comments).replace(/(\r\n)|(\n)/g, '<br/>') || '-' } }/>
                 </tr>); }) }
