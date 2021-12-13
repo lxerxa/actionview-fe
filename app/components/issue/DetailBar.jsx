@@ -1425,7 +1425,7 @@ export default class DetailBar extends Component {
                 </FormGroup> }
               </Form>
             </Tab>
-            <Tab eventKey={ 3 } title='改动纪录'>
+            <Tab eventKey={ 3 } title='改动记录'>
               <History
                 issue_id={ data.id }
                 currentTime={ options.current_time || 0 }
