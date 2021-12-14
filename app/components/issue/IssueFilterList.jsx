@@ -107,7 +107,7 @@ export class IssueFilterList extends Component {
       if (v.type === 'Text' || v.type === 'TextArea' || v.type === 'RichTextEditor' || v.type === 'Url') {
         filters.push(
           <div>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 1 } componentClass={ ControlLabel } style={ { color: this.state.values[v.key] ? '#ff0000' : '#333' } }>
               { v.name }
             </Col>
             <Col sm={ 12 / columns - 1 }>
@@ -123,7 +123,7 @@ export class IssueFilterList extends Component {
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
         filters.push(
           <div>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 1 } componentClass={ ControlLabel } style={ { color: this.state.values[v.key] ? '#ff0000' : '#333' } }>
               { v.name }
             </Col>
             <Col sm={ 12 / columns - 1 }>
@@ -139,7 +139,7 @@ export class IssueFilterList extends Component {
       } else if ([ 'DatePicker', 'DateTimePicker' ].indexOf(v.type) !== -1) {
         filters.push(
           <div>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 1 } componentClass={ ControlLabel } style={ { color: this.state.values[v.key] ? '#ff0000' : '#333' } }>
               { v.name }
             </Col>
             <Col sm={ 12 / columns - 1 }>
@@ -151,7 +151,7 @@ export class IssueFilterList extends Component {
       } else if ([ 'Number', 'Integer', 'TimeTracking' ].indexOf(v.type) !== -1) {
         filters.push(
           <div>
-            <Col sm={ 1 } componentClass={ ControlLabel }>
+            <Col sm={ 1 } componentClass={ ControlLabel } style={ { color: this.state.values[v.key] ? '#ff0000' : '#333' } }>
               { v.name }
             </Col>
             <Col sm={ 12 / columns - 1 }>
