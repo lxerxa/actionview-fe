@@ -958,7 +958,7 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup>
 
-                { data.resolve_version && _.findIndex(schema, { key: 'resolve_version' }) !== -1 && 
+                { data.resolve_version && _.findIndex(schema, { key: 'resolve_version' }) === -1 && 
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     解决版本 
