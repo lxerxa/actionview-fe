@@ -693,7 +693,6 @@ export default class DetailBar extends Component {
       'descriptions', 
       'epic', 
       'labels', 
-      'resolve_version', 
       'expect_start_time', 
       'expect_complete_time', 
       'progress'
@@ -958,6 +957,8 @@ export default class DetailBar extends Component {
                     </div>
                   </Col>
                 </FormGroup>
+
+                { data.resolve_version && _.findIndex(schema, { key: 'resolve_version' }) !== -1 && 
                 <FormGroup>
                   <Col sm={ 3 } componentClass={ ControlLabel }>
                     解决版本 
@@ -967,7 +968,7 @@ export default class DetailBar extends Component {
                      { _.find(options.versions, { id: data.resolve_version }) ? _.find(options.versions, { id: data.resolve_version }).name : <span className='issue-contents-nosetting'>未设置</span> }
                     </div>
                   </Col>
-                </FormGroup>
+                </FormGroup> }
 
                 { _.map(schema, (field, key) => {
                   if (specialFields.indexOf(field.key) !== -1) {
