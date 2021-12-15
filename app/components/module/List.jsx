@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 
 const EditModal = require('./EditModal');
+const BackTop = require('../share/BackTop');
 const DelNotify = require('./DelNotify');
 const img = require('../../assets/images/loading.gif');
 
@@ -384,6 +385,7 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px' } }>
+        <BackTop />
         <BootstrapTable data={ modules } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>

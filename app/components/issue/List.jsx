@@ -12,6 +12,7 @@ const DelNotify = require('./DelNotify');
 const DetailBar = require('./DetailBar');
 const img = require('../../assets/images/loading.gif');
 const PaginationList = require('../share/PaginationList');
+const BackTop = require('../share/BackTop');
 const AddWorklogModal = require('./worklog/AddWorklogModal');
 const CreateModal = require('./CreateModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
@@ -623,6 +624,7 @@ export default class List extends Component {
 
     return (
       <div>
+        <BackTop />
         <BootstrapTable 
           hover
           data={ issues } 

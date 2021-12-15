@@ -6,6 +6,7 @@ import _ from 'lodash';
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
 const ConfigModal = require('./ConfigModal');
+const BackTop = require('../share/BackTop');
 const img = require('../../assets/images/loading.gif');
 
 const sysEvents = [
@@ -233,6 +234,7 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px' } }>
+        <BackTop />
         <BootstrapTable data={ events } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>

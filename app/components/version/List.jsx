@@ -9,6 +9,7 @@ const EditModal = require('./EditModal');
 const ReleaseModal = require('./ReleaseModal');
 const DelNotify = require('./DelNotify');
 const PaginationList = require('../share/PaginationList');
+const BackTop = require('../share/BackTop');
 
 var moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -229,6 +230,7 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px' } }>
+        <BackTop />
         <BootstrapTable data={ versions } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>

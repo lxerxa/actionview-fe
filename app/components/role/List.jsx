@@ -11,6 +11,7 @@ const ViewUsedModal = require('./ViewUsedModal');
 const EditModal = require('./EditModal');
 const ConfigModal = require('./ConfigModal');
 const DelNotify = require('./DelNotify');
+const BackTop = require('../share/BackTop');
 
 const img = require('../../assets/images/loading.gif');
 
@@ -215,6 +216,7 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px' } }>
+        <BackTop />
         <BootstrapTable data={ roles } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name' width='300'>角色</TableHeaderColumn>

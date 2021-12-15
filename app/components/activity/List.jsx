@@ -8,6 +8,7 @@ import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 
 const $ = require('$');
 const moment = require('moment');
+const BackTop = require('../share/BackTop');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
@@ -381,6 +382,7 @@ export default class List extends Component {
 
     return (
       <div style={ { paddingTop: '15px', paddingBottom: '20px' } }>
+        <BackTop />
         <Nav bsStyle='pills' style={ { float: 'left', lineHeight: '1.0' } } activeKey={ this.state.category } onSelect={ this.handleSelect.bind(this) }>
           <NavItem eventKey='all' href='#'>全部</NavItem>
           <NavItem eventKey='comments' href='#'>评论</NavItem>

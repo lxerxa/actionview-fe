@@ -10,6 +10,7 @@ const DelNotify = require('./DelNotify');
 const OptionValuesConfigModal = require('./OptionValuesConfigModal');
 const DefaultValueConfigModal = require('./DefaultValueConfigModal');
 const ViewUsedModal = require('./ViewUsedModal');
+const BackTop = require('../share/BackTop');
 const img = require('../../assets/images/loading.gif');
 
 const sysFields = [ 
@@ -196,6 +197,7 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px' } }>
+        <BackTop />
         <BootstrapTable data={ fields } bordered={ false } hover options={ opts } trClassName='tr-top'>
           <TableHeaderColumn dataField='id' hidden isKey>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>
