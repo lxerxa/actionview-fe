@@ -11,6 +11,7 @@ import List from './List';
 import { ttFormat } from '../../share/Funcs'
 
 const img = require('../../../assets/images/loading.gif');
+const BackTop = require('../../share/BackTop');
 
 export default class Worklog extends Component {
   constructor(props) {
@@ -182,6 +183,7 @@ export default class Worklog extends Component {
 
     return ( 
       <div className='project-report-container'>
+        <BackTop />
         <div className='report-title'>
           人员工作日志报告 
           <Link to={ '/project/' + project.key + '/report' }>

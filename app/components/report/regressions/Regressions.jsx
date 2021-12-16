@@ -9,6 +9,7 @@ import SaveFilterModal from '../SaveFilterModal';
 
 const moment = require('moment');
 const img = require('../../../assets/images/loading.gif');
+const BackTop = require('../../share/BackTop');
 
 export default class Regressions extends Component {
   constructor(props) {
@@ -152,6 +153,7 @@ export default class Regressions extends Component {
 
     return ( 
       <div className='project-report-container'>
+        <BackTop />
         <div className='report-title'>
           问题解决回归分布 
           <Link to={ '/project/' + project.key + '/report' }>

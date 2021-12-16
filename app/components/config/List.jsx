@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { Permissions } from '../share/Constants';
 
 const img = require('../../assets/images/loading.gif');
-
+const BackTop = require('../share/BackTop');
 const PreviewModal = require('../workflow/PreviewModal');
 const ScreenPreviewModal = require('../screen/PreviewModal');
 
@@ -72,6 +72,7 @@ export default class List extends Component {
       </div>
       :
       <div style={ { marginTop: '15px', marginBottom: '30px' } }>
+        <BackTop />
         <Panel header='问题类型'>
           { data.types && data.types.length > 0 ?
           <Table responsive hover>

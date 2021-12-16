@@ -12,6 +12,7 @@ import DetailModal from './DetailModal';
 
 const moment = require('moment');
 const img = require('../../../assets/images/loading.gif');
+const BackTop = require('../../share/BackTop');
 
 export default class TimeTracks extends Component {
   constructor(props) {
@@ -212,6 +213,7 @@ export default class TimeTracks extends Component {
 
     return ( 
       <div className='project-report-container'>
+        <BackTop />
         <div className='report-title'>
           问题时间跟踪报告 
           <Link to={ '/project/' + project.key + '/report' }>

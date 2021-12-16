@@ -8,6 +8,7 @@ import _ from 'lodash';
 
 const qs = require('qs');
 const img = require('../../assets/images/loading.gif');
+const BackTop = require('../share/BackTop');
 const ArchiveNotify = require('../project/ArchiveNotify');
 const EditModal = require('../project/EditModal');
 
@@ -60,6 +61,7 @@ export default class List extends Component {
       </div>
       :
       <div style={ { marginTop: '20px', marginBottom: '30px' } }>
+        <BackTop />
         <div className='project-summary-header'>
           <span style={ { fontSize: '16px' } }>{ project.name || '-' }</span>
           <span style={ { marginLeft: '15px' } }>{ project.status == 'active' ? <span className='project-inprogress-label'>活动中</span> : <span className='project-close-label'>已归档</span> }</span>

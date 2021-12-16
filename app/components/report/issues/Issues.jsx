@@ -9,6 +9,7 @@ import SaveFilterModal from '../SaveFilterModal';
 
 const moment = require('moment');
 const img = require('../../../assets/images/loading.gif');
+const BackTop = require('../../share/BackTop');
 
 export default class Issues extends Component {
   constructor(props) {
@@ -154,6 +155,7 @@ export default class Issues extends Component {
 
     return ( 
       <div className='project-report-container'>
+        <BackTop />
         <div className='report-title'>
           问题分布图
           <Link to={ '/project/' + project.key + '/report' }>

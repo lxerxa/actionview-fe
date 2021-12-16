@@ -34,11 +34,13 @@ export default class BackTop extends Component {
     const self = this;
     const container = $('.doc-container');
 
+    const step = (parseInt(container.scrollTop() / 1000) + 1) * 50;
+
     cancelAnimationFrame(this.timer);
     this.timer = requestAnimationFrame(function fn() {
       const oTop = container.scrollTop();
       if(oTop > 0) {
-        container.scrollTop(oTop - 50 > 0 ? oTop - 50 : 0);
+        container.scrollTop(oTop - step > 0 ? oTop - step : 0);
         self.timer = requestAnimationFrame(fn);
       } else {
         cancelAnimationFrame(self.timer);
