@@ -6,6 +6,7 @@ import _ from 'lodash';
 const moment = require('moment');
 const DetailModal = require('./DetailModal');
 const PaginationList = require('../share/PaginationList');
+const BackTop = require('../share/BackTop');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -76,6 +77,7 @@ export default class List extends Component {
 
     return (
       <div>
+        <BackTop />
         <div style={ { padding: '0px 5px', height: '40px' } }>
           <Button onClick={ this.export.bind(this) } style={ { float: 'right', marginLeft: '10px' } }><i className='fa fa-download'></i> 导出</Button>
           <Button onClick={ this.refresh.bind(this) } style={ { float: 'right' } }><i className='fa fa-refresh'></i> 刷新</Button>

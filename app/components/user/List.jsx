@@ -8,6 +8,7 @@ import { notify } from 'react-notify-toast';
 
 const $ = require('$');
 const PaginationList = require('../share/PaginationList');
+const BackTop = require('../share/BackTop');
 const ImportModal = require('./ImportModal');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
@@ -314,6 +315,7 @@ export default class List extends Component {
 
     return (
       <div>
+        <BackTop />
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
             <span style={ { float: 'right', width: '18%' } }>
