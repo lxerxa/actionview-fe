@@ -1166,7 +1166,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 2 }>
                     <div style={ { marginTop: '7px' } }>
-                      { data.expect_start_time ? moment.unix(data.expect_complete_time).format('YYYY/MM/DD') : <span className='issue-contents-nosetting'>未设置</span> }
+                      { data.expect_complete_time ? moment.unix(data.expect_complete_time).format('YYYY/MM/DD') : <span className='issue-contents-nosetting'>未设置</span> }
                     </div>
                   </Col>
                 </FormGroup>
