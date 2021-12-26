@@ -280,7 +280,7 @@ export default class DetailBar extends Component {
   }
 
   editAssignee() {
-    this.setState({ editAssignee: true });
+    this.setState({ editAssignee: true, newAssignee: null });
   }
 
   async setAssignee() {
