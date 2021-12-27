@@ -108,7 +108,7 @@ export default class EditModal extends Component {
     initializeForm({ 
       expect_start_time: moment.unix(data.expect_start_time || data.expect_complete_time || data.created_at).startOf('day'), 
       expect_complete_time: moment.unix(data.expect_complete_time || data.expect_start_time || data.created_at),
-      progress: data.progress || 0 
+      progress: _.isNumber(data.progress) ? data.progress + '' : '' 
     });
   }
 
@@ -119,7 +119,8 @@ export default class EditModal extends Component {
       handleSubmit, 
       invalid, 
       submitting,
-      data } = this.props;
+      data 
+    } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

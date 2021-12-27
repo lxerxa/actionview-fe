@@ -1184,7 +1184,7 @@ export default class DetailBar extends Component {
                         </div>
                         <span 
                           className='edit-icon-zone edit-icon' 
-                          onClick={ () => { editingItems['progress'] = true; newItemValues['progress'] = data['progress'] || 0;  this.setState({ editingItems, newItemValues }) } }>
+                          onClick={ () => { editingItems['progress'] = true; newItemValues['progress'] = _.isNumber(data['progress']) ? (data['progress'] + '') : '';  this.setState({ editingItems, newItemValues }) } }>
                           <i className='fa fa-pencil'></i>
                         </span>
                       </div> 
@@ -1198,11 +1198,11 @@ export default class DetailBar extends Component {
                       <FormControl 
                         type='number' 
                         min='0'
-                        value={ newItemValues['progress'] || 0 } 
+                        value={ newItemValues['progress'] || '' } 
                         onChange={ (e) => { newItemValues['progress'] = e.target.value; this.setState({ newItemValues }) } }
                         placeholder='进度值'/>
                       <div className='edit-button-group'>
-                        <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, 'progress', newItemValues['progress'] - 0) }><i className='fa fa-check'></i></Button>
+                        <Button className='edit-ok-button' disabled={ newItemValues['progress'] == (data['progress'] + '') || parseFloat(newItemValues['progress']) > 100 || parseFloat(newItemValues['progress']) < 0 } onClick={ this.setItemValue.bind(this, 'progress', newItemValues['progress'] === '' ? '' : newItemValues['progress'] - 0) }><i className='fa fa-check'></i></Button>
                         <Button className='edit-cancel-button' onClick={ this.cancelSetItem.bind(this, 'progress') }><i className='fa fa-close'></i></Button>
                       </div>
                     </div> }
