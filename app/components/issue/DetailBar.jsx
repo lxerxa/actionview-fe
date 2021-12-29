@@ -1238,7 +1238,7 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 3 }>
                     <div style={ { marginTop: '7px' } }>
-                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
+                      <span>{ data['modifier'] ? data['modifier'].name : (data['reporter'] && data['reporter'].name || '-') }</span>
                     </div>
                   </Col>
                   <Col sm={ 2 } componentClass={ ControlLabel }>
