@@ -86,8 +86,7 @@ export default class DefaultValueConfigModal extends Component {
   async handleSubmit() {
     const { values, config, close, data } = this.props;
 
-    const submittedData = { id: data.id };
-    console.log(values.defaultValue, data.type);
+    const submittedData = { ...values };
     if ((values.defaultValue || values.defaultValue === 0) && data.type === 'DatePicker') {
       submittedData.defaultValue = values.defaultValue + 'd'; 
     } else {
