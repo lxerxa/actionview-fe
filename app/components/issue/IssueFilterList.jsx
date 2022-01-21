@@ -477,7 +477,7 @@ function _parseQuery(query, options) {
     let ecode = 0;
     const v = sections[i];
     if (query[v.key]) {
-      if ('labels' == v.key || [ 'Text', 'TextArea', 'RichTextEditor', 'Url', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
+      if ('labels' == v.key || [ 'Text', 'TextArea', 'RichTextEditor', 'Url', 'Integer', 'Number', 'TimeTracking' ].indexOf(v.type) !== -1) {
         queryConds.push({ key: v.key, kname: v.name, value: query[v.key] });
       } else if ([ 'Select', 'MultiSelect', 'SingleUser', 'MultiUser', 'CheckboxGroup', 'RadioGroup', 'SingleVersion', 'MultiVersion' ].indexOf(v.type) !== -1) {
         const queryNames = [];
