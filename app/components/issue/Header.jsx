@@ -229,9 +229,20 @@ export default class Header extends Component {
             <MenuItem eventKey='filterConfig'>过滤器排序</MenuItem>
             <MenuItem eventKey='filterDel'>过滤器删除</MenuItem>
           </DropdownButton>
-          <Button className='create-btn' disabled={ optionsLoading } onClick={ () => { this.setState({ searchShow: !this.state.searchShow }); } }>检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i></Button>
+          <Button 
+            className='create-btn'
+            disabled={ optionsLoading } 
+            onClick={ () => { this.setState({ searchShow: !this.state.searchShow }); } }>
+            检索&nbsp;<i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i>
+          </Button>
           { options.permissions && options.permissions.indexOf('create_issue') !== -1 &&
-          <Button className='create-btn' bsStyle='primary' disabled={ standardTypes.length <= 0 || optionsLoading } onClick={ () => { this.setState({ createModalShow: true }); } }><i className='fa fa-plus'></i> 创建</Button> }
+          <Button 
+            className='create-btn' 
+            bsStyle='primary' 
+            disabled={ standardTypes.length <= 0 || optionsLoading } 
+            onClick={ () => { this.setState({ createModalShow: true }); } }>
+            <i className='fa fa-plus'></i> 创建
+          </Button> }
           <div style={ { marginTop: '10px', float: 'right' } }>
             <DropdownButton id='more' pullRight style={ { float: 'right' } } title='更多' onSelect={ this.operateSelect.bind(this) }>
               <MenuItem eventKey='refresh'>刷新</MenuItem>
@@ -257,7 +268,12 @@ export default class Header extends Component {
             <div className='cond-contents' title={ sqlTxt }>
               <b>检索条件</b>：{ sqlTxt }
             </div>
-            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-undo'></i></div>
+            <div className='remove-icon' onClick={ () => { this.setState({ searchShow: !this.state.searchShow }); } } title={ this.state.searchShow ? '收起' : '展开' }>
+              <i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i>
+            </div>
+            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'>
+              <i className='fa fa-ban'></i>
+            </div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'>
               <i className='fa fa-save'></i>
             </div>

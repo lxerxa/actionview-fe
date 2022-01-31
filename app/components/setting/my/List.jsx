@@ -37,6 +37,7 @@ export default class List extends Component {
     setAvatar: PropTypes.func.isRequired,
     updAvatar: PropTypes.func.isRequired,
     avatarLoading: PropTypes.bool.isRequired,
+    reLogin: PropTypes.func.isRequired,
     resetPwd: PropTypes.func.isRequired,
     updAccount: PropTypes.func.isRequired,
     updNotify: PropTypes.func.isRequired,
@@ -148,7 +149,9 @@ export default class List extends Component {
       notifyLoading, 
       favoriteLoading, 
       updAccount, 
-      resetPwd } = this.props;
+      reLogin, 
+      resetPwd 
+    } = this.props;
     const { notifications, favorites } = this.state;
 
     const accountItems = [];
@@ -355,7 +358,11 @@ export default class List extends Component {
 
     return (
       <div>
-        <Nav bsStyle='pills' style={ { marginTop: '10px', float: 'left', lineHeight: '1.0' } } activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) }>
+        <Nav 
+          bsStyle='pills' 
+          style={ { marginTop: '10px', float: 'left', lineHeight: '1.0' } } 
+          activeKey={ this.state.tabKey } 
+          onSelect={ this.handleTabSelect.bind(this) }>
           <NavItem eventKey='account' href='#'>账号资料</NavItem>
           <NavItem eventKey='favorite' href='#'>个人偏好</NavItem>
           <NavItem eventKey='notification' href='#'>消息提醒</NavItem>
@@ -387,6 +394,7 @@ export default class List extends Component {
           <ResetPwdModal 
             show 
             close={ this.resetPwdModalClose } 
+            reLogin={ reLogin } 
             resetPwd={ resetPwd } 
             i18n={ i18n }/> }
       </div>

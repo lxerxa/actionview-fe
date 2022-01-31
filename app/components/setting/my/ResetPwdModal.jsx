@@ -13,10 +13,11 @@ const validate = (values, props) => {
   }
   if (!values.new_password) {
     errors.new_password = '必填';
-  }
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^ ]{8,}$/;
-  if (!re.test(values.new_password)) {
-    errors.new_password = '密码必须包含字母大小写、数字，至少8位';
+  } else {
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^ ]{8,}$/;
+    if (!re.test(values.new_password)) {
+      errors.new_password = '密码必须包含字母大小写、数字，至少8位';
+    }
   }
   if (!values.new_password2) {
     errors.new_password2 = '必填';
@@ -49,18 +50,18 @@ export default class ResetPwdModal extends Component {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
+    reLogin: PropTypes.func.isRequired,
     resetPwd: PropTypes.func.isRequired
   }
 
   async handleSubmit() {
-    const { values, resetPwd, close } = this.props;
+    const { values, resetPwd, close, reLogin } = this.props;
     const ecode = await resetPwd(_.pick(values, [ 'password', 'new_password' ]));
+    this.setState({ ecode });
     if (ecode === 0) {
-      this.setState({ ecode: 0 });
       close();
-      notify.show('密码已修改。', 'success', 2000);
-    } else {
-      this.setState({ ecode: ecode });
+      notify.show('密码已修改, 请重新登录。', 'success', 2000);
+      reLogin();
     }
   }
 

@@ -29,6 +29,10 @@ export default class Container extends Component {
     mysetting: PropTypes.object.isRequired
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   async getUser() {
     await this.props.actions.getUser();
     return this.props.mysetting.ecode;
@@ -63,6 +67,14 @@ export default class Container extends Component {
     this.props.sessionActions.updAvatar(avatar);
   }
 
+  async reLogin() {
+    await this.props.sessionActions.destroy();
+    if (this.props.session.ecode === 0) {
+      this.context.router.push({ pathname: '/login' });
+    }
+    return this.props.session.ecode;
+  }
+
   render() {
     const { i18n, session } = this.props;
 
@@ -83,6 +95,7 @@ export default class Container extends Component {
             setAvatar={ this.setAvatar.bind(this) }
             getUser={ this.getUser.bind(this) }
             updAccount={ this.updAccount.bind(this) }
+            reLogin={ this.reLogin.bind(this) }
             resetPwd={ this.resetPwd.bind(this) }
             updNotify={ this.updNotify.bind(this) }
             updFavorite={ this.updFavorite.bind(this) }
