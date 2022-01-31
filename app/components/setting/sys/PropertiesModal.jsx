@@ -130,7 +130,7 @@ export default class PropertiesModal extends Component {
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ http_host.touched && http_host.error ? 'error' : null }>
             <ControlLabel>系统域名</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...http_host } placeholder='如:http://www.actionview.cn:8080'/>
+            <FormControl disabled={ submitting } type='text' { ...http_host } placeholder='如:https://actionview.cn'/>
             { http_host.touched && http_host.error && <HelpBlock style={ { float: 'right' } }>{ http_host.error }</HelpBlock> }
           </FormGroup>
           <div>
