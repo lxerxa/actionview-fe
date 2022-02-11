@@ -262,8 +262,6 @@ export default class List extends Component {
       sy = sy + container.scrollTop();
       ey = ey + container.scrollTop();
 
-      console.log(sy, sx, ey, ex);
-
       //绘制连接线条
       ctx.beginPath();
       ctx.strokeStyle = 'red';

@@ -72,8 +72,6 @@ export class IssueFilterList extends Component {
   removeAllConds(keys) {
     const removableKeys = keys.concat([ 'orderBy' ]);
 
-    console.log(removableKeys);
-
     const { values={}, onChange } = this.props;
     const tmpValues = {};
     _.forEach(values, (v, k) => {
