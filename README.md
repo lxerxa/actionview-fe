@@ -6,7 +6,7 @@ ActoionView前端代码库，基于Reactjs＋Redux。后端代码库：[actionvi
 
 # Demo
 
-http://www.actionview.cn  
+https://actionview.cn  
 
 ## How to install
 
