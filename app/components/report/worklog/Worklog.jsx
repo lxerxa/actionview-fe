@@ -43,6 +43,7 @@ export default class Worklog extends Component {
     worklogList: PropTypes.array.isRequired,
     worklogListLoading: PropTypes.bool.isRequired,
     getWorklogDetail: PropTypes.func.isRequired,
+    exportWorklog: PropTypes.func.isRequired,
     worklogDetail: PropTypes.object.isRequired,
     worklogDetailLoading: PropTypes.bool.isRequired,
     refresh: PropTypes.func.isRequired,
@@ -64,6 +65,11 @@ export default class Worklog extends Component {
       this.state.showedUser = {};
     }
     this.setState({ recorded_at: newQuery.recorded_at ? newQuery.recorded_at : '' });
+  }
+
+  exportWorklog() {
+    const { exportWorklog, query } = this.props;
+    exportWorklog(query);
   }
 
   search() {
@@ -224,11 +230,13 @@ export default class Worklog extends Component {
             <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
             <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
           </div> }
+          { data.length > 0 &&
           <ButtonGroup className='report-shape-buttongroup'>
             <Button title='饼状图' style={ { height: '36px', backgroundColor: this.state.shape == 'pie' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'pie' }) } }>饼状图</Button>
             <Button title='柱状图' style={ { height: '36px', backgroundColor: this.state.shape == 'bar' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'bar' }) } }>柱状图</Button>
             <Button title='折线图' style={ { height: '36px', backgroundColor: this.state.shape == 'line' && '#eee' } } onClick={ ()=>{ this.setState({ shape: 'line' }) } }>折线图</Button>
-          </ButtonGroup> 
+          </ButtonGroup> }
+          { data.length > 0 &&
           <div className='report-select-sort'>
             <Select
               simpleValue
@@ -237,7 +245,13 @@ export default class Worklog extends Component {
               value={ this.state.sort || 'default' }
               onChange={ (newValue) => { this.setState({ sort: newValue }); } }
               options={ sortOptions }/>
-          </div>
+          </div> }
+          { data.length > 0 &&
+          <div style={ { float: 'right', marginRight: '15px' } }>
+            <Button onClick={ this.exportWorklog.bind(this) } style={ { height: '36px' } }>
+              <i className='fa fa-download'></i> 导出
+            </Button>
+          </div> }
         </div>
         { worklogLoading ?
         <div style={ { height: '550px', paddingTop: '40px' } }>

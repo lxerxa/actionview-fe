@@ -12,6 +12,8 @@ const Trend = require('./trend/Trend');
 const TimeTracks = require('./timetracks/TimeTracks');
 const Regressions = require('./regressions/Regressions');
 
+const { API_BASENAME } = process.env;
+
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(ReportActions, dispatch)
@@ -91,6 +93,18 @@ export default class Container extends Component {
     return this.props.report.ecode;
   }
 
+  exportWorklog(query) {
+    const eleLink = document.createElement('a');
+    eleLink.style.display = 'none';
+    eleLink.href = API_BASENAME + '/project/' + this.pid + '/report/worklog/export?' + qs.stringify(query || {});
+    eleLink.target = '_blank';
+    // 触发点击
+    document.body.appendChild(eleLink);
+    eleLink.click();
+    // 然后移除
+    document.body.removeChild(eleLink);
+  }
+
   async trend(query) {
     await this.props.actions.trend(this.pid, qs.stringify(query || {}));
     return this.props.report.ecode;
@@ -135,6 +149,7 @@ export default class Container extends Component {
           index={ this.worklog.bind(this) } 
           getWorklogList={ this.getWorklogList.bind(this) }
           getWorklogDetail={ this.getWorklogDetail.bind(this) }
+          exportWorklog={ this.exportWorklog.bind(this) }
           saveFilter={ this.saveFilter.bind(this) } 
           project={ this.props.project.item }
           query={ query }
