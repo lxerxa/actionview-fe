@@ -50,8 +50,7 @@ export default class LinkIssueModal extends Component {
 
   async searchIssue(input) {
     input = input.toLowerCase();
-    if (!input)
-    {
+    if (!input) {
       return { options: [] };
     }
 
@@ -61,7 +60,7 @@ export default class LinkIssueModal extends Component {
     }
 
     const hasLinkedIds = [];
-    _.map(issue.links, (v) => {
+    _.forEach(issue.links, (v) => {
       hasLinkedIds.push(v.src.id == issue.id ? v.dest.id : v.src.id);
     }); 
 
@@ -73,9 +72,8 @@ export default class LinkIssueModal extends Component {
     const results = await api.request( { url: '/project/' + project.key + '/issue/search?s=' + input + '&limit=' + limit } );
 
     const options = [];
-    if (results.data.length > 0)
-    {
-      _.map(results.data, (v) => {
+    if (results.data.length > 0) {
+      _.forEach(results.data, (v) => {
         if (_.indexOf(hasLinkedIds, v.id) === -1 && issue.id !== v.id) {
           options.push({ id: v.id, name: _.find(types, { id: v.type }).name + '/' + v.no + ' - ' + v.title });
         }
