@@ -153,9 +153,18 @@ export default class Header extends Component {
           </div>
           { sqlTxt &&
           <div className='cond-bar'>
-            <div className='cond-contents' title={ sqlTxt }><b>检索条件</b>：{ sqlTxt }</div>
-            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'><i className='fa fa-undo'></i></div>
-            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'><i className='fa fa-save'></i></div>
+            <div className='cond-contents' title={ sqlTxt }>
+              <b>检索条件</b>：{ sqlTxt }
+            </div>
+            <div className='remove-icon' onClick={ () => { this.setState({ searchShow: !this.state.searchShow }); } } title={ this.state.searchShow ? '收起' : '展开' }>
+              <i className={ this.state.searchShow ? 'fa fa-angle-double-up' : 'fa fa-angle-double-down' }></i>
+            </div>
+            <div className='remove-icon' onClick={ () => { refresh({}); } } title='清空当前检索'>
+              <i className='fa fa-ban'></i>
+            </div>
+            <div className='remove-icon' onClick={ () => { this.setState({ saveFilterShow: true }); } } title='保存当前检索'>
+              <i className='fa fa-save'></i>
+            </div>
           </div> }
         </div>
         { this.state.filterConfigShow && 
