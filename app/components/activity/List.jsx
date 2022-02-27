@@ -236,7 +236,13 @@ export default class List extends Component {
       user
     } = this.props;
 
-    const ltStyles = { textDecoration: 'line-through', marginRight: '5px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' };
+    const ltStyles = { 
+      textDecoration: 'line-through', 
+      marginRight: '5px', 
+      whiteSpace: 'pre-wrap', 
+      color: '#999',
+      wordWrap: 'break-word' 
+    };
 
     const activities = [];
     const activityNum = collection.length;
