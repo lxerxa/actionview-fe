@@ -32,7 +32,9 @@ export default class List extends Component {
       selectedIds: [],
       name: '', 
       group: null,
-      directory: null }; 
+      directory: null,
+      status: 'active'
+    }; 
 
     this.importModalClose = this.importModalClose.bind(this);
     this.createModalClose = this.createModalClose.bind(this);
@@ -77,6 +79,7 @@ export default class List extends Component {
     if (query.directory) {
       newQuery.directory = this.state.directory = query.directory;
     }
+    newQuery.status = this.state.status = query.status || 'active';
     index(newQuery);
   }
 
@@ -125,6 +128,7 @@ export default class List extends Component {
     this.state.name = newQuery.name || '';
     this.state.group = newQuery.group || null;
     this.state.directory = newQuery.directory || null;
+    this.state.status = newQuery.status || 'active';
   }
 
   operateNotify(id) {
@@ -148,6 +152,11 @@ export default class List extends Component {
     this.setState({ multiOperateNotifyShow: true, multiOperate: eventKey });
   }
 
+  statusChange(newValue) {
+    this.state.status = newValue;
+    this.refresh();
+  }
+
   refresh() {
     const { refresh } = this.props;
     const query = {};
@@ -159,6 +168,9 @@ export default class List extends Component {
     }
     if (_.trim(this.state.directory)) {
       query.directory = _.trim(this.state.directory);
+    }
+    if (_.trim(this.state.status)) {
+      query.status = _.trim(this.state.status);
     }
 
     refresh(query);
@@ -236,7 +248,8 @@ export default class List extends Component {
       multiInvalidate, 
       update, 
       options, 
-      query } = this.props;
+      query 
+    } = this.props;
 
     const { willSetPrincipalPids, settingPrincipalPids } = this.state;
     const { hoverRowId, operateShow } = this.state;
@@ -318,7 +331,16 @@ export default class List extends Component {
         <BackTop />
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
-            <span style={ { float: 'right', width: '18%' } }>
+            <span style={ { float: 'right', width: '90px' } }>
+              <Select
+                simpleValue
+                clearable={ false }
+                placeholder='用户状态'
+                value={ this.state.status }
+                onChange={ this.statusChange.bind(this) }
+                options={ [{ value: 'all', label: '全部' }, { value: 'active', label: '有效的' }, { value: 'invalid', label: '已禁用' }] }/>
+            </span>
+            <span style={ { float: 'right', width: '18%', marginRight: '10px' } }>
               <Select
                 simpleValue
                 placeholder='用户目录'
