@@ -24,7 +24,8 @@ export default class List extends Component {
       resetPwdModalShow: false, 
       accounts: {}, 
       favorites: {}, 
-      notifications: {} };
+      notifications: {} 
+    };
 
     this.avatarEditModalClose = this.avatarEditModalClose.bind(this);
     this.editModalClose = this.editModalClose.bind(this);
@@ -116,10 +117,8 @@ export default class List extends Component {
     const { updFavorite } = this.props;
     const ecode = await updFavorite(values);
     if (ecode === 0) {
-      alert('aa');
     } else {
       const { favorites } = this.props;
-      alert('bb');
     }
     return ecode;
   }
