@@ -32,7 +32,10 @@ export default function mysetting(state = initialState, action) {
 
     case t.MYSETTING_SET_AVATAR_SUCCESS:
     case t.MYSETTING_ACCOUNT_UPDATE_SUCCESS:
-      return { ...state, accountLoading: false, avatarLoading: false, ecode: action.result.ecode, accounts: action.result.data.accounts || {} };
+      if (action.result.ecode === 0) {
+        state.accounts = action.result.data.accounts || {};
+      }
+      return { ...state, accountLoading: false, avatarLoading: false, ecode: action.result.ecode };
 
     case t.MYSETTING_SET_AVATAR_FAIL:
       return { ...state, avatarLoading: false, error: action.error };
@@ -53,7 +56,10 @@ export default function mysetting(state = initialState, action) {
       return { ...state, notifyLoading: true };
 
     case t.MYSETTING_NOTIFY_UPDATE_SUCCESS:
-      return { ...state, notifyLoading: false, ecode: action.result.ecode, notifications: action.result.data.notifications || {} };
+      if (action.result.ecode === 0) {
+        state.notifications = action.result.data.notifications || {};
+      }
+      return { ...state, notifyLoading: false, ecode: action.result.ecode };
 
     case t.MYSETTING_NOTIFY_UPDATE_FAIL:
       return { ...state, notifyLoading: false, error: action.error };
@@ -62,7 +68,10 @@ export default function mysetting(state = initialState, action) {
       return { ...state, favoriteLoading: true };
 
     case t.MYSETTING_FAVORITE_UPDATE_SUCCESS:
-      return { ...state, favoriteLoading: false, ecode: action.result.ecode, favorites: action.result.data.favorites || {} };
+      if (action.result.ecode === 0) {
+        state.favorites = action.result.data.favorites || {};
+      }
+      return { ...state, favoriteLoading: false, ecode: action.result.ecode };
 
     case t.MYSETTING_FAVORITE_UPDATE_FAIL:
       return { ...state, favoriteLoading: false, error: action.error };
