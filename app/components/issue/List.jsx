@@ -13,6 +13,7 @@ const DetailBar = require('./DetailBar');
 const img = require('../../assets/images/loading.gif');
 const PaginationList = require('../share/PaginationList');
 const BackTop = require('../share/BackTop');
+const Avatar = require('../share/Avatar');
 const AddWorklogModal = require('./worklog/AddWorklogModal');
 const CreateModal = require('./CreateModal');
 const ConvertTypeModal = require('./ConvertTypeModal');
@@ -507,12 +508,12 @@ export default class List extends Component {
             { item.title ? item.title : '-' }
           </a>
           { item.watching &&
-          <span title='点击取消关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(item.id, false) } }><i className='fa fa-eye'></i></span> }
+            <span title='点击取消关注' style={ { marginLeft: '8px', color: '#FF9900', cursor: 'pointer' } } onClick={ () => { this.watch(item.id, false) } }><i className='fa fa-eye'></i></span> }
           <span className='table-td-issue-desc'>
             { item.reporter &&
-            <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
-              { item.reporter.name + '  ' + moment.unix(item.created_at).format('YYYY/MM/DD HH:mm') }
-            </span> }
+              <span style={ { marginRight: '7px', marginTop: '2px', float: 'left' } }>
+                { item.reporter.name + '  ' + moment.unix(item.created_at).format('YYYY/MM/DD HH:mm') }
+              </span> }
             { _.map(item.labels || [], 
               (val, i) => 
                 <Link to={ '/project/' + project.key + '/issue?labels=' + val } key={ i }>
@@ -571,6 +572,8 @@ export default class List extends Component {
             stateClassName = 'state-' + (options.states[stateInd].category || '') + '-label';
           }
           issue.state = stateInd !== -1 ? <span className={ stateClassName }>{ options.states[stateInd].name || '-' }</span> : '-';
+        } else if (val.key === 'assignee') {
+          issue.assignee = <Avatar data={ item.assignee } circle />;
         } else if (val.type === 'TextArea') {
           const contents = item[val.key] ? _.escape(item[val.key]).replace(/(\r\n)|(\n)/g, '<br/>') : '-';
           issue[val.key] = <span style={ textStyle } dangerouslySetInnerHTML={ { __html: contents } }/>;

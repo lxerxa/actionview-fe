@@ -40,6 +40,7 @@ const Comments = require('./comments/Comments');
 const History = require('./history/History');
 const GitCommits = require('./gitcommits/GitCommits');
 const Worklog = require('./worklog/Worklog');
+const Avatar = require('../share/Avatar');
 const img = require('../../assets/images/loading.gif');
 const PreviewModal = require('../workflow/PreviewModal');
 const DelFileModal = require('./DelFileModal');
@@ -1328,12 +1329,15 @@ export default class DetailBar extends Component {
                       <tbody>
                         { _.map(data.subtasks, (val, key) => (
                           <tr key={ 'subtask' + key }>
-                            <td>
+                            <td style={ { verticalAlign: 'middle' } }>
                               <a href='#' style={ val.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(val.id); } }>
                                 { val.no } - { val.title }
                               </a>
                             </td>
-                            <td style={ { whiteSpace: 'nowrap', width: '10px', textAlign: 'center' } }>
+                            <td style={ { width: '45px', verticalAlign: 'middle' } }>
+                              <Avatar data={ val.assignee } circle/>
+                            </td>
+                            <td style={ { whiteSpace: 'nowrap', width: '10px', textAlign: 'center', verticalAlign: 'middle' } }>
                               { _.find(options.states || [], { id: val.state }) ? <span className={ 'state-' +  _.find(options.states, { id: val.state }).category  + '-label' }>{ _.find(options.states, { id: val.state }).name }</span> : '-' }
                             </td>
                           </tr>) 
@@ -1411,6 +1415,9 @@ export default class DetailBar extends Component {
                                 <a href='#' style={ linkedIssue.state == 'Closed' ? { textDecoration: 'line-through' } : {} } onClick={ (e) => { e.preventDefault(); this.goTo(linkIssueId); } }>
                                   { linkedIssue.no } - { linkedIssue.title }
                                 </a>
+                              </td>
+                              <td style={ { width: '45px', verticalAlign: 'middle' } }>
+                                <Avatar data={ linkedIssue.assignee } circle/>
                               </td>
                               <td style={ { whiteSpace: 'nowrap', verticalAlign: 'middle', textAlign: 'center', width: '10px' } }>
                                 { _.find(options.states || [], { id: linkedIssue.state }) ? <span className={ 'state-' +  _.find(options.states, { id: linkedIssue.state }).category  + '-label' }>{ _.find(options.states, { id: linkedIssue.state }).name }</span> : '-' }

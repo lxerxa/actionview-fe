@@ -9,7 +9,7 @@ import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 const $ = require('$');
 const moment = require('moment');
 const BackTop = require('../share/BackTop');
-const no_avatar = require('../../assets/images/no_avatar.png');
+const Avatar = require('../share/Avatar');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
 
@@ -270,7 +270,7 @@ export default class List extends Component {
 
       activities.push({
         id: collection[i].id,
-        avatar: ( <img src={ collection[i].user.avatar ? API_BASENAME + '/getavatar?fid=' + collection[i].user.avatar : no_avatar } className='default-avatar'/> ),
+        avatar: ( <Avatar data={ collection[i].user } circle /> ),
         summary: (
           <div>
             <span style={ { marginRight: '5px' } }><b>{ user.id === collection[i].user.id ? '我' : collection[i].user.name }</b></span>

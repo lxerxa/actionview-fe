@@ -5,7 +5,6 @@ import { Button, Label } from 'react-bootstrap';
 import Select from 'react-select';
 import _ from 'lodash';
 import ApiClient from '../../../shared/api-client';
-import Person from '../share/Person';
 import { notify } from 'react-notify-toast';
 
 const img = require('../../assets/images/loading.gif');
