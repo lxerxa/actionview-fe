@@ -468,6 +468,12 @@
   margin-top: 48%;
 }
 
+.detail-error {
+  margin-top: 48%;
+  color: red;
+  font-size: 16px;
+}
+
 #content {
   height: 100%;
 }
