@@ -14,6 +14,7 @@ const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const MoveModal = require('./MoveModal');
 const EditRow = require('./EditRow');
+const BackTop = require('../share/BackTop');
 const img = require('../../assets/images/loading.gif');
 
 const { API_BASENAME } = process.env;
@@ -386,6 +387,7 @@ export default class List extends Component {
 
     return (
       <div>
+        <BackTop />
         <BootstrapTable data={ rows } bordered={ false } hover options={ opts } trClassName='tr-middle'>
           <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>名称</TableHeaderColumn>

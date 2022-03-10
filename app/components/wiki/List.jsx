@@ -16,6 +16,7 @@ const CopyModal = require('./CopyModal');
 const MoveModal = require('./MoveModal');
 const EditModal = require('./EditModal');
 const EditRow = require('./EditRow');
+const BackTop = require('../share/BackTop');
 const img = require('../../assets/images/loading.gif');
 
 export default class List extends Component {
@@ -512,6 +513,7 @@ export default class List extends Component {
 
     return (
       <div>
+        <BackTop />
         <div style={ { marginTop: '5px', height: '40px' } }>
           <FormGroup>
             <span style={ { float: 'left' } } className='directory-indent' onClick={ () => { toggleDirectory(); } }><i className={ directoryShow ? 'fa fa-outdent' : 'fa fa-indent' }></i></span>
