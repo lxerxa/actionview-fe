@@ -312,7 +312,7 @@ export default class Container extends Component {
             getDirTree={ this.getDirTree.bind(this) }
             getDirChildren={ this.getDirChildren.bind(this) }/>
         </div>
-        <div style={ { marginLeft: this.state.directoryShow ? '260px' : '0px' } }>
+        <div style={ { marginLeft: this.state.directoryShow ? '260px' : '0px', marginTop: '15px' } }>
           { contents }
         </div>
       </div> );

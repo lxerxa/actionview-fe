@@ -302,7 +302,7 @@ export default class Preview extends Component {
     }
 
     return (
-      <div style={ { marginTop: '15px' } }>
+      <div>
         { itemDetailLoading &&
         <div>
           <div style={ { margin: '0 auto', width: '100px', paddingTop: '25px' } }>
