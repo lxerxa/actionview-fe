@@ -4,6 +4,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem } from 'react-bootstrap';
 import _ from 'lodash';
 
+const BackTop = require('../share/BackTop');
 const CreateModal = require('./CreateModal');
 const EditModal = require('./EditModal');
 const DelNotify = require('./DelNotify');
@@ -166,6 +167,7 @@ export default class List extends Component {
 
     return (
       <div style={ { marginBottom: '30px' } }>
+        <BackTop />
         <div style={ { marginTop: '15px' } }>
           <Button onClick={ () => { this.setState({ createModalShow: true }) } }>
             <i className='fa fa-plus'></i>&nbsp;新建标签
