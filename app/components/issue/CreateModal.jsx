@@ -365,6 +365,8 @@ class CreateModal extends Component {
           values[v.key] = v.defaultValue.join(',');
         } else if (v.type === 'CheckboxGroup' && _.isString(v.defaultValue)) {
           values[v.key] = v.defaultValue.split(',');
+        } else if (v.type === 'DatePicker' || v.type === 'DateTimePicker') {
+          values[v.key] = moment.unix(v.defaultValue);
         } else {
           values[v.key] = v.defaultValue;
         }
