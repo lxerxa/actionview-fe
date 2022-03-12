@@ -349,6 +349,8 @@ export default class DetailBar extends Component {
       const ecode = await show(nextId);
       if (ecode === 0) {
         record();
+      } else {
+        notify.show('问题信息获取失败。', 'error', 2000);
       }
     }
   }
@@ -360,6 +362,8 @@ export default class DetailBar extends Component {
       const ecode = await show(nextId);
       if (ecode === 0) {
         record();
+      } else {
+        notify.show('问题信息获取失败。', 'error', 2000);
       }
     }
   }
@@ -438,6 +442,8 @@ export default class DetailBar extends Component {
     const ecode = await show(issue_id);
     if (ecode === 0) {
       record();
+    } else {
+      notify.show('问题信息获取失败。', 'error', 2000);
     }
   }
 
@@ -790,10 +796,15 @@ export default class DetailBar extends Component {
         <div className='panel panel-default' style={ panelStyle }>
           <Tabs activeKey={ this.state.tabKey } onSelect={ this.handleTabSelect.bind(this) } id='issue-detail-tab'>
             <Tab eventKey={ 1 } title='基本'>
-              <div className='detail-view-blanket' style={ { display: itemLoading ? 'block' : 'none' } }>
-                <img src={ img } className='loading detail-loading'/>
+              <div className='detail-view-blanket' style={ { display: (itemLoading || !data.no) ? 'block' : 'none' } }>
+                { itemLoading ?
+                  <img src={ img } className='loading detail-loading'/>
+                  :
+                  <div className='detail-error'>
+                    问题信息获取失败。
+                  </div> }
               </div>
-              <Form horizontal className={ itemLoading && 'hide' } style={ { marginRight: '15px', marginBottom: '40px', marginLeft: '15px' } }>
+              <Form horizontal className={ (itemLoading || !data.no) && 'hide' } style={ { marginRight: '15px', marginBottom: '40px', marginLeft: '15px' } }>
                 <ButtonToolbar style={ { margin: '15px 0px 15px -5px' } }>
                   { (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <Button onClick={ () => { this.setState({ editModalShow: true }) } }><i className='fa fa-edit'></i> 编辑</Button> }
                   { this.isAllowable('exec_workflow') && (

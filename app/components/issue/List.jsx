@@ -300,6 +300,8 @@ export default class List extends Component {
     const ecode = await show(id);  //fix me
     if (ecode == 0) {
       record();
+    } else {
+      notify.show('问题信息获取失败。', 'error', 2000);
     }
   }
 
