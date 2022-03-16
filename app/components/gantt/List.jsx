@@ -237,7 +237,7 @@ export default class List extends Component {
       return;
     }
 
-    $('canvas').attr('height', $('div.ganttview-grid').css('height'));
+    $('canvas').attr('height', (parseInt($('div.ganttview-grid').css('height')) + 40) + 'px');
     $('canvas').attr('width', $('div.ganttview-grid').css('width'));
 
     const ctx = container.find('canvas')[0].getContext('2d');
