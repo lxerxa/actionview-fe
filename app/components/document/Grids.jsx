@@ -14,6 +14,7 @@ const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const MoveModal = require('./MoveModal');
 const EditCard = require('./EditCard');
+const BackTop = require('../share/BackTop');
 const img = require('../../assets/images/loading.gif');
 
 const { API_BASENAME } = process.env;
@@ -222,6 +223,7 @@ export default class Grids extends Component {
 
     return (
       <div style={ { clear: 'both' } }>
+        <BackTop />
         <div className='files-grid-view'>
           { indexLoading && 
             <div style={ { display: 'block', padding: '30px 0px', textAlign: 'center' } }>
