@@ -546,8 +546,8 @@ export default class List extends Component {
               <MenuItem divider/>
               <MenuItem eventKey='worklog'>添加工作日志</MenuItem>
               { !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('create_issue') || (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && !item.hasSubtasks) && <MenuItem divider/> }
-              { !item.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-              { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+              { !item.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子问题</MenuItem> }
+              { !item.hasSubtasks && !item.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='convert2Subtask'>转换为子问题</MenuItem> }
               { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem divider/> }
               { item.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', item.reporter && item.reporter.id || '')) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
               { (this.isAllowable('create_issue') || (this.isAllowable('move_issue') && item.parent_id)) && <MenuItem divider/> }

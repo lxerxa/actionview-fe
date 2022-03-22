@@ -123,7 +123,7 @@ export default class ConvertType2Modal extends Component {
             { parent_id.touched && parent_id.error && <HelpBlock style={ { float: 'right' } }>{ parent_id.error }</HelpBlock> }
           </FormGroup>
           <FormGroup controlId='formControlsText' validationState={ name.touched && name.error ? 'error' : null }>
-            <ControlLabel><span className='txt-impt'>*</span>子任务类型</ControlLabel>
+            <ControlLabel><span className='txt-impt'>*</span>子问题类型</ControlLabel>
             <Select 
               disabled={ submitting } 
               options={ typeOptions } 

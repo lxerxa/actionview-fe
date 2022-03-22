@@ -367,7 +367,7 @@ export default class AddActionModal extends Component {
                   </li>
                   <li>
                     <Checkbox disabled={ submitting } value='checkSubTasksState'/>
-                    <span>根据子任务状态</span>
+                    <span>根据子问题状态</span>
                     <FormControl
                       componentClass='select'
                       value={ this.state.stateParam }

@@ -92,11 +92,11 @@ export default class List extends Component {
                       <span className='table-td-title-nobold'>
                         { v.name || '' }({ v.abb || '' })
                         { v.default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }
-                        { v.type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子任务)</span> }
+                        { v.type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子问题)</span> }
                       </span>
                       <span className='table-td-desc'>{ v.description || '' }</span>
                     </td>
-                    <td>{ v.type === 'subtask' ? '子任务' : '标准' }</td>
+                    <td>{ v.type === 'subtask' ? '子问题' : '标准' }</td>
                     <td>
                       <a href='#' onClick={ (e) => { e.preventDefault(); this.setState({ screenPreviewModalShow: true, screenSchema: v.screen && v.screen.schema || [], screenName: v.screen && v.screen.name || '' }); } }>
                         { v.screen && v.screen.name || '' }

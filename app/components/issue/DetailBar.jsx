@@ -832,8 +832,8 @@ export default class DetailBar extends Component {
                       <MenuItem eventKey='watchers' disabled={ !data.watchers || data.watchers.length <= 0 }><span>查看关注者 <span className='badge-number'>{ data.watchers && data.watchers.length }</span></span></MenuItem>
                       <MenuItem eventKey='share'>分享链接</MenuItem>
                       { !data.parent_id && subtaskTypeOptions.length > 0 && (((this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && !data.hasSubtasks) || this.isAllowable('create_issue')) && <MenuItem divider/> }
-                      { !data.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子任务</MenuItem> }
-                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='convert2Subtask'>转换为子任务</MenuItem> }
+                      { !data.parent_id && subtaskTypeOptions.length > 0 && this.isAllowable('create_issue') && <MenuItem eventKey='createSubtask'>创建子问题</MenuItem> }
+                      { !data.hasSubtasks && !data.parent_id && subtaskTypeOptions.length > 0 && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='convert2Subtask'>转换为子问题</MenuItem> }
                       { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem divider/> }
                       { data.parent_id && (this.isAllowable('edit_issue') || this.isAllowable('edit_self_issue', data.reporter && data.reporter.id || '')) && <MenuItem eventKey='convert2Standard'>转换为标准问题</MenuItem> }
                       { options.permissions && (_.intersection(options.permissions, ['link_issue', 'create_issue']).length > 0 || (options.permissions.indexOf('move_issue') !== -1 && data.parent_id)) && <MenuItem divider/> }

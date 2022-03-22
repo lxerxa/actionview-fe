@@ -98,7 +98,7 @@ export default class CreateModal extends Component {
     const workflowOptions = _.map(workflows, function(val) {
       return { label: val.name, value: val.id };
     });
-    const typeOptions = [{ label: '标准', value: 'standard' }, { label: '子任务', value: 'subtask' }]; 
+    const typeOptions = [{ label: '标准', value: 'standard' }, { label: '子问题', value: 'subtask' }]; 
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>

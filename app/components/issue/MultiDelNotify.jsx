@@ -49,7 +49,7 @@ export default class MultiDelNotify extends Component {
         <Modal.Body>
           共选择问题 <b>{ issueIds.length }</b> 个，确认要删除这些问题？<br/><br/>
           如果您完成了这些问题，通常是"解决"或者"关闭"问题，而不是删除。<br/>
-          如果删除，这些问题的子任务也将一并被删除。<br/> 
+          如果删除，这些问题的子问题也将一并被删除。<br/> 
         </Modal.Body>
         <Modal.Footer>
           <span className='ralign'>{ this.state.ecode !== 0 && !loading && errMsg[this.state.ecode] }</span>

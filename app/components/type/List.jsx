@@ -232,12 +232,12 @@ export default class List extends Component {
               { collection[i].name }
               { collection[i].abb && ' (' + collection[i].abb + ')' }
               { collection[i].default && <span style={ { fontWeight: 'normal' } }> (默认)</span> }
-              { collection[i].type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子任务)</span> } 
+              { collection[i].type == 'subtask' && <span style={ { fontWeight: 'normal' } }> (子问题)</span> } 
             </span>
             { collection[i].description && <span className='table-td-desc'>{ collection[i].description }</span> }
           </div>
         ),
-        type: ( <span>{ collection[i].type == 'subtask' ? '子任务' : '标准' }</span> ),
+        type: ( <span>{ collection[i].type == 'subtask' ? '子问题' : '标准' }</span> ),
         screen: (
           <div>
           { _.indexOf(willSetScreenTypeIds, collection[i].id) === -1 && _.indexOf(settingScreenTypeIds, collection[i].id) === -1 ?
