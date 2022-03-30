@@ -50,7 +50,7 @@ export default class BlockItem extends Component {
         <Grid>
           <Row>
             <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>主题</Col>
-            <Col sm={ 8 }><div style={ { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' } }>{ issue.title }</div></Col>
+            <Col sm={ 8 }><div style={ { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' } }>{ issue.no + '-' + issue.title }</div></Col>
           </Row>
           <Row>
             <Col sm={ 4 } componentClass={ ControlLabel } style={ { textAlign: 'right' } }>开始时间</Col>
