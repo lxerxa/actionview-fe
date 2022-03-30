@@ -1413,12 +1413,12 @@ div.filepicker {
 }
 
 .issue-text-field .edit-button {
-  width: 25px;
-  height: 25px;
+  width: 23px;
+  height: 23px;
   background-color: #dedede;
   border-left: 1px solid #dedede;
   border-bottom: 1px solid #dedede;
-  padding-left: 6px;
+  padding-left: 5px;
   padding-top: 1px;
   cursor: pointer;
   color: #5f5f5f;

@@ -152,7 +152,7 @@ class MultiRowsTextReader extends React.Component {
     return (
       <div className='issue-text-field'>
         { isEditable &&
-          <div className='edit-button' onClick={ () => { onEdit && onEdit() } }><i className='fa fa-pencil'></i></div> }
+          <div className='edit-button' onClick={ () => { onEdit && onEdit() } }><i className='fa fa-edit'></i></div> }
         <div
           onClick={ this.previewInlineImg.bind(this) }
           dangerouslySetInnerHTML={ { __html: html || '<span style="color: #909090">未设置</span>' } } />
