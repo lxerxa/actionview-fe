@@ -32,13 +32,13 @@ class CreateModal extends Component {
     const typeTmpOptions = [];
     if (!isFromWorkflow) {
       if (isSubtask) {
-        _.map(options.types || [], function(val) {
+        _.forEach(options.types || [], function(val) {
           if (val.type == 'subtask') {
             typeTmpOptions.push(val);
           }
         });
       } else {
-        _.map(options.types || [], function(val) {
+        _.forEach(options.types || [], function(val) {
           if (val.type != 'subtask') {
             typeTmpOptions.push(val);
           }
@@ -54,7 +54,7 @@ class CreateModal extends Component {
           schema = action.schema;
         }
       } else {
-        _.map(typeTmpOptions || [], function(val) {
+        _.forEach(typeTmpOptions || [], function(val) {
           if (!val.disabled || data.type == val.id) {
             typeOkOptions.push(val);
           }
@@ -63,7 +63,7 @@ class CreateModal extends Component {
         defaultIndex = _.findIndex(typeOkOptions, { id: data.type });
         schema = defaultIndex !== -1 ? typeOkOptions[defaultIndex].schema : [];
       }
-      _.map(schema, (v) => {
+      _.forEach(schema, (v) => {
         if (!_.isUndefined(data[v.key])) {
           if (v.key == 'assignee' && data[v.key].id) {
             oldValues[v.key] = values[v.key] = data[v.key].id; // assignee
@@ -98,7 +98,7 @@ class CreateModal extends Component {
       _.extend(values, { type: data.type });
       _.extend(oldValues, { type: data.type });
     } else {
-      _.map(typeTmpOptions || [], function(val) {
+      _.forEach(typeTmpOptions || [], function(val) {
         if (!val.disabled) {
           typeOkOptions.push(val);
         }
@@ -116,7 +116,7 @@ class CreateModal extends Component {
         originalValues['type'] = values['type'] = typeOkOptions[defaultIndex].id;
         schema = typeOkOptions[defaultIndex].schema;
       }
-      _.map(schema || [], (v) => {
+      _.forEach(schema || [], (v) => {
         if (v.defaultValue) {
           if (v.type === 'MultiSelect' && _.isArray(v.defaultValue)) {
             originalValues[v.key] = values[v.key] = v.defaultValue.join(',');
@@ -195,7 +195,7 @@ class CreateModal extends Component {
 
   getChangedKeys() {
     const diffKeys = [];
-    _.mapKeys(this.state.values, (val, key) => {
+    _.forEach(this.state.values, (val, key) => {
       if (_.isEmpty(this.state.oldValues[key]) && _.isEmpty(val)) {
         return;
       }
@@ -212,7 +212,7 @@ class CreateModal extends Component {
 
   getChangedKeysForOriginal() {
     const diffKeys = [];
-    _.mapKeys(this.state.values, (val, key) => {
+    _.forEach(this.state.values, (val, key) => {
       if (_.isEmpty(this.state.originalValues[key]) && _.isEmpty(val)) {
         return;
       }
@@ -256,7 +256,7 @@ class CreateModal extends Component {
     }
 
     let newLabels = [];
-    _.mapValues(submitData, (val, key) => {
+    _.forEach(submitData, (val, key) => {
       const index = _.findIndex(schema, { key });
       const field = index === -1 ? {} : schema[index];
       if (val) {
@@ -357,7 +357,7 @@ class CreateModal extends Component {
     }
 
     const errors = {}, values = {};
-    _.map(schema, (v) => {
+    _.forEach(schema, (v) => {
       if (this.state.errors[v.key]) {
         values[v.key] = '';
       } else if (!this.state.values[v.key] && v.defaultValue) {
@@ -391,7 +391,7 @@ class CreateModal extends Component {
 
     const { field = '', file = {} } = res.data;
     this.state.values[field] = this.state.values[field] || [];
-    this.state.values[field].push(file.id); 
+    this.state.values[field] = [ ...this.state.values[field], file.id ]; 
     localfile.field = field;
     localfile.fid = file.id; 
     if (field && this.state.errors[field]) {
@@ -428,7 +428,7 @@ class CreateModal extends Component {
     const tts = newtt.split(' ');
 
     let flag = true;
-    _.map(tts, (v) => {
+    _.forEach(tts, (v) => {
       if (v) {
         if (!_.endsWith(v.toLowerCase(), 'w') && !_.endsWith(v.toLowerCase(), 'd') && !_.endsWith(v.toLowerCase(), 'h') && !_.endsWith(v.toLowerCase(), 'm')) {
           flag = false;
