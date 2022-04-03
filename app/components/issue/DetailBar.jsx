@@ -1127,14 +1127,14 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px' } }>
-                      <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
-                        { selectedEpic.name ?
-                        <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px', float: 'left' } } title={ selectedEpic.name || '-' } >
-                          { selectedEpic.name }
-                        </span>
+                      { selectedEpic.name ?
+                        <Link to={ '/project/' + project.key + '/issue?epic=' + data.epic }>
+                          <span className='epic-title' style={ { borderColor: selectedEpic.bgColor, backgroundColor: selectedEpic.bgColor, maxWidth: '100%', marginRight: '5px', marginTop: '0px', float: 'left' } } title={ selectedEpic.name || '-' } >
+                            { selectedEpic.name }
+                          </span>
+                        </Link>
                         :
                         <span className='issue-contents-nosetting'>未设置</span> }
-                      </Link>
                     </div>
                   </Col>
                 </FormGroup>
