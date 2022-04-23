@@ -75,7 +75,7 @@ export default class Header extends Component {
               :
               <span className='default-set editable-field'>
                 <span style={ { paddingRight: '10px' } }>{ collection[defaultIndex] ? collection[defaultIndex].name : '无' }</span>
-                <Button className='edit-icon' onClick={ () => { this.setState({ defaultSetShow: true }); } }><i className='fa fa-pencil'></i></Button>
+                <Button className='edit-icon' onClick={ () => { this.setState({ defaultSetShow: true }); } }><i className='fa fa-edit'></i></Button>
               </span>
             }
           </div>

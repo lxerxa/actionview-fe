@@ -202,7 +202,7 @@ export default class List extends Component {
                 <span>
                   <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
                 </span> }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetUsers.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetUsers.bind(this, collection[i].id) }><i className='fa fa-edit'></i></span>
               </div>
             </div> 
             :
@@ -259,7 +259,7 @@ export default class List extends Component {
                 <span>
                   <div style={ { display: 'inline-block', margin: '3px 3px 6px 3px' } }>-</div>
                 </span> }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetGroups.bind(this, collection[i].id) }><i className='fa fa-pencil'></i></span>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetGroups.bind(this, collection[i].id) }><i className='fa fa-edit'></i></span>
               </div>
             </div> 
             :

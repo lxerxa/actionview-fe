@@ -361,7 +361,7 @@ export default class List extends Component {
                 :
                 '-' }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetPrincipal.bind(this, collection[i].id) }>
-                  <i className='fa fa-pencil'></i>
+                  <i className='fa fa-edit'></i>
                 </span>
               </div>
             </div>

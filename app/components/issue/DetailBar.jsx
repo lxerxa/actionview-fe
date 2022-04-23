@@ -915,7 +915,7 @@ export default class DetailBar extends Component {
                             { data['assignee'] && data['assignee'].name || '-' }
                           </div>
                         </span>
-                        <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-pencil'></i></span>
+                        <span className='edit-icon-zone edit-icon' onClick={ this.editAssignee.bind(this) }><i className='fa fa-edit'></i></span>
                       </div> 
                       : 
                       <div style={ { marginTop: '7px' } }>
@@ -1197,7 +1197,7 @@ export default class DetailBar extends Component {
                         <span 
                           className='edit-icon-zone edit-icon' 
                           onClick={ () => { editingItems['progress'] = true; newItemValues['progress'] = _.isNumber(data['progress']) ? (data['progress'] + '') : '';  this.setState({ editingItems, newItemValues }) } }>
-                          <i className='fa fa-pencil'></i>
+                          <i className='fa fa-edit'></i>
                         </span>
                       </div> 
                       : 

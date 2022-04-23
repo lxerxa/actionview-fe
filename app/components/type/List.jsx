@@ -251,7 +251,7 @@ export default class List extends Component {
                 </span> :
                 '-' }
                 <span className='edit-icon-zone edit-icon' onClick={ this.willSetScreen.bind(this, collection[i].id, i) }>
-                  <i className='fa fa-pencil'></i>
+                  <i className='fa fa-edit'></i>
                 </span>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default class List extends Component {
                   </div>
                 </span> :
                 '-' }
-                <span className='edit-icon-zone edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id, i) }><i className='fa fa-pencil'></i></span>
+                <span className='edit-icon-zone edit-icon' onClick={ this.willSetWorkflow.bind(this, collection[i].id, i) }><i className='fa fa-edit'></i></span>
               </div>
             </div>
             :
