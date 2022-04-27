@@ -186,6 +186,10 @@ export default class List extends Component {
           <TableHeaderColumn dataField='step' width='200'>步骤</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
+        { !indexLoading && collection.length > 0 &&
+          <div className='page-footer'>
+            <span>共计 { collection.length } 条。</span>
+          </div> }
         { this.state.editModalShow && 
           <EditModal 
             show 

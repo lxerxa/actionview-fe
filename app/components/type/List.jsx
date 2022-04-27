@@ -371,6 +371,10 @@ export default class List extends Component {
           <TableHeaderColumn width='100' dataField='status'>状态</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
+        { !indexLoading && collection.length > 0 &&
+          <div className='page-footer'>
+            <span>共计 { collection.length } 个。</span>
+          </div> }
         { this.state.editModalShow && 
           <EditModal 
             show 

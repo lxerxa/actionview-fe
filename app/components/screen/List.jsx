@@ -179,6 +179,10 @@ export default class List extends Component {
           <TableHeaderColumn dataField='workflow'>应用工作流</TableHeaderColumn>
           <TableHeaderColumn width='60' dataField='operation'/>
         </BootstrapTable>
+        { !indexLoading && collection.length > 0 &&
+          <div className='page-footer'>
+            <span>共计 { collection.length } 个。</span>
+          </div> }
         { this.state.previewModalShow && 
           <PreviewModal 
             show 
