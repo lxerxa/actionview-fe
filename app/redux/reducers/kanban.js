@@ -76,7 +76,7 @@ export default function kanban(state = initialState, action) {
       }
       return { ...state, configLoading: false, ecode: action.result.ecode };
 
-    case t.TYPE_DELETE_FAIL:
+    case t.KANBAN_DELETE_FAIL:
       return { ...state, configLoading: false, error: action.error };
 
     case t.KANBAN_BACKLOG_ISSUE_DRAG:
