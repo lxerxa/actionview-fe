@@ -215,6 +215,7 @@ export class IssueFilterList extends Component {
       { key: 'assignee', name: '负责人', type: 'MultiSelect', optionValues: userOptions },
       { key: 'resolver', name: '解决者', type: 'MultiSelect', optionValues: userOptions },
       { key: 'closer', name: '关闭者', type: 'MultiSelect', optionValues: userOptions },
+      { key: 'transactors', name: '经办者', type: 'MultiSelect', optionValues: userOptions },
       { key: 'watcher', name: '关注者', type: 'MultiSelect', optionValues: [ { id: 'me', name: '当前用户' } ] }
     ];
     const memberFilterSections = this.groupFields(_.reject(memberFields, (v) => notShowFields.indexOf(v.key) !== -1), columns || 3);
@@ -439,6 +440,7 @@ function _parseQuery(query, options) {
     { key: 'watcher', name : '关注者', type: 'MultiSelect', optionValues: userOptions },
     { key: 'resolver', name : '解决者', type: 'MultiSelect', optionValues: userOptions },
     { key: 'closer', name : '关闭者', type: 'MultiSelect', optionValues: userOptions },
+    { key: 'transactors', name : '经办者', type: 'MultiSelect', optionValues: userOptions },
     { key: 'created_at', name: '创建时间', type: 'DateTimePicker' },
     { key: 'updated_at', name : '更新时间', type: 'DateTimePicker' },
     { key: 'resolved_at', name : '解决时间', type: 'DateTimePicker' },

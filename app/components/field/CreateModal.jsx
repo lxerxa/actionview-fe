@@ -23,6 +23,7 @@ const validate = (values, props) => {
     'modifier',
     'resolver',
     'closer',
+    'transactors',
     'created_at', 
     'updated_at', 
     'resolved_at', 
