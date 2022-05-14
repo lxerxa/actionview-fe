@@ -149,5 +149,5 @@ export const LabelRGBs = [
   '#000000'
 ];
 
-export const DetailMinWidth = 600;
+export const DetailMinWidth = 660;
 export const DetailMaxWdith = 1000;

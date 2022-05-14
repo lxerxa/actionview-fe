@@ -29,6 +29,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import { getFileIconCss } from '../share/Funcs';
+import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 import { RichTextEditor, RichTextReader } from './RichText';
 import { MultiRowsTextEditor, MultiRowsTextReader } from './MultiRowsText';
 
@@ -601,7 +602,7 @@ export default class DetailBar extends Component {
 
     const { detailFloatStyle={}, layout } = this.props;
 
-    const width = _.min([ _.max([ layout.containerWidth / 2, 660 ]), 1000 ]);
+    const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
     const initialStyles = { width: width + 'px' };
     const animateStyles = {};
 
@@ -767,7 +768,7 @@ export default class DetailBar extends Component {
         <span style={ { paddingRight: '6px' } }>Git提交{ !itemLoading && '(' + (data.gitcommits_num > 99 ? '99+' : (data.gitcommits_num || 0)) + ')' }</span>
       </div>);
 
-    const width = _.min([ _.max([ layout.containerWidth / 2, 660 ]), 1000 ]) + 'px';
+    const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]) + 'px';
 
     return (
       <div 

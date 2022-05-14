@@ -213,9 +213,9 @@ export default class List extends Component {
   closeDetail() {
     const { detailFloatStyle={}, layout } = this.props;
 
-    const width = _.min([ _.max([ layout.containerWidth / 2, DetailMinWidth ]), DetailMaxWidth ]);
     const animateStyles = {};
     const left = parseInt($('.animate-dialog').css('left'));
+    const width = parseInt($('.animate-dialog').css('width'));
     if (left < layout.containerWidth - width - 10) {
       animateStyles.left = left - width;
     } else {
