@@ -18,7 +18,6 @@ const initialState = {
   loading: false, 
   itemLoading: false, 
   fileLoading: false, 
-  selectedItem: {}, 
   commentsCollection: [], 
   commentsSort: 'desc', 
   commentsIndexLoading: false, 
@@ -149,7 +148,17 @@ export default function issue(state = initialState, action) {
       return { ...state, loading: false, error: action.error };
 
     case t.ISSUE_SHOW:
-      return { ...state, itemLoading: true, linkLoading: false, detailFloatStyle: action.floatStyle || state.detailFloatStyle, itemData: { id: action.id }, commentsLoaded: false, historyLoaded: false, worklogLoaded: false, gitCommitsLoaded: false };
+      return { 
+        ...state, 
+        itemLoading: true, 
+        linkLoading: false, 
+        detailFloatStyle: action.floatStyle || state.detailFloatStyle, 
+        itemData: { id: action.id }, 
+        commentsLoaded: false, 
+        historyLoaded: false, 
+        worklogLoaded: false, 
+        gitCommitsLoaded: false 
+      };
 
     case t.ISSUE_SHOW_SUCCESS:
       if (action.result.ecode === 0) {
