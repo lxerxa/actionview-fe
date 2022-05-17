@@ -98,9 +98,21 @@ export default class ColumnItemCard extends Component {
   };
 
   render() {
-    const { column, options, isAllowedEdit, isDragging, connectDragSource, connectDropTarget, editColumn, delColumn } = this.props;
+    const { 
+      column, 
+      options, 
+      isAllowedEdit, 
+      isDragging, 
+      connectDragSource, 
+      connectDropTarget, 
+      editColumn, 
+      delColumn 
+    } = this.props;
+
     const opacity = isDragging ? 0 : 1;
     const styles = { float: 'right', cursor: 'pointer' };
+
+    const states = _.filter(column.states, (v) => _.findIndex(options.states, { id: v }) !== -1);
 
     return connectDragSource(connectDropTarget(
       <div style={ { opacity } } className='config-column'>
@@ -114,9 +126,11 @@ export default class ColumnItemCard extends Component {
           { isAllowedEdit && !!editColumn && <span style={ styles } onClick={ () => { editColumn(column.no) } } title='编辑' className='edit-icon'><i className='fa fa-edit'></i></span> }
         </div>
         <div>
-        { _.map(column.states, (v, i) => 
+        { _.map(states, (v, i) => 
           <div key={ i } className='config-column-card'>
-            { _.findIndex(options.states, { id: v }) !== -1 ? <span className={ 'state-' + _.find(options.states, { id : v }).category + '-label' }>{ _.find(options.states, { id : v }).name }</span> : '' }
+            <span className={ 'state-' + _.find(options.states, { id : v }).category + '-label' }>
+              { _.find(options.states, { id : v }).name }
+            </span>
           </div>) }
         </div>
       </div>
