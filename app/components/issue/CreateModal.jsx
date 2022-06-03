@@ -171,8 +171,8 @@ class CreateModal extends Component {
   componentDidMount(){
     const dom = findDOMNode(this.refs['createModal']);
     const rect = dom.getBoundingClientRect();
-    if (rect.height < 580) {
-      dom.style.overflow = 'auto';
+    if (rect.height < 580 - 1) {
+      dom.style.overflow = 'visible';
     }
   }
 
