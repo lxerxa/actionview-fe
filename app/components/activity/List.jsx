@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-// import { Link } from 'react-router';
+import { Link } from 'react-router';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem, Checkbox } from 'react-bootstrap';
 import { getAgoAt } from '../share/Funcs';
@@ -373,6 +373,12 @@ export default class List extends Component {
               { collection[i].data && collection[i].data.end_time && <li>结束时间 : { moment.unix(collection[i].data.end_time).format('YY/MM/DD') }</li> }
               { collection[i].data && collection[i].data.description && <li>描述 : { collection[i].data.description }</li> }
             </ul> */}
+            { collection[i].event_key == 'release_version' && <span>发布了版本 <span style={ collection[i].version.del_flag === 1 ? ltStyles : { fontWeight: 600 } }>{ collection[i].version.name }</span></span> }
+            { collection[i].event_key == 'create_wiki' && <span>创建了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }
+            { collection[i].event_key == 'edit_wiki' && <span>更新了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }
+            { collection[i].event_key == 'delete_wiki' && <span>删除了文档 <span style={ ltStyles }>{ collection[i].wiki.name }</span></span> }
+            { collection[i].event_key == 'start_sprint' && <span>启动了迭代 <span style={ { fontWeight: 600 } }>{ collection[i].sprint && collection[i].sprint.name }</span></span> }
+            { collection[i].event_key == 'complete_sprint' && <span>完成了迭代 <span style={ { fontWeight: 600 } }>{ collection[i].sprint && collection[i].sprint.name }</span></span> }
           </div>
         ),
         time: agoAt 
@@ -393,6 +399,10 @@ export default class List extends Component {
           <NavItem eventKey='all' href='#'>全部</NavItem>
           <NavItem eventKey='comments' href='#'>评论</NavItem>
           <NavItem eventKey='worklog' href='#'>工作日志</NavItem>
+          <NavItem eventKey='release_version' href='#'>版本</NavItem>
+          <NavItem eventKey='sprint' href='#'>迭代</NavItem>
+          <NavItem eventKey='project_file' href='#'>文件</NavItem>
+          <NavItem eventKey='wiki' href='#'>Wiki</NavItem>
         </Nav>
         <Button style={ { float: 'right' } } onClick={ this.refresh.bind(this) }><i className='fa fa-refresh'></i>&nbsp;刷新</Button>
         <span style={ { marginRight: '20px', float: 'right' } }>
