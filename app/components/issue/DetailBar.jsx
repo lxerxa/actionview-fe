@@ -853,11 +853,15 @@ export default class DetailBar extends Component {
                   </Col>
                   <Col sm={ 9 }>
                     <div style={ { marginTop: '7px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } }>
+                      { data.no + '-' + (data.title || '') }
+                      { data.parent && <br/> }
                       { data.parent && 
-                        <a href='#' onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>
-                          { data.parent.no + '-' + (data.parent.title || '') }
+                        <a 
+                          href='#' 
+                          style={ { fontSize: '12px' } } 
+                          onClick={ (e) => { e.preventDefault(); this.goTo(data.parent.id); } }>
+                          父:{ data.parent.no + '-' + (data.parent.title || '') }
                         </a> }
-                      { data.parent && ' / ' }{ data.no + '-' + (data.title || '') }
                     </div>
                   </Col>
                 </FormGroup>
