@@ -927,7 +927,7 @@ export default class DetailBar extends Component {
                         <span>{ data['assignee'] && data['assignee'].name || '-' }</span>
                       </div> }
                       { (!data['assignee'] || data['assignee'].id !== user.id) && this.isAllowable('assigned_issue') &&
-                      <span style={ { float: 'left', marginLeft: '5px' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span> }
+                      <span style={ { float: 'left', marginLeft: '5px', fontSize: '12px' } }><a href='#' onClick={ this.assignToMe.bind(this) }>分配给我</a></span> }
                     </div>
                     :
                     <div style={ { marginTop: '0px' } }>
