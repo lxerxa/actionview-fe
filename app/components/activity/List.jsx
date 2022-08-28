@@ -328,20 +328,20 @@ export default class List extends Component {
             { wfEventFlag && collection[i].event_key.indexOf('_') === -1 && <span>的</span> }
             { wfEventFlag &&
             <span>
-            { _.map(collection[i].data, (v, i) => {
-              if ( i === 0) {
-                return (<span>{ v.field + ' 更新为: ' + v.after_value }</span>);
-              } else {
-                return (<span>{ ', ' + v.field + ' 更新为: ' + v.after_value }</span>);
-              }
-            }) }
+              { _.map(collection[i].data, (v, i) => {
+                if ( i === 0) {
+                  return (<span>{ v.field + ' 更新为: ' + v.after_value }</span>);
+                } else {
+                  return (<span>{ ', ' + v.field + ' 更新为: ' + v.after_value }</span>);
+                }
+              }) }
             </span> }
             { collection[i].event_key == 'edit_issue' && <span>的 { collection[i].data.length } 个字段</span> }
             { collection[i].event_key == 'edit_issue' &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-            { _.map(collection[i].data, (v, i) => {
-              return (<li style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? _.escape(v.after_value).replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
-            }) }
+              { _.map(collection[i].data, (v, i) => {
+                return (<li style={ { whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } key={ i } dangerouslySetInnerHTML={ { __html: v.field + ': ' + (_.isString(v.after_value) ? _.escape(v.after_value).replace(/(\r\n)|(\n)/g, '<br/>') : v.after_value) } }/>);
+              }) }
             </ul> }
             { collection[i].event_key == 'assign_issue'    && <span>给 { collection[i].data.new_user && user.id === collection[i].data.new_user.id ? '我' : (collection[i].data.new_user.name || '') }</span> }
 
@@ -361,7 +361,7 @@ export default class List extends Component {
             { collection[i].event_key == 'del_worklog'    && <span> 删除了工作日志</span> }
             { collection[i].event_key.indexOf('worklog') !== -1 &&
             <ul className='list-unstyled clearfix' style={ { marginTop: '10px', marginBottom: '5px', fontSize: '12px' } }>
-              { collection[i].data && collection[i].data.started_at       && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>开始时间: { moment.unix(collection[i].data.started_at).format('YYYY/MM/DD') }</li> }
+              { collection[i].data && collection[i].data.started_at       && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>开始时间: { moment.unix(collection[i].data.started_at).format('YYYY/MM/DD HH:mm:ss') }</li> }
               { collection[i].data && collection[i].data.spend            && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>耗时: { collection[i].data.spend }</li> }
               { collection[i].data && collection[i].data.leave_estimate   && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间设置为: { collection[i].data.leave_estimate }</li> }
               { collection[i].data && collection[i].data.cut              && <li style={ collection[i].event_key == 'del_worklog' ? ltStyles : {} }>剩余时间缩减: { collection[i].data.cut }</li> }
