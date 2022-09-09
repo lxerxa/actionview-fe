@@ -10,7 +10,13 @@ export default function clientMiddleware(client) {
       const [ REQUEST, SUCCESS, FAILURE ] = types;
       next({ ...rest, type: REQUEST });
       return promise(client).then(
-        (result) => { if (result.ecode === -10001) { next({ type: SESSION_INVALIDATE }); } else { return next({ ...rest, result, type: SUCCESS }); } },
+        (result) => { 
+          if (result.ecode === -10001) { 
+            next({ type: SESSION_INVALIDATE }); 
+          } else { 
+            return next({ ...rest, result, type: SUCCESS }); 
+          } 
+        },
         (error) => next({ ...rest, error, type: FAILURE })
       );
     };

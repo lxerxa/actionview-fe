@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { TOKEN_KEY, getToken, saveToken }  from './jwt-token.jsx';
 
 const { API_BASENAME, BROWSER, PORT = 3000 } = process.env;
 
@@ -32,12 +33,20 @@ class ApiClient {
     // Copy cookies into headers on server side
     if (!BROWSER && this.cookie) config.headers = { cookie: this.cookie };
 
+    const token = getToken();
+    if (token) {
+      config.headers = { Authorization: `Bearer ${token}` };
+    }
+
     return config;
   }
 
   async request(config = {}) {
     try {
-      const { data } = await axios(this.getConfig(config));
+      const { data, headers } = await axios(this.getConfig(config));
+      if (headers['authorization']) {
+        saveToken(headers['authorization']);
+      }
       return data;
     } catch (error) {
       throw error && error.data || error.stack;
