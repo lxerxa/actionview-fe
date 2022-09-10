@@ -28,7 +28,7 @@ import Lightbox from 'react-image-lightbox';
 import Select from 'react-select';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
-import { getFileIconCss } from '../share/Funcs';
+import { getFileIconCss, urlWrapper } from '../share/Funcs';
 import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
 import { RichTextEditor, RichTextReader } from './RichText';
 import { MultiRowsTextEditor, MultiRowsTextReader } from './MultiRowsText';
@@ -59,8 +59,6 @@ const DelNotify = require('./DelNotify');
 const CopyModal = require('./CopyModal');
 const WatcherListModal = require('./WatcherListModal');
 const PeriodEditModal = require('../gantt/EditModal');
-
-const { API_BASENAME } = process.env;
 
 export default class DetailBar extends Component {
   constructor(props) {
@@ -529,9 +527,9 @@ export default class DetailBar extends Component {
     const { project } = this.props;
     return (
       <Lightbox
-        mainSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[photoIndex].id }
-        nextSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id }
-        prevSrc={ API_BASENAME + '/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id }
+        mainSrc={ urlWrapper('/project/' + project.key + '/file/' + imgFiles[photoIndex].id) }
+        nextSrc={ urlWrapper('/project/' + project.key + '/file/' + imgFiles[(photoIndex + 1) % imgFiles.length].id) }
+        prevSrc={ urlWrapper('/project/' + project.key + '/file/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id) }
         imageTitle={ imgFiles[photoIndex].name }
         imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + imgFiles[photoIndex].created_at }
         onCloseRequest={ () => { this.state.previewShow[field_key] = false; this.setState({ previewShow: this.state.previewShow }) } }
@@ -550,7 +548,7 @@ export default class DetailBar extends Component {
             id={ 'field-textarea-' + fieldKey }
             value={ txt || '' }
             placeholder={ '输入' + fieldName + (maxLength && maxLength > 0 ? ('(字数' + maxLength + '字之内)') : '') }
-            uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+            uploadUrl={ urlWrapper('/project/' + project.key + '/file') }
             onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/>
           <div className='edit-button-group'>
             <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) || (maxLength && maxLength > 0 && _.trim(newItemValues[fieldKey] || '').length > maxLength) }><i className='fa fa-check'></i></Button>
@@ -579,7 +577,7 @@ export default class DetailBar extends Component {
             id={ 'field-richeditor-' + fieldKey }
             value={ txt || '' }
             placeholder={ '输入' + fieldName + (maxLength && maxLength > 0 ? ('(字数' + maxLength + '字之内)') : '') }
-            uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+            uploadUrl={ urlWrapper('/project/' + project.key + '/file') }
             onChange={ (newValue) => { newItemValues[fieldKey] = newValue; this.setState({ newItemValues: this.state.newItemValues }) } }/> 
           <div className='edit-button-group'>
             <Button className='edit-ok-button' onClick={ this.setItemValue.bind(this, fieldKey, newItemValues[fieldKey]) } disabled={ _.isEqual(txt || '', newItemValues[fieldKey] || '') || (required && !newItemValues[fieldKey]) || (maxLength && maxLength > 0 && _.trim(newItemValues[fieldKey] || '').length > maxLength) }><i className='fa fa-check'></i></Button>
@@ -1035,7 +1033,7 @@ export default class DetailBar extends Component {
                   } else if (field.type === 'File') {
                     const componentConfig = {
                       showFiletypeIcon: true,
-                      postUrl: API_BASENAME + '/project/' + project.key + '/file?issue_id=' + data.id 
+                      postUrl: urlWrapper('/project/' + project.key + '/file?issue_id=' + data.id) 
                     };
                     const djsConfig = {
                       parallelUploads: 1,
@@ -1060,7 +1058,7 @@ export default class DetailBar extends Component {
                                 <td>
                                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span> 
                                   { this.isAllowable('download_file') ? 
-                                    <a target='_blank' href={ API_BASENAME + '/project/' + project.key + '/file/' + f.id + (f.type == 'application/pdf' ? ('/' + f.name) : '') } download={ f.type == 'application/pdf' ? false : f.name }>{ f.name }</a> :
+                                    <a target='_blank' href={ urlWrapper('/project/' + project.key + '/file/' + f.id + (f.type == 'application/pdf' ? ('/' + f.name) : '')) } download={ f.type == 'application/pdf' ? false : f.name }>{ f.name }</a> :
                                     <span>{ f.name }</span> }
                                 </td>
                                 { (this.isAllowable('remove_file') || this.isAllowable('remove_self_file', f.uploader && f.uploader.id || '')) && 
@@ -1080,7 +1078,7 @@ export default class DetailBar extends Component {
                             <Col sm={ 6 } key={ i }>
                               <div className='attachment-content'>
                                 <div className='attachment-thumb' onClick={ this.openPreview.bind(this, i, field.key) }>
-                                  <img src={ API_BASENAME + '/project/' + project.key + '/file/' + f.id + '/thumbnail' }/>
+                                  <img src={ urlWrapper('/project/' + project.key + '/file/' + f.id + '/thumbnail') }/>
                                 </div>
                                 <div className='attachment-title-container'>
                                    <div className='attachment-title' title={ f.name }>{ f.name }</div>

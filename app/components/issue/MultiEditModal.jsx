@@ -9,8 +9,7 @@ import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 import { RichTextEditor } from './RichText';
 import { MultiRowsTextEditor } from './MultiRowsText';
-
-const { API_BASENAME } = process.env;
+import { urlWrapper } from '../share/Funcs';
 
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
@@ -349,7 +348,7 @@ export default class MultiEditModal extends Component {
                         value={ this.state.values[v.key] || '' }
                         onChange={ (newValue) => { this.onChange(newValue, v); } }
                         onBlur={ () => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                        uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                        uploadUrl={ urlWrapper('/project/' + project.key + '/file') }
                         style={ { height: '180px' } }
                         placeholder={ this.getPlaceholder(v) } />
                     </Col>
@@ -369,7 +368,7 @@ export default class MultiEditModal extends Component {
                         value={ this.state.values[v.key] || '' }
                         disabled={ loading }
                         placeholder={ this.getPlaceholder(v) }
-                        uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                        uploadUrl={ urlWrapper('/project/' + project.key + '/file') }
                         onBlur={ (newValue) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                         onChange={ (newValue) => { this.onChange(newValue, v); } }/>
                     </Col>

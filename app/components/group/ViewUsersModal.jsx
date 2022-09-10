@@ -1,10 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button, Table } from 'react-bootstrap';
 import _ from 'lodash';
+import { urlWrapper } from '../share/Funcs';
 
 const no_avatar = require('../../assets/images/no_avatar.png');
-
-const { API_BASENAME } = process.env;
 
 export default class UserListModal extends Component {
   constructor(props) {
@@ -42,7 +41,7 @@ export default class UserListModal extends Component {
             <div className='grid-view-container'>
               { _.map(users, (v, key) => {
                 return (<div key={ key } className='grid-view-item'>
-                 <img src={ v.avatar ? API_BASENAME + '/getavatar?fid=' + v.avatar : no_avatar } className='middle-avatar'i/>
+                 <img src={ v.avatar ? urlWrapper('/getavatar?fid=' + v.avatar) : no_avatar } className='middle-avatar'i/>
                    <div className='grid-view-item-name'>{ v.first_name }</div>
                 </div>); }) }
             </div>

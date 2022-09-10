@@ -2,11 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button, FormControl } from 'react-bootstrap';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { urlWrapper } from '../../share/Funcs';
 
 const $ = require('$');
 const img = require('../../../assets/images/loading.gif');
-
-const { API_BASENAME } = process.env;
 
 export default class EditCommentsModal extends Component {
   constructor(props) {
@@ -98,7 +97,7 @@ export default class EditCommentsModal extends Component {
       $(function() {
         $('.edit-comments-inputor textarea').inlineattachment({
           allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: API_BASENAME + '/project/' + project.key + '/file',
+          uploadUrl: urlWrapper('/project/' + project.key + '/file'),
           onFileUploaded: (editor, filename) => {
             self.setState({ contents: editor.getValue() });
           },

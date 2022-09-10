@@ -5,10 +5,9 @@ import { RadioGroup, Radio } from 'react-radio-group';
 import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { urlWrapper } from '../share/Funcs';
 
 const img = require('../../assets/images/loading.gif');
-
-const { API_BASENAME } = process.env;
 
 export default class ImportModal extends Component {
   constructor(props) {
@@ -59,7 +58,7 @@ export default class ImportModal extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: API_BASENAME + '/tmpfile'
+      postUrl: urlWrapper('/tmpfile')
     };
     const djsConfig = {
       dictDefaultMessage: '点击或拖拽文件至此',

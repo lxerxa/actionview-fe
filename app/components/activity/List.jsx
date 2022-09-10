@@ -5,6 +5,7 @@ import { Button, Label, DropdownButton, MenuItem, ButtonGroup, Nav, NavItem, Che
 import { getAgoAt } from '../share/Funcs';
 import _ from 'lodash';
 import { DetailMinWidth, DetailMaxWidth } from '../share/Constants';
+import { urlWrapper } from '../share/Funcs';
 
 const $ = require('$');
 const moment = require('moment');
@@ -12,8 +13,6 @@ const BackTop = require('../share/BackTop');
 const Avatar = require('../share/Avatar');
 const img = require('../../assets/images/loading.gif');
 const DetailBar = require('../issue/DetailBar');
-
-const { API_BASENAME } = process.env;
 
 export default class List extends Component {
   constructor(props) {
@@ -374,7 +373,7 @@ export default class List extends Component {
               { collection[i].data && collection[i].data.description && <li>描述 : { collection[i].data.description }</li> }
             </ul> */}
             { (collection[i].event_key == 'release_version' || collection[i].event_key == 'create_release_version') && <span>发布了版本 <span style={ collection[i].version.del_flag === 1 ? ltStyles : { fontWeight: 600 } }>{ collection[i].version.name }</span></span> }
-            { collection[i].event_key == 'upload_document' && <span>上传了文件 <span style={ collection[i].document.del_flag === 1 ? ltStyles : {} }>{ collection[i].document.del_flag === 1 ? collection[i].document.name : <a target='_blank' href={ API_BASENAME + '/project/' + project.key + '/document/' + collection[i].document.id + '/download' }>{ collection[i].document.name }</a> }</span></span> }
+            { collection[i].event_key == 'upload_document' && <span>上传了文件 <span style={ collection[i].document.del_flag === 1 ? ltStyles : {} }>{ collection[i].document.del_flag === 1 ? collection[i].document.name : <a target='_blank' href={ urlWrapper('/project/' + project.key + '/document/' + collection[i].document.id + '/download') }>{ collection[i].document.name }</a> }</span></span> }
             { collection[i].event_key == 'delete_document' && <span>删除了{ collection[i].document.d == 1 ? '文件目录' : '文件' } <span style={ ltStyles }>{ collection[i].document.name }</span></span> }
             { collection[i].event_key == 'create_wiki' && <span>创建了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }
             { collection[i].event_key == 'edit_wiki' && <span>更新了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }

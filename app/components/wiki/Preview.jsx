@@ -6,7 +6,7 @@ import DropzoneComponent from 'react-dropzone-component';
 import _ from 'lodash';
 import Lightbox from 'react-image-lightbox';
 import { notify } from 'react-notify-toast';
-import { getFileIconCss } from '../share/Funcs';
+import { getFileIconCss, urlWrapper } from '../share/Funcs';
 
 const history = createHistory();
 const moment = require('moment');
@@ -18,8 +18,6 @@ const CheckoutNotify = require('./CheckoutNotify');
 const DelFileModal = require('./DelFileModal');
 const EditModal = require('./EditModal');
 const VersionView = require('./VersionView');
-
-const { API_BASENAME } = process.env;
 
 export default class Preview extends Component {
   constructor(props) {
@@ -172,7 +170,7 @@ export default class Preview extends Component {
 
   downloadAll() {
     const { project, wid } = this.props;
-    const url = API_BASENAME + '/project/' + project.key + '/wiki/' + wid + '/download';
+    const url = urlWrapper('/project/' + project.key + '/wiki/' + wid + '/download');
     window.open(url, '_blank');
   }
 
@@ -276,7 +274,7 @@ export default class Preview extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: API_BASENAME + '/project/' + project.key + '/wiki/' + item.id + '/upload'
+      postUrl: urlWrapper('/project/' + project.key + '/wiki/' + item.id + '/upload')
     };
     const djsConfig = {
       dictDefaultMessage: '点击或拖拽文件至此',
@@ -398,7 +396,7 @@ export default class Preview extends Component {
               <tr key={ i }>
                 <td>
                   <span style={ { marginRight: '5px', color: '#777' } }><i className={ getFileIconCss(f.name) }></i></span>
-                  <a href={ API_BASENAME + '/project/' + project.key + '/wiki/' + wid +'/file/' + f.id + '/download' } download={ f.name }>{ f.name }</a>
+                  <a href={ urlWrapper('/project/' + project.key + '/wiki/' + wid +'/file/' + f.id + '/download') } download={ f.name }>{ f.name }</a>
                  </td>
                  <td width='10%'>
                    <div style={ { whiteSpace: 'nowrap' } }>{ f.uploader.name + '  ' + moment.unix(f.uploaded_at).format('YYYY/MM/DD HH:mm') }</div>

@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { urlWrapper } from './Funcs';
 
 const no_avatar = require('../../assets/images/no_avatar.png');
-
-const { API_BASENAME } = process.env;
 
 const bgColors = [
   '#815b3a',
@@ -47,7 +46,7 @@ export default class Avatar extends Component {
     if (data.avatar) {
       return (
         <div title={ data.name || '' }>
-          <img src={ API_BASENAME + '/getavatar?fid=' + data.avatar } className='default-avatar' style={ brStyle }/> 
+          <img src={ urlWrapper('/getavatar?fid=' + data.avatar) } className='default-avatar' style={ brStyle }/> 
         </div>
       );
     }

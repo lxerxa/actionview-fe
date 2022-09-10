@@ -11,12 +11,11 @@ import { notify } from 'react-notify-toast';
 import { findDOMNode } from 'react-dom';
 import { RichTextEditor } from './RichText';
 import { MultiRowsTextEditor } from './MultiRowsText';
+import { urlWrapper } from '../share/Funcs';
 
 const $ = require('$');
 const moment = require('moment');
 const img = require('../../assets/images/loading.gif');
-
-const { API_BASENAME } = process.env;
 
 class CreateModal extends Component {
   constructor(props) {
@@ -672,7 +671,7 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] || '' }
                       disabled={ loading }
                       placeholder={ this.getPlaceholder(v) }
-                      uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                      uploadUrl={ urlWrapper('/project/' + project.key + '/file') }
                       onBlur={ (newValue) => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
                       onChange={ (newValue) => { this.onChange(newValue, v); } }/>
                   </Col>
@@ -691,7 +690,7 @@ class CreateModal extends Component {
                       value={ this.state.values[v.key] || '' }
                       onChange={ (newValue) => { this.onChange(newValue, v); } }
                       onBlur={ () => { this.state.touched[v.key] = true; this.setState({ touched: this.state.touched }); } }
-                      uploadUrl={ API_BASENAME + '/project/' + project.key + '/file' }
+                      uploadUrl={ urlWrapper('/project/' + project.key + '/file') }
                       style={ { height: '180px' } }
                       placeholder={ this.getPlaceholder(v) } />
                   </Col>
@@ -797,7 +796,7 @@ class CreateModal extends Component {
               } else if (v.type === 'File' && options.permissions && options.permissions.indexOf('upload_file') !== -1) {
                 const componentConfig = {
                   showFiletypeIcon: true,
-                  postUrl: API_BASENAME + '/project/' + project.key + '/file'
+                  postUrl: urlWrapper('/project/' + project.key + '/file')
                 };
                 const djsConfig = {
                   dictDefaultMessage: '点击或拖拽文件至此',

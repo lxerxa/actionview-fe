@@ -10,8 +10,6 @@ const moment = require('moment');
 const $ = require('$');
 const Avatar = require('../share/Avatar');
 
-const { API_BASENAME } = process.env;
-
 const cardSource = {
   beginDrag(props) {
     props.closeDetail();

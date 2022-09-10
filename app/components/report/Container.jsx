@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import * as ReportActions from 'redux/actions/ReportActions';
+import { urlWrapper } from '../share/Funcs';
 
 const qs = require('qs');
 const List = require('./List');
@@ -11,8 +11,6 @@ const Worklog = require('./worklog/Worklog');
 const Trend = require('./trend/Trend');
 const TimeTracks = require('./timetracks/TimeTracks');
 const Regressions = require('./regressions/Regressions');
-
-const { API_BASENAME } = process.env;
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -96,7 +94,7 @@ export default class Container extends Component {
   exportWorklog(query) {
     const eleLink = document.createElement('a');
     eleLink.style.display = 'none';
-    eleLink.href = API_BASENAME + '/project/' + this.pid + '/report/worklog/export?' + qs.stringify(query || {});
+    eleLink.href = urlWrapper('/project/' + this.pid + '/report/worklog/export?' + qs.stringify(query || {}));
     eleLink.target = '_blank';
     // 触发点击
     document.body.appendChild(eleLink);

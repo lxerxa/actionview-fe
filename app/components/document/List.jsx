@@ -6,7 +6,7 @@ import DropzoneComponent from 'react-dropzone-component';
 import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
-import { getFileIconCss } from '../share/Funcs';
+import { getFileIconCss, urlWrapper } from '../share/Funcs';
 
 const $ = require('$');
 const moment = require('moment');
@@ -16,8 +16,6 @@ const MoveModal = require('./MoveModal');
 const EditRow = require('./EditRow');
 const BackTop = require('../share/BackTop');
 const img = require('../../assets/images/loading.gif');
-
-const { API_BASENAME } = process.env;
 
 export default class List extends Component {
   constructor(props) {
@@ -119,7 +117,7 @@ export default class List extends Component {
     } else if (eventKey === 'del') {
       this.setState({ delNotifyShow: true });
     } else if (eventKey === 'download') {
-      const url = API_BASENAME + '/project/' + project.key + '/document/' + hoverRowId + '/download';
+      const url = urlWrapper('/project/' + project.key + '/document/' + hoverRowId + '/download');
       window.open(url, '_blank');
     } else if (eventKey === 'favorite') {
       this.favorite();
@@ -128,7 +126,7 @@ export default class List extends Component {
 
   downloadAll() {
     const { project, directory } = this.props;
-    const url = API_BASENAME + '/project/' + project.key + '/document/' + directory + '/download';
+    const url = urlWrapper('/project/' + project.key + '/document/' + directory + '/download');
     window.open(url, '_blank');
   }
 
@@ -202,7 +200,7 @@ export default class List extends Component {
 
     const componentConfig = {
       showFiletypeIcon: true,
-      postUrl: API_BASENAME + '/project/' + project.key + '/document/' + (directory ? (directory + '/') : '') + 'upload'
+      postUrl: urlWrapper('/project/' + project.key + '/document/' + (directory ? (directory + '/') : '') + 'upload')
     };
     const djsConfig = {
       dictDefaultMessage: '点击或拖拽文件至此',
@@ -329,7 +327,7 @@ export default class List extends Component {
           <div> 
             <span style={ { marginRight: '5px', color: '#777', float: 'left' } }><i className={ iconCss }></i></span>
             { _.findIndex(imgFiles, { id: files[i].id }) === -1 ?
-              <a target='_blank' href={ API_BASENAME + '/project/' + project.key + '/document/' + files[i].id + '/download' + (files[i].type == 'application/pdf' ? ('/' + files[i].name) : '') } download={ files[i].type == 'application/pdf' ? false : files[i].name } style={ { cursor: 'pointer' } }>
+              <a target='_blank' href={ urlWrapper('/project/' + project.key + '/document/' + files[i].id + '/download' + (files[i].type == 'application/pdf' ? ('/' + files[i].name) : '')) } download={ files[i].type == 'application/pdf' ? false : files[i].name } style={ { cursor: 'pointer' } }>
                 { files[i].name }
               </a>
               :
@@ -396,9 +394,9 @@ export default class List extends Component {
 
         { imgPreviewShow &&
           <Lightbox
-            mainSrc={ API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[photoIndex].id + '/download' }
-            nextSrc={  API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download' }
-            prevSrc={  API_BASENAME + '/project/' + project.key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/download' }
+            mainSrc={ urlWrapper('/project/' + project.key + '/document/' + imgFiles[photoIndex].id + '/download') }
+            nextSrc={ urlWrapper('/project/' + project.key + '/document/' + imgFiles[(photoIndex + 1) % imgFiles.length].id + '/download') }
+            prevSrc={ urlWrapper('/project/' + project.key + '/document/' + imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length].id + '/download') }
             imageTitle={ imgFiles[photoIndex].name }
             imageCaption={ imgFiles[photoIndex].uploader.name + ' 上传于 ' + moment.unix(imgFiles[photoIndex].uploaded_at).format('YYYY/MM/DD HH:mm') }
             onCloseRequest={ () => { this.setState({ imgPreviewShow: false }) } }

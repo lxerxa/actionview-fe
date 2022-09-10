@@ -5,14 +5,13 @@ import { Button, Label, Nav, NavItem } from 'react-bootstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
+import { urlWrapper } from '../../share/Funcs';
 
 const no_avatar = require('../../../assets/images/no_avatar.png');
 const img = require('../../../assets/images/loading.gif');
 const AvatarEditModal = require('./AvatarEditModal');
 const EditModal = require('./EditModal');
 const ResetPwdModal = require('./ResetPwdModal');
-
-const { API_BASENAME } = process.env;
 
 export default class List extends Component {
   constructor(props) {
@@ -164,7 +163,7 @@ export default class List extends Component {
       ),
       contents: (
         <div style={ styles }>
-          <img src={ accounts.avatar ? API_BASENAME + '/getavatar?fid=' + accounts.avatar : no_avatar } className='big-avatar'/>
+          <img src={ accounts.avatar ? urlWrapper('/getavatar?fid=' + accounts.avatar) : no_avatar } className='big-avatar'/>
           <Button style={ { marginLeft: '15px' } } onClick={ () => { this.setState({ avatarEditModalShow: true }) } }>设置头像</Button>
         </div>
       )

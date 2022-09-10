@@ -4,7 +4,7 @@ import { Button, Form, FormControl, FormGroup, Col, Panel, Checkbox } from 'reac
 import Lightbox from 'react-image-lightbox';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
-import { getAgoAt } from '../../share/Funcs';
+import { getAgoAt, urlWrapper } from '../../share/Funcs';
 
 const $ = require('$');
 const img = require('../../../assets/images/loading.gif');
@@ -12,8 +12,6 @@ const moment = require('moment');
 const DelCommentsModal = require('./DelCommentsModal');
 const DelReplyModal = require('./DelReplyModal');
 const EditCommentsModal = require('./EditCommentsModal');
-
-const { API_BASENAME } = process.env;
 
 export default class Comments extends Component {
   constructor(props) {
@@ -117,7 +115,7 @@ export default class Comments extends Component {
       $(function() {
         $('.comments-inputor textarea').inlineattachment({
           allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-          uploadUrl: API_BASENAME + '/project/' + project.key + '/file',
+          uploadUrl: urlWrapper('/project/' + project.key + '/file'),
           onFileUploaded: (editor, filename) => {
             self.setState({ contents: editor.getValue() });
           },

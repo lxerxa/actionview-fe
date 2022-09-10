@@ -1,5 +1,10 @@
 import _ from 'lodash';
+import { getToken } from '../../../shared/jwt-token';
+
+const qs = require('qs');
 const moment = require('moment');
+
+const { API_BASENAME } = process.env;
 
 export function getAgoAt(stamptime, current_time) {
 
@@ -103,4 +108,35 @@ export function ttFormat(value, w2m, d2m) {
     newTT.push('0m');
   }
   return (direct < 0 ? '-' : '') + newTT.join(' ');
+}
+
+export function urlWrapper(url) {
+  if (url.indexOf('http') === 0) {
+    return url;
+  }
+
+  let newUrl = '';
+  if (url.indexOf(API_BASENAME) === 0) {
+    newUrl = url;
+  } else {
+    newUrl = API_BASENAME + url;
+  } 
+
+  const token = getToken();
+  if (!token) {
+    return newUrl;
+  }
+
+  const pos = newUrl.indexOf('?');
+  if (pos === -1) {
+    return newUrl + '?token=' + token;
+  }
+
+  const pathname = newUrl.substr(0, pos);
+  const queries = qs.parse(newUrl.substr(pos + 1));
+  if (!queries.token) {
+    queries.token = token;
+  }
+
+  return pathname + '?' + qs.stringify(queries); 
 }

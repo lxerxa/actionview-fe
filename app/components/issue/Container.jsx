@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import { urlWrapper } from '../share/Funcs';
 
 import * as IssueActions from 'redux/actions/IssueActions';
 import * as WorkflowActions from 'redux/actions/WorkflowActions';
@@ -11,8 +12,6 @@ const $ = require('$');
 const qs = require('qs');
 const Header = require('./Header');
 const List = require('./List');
-
-const { API_BASENAME } = process.env;
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -77,7 +76,7 @@ export default class Container extends Component {
 
     const eleLink = document.createElement('a');
     eleLink.style.display = 'none';
-    eleLink.href = API_BASENAME + '/project/' + this.pid + '/issue?' + qs.stringify(newQuery || {});
+    eleLink.href = urlWrapper('/project/' + this.pid + '/issue?' + qs.stringify(newQuery || {}));
     eleLink.target = '_blank';
     // 触发点击
     document.body.appendChild(eleLink);

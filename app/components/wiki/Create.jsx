@@ -2,14 +2,13 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Form, InputGroup, Button, ControlLabel, FormControl, FormGroup, Checkbox } from 'react-bootstrap';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
+import { urlWrapper } from '../share/Funcs';
 
 const inlineAttachment = require('inlineAttachment2');
 const SimpleMDE = require('SimpleMDE');
 const img = require('../../assets/images/loading.gif');
 
 let simplemde = null;
-
-const { API_BASENAME } = process.env;
 
 export default class Create extends Component {
   constructor(props) {
@@ -90,7 +89,7 @@ export default class Create extends Component {
 
       const inlineAttachmentConfig = {
         allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-        uploadUrl: API_BASENAME + '/project/' + project.key + '/file'
+        uploadUrl: urlWrapper('/project/' + project.key + '/file')
       };
       inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, inlineAttachmentConfig); 
     }
