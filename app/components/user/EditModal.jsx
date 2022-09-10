@@ -18,9 +18,9 @@ const validate = (values, props) => {
     errors.email = '格式有误';
   } 
 
-  if (values.phone) {
-    if (!/^1(3|4|5|7|8)\d{9}$/.test(values.phone)) {
-      errors.phone = '格式有误';
+  if (values.mobile) {
+    if (!/^1(3|4|5|7|8)\d{9}$/.test(values.mobile)) {
+      errors.mobile = '格式有误';
     }
   }
   return errors;
@@ -28,7 +28,7 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'user',
-  fields: [ 'id', 'first_name', 'email', 'phone' ],
+  fields: [ 'id', 'first_name', 'email', 'mobile' ],
   validate
 })
 export default class EditModal extends Component {
@@ -81,7 +81,7 @@ export default class EditModal extends Component {
   }
 
   render() {
-    const { i18n: { errMsg }, fields: { id, first_name, email, phone }, dirty, handleSubmit, invalid, submitting } = this.props;
+    const { i18n: { errMsg }, fields: { id, first_name, email, mobile }, dirty, handleSubmit, invalid, submitting } = this.props;
 
     return (
       <Modal show onHide={ this.handleCancel } backdrop='static' aria-labelledby='contained-modal-title-sm'>
@@ -101,10 +101,10 @@ export default class EditModal extends Component {
             <FormControl disabled={ submitting } type='text' { ...email } placeholder='Email'/>
             { email.touched && email.error && <HelpBlock style={ { float: 'right' } }>{ email.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ phone.touched && phone.error ? 'error' : null }>
+          <FormGroup controlId='formControlsText' validationState={ mobile.touched && mobile.error ? 'error' : null }>
             <ControlLabel>手机</ControlLabel>
-            <FormControl disabled={ submitting } type='text' { ...phone } placeholder='手机号'/>
-            { phone.touched && phone.error && <HelpBlock style={ { float: 'right' } }>{ phone.error }</HelpBlock> }
+            <FormControl disabled={ submitting } type='text' { ...mobile } placeholder='手机号'/>
+            { mobile.touched && mobile.error && <HelpBlock style={ { float: 'right' } }>{ mobile.error }</HelpBlock> }
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>

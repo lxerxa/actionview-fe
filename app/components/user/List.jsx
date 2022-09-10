@@ -268,7 +268,7 @@ export default class List extends Component {
             { collection[i].status === 'invalid' &&  <Label bsStyle='danger'>已禁用</Label> }
           </span>),
         email: collection[i].email || '-',
-        phone: collection[i].phone || '-',
+        mobile: collection[i].mobile || '-',
         groups: (
           <ul style={ { marginBottom: '0px', paddingLeft: '0px', listStyle: 'none' } }>
             { _.isEmpty(collection[i].groups) ? '-' : _.map(collection[i].groups, function(v, i) { return (<li key={ i }>{ v }</li>) }) }

@@ -219,7 +219,7 @@ export default class List extends Component {
     });
 
     accountItems.push({
-      id: 'phone',
+      id: 'mobile',
       title: (
         <div>
           <span className='table-td-title'>绑定手机号</span>
@@ -228,9 +228,9 @@ export default class List extends Component {
       ),
       contents: (
         <div style={ styles }>
-          <div>当前手机号为：{ accounts.phone || '未设置' }</div>
+          <div>当前手机号为：{ accounts.mobile || '未设置' }</div>
           <div style={ { marginTop: '10px' } }>
-            <Button style={ { marginLeft: '15px' } } onClick={ () => { notify.show('暂不支持此功能。', 'warning', 2000); } }>{ accounts.phone && '修改' }绑定手机号</Button>
+            <Button style={ { marginLeft: '15px' } } onClick={ () => { notify.show('暂不支持此功能。', 'warning', 2000); } }>{ accounts.mobile && '修改' }绑定手机号</Button>
           </div>
         </div>
       )

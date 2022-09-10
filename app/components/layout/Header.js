@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropdownButton, MenuItem, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import { urlWrapper } from '../share/Funcs';
+import { removeToken } from '../../../shared/jwt-token';
 
 const About = require('./AboutModal');
 const logo = require('../../assets/images/brand.png');
@@ -67,6 +68,7 @@ export default class Header extends Component {
       this.setState({ aboutShow: true });
     } else if (eventKey === 'logout') {
       logout();
+      removeToken();
     }
   }
 
