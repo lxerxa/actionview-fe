@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 import { notify } from 'react-notify-toast';
 import Lightbox from 'react-image-lightbox';
-import { appendToken } from '../share/Funcs';
+import { urlWrapper } from '../share/Funcs';
 
 const inlineAttachment = require('inlineAttachment2');
 const SimpleMDE = require('SimpleMDE');
@@ -127,7 +127,7 @@ class RichTextReader extends React.Component {
           if (!imgurl) {
             return;
           }
-          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : appendToken(imgurl + '/thumbnail')) + '"/>');
+          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : urlWrapper(imgurl + '/thumbnail')) + '"/>');
           imgFiles.push(imgurl);
         }
       });
@@ -178,9 +178,9 @@ class RichTextReader extends React.Component {
           dangerouslySetInnerHTML={ { __html: html || '<span style="color: #909090">未设置</span>' } } />
         { inlinePreviewShow &&
           <Lightbox
-            mainSrc={ appendToken(imgFiles[photoIndex]) }
-            nextSrc={ appendToken(imgFiles[(photoIndex + 1) % imgFiles.length]) }
-            prevSrc={ appendToken(imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length]) }
+            mainSrc={ urlWrapper(imgFiles[photoIndex]) }
+            nextSrc={ urlWrapper(imgFiles[(photoIndex + 1) % imgFiles.length]) }
+            prevSrc={ urlWrapper(imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length]) }
             imageTitle=''
             imageCaption=''
             onCloseRequest={ () => { this.setState({ inlinePreviewShow: false }) } }

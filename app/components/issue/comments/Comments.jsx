@@ -139,7 +139,7 @@ export default class Comments extends Component {
             return;
           }
           const alt = RegExp.$1 || '';
-          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + cid + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
+          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + cid + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : urlWrapper(imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
           imgFileUrls.push(imgurl);
         }
       });
@@ -165,9 +165,9 @@ export default class Comments extends Component {
   createLightbox(cid, imgFiles, photoIndex) {
     return (
       <Lightbox
-        mainSrc={ imgFiles[photoIndex] }
-        nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
-        prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+        mainSrc={ urlWrapper(imgFiles[photoIndex]) }
+        nextSrc={ urlWrapper(imgFiles[(photoIndex + 1) % imgFiles.length]) }
+        prevSrc={ urlWrapper(imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length]) }
         imageTitle=''
         imageCaption=''
         onCloseRequest={ () => { this.state.inlinePreviewShow[cid] = false; this.setState({ inlinePreviewShow: this.state.inlinePreviewShow }) } }
