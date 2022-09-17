@@ -1224,84 +1224,6 @@ export default class DetailBar extends Component {
                   </Col>
                 </FormGroup>
 
-                <div className='issue-contents-diviver'>
-                  <span className='issue-contents-diviver-title'>
-                    人员时间 
-                  </span>
-                </div>
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    创建者
-                  </Col>
-                  <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>
-                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
-                    </div>
-                  </Col>
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
-                    创建时间
-                  </Col>
-                  <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
-                    </div>
-                  </Col>
-                </FormGroup>
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    更新者
-                  </Col>
-                  <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>
-                      <span>{ data['modifier'] ? data['modifier'].name : (data['reporter'] && data['reporter'].name || '-') }</span>
-                    </div>
-                  </Col>
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
-                    更新时间
-                  </Col>
-                  <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : (data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-') }
-                    </div>
-                  </Col>
-                </FormGroup>
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    解决者
-                  </Col>
-                  <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>
-                      <span>{ data['resolver'] && data['resolver'].name || '-' }</span>
-                    </div>
-                  </Col>
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
-                    解决时间
-                  </Col>
-                  <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { data.resolved_at ? moment.unix(data.resolved_at).format('YYYY/MM/DD HH:mm') : '-' }
-                    </div>
-                  </Col>
-                </FormGroup>
-                <FormGroup>
-                  <Col sm={ 3 } componentClass={ ControlLabel }>
-                    关闭者
-                  </Col>
-                  <Col sm={ 3 }>
-                    <div style={ { marginTop: '7px' } }>
-                      <span>{ data['closer'] && data['closer'].name || '-' }</span>
-                    </div>
-                  </Col>
-                  <Col sm={ 2 } componentClass={ ControlLabel }>
-                    关闭时间
-                  </Col>
-                  <Col sm={ 4 }>
-                    <div style={ { marginTop: '7px' } }>
-                      { data.closed_at ? moment.unix(data.closed_at).format('YYYY/MM/DD HH:mm') : '-' }
-                    </div>
-                  </Col>
-                </FormGroup>
-
                 { !data.parent_id &&
                 <div className='issue-contents-diviver'>
                   <div className='issue-contents-diviver-title'>
@@ -1445,6 +1367,85 @@ export default class DetailBar extends Component {
                     </Table>
                   </Col>
                 </FormGroup> }
+
+                <div className='issue-contents-diviver'>
+                  <span className='issue-contents-diviver-title'>
+                    人员时间 
+                  </span>
+                </div>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    创建者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['reporter'] && data['reporter'].name || '-' }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    创建时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    更新者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['modifier'] ? data['modifier'].name : (data['reporter'] && data['reporter'].name || '-') }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    更新时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.updated_at ? moment.unix(data.updated_at).format('YYYY/MM/DD HH:mm') : (data.created_at ? moment.unix(data.created_at).format('YYYY/MM/DD HH:mm') : '-') }
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    解决者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['resolver'] && data['resolver'].name || '-' }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    解决时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.resolved_at ? moment.unix(data.resolved_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={ 3 } componentClass={ ControlLabel }>
+                    关闭者
+                  </Col>
+                  <Col sm={ 3 }>
+                    <div style={ { marginTop: '7px' } }>
+                      <span>{ data['closer'] && data['closer'].name || '-' }</span>
+                    </div>
+                  </Col>
+                  <Col sm={ 2 } componentClass={ ControlLabel }>
+                    关闭时间
+                  </Col>
+                  <Col sm={ 4 }>
+                    <div style={ { marginTop: '7px' } }>
+                      { data.closed_at ? moment.unix(data.closed_at).format('YYYY/MM/DD HH:mm') : '-' }
+                    </div>
+                  </Col>
+                </FormGroup>
+
               </Form>
             </Tab>
             <Tab eventKey={ 3 } title='改动记录'>
