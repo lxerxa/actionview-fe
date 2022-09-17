@@ -209,7 +209,7 @@ export default class Preview extends Component {
           if (!imgurl) {
             return;
           }
-          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + i + '" src="' + imgurl + '"/>');
+          html = html.replace(v, '<img class="inline-img" id="inlineimg-' + i + '" src="' + urlWrapper(imgurl) + '"/>');
           imgFileUrls.push(imgurl);
         }
       });
@@ -220,9 +220,9 @@ export default class Preview extends Component {
   createLightbox(imgFiles, photoIndex) {
     return (
       <Lightbox
-        mainSrc={ imgFiles[photoIndex] }
-        nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
-        prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+        mainSrc={ urlWrapper(imgFiles[photoIndex]) }
+        nextSrc={ urlWrapper(imgFiles[(photoIndex + 1) % imgFiles.length]) }
+        prevSrc={ urlWrapper(imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length]) }
         imageTitle=''
         imageCaption=''
         onCloseRequest={ () => { this.setState({ inlinePreviewShow: false }) } }

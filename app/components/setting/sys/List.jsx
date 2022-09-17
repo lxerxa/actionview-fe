@@ -126,6 +126,18 @@ export default class List extends Component {
       )
     });
     propertyItems.push({
+      id: 'logssave',
+      title: (
+        <div>
+          <span className='table-td-title'>日志保存</span>
+          <span className='table-td-issue-desc'>不建议保存时间过长，日志保存占用磁盘空间较大。</span>
+        </div>
+      ),
+      contents: (
+        <div>{ properties.logs_save_duration && logsSaveOptions[properties.logs_save_duration] || '6个月' }</div>
+      )
+    });
+    {/* propertyItems.push({
       id: 'allowed_login_num',
       title: (
         <div>
@@ -136,7 +148,7 @@ export default class List extends Component {
       contents: (
         <div>{ properties.enable_login_protection === 1 ? '是' : '否' }</div>
       )
-    })
+    }) */}
     propertyItems.push({
       id: 'default_locale',
       title: (
@@ -176,19 +188,6 @@ export default class List extends Component {
             <li>每天有效工作时间：{ properties.day2hour ? (properties.day2hour + '小时') : '-' }</li>
           </ul>
         </div>
-      )
-    });
-
-    propertyItems.push({
-      id: 'logssave',
-      title: (
-        <div>
-          <span className='table-td-title'>日志保存</span>
-          <span className='table-td-issue-desc'>不建议保存时间过长，日志保存占用磁盘空间较大。</span>
-        </div>
-      ),
-      contents: (
-        <div>{ properties.logs_save_duration && logsSaveOptions[properties.logs_save_duration] || '6个月' }</div>
       )
     });
 

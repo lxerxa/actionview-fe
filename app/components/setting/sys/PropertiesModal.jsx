@@ -20,7 +20,14 @@ const validate = (values, props) => {
 
 @reduxForm({
   form: 'syssetting',
-  fields: [ 'login_mail_domain', 'allow_create_project', 'http_host', 'enable_login_protection', 'week2day', 'day2hour', 'logs_save_duration' ],
+  fields: [ 
+    'login_mail_domain', 
+    'allow_create_project', 
+    'http_host', 
+    'week2day', 
+    'day2hour', 
+    'logs_save_duration' 
+  ],
   validate
 })
 export default class PropertiesModal extends Component {
@@ -123,18 +130,18 @@ export default class PropertiesModal extends Component {
         </Modal.Header>
         <form onSubmit={ handleSubmit(this.handleSubmit) } onKeyDown={ (e) => { if (e.keyCode == 13) { e.preventDefault(); } } }>
         <Modal.Body>
-          <FormGroup controlId='formControlsText' validationState={ login_mail_domain.touched && login_mail_domain.error ? 'error' : null }>
+          <FormGroup validationState={ login_mail_domain.touched && login_mail_domain.error ? 'error' : null }>
             <ControlLabel>默认登陆邮箱域名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...login_mail_domain } placeholder='邮箱域名'/>
             { login_mail_domain.touched && login_mail_domain.error && <HelpBlock style={ { float: 'right' } }>{ login_mail_domain.error }</HelpBlock> }
           </FormGroup>
-          <FormGroup controlId='formControlsText' validationState={ http_host.touched && http_host.error ? 'error' : null }>
+          <FormGroup validationState={ http_host.touched && http_host.error ? 'error' : null }>
             <ControlLabel>系统域名</ControlLabel>
             <FormControl disabled={ submitting } type='text' { ...http_host } placeholder='如:https://actionview.cn'/>
             { http_host.touched && http_host.error && <HelpBlock style={ { float: 'right' } }>{ http_host.error }</HelpBlock> }
           </FormGroup>
           <div>
-            <FormGroup controlId='formControlsText' style={ { width: '45%', display: 'inline-block' } }>
+            <FormGroup style={ { width: '45%', display: 'inline-block' } }>
               <ControlLabel>是否允许用户创建项目</ControlLabel>
               <Select
                 simpleValue
@@ -146,7 +153,19 @@ export default class PropertiesModal extends Component {
                 onChange={ newValue => { allow_create_project.onChange(newValue) } }
                 placeholder='请选择'/>
             </FormGroup>
-            <FormGroup controlId='formControlsText' style={ { width: '45%', display: 'inline-block', float: 'right' } }>
+            <FormGroup style={ { width: '45%', display: 'inline-block', float: 'right' } }>
+              <ControlLabel>日志保存</ControlLabel>
+              <Select
+                simpleValue
+                disabled={ submitting }
+                clearable={ false }
+                searchable={ false }
+                options={ logsSaveOptions }
+                value={ logs_save_duration.value || '6m' }
+                onChange={ newValue => { logs_save_duration.onChange(newValue) } }
+                placeholder='请选择'/>
+            </FormGroup>
+            {/*<FormGroup controlId='formControlsText' style={ { width: '45%', display: 'inline-block', float: 'right' } }>
               <ControlLabel>启用安全登录保护</ControlLabel>
               <Select
                 simpleValue
@@ -157,7 +176,7 @@ export default class PropertiesModal extends Component {
                 value={ enable_login_protection.value || 0 }
                 onChange={ newValue => { enable_login_protection.onChange(newValue) } }
                 placeholder='请选择'/>
-            </FormGroup>
+            </FormGroup>*/}
           </div>
           <div>
             <FormGroup style={ { width: '45%', display: 'inline-block' } }>
@@ -182,20 +201,6 @@ export default class PropertiesModal extends Component {
                 options={ hourOptions }
                 value={ day2hour.value }
                 onChange={ newValue => { day2hour.onChange(newValue) } }
-                placeholder='请选择'/>
-            </FormGroup>
-          </div>
-          <div>
-            <FormGroup style={ { width: '45%', display: 'inline-block' } }>
-              <ControlLabel>日志保存</ControlLabel>
-              <Select
-                simpleValue
-                disabled={ submitting }
-                clearable={ false }
-                searchable={ false }
-                options={ logsSaveOptions }
-                value={ logs_save_duration.value || '6m' }
-                onChange={ newValue => { logs_save_duration.onChange(newValue) } }
                 placeholder='请选择'/>
             </FormGroup>
           </div>
