@@ -5,6 +5,7 @@ import { urlWrapper } from '../share/Funcs';
 import { removeToken } from '../../../shared/jwt-token';
 
 const About = require('./AboutModal');
+const Encourage = require('./EncourageModal');
 const logo = require('../../assets/images/brand.png');
 const no_avatar = require('../../assets/images/no_avatar.png');
 const $ = require('$');
@@ -12,7 +13,7 @@ const $ = require('$');
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { aboutShow: false };
+    this.state = { aboutShow: false, encourageShow: false };
   }
 
   static propTypes = {
@@ -66,6 +67,8 @@ export default class Header extends Component {
       entry('/mygroup');
     } else if (eventKey === 'about') {
       this.setState({ aboutShow: true });
+    } else if (eventKey === 'encourage') {
+      this.setState({ encourageShow: true });
     } else if (eventKey === 'logout') {
       logout();
       removeToken();
@@ -219,10 +222,11 @@ export default class Header extends Component {
             style={ headerUser } 
             onSelect={ this.userOperateSelect.bind(this) }>
             <MenuItem disabled>{ session.user.first_name || '' }</MenuItem>
-            <MenuItem divider />
-            <MenuItem eventKey='about'>关于</MenuItem>
             { session.user && session.user.email && session.user.email !== 'admin@action.view' && <MenuItem divider /> }
             { session.user && session.user.email && session.user.email !== 'admin@action.view' && <MenuItem eventKey='mygroup'>我的群组</MenuItem> }
+            <MenuItem divider />
+            <MenuItem eventKey='about'>关于</MenuItem>
+            <MenuItem eventKey='encourage'>鼓励一下</MenuItem>
             <MenuItem divider />
             <MenuItem eventKey='setting'>个人设置</MenuItem>
             <MenuItem eventKey='logout'>退出</MenuItem>
@@ -274,20 +278,14 @@ export default class Header extends Component {
             </MenuItem>
           </DropdownButton>
         </span> }
-        {/* <span style={ { paddingTop: '5px', float: 'right' } }>
-          <iframe 
-            src='https://ghbtns.com/github-btn.html?user=lxerxa&repo=actionview&type=star&count=true' 
-            frameBorder='0' 
-            scrolling='0' 
-            width='100px' 
-            height='20px'>
-          </iframe>
-        </span> */}
         { this.state.aboutShow &&
-        <About
-          show
-          close={ () => { this.setState({ aboutShow: false }) } }/>
-        }
+          <About
+            show
+            close={ () => { this.setState({ aboutShow: false }) } }/> }
+        { this.state.encourageShow &&
+          <Encourage
+            show
+            close={ () => { this.setState({ encourageShow: false }) } }/> }
       </div>
     );
   }
