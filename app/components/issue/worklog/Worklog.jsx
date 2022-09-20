@@ -200,7 +200,8 @@ export default class Worklog extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '15px' } }>
             <div>
               <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ () => { indexWorklog(issue.id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> 排序</span>
+              { collection.length > 1 &&
+                <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortWorklog() } }><i className='fa fa-sort'></i> { collection[0].recorded_at < collection[collection.length - 1].recorded_at ? '最新' : '最早' }</span> }
               { permissions.indexOf('add_worklog') !== -1 &&
               <span className='comments-button' title='添加' style={ { marginRight: '10px', float: 'right' } } disabled={ loading } onClick={ this.showAddWorklog.bind(this) }><i className='fa fa-plus'></i> 添加</span> }
               <span style={ { marginRight: '20px', float: 'right' } }>

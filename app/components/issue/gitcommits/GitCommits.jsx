@@ -39,7 +39,15 @@ export default class GitCommits extends Component {
   }
 
   render() {
-    const { issue_id, currentTime, currentUser, indexGitCommits, sortGitCommits, collection, indexLoading } = this.props;
+    const { 
+      issue_id, 
+      currentTime, 
+      currentUser, 
+      indexGitCommits, 
+      sortGitCommits, 
+      collection, 
+      indexLoading 
+    } = this.props;
 
     return (
       <Form horizontal style={ { padding: '0px 15px' } }>
@@ -47,7 +55,8 @@ export default class GitCommits extends Component {
           <Col sm={ 12 } className={ indexLoading && 'hide' } style={ { marginTop: '15px', marginBottom: '15px' } }>
             <div>
               <span className='comments-button' title='刷新' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { indexGitCommits(issue_id, this.state.sort) } }><i className='fa fa-refresh'></i> 刷新</span>
-              <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortGitCommits() } }><i className='fa fa-sort'></i> 排序</span>
+              { collection.length > 1 &&
+                <span className='comments-button' title='排序' style={ { marginRight: '10px', float: 'right' } } onClick={ () => { sortGitCommits() } }><i className='fa fa-sort'></i> { collection[0].committed_at < collection[collection.length - 1].committed_at ? '最新' : '最早' }</span> }
               <span style={ { marginRight: '20px', float: 'right' } }>
                 <Checkbox
                   style={ { paddingTop: '0px', minHeight: '18px' } }
