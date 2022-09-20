@@ -64,14 +64,33 @@ export default class Create extends Component {
     setRouterNotifyFlg(false);
   }
 
+  extractImg(html) {
+    const images = html.match(/<img(.*?)>/ig);
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const pattern = new RegExp('^<img src="(.*?)"(.*?)>$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$1;
+          if (!imgurl) {
+            return;
+          }
+          html = html.replace(v, '<img src="' + urlWrapper(imgurl) + '" ' + RegExp.$2 + '>');
+        }
+      });
+    }
+    return html;
+  }
+
   componentDidMount() {
     const { project } = this.props;
 
     const fileeditDOM = document.getElementById('fileedit');
     if (fileeditDOM) {
+      const self = this;
+
       simplemde = new SimpleMDE({ 
         element: fileeditDOM,
-        previewRender: (text) => simplemde.markdown(text), 
+        previewRender: text => self.extractImg(simplemde.markdown(text)), 
         autoDownloadFontAwesome: false, 
         showIcons: ['table'], 
         hideIcons: ['side-by-side', 'fullscreen'], 
@@ -79,7 +98,6 @@ export default class Create extends Component {
         status: false 
       });
 
-      const self = this;
       simplemde.codemirror.on('change', function() {
         const { loading, setRouterNotifyFlg } = self.props;
         if (!loading) {

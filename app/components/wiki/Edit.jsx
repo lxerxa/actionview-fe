@@ -87,6 +87,23 @@ export default class Edit extends Component {
     setRouterNotifyFlg(false);
   }
 
+  extractImg(html) {
+    const images = html.match(/<img(.*?)>/ig);
+    if (images) {
+      _.forEach(images, (v, i) => {
+        const pattern = new RegExp('^<img src="(.*?)"(.*?)>$');
+        if (pattern.exec(v)) {
+          const imgurl = RegExp.$1;
+          if (!imgurl) {
+            return;
+          }
+          html = html.replace(v, '<img src="' + urlWrapper(imgurl) + '" ' + RegExp.$2 + '>');
+        }
+      });
+    }
+    return html;
+  }
+
   componentDidMount() {
     const { project } = this.props;
 
@@ -94,6 +111,7 @@ export default class Edit extends Component {
     if (fileeditDOM) {
       simplemde = new SimpleMDE({ 
         element: fileeditDOM, 
+        previewRender: text => self.extractImg(simplemde.markdown(text)),
         autoDownloadFontAwesome: false, 
         showIcons: ['table'], 
         hideIcons: ['side-by-side', 'fullscreen'], 
