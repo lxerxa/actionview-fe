@@ -196,8 +196,9 @@
 }
 
 .config-column-card {
-  border: 1px dashed gray;
+  border: 1px solid #dedede;
   margin-top: 10px;
+  border-radius: 4px;
   padding: 5px;
 }
 
