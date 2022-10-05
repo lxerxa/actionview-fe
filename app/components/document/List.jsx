@@ -336,7 +336,7 @@ export default class List extends Component {
               </a> }
             <span style={ { float: 'right' } }>
               { files[i].parent != directory && 
-              <Link to={ '/project/' + project.key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '10px', float: 'left' } }>打开目录</span></Link> }
+              <Link to={ '/project/' + project.key + '/document' + (files[i].parent == '0' ? '' : ('/' + files[i].parent) ) }><span style={ { marginRight: '10px', float: 'left' } }>进入目录</span></Link> }
               { files[i].favorited &&
               <span title='点击取消收藏' style={ { float: 'left', color: '#FFD300', cursor: 'pointer', marginRight: '10px' } } onClick={ (e) => { this.favorite(files[i].id) } }><i className='fa fa-star'></i></span> }
               { files[i].uploader &&

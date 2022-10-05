@@ -372,14 +372,26 @@ export default class List extends Component {
               { collection[i].data && collection[i].data.end_time && <li>结束时间 : { moment.unix(collection[i].data.end_time).format('YY/MM/DD') }</li> }
               { collection[i].data && collection[i].data.description && <li>描述 : { collection[i].data.description }</li> }
             </ul> */}
-            { (collection[i].event_key == 'release_version' || collection[i].event_key == 'create_release_version') && <span>发布了版本 <span style={ collection[i].version.del_flag === 1 ? ltStyles : { fontWeight: 600 } }>{ collection[i].version.name }</span></span> }
-            { collection[i].event_key == 'upload_document' && <span>上传了文件 <span style={ collection[i].document.del_flag === 1 ? ltStyles : {} }>{ collection[i].document.del_flag === 1 ? collection[i].document.name : <a target='_blank' href={ urlWrapper('/project/' + project.key + '/document/' + collection[i].document.id + '/download') }>{ collection[i].document.name }</a> }</span></span> }
-            { collection[i].event_key == 'delete_document' && <span>删除了{ collection[i].document.d == 1 ? '文件目录' : '文件' } <span style={ ltStyles }>{ collection[i].document.name }</span></span> }
-            { collection[i].event_key == 'create_wiki' && <span>创建了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }
-            { collection[i].event_key == 'edit_wiki' && <span>更新了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }
-            { collection[i].event_key == 'delete_wiki' && <span>删除了{ collection[i].wiki.d == 1 ? 'Wiki目录' : '文档' } <span style={ ltStyles }>{ collection[i].wiki.name }</span></span> }
-            { collection[i].event_key == 'start_sprint' && <span>启动了迭代 <span style={ { fontWeight: 600 } }>{ collection[i].sprint && collection[i].sprint.name }</span></span> }
-            { collection[i].event_key == 'complete_sprint' && <span>完成了迭代 <span style={ { fontWeight: 600 } }>{ collection[i].sprint && collection[i].sprint.name }</span></span> }
+            { (collection[i].event_key == 'release_version' || collection[i].event_key == 'create_release_version') && 
+              <span>发布了版本 <span style={ collection[i].version.del_flag === 1 ? ltStyles : { fontWeight: 600 } }>{ collection[i].version.name }</span></span> }
+            { collection[i].event_key == 'upload_document' && 
+              <span>上传了文件 <span style={ collection[i].document.del_flag === 1 ? ltStyles : {} }>{ collection[i].document.del_flag === 1 ? collection[i].document.name : <a target='_blank' href={ urlWrapper('/project/' + project.key + '/document/' + collection[i].document.id + '/download') }>{ collection[i].document.name }</a> }</span></span> }
+            { collection[i].event_key == 'upload_document' && collection[i].document.del_flag != 1 &&
+              <Link to={ '/project/' + project.key + '/document' + (collection[i].document.parent == '0' ? '' : ('/' + collection[i].document.parent) ) }><span style={ { marginLeft: '15px' } }>进入目录</span></Link> }
+            { collection[i].event_key == 'delete_document' && 
+              <span>删除了{ collection[i].document.d == 1 ? '文件目录' : '文件' } <span style={ ltStyles }>{ collection[i].document.name }</span></span> }
+            { collection[i].event_key == 'create_wiki' && 
+              <span>创建了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }
+            { collection[i].event_key == 'edit_wiki' && 
+              <span>更新了文档 <span style={ collection[i].wiki.del_flag === 1 ? ltStyles : {} }>{ collection[i].wiki.del_flag === 1 ? collection[i].wiki.name : <Link to={ '/project/' + project.key + '/wiki/' + (collection[i].wiki.parent == '0' ? 'root' : collection[i].wiki.parent) + '/' + collection[i].wiki.id }>{ collection[i].wiki.name }</Link> }</span></span> }
+            { (collection[i].event_key == 'create_wiki' || collection[i].event_key == 'edit_wiki') && collection[i].wiki.del_flag != 1 &&
+              <Link to={ '/project/' + project.key + '/wiki' + (collection[i].wiki.parent == '0' ? '' : ('/' + collection[i].wiki.parent) ) }><span style={ { marginLeft: '15px' } }>进入目录</span></Link> }
+            { collection[i].event_key == 'delete_wiki' && 
+              <span>删除了{ collection[i].wiki.d == 1 ? 'Wiki目录' : '文档' } <span style={ ltStyles }>{ collection[i].wiki.name }</span></span> }
+            { collection[i].event_key == 'start_sprint' && 
+              <span>启动了迭代 <span style={ { fontWeight: 600 } }>{ collection[i].sprint && collection[i].sprint.name }</span></span> }
+            { collection[i].event_key == 'complete_sprint' && 
+              <span>完成了迭代 <span style={ { fontWeight: 600 } }>{ collection[i].sprint && collection[i].sprint.name }</span></span> }
           </div>
         ),
         time: agoAt 
