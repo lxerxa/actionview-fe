@@ -643,7 +643,6 @@ table tr:hover .remove-icon{
 
 .login-form input {
   height: auto;
-  margin-top: 25px;
   width: 100%;
   padding: 12px;	
   font-size: 16px;
@@ -652,11 +651,14 @@ table tr:hover .remove-icon{
 
 .login-form button {
   height: auto;
-  margin-top: 10px;
   width: 100%;
   padding: 12px;
   font-size: 19px;
   line-height: 20px;
+}
+
+.login-form .form-group {
+  margin-bottom: 25px;
 }
 
 .small-avatar {
@@ -701,7 +703,7 @@ table tr:hover .remove-icon{
 .brand {
   text-align: center;
   padding-top: 20px;
-  padding-bottom: 10px;
+  padding-bottom: 33px;
 }
 
 .toc-logo {

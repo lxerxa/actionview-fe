@@ -5,6 +5,7 @@ const initialState = {
   ecode: 0, 
   emsg: '', 
   invalid: false, 
+  vcodeRequired: false,
   user: {} 
 };
 
@@ -16,10 +17,9 @@ export default function session(state = initialState, action) {
     case t.SESSION_CREATE_SUCCESS:
       if (action.result.ecode === 0) {
         state.user = action.result.data && action.result.data.user;
-      }
-      // for sentinel throttle
-      if (action.result.emsg) {
-        state.emsg = action.result.emsg
+        state.vcodeRequired = false;
+      } else {
+        state.vcodeRequired = state.vcodeRequired || action.result.data.vcodeRequired || false;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 

@@ -10,19 +10,23 @@ const brand = require('../../assets/images/brand.png');
 const $ = require('$');
 const qs = require('qs');
 
+const { API_BASENAME } = process.env;
+
 import * as ProjectActions from 'redux/actions/ProjectActions';
 import * as SessionActions from 'redux/actions/SessionActions';
 
-const validate = (values) => {
+const validate = (values, props) => {
   const errors = {};
   if (!values.email) {
     errors.email = '账号不能为空';
-  //} else if (!/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(values.email) && !(/^1[34578]\d{9}$/.test(values.email))) {
-  //  errors.email = '输入格式有误';
   }
 
   if (!values.password) {
     errors.password = '密码不能为空';
+  }
+
+  if (props.session.vcodeRequired && !values.vcode) {
+    errors.vcode = '验证码不能为空';
   }
   return errors;
 };
@@ -43,15 +47,18 @@ function mapDispatchToProps(dispatch) {
 @connect(mapStateToProps, mapDispatchToProps)
 @reduxForm({
   form: 'login',
-  fields: ['email', 'password'],
+  fields: ['email', 'password', 'vcode'],
   validate
 })
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { alertShow: false };
+    this.random = this.randomString(10);
+    this.vcodeImgUrl = API_BASENAME + '/api/vcode?random=' + this.random;
+    this.state = { alertShow: false, vcodeImgUrl: this.vcodeImgUrl };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
+    this.refreshVcode = this.refreshVcode.bind(this);
   }
 
   static contextTypes = {
@@ -113,9 +120,25 @@ class Login extends Component {
   async handleSubmit() {
     this.setState({ alertShow: false });
 
-    const { location: { query={} } } = this.props;
-    const { values, actions, projectActions } = this.props;
-    await actions.create(values);
+    const { 
+      location: { query={} },
+      session: { vcodeRequired=false },
+      values, 
+      actions, 
+      projectActions 
+    } = this.props;
+
+    const data = {};
+    data.email = values.email || '';
+    data.password = values.password || '';
+
+    if (vcodeRequired) {
+      data.vcode = values.vcode || '';
+      data.random = this.random || '';
+    }
+
+    await actions.create(data);
+
     const { session } = this.props;
     if (session.ecode === 0 && session.user && session.user.id) {
       if (!session.user.directory && values.password == 'actionview') {
@@ -135,7 +158,7 @@ class Login extends Component {
         } else {
           projectActions.cleanSelectedProject();
           if (session.user && session.user.latest_access_project) {
-            this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });    
+            this.context.router.push({ pathname: '/project/' + session.user.latest_access_project + '/summary' });
           } else {
             this.context.router.push({ pathname: '/myproject' });    
           }
@@ -143,11 +166,31 @@ class Login extends Component {
       }
     } else {
       this.setState({ alertShow: true });
+      session.vcodeRequired && this.refreshVcode();
     }
   }
 
+  refreshVcode() {
+    this.setState({ vcodeImgUrl: this.vcodeImgUrl + '&reqeusted_at=' + Date.now() })
+  }
+
+  randomString(length) {  
+    const str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (var i = length; i > 0; --i) { 
+      result += str[Math.floor(Math.random() * str.length)];
+    }
+    return result;
+  }
+
   render() {
-    const { fields: { email, password }, handleSubmit, invalid, submitting, session } = this.props;
+    const { 
+      fields: { email, password, vcode }, 
+      handleSubmit, 
+      invalid, 
+      submitting, 
+      session 
+    } = this.props;
 
     return (
       <div className='login-panel'>
@@ -156,20 +199,32 @@ class Login extends Component {
             <img src={ brand } width={ 200 }/>
           </div>
           <form onSubmit={ handleSubmit(this.handleSubmit) }>
-            <FormGroup controlId='formControlsName' validationState={ email.touched && email.error ? 'error' : null }>
+            <FormGroup validationState={ email.touched && email.error ? 'error' : null }>
               <FormControl disabled={ submitting } type='text' { ...email } placeholder='用户名/邮箱'/>
               { email.touched && email.error && <HelpBlock style={ { marginLeft: '5px' } }>{ email.error }</HelpBlock> }
             </FormGroup>
-            <FormGroup controlId='formControlsPwd' validationState={ password.touched && password.error ? 'error' : null }>
+            <FormGroup validationState={ password.touched && password.error ? 'error' : null }>
               <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>
-            <Button bsStyle='success' disabled={ submitting } type='submit'>{ submitting ? '登 录 中 ...' : '登 录' }</Button>
+            { session.vcodeRequired &&
+            <FormGroup validationState={ vcode.touched && vcode.error ? 'error' : null }>
+              <FormControl disabled={ submitting } type='text' { ...vcode } placeholder='验证码' style={ { width: '200px', display: 'inline-block' } }/>
+              <img src={ this.state.vcodeImgUrl } onClick={ this.refreshVcode } style={ { width: '100px', marginLeft: '20px' } }/>
+              { vcode.touched && vcode.error && <HelpBlock style={ { marginLeft: '5px' } }>{ vcode.error }</HelpBlock> }
+            </FormGroup> }
+            <Button bsStyle='success' disabled={ submitting } type='submit'>
+              { submitting ? '登 录 中 ...' : '登 录' }
+            </Button>
             <div style={ { textAlign: 'center', height: '40px' } }>
               { this.state.alertShow && !submitting && 
                 <div style={ { marginTop: '10px', color: '#a94442' } }>
                   { session.ecode === -10000 && '登录失败，用户名或密码错误。' }   
+                  { session.ecode === -10004 && session.emsg }   
+                  { session.ecode === -10005 && '用户未激活。' }   
                   { session.ecode === -10006 && '用户已被禁用。' }   
+                  { session.ecode === -10007 && '请输入验证码。' }   
+                  { session.ecode === -10008 && '验证码错误。' }   
                   { session.ecode === -99999 && '系统错误。' }
                 </div> }
             </div>
