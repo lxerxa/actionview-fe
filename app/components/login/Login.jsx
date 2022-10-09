@@ -25,8 +25,8 @@ const validate = (values, props) => {
     errors.password = '密码不能为空';
   }
 
-  if (props.session.vcodeRequired && !values.vcode) {
-    errors.vcode = '验证码不能为空';
+  if (props.session.captchaRequired && !values.captcha) {
+    errors.captcha = '验证码不能为空';
   }
   return errors;
 };
@@ -47,18 +47,18 @@ function mapDispatchToProps(dispatch) {
 @connect(mapStateToProps, mapDispatchToProps)
 @reduxForm({
   form: 'login',
-  fields: ['email', 'password', 'vcode'],
+  fields: ['email', 'password', 'captcha'],
   validate
 })
 class Login extends Component {
   constructor(props) {
     super(props);
     this.random = this.randomString(10);
-    this.vcodeImgUrl = API_BASENAME + '/api/vcode?random=' + this.random;
-    this.state = { alertShow: false, vcodeImgUrl: this.vcodeImgUrl };
+    this.captchaImgUrl = API_BASENAME + '/api/captcha?random=' + this.random;
+    this.state = { alertShow: false, captchaImgUrl: this.captchaImgUrl };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
-    this.refreshVcode = this.refreshVcode.bind(this);
+    this.refreshCaptcha = this.refreshCaptcha.bind(this);
   }
 
   static contextTypes = {
@@ -122,7 +122,7 @@ class Login extends Component {
 
     const { 
       location: { query={} },
-      session: { vcodeRequired=false },
+      session: { captchaRequired=false },
       values, 
       actions, 
       projectActions 
@@ -132,8 +132,8 @@ class Login extends Component {
     data.email = values.email || '';
     data.password = values.password || '';
 
-    if (vcodeRequired) {
-      data.vcode = values.vcode || '';
+    if (captchaRequired) {
+      data.captcha = values.captcha || '';
       data.random = this.random || '';
     }
 
@@ -166,12 +166,15 @@ class Login extends Component {
       }
     } else {
       this.setState({ alertShow: true });
-      session.vcodeRequired && this.refreshVcode();
+      session.captchaRequired && this.refreshCaptcha();
     }
   }
 
-  refreshVcode() {
-    this.setState({ vcodeImgUrl: this.vcodeImgUrl + '&reqeusted_at=' + Date.now() })
+  refreshCaptcha() {
+    const { fields: { captcha } } = this.props;
+    captcha.onChange('');
+
+    this.setState({ captchaImgUrl: this.captchaImgUrl + '&reqeusted_at=' + Date.now() })
   }
 
   randomString(length) {  
@@ -185,7 +188,7 @@ class Login extends Component {
 
   render() {
     const { 
-      fields: { email, password, vcode }, 
+      fields: { email, password, captcha }, 
       handleSubmit, 
       invalid, 
       submitting, 
@@ -207,11 +210,11 @@ class Login extends Component {
               <FormControl disabled={ submitting } type='password' { ...password } placeholder='密码'/>
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>
-            { session.vcodeRequired &&
-            <FormGroup validationState={ vcode.touched && vcode.error ? 'error' : null }>
-              <FormControl disabled={ submitting } type='text' { ...vcode } placeholder='验证码' style={ { width: '200px', display: 'inline-block' } }/>
-              <img src={ this.state.vcodeImgUrl } onClick={ this.refreshVcode } style={ { width: '100px', marginLeft: '20px' } }/>
-              { vcode.touched && vcode.error && <HelpBlock style={ { marginLeft: '5px' } }>{ vcode.error }</HelpBlock> }
+            { session.captchaRequired &&
+            <FormGroup validationState={ captcha.touched && captcha.error ? 'error' : null }>
+              <FormControl disabled={ submitting } type='text' { ...captcha } placeholder='验证码' style={ { width: '200px', display: 'inline-block' } }/>
+              <img src={ this.state.captchaImgUrl } onClick={ this.refreshCaptcha } style={ { width: '100px', marginLeft: '20px' } }/>
+              { captcha.touched && captcha.error && <HelpBlock style={ { marginLeft: '5px' } }>{ captcha.error }</HelpBlock> }
             </FormGroup> }
             <Button bsStyle='success' disabled={ submitting } type='submit'>
               { submitting ? '登 录 中 ...' : '登 录' }

@@ -5,7 +5,7 @@ const initialState = {
   ecode: 0, 
   emsg: '', 
   invalid: false, 
-  vcodeRequired: false,
+  captchaRequired: false,
   user: {} 
 };
 
@@ -17,9 +17,9 @@ export default function session(state = initialState, action) {
     case t.SESSION_CREATE_SUCCESS:
       if (action.result.ecode === 0) {
         state.user = action.result.data && action.result.data.user;
-        state.vcodeRequired = false;
+        state.captchaRequired = false;
       } else {
-        state.vcodeRequired = state.vcodeRequired || action.result.data.vcodeRequired || false;
+        state.captchaRequired = state.captchaRequired || action.result.data.captchaRequired || false;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
