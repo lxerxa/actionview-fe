@@ -54,7 +54,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.random = this.randomString(10);
-    this.captchaImgUrl = API_BASENAME + '/api/captcha?random=' + this.random;
+    this.captchaImgUrl = API_BASENAME + '/captcha?random=' + this.random;
     this.state = { alertShow: false, captchaImgUrl: this.captchaImgUrl };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
@@ -166,7 +166,7 @@ class Login extends Component {
       }
     } else {
       this.setState({ alertShow: true });
-      session.captchaRequired && this.refreshCaptcha();
+      session.captchaRequired && data.captcha && this.refreshCaptcha();
     }
   }
 
@@ -211,11 +211,10 @@ class Login extends Component {
               { password.touched && password.error && <HelpBlock style={ { marginLeft: '5px' } }>{ password.error }</HelpBlock> }
             </FormGroup>
             { session.captchaRequired &&
-            <FormGroup validationState={ captcha.touched && captcha.error ? 'error' : null }>
-              <FormControl disabled={ submitting } type='text' { ...captcha } placeholder='验证码' style={ { width: '200px', display: 'inline-block' } }/>
-              <img src={ this.state.captchaImgUrl } onClick={ this.refreshCaptcha } style={ { width: '100px', marginLeft: '20px' } }/>
-              { captcha.touched && captcha.error && <HelpBlock style={ { marginLeft: '5px' } }>{ captcha.error }</HelpBlock> }
-            </FormGroup> }
+              <FormGroup>
+                <FormControl disabled={ submitting } type='text' { ...captcha } placeholder='验证码' style={ { width: '200px', display: 'inline-block' } }/>
+                <img src={ this.state.captchaImgUrl } onClick={ this.refreshCaptcha } style={ { width: '100px', marginLeft: '20px' } }/>
+              </FormGroup> }
             <Button bsStyle='success' disabled={ submitting } type='submit'>
               { submitting ? '登 录 中 ...' : '登 录' }
             </Button>
@@ -228,6 +227,7 @@ class Login extends Component {
                   { session.ecode === -10006 && '用户已被禁用。' }   
                   { session.ecode === -10007 && '请输入验证码。' }   
                   { session.ecode === -10008 && '验证码错误。' }   
+                  { session.ecode === -10009 && '验证码失效。' }   
                   { session.ecode === -99999 && '系统错误。' }
                 </div> }
             </div>

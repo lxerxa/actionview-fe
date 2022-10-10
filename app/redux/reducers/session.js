@@ -19,7 +19,7 @@ export default function session(state = initialState, action) {
         state.user = action.result.data && action.result.data.user;
         state.captchaRequired = false;
       } else {
-        state.captchaRequired = state.captchaRequired || action.result.data.captchaRequired || false;
+        state.captchaRequired = state.captchaRequired || action.result.data.captcha_required || false;
       }
       return { ...state, loading: false, ecode: action.result.ecode };
 
