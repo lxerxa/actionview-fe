@@ -195,6 +195,15 @@ class Login extends Component {
       session 
     } = this.props;
 
+    const errMsgs = {
+      '-10000': '登录失败，用户名或密码错误。',
+      '-10005': '用户未激活。',
+      '-10006': '用户已被禁用。',
+      '-10007': '请输入验证码。',
+      '-10008': '验证码错误。',
+      '-10009': '验证码失效。'
+    };
+
     return (
       <div className='login-panel'>
         <div className='login-form'>
@@ -219,16 +228,9 @@ class Login extends Component {
               { submitting ? '登 录 中 ...' : '登 录' }
             </Button>
             <div style={ { textAlign: 'center', height: '40px' } }>
-              { this.state.alertShow && !submitting && 
+              { this.state.alertShow && !submitting && session.ecode !== 0 &&  
                 <div style={ { marginTop: '10px', color: '#a94442' } }>
-                  { session.ecode === -10000 && '登录失败，用户名或密码错误。' }   
-                  { session.ecode === -10004 && session.emsg }   
-                  { session.ecode === -10005 && '用户未激活。' }   
-                  { session.ecode === -10006 && '用户已被禁用。' }   
-                  { session.ecode === -10007 && '请输入验证码。' }   
-                  { session.ecode === -10008 && '验证码错误。' }   
-                  { session.ecode === -10009 && '验证码失效。' }   
-                  { session.ecode === -99999 && '系统错误。' }
+                  { errMsgs[session.ecode] || '系统错误。' }
                 </div> }
             </div>
             <div className='login-footer'>
