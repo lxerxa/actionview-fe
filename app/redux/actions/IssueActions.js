@@ -54,14 +54,7 @@ export function resetFilters(key) {
 export function configFilters(key, values) {
   return asyncFuncCreator({
     constant: 'ISSUE_FILTERS_CONFIG',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/filters', method: 'post', data: { ...values, mode: 'sort' } })
-  });
-}
-
-export function delFilters(key, values) {
-  return asyncFuncCreator({
-    constant: 'ISSUE_FILTERS_DEL',
-    promise: (client) => client.request({ url: '/project/' + key + '/issue/filters', method: 'post', data: { ...values, mode: 'del' } })
+    promise: (client) => client.request({ url: '/project/' + key + '/issue/filters', method: 'post', data: values })
   });
 }
 

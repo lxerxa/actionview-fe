@@ -7,7 +7,6 @@ const CreateModal = require('./CreateModal');
 const SaveFilterModal = require('./SaveFilterModal');
 const ResetFiltersNotify = require('./ResetFiltersNotify');
 const FilterConfigModal = require('../share/FilterConfigModal');
-const FilterDelModal = require('./DelFiltersModal');
 const ResetColumnsNotify = require('./ResetColumnsNotify');
 const ColumnsConfigModal = require('./ColumnsConfigModal');
 const ExportConfigModal = require('./ExportConfigModal');
@@ -23,7 +22,6 @@ export default class Header extends Component {
     this.state = { 
       createModalShow: false, 
       filterConfigShow: false, 
-      filterDelShow: false, 
       searchShow: false, 
       saveFilterShow: false,
       resetFiltersShow: false,
@@ -39,7 +37,6 @@ export default class Header extends Component {
     this.saveFilterModalClose = this.saveFilterModalClose.bind(this);
     this.resetFiltersNotifyClose = this.resetFiltersNotifyClose.bind(this);
     this.filterConfigModalClose = this.filterConfigModalClose.bind(this);
-    this.filterDelModalClose = this.filterDelModalClose.bind(this);
     this.setColumnsNotifyClose = this.setColumnsNotifyClose.bind(this);
     this.resetColumnsNotifyClose = this.resetColumnsNotifyClose.bind(this);
     this.exportConfigModalClose = this.exportConfigModalClose.bind(this);
@@ -108,10 +105,6 @@ export default class Header extends Component {
     this.setState({ filterConfigShow: false });
   }
 
-  filterDelModalClose() {
-    this.setState({ filterDelShow: false });
-  }
-
   exportConfigModalClose() {
     this.setState({ exportConfigShow: false });
   }
@@ -158,8 +151,6 @@ export default class Header extends Component {
       this.setState({ filterConfigShow: true });
     } else if(eventKey == 'saveFilter') {
       this.setState({ saveFilterShow : true });
-    } else if(eventKey == 'filterDel') {
-      this.setState({ filterDelShow : true });
     } else {
       const filters = options.filters || [];
       const filter = _.find(filters, { id: eventKey }) || {};
@@ -225,9 +216,8 @@ export default class Header extends Component {
               _.map(options.filters || [], (val) => <MenuItem eventKey={ val.id } key={ val.id }>{ val.name }</MenuItem> ) :
               <MenuItem disabled>无</MenuItem> }
             <MenuItem divider/>
+            <MenuItem eventKey='filterConfig'>过滤器管理</MenuItem>
             <MenuItem eventKey='saveFilter'>保存当前检索</MenuItem>
-            <MenuItem eventKey='filterConfig'>过滤器排序</MenuItem>
-            <MenuItem eventKey='filterDel'>过滤器删除</MenuItem>
           </DropdownButton>
           <Button 
             className='create-btn'
@@ -286,15 +276,7 @@ export default class Header extends Component {
             close={ this.filterConfigModalClose } 
             loading={ filterLoading } 
             config={ configFilters } 
-            filters={ options.filters || [] } 
-            i18n={ i18n }/> }
-        { this.state.filterDelShow &&
-          <FilterDelModal
-            show
-            close={ this.filterDelModalClose }
-            loading={ filterLoading }
-            del={ delFilters }
-            data={ _.filter(options.filters || [], (v) => v.creator == user.id) }
+            filters={ _.map(options.filters || [], (v) => ({ ...v, isLocalRemovable: v.creator == user.id })) } 
             i18n={ i18n }/> }
         { !optionsLoading && 
           <IssueFilterList 

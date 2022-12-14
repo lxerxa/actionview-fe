@@ -20,7 +20,8 @@ export default class FilterConfigModal extends Component {
     for (let i = 0; i < filterNum; i++) {
       this.state.cards.push({
         id: filters[i].id,
-        text: filters[i].name
+        text: filters[i].name,
+        isLocalRemovable: filters[i].isLocalRemovable || false
       });
     }
     this.state.strCards = JSON.stringify(this.state.cards);
@@ -97,7 +98,7 @@ export default class FilterConfigModal extends Component {
                   id={ op.id }
                   text={ op.text }
                   moveCard={ this.moveCard }
-                  deleteCard={ isRemovable ? this.deleteCard.bind(this, i) : null }/>
+                  deleteCard={ isRemovable || op.isLocalRemovable ? this.deleteCard.bind(this, i) : null }/>
               );
             }) 
             :
