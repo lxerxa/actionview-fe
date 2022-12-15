@@ -445,8 +445,8 @@ function _parseQuery(query, options) {
     { key: 'updated_at', name : '更新时间', type: 'DateTimePicker' },
     { key: 'resolved_at', name : '解决时间', type: 'DateTimePicker' },
     { key: 'closed_at', name : '关闭时间', type: 'DateTimePicker' },
-    { key: 'expect_start_time', name : '期望开始时间', type: 'DatePicker' },
-    { key: 'expect_complete_time', name : '期望完成时间', type: 'DatePicker' },
+    { key: 'expect_start_time', name : '计划开始时间', type: 'DatePicker' },
+    { key: 'expect_complete_time', name : '计划完成时间', type: 'DatePicker' },
     { key: 'epic', type: 'MultiSelect', name: 'Epic', optionValues: epics },
     { key: 'sprints', type: 'Select', name: 'Sprint', optionValues: sprintOptions }
   ];
