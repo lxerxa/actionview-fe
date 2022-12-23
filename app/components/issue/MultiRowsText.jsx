@@ -3,6 +3,7 @@ import { FormControl } from 'react-bootstrap';
 import { notify } from 'react-notify-toast';
 import _ from 'lodash';
 import Lightbox from 'react-image-lightbox';
+import { urlWrapper } from '../share/Funcs';
 
 const $ = require('$');
 const inlineAttachment = require('inlineAttachment2');
@@ -97,7 +98,7 @@ class MultiRowsTextReader extends React.Component {
             return;
           }
           const alt = RegExp.$1 || '';
-          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : (imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
+          txt = txt.replace(v, '<div><img class="inline-img" id="inlineimg-' + key + '-' + i + '" src="' + (imgurl.indexOf('http') === 0 ? imgurl : urlWrapper(imgurl + '/thumbnail')) + '" alt="' + alt + '"/></div>');
           imgFiles.push(imgurl);
         }
       });
@@ -158,9 +159,9 @@ class MultiRowsTextReader extends React.Component {
           dangerouslySetInnerHTML={ { __html: html || '<span style="color: #909090">未设置</span>' } } />
         { inlinePreviewShow &&
           <Lightbox
-            mainSrc={ imgFiles[photoIndex] }
-            nextSrc={ imgFiles[(photoIndex + 1) % imgFiles.length] }
-            prevSrc={ imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length] }
+            mainSrc={ urlWrapper(imgFiles[photoIndex]) }
+            nextSrc={ urlWrapper(imgFiles[(photoIndex + 1) % imgFiles.length]) }
+            prevSrc={ urlWrapper(imgFiles[(photoIndex + imgFiles.length - 1) % imgFiles.length]) }
             imageTitle=''
             imageCaption=''
             onCloseRequest={ () => { this.setState({ inlinePreviewShow: false }) } }
