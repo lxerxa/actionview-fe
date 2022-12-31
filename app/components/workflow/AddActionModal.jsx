@@ -274,7 +274,7 @@ export default class AddActionModal extends Component {
     const roleOptions = options.roles || [];
     const resolutionOptions = options.resolutions || [];
 
-    const selectEnableStyles = { display: 'inline-block', width: '125px', height: '25px', verticalAlign: 'middle', marginLeft: '10px', backgroundColor: '#ffffff', borderRadius: '4px' }; 
+    const selectEnableStyles = { display: 'inline-block', width: '135px', verticalAlign: 'middle', marginLeft: '10px', backgroundColor: '#ffffff', borderRadius: '4px' }; 
     const selectDisabledStyles = _.assign({}, selectEnableStyles, { backgroundColor: '#f5f5f5' }); 
 
     return (
