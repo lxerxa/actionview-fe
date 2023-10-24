@@ -75,7 +75,7 @@
     "history": "1.17.0",
     "intl": "1.1.0",
     "json2csv": "4.0.4",
-    "lodash": "3.10.1",
+    "lodash": "4.17.21",
     "marked": "0.3.5",
     "mermaid": "7.0.3",
     "moment": "2.13.0",
